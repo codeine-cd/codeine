@@ -43,7 +43,7 @@
 		<delete dir="compiled_classes" />
 	</target>
 	<target depends="clean" name="cleanall" />
-	<target depends="build-subprojects,build-project,create-jar,test" name="build" />
+	<target depends="build-subprojects,build-project,test,create-jar,tar" name="build" />
 	<target name="build-subprojects" />
 	<target depends="init" name="build-project">
 		<echo message="${ant.project.name}: ${ant.file}" />
@@ -104,5 +104,7 @@
 		</junitreport>
 	</target>
 
-
+	<target name="tar">
+	<tar destfile="yami-0.1.tar.gz" compression="gzip" basedir="dist" />
+		</target>
 </project>
