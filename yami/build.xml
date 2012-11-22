@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="yami">
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<path id="JUnit4.libraryclasspath">
+		<pathelement location="libs/junit-4.9.jar" />
+	</path>
+	<path id="yami.classpath">
+		<pathelement location="compiled_classes" />
+		<pathelement location="libs/javax.servlet-3.0.0.v201112011016.jar" />
+		<pathelement location="libs/jetty-all-8.1.7.v20120910.jar" />
+		<pathelement location="libs/log4j-1.2.17.jar" />
+		<pathelement location="libs/smtp.jar" />
+		<pathelement location="libs/mailapi.jar" />
+		<path refid="JUnit4.libraryclasspath" />
+	</path>
+	<target name="init">
+		<mkdir dir="compiled_classes" />
+		<copy includeemptydirs="false" todir="compiled_classes">
+			<fileset dir="test">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="compiled_classes">
+			<fileset dir="src/server">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="compiled_classes">
+			<fileset dir="src/common">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="compiled_classes">
+			<fileset dir="src/peer">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="compiled_classes" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project,create-jar,test" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="compiled_classes" source="${source}" target="${target}">
+			<src path="src/common" />
+			<classpath refid="yami.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="compiled_classes" source="${source}" target="${target}">
+			<src path="src/server" />
+			<classpath refid="yami.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="compiled_classes" source="${source}" target="${target}">
+			<src path="src/peer" />
+			<classpath refid="yami.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="compiled_classes" source="${source}" target="${target}">
+			<src path="test" />
+			<classpath refid="yami.classpath" />
+		</javac>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+	<target name="create-jar">
+		<jar destfile="dist/bin/yami.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="yami.YamiServerBootstrap" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="compiled_classes" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/javax.servlet-3.0.0.v201112011016.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/jetty-all-8.1.7.v20120910.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/log4j-1.2.17.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/mailapi.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/smtp.jar" />
+		</jar>
+	</target>
+
+	<property name="junit.output.dir" value="junit_output" />
+	<target depends="junit-testing,junit-report" name="test" />
+
+	<target name="junit-testing">
+		<mkdir dir="${junit.output.dir}" />
+		<junit fork="no" printsummary="withOutAndErr">
+			<formatter type="xml" />
+			<batchtest fork="no" todir="${junit.output.dir}">
+				<fileset dir="test">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+			<classpath refid="yami.classpath" />
+		</junit>
+	</target>
+	<target name="junit-report">
+		<junitreport todir="${junit.output.dir}">
+			<fileset dir="${junit.output.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${junit.output.dir}" />
+		</junitreport>
+	</target>
+
+
+</project>
