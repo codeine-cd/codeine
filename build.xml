@@ -4,6 +4,7 @@
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
+	<property file="src/common/yami/version.properties"/>
 	<path id="JUnit4.libraryclasspath">
 		<pathelement location="libs/junit-4.9.jar" />
 	</path>
@@ -105,6 +106,6 @@
 	</target>
 
 	<target name="tar">
-	<tar destfile="yami-0.1.tar.gz" compression="gzip" basedir="dist" />
+	<tar destfile="yami-${YamiVersion.major}.${YamiVersion.minor}.${YamiVersion.build}.${YamiVersion.date}.tar.gz" compression="gzip" basedir="dist" />
 		</target>
 </project>
