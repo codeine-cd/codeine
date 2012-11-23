@@ -31,6 +31,7 @@ public class YamiServerBootstrap
 	private void runServer()
 	{
 		String installDir = Constants.getInstallDir();
+		log.info("Starting yami server at version " + YamiVersion.get());
 		int port = Constants.getServerPort();
 		log.info("starting with port " + port);
 		log.info("starting static server under '/', serving" + installDir + "/http-root");

@@ -21,39 +21,43 @@ import yami.model.DataStoreRetriever;
 
 public class YamiClientBootstrap
 {
-	private static final Logger log = Logger.getLogger(YamiClientBootstrap.class);
+	private final Logger log = Logger.getLogger(YamiClientBootstrap.class);
 	
 	public static void main(String[] args)
 	{
-		
 		try
 		{
-			int port = Constants.getClientPort();
-			String hostname = java.net.InetAddress.getLocalHost().getHostName();
 			setLogger(Constants.getInstallDir() + "/" + Constants.CLIENT_LOG);
-			log.info("Client will try to start on port " + port + " from directory " + Constants.getInstallDir());		
-			List<Node> nodes = getNodes(hostname);
-			ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
-			contexts.addHandler(createLogContextHandler());
-			for (Node node : nodes)
-			{
-				log.debug("Starting PeriodicExecuter thread for node " + node.name);
-				new Thread(new PeriodicExecuter(20, new RunMonitors(node))).start();
-			}
-			log.info("Starting server at port " + port);
-			Server peerHTTPserver = new Server(port);
-			peerHTTPserver.setHandler(contexts);
-			peerHTTPserver.start();
+			new YamiClientBootstrap().execute();
 		}
 		catch (Exception e)
 		{
-			log.warn("Got an exception at client's main function ",e);
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
 	
+	private void execute() throws Exception
+	{
+		int port = Constants.getClientPort();
+		String hostname = java.net.InetAddress.getLocalHost().getHostName();
+		log.info("Client will try to start on port " + port + " from directory " + Constants.getInstallDir());
+		List<Node> nodes = getNodes(hostname);
+		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
+		contexts.addHandler(createLogContextHandler());
+		for (Node node : nodes)
+		{
+			log.debug("Starting PeriodicExecuter thread for node " + node.name);
+			new Thread(new PeriodicExecuter(20, new RunMonitors(node))).start();
+		}
+		log.info("Starting server at port " + port);
+		Server peerHTTPserver = new Server(port);
+		peerHTTPserver.setHandler(contexts);
+		peerHTTPserver.start();
+	}
+	
 	// create the directory structure under "path" if does not already exists:
-	private static void createFileSystem(String path)
+	private void createFileSystem(String path)
 	{
 		log.debug("Will try to create directory structure " + path);
 		File f = new File(path);
@@ -85,7 +89,7 @@ public class YamiClientBootstrap
 	}
 	
 	// returns a list of nodes to check for this hostname:
-	private static List<Node> getNodes(String hostname) throws Exception
+	private List<Node> getNodes(String hostname) throws Exception
 	{
 		boolean found = false;
 		DataStore d = DataStoreRetriever.getD();
@@ -108,7 +112,7 @@ public class YamiClientBootstrap
 	}
 	
 	// returns a collection of contexts (Context per node)
-	private static ContextHandlerCollection createFileServerContexts(List<Node> nodes, String hostname)
+	private ContextHandlerCollection createFileServerContexts(List<Node> nodes, String hostname)
 	{
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		for (Node node : nodes)
@@ -121,18 +125,19 @@ public class YamiClientBootstrap
 		return contexts;
 	}
 	
-	private static ContextHandler createLogContextHandler()
+	private ContextHandler createLogContextHandler()
 	{
 		String logdir = Constants.getInstallDir() + "/log/";
 		log.debug("Creating log Context Handler under " + logdir);
 		return createStaticContextHandler("/", logdir);
 	}
 	
-	private static ContextHandler createStaticContextHandler(String contextPath, String fsPath){
+	private ContextHandler createStaticContextHandler(String contextPath, String fsPath)
+	{
 		ResourceHandler resourceHandler = new ResourceHandler();
-		resourceHandler.setDirectoriesListed(true); 
-		resourceHandler.setWelcomeFiles(new String[] {"index.htm","index.html"}); 
-		resourceHandler.setResourceBase(fsPath);		
+		resourceHandler.setDirectoriesListed(true);
+		resourceHandler.setWelcomeFiles(new String[] { "index.htm", "index.html" });
+		resourceHandler.setResourceBase(fsPath);
 		ContextHandler ch = new ContextHandler();
 		ch.setContextPath(contextPath);
 		ch.setHandler(resourceHandler);
