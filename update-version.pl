@@ -33,7 +33,7 @@ sub getVersion
 	print "new version is $version\n";
 	system("echo 'YamiVersion.build=$build\nYamiVersion.major=$major\nYamiVersion.minor=$minor\nYamiVersion.date=$date' > $propertiesFile");
 	system("git commit -m 'version updated to $version' $propertiesFile");
-	system("git push --repor origin");
+	system("git push --repo origin");
 #	my $recepients = "oshai yshabi zivry";
 #	open MAIL, "|/usr/sbin/sendmail $recepients ";
 #	print MAIL "To: $recepients\n";
