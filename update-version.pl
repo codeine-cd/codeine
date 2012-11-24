@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 my $propertiesFile = "src/common/yami/version.properties";
-my $repo = "https://github.com/oshai/yami";
+my $repo = "https://github.com/oshai/yami.git";
 sub getVersion
 {
 	my $key = shift;
