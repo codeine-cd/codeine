@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 my $propertiesFile = "src/common/yami/version.properties";
-my $repo = "https://github.com/oshai/yami.git";
+my $repo = "https://github.com/oshai/yami";
 sub getVersion
 {
 	my $key = shift;
@@ -33,7 +33,7 @@ sub getVersion
 	print "new version is $version\n";
 	system("echo 'YamiVersion.build=$build\nYamiVersion.major=$major\nYamiVersion.minor=$minor\nYamiVersion.date=$date' > $propertiesFile");
 	system("git commit -m 'version updated to $version' $propertiesFile");
-	system("git push --progress -o origin $repo");
+	system("git push $repo");
 #	my $recepients = "oshai yshabi zivry";
 #	open MAIL, "|/usr/sbin/sendmail $recepients ";
 #	print MAIL "To: $recepients\n";
