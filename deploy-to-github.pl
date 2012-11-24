@@ -6,13 +6,7 @@ use strict;
 
 my $propertiesFile = "src/common/yami/version.properties";
 my $repo = "https://github.com/oshai/yami.git";
-sub getVersion
-{
-	my $key = shift;
-	my $value = `cat $propertiesFile | grep $key | awk -F= '{print \$2}'`;
-	chomp($value);
-	return $value;
-}
+
 #if (defined $ENV{'deploy-yami'} && $ENV{'deploy-yami'} eq 'true')
 {
 	print "update version...\n";
@@ -34,7 +28,13 @@ sub getVersion
 	system("echo 'YamiVersion.build=$build\nYamiVersion.major=$major\nYamiVersion.minor=$minor\nYamiVersion.date=$date' > $propertiesFile");
 	system("git commit -m 'version updated to $version' $propertiesFile");
 	system("git push --repo origin");
-#	my $recepients = "oshai yshabi zivry";
+	
+	
+	system("ant");
+	
+	#upload yami-$version.ta.gz
+	system("upload.rb oshai ronittt00 $repo yami-$version.ta.gz \"release version $version\"");
+#	my $recepients = "oshai";
 #	open MAIL, "|/usr/sbin/sendmail $recepients ";
 #	print MAIL "To: $recepients\n";
 #	print MAIL "Subject: yami $version pushed to github\n";
@@ -45,4 +45,12 @@ sub getVersion
 #	print MAIL "nbdist\n";
 #	close MAIL;
 	
+}
+
+sub getVersion
+{
+	my $key = shift;
+	my $value = `cat $propertiesFile | grep $key | awk -F= '{print \$2}'`;
+	chomp($value);
+	return $value;
 }
