@@ -82,7 +82,7 @@
 	</target>
 
 	<property name="junit.output.dir" value="junit_output" />
-	<target depends="junit-testing,junit-report" name="test" />
+	<target depends="junit-testing" name="test" />
 
 	<target name="junit-testing">
 		<mkdir dir="${junit.output.dir}" />

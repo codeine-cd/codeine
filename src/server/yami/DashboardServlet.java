@@ -41,7 +41,7 @@ public class DashboardServlet extends HttpServlet
 		writer.println("<div id=\"container\">");
 		writer.println("  <div id=\"header\">");
 		writer.println("      <h1><a href=\"/\">yami</a></h1>");
-		writer.println("        <h2>0.4b</h2>");
+		writer.println("        <h2>"+YamiVersion.get()+"</h2>");
 		writer.println("        <div class=\"clear\"></div>");
 		writer.println("    </div>");
 		writer.println("    <div id=\"nav\">");

@@ -1,5 +1,7 @@
 package yami;
 
+import java.io.File;
+
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.BasicConfigurator;
@@ -23,11 +25,23 @@ public class YamiServerBootstrap
 	
 	public static void main(String[] args)
 	{
-		setLogger(Constants.getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
-		configureLogLevel();
-		new YamiServerBootstrap().runServer();
+	    System.out.println("Starting yami " + YamiVersion.get());
+	    setLogger(getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
+	    configureLogLevel();
+	    new YamiServerBootstrap().runServer();
 	}
 	
+	private static String getInstallDir() 
+	{
+	    if (System.getProperty("installDir") != null)
+	    {
+		return System.getProperty("installDir");
+	    }
+	    String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+	    File jarFile = new File(jarFileString);
+	    return jarFile.getParentFile().getParent();
+	}
+
 	private void runServer()
 	{
 		String installDir = Constants.getInstallDir();
@@ -56,12 +70,12 @@ public class YamiServerBootstrap
 	
 	private static void setLogger(String logfile) throws RuntimeException
 	{
-		System.out.println("flag to stdout: " + System.getProperty("log.to.stdout"));
 		if (Boolean.getBoolean("log.to.stdout"))
 		{
-			BasicConfigurator.configure();
-			Logger.getRootLogger().setLevel(Level.INFO);
-			return;
+		    System.out.println("logging to std-out");
+		    BasicConfigurator.configure();
+		    Logger.getRootLogger().setLevel(Level.INFO);
+		    return;
 		}
 		String pattern = "%d{ISO8601} [%c] %p %m %n";
 		PatternLayout layout = new PatternLayout(pattern);

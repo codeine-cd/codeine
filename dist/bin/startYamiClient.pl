@@ -1,4 +1,4 @@
-#!/usr/intel/bin/perl
+#!/usr/bin/perl
 use strict;
 die "Usage: startYamiClient <rsync user> <client port> <server port> <client install dir> <conf file name>  <rsync source>\n" if (@ARGV < 6);
 die "Should be run by root\n" if ($>);
@@ -11,9 +11,9 @@ my $conf_file = shift;
 my $rsync_source = shift;
 #
 my $PS ="/bin/ps";
-my $RSYNC = "/usr/intel/pkgs/rsync/3.0.6//bin/rsync";
+my $RSYNC = "rsync";
 my $FLAGS = "-avz --delete --delete-before --exclude .svn/";
-my $java = "/usr/intel/pkgs/java/1.7.0.09-64/bin/java";
+my $java = "java";
 my $rsync_cmd = "/bin/su - $user -c \"$RSYNC $FLAGS $rsync_source $client_install/\"";
 
 if (not -e $client_install){

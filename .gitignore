@@ -1,2 +1,3 @@
 *.class
 /junit_output
+/compiled_classes
