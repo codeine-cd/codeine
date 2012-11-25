@@ -156,18 +156,13 @@ public class UpdaterThread implements Runnable
 		{
 			return "";
 		}
-		if (null == lineDelimiter )
-		{
-			lineDelimiter = "";
-		}
+		String delimiter = null == lineDelimiter ? "" : lineDelimiter;
 		for (String line : list)
 		{
 			sb.append(line);
-			sb.append(lineDelimiter);
+			sb.append(delimiter);
 		}
-		
-		sb.delete((sb.length() - lineDelimiter.length()), sb.length());
-		
+		sb.delete((sb.length() - delimiter.length()), sb.length());		
 		return sb.toString();
 	}
 }
