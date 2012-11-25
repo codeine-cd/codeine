@@ -33,8 +33,7 @@ public class YamiServerBootstrap
 		String installDir = Constants.getInstallDir();
 		log.info("Starting yami server at version " + YamiVersion.get());
 		int port = Constants.getServerPort();
-		log.info("starting with port " + port);
-		log.info("to set different server port, use -DserverPort=<port>");
+		log.info("Starting on port "+ port + ". To set different server port, use -DserverPort=<port>");
 		log.info("starting static server under '/', serving" + installDir + "/http-root");
 		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + "/http-root");
 		log.info("starting dashboard servlet under '/dashboard'");
