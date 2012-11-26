@@ -28,10 +28,10 @@ my $repo = "https://github.com/oshai/yami.git";
 	system("echo 'YamiVersion.build=$build\nYamiVersion.major=$major\nYamiVersion.minor=$minor\nYamiVersion.date=$date' > $propertiesFile");
 	system("git commit -m 'version updated to $version' $propertiesFile");
 	system("git push --repo origin");
-	
+	system("/usr/intel/bin/rsync -avz --verbose --delete --exclude '.svn' dist/bin/ /nfs/site/disks/iec_sws3/dist/workspace/misc/yami-$version/bin");
 	
 	system("ant");
-	
+  	
 	#upload yami-$version.ta.gz
 	system("upload.rb oshai xxx $repo yami-$version.ta.gz \"release version $version\"");
 #	my $recepients = "oshai";
