@@ -1,8 +1,10 @@
 #!/usr/bin/perl
 use strict;
-die "Usage: startYamiClient <rsync user> <client port> <server port> <client install dir> <conf file name>  <rsync source>\n" if (@ARGV < 6);
+die "Usage: startYamiClient <java> <rsync> <rsync user> <client port> <server port> <client install dir> <conf file name>  <rsync source>\n" if (@ARGV < 8);
 die "Should be run by root\n" if ($>);
 #
+my $java = shift;
+my $rsync = shift;
 my $user = shift;
 my $client_port = shift; 
 my $server_port = shift;
@@ -11,10 +13,9 @@ my $conf_file = shift;
 my $rsync_source = shift;
 #
 my $PS ="/bin/ps";
-my $RSYNC = "rsync";
+my $rsync = "rsync";
 my $FLAGS = "-avz --delete --delete-before --exclude .svn/";
-my $java = "java";
-my $rsync_cmd = "/bin/su - $user -c \"$RSYNC $FLAGS $rsync_source $client_install/\"";
+my $rsync_cmd = "/bin/su - $user -c \"$rsync $FLAGS $rsync_source $client_install/\"";
 
 if (not -e $client_install){
   `mkdir -p $client_install`;
