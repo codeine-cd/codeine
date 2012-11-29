@@ -3,6 +3,7 @@ package yami;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,31 +26,44 @@ public class RunMonitors implements Task
 	@Override
 	public void exec()
 	{
-		// list files under local "../monitors" dir:
-		List<File> files = getMonitors();
-		for (File file : files)
+		for (File monitor : getMonitors())
 		{
-			// execute monitors and capture:
-			if (file.isFile() && file.canExecute())
-			{
-				try
-				{
-					log.info("Will execute " + file.getAbsolutePath());
-					Result res = ProcessExecuter.execute(file.getAbsolutePath());
-					log.debug(file.getName() +" ended with res=" +res.success());
-					FileWriter fstream = new FileWriter(Constants.getInstallDir() +"/nodes/"+ node.name +"/" +file.getName() + ".txt");
-					BufferedWriter out = new BufferedWriter(fstream);
-					out.write(res.success() ? "True\n" : "False\n");
-					out.write(res.output);
-					out.close();
-				}
-				catch (Exception e)
-				{
-					log.warn("got exception when executing monitor ", e);
-				}
-			}
+			runMonitor(monitor);
 		}
 		
+	}
+
+	private void runMonitor(File monitor)
+	{
+		if (monitor.isFile() && monitor.canExecute())
+		{
+			try
+			{
+				log.info("Will execute " + monitor.getAbsolutePath());
+				Result res = ProcessExecuter.execute(monitor.getAbsolutePath());
+				log.debug(monitor.getName() +" ended with res=" +res.success());
+				writeResult(res, monitor.getName());
+			}
+			catch (Exception e)
+			{
+				log.warn("got exception when executing monitor ", e);
+			}
+		}
+	}
+
+	private void writeResult(Result res, String outputFileName) throws IOException
+	{
+		BufferedWriter out = getWriter(outputFileName);
+		out.write(res.success()  ? "True\n" : "False\n");
+		out.write(res.output);
+		out.close();
+	}
+
+	private BufferedWriter getWriter(String name) throws IOException
+	{
+		FileWriter fstream = new FileWriter(Constants.getInstallDir() +"/nodes/"+ node.name +"/" +name + ".txt");
+		BufferedWriter out = new BufferedWriter(fstream);
+		return out;
 	}
 	
 	private List<File> getMonitors(){

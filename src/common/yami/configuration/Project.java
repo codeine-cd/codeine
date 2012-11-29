@@ -13,6 +13,7 @@ public class Project
 	public List<HttpCollector> collector = new ArrayList<HttpCollector>();
 	public List<String> mailingList = new ArrayList<String>();
 	public List<MailPolicy> mailingPolicy = new ArrayList<MailPolicy>();
+	public GlobalConfiguration conf = new GlobalConfiguration();
 	
 	
 	@Override

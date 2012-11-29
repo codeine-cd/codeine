@@ -2,7 +2,6 @@ package yami;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Level;
@@ -15,13 +14,12 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
 import yami.configuration.Node;
+import yami.configuration.Nodes;
 import yami.model.Constants;
-import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
-
-public class YamiClientBootstrap
+public class YamiClientBootstrap 
 {
-	private final Logger log = Logger.getLogger(YamiClientBootstrap.class);
+	private static final Logger log = Logger.getLogger(YamiClientBootstrap.class);
 	
 	public static void main(String[] args)
 	{
@@ -42,18 +40,23 @@ public class YamiClientBootstrap
 		int port = Constants.getClientPort();
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
 		log.info("Client will try to start on port " + port + " from directory " + Constants.getInstallDir());
-		List<Node> nodes = getNodes(hostname);
+		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
+		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
 		contexts.addHandler(createLogContextHandler());
+		log.info("Starting server at port " + port);
+		Server peerHTTPserver = new Server(port);
+		peerHTTPserver.setHandler(contexts);
+		peerHTTPserver.start();
+	}
+
+	private void startNodeMonitoringThreads(List<Node> nodes)
+	{
 		for (Node node : nodes)
 		{
 			log.debug("Starting PeriodicExecuter thread for node " + node.name);
 			new Thread(new PeriodicExecuter(20, new RunMonitors(node))).start();
 		}
-		log.info("Starting server at port " + port);
-		Server peerHTTPserver = new Server(port);
-		peerHTTPserver.setHandler(contexts);
-		peerHTTPserver.start();
 	}
 	
 	// create the directory structure under "path" if does not already exists:
@@ -88,29 +91,7 @@ public class YamiClientBootstrap
 		}
 	}
 	
-	// returns a list of nodes to check for this hostname:
-	private List<Node> getNodes(String hostname) throws Exception
-	{
-		boolean found = false;
-		DataStore d = DataStoreRetriever.getD();
-		List<Node> nodes = new ArrayList<Node>();
-		for (Node node : d.appInstances())
-		{
-			if (!hostname.equals(node.node.name))
-			{
-				continue;
-			}
-			found = true;
-			nodes.add(node);
-		}
-		if (!found)
-		{
-			log.warn("Client " + hostname + " has no monitoring nodes configured");
-			throw new Exception("Client is not configured to run on " + hostname);
-		}
-		return nodes;
-	}
-	
+		
 	// returns a collection of contexts (Context per node)
 	private ContextHandlerCollection createFileServerContexts(List<Node> nodes, String hostname)
 	{
