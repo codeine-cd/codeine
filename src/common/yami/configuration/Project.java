@@ -1,20 +1,14 @@
 package yami.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.*;
 
 
-@XmlRootElement
 public class Project
 {
 	public List<Peer> peer = new ArrayList<Peer>();
 	public List<HttpCollector> collector = new ArrayList<HttpCollector>();
 	public List<String> mailingList = new ArrayList<String>();
-	public List<MailPolicy> mailingPolicy = new ArrayList<MailPolicy>();
-	public GlobalConfiguration conf = new GlobalConfiguration();
-	
+	public List<MailPolicy> mailingPolicy = new ArrayList<MailPolicy>();	
 	
 	@Override
 	public int hashCode()
@@ -76,7 +70,5 @@ public class Project
 		}
 		return $;
 	}
-	
-	
 	
 }

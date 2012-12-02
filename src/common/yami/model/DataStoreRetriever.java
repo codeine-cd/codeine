@@ -1,12 +1,10 @@
 package yami.model;
 
-import java.io.File;
+import java.io.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 
-import yami.configuration.Project;
+import yami.configuration.*;
 
 public class DataStoreRetriever
 {
@@ -21,49 +19,12 @@ public class DataStoreRetriever
 	{
 		try
 		{
-			Unmarshaller unmarshalr;
-			unmarshalr = createUnmarshaller(Project.class);
-			Object $ = unmarshalr.unmarshal(new File(Constants.getConf()));
-			return (Project)$;
+			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConf()));
+			return ((Yami)o).project;
 		}
 		catch (JAXBException ex)
 		{
 			throw new RuntimeException(ex);
 		}
-	}
-	
-	private <T> Unmarshaller createUnmarshaller(Class<T> clazz) throws JAXBException
-	{
-		Unmarshaller unmarshalr;
-		unmarshalr = JAXBContext.newInstance(clazz).createUnmarshaller();
-		unmarshalr.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-//		unmarshalr.setEventHandler(new ValidationEventHandler()
-//		{
-//			@Override
-//			public boolean handleEvent(ValidationEvent event)
-//			{
-//				collector.addViolation(new CoValidationViolationEvent(event));
-//				return true;
-//			}
-//		});
-//		unmarshalr.setListener(new Listener()
-//		{
-//			@Override
-//			public void afterUnmarshal(Object target, Object parent)
-//			{
-//				if (target instanceof AbstractCo)
-//				{
-//					((AbstractCo)target).fixUknowns();
-//					if (parent instanceof AbstractCo || parent == null)
-//					{
-//						((AbstractCo)target).setParent((AbstractCo)parent);
-//						((AbstractCo)target).afterUnmarshal((AbstractCo)parent, collector);
-//					}
-//				}
-//			}
-//		});
-		return unmarshalr;
-	}
-	
-	
+	}	
 }

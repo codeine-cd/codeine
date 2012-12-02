@@ -7,6 +7,7 @@ public class GlobalConfiguration
 	public String clientpath = "/tmp/yami.monitor/";
 	public int serverport = 8080;
 	public int clientrport = 8112;
+	
 	@Override
 	public int hashCode()
 	{
