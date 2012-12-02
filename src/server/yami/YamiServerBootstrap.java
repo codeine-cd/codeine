@@ -1,23 +1,15 @@
 package yami;
 
-import java.io.File;
+import java.io.*;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.http.*;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.apache.log4j.*;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.handler.*;
+import org.eclipse.jetty.servlet.*;
 
-import yami.model.Constants;
+import yami.model.*;
 
 public class YamiServerBootstrap
 {
@@ -25,35 +17,37 @@ public class YamiServerBootstrap
 	
 	public static void main(String[] args)
 	{
-	    System.out.println("Starting yami " + YamiVersion.get());
-	    setLogger(getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
-	    configureLogLevel();
-	    new YamiServerBootstrap().runServer();
+		System.out.println("Starting yami " + YamiVersion.get());
+		setLogger(getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
+		configureLogLevel();
+		new YamiServerBootstrap().runServer();
 	}
 	
-	private static String getInstallDir() 
+	private static String getInstallDir()
 	{
-	    if (System.getProperty("installDir") != null)
-	    {
-		return System.getProperty("installDir");
-	    }
-	    String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-	    File jarFile = new File(jarFileString);
-	    return jarFile.getParentFile().getParent();
+		if (System.getProperty("installDir") != null)
+		{
+			return System.getProperty("installDir");
+		}
+		String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File jarFile = new File(jarFileString);
+		return jarFile.getParentFile().getParent();
 	}
-
+	
 	private void runServer()
 	{
 		String installDir = Constants.getInstallDir();
 		log.info("Starting yami server at version " + YamiVersion.get());
 		int port = Constants.getServerPort();
-		log.info("Starting on port "+ port + ". To set different server port, use -DserverPort=<port>");
+		log.info("Starting on port " + port + ". To set different server port, use -DserverPort=<port>");
 		log.info("starting static server under '/', serving" + installDir + "/http-root");
 		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + "/http-root");
 		log.info("starting dashboard servlet under '/dashboard'");
 		ServletContextHandler dashboardContext = createServletContext("/dashboard", new DashboardServlet());
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
-		contexts.setHandlers(new Handler[] { staticResouceContextHandler, dashboardContext });
+		contexts.setHandlers(new Handler[] {
+				staticResouceContextHandler, dashboardContext
+		});
 		Server server = new Server(port);
 		server.setHandler(contexts);
 		try
@@ -72,10 +66,10 @@ public class YamiServerBootstrap
 	{
 		if (Boolean.getBoolean("log.to.stdout"))
 		{
-		    System.out.println("logging to std-out");
-		    BasicConfigurator.configure();
-		    Logger.getRootLogger().setLevel(Level.INFO);
-		    return;
+			System.out.println("logging to std-out");
+			BasicConfigurator.configure();
+			Logger.getRootLogger().setLevel(Level.INFO);
+			return;
 		}
 		String pattern = "%d{ISO8601} [%c] %p %m %n";
 		PatternLayout layout = new PatternLayout(pattern);
@@ -107,7 +101,9 @@ public class YamiServerBootstrap
 	{
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
-		resourceHandler.setWelcomeFiles(new String[] { "index.htm", "index.html" });
+		resourceHandler.setWelcomeFiles(new String[] {
+				"index.htm", "index.html"
+		});
 		resourceHandler.setResourceBase(fsPath);
 		ContextHandler ch = new ContextHandler();
 		ch.setContextPath(contextPath);
