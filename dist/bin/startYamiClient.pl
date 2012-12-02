@@ -13,7 +13,6 @@ my $conf_file = shift;
 my $rsync_source = shift;
 #
 my $PS ="/bin/ps";
-my $rsync = "rsync";
 my $FLAGS = "-avz --delete --delete-before --exclude .svn/";
 my $rsync_cmd = "/bin/su - $user -c \"$rsync $FLAGS $rsync_source $client_install/\"";
 
