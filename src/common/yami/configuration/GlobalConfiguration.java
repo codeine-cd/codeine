@@ -2,11 +2,18 @@ package yami.configuration;
 
 public class GlobalConfiguration
 {
+	public String rsyncuser = "root";
+	public String rsyncsource = "";
 	public String rsync = "rsync";
 	public String perl = "perl";
 	public String clientpath = "/tmp/yami.monitor/";
 	public int serverport = 8080;
-	public int clientrport = 8112;
+	public int clientport = 8112;
+	
+	public String toString()
+	{
+		return "rsyncuser = " + rsyncuser + ", " + "rsyncsource = " + rsyncsource  +", "+ "rsync = " + rsync + ", "+ "perl = " + perl + ", "+ "clientpath = " + clientpath+ ", "+ "clientport = " + clientport + ", "+ "serverport = " + serverport;
+	}
 	
 	@Override
 	public int hashCode()
@@ -14,12 +21,15 @@ public class GlobalConfiguration
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((clientpath == null) ? 0 : clientpath.hashCode());
-		result = prime * result + clientrport;
+		result = prime * result + clientport;
 		result = prime * result + ((perl == null) ? 0 : perl.hashCode());
 		result = prime * result + ((rsync == null) ? 0 : rsync.hashCode());
+		result = prime * result + ((rsyncsource == null) ? 0 : rsyncsource.hashCode());
+		result = prime * result + ((rsyncuser == null) ? 0 : rsyncuser.hashCode());
 		result = prime * result + serverport;
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -37,7 +47,7 @@ public class GlobalConfiguration
 		}
 		else if (!clientpath.equals(other.clientpath))
 			return false;
-		if (clientrport != other.clientrport)
+		if (clientport != other.clientport)
 			return false;
 		if (perl == null)
 		{
@@ -53,11 +63,22 @@ public class GlobalConfiguration
 		}
 		else if (!rsync.equals(other.rsync))
 			return false;
+		if (rsyncsource == null)
+		{
+			if (other.rsyncsource != null)
+				return false;
+		}
+		else if (!rsyncsource.equals(other.rsyncsource))
+			return false;
+		if (rsyncuser == null)
+		{
+			if (other.rsyncuser != null)
+				return false;
+		}
+		else if (!rsyncuser.equals(other.rsyncuser))
+			return false;
 		if (serverport != other.serverport)
 			return false;
 		return true;
 	}
-	
-
-	
 }

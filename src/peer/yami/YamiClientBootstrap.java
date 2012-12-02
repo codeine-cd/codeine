@@ -1,22 +1,17 @@
 package yami;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.ResourceHandler;
+import javax.servlet.http.*;
 
-import yami.configuration.Node;
-import yami.configuration.Nodes;
-import yami.model.Constants;
-import yami.model.DataStoreRetriever;
+import org.apache.log4j.*;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.server.handler.*;
+import org.eclipse.jetty.servlet.*;
+
+import yami.configuration.*;
+import yami.model.*;
 public class YamiClientBootstrap 
 {
 	private static final Logger log = Logger.getLogger(YamiClientBootstrap.class);
@@ -43,6 +38,8 @@ public class YamiClientBootstrap
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
 		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
+		ServletContextHandler restartServlet = createServletContext("/restart",new ClientRestartServlet());
+		contexts.addHandler(restartServlet);
 		contexts.addHandler(createLogContextHandler());
 		log.info("Starting server at port " + port);
 		Server peerHTTPserver = new Server(port);
@@ -123,6 +120,14 @@ public class YamiClientBootstrap
 		ch.setContextPath(contextPath);
 		ch.setHandler(resourceHandler);
 		return ch;
+	}
+	
+	private ServletContextHandler createServletContext(String context, HttpServlet servlet)
+	{
+		ServletContextHandler monitorContext = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+		monitorContext.setContextPath(context);
+		monitorContext.addServlet(new ServletHolder(servlet), "/");
+		return monitorContext;
 	}
 	
 }

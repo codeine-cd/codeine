@@ -26,5 +26,18 @@ public class DataStoreRetriever
 		{
 			throw new RuntimeException(ex);
 		}
+	}
+	
+	public static GlobalConfiguration readGlobalConfiguration()
+	{
+		try
+		{
+			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConf()));
+			return ((Yami)o).conf;
+		}
+		catch (JAXBException ex)
+		{
+			throw new RuntimeException(ex);
+		}
 	}	
 }
