@@ -38,7 +38,7 @@ public class YamiClientBootstrap
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
 		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
-		ServletContextHandler restartServlet = createServletContext("/restart", new ClientRestartServlet());
+		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT_PATH, new ClientRestartServlet());
 		contexts.setHandlers(new Handler[] {
 				restartServlet, createLogContextHandler()
 		});
@@ -96,7 +96,7 @@ public class YamiClientBootstrap
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		for (Node node : nodes)
 		{
-			String filesPath = Constants.getInstallDir() + "/nodes/" + node.name;
+			String filesPath = Constants.getInstallDir() + Constants.NODES_DIR + node.name;
 			createFileSystem(filesPath);
 			contexts.addHandler(createStaticContextHandler("/" + node.name, filesPath));
 			log.debug(hostname + ":" + node.name + " is served under " + filesPath);
@@ -106,7 +106,7 @@ public class YamiClientBootstrap
 	
 	private ContextHandler createLogContextHandler()
 	{
-		String logdir = Constants.getInstallDir() + "/log/";
+		String logdir = Constants.getInstallDir() + Constants.LOG_DIR;
 		log.debug("Creating log Context Handler under " + logdir);
 		return createStaticContextHandler("/", logdir);
 	}
@@ -115,7 +115,7 @@ public class YamiClientBootstrap
 	{
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
-		resourceHandler.setWelcomeFiles(new String[] { "index.htm", "index.html" });
+		resourceHandler.setWelcomeFiles(new String[] { });
 		resourceHandler.setResourceBase(fsPath);
 		ContextHandler ch = new ContextHandler();
 		ch.setContextPath(contextPath);

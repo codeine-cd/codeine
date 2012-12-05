@@ -1,8 +1,8 @@
 package yami.model;
 
-import java.io.File;
+import java.io.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 public class Constants
 {
@@ -18,6 +18,9 @@ public class Constants
 	public static final String NODE_NAME = "$node_name";
 	public static final String COLLECTOR_NAME = "$collector_name";
 	public static final String CLIENT_LINK = "http://" + NODE_NAME + ":" + getClientPort() + "/" + APP_NAME + "/" + COLLECTOR_NAME + ".txt";
+	public static final String NODES_DIR = "/nodes/";
+	public static final String LOG_DIR = "/log/";
+	public static final String RESTART_CONTEXT_PATH = "/restart";
 	public static String installDir = null;
 	public static String confPath = null;
 	
