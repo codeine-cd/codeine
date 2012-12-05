@@ -24,7 +24,7 @@ if (not -e $client_install){
 print "DEBUG: will run ($rsync_cmd)\n";
 `$rsync_cmd`;
 warn "SCRIPT ERROR: Failed to run ($rsync_cmd)(exit code $?)\n" if ($?);
-my $pid_cmd = "$PS -eo pid,cmd | grep java | grep yami | grep yami.conf=$client_install/conf/$conf_file |grep 'yami.YamiClientBootstrap\$'| awk '{print \$1}'";
+my $pid_cmd = "$PS -eo pid,cmd | grep java | grep 'yami.YamiClientBootstrap\$'| awk '{print \$1}'";
 print "DEBUG: will run ($pid_cmd)\n";
 my @pids = `$pid_cmd`;
 if (scalar @pids > 0){
@@ -41,7 +41,7 @@ if (scalar @pids > 0){
 my $java_cmd = "/usr/bin/nohup $java -Ddebug=true -Dyami.conf=$conf_file -Dport=$client_port -cp $client_install/bin/yami.jar yami.YamiClientBootstrap > /tmp/yami_start 2>&1 < /dev/null &";
 print "DEBUG: will run ($java_cmd)\n";
 `$java_cmd`;
-sleep 2;
+sleep 5;
 @pids = `$pid_cmd`;
 if (not scalar @pids){
   print "Failed to start yami client, check /tmp/yami_start for more information\n";
