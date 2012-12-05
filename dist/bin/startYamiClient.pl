@@ -38,7 +38,7 @@ if (scalar @pids > 0){
 }else{
   print "DEBUG: didn't find previous instances for this monitor\n";
 }
-my $java_cmd = "/usr/bin/nohup $java -Ddebug=true -Dyami.conf=$client_install/conf/$conf_file -DinstallDir=$client_install -Dport=$client_port -cp $client_install/bin/yami.jar yami.YamiClientBootstrap >> /tmp/yami_start 2>&1 < /dev/null &";
+my $java_cmd = "/usr/bin/nohup $java -Ddebug=true -Dyami.conf=$conf_file -Dport=$client_port -cp $client_install/bin/yami.jar yami.YamiClientBootstrap > /tmp/yami_start 2>&1 < /dev/null &";
 print "DEBUG: will run ($java_cmd)\n";
 `$java_cmd`;
 sleep 2;

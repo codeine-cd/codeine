@@ -53,14 +53,14 @@ public class Constants
 		{
 			return installDir;
 		}
-		if (System.getProperty("installDir") != null)
+		if (System.getProperty("install.dir") != null)
 		{
-			return System.getProperty("installDir");
+			return System.getProperty("install.dir");
 		}
 		String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File jarFile = new File(jarFileString);
 		installDir = jarFile.getParentFile().getParent();
-		log.info("SystemProperty 'installDir' not defined, returning default path " + installDir);
+		log.info("SystemProperty 'install.dir' not defined, returning default path " + installDir);
 		return installDir;
 	}
 	
