@@ -6,9 +6,11 @@ public class GlobalConfiguration
 	public String rsyncsource = "";
 	public String rsync = "rsync";
 	public String perl = "perl";
+	public String confPath = null;
 	public String clientpath = "/tmp/yami.monitor/";
 	public int serverport = 8080;
 	public int clientport = 8112;
+	
 	
 	public String toString()
 	{

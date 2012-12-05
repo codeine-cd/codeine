@@ -40,10 +40,10 @@ public class YamiServerBootstrap
 		log.info("Starting yami server at version " + YamiVersion.get());
 		int port = Constants.getServerPort();
 		log.info("Starting on port " + port + ". To set different server port, use -DserverPort=<port>");
-		log.info("starting static server under '/', serving" + installDir + "/http-root");
-		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + "/http-root");
+		log.info("starting static server under '/', serving" + installDir + Constants.HTTP_ROOT_CONTEXT);
+		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + Constants.HTTP_ROOT_CONTEXT);
 		log.info("starting dashboard servlet under '/dashboard'");
-		ServletContextHandler dashboardContext = createServletContext("/dashboard", new DashboardServlet());
+		ServletContextHandler dashboardContext = createServletContext(Constants.DASHBOARD_CONTEXT, new DashboardServlet());
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		contexts.setHandlers(new Handler[] {
 				staticResouceContextHandler, dashboardContext

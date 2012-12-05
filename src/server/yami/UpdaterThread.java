@@ -1,23 +1,15 @@
 package yami;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.SocketException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import yami.configuration.HttpCollector;
-import yami.configuration.Node;
-import yami.mail.CollectorOnAppState;
-import yami.model.Constants;
-import yami.model.DataStore;
-import yami.model.DataStoreRetriever;
-import yami.model.Result;
+import yami.configuration.*;
+import yami.mail.*;
+import yami.model.*;
 
 public class UpdaterThread implements Runnable
 {
@@ -34,7 +26,7 @@ public class UpdaterThread implements Runnable
 		while (true)
 		{
 			DataStore d = DataStoreRetriever.getD();
-			log.info("DataStore retrieved (using " + Constants.getConf() + ")");
+			log.info("DataStore retrieved (using " + Constants.getConfPath() + ")");
 			for (HttpCollector c : d.collectors())
 			{
 				for (Node n : d.appInstances())

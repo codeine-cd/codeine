@@ -19,7 +19,7 @@ public class DataStoreRetriever
 	{
 		try
 		{
-			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConf()));
+			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConfPath()));
 			return ((Yami)o).project;
 		}
 		catch (JAXBException ex)
@@ -32,7 +32,7 @@ public class DataStoreRetriever
 	{
 		try
 		{
-			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConf()));
+			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConfPath()));
 			return ((Yami)o).conf;
 		}
 		catch (JAXBException ex)

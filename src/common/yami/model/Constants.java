@@ -7,24 +7,31 @@ import org.apache.log4j.*;
 public class Constants
 {
 	private static final Logger log = Logger.getLogger(Constants.class);
-	public static final String INSTALLATION = ".";
-	public static final String DEFAULT_CLIENT_INSTALL = "/tmp/nbdist.monitoring/";
+	
+	public static final String DEFAULT_CLIENT_INSTALL = "/tmp/yami.monitoring/";
 	public static final int DEFAULT_CLIENT_PORT = 8112;
 	public static final int DEFAULT_SERVER_PORT = 8080;
-	public static final String DASHBOARD = "/dashboard/";
+	
 	public static final String CLIENT_LOG = "log/yami_client.log";
 	public static final String SERVER_LOG = "yami_server.log";
+	
 	public static final String APP_NAME = "$app_name";
 	public static final String NODE_NAME = "$node_name";
 	public static final String COLLECTOR_NAME = "$collector_name";
 	public static final String CLIENT_LINK = "http://" + NODE_NAME + ":" + getClientPort() + "/" + APP_NAME + "/" + COLLECTOR_NAME + ".txt";
+	
+	public static final String INSTALLATION = ".";
 	public static final String NODES_DIR = "/nodes/";
 	public static final String LOG_DIR = "/log/";
-	public static final String RESTART_CONTEXT_PATH = "/restart";
+	
+	public static final String DASHBOARD_CONTEXT = "/dashboard";
+	public static final String RESTART_CONTEXT = "/restart";
+	public static final String HTTP_ROOT_CONTEXT = "/http-root";
+	
 	public static String installDir = null;
 	public static String confPath = null;
 	
-	public static String getConf()
+	public static String getConfPath()
 	{
 		if (confPath != null)
 		{
@@ -53,7 +60,6 @@ public class Constants
 		File jarFile = new File(jarFileString);
 		installDir = jarFile.getParentFile().getParent();
 		log.info("SystemProperty 'installDir' not defined, returning default path " + installDir);
-		
 		return installDir;
 	}
 	
@@ -89,12 +95,15 @@ public class Constants
 	public static String getServerDashboard()
 	{
 		String hostname = null;
-		try{
+		try
+		{
 			hostname = java.net.InetAddress.getLocalHost().getHostName();
-		}catch (Exception e){
+		}
+		catch (Exception e)
+		{
 			throw new RuntimeException(e);
 		}
-		return "http://" + hostname  + ":"+ getServerPort()+DASHBOARD;
+		return "http://" + hostname + ":" + getServerPort() + DASHBOARD_CONTEXT;
 	}
 	
 }
