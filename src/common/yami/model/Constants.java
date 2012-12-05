@@ -40,7 +40,7 @@ public class Constants
 		}
 		if (System.getProperty("yami.conf") != null)
 		{
-			return getInstallDir() + '/' + System.getProperty("yami.conf");
+			return getInstallDir() + '/conf/' + System.getProperty("yami.conf");
 		}
 		confPath = getInstallDir() + "/conf/yami.conf.xml";
 		log.info("SystemProperty 'yami.conf' not defined, returning default path " + confPath);
