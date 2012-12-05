@@ -31,6 +31,7 @@ public class Constants
 	public static String installDir = null;
 	public static String confPath = null;
 	
+	
 	public static String getConfPath()
 	{
 		if (confPath != null)
@@ -39,7 +40,7 @@ public class Constants
 		}
 		if (System.getProperty("yami.conf") != null)
 		{
-			return System.getProperty("yami.conf");
+			return getInstallDir() + '/' + System.getProperty("yami.conf");
 		}
 		confPath = getInstallDir() + "/conf/yami.conf.xml";
 		log.info("SystemProperty 'yami.conf' not defined, returning default path " + confPath);
