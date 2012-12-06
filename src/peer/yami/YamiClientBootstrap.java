@@ -39,9 +39,8 @@ public class YamiClientBootstrap
 		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
 		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, new ClientRestartServlet());
-		contexts.setHandlers(new Handler[] {
-				restartServlet, createLogContextHandler()
-		});
+		contexts.addHandler(restartServlet);
+		contexts.addHandler(createLogContextHandler());
 		log.info("Starting server at port " + port);
 		Server peerHTTPserver = new Server(port);
 		peerHTTPserver.setHandler(contexts);
@@ -98,7 +97,7 @@ public class YamiClientBootstrap
 		{
 			String filesPath = Constants.getInstallDir() + Constants.NODES_DIR + node.name;
 			createFileSystem(filesPath);
-			contexts.addHandler(createStaticContextHandler("/" + node.name, filesPath));
+			contexts.addHandler(createStaticContextHandler("/" + node.name , filesPath));
 			log.debug(hostname + ":" + node.name + " is served under " + filesPath);
 		}
 		return contexts;
