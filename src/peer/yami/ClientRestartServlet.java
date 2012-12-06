@@ -17,6 +17,10 @@ public class ClientRestartServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
+		ConfigurationManager cm = ConfigurationManager.getInstance();
+		Logger.getRootLogger().removeAllAppenders();
+		LogManager.shutdown();
+		
 		log.info("ClientRestartServlet started");
 	}
 	

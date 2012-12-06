@@ -22,6 +22,7 @@ public class Constants
 	
 	public static final String INSTALLATION = ".";
 	public static final String NODES_DIR = "/nodes/";
+	public static final String MONITORS_DIR = "/monitors/";
 	public static final String LOG_DIR = "/log/";
 	
 	public static final String DASHBOARD_CONTEXT = "/dashboard";
@@ -55,12 +56,14 @@ public class Constants
 		}
 		if (System.getProperty("install.dir") != null)
 		{
-			return System.getProperty("install.dir");
+			log.debug("setting installDir from properties: " + System.getProperty("install.dir"));
+			installDir = System.getProperty("install.dir");
+			return installDir;
 		}
 		String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File jarFile = new File(jarFileString);
 		installDir = jarFile.getParentFile().getParent();
-		log.info("SystemProperty 'install.dir' not defined, returning default path " + installDir);
+		log.info("SystemProperty 'install.dir' not defined, setting installDir as '" + installDir + "'");
 		return installDir;
 	}
 	

@@ -11,6 +11,7 @@ my $server_port = shift;
 my $client_install = shift;
 my $conf_file = shift;
 my $rsync_source = shift;
+my $hostname = `su - nobody -c 'hostname --fqdn'`;
 #
 my $PS ="/bin/ps";
 my $FLAGS = "-avz --delete --delete-before --exclude .svn/";
@@ -24,11 +25,11 @@ if (not -e $client_install){
 print "DEBUG: will run ($rsync_cmd)\n";
 `$rsync_cmd`;
 warn "SCRIPT ERROR: Failed to run ($rsync_cmd)(exit code $?)\n" if ($?);
-my $pid_cmd = "$PS -eo pid,cmd | grep java | grep 'yami.YamiClientBootstrap\$'| awk '{print \$1}'";
-print "DEBUG: will run ($pid_cmd)\n";
-my @pids = `$pid_cmd`;
+
+my @pids = &get_running_pids();
 if (scalar @pids > 0){
   if (scalar @pids == 1){
+    
     print "DEBUG: going to kill previous instance $pids[0]\n";
     kill(9,@pids);
     sleep 5;
@@ -42,9 +43,32 @@ my $java_cmd = "/usr/bin/nohup $java -Ddebug=true -Dyami.conf=$conf_file -Dport=
 print "DEBUG: will run ($java_cmd)\n";
 `$java_cmd`;
 sleep 5;
-@pids = `$pid_cmd`;
+@pids = &get_running_pids;
 if (not scalar @pids){
   print "Failed to start yami client, check /tmp/yami_start for more information\n";
 }else{
   print "Yami Client started successfully as @pids\n";
+}
+
+sub get_running_pids
+{
+  my $pid_cmd = "$PS -eo pid,cmd | grep java | grep 'yami.YamiClientBootstrap\$'| awk '{print \$1}'";
+  print "DEBUG: will run ($pid_cmd)\n";
+  my @pids = `$pid_cmd`;
+  chomp @pids;
+  return @pids;
+}
+
+sub is_pid_port_match ## need to finish yshabi
+{
+  my $pid = shift;
+  my @out = `lsof -i 'tcp:$client_port'`;
+  return 0 if ($?);
+  chomp @out;
+  foreach my $line (@out)
+  {
+    my @v = split(/[ \t]+/,$line);
+    return 1 if ($v[1] =~ m/^$pid$/ && $line =~ m/($client_port[ \t]+\(LISTEN\)$)|($hostname:$client_port(->))/);
+  }
+  return 0;
 }

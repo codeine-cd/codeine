@@ -1,18 +1,13 @@
 package yami;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import yami.configuration.Node;
-import yami.model.Constants;
-import yami.model.Result;
-import yami.utils.ProcessExecuter;
+import yami.configuration.*;
+import yami.model.*;
+import yami.utils.*;
 
 public class RunMonitors implements Task
 {
@@ -29,8 +24,7 @@ public class RunMonitors implements Task
 		for (File monitor : getMonitors())
 		{
 			runMonitor(monitor);
-		}
-		
+		}		
 	}
 
 	private void runMonitor(File monitor)
@@ -61,17 +55,20 @@ public class RunMonitors implements Task
 
 	private BufferedWriter getWriter(String name) throws IOException
 	{
-		FileWriter fstream = new FileWriter(Constants.getInstallDir() +"/nodes/"+ node.name +"/" +name + ".txt");
-		BufferedWriter out = new BufferedWriter(fstream);
-		return out;
+		String out = Constants.getInstallDir() +  Constants.NODES_DIR + node.name +"/" +name + ".txt";
+		log.debug("Output for " + name + " will be written to: "+ out);
+		FileWriter fstream = new FileWriter(out);
+		BufferedWriter bw = new BufferedWriter(fstream);
+		return bw;
 	}
 	
 	private List<File> getMonitors(){
-		log.debug("Collecting monitors from " + Constants.getInstallDir() + "/monitors/");
-		File folder = new File(Constants.getInstallDir() + "/monitors/");
+		String dir = Constants.getInstallDir() + Constants.MONITORS_DIR;
+		log.debug("Collecting monitors from " + dir);
+		File folder = new File(dir);
 		List<File> files = Arrays.asList(folder.listFiles());
 		if (files.isEmpty()){
-			log.debug("No files found to execute under "+ Constants.getInstallDir() + "/monitors/");
+			log.debug("No files found to execute under " + dir);
 		}else{
 			log.debug("Found monitors: " + files);
 		}
