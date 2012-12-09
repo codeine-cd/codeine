@@ -52,7 +52,7 @@ public class YamiServerBootstrap
 		server.setHandler(contexts);
 		try
 		{
-			new Thread(new UpdaterThread()).start();
+			new Thread(new UpdaterThread(new YamiMailSender(new SendMailStrategy()),new CollectorHttpResultFetcher())).start();
 			server.start();
 		}
 		catch (Exception e)
