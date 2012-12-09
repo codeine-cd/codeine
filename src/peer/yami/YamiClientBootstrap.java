@@ -38,12 +38,14 @@ public class YamiClientBootstrap
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
 		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
-		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, new ClientRestartServlet());
+		ClientRestartServlet rs = new ClientRestartServlet();
+		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, rs);
 		contexts.addHandler(restartServlet);
 		contexts.addHandler(createLogContextHandler());
 		log.info("Starting server at port " + port);
 		Server peerHTTPserver = new Server(port);
 		peerHTTPserver.setHandler(contexts);
+		rs.setStoppedObject(peerHTTPserver);
 		peerHTTPserver.start();
 	}
 

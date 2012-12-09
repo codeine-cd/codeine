@@ -51,7 +51,7 @@ public class ConfigurationManager
 		}
 	}
 	
-	private Yami getConfFromFile(String confPath) throws RuntimeException
+	public Yami getConfFromFile(String confPath) throws RuntimeException
 	{
 		try
 		{

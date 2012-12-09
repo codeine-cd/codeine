@@ -1,9 +1,9 @@
 package yami.mail;
 
-import java.util.List;
+import java.util.*;
 
-import yami.model.Result;
-import yami.utils.LimitedQueue;
+import yami.model.*;
+import yami.utils.*;
 
 public class CollectorOnAppState
 {
@@ -28,7 +28,7 @@ public class CollectorOnAppState
 		{
 			if (r.success())
 			{
-				success += 1;
+				success++;
 			}
 		}
 		return success > results.size() / 2;

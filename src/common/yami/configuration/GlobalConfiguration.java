@@ -3,6 +3,7 @@ package yami.configuration;
 public class GlobalConfiguration
 {
 	public String rsyncuser = "root";
+	public String java = "java";
 	public String rsyncsource = "";
 	public String rsync = "rsync";
 	public String perl = "perl";
@@ -82,5 +83,14 @@ public class GlobalConfiguration
 		if (serverport != other.serverport)
 			return false;
 		return true;
+	}
+
+	public String getJavaPath()
+	{
+		if (System.getProperty("java.path") != null)
+		{
+			java = System.getProperty("java.path");
+		}
+		return java;
 	}
 }

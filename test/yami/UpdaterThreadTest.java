@@ -219,8 +219,12 @@ public class UpdaterThreadTest
 		tested.updateResults(d);
 		
 		assertEquals(0, d.resultsByMonitoredApp.size());
-		assertEquals(0, yamiMailSender.callHistory.size());	
+		assertEquals(0, yamiMailSender.callHistory.size());
+		
+		addNode(d, "node2", true);
+		tested.updateResults(d);
+		
+		assertEquals(1, d.resultsByMonitoredApp.size());
+		assertEquals(1, yamiMailSender.callHistory.size());
 	}
-	
-	// after 100~% split for to two loops. o
 }

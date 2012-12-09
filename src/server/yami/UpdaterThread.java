@@ -57,6 +57,7 @@ public class UpdaterThread  implements Runnable
 					Result r = fetcher.getResult(c, n);
 					log.debug("adding result " + r.success() + " to node " + n);
 					d.addResults(n, c, r);
+					
 					mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
 				}
 				catch (Exception ex)
@@ -69,20 +70,20 @@ public class UpdaterThread  implements Runnable
 	
 	private boolean shouldSkipNode(HttpCollector c, Node n)
 	{
-		for (String node : c.excludedNode)
+		for (String exNode : c.excludedNode)
 		{
-			if (node.equals(n.name) || node.equals(n.nick) || node.equals(n.node.name))
+			if (exNode.equals(n.name) || exNode.equals(n.nick) || (null != n.node && exNode.equals(n.node.name)) )
 			{
 				return true;
 			}
 		}
-		for (String node : c.includedNode)
+		for (String incNode : c.includedNode)
 		{
-			if (node.equals("all"))
+			if (incNode.equals("all"))
 			{
 				return false;
 			}
-			if (node.equals(n.name) || node.equals(n.nick))
+			if (incNode.equals(n.name) || incNode.equals(n.nick))
 			{
 				return false;
 			}
