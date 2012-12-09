@@ -33,23 +33,7 @@ public class ClientRestartServlet extends HttpServlet
 			LogManager.shutdown();
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			// fix yshabi - hardcoded strings
-			String c = "\"";
-			c +=  gc.getJavaPath()+ " ";
-			if (System.getProperty("debug") != null)
-			{
-				c += "-Ddebug=" + System.getProperty("debug"); 
-			}
-			if (System.getProperty("yami.conf") != null)
-			{
-				c += "-Dyami.conf=" + System.getProperty("yami.conf") + " "; 
-			}
-			if (System.getProperty("port") != null)
-			{
-				c += "-Dport=" + System.getProperty("port") + " "; 
-			}
-			c += "-cp " + Constants.getInstallDir() + "/bin/yami.jar yami.YamiClientBootstrap";
-			c += "\"";
-			String[] cmd = {"/usr/bin/nohup",c};
+			String[] cmd = {"/usr/bin/nohup",Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(),gc.getRsyncPath(),gc.clientport + "", gc.serverport+"",Constants.getInstallDir(), "yami.conf.xml","itstl1078:/nfs/site/disks/iec_sws3/dist/workspace/misc/yami/" };
 			log.info("restart command: "+ cmd);
 			Runtime.getRuntime().exec(cmd);
 			System.exit(0);			

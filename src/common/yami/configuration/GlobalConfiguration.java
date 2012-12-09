@@ -93,4 +93,13 @@ public class GlobalConfiguration
 		}
 		return java;
 	}
+
+	public String getRsyncPath()
+	{
+		if (System.getProperty("rsync.path") != null)
+		{
+			java = System.getProperty("rsync");
+		}
+		return rsync;
+	}
 }
