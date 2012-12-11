@@ -53,7 +53,7 @@ public class YamiClientBootstrap
 		while (true)
 		{
 			log.info("HTTP server stopped, will wait 20 seconds");
-			Thread.sleep(TimeUnit.SECONDS.toSeconds(20));
+			Thread.sleep(TimeUnit.SECONDS.toMillis(20));
 		}
 	}
 	
