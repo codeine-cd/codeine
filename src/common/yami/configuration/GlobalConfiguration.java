@@ -118,4 +118,13 @@ public class GlobalConfiguration
 		}
 		return rsync;
 	}
+	
+	public String getRsyncUser()
+	{
+		if (System.getProperty("rsync.user") != null)
+		{
+			java = System.getProperty("rsyncuser");
+		}
+		return rsync;
+	}
 }

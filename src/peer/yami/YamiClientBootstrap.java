@@ -2,6 +2,7 @@ package yami;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import javax.servlet.http.*;
 
@@ -52,7 +53,7 @@ public class YamiClientBootstrap
 		while (true)
 		{
 			log.info("HTTP server stopped, will wait 20 seconds");
-			Thread.sleep(20);
+			Thread.sleep(TimeUnit.SECONDS.toSeconds(20));
 		}
 	}
 	
