@@ -12,7 +12,8 @@ import org.eclipse.jetty.servlet.*;
 
 import yami.configuration.*;
 import yami.model.*;
-public class YamiClientBootstrap 
+
+public class YamiClientBootstrap
 {
 	private static final Logger log = Logger.getLogger(YamiClientBootstrap.class);
 	
@@ -47,8 +48,14 @@ public class YamiClientBootstrap
 		peerHTTPserver.setHandler(contexts);
 		rs.setStoppedObject(peerHTTPserver);
 		peerHTTPserver.start();
+		peerHTTPserver.join();
+		while (true)
+		{
+			log.info("HTTP server stopped, will wait 20 seconds");
+			Thread.sleep(20);
+		}
 	}
-
+	
 	private void startNodeMonitoringThreads(List<Node> nodes)
 	{
 		for (Node node : nodes)
@@ -90,7 +97,6 @@ public class YamiClientBootstrap
 		}
 	}
 	
-		
 	// returns a collection of contexts (Context per node)
 	private ContextHandlerCollection createFileServerContexts(List<Node> nodes, String hostname)
 	{
@@ -99,7 +105,7 @@ public class YamiClientBootstrap
 		{
 			String filesPath = Constants.getInstallDir() + Constants.NODES_DIR + node.name;
 			createFileSystem(filesPath);
-			contexts.addHandler(createStaticContextHandler("/" + node.name , filesPath));
+			contexts.addHandler(createStaticContextHandler("/" + node.name, filesPath));
 			log.debug(hostname + ":" + node.name + " is served under " + filesPath);
 		}
 		return contexts;
@@ -116,7 +122,7 @@ public class YamiClientBootstrap
 	{
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
-		resourceHandler.setWelcomeFiles(new String[] { });
+		resourceHandler.setWelcomeFiles(new String[] {});
 		resourceHandler.setResourceBase(fsPath);
 		ContextHandler ch = new ContextHandler();
 		ch.setContextPath(contextPath);
@@ -126,7 +132,7 @@ public class YamiClientBootstrap
 	
 	private ServletContextHandler createServletContext(String context, HttpServlet servlet)
 	{
-		log.info("Creating servlet context at '"+ context + "'");
+		log.info("Creating servlet context at '" + context + "'");
 		ServletContextHandler monitorContext = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
 		monitorContext.setContextPath(context);
 		monitorContext.addServlet(new ServletHolder(servlet), "/");

@@ -38,9 +38,9 @@ public class PeerRestartThread
 		{
 			GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf; // if exception thrown, conf is
 																						// bad // bad.
+			log.info("going to shutdown HTTP server");
 			peerHTTPserver.stop();
-			Logger.getRootLogger().removeAllAppenders();
-			LogManager.shutdown();
+			log.info("HTTP server stopped successfully");
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			// fix yshabi - hardcoded strings
 			String[] cmd = {

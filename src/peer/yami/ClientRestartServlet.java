@@ -22,7 +22,6 @@ public class ClientRestartServlet extends HttpServlet
 		log.info("ClientRestartServlet started");
 		PrintWriter writer = res.getWriter();
 		writer.println("Recived restart request");
-		ConfigurationManager cm = ConfigurationManager.getInstance();
 		new PeerRestartThread(peerHTTPserver,writer);
 	}
 	
