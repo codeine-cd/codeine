@@ -15,6 +15,7 @@ public class PeerRestartThread
 	private Thread thread;
 	private Server peerHTTPserver;
 	private PrintWriter writer;
+	
 	public PeerRestartThread(Server peerHTTPserver, PrintWriter writer)
 	{
 		this.peerHTTPserver = peerHTTPserver;
@@ -46,9 +47,9 @@ public class PeerRestartThread
 			String[] cmd = {
 					"/usr/bin/nohup", Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(), gc.getRsyncPath(), gc.clientport + "", gc.serverport + "", Constants.getInstallDir(), "yami.conf.xml", "itstl1078:/nfs/site/disks/iec_sws3/dist/workspace/misc/yami/"
 			};
-			log.info("restart command: " + cmd);
+			log.info("restart command: " + cmdString(cmd));
 			Runtime.getRuntime().exec(cmd);
-			System.exit(0);
+			// System.exit(0);
 		}
 		catch (RuntimeException e)
 		{
@@ -59,6 +60,16 @@ public class PeerRestartThread
 		{
 			log.warn("failed to stop current http server", e);
 		}
+	}
+	
+	private String cmdString(String[] cmd)
+	{
+		String res = "";
+		for (String arg : cmd)
+		{
+			res += arg + " ";
+		}
+		return res;
 	}
 	
 }
