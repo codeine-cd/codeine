@@ -12,12 +12,11 @@ public class GlobalConfiguration
 	public int serverport = 8080;
 	public int clientport = 8112;
 	
-	
 	public String toString()
 	{
 		return "rsyncuser = " + rsyncuser + ", " + "rsyncsource = " + rsyncsource  +", "+ "rsync = " + rsync + ", "+ "perl = " + perl + ", "+ "clientpath = " + clientpath+ ", "+ "clientport = " + clientport + ", "+ "serverport = " + serverport;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -25,6 +24,8 @@ public class GlobalConfiguration
 		int result = 1;
 		result = prime * result + ((clientpath == null) ? 0 : clientpath.hashCode());
 		result = prime * result + clientport;
+		result = prime * result + ((confPath == null) ? 0 : confPath.hashCode());
+		result = prime * result + ((java == null) ? 0 : java.hashCode());
 		result = prime * result + ((perl == null) ? 0 : perl.hashCode());
 		result = prime * result + ((rsync == null) ? 0 : rsync.hashCode());
 		result = prime * result + ((rsyncsource == null) ? 0 : rsyncsource.hashCode());
@@ -32,7 +33,7 @@ public class GlobalConfiguration
 		result = prime * result + serverport;
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -51,6 +52,20 @@ public class GlobalConfiguration
 		else if (!clientpath.equals(other.clientpath))
 			return false;
 		if (clientport != other.clientport)
+			return false;
+		if (confPath == null)
+		{
+			if (other.confPath != null)
+				return false;
+		}
+		else if (!confPath.equals(other.confPath))
+			return false;
+		if (java == null)
+		{
+			if (other.java != null)
+				return false;
+		}
+		else if (!java.equals(other.java))
 			return false;
 		if (perl == null)
 		{
@@ -84,6 +99,7 @@ public class GlobalConfiguration
 			return false;
 		return true;
 	}
+
 
 	public String getJavaPath()
 	{

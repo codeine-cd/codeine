@@ -1,7 +1,6 @@
 package yami;
 
 import java.io.*;
-import java.util.concurrent.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -10,7 +9,6 @@ import org.apache.log4j.*;
 import org.eclipse.jetty.server.*;
 
 import yami.configuration.*;
-import yami.model.*;
 
 public class ClientRestartServlet extends HttpServlet
 {
@@ -25,30 +23,7 @@ public class ClientRestartServlet extends HttpServlet
 		PrintWriter writer = res.getWriter();
 		writer.println("Recived restart request");
 		ConfigurationManager cm = ConfigurationManager.getInstance();
-		try
-		{
-			GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf; //if exception thrown, conf is bad.
-			peerHTTPserver.stop();
-			Logger.getRootLogger().removeAllAppenders();
-			LogManager.shutdown();
-			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
-			// fix yshabi - hardcoded strings
-			String[] cmd = {"/usr/bin/nohup",Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(),gc.getRsyncPath(),gc.clientport + "", gc.serverport+"",Constants.getInstallDir(), "yami.conf.xml","itstl1078:/nfs/site/disks/iec_sws3/dist/workspace/misc/yami/" };
-			log.info("restart command: "+ cmd);
-			Runtime.getRuntime().exec(cmd);
-			System.exit(0);			
-		}
-		catch (RuntimeException e)
-		{
-			writer.println("failed to read new configuration from file "+ Constants.getConfPath());
-			log.warn("failed to read new configuration from file "+ Constants.getConfPath(), e);
-		}
-		catch (Exception e)
-		{
-			log.warn("failed to stop current http server", e);
-		}
-		
-		
+		new PeerRestartThread(peerHTTPserver,writer);
 	}
 	
 	boolean verifyConfiguration(GlobalConfiguration conf)
