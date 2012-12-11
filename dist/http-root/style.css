@@ -78,12 +78,17 @@ alert {
     background-color:#347C2C;
     color:#347C2C;
  }
-
  .alertbar ul li a.bad{
     background-color:#C11B17;
     color:#C11B17;
  }
+  .alertbar ul li a.restartbutton{
+    background-color: black;
+    color: white;
+ }
  
+
+
 .alertbar ul li a:hover, .alertbar ul li .current{
     color: black;
     background-color:black;}

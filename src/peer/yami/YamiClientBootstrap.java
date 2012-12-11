@@ -17,7 +17,7 @@ import yami.model.*;
 public class YamiClientBootstrap
 {
 	private static final Logger log = Logger.getLogger(YamiClientBootstrap.class);
-	
+	ConfigurationManager cm;
 	public static void main(String[] args)
 	{
 		try
@@ -34,7 +34,8 @@ public class YamiClientBootstrap
 	
 	private void execute() throws Exception
 	{
-		int port = Constants.getClientPort();
+		cm = ConfigurationManager.getInstance();
+		int port = cm.getCurrentGlobalConfiguration().getClientPort();
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
 		log.info("Client will try to start on port " + port + " from directory " + Constants.getInstallDir());
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
@@ -52,7 +53,7 @@ public class YamiClientBootstrap
 		peerHTTPserver.join();
 		while (true)
 		{
-			log.info("HTTP server stopped, will wait 20 seconds");
+			log.info("HTTP server is stopped. Sleeping for 20 seconds");
 			Thread.sleep(TimeUnit.SECONDS.toMillis(20));
 		}
 	}
@@ -138,6 +139,5 @@ public class YamiClientBootstrap
 		monitorContext.setContextPath(context);
 		monitorContext.addServlet(new ServletHolder(servlet), "/");
 		return monitorContext;
-	}
-	
+	}	
 }

@@ -1,16 +1,9 @@
 package yami.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import yami.configuration.HttpCollector;
-import yami.configuration.MailPolicy;
-import yami.configuration.Node;
-import yami.configuration.Peer;
-import yami.configuration.Project;
-import yami.mail.CollectorOnAppState;
+import yami.configuration.*;
+import yami.mail.*;
 
 public class DataStore implements IDataStore
 {
@@ -73,7 +66,7 @@ public class DataStore implements IDataStore
 		return $;
 	}
 	
-	public List<Peer> nodes()
+	public List<Peer> peers()
 	{
 		return configuration().peer;
 	}

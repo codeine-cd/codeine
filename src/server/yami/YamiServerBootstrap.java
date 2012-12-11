@@ -1,7 +1,5 @@
 package yami;
 
-import java.io.*;
-
 import javax.servlet.http.*;
 
 import org.apache.log4j.*;
@@ -9,6 +7,7 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.*;
 
+import yami.configuration.*;
 import yami.model.*;
 
 public class YamiServerBootstrap
@@ -18,41 +17,32 @@ public class YamiServerBootstrap
 	public static void main(String[] args)
 	{
 		System.out.println("Starting yami " + YamiVersion.get());
-		setLogger(getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
+		setLogger(Constants.getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
 		configureLogLevel();
 		new YamiServerBootstrap().runServer();
 	}
 	
-	private static String getInstallDir()
-	{
-		if (System.getProperty("installDir") != null)
-		{
-			return System.getProperty("installDir");
-		}
-		String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		File jarFile = new File(jarFileString);
-		return jarFile.getParentFile().getParent();
-	}
-	
 	private void runServer()
 	{
+		ConfigurationManager cm = ConfigurationManager.getInstance();
 		String installDir = Constants.getInstallDir();
 		log.info("Starting yami server at version " + YamiVersion.get());
-		int port = Constants.getServerPort();
+		int port = cm.getCurrentGlobalConfiguration().getServerPort();
 		log.info("Starting on port " + port + ". To set different server port, use -DserverPort=<port>");
 		log.info("starting static server under '/', serving" + installDir + Constants.HTTP_ROOT_CONTEXT);
 		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + Constants.HTTP_ROOT_CONTEXT);
 		log.info("starting dashboard servlet under '/dashboard'");
 		ServletContextHandler dashboardContext = createServletContext(Constants.DASHBOARD_CONTEXT, new DashboardServlet());
+		ServletContextHandler peerDashboardContext = createServletContext(Constants.PEERS_DASHBOARD_CONTEXT, new PeersDashboardServlet());
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		contexts.setHandlers(new Handler[] {
-				staticResouceContextHandler, dashboardContext
+				staticResouceContextHandler, dashboardContext, peerDashboardContext
 		});
 		Server server = new Server(port);
 		server.setHandler(contexts);
 		try
 		{
-			new Thread(new UpdaterThread(new YamiMailSender(new SendMailStrategy()),new CollectorHttpResultFetcher())).start();
+			new Thread(new UpdaterThread(new YamiMailSender(new SendMailStrategy()), new CollectorHttpResultFetcher())).start();
 			server.start();
 		}
 		catch (Exception e)

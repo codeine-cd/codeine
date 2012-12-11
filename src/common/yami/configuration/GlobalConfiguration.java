@@ -1,22 +1,88 @@
 package yami.configuration;
 
+import yami.model.*;
+
 public class GlobalConfiguration
 {
-	public String rsyncuser = "root";
-	public String java = "java";
-	public String rsyncsource = "";
-	public String rsync = "rsync";
-	public String perl = "perl";
-	public String confPath = null;
-	public String clientpath = "/tmp/yami.monitor/";
-	public int serverport = 8080;
-	public int clientport = 8112;
+	private String rsyncuser = "root";
+	private String java = "java";
+	private String rsyncsource = "";
+	private String rsync = "rsync";
+	private String perl = "perl";
+	private String conffile = "yami.conf.xml";
+	private String clientpath = "/tmp/yami.monitor/";
+	private int serverport = 8080;
+	private int clientport = 8112;
 	
+	public String getJavaPath()
+	{
+		if (System.getProperty("java.path") != null)
+		{
+			java = System.getProperty("java.path");
+		}
+		return java;
+	}
+	
+	public String getRsyncPath()
+	{
+		if (System.getProperty("rsync.path") != null)
+		{
+			java = System.getProperty("rsync");
+		}
+		return rsync;
+	}
+	
+	public String getRsyncUser()
+	{
+		if (System.getProperty("rsync.user") != null)
+		{
+			java = System.getProperty("rsyncuser");
+		}
+		return rsync;
+	}
+	
+	public int getClientPort()
+	{
+		if (System.getProperty("client.port") != null)
+		{
+			java = System.getProperty("client.port");
+		}
+		return clientport;
+	}
+	
+	public int getServerPort()
+	{
+		if (System.getProperty("server.port") != null)
+		{
+			serverport = Integer.parseInt(System.getProperty("server.port"));
+		}
+		return serverport;
+	}
+	
+	public String getRsyncSource()
+	{
+		if (System.getProperty("rsync.source") != null)
+		{
+			rsyncsource = System.getProperty("rsync.source");
+		}
+		return rsyncsource;
+	}
+	
+	public String getConfFullPath()
+	{
+		if (System.getProperty("yami.conf") != null)
+		{
+			conffile = System.getProperty("yami.conf");
+		}
+		return Constants.getInstallDir();
+	}
+	
+	@Override
 	public String toString()
 	{
-		return "rsyncuser = " + rsyncuser + ", " + "rsyncsource = " + rsyncsource  +", "+ "rsync = " + rsync + ", "+ "perl = " + perl + ", "+ "clientpath = " + clientpath+ ", "+ "clientport = " + clientport + ", "+ "serverport = " + serverport;
+		return "GlobalConfiguration [rsyncuser=" + rsyncuser + ", java=" + java + ", rsyncsource=" + rsyncsource + ", rsync=" + rsync + ", perl=" + perl + ", conffile=" + conffile + ", clientpath=" + clientpath + ", serverport=" + serverport + ", clientport=" + clientport + "]";
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
@@ -24,7 +90,7 @@ public class GlobalConfiguration
 		int result = 1;
 		result = prime * result + ((clientpath == null) ? 0 : clientpath.hashCode());
 		result = prime * result + clientport;
-		result = prime * result + ((confPath == null) ? 0 : confPath.hashCode());
+		result = prime * result + ((conffile == null) ? 0 : conffile.hashCode());
 		result = prime * result + ((java == null) ? 0 : java.hashCode());
 		result = prime * result + ((perl == null) ? 0 : perl.hashCode());
 		result = prime * result + ((rsync == null) ? 0 : rsync.hashCode());
@@ -33,7 +99,7 @@ public class GlobalConfiguration
 		result = prime * result + serverport;
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -53,12 +119,12 @@ public class GlobalConfiguration
 			return false;
 		if (clientport != other.clientport)
 			return false;
-		if (confPath == null)
+		if (conffile == null)
 		{
-			if (other.confPath != null)
+			if (other.conffile != null)
 				return false;
 		}
-		else if (!confPath.equals(other.confPath))
+		else if (!conffile.equals(other.conffile))
 			return false;
 		if (java == null)
 		{
@@ -99,32 +165,5 @@ public class GlobalConfiguration
 			return false;
 		return true;
 	}
-
-
-	public String getJavaPath()
-	{
-		if (System.getProperty("java.path") != null)
-		{
-			java = System.getProperty("java.path");
-		}
-		return java;
-	}
-
-	public String getRsyncPath()
-	{
-		if (System.getProperty("rsync.path") != null)
-		{
-			java = System.getProperty("rsync");
-		}
-		return rsync;
-	}
 	
-	public String getRsyncUser()
-	{
-		if (System.getProperty("rsync.user") != null)
-		{
-			java = System.getProperty("rsyncuser");
-		}
-		return rsync;
-	}
 }

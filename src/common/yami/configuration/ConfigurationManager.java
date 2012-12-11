@@ -33,7 +33,7 @@ public class ConfigurationManager
 	
 	private void applySystemPropertiesOverXML()
 	{
-		if (System.getProperty("client.port") != null)
+/*		if (System.getProperty("client.port") != null)
 		{
 			configuration.conf.clientport = Integer.parseInt(System.getProperty("client.port"));
 		}
@@ -47,9 +47,9 @@ public class ConfigurationManager
 		}
 		if (System.getProperty("yami.conf") != null)
 		{
-			configuration.conf.confPath = System.getProperty("yami.conf");
+			configuration.conf.conffile = System.getProperty("yami.conf");
 		}
-	}
+*/	}
 	
 	public Yami getConfFromFile(String confPath) throws RuntimeException
 	{

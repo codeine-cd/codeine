@@ -1,7 +1,6 @@
 package yami.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Peer
 {
@@ -10,6 +9,7 @@ public class Peer
 	
 	public Peer()
 	{
+		
 	}
 	
 	public Peer(String name)
@@ -20,6 +20,17 @@ public class Peer
 	@Override
 	public String toString()
 	{
-		return "Peer: name="+name+": "+node;
+		return "Peer: name=" + name + ": " + node;
+	}
+	
+	public String getPeerLink()
+	{
+		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
+		return "http://" + name + ":" + gc.getClientPort(); 
+	}
+	
+	public String getPeerRestartLink()
+	{
+		return getPeerLink() + "/restart"; 
 	}
 }

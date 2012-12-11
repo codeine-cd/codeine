@@ -1,21 +1,15 @@
 package yami;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import yami.configuration.HttpCollector;
-import yami.configuration.Node;
-import yami.mail.CollectorOnAppState;
-import yami.model.Constants;
-import yami.model.DataStore;
-import yami.model.DataStoreRetriever;
+import yami.configuration.*;
+import yami.mail.*;
+import yami.model.*;
 
 public class DashboardServlet extends HttpServlet
 {
@@ -26,13 +20,15 @@ public class DashboardServlet extends HttpServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 		log.debug("dashboard request");
+		String hostname = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
 		writer.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
 		writer.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
 		writer.println("<head>");
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-		//writer.println("<meta http-equiv=\"refresh\" content=\"5\" />");
+		// writer.println("<meta http-equiv=\"refresh\" content=\"5\" />");
 		writer.println("<title>YAMI Dashboard</title>");
 		writer.println("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
 		writer.println("");
@@ -41,14 +37,15 @@ public class DashboardServlet extends HttpServlet
 		writer.println("<div id=\"container\">");
 		writer.println("  <div id=\"header\">");
 		writer.println("      <h1><a href=\"/\">yami</a></h1>");
-		writer.println("        <h2>"+YamiVersion.get()+"</h2>");
+		writer.println("        <h2>" + YamiVersion.get() + "</h2>");
 		writer.println("        <div class=\"clear\"></div>");
 		writer.println("    </div>");
 		writer.println("    <div id=\"nav\">");
 		writer.println("      <ul>");
-		writer.println("          <li class=\"start\"><a href=\"server\">Server</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"peers\">Peers</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"nodes\">Nodes</a></li>");
+		writer.println("          <li class=\"start\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.DASHBOARD_CONTEXT + "\">Dashboard</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/server" + "\">Server</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/peers" + "\">Peers</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/nodes" + "\">Nodes</a></li>");
 		writer.println("        </ul>");
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
@@ -105,7 +102,7 @@ public class DashboardServlet extends HttpServlet
 	
 	private String getLink(HttpCollector collector, Node node)
 	{
-		return Constants.CLIENT_LINK.replace(Constants.NODE_NAME, node.node.name).replace(Constants.APP_NAME, node.name).replace(Constants.COLLECTOR_NAME,collector.name);
+		return Constants.CLIENT_LINK.replace(Constants.NODE_NAME, node.node.name).replace(Constants.APP_NAME, node.name).replace(Constants.COLLECTOR_NAME, collector.name);
 	}
 	
 	private DataStore getDataStore()

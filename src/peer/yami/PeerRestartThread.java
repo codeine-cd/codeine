@@ -45,11 +45,10 @@ public class PeerRestartThread
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			// fix yshabi - hardcoded strings
 			String[] cmd = {
-					"/usr/bin/nohup", Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(), gc.getRsyncPath(), gc.getRsyncUser() ,gc.clientport + "", gc.serverport + "", Constants.getInstallDir(), "yami.conf.xml", "itstl1078:/nfs/site/disks/iec_sws3/dist/workspace/misc/yami/"
+					"/usr/bin/nohup", Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(), gc.getRsyncPath(), gc.getRsyncUser(), gc.getClientPort() + "", gc.getServerPort() + "", Constants.getInstallDir(), "yami.conf.xml", gc.getRsyncSource()
 			};
 			log.info("restart command: " + cmdString(cmd));
 			Runtime.getRuntime().exec(cmd);
-			// System.exit(0);
 		}
 		catch (RuntimeException e)
 		{
