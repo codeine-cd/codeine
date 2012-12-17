@@ -7,7 +7,7 @@ import org.apache.log4j.*;
 import yami.configuration.*;
 import yami.model.*;
 
-public class UpdaterThread  implements Runnable
+public class UpdaterThread implements Runnable
 {
 	
 	private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(10);
@@ -21,7 +21,7 @@ public class UpdaterThread  implements Runnable
 		mailSender = yamiMailSender;
 		this.fetcher = fetcher;
 	}
-
+	
 	@Override
 	public void run()
 	{
@@ -41,7 +41,7 @@ public class UpdaterThread  implements Runnable
 			}
 		}
 	}
-
+	
 	public void updateResults(DataStore d)
 	{
 		for (HttpCollector c : d.collectors())
@@ -57,13 +57,22 @@ public class UpdaterThread  implements Runnable
 					Result r = fetcher.getResult(c, n);
 					log.debug("adding result " + r.success() + " to node " + n);
 					d.addResults(n, c, r);
-					
-					mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
 				}
 				catch (Exception ex)
 				{
 					ex.printStackTrace();
 				}
+			}
+		}
+		for (HttpCollector c : d.collectors())
+		{
+			for (Node n : d.appInstances())
+			{
+				if (shouldSkipNode(c, n))
+				{
+					continue;
+				}
+				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));				
 			}
 		}
 	}
@@ -72,7 +81,7 @@ public class UpdaterThread  implements Runnable
 	{
 		for (String exNode : c.excludedNode)
 		{
-			if (exNode.equals(n.name) || exNode.equals(n.nick) || (null != n.node && exNode.equals(n.node.name)) )
+			if (exNode.equals(n.name) || exNode.equals(n.nick) || (null != n.node && exNode.equals(n.node.name)))
 			{
 				return true;
 			}
@@ -92,5 +101,4 @@ public class UpdaterThread  implements Runnable
 		return true;
 	}
 	
-
 }
