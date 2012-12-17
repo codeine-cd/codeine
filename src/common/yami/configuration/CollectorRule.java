@@ -4,8 +4,8 @@ import java.util.*;
 
 public class CollectorRule
 {
-	public String node = null;
-	public String peer = null;
+	public String node = "^$";
+	public String peer = "^$";
 	public List<String> arg = new ArrayList<String>();
 	
 	public CollectorRule()
@@ -36,5 +36,3 @@ public class CollectorRule
 		return shouldApplyForNode(peer);
 	}
 }
-
-

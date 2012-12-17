@@ -5,23 +5,24 @@ import java.util.concurrent.*;
 import org.apache.log4j.*;
 
 import yami.configuration.*;
+import yami.mail.*;
 import yami.model.*;
 
 public class UpdaterThread implements Runnable
 {
-	
+
 	private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(10);
 	private static final Logger log = Logger.getLogger(UpdaterThread.class);
 	static final String DASHBOARD_URL = "http://";
 	private final YamiMailSender mailSender;
 	private final CollectorHttpResultFetcher fetcher;
-	
+
 	public UpdaterThread(YamiMailSender yamiMailSender, CollectorHttpResultFetcher fetcher)
 	{
 		mailSender = yamiMailSender;
 		this.fetcher = fetcher;
 	}
-	
+
 	@Override
 	public void run()
 	{
@@ -41,7 +42,7 @@ public class UpdaterThread implements Runnable
 			}
 		}
 	}
-	
+
 	public void updateResults(DataStore d)
 	{
 		for (HttpCollector c : d.collectors())
@@ -72,11 +73,27 @@ public class UpdaterThread implements Runnable
 				{
 					continue;
 				}
-				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));				
+				if (shouldMail(c, n, d))
+				{
+					mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
+				}
 			}
 		}
 	}
-	
+
+	private boolean shouldMail(HttpCollector c, Node n, DataStore d)
+	{
+		for (HttpCollector master : c.dependsOn())
+		{
+			CollectorOnAppState r = d.getResult(n,master);
+			if (r == null || !r.state() )
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private boolean shouldSkipNode(HttpCollector c, Node n)
 	{
 		for (String exNode : c.excludedNode)
@@ -97,8 +114,8 @@ public class UpdaterThread implements Runnable
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 }
