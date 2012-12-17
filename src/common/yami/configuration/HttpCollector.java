@@ -1,7 +1,6 @@
 package yami.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class HttpCollector
 {
@@ -9,6 +8,7 @@ public class HttpCollector
 	public String name;
 	public List<String> includedNode = new ArrayList<String>();
 	public List<String> excludedNode = new ArrayList<String>();
+	public List<CollectorRule> rule = new ArrayList<CollectorRule>();
 	
 	public HttpCollector()
 	{

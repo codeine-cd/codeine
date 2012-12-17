@@ -2,13 +2,12 @@ package yami.configuration;
 
 import java.util.*;
 
-
 public class Project
 {
 	public List<Peer> peer = new ArrayList<Peer>();
 	public List<HttpCollector> collector = new ArrayList<HttpCollector>();
 	public List<String> mailingList = new ArrayList<String>();
-	public List<MailPolicy> mailingPolicy = new ArrayList<MailPolicy>();	
+	public List<MailPolicy> mailingPolicy = new ArrayList<MailPolicy>();
 	
 	@Override
 	public int hashCode()
@@ -21,6 +20,7 @@ public class Project
 		result = prime * result + ((peer == null) ? 0 : peer.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -61,6 +61,7 @@ public class Project
 			return false;
 		return true;
 	}
+	
 	public List<Node> appInstances()
 	{
 		List<Node> $ = new ArrayList<Node>();
@@ -69,6 +70,18 @@ public class Project
 			$.addAll(p.node);
 		}
 		return $;
+	}
+	
+	public HttpCollector getCollector(String name)
+	{
+		for (HttpCollector c : collector)
+		{
+			if (c.name.equals(name))
+			{
+				return c;
+			}
+		}
+		return null;
 	}
 	
 }
