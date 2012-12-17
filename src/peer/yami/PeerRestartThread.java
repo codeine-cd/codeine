@@ -49,6 +49,7 @@ public class PeerRestartThread
 			};
 			log.info("restart command: " + cmdString(cmd));
 			Runtime.getRuntime().exec(cmd);
+			System.exit(0);
 		}
 		catch (RuntimeException e)
 		{

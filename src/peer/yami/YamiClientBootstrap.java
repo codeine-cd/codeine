@@ -41,7 +41,7 @@ public class YamiClientBootstrap
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
 		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
-		ClientRestartServlet rs = new ClientRestartServlet();
+		PeerRestartServlet rs = new PeerRestartServlet();
 		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, rs);
 		contexts.addHandler(restartServlet);
 		contexts.addHandler(createLogContextHandler());
