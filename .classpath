@@ -12,6 +12,7 @@
 	<classpathentry kind="lib" path="libs/smtp.jar"/>
 	<classpathentry kind="lib" path="libs/guice-3.0.jar"/>
 	<classpathentry kind="lib" path="libs/aopalliance.jar"/>
+	<classpathentry kind="lib" path="libs/guava-14.0-rc1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="compiled_classes"/>
 </classpath>
