@@ -1,14 +1,22 @@
 package yami;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.SocketException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import yami.configuration.*;
-import yami.model.*;
+import yami.configuration.HttpCollector;
+import yami.configuration.Node;
+import yami.model.Constants;
+import yami.model.Result;
+
+import com.google.common.base.Joiner;
 
 public class CollectorHttpResultFetcher
 {
@@ -20,7 +28,7 @@ public class CollectorHttpResultFetcher
 		resultURL = resultURL.replace(Constants.NODE_NAME, n.node.name).replace(Constants.APP_NAME, n.name).replace(Constants.COLLECTOR_NAME, c.name);
 		log.debug("Will try to fetch result from " + resultURL);
 		List<String> lines = readHTTP(resultURL);
-		String output = new ListJoiner().listToString(lines, "\n");
+		String output = Joiner.on("\n").join(lines);
 		Result res = new Result(0, output);
 		if (lines.isEmpty())
 		{
