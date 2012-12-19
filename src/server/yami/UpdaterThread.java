@@ -1,12 +1,16 @@
 package yami;
 
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import yami.configuration.*;
-import yami.mail.*;
-import yami.model.*;
+import yami.configuration.HttpCollector;
+import yami.configuration.Node;
+import yami.mail.CollectorOnAppState;
+import yami.model.Constants;
+import yami.model.DataStore;
+import yami.model.DataStoreRetriever;
+import yami.model.Result;
 
 public class UpdaterThread implements Runnable
 {
