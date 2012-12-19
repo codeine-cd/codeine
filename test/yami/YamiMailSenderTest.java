@@ -1,7 +1,6 @@
 package yami;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +82,7 @@ public class YamiMailSenderTest
 		@Override
 		public List<String> mailingList()
 		{
-			return null;
+			return new ArrayList<String>();
 		}
 		
 	}
@@ -92,7 +91,7 @@ public class YamiMailSenderTest
 		private boolean sent;
 
 		@Override
-		public void sendMail(List<String> mailingList, HttpCollector c, Node n, Result results)
+		public void mailCollectorResult(List<String> mailingList, HttpCollector c, Node n, Result results)
 		{
 			sent = true;
 		}

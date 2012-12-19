@@ -10,6 +10,7 @@ public class Peer
 	@XmlElement(name = "node")
 	public List<Node> nodes = new ArrayList<Node>();
 	public String name;
+	public List<String> mailingList = new ArrayList<String>();
 	
 	public Peer()
 	{

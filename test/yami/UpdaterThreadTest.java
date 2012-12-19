@@ -2,15 +2,20 @@ package yami;
 
 import static org.junit.Assert.*;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import org.junit.*;
+import org.junit.Test;
 
-import yami.configuration.*;
-import yami.mail.*;
-import yami.model.*;
+import yami.configuration.HttpCollector;
+import yami.configuration.Node;
+import yami.mail.CollectorOnAppState;
+import yami.model.DataStore;
+import yami.model.IDataStore;
+import yami.model.Result;
 
 public class UpdaterThreadTest
 {
@@ -101,7 +106,7 @@ public class UpdaterThreadTest
 	{
 		HttpCollector c = createHttpCollector();
 		c.name = name;
-		c.includedNode.add("all");
+		c.includedNodes.add("all");
 		if (addToDatastore)
 		{
 			d.collectors().add(c);
@@ -132,7 +137,7 @@ public class UpdaterThreadTest
 		DataStore d = new ForTestingDataStore(c, a);
 		HttpCollector hc = createHttpCollector();
 		hc.name = "test";
-		hc.includedNode.add("all");
+		hc.includedNodes.add("all");
 		d.collectors().add(hc);
 		addNode(d, "node1", true);
 		
@@ -185,7 +190,7 @@ public class UpdaterThreadTest
 		
 		HttpCollector hc = addCollector(d, "collector1", true);
 		
-		hc.includedNode.clear();
+		hc.includedNodes.clear();
 		tested.updateResults(d);
 		
 		assertEquals(0, d.resultsByMonitoredApp.size());
@@ -206,8 +211,8 @@ public class UpdaterThreadTest
 		
 		HttpCollector hc = addCollector(d, "collector1", true);
 		
-		hc.includedNode.clear();
-		hc.includedNode.add("node1");
+		hc.includedNodes.clear();
+		hc.includedNodes.add("node1");
 		tested.updateResults(d);
 		
 		assertEquals(1, d.resultsByMonitoredApp.size());
@@ -226,7 +231,7 @@ public class UpdaterThreadTest
 		addNode(d, "node1", true);
 		HttpCollector hc = addCollector(d, "collector1", true);
 		
-		hc.includedNode.add("all");
+		hc.includedNodes.add("all");
 		hc.excludedNodes.add("node1");
 		tested.updateResults(d);
 		
@@ -250,17 +255,17 @@ public class UpdaterThreadTest
 		HttpCollector master = createHttpCollector();
 		
 		master.name = "master";
-		master.includedNode.add("all");
+		master.includedNodes.add("all");
 		
 		HttpCollector hc = createHttpCollector();
 		hc.name = "slave";
-		hc.includedNode.add("all");
+		hc.includedNodes.add("all");
 		hc.dependsOn().add(master);
 		d.collectors().add(hc);
 		
 		HttpCollector hc2 = createHttpCollector();
 		hc2.name = "bulgaria";
-		hc2.includedNode.add("all");
+		hc2.includedNodes.add("all");
 		hc2.dependsOn().add(master);
 		d.collectors().add(hc2);
 		
@@ -284,11 +289,11 @@ public class UpdaterThreadTest
 		HttpCollector hc = createHttpCollector();
 		
 		master.name = "master";
-		master.includedNode.add("all");
+		master.includedNodes.add("all");
 		d.collectors().add(master);
 		
 		hc.name = "slave";
-		hc.includedNode.add("all");
+		hc.includedNodes.add("all");
 		hc.dependsOn().add(master);
 		d.collectors().add(hc);
 		
@@ -312,18 +317,18 @@ public class UpdaterThreadTest
 		HttpCollector master = createHttpCollector();
 		
 		master.name = "master";
-		master.includedNode.add("all");
+		master.includedNodes.add("all");
 		d.collectors().add(master);
 		
 		HttpCollector hc = createHttpCollector();
 		hc.name = "slave";
-		hc.includedNode.add("all");
+		hc.includedNodes.add("all");
 		hc.dependsOn().add(master);
 		d.collectors().add(hc);
 		
 		HttpCollector hc2 = createHttpCollector();
 		hc2.name = "bulgaria";
-		hc2.includedNode.add("all");
+		hc2.includedNodes.add("all");
 		hc2.dependsOn().add(master);
 		d.collectors().add(hc2);
 		

@@ -40,6 +40,7 @@ public class Send
 			msg.setSubject(subject);
 			msg.setSentDate(new Date());
 			msg.setText(content);
+			log.info("Mail subject '" + subject + "' is sent to recipients: " + recipients);
 			if (System.getProperty("nomail") == null)
 			{
 				Transport.send(msg);

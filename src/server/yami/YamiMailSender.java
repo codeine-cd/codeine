@@ -2,6 +2,8 @@ package yami;
 
 import java.util.List;
 
+import org.apache.commons.collections.ListUtils;
+
 import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
@@ -21,7 +23,9 @@ public class YamiMailSender
 	{
 		if (shouldMailByPolicies(d.mailingPolicy(), state))
 		{
-			sendMailStrategy.sendMail(d.mailingList(), c, n, state.getLast());
+			@SuppressWarnings("unchecked")
+			List<String> fullMailingList = ListUtils.union(d.mailingList(),n.node.mailingList);
+			sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
 		}
 	}
 	private boolean shouldMailByPolicies(List<MailPolicy> mailPolicy, CollectorOnAppState state)

@@ -1,13 +1,22 @@
 package yami;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import yami.configuration.*;
-import yami.model.*;
-import yami.utils.*;
+import yami.configuration.CollectorRule;
+import yami.configuration.ConfigurationManager;
+import yami.configuration.HttpCollector;
+import yami.configuration.Node;
+import yami.model.Constants;
+import yami.model.Result;
+import yami.utils.ProcessExecuter;
 
 public class RunMonitors implements Task
 {
@@ -57,7 +66,7 @@ public class RunMonitors implements Task
 	{
 		List<String> cmd = new ArrayList<String>();
 		cmd.add(monitor.getAbsolutePath());
-		for (CollectorRule r : c.rule)
+		for (CollectorRule r : c.rules)
 		{
 			if (r.shouldApplyForNode(node.name))
 			{

@@ -10,7 +10,7 @@ import yami.model.Result;
 public class SendMailStrategy
 {
 	
-	public void sendMail(List<String> mailingList, HttpCollector c, Node n, Result results)
+	public void mailCollectorResult(List<String> mailingList, HttpCollector c, Node n, Result results)
 	{
 		String successString = results.success() ? "OK" : "FAIL";
 		String subject = "yami monitor '" + c.name + "' on " + n.nick() + " is now " + successString;
