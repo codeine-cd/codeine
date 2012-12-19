@@ -227,7 +227,7 @@ public class UpdaterThreadTest
 		HttpCollector hc = addCollector(d, "collector1", true);
 		
 		hc.includedNode.add("all");
-		hc.excludedNode.add("node1");
+		hc.excludedNodes.add("node1");
 		tested.updateResults(d);
 		
 		assertEquals(0, d.resultsByMonitoredApp.size());

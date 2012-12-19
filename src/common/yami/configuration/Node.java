@@ -13,7 +13,8 @@ public class Node
 {
 	public String nick;
 	public String name;
-	@XmlTransient public Peer node;
+	@XmlTransient
+	public Peer node;
 	
 	public void afterUnmarshal(Unmarshaller u, Object parent)
 	{

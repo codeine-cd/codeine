@@ -47,7 +47,7 @@ public class DataStore implements IDataStore
 	{
 		for (Node node : configuration().appInstances())
 		{
-			for (HttpCollector collector : configuration().collector)
+			for (HttpCollector collector : configuration().collectors)
 			{
 				CollectorOnAppState result = getResult(node, collector);
 				if (null == result || !result.state())
@@ -62,13 +62,13 @@ public class DataStore implements IDataStore
 	public List<HttpCollector> collectors()
 	{
 		List<HttpCollector> $ = new ArrayList<HttpCollector>();
-		$.addAll(configuration().collector);
+		$.addAll(configuration().collectors);
 		return $;
 	}
 	
 	public List<Peer> peers()
 	{
-		return configuration().peer;
+		return configuration().peers;
 	}
 	
 	public List<Node> appInstances()

@@ -1,15 +1,21 @@
 package yami.configuration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 
 public class HttpCollector
 {
 	
 	public String name;
-	public List<String> includedNode = new ArrayList<String>();
-	public List<String> excludedNode = new ArrayList<String>();
+	@XmlElement(name = "includedNode")
+	public List<String> includedNodes = new ArrayList<String>();
+	@XmlElement(name = "excludedNode")
+	public List<String> excludedNodes = new ArrayList<String>();
 	public List<String> dependsOn = new ArrayList<String>();
-	public List<CollectorRule> rule = new ArrayList<CollectorRule>();
+	@XmlElement(name = "rule")
+	public List<CollectorRule> rules = new ArrayList<CollectorRule>();
 	
 	public HttpCollector()
 	{
@@ -21,10 +27,10 @@ public class HttpCollector
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dependsOn == null) ? 0 : dependsOn.hashCode());
-		result = prime * result + ((excludedNode == null) ? 0 : excludedNode.hashCode());
-		result = prime * result + ((includedNode == null) ? 0 : includedNode.hashCode());
+		result = prime * result + ((excludedNodes == null) ? 0 : excludedNodes.hashCode());
+		result = prime * result + ((includedNodes == null) ? 0 : includedNodes.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((rule == null) ? 0 : rule.hashCode());
+		result = prime * result + ((rules == null) ? 0 : rules.hashCode());
 		return result;
 	}
 
@@ -45,19 +51,19 @@ public class HttpCollector
 		}
 		else if (!dependsOn.equals(other.dependsOn))
 			return false;
-		if (excludedNode == null)
+		if (excludedNodes == null)
 		{
-			if (other.excludedNode != null)
+			if (other.excludedNodes != null)
 				return false;
 		}
-		else if (!excludedNode.equals(other.excludedNode))
+		else if (!excludedNodes.equals(other.excludedNodes))
 			return false;
-		if (includedNode == null)
+		if (includedNodes == null)
 		{
-			if (other.includedNode != null)
+			if (other.includedNodes != null)
 				return false;
 		}
-		else if (!includedNode.equals(other.includedNode))
+		else if (!includedNodes.equals(other.includedNodes))
 			return false;
 		if (name == null)
 		{
@@ -66,12 +72,12 @@ public class HttpCollector
 		}
 		else if (!name.equals(other.name))
 			return false;
-		if (rule == null)
+		if (rules == null)
 		{
-			if (other.rule != null)
+			if (other.rules != null)
 				return false;
 		}
-		else if (!rule.equals(other.rule))
+		else if (!rules.equals(other.rules))
 			return false;
 		return true;
 	}
@@ -81,7 +87,7 @@ public class HttpCollector
 	{
 		final List<HttpCollector> l = new ArrayList<HttpCollector>();
 		Project p = ConfigurationManager.getInstance().getConfiguredProject();
-		for (HttpCollector c : p.collector)
+		for (HttpCollector c : p.collectors)
 		{
 			for (String name : dependsOn)
 			{

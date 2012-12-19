@@ -1,10 +1,14 @@
 package yami.configuration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 
 public class Peer
 {
-	public List<Node> node = new ArrayList<Node>();
+	@XmlElement(name = "node")
+	public List<Node> nodes = new ArrayList<Node>();
 	public String name;
 	
 	public Peer()
@@ -20,7 +24,7 @@ public class Peer
 	@Override
 	public String toString()
 	{
-		return "Peer: name=" + name + ": " + node;
+		return "Peer: name=" + name + ": " + nodes;
 	}
 	
 	public String getPeerLink()

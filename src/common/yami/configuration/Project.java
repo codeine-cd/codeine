@@ -1,11 +1,16 @@
 package yami.configuration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 
 public class Project
 {
-	public List<Peer> peer = new ArrayList<Peer>();
-	public List<HttpCollector> collector = new ArrayList<HttpCollector>();
+	@XmlElement(name = "peer")
+	public List<Peer> peers = new ArrayList<Peer>();
+	@XmlElement(name = "collector")
+	public List<HttpCollector> collectors = new ArrayList<HttpCollector>();
 	public List<String> mailingList = new ArrayList<String>();
 	public List<MailPolicy> mailingPolicy = new ArrayList<MailPolicy>();
 	
@@ -14,10 +19,10 @@ public class Project
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((collector == null) ? 0 : collector.hashCode());
+		result = prime * result + ((collectors == null) ? 0 : collectors.hashCode());
 		result = prime * result + ((mailingList == null) ? 0 : mailingList.hashCode());
 		result = prime * result + ((mailingPolicy == null) ? 0 : mailingPolicy.hashCode());
-		result = prime * result + ((peer == null) ? 0 : peer.hashCode());
+		result = prime * result + ((peers == null) ? 0 : peers.hashCode());
 		return result;
 	}
 	
@@ -31,12 +36,12 @@ public class Project
 		if (getClass() != obj.getClass())
 			return false;
 		Project other = (Project)obj;
-		if (collector == null)
+		if (collectors == null)
 		{
-			if (other.collector != null)
+			if (other.collectors != null)
 				return false;
 		}
-		else if (!collector.equals(other.collector))
+		else if (!collectors.equals(other.collectors))
 			return false;
 		if (mailingList == null)
 		{
@@ -52,12 +57,12 @@ public class Project
 		}
 		else if (!mailingPolicy.equals(other.mailingPolicy))
 			return false;
-		if (peer == null)
+		if (peers == null)
 		{
-			if (other.peer != null)
+			if (other.peers != null)
 				return false;
 		}
-		else if (!peer.equals(other.peer))
+		else if (!peers.equals(other.peers))
 			return false;
 		return true;
 	}
@@ -65,16 +70,16 @@ public class Project
 	public List<Node> appInstances()
 	{
 		List<Node> $ = new ArrayList<Node>();
-		for (Peer p : peer)
+		for (Peer p : peers)
 		{
-			$.addAll(p.node);
+			$.addAll(p.nodes);
 		}
 		return $;
 	}
 	
 	public HttpCollector getCollector(String name)
 	{
-		for (HttpCollector c : collector)
+		for (HttpCollector c : collectors)
 		{
 			if (c.name.equals(name))
 			{
