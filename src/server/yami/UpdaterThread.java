@@ -64,9 +64,9 @@ public class UpdaterThread implements Runnable
 					log.debug("adding result " + r.success() + " to node " + n);
 					d.addResults(n, c, r);
 				}
-				catch (Exception ex)
+				catch (Exception e)
 				{
-					ex.printStackTrace();
+					log.warn("Exception in updateResults.",e);
 				}
 			}
 		}
