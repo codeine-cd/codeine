@@ -1,14 +1,14 @@
 package yami.configuration;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import yami.model.*;
+import yami.model.Constants;
 
 public class ConfigurationManager
 {
@@ -19,16 +19,21 @@ public class ConfigurationManager
 	
 	private ConfigurationManager()
 	{
+		updateTime = new Date();
 		try
 		{
 			configuration = getConfFromFile(Constants.getConfPath());
 			applySystemPropertiesOverXML();
-			updateTime = new Date();
 		}
 		catch (RuntimeException e)
 		{
 			log.warn("Failed to read new configuration from " + Constants.getConfPath() + ". Using original from " + DateFormat.getDateTimeInstance().format(updateTime), e);
 		}
+		catch (Exception e)
+		{
+			log.warn("Configuration manager failed to start, aborting.",e);
+		}
+		
 	}
 	
 	private void applySystemPropertiesOverXML()
