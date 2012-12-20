@@ -21,7 +21,7 @@ import com.google.common.base.Joiner;
 public class CollectorHttpResultFetcher
 {
 	private static final Logger log = Logger.getLogger(CollectorHttpResultFetcher.class);
-
+	
 	public Result getResult(HttpCollector c, Node n) throws IOException, InterruptedException
 	{
 		String resultURL = Constants.CLIENT_LINK;
@@ -30,23 +30,34 @@ public class CollectorHttpResultFetcher
 		List<String> lines = readHTTP(resultURL);
 		String output = Joiner.on("\n").join(lines);
 		Result res = new Result(0, output);
-		if (lines.isEmpty())
+		if (c.name.equals("keepalive"))
+		{
+			res = getKeepaliveResult(lines, res);
+		}
+		else if (lines.isEmpty())
 		{
 			return null;
-		}
-		else if (c.name.equals("keepalive"))
-		{
-			long serverEpoch = System.currentTimeMillis() / 1000;
-			long clientEpoch = Long.parseLong(lines.get(3));
-			log.debug("server time - client time :" + serverEpoch + "-" + clientEpoch);
-			if (serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(2))
-			{
-				res = new Result(1, "");
-			}
 		}
 		else
 		{
 			res = new Result(lines.get(0).equals("True") ? 0 : 1, output);
+		}
+		return res;
+	}
+
+	private Result getKeepaliveResult(List<String> lines, Result res)
+	{
+		long serverEpoch = System.currentTimeMillis() / 1000;
+		
+		long clientEpoch = 0;
+		if (!lines.isEmpty() && lines.size() >= 4)
+		{
+			clientEpoch = Long.parseLong(lines.get(3));
+			log.debug("server time - client time :" + serverEpoch + "-" + clientEpoch + "=" + (serverEpoch-clientEpoch));
+		}
+		if (clientEpoch == 0 || serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(2))
+		{
+			return new Result(1, "Keepalive failed, node is either down or not updating.");
 		}
 		return res;
 	}
