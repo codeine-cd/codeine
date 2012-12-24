@@ -35,7 +35,7 @@ public class UpdaterThread implements Runnable
 		{
 			DataStore d = DataStoreRetriever.getD();
 			updateResults(d);
-			try
+			try 
 			{
 				Thread.sleep(SLEEP_TIME);
 			}
