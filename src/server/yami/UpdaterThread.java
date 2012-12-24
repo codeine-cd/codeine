@@ -88,7 +88,7 @@ public class UpdaterThread implements Runnable
 	{
 		for (String exNode : c.excludedNodes)
 		{
-			if (exNode.equals(n.name) || exNode.equals(n.nick) || (null != n.node && exNode.equals(n.node.name)))
+			if (exNode.equals(n.name) || exNode.equals(n.nick) || (null != n.peer && exNode.equals(n.peer.name)))
 			{
 				return true;
 			}

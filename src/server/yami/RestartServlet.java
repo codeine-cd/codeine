@@ -38,7 +38,7 @@ public class RestartServlet extends HttpServlet
 		log.info("restarting " + node.name);
 		List<String> cmd = new ArrayList<String>();
 		cmd.add("/nfs/iil/disks/iec_sws3/dist/workspace/misc/monitoring/server/yamiSsh.pl");
-		cmd.add(node.node.name);
+		cmd.add(node.peer.name);
 		cmd.add("/usr/intel/pkgs/python/2.7.2/bin/python -tt /nfs/iil/disks/iec_sws3/dist/workspace/misc/monitoring/monitoring_agent.py restart " + node.name);
 		log.debug("restarting " + cmd);
 		try

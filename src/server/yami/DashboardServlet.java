@@ -102,7 +102,7 @@ public class DashboardServlet extends HttpServlet
 	
 	private String getLink(HttpCollector collector, Node node)
 	{
-		return Constants.CLIENT_LINK.replace(Constants.NODE_NAME, node.node.name).replace(Constants.APP_NAME, node.name).replace(Constants.COLLECTOR_NAME, collector.name);
+		return Constants.CLIENT_LINK.replace(Constants.NODE_NAME, node.peer.name).replace(Constants.APP_NAME, node.name).replace(Constants.COLLECTOR_NAME, collector.name);
 	}
 	
 	private DataStore getDataStore()

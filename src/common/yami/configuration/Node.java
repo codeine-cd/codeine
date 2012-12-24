@@ -14,11 +14,11 @@ public class Node
 	public String nick;
 	public String name;
 	@XmlTransient
-	public Peer node;
+	public Peer peer;
 	
 	public void afterUnmarshal(Unmarshaller u, Object parent)
 	{
-		node = (Peer)parent;
+		peer = (Peer)parent;
 	}
 	   
 	public String nick()
@@ -67,7 +67,7 @@ public class Node
 
 	public String getLogLink()
 	{
-		return "http://" + node.name + ":"+ Constants.getClientPort();
+		return "http://" + peer.name + ":"+ Constants.getClientPort();
 	}
 	
 	

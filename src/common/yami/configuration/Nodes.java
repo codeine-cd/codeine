@@ -18,7 +18,7 @@ public class Nodes
 		List<Node> nodes = new ArrayList<Node>();
 		for (Node node : dataStore.appInstances())
 		{
-			if (!hostname.equals(node.node.name))
+			if (!hostname.equals(node.peer.name))
 			{
 				continue;
 			}

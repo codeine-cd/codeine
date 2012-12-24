@@ -33,7 +33,7 @@ public class NodesTest
 			{
 				ArrayList<Node> arrayList = new ArrayList<Node>();
 				Node e = new Node();
-				e.node = new Peer("host");
+				e.peer = new Peer("host");
 				arrayList.add(e);
 				return arrayList;
 			};

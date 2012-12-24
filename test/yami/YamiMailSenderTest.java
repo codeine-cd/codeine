@@ -28,7 +28,7 @@ public class YamiMailSenderTest
 		n.name = "stam";
 		Peer peer = new Peer();
 		peer.name = "peername";
-		n.node = peer;
+		n.peer = peer;
 		HttpCollector c = createHttpCollector();
 		c.name = "cname";
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.EachRun);

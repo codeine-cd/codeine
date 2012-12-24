@@ -134,7 +134,7 @@ public class UpdaterThreadTest
 		node.name = string;
 		Peer peer = new Peer();
 		peer.mailingList = Lists.newArrayList();
-		node.node = peer;
+		node.peer = peer;
 		if (addToDataStore)
 		{
 			d.appInstances().add(node);

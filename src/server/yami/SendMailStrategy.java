@@ -15,7 +15,7 @@ public class SendMailStrategy
 		String successString = results.success() ? "OK" : "FAIL";
 		String subject = "yami monitor '" + c.name + "' on " + n.nick() + " is now " + successString;
 		String content = "Collector current status: "
-				+ Constants.CLIENT_LINK.replace(Constants.APP_NAME, n.name).replace(Constants.NODE_NAME, n.node.name).replace(Constants.COLLECTOR_NAME, c.name)
+				+ Constants.CLIENT_LINK.replace(Constants.APP_NAME, n.name).replace(Constants.NODE_NAME, n.peer.name).replace(Constants.COLLECTOR_NAME, c.name)
 				+ "\n\n";
 		content += "Dashboard: " + Constants.getServerDashboard() + "\n\n";
 		content += "Collector Output:\n";

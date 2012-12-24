@@ -32,7 +32,7 @@ public class YamiMailSender
 			return;
 		}
 		
-		List<String> fullMailingList = ListUtils.union(d.mailingList(), n.node.mailingList);
+		List<String> fullMailingList = ListUtils.union(d.mailingList(), n.peer.mailingList);
 		sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
 	}
 	
