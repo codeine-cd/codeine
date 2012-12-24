@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
-import yami.mail.CollectorOnAppState;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 import yami.model.Result;
@@ -66,12 +65,12 @@ public class UpdaterThread implements Runnable
 				}
 				catch (Exception e)
 				{
-					log.warn("Exception in updateResults.",e);
+					log.warn("Exception in updateResults.", e);
 				}
 			}
 		}
 		timer.stop();
-		log.info("updateResults cycle time: " + timer.elapsed(TimeUnit.MILLISECONDS) + " " + TimeUnit.MILLISECONDS.name()) ;
+		log.info("updateResults cycle time: " + timer.elapsed(TimeUnit.MILLISECONDS) + " " + TimeUnit.MILLISECONDS.name());
 		for (HttpCollector c : d.collectors())
 		{
 			for (Node n : d.appInstances())
@@ -80,25 +79,9 @@ public class UpdaterThread implements Runnable
 				{
 					continue;
 				}
-				if (shouldMail(c, n, d))
-				{
-					mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
-				}
+				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
 			}
 		}
-	}
-	
-	private boolean shouldMail(HttpCollector c, Node n, DataStore d)
-	{
-		for (HttpCollector master : c.dependsOn())
-		{
-			CollectorOnAppState r = d.getResult(n, master);
-			if (r == null || !r.state())
-			{
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	private boolean shouldSkipNode(HttpCollector c, Node n)

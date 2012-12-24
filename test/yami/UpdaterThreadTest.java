@@ -8,14 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import yami.YamiMailSenderTest.ForTestingSendMailStrategy;
 import yami.configuration.HttpCollector;
+import yami.configuration.MailPolicy;
 import yami.configuration.Node;
+import yami.configuration.Peer;
 import yami.mail.CollectorOnAppState;
 import yami.model.DataStore;
 import yami.model.IDataStore;
 import yami.model.Result;
+
+import com.google.common.collect.Lists;
 
 public class UpdaterThreadTest
 {
@@ -24,6 +30,7 @@ public class UpdaterThreadTest
 	private DataStore d;
 	private List<Node> a;
 	private List<HttpCollector> c;
+	private UpdaterThread tested;
 	
 	private final class ForTestingCollectorHttpResultFetcher extends CollectorHttpResultFetcher
 	{
@@ -89,12 +96,28 @@ public class UpdaterThreadTest
 			return apps;
 		}
 		
+		@Override
+		public List<String> mailingList()
+		{
+			return new ArrayList<String>();
+		}
+		
+		@Override
+		public List<MailPolicy> mailingPolicy()
+		{
+			List<MailPolicy> l = Lists.newArrayList(MailPolicy.NewFailure);
+			return l;
+		}
+		
 	}
 	
 	private Node addNode(DataStore d, String string, boolean addToDataStore)
 	{
 		Node node = new Node();
 		node.name = string;
+		Peer peer = new Peer();
+		peer.mailingList = Lists.newArrayList();
+		node.node = peer;
 		if (addToDataStore)
 		{
 			d.appInstances().add(node);
@@ -102,11 +125,9 @@ public class UpdaterThreadTest
 		return node;
 	}
 	
-	private HttpCollector addCollector(DataStore d, String name, boolean addToDatastore)
+	private HttpCollector addCollector(DataStore d, String name, String included, boolean addToDatastore)
 	{
-		HttpCollector c = createHttpCollector();
-		c.name = name;
-		c.includedNodes.add("all");
+		HttpCollector c = createHttpCollector(name, included);
 		if (addToDatastore)
 		{
 			d.collectors().add(c);
@@ -114,15 +135,19 @@ public class UpdaterThreadTest
 		return c;
 	}
 	
+	private HttpCollector addCollector(DataStore d, String name, String included)
+	{
+		return addCollector(d, name, included, true);
+	}
+	
+	private HttpCollector addCollector(DataStore d, String name)
+	{
+		return addCollector(d, name, "all");
+	}
+	
 	@Test
 	public void testUpdateResultsEmpty()
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		
-		ForTestingMailSender yamiMailSender = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(yamiMailSender, null);
 		tested.updateResults(d);
 		assertTrue(yamiMailSender.callHistory.isEmpty());
 		assertTrue(d.resultsByMonitoredApp.isEmpty());
@@ -131,42 +156,20 @@ public class UpdaterThreadTest
 	@Test
 	public void testUpdateResults_AddsOneResultForOneNodeAndOneCollector()
 	{
-		
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		HttpCollector hc = createHttpCollector();
-		hc.name = "test";
-		hc.includedNodes.add("all");
-		d.collectors().add(hc);
 		addNode(d, "node1", true);
-		
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		
-		ForTestingMailSender ms = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(ms, fetcher);
+		addCollector(d, "collector1");
 		tested.updateResults(d);
-		assertEquals(1, ms.callHistory.size());
+		assertEquals(1, yamiMailSender.callHistory.size());
 		assertFalse(d.resultsByMonitoredApp.isEmpty());
 	}
 	
 	@Test
 	public void testUpdateResults_AddsFourResultsForTwoCollectorsAndTwoNodes()
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		
-		DataStore d = new ForTestingDataStore(c, a);
-		addCollector(d, "collector1", true);
-		addCollector(d, "collector2", true);
-		
+		addCollector(d, "collector1");
+		addCollector(d, "collector2");
 		addNode(d, "node1", true);
 		addNode(d, "node2", true);
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		
-		ForTestingMailSender yamiMailSender = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(yamiMailSender, fetcher);
-		
 		tested.updateResults(d);
 		assertEquals(2, d.resultsByMonitoredApp.size());
 		assertEquals(4, yamiMailSender.callHistory.size());
@@ -179,20 +182,9 @@ public class UpdaterThreadTest
 	@Test
 	public void testUpdateResults_ResultForNotIncludedNodes()
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		ForTestingMailSender yamiMailSender = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(yamiMailSender, fetcher);
-		
+		addCollector(d, "collector1", "included_hostname");
 		addNode(d, "node1", true);
-		
-		HttpCollector hc = addCollector(d, "collector1", true);
-		
-		hc.includedNodes.clear();
 		tested.updateResults(d);
-		
 		assertEquals(0, d.resultsByMonitoredApp.size());
 		assertEquals(0, yamiMailSender.callHistory.size());
 	}
@@ -200,21 +192,9 @@ public class UpdaterThreadTest
 	@Test
 	public void testUpdateResults_ResultForIncludedNode()
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		ForTestingMailSender yamiMailSender = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(yamiMailSender, fetcher);
-		
 		addNode(d, "node1", true);
-		
-		HttpCollector hc = addCollector(d, "collector1", true);
-		
-		hc.includedNodes.clear();
-		hc.includedNodes.add("node1");
+		addCollector(d, "collector1", "node1");
 		tested.updateResults(d);
-		
 		assertEquals(1, d.resultsByMonitoredApp.size());
 		assertEquals(1, yamiMailSender.callHistory.size());
 	}
@@ -222,25 +202,14 @@ public class UpdaterThreadTest
 	@Test
 	public void testUpdateResults_ResultForExcludedNodeWithALLIncluded()
 	{
-		c = new ArrayList<HttpCollector>();
-		a = new ArrayList<Node>();
-		d = new ForTestingDataStore(c, a);
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		yamiMailSender = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(yamiMailSender, fetcher);
 		addNode(d, "node1", true);
-		HttpCollector hc = addCollector(d, "collector1", true);
-		
-		hc.includedNodes.add("all");
+		HttpCollector hc = addCollector(d, "collector1");
 		hc.excludedNodes.add("node1");
 		tested.updateResults(d);
-		
 		assertEquals(0, d.resultsByMonitoredApp.size());
 		assertEquals(0, yamiMailSender.callHistory.size());
-		
 		addNode(d, "node2", true);
 		tested.updateResults(d);
-		
 		assertEquals(1, d.resultsByMonitoredApp.size());
 		assertEquals(1, yamiMailSender.callHistory.size());
 	}
@@ -248,98 +217,51 @@ public class UpdaterThreadTest
 	@Test
 	public void testMonitorDependencyPreventSendingMail() throws Exception
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		
-		HttpCollector master = createHttpCollector();
-		
-		master.name = "master";
-		master.includedNodes.add("all");
-		
-		HttpCollector hc = createHttpCollector();
-		hc.name = "slave";
-		hc.includedNodes.add("all");
+		HttpCollector master = addCollector(d, "master", "all", false);
+		HttpCollector hc = addCollector(d, "slave");
 		hc.dependsOn().add(master);
-		d.collectors().add(hc);
-		
-		HttpCollector hc2 = createHttpCollector();
-		hc2.name = "bulgaria";
-		hc2.includedNodes.add("all");
+		HttpCollector hc2 = addCollector(d, "slave2");
 		hc2.dependsOn().add(master);
-		d.collectors().add(hc2);
-		
 		addNode(d, "node1", true);
-		
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		
-		ForTestingMailSender ms = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(ms, fetcher);
 		tested.updateResults(d);
-		assertEquals(0, ms.callHistory.size());
+		assertEquals(0, yamiMailSender.callHistory.size());
 	}
 	
 	@Test
 	public void testMonitorDependencyMasterOKShouldMail() throws Exception
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		HttpCollector master = createHttpCollector();
-		HttpCollector hc = createHttpCollector();
-		
-		master.name = "master";
-		master.includedNodes.add("all");
-		d.collectors().add(master);
-		
-		hc.name = "slave";
-		hc.includedNodes.add("all");
-		hc.dependsOn().add(master);
-		d.collectors().add(hc);
-		
 		addNode(d, "node1", true);
-		
-		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
-		
-		ForTestingMailSender ms = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(ms, fetcher);
+		HttpCollector master = addCollector(d, "master");
+		HttpCollector hc = addCollector(d, "slave");
+		hc.dependsOn().add(master);
 		tested.updateResults(d);
-		assertEquals(2, ms.callHistory.size());
+		assertEquals(2, yamiMailSender.callHistory.size());
 	}
 	
 	@Test
 	public void testMonitorDependencyMasterFailedPreventSendingMail() throws Exception
 	{
+		addNode(d, "node1", true);
+		HttpCollector master = addCollector(d, "master");
+		HttpCollector hc = addCollector(d, "slave");
+		hc.dependsOn().add(master);
+		HttpCollector hc2 = addCollector(d, "slave2");
+		hc2.dependsOn().add(master);
+		ForTestingSendMailStrategy sendMailStrategy = new ForTestingSendMailStrategy();
+		YamiMailSender yamiMailSender1 = new YamiMailSender(sendMailStrategy);
+		new UpdaterThread(yamiMailSender1, new ForTestingFailingCollectorHttpResultFetcher()).updateResults(d);
+		assertEquals(1, sendMailStrategy.sent());
+	}
+	
+	@Before
+	public void set()
+	{
 		List<HttpCollector> c = new ArrayList<HttpCollector>();
 		List<Node> a = new ArrayList<Node>();
-		DataStore d = new ForTestingDataStore(c, a);
-		
-		HttpCollector master = createHttpCollector();
-		
-		master.name = "master";
-		master.includedNodes.add("all");
-		d.collectors().add(master);
-		
-		HttpCollector hc = createHttpCollector();
-		hc.name = "slave";
-		hc.includedNodes.add("all");
-		hc.dependsOn().add(master);
-		d.collectors().add(hc);
-		
-		HttpCollector hc2 = createHttpCollector();
-		hc2.name = "bulgaria";
-		hc2.includedNodes.add("all");
-		hc2.dependsOn().add(master);
-		d.collectors().add(hc2);
-		
-		addNode(d, "node1", true);
-		
-		CollectorHttpResultFetcher fetcher = new ForTestingFailingCollectorHttpResultFetcher();
-		
-		ForTestingMailSender ms = new ForTestingMailSender();
-		UpdaterThread tested = new UpdaterThread(ms, fetcher);
-		tested.updateResults(d);
-		assertEquals(1, ms.callHistory.size());
+		d = new ForTestingDataStore(c, a);
+		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
+		yamiMailSender = new ForTestingMailSender();
+		tested = new UpdaterThread(yamiMailSender, fetcher);
 	}
 	
 	private HttpCollector createHttpCollector()
@@ -354,6 +276,14 @@ public class UpdaterThreadTest
 				return l;
 			}
 		};
+	}
+	
+	private HttpCollector createHttpCollector(String name, String included)
+	{
+		HttpCollector c = createHttpCollector();
+		c.name = name;
+		c.includedNodes.add(included);
+		return c;
 	}
 	
 }

@@ -29,12 +29,12 @@ public class YamiMailSenderTest
 		Peer peer = new Peer();
 		peer.name = "peername";
 		n.node = peer;
-		HttpCollector c = new HttpCollector();
+		HttpCollector c = createHttpCollector();
 		c.name = "cname";
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.EachRun);
 		ForTestingSendMailStrategy a = new ForTestingSendMailStrategy();
 		new YamiMailSender(a ).sendMailIfNeeded(d, c, n, state);
-		assertTrue(a.sent);
+		assertTrue(a.isSent());
 	}
 	@Test
 	public void testDontSendMail()
@@ -43,24 +43,23 @@ public class YamiMailSenderTest
 		Result r = new Result(1, null);
 		state.addResult(r );
 		Node n = new Node();
-		HttpCollector c = new HttpCollector();
+		HttpCollector c = createHttpCollector();
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.BackToNormal);
 		ForTestingSendMailStrategy a = new ForTestingSendMailStrategy();
 		new YamiMailSender(a ).sendMailIfNeeded(d, c, n, state);
-		assertFalse(a.sent);
+		assertFalse(a.isSent());
 	}
 	@Test
 	public void testDontSendMailIfStateIsNull()
 	{
 		CollectorOnAppState state = null;
 		Node n = new Node();
-		HttpCollector c = new HttpCollector();
+		HttpCollector c = createHttpCollector();
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.BackToNormal);
 		ForTestingSendMailStrategy a = new ForTestingSendMailStrategy();
 		new YamiMailSender(a ).sendMailIfNeeded(d, c, n, state);
-		assertFalse(a.sent);
+		assertFalse(a.isSent());
 	}
-	
 	public static class ForTestingIDataStore implements IDataStore
 	{
 
@@ -84,16 +83,47 @@ public class YamiMailSenderTest
 		{
 			return new ArrayList<String>();
 		}
+
+		@Override
+		public CollectorOnAppState getResult(Node n, HttpCollector master)
+		{
+			return null;
+		}
 		
 	}
 	public static class ForTestingSendMailStrategy extends SendMailStrategy
 	{
-		private boolean sent;
+		private int sent;
 
 		@Override
 		public void mailCollectorResult(List<String> mailingList, HttpCollector c, Node n, Result results)
 		{
-			sent = true;
+			sent++;
+		}
+
+		public boolean isSent()
+		{
+			return sent > 0;
+		}
+
+		public int sent()
+		{
+			return sent;
 		}
 	}
+	
+	private HttpCollector createHttpCollector()
+	{
+		return new HttpCollector()
+		{
+			private List<HttpCollector> l = new ArrayList<HttpCollector>();
+			
+			@Override
+			public List<HttpCollector> dependsOn()
+			{
+				return l;
+			}
+		};
+	}
+	
 }

@@ -10,6 +10,10 @@ public class LimitedQueue<E> extends LinkedList<E>
 	public LimitedQueue(int limit)
 	{
 		this.limit = limit;
+		if (limit < 1)
+		{
+			throw new IllegalArgumentException("Queue limit must be greater than 0");
+		}
 	}
 	
 	@Override
