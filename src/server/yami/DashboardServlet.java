@@ -56,7 +56,7 @@ public class DashboardServlet extends HttpServlet
 			boolean fail = false;
 			for (HttpCollector collector : ds.collectors())
 			{
-				CollectorOnAppState result = ds.getResult(node, collector);
+				CollectorOnNodeState result = ds.getResult(node, collector);
 				if (result == null || !result.state())
 				{
 					fail = true;
@@ -70,7 +70,7 @@ public class DashboardServlet extends HttpServlet
 			// build result buttons for each collector:
 			for (HttpCollector collector : ds.collectors())
 			{
-				CollectorOnAppState result = ds.getResult(node, collector);
+				CollectorOnNodeState result = ds.getResult(node, collector);
 				// in case no result found:
 				if (null == result)
 				{

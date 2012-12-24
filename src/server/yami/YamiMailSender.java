@@ -7,7 +7,7 @@ import org.apache.commons.collections.ListUtils;
 import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
-import yami.mail.CollectorOnAppState;
+import yami.mail.CollectorOnNodeState;
 import yami.model.IDataStore;
 
 public class YamiMailSender
@@ -20,7 +20,7 @@ public class YamiMailSender
 		this.sendMailStrategy = sendMailStrategy;
 	}
 	
-	public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnAppState state)
+	public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnNodeState state)
 	{
 		if (!shouldMail(c, n, d))
 		{
@@ -36,7 +36,7 @@ public class YamiMailSender
 		sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
 	}
 	
-	protected boolean shouldMailByPolicies(List<MailPolicy> mailPolicy, CollectorOnAppState state)
+	protected boolean shouldMailByPolicies(List<MailPolicy> mailPolicy, CollectorOnNodeState state)
 	{
 		for (MailPolicy mailPolicy2 : mailPolicy)
 		{
@@ -56,7 +56,7 @@ public class YamiMailSender
 	{
 		for (HttpCollector master : c.dependsOn())
 		{
-			CollectorOnAppState r = d.getResult(n, master);
+			CollectorOnNodeState r = d.getResult(n, master);
 			if (r == null || !r.state())
 			{
 				return false;

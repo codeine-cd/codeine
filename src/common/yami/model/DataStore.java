@@ -7,7 +7,7 @@ import yami.mail.*;
 
 public class DataStore implements IDataStore
 {
-	public Map<Node, Map<HttpCollector, CollectorOnAppState>> resultsByMonitoredApp = new HashMap<Node, Map<HttpCollector, CollectorOnAppState>>();
+	public Map<Node, Map<HttpCollector, CollectorOnNodeState>> resultsByMonitoredApp = new HashMap<Node, Map<HttpCollector, CollectorOnNodeState>>();
 	
 	public DataStore()
 	{
@@ -15,24 +15,24 @@ public class DataStore implements IDataStore
 	
 	public void addResults(Node node, HttpCollector collector, Result r)
 	{
-		Map<HttpCollector, CollectorOnAppState> map = resultsByMonitoredApp.get(node);
+		Map<HttpCollector, CollectorOnNodeState> map = resultsByMonitoredApp.get(node);
 		if (null == map)
 		{
-			map = new HashMap<HttpCollector, CollectorOnAppState>();
+			map = new HashMap<HttpCollector, CollectorOnNodeState>();
 			resultsByMonitoredApp.put(node, map);
 		}
-		CollectorOnAppState c = map.get(collector);
+		CollectorOnNodeState c = map.get(collector);
 		if (null == c)
 		{
-			c = new CollectorOnAppState();
+			c = new CollectorOnNodeState();
 			map.put(collector, c);
 		}
 		c.addResult(r);
 	}
 	
-	public CollectorOnAppState getResult(Node node, HttpCollector collector)
+	public CollectorOnNodeState getResult(Node node, HttpCollector collector)
 	{
-		Map<HttpCollector, CollectorOnAppState> map = resultsByMonitoredApp.get(node);
+		Map<HttpCollector, CollectorOnNodeState> map = resultsByMonitoredApp.get(node);
 		if (null == map)
 		{
 			return null;
@@ -49,7 +49,7 @@ public class DataStore implements IDataStore
 		{
 			for (HttpCollector collector : configuration().collectors)
 			{
-				CollectorOnAppState result = getResult(node, collector);
+				CollectorOnNodeState result = getResult(node, collector);
 				if (null == result || !result.state())
 				{
 					return false;

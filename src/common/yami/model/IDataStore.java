@@ -5,7 +5,7 @@ import java.util.List;
 import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
-import yami.mail.CollectorOnAppState;
+import yami.mail.CollectorOnNodeState;
 
 public interface IDataStore
 {
@@ -14,6 +14,6 @@ public interface IDataStore
 
 	List<String> mailingList();
 
-	CollectorOnAppState getResult(Node n, HttpCollector master);
+	CollectorOnNodeState getResult(Node n, HttpCollector master);
 	
 }

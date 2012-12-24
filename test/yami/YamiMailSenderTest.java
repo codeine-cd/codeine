@@ -11,7 +11,7 @@ import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
 import yami.configuration.Peer;
-import yami.mail.CollectorOnAppState;
+import yami.mail.CollectorOnNodeState;
 import yami.model.IDataStore;
 import yami.model.Result;
 
@@ -21,7 +21,7 @@ public class YamiMailSenderTest
 	@Test
 	public void testSendMailIfNeededSimple()
 	{
-		CollectorOnAppState state = new CollectorOnAppState();
+		CollectorOnNodeState state = new CollectorOnNodeState();
 		Result r = new Result(0, null);
 		state.addResult(r );
 		Node n = new Node();
@@ -39,7 +39,7 @@ public class YamiMailSenderTest
 	@Test
 	public void testDontSendMail()
 	{
-		CollectorOnAppState state = new CollectorOnAppState();
+		CollectorOnNodeState state = new CollectorOnNodeState();
 		Result r = new Result(1, null);
 		state.addResult(r );
 		Node n = new Node();
@@ -52,7 +52,7 @@ public class YamiMailSenderTest
 	@Test
 	public void testDontSendMailIfStateIsNull()
 	{
-		CollectorOnAppState state = null;
+		CollectorOnNodeState state = null;
 		Node n = new Node();
 		HttpCollector c = createHttpCollector();
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.BackToNormal);
@@ -85,7 +85,7 @@ public class YamiMailSenderTest
 		}
 
 		@Override
-		public CollectorOnAppState getResult(Node n, HttpCollector master)
+		public CollectorOnNodeState getResult(Node n, HttpCollector master)
 		{
 			return null;
 		}

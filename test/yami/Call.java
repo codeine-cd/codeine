@@ -7,9 +7,9 @@ public class Call
 {
 	public HttpCollector c;
 	public Node n;
-	public CollectorOnAppState state;
+	public CollectorOnNodeState state;
 	
-	public Call(HttpCollector c, Node n, CollectorOnAppState state)
+	public Call(HttpCollector c, Node n, CollectorOnNodeState state)
 	{
 		this.c = c;
 		this.n = n;

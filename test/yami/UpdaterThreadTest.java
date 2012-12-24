@@ -16,7 +16,7 @@ import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
 import yami.configuration.Peer;
-import yami.mail.CollectorOnAppState;
+import yami.mail.CollectorOnNodeState;
 import yami.model.DataStore;
 import yami.model.IDataStore;
 import yami.model.Result;
@@ -58,7 +58,7 @@ public class UpdaterThreadTest
 			super(null);
 		}
 		
-		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnAppState state)
+		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnNodeState state)
 		{
 			add(new Call(c, n, state));
 			
@@ -74,7 +74,7 @@ public class UpdaterThreadTest
 	private final class ForTestingMailSenderWithDependencyAndPolicyValidation extends ForTestingMailSender
 	{
 		
-		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnAppState state)
+		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnNodeState state)
 		{
 			if (!shouldMail(c, n, d))
 			{
@@ -190,7 +190,7 @@ public class UpdaterThreadTest
 		tested.updateResults(d);
 		assertEquals(2, d.resultsByMonitoredApp.size());
 		assertEquals(4, yamiMailSender.callHistory.size());
-		for (Entry<Node, Map<HttpCollector, CollectorOnAppState>> e : d.resultsByMonitoredApp.entrySet())
+		for (Entry<Node, Map<HttpCollector, CollectorOnNodeState>> e : d.resultsByMonitoredApp.entrySet())
 		{
 			assertEquals(2, e.getValue().size());
 		}
