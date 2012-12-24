@@ -44,7 +44,7 @@ public class PeerRestartThread
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			// fix yshabi - hardcoded strings
 			String[] cmd = createRestartCmd();
-			log.info("restart command: " + cmdString(cmd));
+			log.info("restart command: (" + cmdString(cmd) + ")");
 			Runtime.getRuntime().exec(cmd);
 			System.exit(0);
 		}
