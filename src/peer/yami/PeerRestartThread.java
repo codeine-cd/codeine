@@ -10,6 +10,8 @@ import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
 import yami.model.Constants;
 
+import com.google.common.base.Joiner;
+
 public class PeerRestartThread
 {
 	private static final Logger log = Logger.getLogger(PeerRestartThread.class);
@@ -43,9 +45,15 @@ public class PeerRestartThread
 			log.info("HTTP server stopped successfully");
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			String[] cmd = createRestartCmd();
-			log.info("restart command: (" + cmd + ")");
+			log.info("restart command: (" + Joiner.on(' ').join(cmd) + ")");
 			Runtime.getRuntime().exec(cmd);
 			System.exit(0);
+		}
+		
+		catch (NullPointerException e)
+		{
+			writer.println("null at restart");
+			log.warn("null pointer exception in restart",e);
 		}
 		catch (RuntimeException e)
 		{
@@ -67,5 +75,5 @@ public class PeerRestartThread
 				"/usr/bin/nohup", Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(), gc.getRsyncPath(), gc.getRsyncUser(), gc.getClientPort() + "", gc.getServerPort() + "", Constants.getInstallDir(), "yami.conf.xml", gc.getRsyncSource()
 		};
 		return cmd;
-	}	
+	}
 }
