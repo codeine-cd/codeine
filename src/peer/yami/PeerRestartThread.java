@@ -59,6 +59,16 @@ public class PeerRestartThread
 		{
 			writer.println("failed to read new configuration from file " + Constants.getConfPath());
 			log.warn("failed to read new configuration from file " + Constants.getConfPath(), e);
+			try
+			{
+				log.info("trying to start http server again");
+				peerHTTPserver.start();
+			}
+			catch (Exception e1)
+			{
+				log.warn("failed to start http server again");
+				System.exit(1);
+			}
 		}
 		catch (Exception e)
 		{

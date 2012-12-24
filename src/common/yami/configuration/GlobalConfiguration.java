@@ -1,6 +1,5 @@
 package yami.configuration;
 
-import yami.model.Constants;
 
 public class GlobalConfiguration
 {
@@ -27,7 +26,7 @@ public class GlobalConfiguration
 	{
 		if (System.getProperty("rsync.path") != null)
 		{
-			rsync = System.getProperty("rsync");
+			rsync = System.getProperty("rsync.path");
 		}
 		return rsync;
 	}
@@ -36,7 +35,7 @@ public class GlobalConfiguration
 	{
 		if (System.getProperty("rsync.user") != null)
 		{
-			rsyncuser = System.getProperty("rsyncuser");
+			rsyncuser = System.getProperty("rsync.user");
 		}
 		return rsyncuser;
 	}
@@ -66,15 +65,6 @@ public class GlobalConfiguration
 			rsyncsource = System.getProperty("rsync.source");
 		}
 		return rsyncsource;
-	}
-	
-	public String getConfFullPath()
-	{
-		if (System.getProperty("yami.conf") != null)
-		{
-			conffile = System.getProperty("yami.conf");
-		}
-		return Constants.getInstallDir();
 	}
 	
 	@Override
