@@ -1,8 +1,8 @@
 package yami.model;
 
-import java.io.*;
+import java.io.File;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
 public class Constants
 {
@@ -89,12 +89,12 @@ public class Constants
 	
 	public static int getClientPort()
 	{
-		return getPort("clientPort", DEFAULT_CLIENT_PORT);
+		return getPort("client.port", DEFAULT_CLIENT_PORT);
 	}
 	
 	public static int getServerPort()
 	{
-		return getPort("serverPort", DEFAULT_SERVER_PORT);
+		return getPort("server.port", DEFAULT_SERVER_PORT);
 	}
 	
 	public static String getServerDashboard()
