@@ -1,13 +1,14 @@
 package yami;
 
-import java.io.*;
-import java.util.concurrent.*;
+import java.io.PrintWriter;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.*;
-import org.eclipse.jetty.server.*;
+import org.apache.log4j.Logger;
+import org.eclipse.jetty.server.Server;
 
-import yami.configuration.*;
-import yami.model.*;
+import yami.configuration.ConfigurationManager;
+import yami.configuration.GlobalConfiguration;
+import yami.model.Constants;
 
 public class PeerRestartThread
 {
@@ -34,19 +35,15 @@ public class PeerRestartThread
 	
 	private void restart()
 	{
-		ConfigurationManager cm = ConfigurationManager.getInstance();
+		
 		try
 		{
-			GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf; // if exception thrown, conf is
-																						// bad // bad.
 			log.info("going to shutdown HTTP server");
 			peerHTTPserver.stop();
 			log.info("HTTP server stopped successfully");
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			// fix yshabi - hardcoded strings
-			String[] cmd = {
-					"/usr/bin/nohup", Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(), gc.getRsyncPath(), gc.getRsyncUser(), gc.getClientPort() + "", gc.getServerPort() + "", Constants.getInstallDir(), "yami.conf.xml", gc.getRsyncSource()
-			};
+			String[] cmd = createRestartCmd();
 			log.info("restart command: " + cmdString(cmd));
 			Runtime.getRuntime().exec(cmd);
 			System.exit(0);
@@ -60,6 +57,16 @@ public class PeerRestartThread
 		{
 			log.warn("failed to stop current http server", e);
 		}
+	}
+	
+	private String[] createRestartCmd()
+	{
+		ConfigurationManager cm = ConfigurationManager.getInstance();
+		GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf; // if exception thrown, conf is
+		String[] cmd = {
+				"/usr/bin/nohup", Constants.getInstallDir() + "/bin/startYamiClient.pl", gc.getJavaPath(), gc.getRsyncPath(), gc.getRsyncUser(), gc.getClientPort() + "", gc.getServerPort() + "", Constants.getInstallDir(), "yami.conf.xml", gc.getRsyncSource()
+		};
+		return cmd;
 	}
 	
 	private String cmdString(String[] cmd)

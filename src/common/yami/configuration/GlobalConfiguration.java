@@ -1,6 +1,6 @@
 package yami.configuration;
 
-import yami.model.*;
+import yami.model.Constants;
 
 public class GlobalConfiguration
 {
@@ -27,7 +27,7 @@ public class GlobalConfiguration
 	{
 		if (System.getProperty("rsync.path") != null)
 		{
-			java = System.getProperty("rsync");
+			rsync = System.getProperty("rsync");
 		}
 		return rsync;
 	}
@@ -36,16 +36,16 @@ public class GlobalConfiguration
 	{
 		if (System.getProperty("rsync.user") != null)
 		{
-			java = System.getProperty("rsyncuser");
+			rsyncuser = System.getProperty("rsyncuser");
 		}
-		return rsync;
+		return rsyncuser;
 	}
 	
 	public int getClientPort()
 	{
 		if (System.getProperty("client.port") != null)
 		{
-			java = System.getProperty("client.port");
+			clientport  = Integer.parseInt(System.getProperty("client.port"));
 		}
 		return clientport;
 	}
@@ -82,7 +82,7 @@ public class GlobalConfiguration
 	{
 		return "GlobalConfiguration [rsyncuser=" + rsyncuser + ", java=" + java + ", rsyncsource=" + rsyncsource + ", rsync=" + rsync + ", perl=" + perl + ", conffile=" + conffile + ", clientpath=" + clientpath + ", serverport=" + serverport + ", clientport=" + clientport + "]";
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
