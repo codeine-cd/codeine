@@ -106,7 +106,7 @@ public class UpdaterThreadTest
 		{
 			return collectors;
 		}
-		
+		 
 		@Override
 		public List<Node> appInstances()
 		{
