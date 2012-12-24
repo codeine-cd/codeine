@@ -28,8 +28,6 @@ public class UpdaterThreadTest
 	
 	private ForTestingMailSender yamiMailSender;
 	private DataStore d;
-	private List<Node> a;
-	private List<HttpCollector> c;
 	private UpdaterThread tested;
 	
 	private final class ForTestingCollectorHttpResultFetcher extends CollectorHttpResultFetcher
@@ -50,7 +48,7 @@ public class UpdaterThreadTest
 		}
 	}
 	
-	private final class ForTestingMailSender extends YamiMailSender
+	private class ForTestingMailSender extends YamiMailSender
 	{
 		
 		private List<Call> callHistory = new ArrayList<Call>();
@@ -63,13 +61,32 @@ public class UpdaterThreadTest
 		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnAppState state)
 		{
 			add(new Call(c, n, state));
+			
 		}
 		
-		private void add(Call call)
+		protected void add(Call call)
 		{
 			callHistory.add(call);
 		}
 		
+	}
+	
+	private final class ForTestingMailSenderWithDependencyAndPolicyValidation extends ForTestingMailSender
+	{
+		
+		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnAppState state)
+		{
+			if (!shouldMail(c, n, d))
+			{
+				return;
+			}
+			
+			if (!shouldMailByPolicies(d.mailingPolicy(), state))
+			{
+				return;
+			}
+			add(new Call(c, n, state));
+		}
 	}
 	
 	private final class ForTestingDataStore extends DataStore
@@ -217,12 +234,14 @@ public class UpdaterThreadTest
 	@Test
 	public void testMonitorDependencyPreventSendingMail() throws Exception
 	{
-		HttpCollector master = addCollector(d, "master", "all", false);
 		HttpCollector hc = addCollector(d, "slave");
-		hc.dependsOn().add(master);
-		HttpCollector hc2 = addCollector(d, "slave2");
-		hc2.dependsOn().add(master);
+		hc.dependsOn.add("master");
 		addNode(d, "node1", true);
+		
+		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
+		yamiMailSender = new ForTestingMailSenderWithDependencyAndPolicyValidation();
+		tested = new UpdaterThread(yamiMailSender, fetcher);
+		
 		tested.updateResults(d);
 		assertEquals(0, yamiMailSender.callHistory.size());
 	}

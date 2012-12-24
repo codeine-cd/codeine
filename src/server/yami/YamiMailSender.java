@@ -27,14 +27,16 @@ public class YamiMailSender
 			return;
 		}
 		
-		if (shouldMailByPolicies(d.mailingPolicy(), state))
+		if (!shouldMailByPolicies(d.mailingPolicy(), state))
 		{
-			List<String> fullMailingList = ListUtils.union(d.mailingList(), n.node.mailingList);
-			sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
+			return;
 		}
+		
+		List<String> fullMailingList = ListUtils.union(d.mailingList(), n.node.mailingList);
+		sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
 	}
 	
-	private boolean shouldMailByPolicies(List<MailPolicy> mailPolicy, CollectorOnAppState state)
+	protected boolean shouldMailByPolicies(List<MailPolicy> mailPolicy, CollectorOnAppState state)
 	{
 		for (MailPolicy mailPolicy2 : mailPolicy)
 		{
@@ -50,7 +52,7 @@ public class YamiMailSender
 		return false;
 	}
 	
-	private boolean shouldMail(HttpCollector c, Node n, IDataStore d)
+	protected boolean shouldMail(HttpCollector c, Node n, IDataStore d)
 	{
 		for (HttpCollector master : c.dependsOn())
 		{
