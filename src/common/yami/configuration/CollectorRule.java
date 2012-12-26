@@ -1,6 +1,7 @@
 package yami.configuration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CollectorRule
 {
@@ -35,4 +36,51 @@ public class CollectorRule
 	{
 		return shouldApplyForNode(peer);
 	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((arg == null) ? 0 : arg.hashCode());
+		result = prime * result + ((node == null) ? 0 : node.hashCode());
+		result = prime * result + ((peer == null) ? 0 : peer.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CollectorRule other = (CollectorRule)obj;
+		if (arg == null)
+		{
+			if (other.arg != null)
+				return false;
+		}
+		else if (!arg.equals(other.arg))
+			return false;
+		if (node == null)
+		{
+			if (other.node != null)
+				return false;
+		}
+		else if (!node.equals(other.node))
+			return false;
+		if (peer == null)
+		{
+			if (other.peer != null)
+				return false;
+		}
+		else if (!peer.equals(other.peer))
+			return false;
+		return true;
+	}
+	
+	
 }

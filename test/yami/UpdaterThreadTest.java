@@ -68,12 +68,10 @@ public class UpdaterThreadTest
 		{
 			callHistory.add(call);
 		}
-		
 	}
 	
 	private final class ForTestingMailSenderWithDependencyAndPolicyValidation extends ForTestingMailSender
 	{
-		
 		public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnNodeState state)
 		{
 			if (!shouldMail(c, n, d))
@@ -106,7 +104,7 @@ public class UpdaterThreadTest
 		{
 			return collectors;
 		}
-		 
+		
 		@Override
 		public List<Node> appInstances()
 		{
@@ -125,7 +123,6 @@ public class UpdaterThreadTest
 			List<MailPolicy> l = Lists.newArrayList(MailPolicy.NewFailure);
 			return l;
 		}
-		
 	}
 	
 	private Node addNode(DataStore d, String string, boolean addToDataStore)
@@ -167,7 +164,7 @@ public class UpdaterThreadTest
 	{
 		tested.updateResults(d);
 		assertTrue(yamiMailSender.callHistory.isEmpty());
-		assertTrue(d.resultsByMonitoredApp.isEmpty());
+		assertTrue(d.resultsByNode.isEmpty());
 	}
 	
 	@Test
@@ -177,7 +174,7 @@ public class UpdaterThreadTest
 		addCollector(d, "collector1");
 		tested.updateResults(d);
 		assertEquals(1, yamiMailSender.callHistory.size());
-		assertFalse(d.resultsByMonitoredApp.isEmpty());
+		assertFalse(d.resultsByNode.isEmpty());
 	}
 	
 	@Test
@@ -188,9 +185,9 @@ public class UpdaterThreadTest
 		addNode(d, "node1", true);
 		addNode(d, "node2", true);
 		tested.updateResults(d);
-		assertEquals(2, d.resultsByMonitoredApp.size());
+		assertEquals(2, d.resultsByNode.size());
 		assertEquals(4, yamiMailSender.callHistory.size());
-		for (Entry<Node, Map<HttpCollector, CollectorOnNodeState>> e : d.resultsByMonitoredApp.entrySet())
+		for (Entry<Node, Map<HttpCollector, CollectorOnNodeState>> e : d.resultsByNode.entrySet())
 		{
 			assertEquals(2, e.getValue().size());
 		}
@@ -202,7 +199,7 @@ public class UpdaterThreadTest
 		addCollector(d, "collector1", "included_hostname");
 		addNode(d, "node1", true);
 		tested.updateResults(d);
-		assertEquals(0, d.resultsByMonitoredApp.size());
+		assertEquals(0, d.resultsByNode.size());
 		assertEquals(0, yamiMailSender.callHistory.size());
 	}
 	
@@ -212,7 +209,7 @@ public class UpdaterThreadTest
 		addNode(d, "node1", true);
 		addCollector(d, "collector1", "node1");
 		tested.updateResults(d);
-		assertEquals(1, d.resultsByMonitoredApp.size());
+		assertEquals(1, d.resultsByNode.size());
 		assertEquals(1, yamiMailSender.callHistory.size());
 	}
 	
@@ -223,11 +220,11 @@ public class UpdaterThreadTest
 		HttpCollector hc = addCollector(d, "collector1");
 		hc.excludedNodes.add("node1");
 		tested.updateResults(d);
-		assertEquals(0, d.resultsByMonitoredApp.size());
+		assertEquals(0, d.resultsByNode.size());
 		assertEquals(0, yamiMailSender.callHistory.size());
 		addNode(d, "node2", true);
 		tested.updateResults(d);
-		assertEquals(1, d.resultsByMonitoredApp.size());
+		assertEquals(1, d.resultsByNode.size());
 		assertEquals(1, yamiMailSender.callHistory.size());
 	}
 	
@@ -304,5 +301,4 @@ public class UpdaterThreadTest
 		c.includedNodes.add(included);
 		return c;
 	}
-	
 }

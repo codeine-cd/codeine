@@ -62,14 +62,11 @@ public class Node
 	@Override
 	public String toString()
 	{
-		return "MonitoredInstance [nick=" + nick + ", name=" + name + "]";
+		return "Node [nick=" + nick + ", name=" + name + "]";
 	}
 
 	public String getLogLink()
 	{
 		return "http://" + peer.name + ":"+ Constants.getClientPort();
 	}
-	
-	
-	
 }

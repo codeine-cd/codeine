@@ -20,8 +20,11 @@ public class Result
 	@Override
 	public String toString()
 	{
-		return "Result [link=" + link + ", output=" + output + ", exit=" + exit + "]";
+		return "Result [exit="+exit+"]";
 	}
 	
-	
+	public String toStringLong()
+	{
+		return "Result [link=" + link + ", output=" + output + ", exit=" + exit + "]";
+	}
 }

@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class HttpCollector
 {
-	
 	public String name;
 	@XmlElement(name = "includedNode")
 	public List<String> includedNodes = new ArrayList<String>();
@@ -33,7 +32,7 @@ public class HttpCollector
 		result = prime * result + ((rules == null) ? 0 : rules.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -81,8 +80,7 @@ public class HttpCollector
 			return false;
 		return true;
 	}
-
-
+	
 	public List<HttpCollector> dependsOn()
 	{
 		final List<HttpCollector> l = new ArrayList<HttpCollector>();
@@ -91,7 +89,8 @@ public class HttpCollector
 		{
 			for (String name : dependsOn)
 			{
-				if (name.equals(c.name)) {
+				if (name.equals(c.name))
+				{
 					l.add(c);
 				}
 			}
@@ -99,4 +98,9 @@ public class HttpCollector
 		return l;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return "HttpCollector [name=" + name + "]";
+	}
 }

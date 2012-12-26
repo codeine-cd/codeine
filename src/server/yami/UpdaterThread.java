@@ -35,7 +35,7 @@ public class UpdaterThread implements Runnable
 		{
 			DataStore d = DataStoreRetriever.getD();
 			updateResults(d);
-			try 
+			try
 			{
 				Thread.sleep(SLEEP_TIME);
 			}
@@ -62,6 +62,10 @@ public class UpdaterThread implements Runnable
 					Result r = fetcher.getResult(c, n);
 					log.debug("adding result " + r.success() + " to node " + n);
 					d.addResults(n, c, r);
+					if (n.nick().equals("itstl1064") && c.name.equals("lsof"))
+					{
+						log.debug(d.resultsByNode.get(n));
+					}
 				}
 				catch (Exception e)
 				{
@@ -104,8 +108,6 @@ public class UpdaterThread implements Runnable
 				return false;
 			}
 		}
-		
 		return true;
 	}
-	
 }

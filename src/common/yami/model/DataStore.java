@@ -7,7 +7,7 @@ import yami.mail.*;
 
 public class DataStore implements IDataStore
 {
-	public Map<Node, Map<HttpCollector, CollectorOnNodeState>> resultsByMonitoredApp = new HashMap<Node, Map<HttpCollector, CollectorOnNodeState>>();
+	public Map<Node, Map<HttpCollector, CollectorOnNodeState>> resultsByNode = new HashMap<Node, Map<HttpCollector, CollectorOnNodeState>>();
 	
 	public DataStore()
 	{
@@ -15,11 +15,11 @@ public class DataStore implements IDataStore
 	
 	public void addResults(Node node, HttpCollector collector, Result r)
 	{
-		Map<HttpCollector, CollectorOnNodeState> map = resultsByMonitoredApp.get(node);
+		Map<HttpCollector, CollectorOnNodeState> map = resultsByNode.get(node);
 		if (null == map)
 		{
 			map = new HashMap<HttpCollector, CollectorOnNodeState>();
-			resultsByMonitoredApp.put(node, map);
+			resultsByNode.put(node, map);
 		}
 		CollectorOnNodeState c = map.get(collector);
 		if (null == c)
@@ -32,7 +32,7 @@ public class DataStore implements IDataStore
 	
 	public CollectorOnNodeState getResult(Node node, HttpCollector collector)
 	{
-		Map<HttpCollector, CollectorOnNodeState> map = resultsByMonitoredApp.get(node);
+		Map<HttpCollector, CollectorOnNodeState> map = resultsByNode.get(node);
 		if (null == map)
 		{
 			return null;

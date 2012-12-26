@@ -1,9 +1,9 @@
 package yami.mail;
 
-import java.util.*;
+import java.util.List;
 
-import yami.model.*;
-import yami.utils.*;
+import yami.model.Result;
+import yami.utils.LimitedQueue;
 
 public class CollectorOnNodeState
 {
@@ -47,5 +47,11 @@ public class CollectorOnNodeState
 	public Result getLast()
 	{
 		return results.get(results.size() - 1);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "CollectorOnNodeState [previousState=" + previousState + ", results=" + results + "]";
 	}
 }

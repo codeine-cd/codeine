@@ -1,15 +1,23 @@
 package yami;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import yami.configuration.*;
-import yami.mail.*;
-import yami.model.*;
+import yami.configuration.ConfigurationManager;
+import yami.configuration.GlobalConfiguration;
+import yami.configuration.HttpCollector;
+import yami.configuration.Node;
+import yami.mail.CollectorOnNodeState;
+import yami.model.Constants;
+import yami.model.DataStore;
+import yami.model.DataStoreRetriever;
 
 public class DashboardServlet extends HttpServlet
 {
@@ -71,7 +79,7 @@ public class DashboardServlet extends HttpServlet
 			for (HttpCollector collector : ds.collectors())
 			{
 				CollectorOnNodeState result = ds.getResult(node, collector);
-				// in case no result found:
+				log.debug(collector + " result for " + node + " is: " + result);
 				if (null == result)
 				{
 					line += "<li><a class=\"na\" title=\"" + collector.name + "\" href=\"" + getLink(collector, node) + "\">?</a></li>";
