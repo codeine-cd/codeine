@@ -44,7 +44,7 @@ public class CollectorHttpResultFetcher
 		}
 		return res;
 	}
-
+	
 	private Result getKeepaliveResult(List<String> lines, Result res)
 	{
 		long serverEpoch = System.currentTimeMillis() / 1000;
@@ -53,7 +53,7 @@ public class CollectorHttpResultFetcher
 		if (!lines.isEmpty() && lines.size() >= 4)
 		{
 			clientEpoch = Long.parseLong(lines.get(3));
-			log.debug("server time - client time :" + serverEpoch + "-" + clientEpoch + "=" + (serverEpoch-clientEpoch));
+			log.debug("server time - client time :" + serverEpoch + "-" + clientEpoch + "=" + (serverEpoch - clientEpoch));
 		}
 		if (clientEpoch == 0 || serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(2))
 		{
@@ -77,16 +77,13 @@ public class CollectorHttpResultFetcher
 			}
 			in.close();
 		}
-		catch (SocketException e)
+		catch (SocketException ignore)
 		{
-			log.warn("Bad HTTP response at " + resultURL);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			log.warn("got an exception at readHTTPHead", e);
 		}
-		
 		return resultLines;
 	}
 }

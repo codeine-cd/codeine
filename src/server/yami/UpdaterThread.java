@@ -60,12 +60,12 @@ public class UpdaterThread implements Runnable
 						continue;
 					}
 					Result r = fetcher.getResult(c, n);
-					log.debug("adding result " + r.success() + " to node " + n);
-					d.addResults(n, c, r);
-					if (n.nick().equals("itstl1064") && c.name.equals("lsof"))
-					{
-						log.debug(d.resultsByNode.get(n));
+					if (r != null){
+					log.debug("adding result " + r.success() + " to node " + n);}
+					else{
+						log.debug("no result fetched for node " + n + " "+ c);
 					}
+					d.addResults(n, c, r);
 				}
 				catch (Exception e)
 				{
