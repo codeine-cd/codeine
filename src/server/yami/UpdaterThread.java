@@ -16,7 +16,8 @@ public class UpdaterThread implements Runnable
 {
 	
 	private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(10);
-	private static final Logger log = Logger.getLogger(UpdaterThread.class);
+	private static final Logger log =
+			Logger.getLogger(UpdaterThread.class);
 	private final boolean shouldSkipFirst;
 	static final String DASHBOARD_URL = "http://";
 	private final YamiMailSender mailSender;
@@ -91,12 +92,15 @@ public class UpdaterThread implements Runnable
 						continue;
 					}
 					Result r = fetcher.getResult(c, n);
-					if (r != null){
-					log.debug("adding result " + r.success() + " to node " + n);}
-					else{
+					if (r != null)
+					{
+						log.debug("adding result " + r.success() + " to node " + n);
+						d.addResults(n, c, r);
+					}
+					else
+					{
 						log.debug("no result fetched for node " + n + " "+ c);
 					}
-					d.addResults(n, c, r);
 				}
 				catch (Exception e)
 				{
