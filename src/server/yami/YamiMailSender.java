@@ -36,14 +36,14 @@ public class YamiMailSender
 		sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
 	}
 	
-	protected boolean shouldMailByPolicies(List<MailPolicy> mailPolicy, CollectorOnNodeState state)
+	protected boolean shouldMailByPolicies(List<MailPolicy> policies, CollectorOnNodeState state)
 	{
-		for (MailPolicy mailPolicy2 : mailPolicy)
+		if (null == state)
 		{
-			if (null == state)
-			{
-				return false;
-			}
+			return false;
+		}
+		for (MailPolicy mailPolicy2 : policies)
+		{
 			if (mailPolicy2.isActive(state.prevState(), state.state()))
 			{
 				return true;

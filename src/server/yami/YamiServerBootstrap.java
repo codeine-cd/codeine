@@ -1,14 +1,22 @@
 package yami;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 
-import org.apache.log4j.*;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.handler.*;
-import org.eclipse.jetty.servlet.*;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
-import yami.configuration.*;
-import yami.model.*;
+import yami.configuration.ConfigurationManager;
+import yami.model.Constants;
 
 public class YamiServerBootstrap
 {
@@ -42,7 +50,7 @@ public class YamiServerBootstrap
 		server.setHandler(contexts);
 		try
 		{
-			new Thread(new UpdaterThread(new YamiMailSender(new SendMailStrategy()), new CollectorHttpResultFetcher())).start();
+			new Thread(new UpdaterThread(new YamiMailSender(new SendMailStrategy()), new CollectorHttpResultFetcher(), true)).start();
 			server.start();
 		}
 		catch (Exception e)

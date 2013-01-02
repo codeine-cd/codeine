@@ -17,6 +17,7 @@
 		<pathelement location="libs/log4j-1.2.17.jar" />
 		<pathelement location="libs/smtp.jar" />
 		<pathelement location="libs/mailapi.jar" />
+		<pathelement location="libs/mockito-all-1.9.0.jar" />
 		<path refid="JUnit4.libraryclasspath" />
 	</path>
 	<target name="init">
@@ -82,6 +83,7 @@
 			<zipfileset excludes="META-INF/*.SF" src="libs/commons-collections-3.2.1.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/mailapi.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/smtp.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/mockito-all-1.9.0.jar" />
 		</jar>
 	</target>
 

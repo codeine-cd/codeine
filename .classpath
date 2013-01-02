@@ -17,6 +17,11 @@
 	<classpathentry kind="lib" path="libs/commons-collections-3.2.1-sources.jar"/>
 	<classpathentry kind="lib" path="libs/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="libs/commons-collections-testframework-3.2.1.jar"/>
+	<classpathentry kind="lib" path="libs/mockito-all-1.9.0.jar" sourcepath="libs/mockito-all-1.9.0.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/yami/libs/mockito-all-1.9.0.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="compiled_classes"/>
 </classpath>

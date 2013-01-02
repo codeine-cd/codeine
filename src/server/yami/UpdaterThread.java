@@ -17,14 +17,17 @@ public class UpdaterThread implements Runnable
 	
 	private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(10);
 	private static final Logger log = Logger.getLogger(UpdaterThread.class);
+	private final boolean shouldSkipFirst;
 	static final String DASHBOARD_URL = "http://";
 	private final YamiMailSender mailSender;
 	private final CollectorHttpResultFetcher fetcher;
+	static boolean isFirstIteration = true;
 	
-	public UpdaterThread(YamiMailSender yamiMailSender, CollectorHttpResultFetcher fetcher)
+	public UpdaterThread(YamiMailSender yamiMailSender, CollectorHttpResultFetcher fetcher, boolean shouldSkipFirst)
 	{
 		mailSender = yamiMailSender;
 		this.fetcher = fetcher;
+		this.shouldSkipFirst = shouldSkipFirst;
 	}
 	
 	@Override
@@ -49,6 +52,34 @@ public class UpdaterThread implements Runnable
 	public void updateResults(DataStore d)
 	{
 		Stopwatch timer = new Stopwatch().start();
+		fetchResultsFromAllCollectors(d);
+		timer.stop();
+		log.info("updateResults cycle time: " + timer.elapsed(TimeUnit.MILLISECONDS) + " " + TimeUnit.MILLISECONDS.name());
+		if (isFirstIteration && shouldSkipFirst)
+		{
+			isFirstIteration = false;
+			return;
+		}
+		mailResultsForAllCollectors(d);
+	}
+
+	private void mailResultsForAllCollectors(DataStore d)
+	{
+		for (HttpCollector c : d.collectors())
+		{
+			for (Node n : d.appInstances())
+			{
+				if (shouldSkipNode(c, n))
+				{
+					continue;
+				}
+				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
+			}
+		}
+	}
+
+	private void fetchResultsFromAllCollectors(DataStore d)
+	{
 		for (HttpCollector c : d.collectors())
 		{
 			for (Node n : d.appInstances())
@@ -71,19 +102,6 @@ public class UpdaterThread implements Runnable
 				{
 					log.warn("Exception in updateResults.", e);
 				}
-			}
-		}
-		timer.stop();
-		log.info("updateResults cycle time: " + timer.elapsed(TimeUnit.MILLISECONDS) + " " + TimeUnit.MILLISECONDS.name());
-		for (HttpCollector c : d.collectors())
-		{
-			for (Node n : d.appInstances())
-			{
-				if (shouldSkipNode(c, n))
-				{
-					continue;
-				}
-				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
 			}
 		}
 	}

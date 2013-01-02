@@ -76,7 +76,6 @@ public class RunMonitors implements Task
 				}
 			}
 		}
-		// cmdList.addAll();
 		return cmd;
 	}
 	
