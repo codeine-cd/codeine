@@ -26,7 +26,8 @@ public class CollectorOnNodeState
 		}
 		for (Result r : results)
 		{
-			if (r.success())
+			//TODO yshabi - check if/why there are null results in the list
+			if (r != null && r.success())
 			{
 				success++;
 			}
