@@ -23,7 +23,7 @@ public class YamiMailSenderTest
 	{
 		CollectorOnNodeState state = new CollectorOnNodeState();
 		Result r = new Result(0, null);
-		state.addResult(r );
+		state.addResult(r);
 		Node n = new Node();
 		n.name = "stam";
 		Peer peer = new Peer();
@@ -33,22 +33,24 @@ public class YamiMailSenderTest
 		c.name = "cname";
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.EachRun);
 		ForTestingSendMailStrategy a = new ForTestingSendMailStrategy();
-		new YamiMailSender(a ).sendMailIfNeeded(d, c, n, state);
+		new YamiMailSender(a).sendMailIfNeeded(d, c, n, state);
 		assertTrue(a.isSent());
 	}
+	
 	@Test
 	public void testDontSendMail()
 	{
 		CollectorOnNodeState state = new CollectorOnNodeState();
 		Result r = new Result(1, null);
-		state.addResult(r );
+		state.addResult(r);
 		Node n = new Node();
 		HttpCollector c = createHttpCollector();
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.BackToNormal);
 		ForTestingSendMailStrategy a = new ForTestingSendMailStrategy();
-		new YamiMailSender(a ).sendMailIfNeeded(d, c, n, state);
+		new YamiMailSender(a).sendMailIfNeeded(d, c, n, state);
 		assertFalse(a.isSent());
 	}
+	
 	@Test
 	public void testDontSendMailIfStateIsNull()
 	{
@@ -57,19 +59,26 @@ public class YamiMailSenderTest
 		HttpCollector c = createHttpCollector();
 		ForTestingIDataStore d = new ForTestingIDataStore(MailPolicy.BackToNormal);
 		ForTestingSendMailStrategy a = new ForTestingSendMailStrategy();
-		new YamiMailSender(a ).sendMailIfNeeded(d, c, n, state);
+		new YamiMailSender(a).sendMailIfNeeded(d, c, n, state);
 		assertFalse(a.isSent());
 	}
+	
+	@Test
+	public void testComposeMailingListEmpty()
+	{
+		
+	}
+	
 	public static class ForTestingIDataStore implements IDataStore
 	{
-
+		
 		private MailPolicy policy;
-
+		
 		public ForTestingIDataStore(MailPolicy mailPolicy)
 		{
 			policy = mailPolicy;
 		}
-
+		
 		@Override
 		public List<MailPolicy> mailingPolicy()
 		{
@@ -77,13 +86,13 @@ public class YamiMailSenderTest
 			lst.add(policy);
 			return lst;
 		}
-
+		
 		@Override
 		public List<String> mailingList()
 		{
 			return new ArrayList<String>();
 		}
-
+		
 		@Override
 		public CollectorOnNodeState getResult(Node n, HttpCollector master)
 		{
@@ -91,21 +100,27 @@ public class YamiMailSenderTest
 		}
 		
 	}
+	
 	public static class ForTestingSendMailStrategy extends SendMailStrategy
 	{
 		private int sent;
-
+		
+		public ForTestingSendMailStrategy()
+		{
+			sent = 0;
+		}
+		
 		@Override
 		public void mailCollectorResult(List<String> mailingList, HttpCollector c, Node n, Result results)
 		{
 			sent++;
 		}
-
+		
 		public boolean isSent()
 		{
 			return sent > 0;
 		}
-
+		
 		public int sent()
 		{
 			return sent;

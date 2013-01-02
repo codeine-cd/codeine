@@ -31,11 +31,16 @@ public class Peer
 	public String getPeerLink()
 	{
 		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
-		return "http://" + name + ":" + gc.getClientPort(); 
+		return "http://" + name + ":" + gc.getClientPort();
 	}
 	
 	public String getPeerRestartLink()
 	{
-		return getPeerLink() + "/restart"; 
+		return getPeerLink() + "/restart";
+	}
+	
+	public List<String> mailingList()
+	{
+		return mailingList;
 	}
 }

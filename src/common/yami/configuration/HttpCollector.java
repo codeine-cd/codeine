@@ -1,20 +1,23 @@
 package yami.configuration;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+
+import com.google.common.collect.Lists;
 
 public class HttpCollector
 {
 	public String name;
 	@XmlElement(name = "includedNode")
-	public List<String> includedNodes = new ArrayList<String>();
+	public List<String> includedNodes = Lists.newLinkedList();
 	@XmlElement(name = "excludedNode")
-	public List<String> excludedNodes = new ArrayList<String>();
-	public List<String> dependsOn = new ArrayList<String>();
+	public List<String> excludedNodes = Lists.newLinkedList();
+	public List<String> dependsOn = Lists.newLinkedList();
 	@XmlElement(name = "rule")
-	public List<CollectorRule> rules = new ArrayList<CollectorRule>();
+	public List<CollectorRule> rules = Lists.newLinkedList();
+	public List<String> mailingList = Lists.newLinkedList();
 	
 	public HttpCollector()
 	{
@@ -83,7 +86,7 @@ public class HttpCollector
 	
 	public List<HttpCollector> dependsOn()
 	{
-		final List<HttpCollector> l = new ArrayList<HttpCollector>();
+		final List<HttpCollector> l = Lists.newLinkedList();
 		Project p = ConfigurationManager.getInstance().getConfiguredProject();
 		for (HttpCollector c : p.collectors)
 		{
@@ -102,5 +105,10 @@ public class HttpCollector
 	public String toString()
 	{
 		return "HttpCollector [name=" + name + "]";
+	}
+	
+	public Collection<String> mailingList()
+	{
+		return mailingList;
 	}
 }

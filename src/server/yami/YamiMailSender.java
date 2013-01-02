@@ -2,13 +2,13 @@ package yami;
 
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
-
 import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
 import yami.mail.CollectorOnNodeState;
 import yami.model.IDataStore;
+
+import com.google.common.collect.Lists;
 
 public class YamiMailSender
 {
@@ -22,7 +22,7 @@ public class YamiMailSender
 	
 	public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnNodeState state)
 	{
-		if (!shouldMail(c, n, d))
+		if (!shouldMailByState(c, n, d))
 		{
 			return;
 		}
@@ -32,13 +32,34 @@ public class YamiMailSender
 			return;
 		}
 		
-		List<String> fullMailingList = ListUtils.union(d.mailingList(), n.peer.mailingList);
-		sendMailStrategy.mailCollectorResult(fullMailingList, c, n, state.getLast());
+		List<String> mailingList = composeMailingList(d, n, c);
+		sendMailStrategy.mailCollectorResult(mailingList, c, n, state.getLast());
+	}
+	
+	List<String> composeMailingList(IDataStore d, Node n, HttpCollector c)
+	{
+		List<String> mailingList = Lists.newLinkedList();
+		if (n != null)
+		{
+			if (n.peer != null)
+			{
+				mailingList.addAll(n.peer.mailingList());
+			}
+		}
+		if (d != null)
+		{
+			mailingList.addAll(d.mailingList());
+		}
+		if (c != null)
+		{
+			mailingList.addAll(c.mailingList());
+		}
+		return mailingList;
 	}
 	
 	protected boolean shouldMailByPolicies(List<MailPolicy> policies, CollectorOnNodeState state)
 	{
-		if (null == state)
+		if (null == state || null == policies)
 		{
 			return false;
 		}
@@ -52,7 +73,7 @@ public class YamiMailSender
 		return false;
 	}
 	
-	protected boolean shouldMail(HttpCollector c, Node n, IDataStore d)
+	protected boolean shouldMailByState(HttpCollector c, Node n, IDataStore d)
 	{
 		for (HttpCollector master : c.dependsOn())
 		{

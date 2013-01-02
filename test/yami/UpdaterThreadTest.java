@@ -24,7 +24,6 @@ import com.google.common.collect.Lists;
 
 public class UpdaterThreadTest
 {
-	
 	private YamiMailSender yamiMailSender;
 	private DataStore d;
 	private UpdaterThread tested;
@@ -84,7 +83,7 @@ public class UpdaterThreadTest
 		{
 			return l;
 		}
-
+		
 		public void mailingPolicy(ArrayList<MailPolicy> l)
 		{
 			this.l = l;
@@ -199,13 +198,13 @@ public class UpdaterThreadTest
 	public void testMonitorDependencyPreventSendingMail() throws Exception
 	{
 		HttpCollector hc = addCollector(d, "slave");
-//		d = mock(DataStore.class);
+		// d = mock(DataStore.class);
 		hc.dependsOn().add(addCollector(d, "master"));
 		((ForTestingDataStore)d).mailingPolicy(Lists.newArrayList(MailPolicy.NewFailure));
 		addNode(d, "node1", true);
-//		when(d.mailingPolicy()).thenReturn(Lists.newArrayList(MailPolicy.NewFailure));
+		// when(d.mailingPolicy()).thenReturn(Lists.newArrayList(MailPolicy.NewFailure));
 		CollectorHttpResultFetcher fetcher = new ForTestingFailingCollectorHttpResultFetcher();
-		tested = new UpdaterThread(createYamiMailSender(), fetcher,false);
+		tested = new UpdaterThread(createYamiMailSender(), fetcher, false);
 		tested.updateResults(d);
 		assertEquals(1, sendMailStrategy.sent());
 	}
@@ -240,30 +239,30 @@ public class UpdaterThreadTest
 		hc.dependsOn().add(master);
 		HttpCollector hc2 = addCollector(d, "slave2");
 		hc2.dependsOn().add(master);
-		new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(),false).updateResults(d);
+		new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(), false).updateResults(d);
 		assertEquals(1, sendMailStrategy.sent());
 	}
 	
 	@Test
 	public void testFirstMailNotSent() throws Exception
 	{
-		addNode(d,"node1",true);
+		addNode(d, "node1", true);
 		addCollector(d, "master");
-		tested = new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(),true);
+		tested = new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(), true);
 		tested.updateResults(d);
-		assertEquals(0,size());
+		assertEquals(0, size());
 	}
 	
 	@Test
 	public void testFirstMailNotSentSecondMailSent() throws Exception
 	{
-		addNode(d,"node1",true);
+		addNode(d, "node1", true);
 		addCollector(d, "master");
-		tested = new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(),true);
+		tested = new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(), true);
 		UpdaterThread.isFirstIteration = true;
 		tested.updateResults(d);
 		tested.updateResults(d);
-		assertEquals(1,size());
+		assertEquals(1, size());
 	}
 	
 	@Before
@@ -275,7 +274,7 @@ public class UpdaterThreadTest
 		CollectorHttpResultFetcher fetcher = new ForTestingCollectorHttpResultFetcher();
 		sendMailStrategy = new ForTestingSendMailStrategy();
 		yamiMailSender = createYamiMailSender();
-		tested = new UpdaterThread(yamiMailSender, fetcher,false);
+		tested = new UpdaterThread(yamiMailSender, fetcher, false);
 	}
 	
 	private HttpCollector createHttpCollector()
