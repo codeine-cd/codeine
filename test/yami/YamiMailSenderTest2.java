@@ -13,13 +13,11 @@ import yami.configuration.HttpCollector;
 import yami.configuration.MailPolicy;
 import yami.configuration.Node;
 import yami.configuration.Peer;
-import yami.mail.CollectorOnNodeState;
 import yami.model.DataStore;
-import yami.model.Result;
 
 import com.google.common.collect.Lists;
 
-public class MailSenderTest2
+public class YamiMailSenderTest2
 {
 	
 	private ForTestingDataStore d;
@@ -29,8 +27,8 @@ public class MailSenderTest2
 	@Before
 	public void setUp() throws Exception
 	{
-		List<HttpCollector> c = new ArrayList<HttpCollector>();
-		List<Node> a = new ArrayList<Node>();
+		List<HttpCollector> c = Lists.newArrayList();
+		List<Node> a = Lists.newArrayList();
 		d = new ForTestingDataStore(c, a);
 		sendMailStrategy = new ForTestingSendMailStrategy();
 		yamiMailSender = new YamiMailSender(sendMailStrategy);
@@ -68,6 +66,7 @@ public class MailSenderTest2
 		Node n = addNode(d, "node1", true);
 		n.peer = null;
 		HttpCollector c = new HttpCollector();
+		c.mailingList = Lists.newArrayList();
 		c.mailingList().add("test");
 		List<String> m = yamiMailSender.composeMailingList(d, n, c);
 		assertEquals(1, m.size());
@@ -82,132 +81,10 @@ public class MailSenderTest2
 		Node n = addNode(d, "node1", true);
 		n.peer = p;
 		HttpCollector c = new HttpCollector();
+		c.mailingList = Lists.newArrayList();
 		c.mailingList().add("mail3");
 		List<String> m = yamiMailSender.composeMailingList(d, n, c);
 		assertEquals(3, m.size());
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_EmptyPolicies()
-	{
-		List<MailPolicy> policies = Lists.newArrayList();
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, null));
-		assertFalse(yamiMailSender.shouldMailByPolicies(null, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyEachRun()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.EachRun);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		assertTrue(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyBackToNormal()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.BackToNormal);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyBackToNormalWith1Failure()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.BackToNormal);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		Result r = new Result(1, "");
-		state.addResult(r);
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyBackToNormalWith1FailureAnd1Success()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.BackToNormal);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		state.addResult(new Result(0, ""));
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyBackToNormalWith1FailureAnd2Success()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.BackToNormal);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		state.addResult(new Result(0, ""));
-		state.addResult(new Result(0, ""));
-		assertTrue(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyNewFailue()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.NewFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyNewFailueWith1Failed()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.NewFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		assertTrue(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyNewFailueWith2FailedResult()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.NewFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		state.addResult(new Result(1, ""));
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyNewFailueWith2FailedResult1Success()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.NewFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		state.addResult(new Result(1, ""));
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyNewFailueWith1FailedResult1Success()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.NewFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		state.addResult(new Result(0, ""));
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyEachFailue()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.EachFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		assertFalse(yamiMailSender.shouldMailByPolicies(policies, state));
-	}
-	
-	@Test
-	public void testShouldMailByPolicies_SinglePolicyEachFailueWithFailures()
-	{
-		List<MailPolicy> policies = Lists.newArrayList(MailPolicy.EachFailure);
-		CollectorOnNodeState state = new CollectorOnNodeState();
-		state.addResult(new Result(1, ""));
-		assertTrue(yamiMailSender.shouldMailByPolicies(policies, state));
-		state.addResult(new Result(1, ""));
-		assertTrue(yamiMailSender.shouldMailByPolicies(policies, state));
 	}
 	
 	private final class ForTestingDataStore extends DataStore

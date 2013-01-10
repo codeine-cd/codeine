@@ -1,13 +1,15 @@
 package yami.configuration;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 public class CollectorRule
 {
 	public String node = "^$";
 	public String peer = "^$";
-	public List<String> arg = new ArrayList<String>();
+	public List<MailPolicy> mailPolicy = null;
+	public List<String> arg = Lists.newArrayList();
 	
 	public CollectorRule()
 	{
@@ -36,7 +38,7 @@ public class CollectorRule
 	{
 		return shouldApplyForNode(peer);
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
@@ -47,7 +49,7 @@ public class CollectorRule
 		result = prime * result + ((peer == null) ? 0 : peer.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -81,6 +83,5 @@ public class CollectorRule
 			return false;
 		return true;
 	}
-	
 	
 }

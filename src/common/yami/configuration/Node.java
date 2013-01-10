@@ -6,8 +6,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import yami.model.Constants;
 
 /**
- * @author oshai
- * currently names has to be unique
+ * @author oshai currently names has to be unique
  */
 public class Node
 {
@@ -16,11 +15,29 @@ public class Node
 	@XmlTransient
 	public Peer peer;
 	
+	public Node(String name, String nick, Peer peer)
+	{
+		this.name = name;
+		this.nick = nick;
+		this.peer = peer;
+	}
+	
+	public Node(String nick)
+	{
+		this.nick = nick;
+		this.name = nick;
+	}
+	
+	public Node()
+	{
+		
+	}
+	
 	public void afterUnmarshal(Unmarshaller u, Object parent)
 	{
 		peer = (Peer)parent;
 	}
-	   
+	
 	public String nick()
 	{
 		if (null == nick || "".equals(nick))
@@ -29,7 +46,7 @@ public class Node
 		}
 		return nick;
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
@@ -38,7 +55,7 @@ public class Node
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -58,15 +75,15 @@ public class Node
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString()
 	{
 		return "Node [nick=" + nick + ", name=" + name + "]";
 	}
-
+	
 	public String getLogLink()
 	{
-		return "http://" + peer.name + ":"+ Constants.getClientPort();
+		return "http://" + peer.name + ":" + Constants.getClientPort();
 	}
 }

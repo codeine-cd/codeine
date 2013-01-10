@@ -66,10 +66,12 @@ public class CollectorHttpResultFetcher
 	{
 		List<String> resultLines = new ArrayList<String>();
 		URL url;
+		BufferedReader in;
 		try
 		{
 			url = new URL(resultURL);
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			in = new BufferedReader(new InputStreamReader(url.openStream()));
+			
 			String line;
 			while ((line = in.readLine()) != null)
 			{

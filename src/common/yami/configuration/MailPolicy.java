@@ -33,6 +33,7 @@ public enum MailPolicy implements ActivePredicate
 		{
 			return true;
 		}
-	};
+	},
+	;
 	
 }

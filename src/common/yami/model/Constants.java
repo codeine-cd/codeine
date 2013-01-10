@@ -33,7 +33,6 @@ public class Constants
 	public static String installDir = null;
 	public static String confPath = null;
 	
-	
 	public static String getConfPath()
 	{
 		if (confPath != null)
