@@ -4,16 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import yami.utils.LimitedQueue;
-
 public class LimitedQueueTest
 {
 	
-	@Test(expected=IllegalArgumentException.class)
+	@SuppressWarnings("unused")
+	@Test(expected = IllegalArgumentException.class)
 	public void testLimitedQueue_IllegalArgument()
 	{
-		@SuppressWarnings("unused")
-		LimitedQueue<String> q = new LimitedQueue<String>(-1);
+		new LimitedQueue<String>(-1);
 	}
 	
 	@Test
@@ -29,9 +27,10 @@ public class LimitedQueueTest
 		LimitedQueue<String> q = new LimitedQueue<String>(3);
 		q.add("line1");
 		q.add("line2");
+		assertEquals(2, q.size());
 		q.add("line3");
 		q.add("line4");
-		assertEquals(3,q.size());
+		assertEquals(3, q.size());
 	}
 	
 }

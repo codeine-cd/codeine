@@ -1,6 +1,7 @@
 package yami;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.SocketException;
@@ -81,6 +82,10 @@ public class CollectorHttpResultFetcher
 		}
 		catch (SocketException ignore)
 		{
+		}
+		catch (FileNotFoundException e)
+		{
+			log.info("Could not read page " + resultURL);
 		}
 		catch (Exception e)
 		{

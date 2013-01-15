@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import yami.model.Result;
 
@@ -20,7 +21,7 @@ public class ProcessExecuter
 		worker.start();
 		try
 		{
-			long timeout = 30000;
+			long timeout = TimeUnit.MINUTES.toMillis(2);
 			worker.join(timeout);
 			if (worker.exit != null)
 				return new Result(worker.exit, worker.output);
