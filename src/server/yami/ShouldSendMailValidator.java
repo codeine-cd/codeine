@@ -26,15 +26,15 @@ public class ShouldSendMailValidator
 		policies = p;
 	}
 	
-	private boolean shouldMailByPolicies(List<MailPolicy> policies, CollectorOnNodeState state)
+	private boolean shouldMailByPolicies(List<MailPolicy> policies)
 	{
 		if (null == state || null == policies)
 		{
 			return false;
 		}
-		for (MailPolicy mailPolicy2 : policies)
+		for (MailPolicy p : policies)
 		{
-			if (mailPolicy2.isActive(state.prevState(), state.state()))
+			if (p.isActive(state.prevState(), state.state()))
 			{
 				return true;
 			}
@@ -42,14 +42,17 @@ public class ShouldSendMailValidator
 		return false;
 	}
 	
-	private boolean shouldMailByState(HttpCollector c, Node n, IDataStore d)
+	private boolean shouldMailByDependencies(HttpCollector c, Node n, List<MailPolicy> policies)
 	{
-		for (HttpCollector master : c.dependsOn())
+		for (MailPolicy policy : policies)
 		{
-			CollectorOnNodeState r = d.getResult(n, master);
-			if (r == null || !r.state())
+			for (HttpCollector master : c.dependsOn())
 			{
-				return false;
+				CollectorOnNodeState r = ds.getResult(n, master);
+				if (r == null || policy.isActive(r.prevState(), r.state()))
+				{
+					return false;
+				}
 			}
 		}
 		return true;
@@ -57,14 +60,14 @@ public class ShouldSendMailValidator
 	
 	public boolean shouldMail()
 	{
-		List<MailPolicy> policies = this.policies;
+		List<MailPolicy> calculatedPolicies = this.policies;
 		for (CollectorRule rule : col.rules) // overwrite mailing policies if there are explicit rules
 		{
 			if (rule.mailPolicy != null && rule.shouldApplyForNode(node))
 			{
-				policies = rule.mailPolicy;
+				calculatedPolicies = rule.mailPolicy;
 			}
 		}
-		return shouldMailByPolicies(policies, state) && shouldMailByState(col, node, ds);
+		return calculatedPolicies.contains(MailPolicy.EachRun) || (shouldMailByPolicies(calculatedPolicies) && shouldMailByDependencies(col, node, calculatedPolicies));
 	}
 }

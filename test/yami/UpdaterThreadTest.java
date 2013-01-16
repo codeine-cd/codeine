@@ -225,6 +225,24 @@ public class UpdaterThreadTest
 		assertEquals(2, size());
 	}
 	
+	@Test
+	public void testMonitorDependencyMasterAndSlaveBackToNormal() throws Exception
+	{
+		addNode(d, "node1", true);
+		HttpCollector master = addCollector(d, "master");
+		HttpCollector hc = addCollector(d, "slave");
+		hc.dependsOn().add(master);
+		// fail once for both collector (mail once):
+		((ForTestingDataStore)d).mailingPolicy(Lists.newArrayList(MailPolicy.NewFailure));
+		new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(), false).updateResults(d);
+		assertEquals(1, size());
+		// succeed twice for both collector (mail once):
+		((ForTestingDataStore)d).mailingPolicy(Lists.newArrayList(MailPolicy.BackToNormal));
+		new UpdaterThread(yamiMailSender, new ForTestingCollectorHttpResultFetcher(), false).updateResults(d);
+		new UpdaterThread(yamiMailSender, new ForTestingCollectorHttpResultFetcher(), false).updateResults(d);
+		assertEquals(2, size());
+	}
+	
 	private int size()
 	{
 		return sendMailStrategy.sent();
@@ -239,6 +257,7 @@ public class UpdaterThreadTest
 		hc.dependsOn().add(master);
 		HttpCollector hc2 = addCollector(d, "slave2");
 		hc2.dependsOn().add(master);
+		((ForTestingDataStore)d).mailingPolicy(Lists.newArrayList(MailPolicy.EachFailure));
 		new UpdaterThread(yamiMailSender, new ForTestingFailingCollectorHttpResultFetcher(), false).updateResults(d);
 		assertEquals(1, sendMailStrategy.sent());
 	}

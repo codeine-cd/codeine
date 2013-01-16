@@ -194,11 +194,6 @@ public class ShouldSendMailValidatorTest
 		assertTrue(validator.shouldMail());
 	}
 	
-	private final class ForTestingHttpCollector extends HttpCollector
-	{
-		
-	}
-	
 	private HttpCollector createHttpCollector()
 	{
 		return new HttpCollector()
@@ -216,44 +211,15 @@ public class ShouldSendMailValidatorTest
 	private final class ForTestingDataStore extends DataStore
 	{
 		private final List<HttpCollector> collectors;
-		private final List<Node> apps;
+		private final List<Node> nodes;
 		private List<String> m = Lists.newArrayList();
 		private List<MailPolicy> l = Lists.newArrayList(MailPolicy.EachRun);
 		
-		public ForTestingDataStore(List<HttpCollector> collectors, List<Node> apps)
+		public ForTestingDataStore(List<HttpCollector> collectors, List<Node> nodes)
 		{
 			super();
 			this.collectors = collectors;
-			this.apps = apps;
-		}
-		
-		@Override
-		public List<HttpCollector> collectors()
-		{
-			return collectors;
-		}
-		
-		@Override
-		public List<Node> appInstances()
-		{
-			return apps;
-		}
-		
-		@Override
-		public List<String> mailingList()
-		{
-			return m;
-		}
-		
-		@Override
-		public List<MailPolicy> mailingPolicy()
-		{
-			return l;
-		}
-		
-		public void mailingPolicy(ArrayList<MailPolicy> l)
-		{
-			this.l = l;
+			this.nodes = nodes;
 		}
 	}
 	
