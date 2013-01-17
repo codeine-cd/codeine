@@ -1,14 +1,21 @@
 package yami;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 
-import yami.configuration.*;
-import yami.model.*;
+import yami.configuration.ConfigurationManager;
+import yami.configuration.GlobalConfiguration;
+import yami.configuration.Peer;
+import yami.model.Constants;
+import yami.model.DataStore;
+import yami.model.DataStoreRetriever;
 
 public class PeersDashboardServlet extends HttpServlet
 {
@@ -52,7 +59,7 @@ public class PeersDashboardServlet extends HttpServlet
 		writer.println("    <div id=\"content\">");
 		writer.println("      <h2>Active Monitors</h2>");
 		for (Peer peer : ds.peers())
-		{		
+		{
 			String line = "            <alert><div class=\"alertbar\"><ul>";
 			line += "<li><a class=\"" + "nameg" + "\" href=\"" + peer.getPeerLink() + "\">" + peer.name + "</a></li>";
 			line += "<li><a class=\"" + "restartbutton" + "\" title=\"" + "Restart" + "\" href=\"" + peer.getPeerRestartLink() + "\">restart</a></li>";
@@ -72,10 +79,9 @@ public class PeersDashboardServlet extends HttpServlet
 		writer.println("</html>");
 		writer.close();
 	}
-		
+	
 	private DataStore getDataStore()
 	{
 		return DataStoreRetriever.getD();
 	}
-	
 }
