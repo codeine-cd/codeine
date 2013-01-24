@@ -58,7 +58,9 @@ public class CollectorHttpResultFetcher
 		}
 		if (clientEpoch == 0 || serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(5))
 		{
-			return new Result(1, "Keepalive failed, node is either down or not updating.");
+			lines.add(0, "Keepalive failed, node is either down or not updating. Monitor result was:\n");
+			String output = Joiner.on("\n").join(lines);
+			return new Result(1, output);
 		}
 		return res;
 	}
