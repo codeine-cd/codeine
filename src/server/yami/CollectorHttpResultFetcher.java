@@ -56,7 +56,7 @@ public class CollectorHttpResultFetcher
 			clientEpoch = Long.parseLong(lines.get(3));
 			log.debug("server time - client time :" + serverEpoch + "-" + clientEpoch + "=" + (serverEpoch - clientEpoch));
 		}
-		if (clientEpoch == 0 || serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(2))
+		if (clientEpoch == 0 || serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(5))
 		{
 			return new Result(1, "Keepalive failed, node is either down or not updating.");
 		}
