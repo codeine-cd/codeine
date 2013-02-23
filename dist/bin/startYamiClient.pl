@@ -13,7 +13,7 @@ foreach my $arg (@ARGV)
   push( @ARGV2, $arg );
 }
 
-print "DEBUG: KILL is ON\n";
+print "DEBUG: KILL is ON\n" if ($kill_current);
 @ARGV = @ARGV2;
 die
 "Usage: startYamiClient <java> <rsync> <rsync user> <client port> <server port> <client install dir> <conf file name>  <rsync source>\n"
@@ -92,7 +92,7 @@ sub rsync_dist
 sub start_peer_java
 {
   my $java_cmd =
-"/usr/bin/nohup $java -Djava.path=$java -Ddebug=true -Drsync.path=$rsync -Dyami.conf=$conf_file -Drsync.user=$user -Dclient.port=$client_port -Drsync.source=$rsync_source -cp $client_install/bin/yami.jar yami.YamiClientBootstrap > $start_log 2>&1 < /dev/null &";
+"/usr/bin/nohup $java -Xmx200m -Djava.path=$java -Ddebug=true -Drsync.path=$rsync -Dyami.conf=$conf_file -Drsync.user=$user -Dclient.port=$client_port -Drsync.source=$rsync_source -cp $client_install/bin/yami.jar yami.YamiClientBootstrap > $start_log 2>&1 < /dev/null &";
   print "DEBUG: will run ($java_cmd)\n";
   `$java_cmd`;
 }
