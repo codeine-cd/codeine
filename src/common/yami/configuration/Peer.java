@@ -3,12 +3,14 @@ package yami.configuration;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 public class Peer
 {
 	@XmlElement(name = "node")
 	public List<Node> nodes = new ArrayList<Node>();
+	@XmlAttribute
 	public String name;
 	public List<String> mailingList = new ArrayList<String>();
 	

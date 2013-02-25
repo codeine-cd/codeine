@@ -1,9 +1,8 @@
 package yami.configuration;
 
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
-
-import yami.model.Constants;
 
 /**
  * @author oshai currently names has to be unique
@@ -11,6 +10,7 @@ import yami.model.Constants;
 public class Node
 {
 	public String nick;
+	@XmlAttribute
 	public String name;
 	@XmlTransient
 	public Peer peer;
@@ -84,6 +84,6 @@ public class Node
 	
 	public String getLogLink()
 	{
-		return "http://" + peer.name + ":" + Constants.getClientPort();
+		return "http://" + peer.name + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort();
 	}
 }
