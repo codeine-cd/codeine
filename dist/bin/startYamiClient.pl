@@ -75,6 +75,8 @@ if ($kill)
 
 &start_peer_java;
 
+sleep(2);
+
 my @pids = &get_running_pids;
 if ( not( scalar(@pids) ) )
 {
