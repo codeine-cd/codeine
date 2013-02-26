@@ -6,6 +6,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import yami.model.Constants;
+
 public class Peer
 {
 	@XmlElement(name = "node")
@@ -38,7 +40,11 @@ public class Peer
 	
 	public String getPeerRestartLink()
 	{
-		return getPeerLink() + "/restart";
+		return getPeerLink() + Constants.RESTART_CONTEXT;
+	}
+	public String getPeerSwitchVersionLink(String node, String version)
+	{
+	    return getPeerLink() + Constants.SWITCH_NODE_VERSION_CONTEXT + "?node=" + node + "&version=" + version;
 	}
 	
 	public List<String> mailingList()

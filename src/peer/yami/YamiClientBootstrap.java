@@ -53,6 +53,9 @@ public class YamiClientBootstrap
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
 		PeerRestartServlet rs = new PeerRestartServlet();
 		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, rs);
+		SwitchNodeVersionServlet switchNodeVersionServlet = new SwitchNodeVersionServlet();
+		ServletContextHandler switchNodeVersionServletContextHandler = createServletContext(Constants.SWITCH_NODE_VERSION_CONTEXT, switchNodeVersionServlet);
+		contexts.addHandler(switchNodeVersionServletContextHandler);
 		contexts.addHandler(restartServlet);
 		contexts.addHandler(createLogContextHandler());
 		log.info("Starting peer at port " + port);

@@ -41,6 +41,13 @@ public class DashboardServlet extends HttpServlet
 		writer.println("<title>YAMI Dashboard</title>");
 		writer.println("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
 		writer.println("");
+		writer.println("<script type=\"text/javascript\">");
+		writer.println("function switchVersion(node,link)");
+		writer.println("{");
+		writer.println(" alert('sending command to node ' + node);");
+		writer.println(" window.location =  link + document.getElementById(node+'_newVersion').value;");
+		writer.println("}");
+		writer.println("</script>");
 		writer.println("</head>");
 		writer.println("<body>");
 		writer.println("<div id=\"container\">");
@@ -95,6 +102,14 @@ public class DashboardServlet extends HttpServlet
 			if (null != version)
 			{
 			    line += "<li><a class=\"" + className + "\" href=\"none\">"+version+"</a></li>";
+			}
+			if (gc.isSwitchVersionEnabled())
+			{
+			    String link = node.peer.getPeerSwitchVersionLink(node.name, "");
+			    line += "<li>" +
+			    		"<input class=\"" + className + "\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
+			    		"<button class=\"" + className + "\" id=\""+node.name+"\" onClick=\"switchVersion(this.id,'"+link+"')\">Switch-Version</button>" +
+			    				"</li>";
 			}
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
 			writer.println(line);

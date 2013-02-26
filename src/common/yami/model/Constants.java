@@ -31,6 +31,7 @@ public class Constants
 	public static final String DASHBOARD_CONTEXT = "/dashboard";
 	public static final String PEERS_DASHBOARD_CONTEXT = "/peers";
 	public static final String RESTART_CONTEXT = "/restart";
+	public static final String SWITCH_NODE_VERSION_CONTEXT = "/command-node";
 	public static final String HTTP_ROOT_CONTEXT = "/http-root";
 	
 	public static String installDir = null;

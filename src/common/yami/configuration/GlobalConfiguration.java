@@ -12,6 +12,7 @@ public class GlobalConfiguration
 	public String client_path = "/tmp/yami.monitor/";
 	public Integer server_port = 8080;
 	public Integer client_port = 8112;
+	public Boolean switchVersionEnabled = false;
 	
 	public String getJavaPath()
 	{
@@ -163,6 +164,11 @@ public class GlobalConfiguration
 		if (server_port != other.server_port)
 			return false;
 		return true;
+	}
+
+	public boolean isSwitchVersionEnabled() 
+	{
+	    return switchVersionEnabled;
 	}
 	
 }
