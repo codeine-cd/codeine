@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
+import yami.configuration.VersionCollector;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 import yami.model.Result;
@@ -83,31 +84,36 @@ public class UpdaterThread implements Runnable
 	{
 		for (HttpCollector c : d.collectors())
 		{
-			for (Node n : d.appInstances())
-			{
-				try
-				{
-					if (shouldSkipNode(c, n))
-					{
-						continue;
-					}
-					Result r = fetcher.getResult(c, n);
-					if (r != null)
-					{
-						log.debug("adding result " + r.success() + " to node " + n);
-						d.addResults(n, c, r);
-					}
-					else
-					{
-						log.debug("no result fetched for node " + n + " "+ c);
-					}
-				}
-				catch (Exception e)
-				{
-					log.warn("Exception in updateResults.", e);
-				}
-			}
+			updateResultForCollector(c, d);
 		}
+		updateResultForCollector(new VersionCollector(), d);
+	}
+
+	private void updateResultForCollector(HttpCollector collector, DataStore d) {
+	    for (Node n : d.appInstances())
+	    {
+	    	try
+	    	{
+	    		if (shouldSkipNode(collector, n))
+	    		{
+	    			continue;
+	    		}
+	    		Result r = fetcher.getResult(collector, n);
+	    		if (r != null)
+	    		{
+	    			log.debug("adding result " + r.success() + " to node " + n);
+	    			d.addResults(n, collector, r);
+	    		}
+	    		else
+	    		{
+	    			log.debug("no result fetched for node " + n + " "+ collector);
+	    		}
+	    	}
+	    	catch (Exception e)
+	    	{
+	    		log.warn("Exception in updateResults.", e);
+	    	}
+	    }
 	}
 	
 	private boolean shouldSkipNode(HttpCollector c, Node n)

@@ -57,7 +57,6 @@ public class PeersDashboardServlet extends HttpServlet
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
 		writer.println("    <div id=\"content\">");
-		writer.println("      <h2>Active Monitors</h2>");
 		for (Peer peer : ds.peers())
 		{
 			String line = "            <alert><div class=\"alertbar\"><ul>";

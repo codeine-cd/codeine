@@ -14,6 +14,7 @@ import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
+import yami.configuration.VersionCollector;
 import yami.mail.CollectorOnNodeState;
 import yami.model.Constants;
 import yami.model.DataStore;
@@ -58,7 +59,6 @@ public class DashboardServlet extends HttpServlet
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
 		writer.println("    <div id=\"content\">");
-		writer.println("      <h2>Active Monitors</h2>");
 		for (Node node : ds.appInstances())
 		{
 			boolean fail = false;
@@ -73,8 +73,8 @@ public class DashboardServlet extends HttpServlet
 			}
 			// start building monitored instance line:
 			String line = "            <alert><div class=\"alertbar\"><ul>";
-			String goodbad = fail ? "nameb" : "nameg";
-			line += "<li><a class=\"" + goodbad + "\" href=\"" + node.getLogLink() + "\">" + node.nick() + "</a></li>";
+			String className = fail ? "nameb" : "nameg";
+			line += "<li><a class=\"" + className + "\" href=\"" + node.getLogLink() + "\">" + node.nick() + "</a></li>";
 			// build result buttons for each collector:
 			for (HttpCollector collector : ds.collectors())
 			{
@@ -87,9 +87,14 @@ public class DashboardServlet extends HttpServlet
 				else
 				{
 					// change css class depending on result:
-					goodbad = result.state() ? "good" : "bad";
+					String goodbad = result.state() ? "good" : "bad";
 					line += "<li><a class=\"" + goodbad + "\" title=\"" + collector.name + "\" href=\"" + getLink(collector, node) + "\">?</a></li>";
 				}
+			}
+			String version = getVersion(ds, node);
+			if (null != version)
+			{
+			    line += "<li><a class=\"" + className + "\" href=\"none\">"+version+"</a></li>";
 			}
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
 			writer.println(line);
@@ -106,6 +111,16 @@ public class DashboardServlet extends HttpServlet
 		writer.println("</body>");
 		writer.println("</html>");
 		writer.close();
+	}
+
+	private String getVersion(DataStore ds, Node node) 
+	{
+	    CollectorOnNodeState result = ds.getResult(node, new VersionCollector());
+	    if (null == result)
+	    {
+		return null;
+	    }
+	    return result.getLast().output;
 	}
 	
 	private String getLink(HttpCollector collector, Node node)

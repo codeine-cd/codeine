@@ -14,6 +14,7 @@ import yami.configuration.CollectorRule;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
+import yami.configuration.VersionCollector;
 import yami.model.Constants;
 import yami.model.Result;
 import yami.utils.ProcessExecuter;
@@ -36,6 +37,13 @@ public class RunMonitors implements Task
 			HttpCollector c = ConfigurationManager.getInstance().getConfiguredProject().getCollector(monitor.getName());
 			if (null == c)
 			{
+			    if (monitor.getName().equals(new VersionCollector().name))
+			    {
+				c = new VersionCollector();
+			    }
+			}
+			if (null == c)
+			{
 				log.debug("no collector defined for monitor file " + monitor.getName() + ", skipping exectution");
 				continue;
 			}
@@ -53,7 +61,7 @@ public class RunMonitors implements Task
 				log.info("Will execute " + cmd);
 				Result res = ProcessExecuter.execute(cmd);
 				log.info(monitor.getName() + " ended with res=" + res.success());
-				writeResult(res, monitor.getName());
+				writeResult(res, monitor.getName(), c);
 			}
 			catch (Exception e)
 			{
@@ -79,10 +87,13 @@ public class RunMonitors implements Task
 		return cmd;
 	}
 	
-	private void writeResult(Result res, String outputFileName) throws IOException
+	private void writeResult(Result res, String outputFileName, HttpCollector c) throws IOException
 	{
 		BufferedWriter out = getWriter(outputFileName);
-		out.write(res.success() ? "True\n" : "False\n");
+		if (c.hasStatus())
+		{
+		    out.write(res.success() ? "True\n" : "False\n");
+		}
 		out.write(res.output);
 		out.close();
 	}
