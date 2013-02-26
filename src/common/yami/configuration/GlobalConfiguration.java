@@ -1,92 +1,101 @@
 package yami.configuration;
 
-
 public class GlobalConfiguration
 {
-	private String rsyncuser = "root";
-	private String java = "java";
-	private String rsyncsource = "";
-	private String rsync = "rsync";
-	private String perl = "perl";
-	private String conffile = "yami.conf.xml";
-	private String clientpath = "/tmp/yami.monitor/";
-	private int serverport = 8080;
-	private int clientport = 8112;
+	
+	public String rsync_user = "root";
+	public String java = "java";
+	public String rsync_source = "admin:/yami/";
+	public String rsync = "rsync";
+	public String perl = "perl";
+	public String conf_file = "yami.conf.xml";
+	public String client_path = "/tmp/yami.monitor/";
+	public int server_port = 8080;
+	public int client_port = 8112;
 	
 	public String getJavaPath()
 	{
-		if (System.getProperty("java.path") != null)
+		if (System.getProperty("java") != null)
 		{
-			java = System.getProperty("java.path");
+			java = System.getProperty("java");
 		}
 		return java;
 	}
 	
 	public String getRsyncPath()
 	{
-		if (System.getProperty("rsync.path") != null)
+		if (System.getProperty("rsync") != null)
 		{
-			rsync = System.getProperty("rsync.path");
+			return System.getProperty("rsync");
 		}
 		return rsync;
 	}
 	
 	public String getRsyncUser()
 	{
-		if (System.getProperty("rsync.user") != null)
+		if (System.getProperty("rsync_user") != null)
 		{
-			rsyncuser = System.getProperty("rsync.user");
+			rsync_user = System.getProperty("rsync_user");
 		}
-		return rsyncuser;
+		return rsync_user;
 	}
 	
 	public int getClientPort()
 	{
-		if (System.getProperty("client.port") != null)
+		if (System.getProperty("client_port") != null)
 		{
-			clientport  = Integer.parseInt(System.getProperty("client.port"));
+			client_port = Integer.parseInt(System.getProperty("client_port"));
 		}
-		return clientport;
+		return client_port;
 	}
 	
 	public int getServerPort()
 	{
-		if (System.getProperty("server.port") != null)
+		if (System.getProperty("server_port") != null)
 		{
-			serverport = Integer.parseInt(System.getProperty("server.port"));
+			server_port = Integer.parseInt(System.getProperty("server_port"));
 		}
-		return serverport;
+		return server_port;
 	}
 	
 	public String getRsyncSource()
 	{
-		if (System.getProperty("rsync.source") != null)
+		if (System.getProperty("rsync_source") != null)
 		{
-			rsyncsource = System.getProperty("rsync.source");
+			rsync_source = System.getProperty("rsync_source");
 		}
-		return rsyncsource;
+		return rsync_source;
+	}
+	
+	public String getConfFileName()
+	{
+		if (System.getProperty("conf_file") != null)
+		{
+			conf_file = System.getProperty("conf_file");
+		}
+		return conf_file;
 	}
 	
 	@Override
 	public String toString()
 	{
-		return "GlobalConfiguration [rsyncuser=" + rsyncuser + ", java=" + java + ", rsyncsource=" + rsyncsource + ", rsync=" + rsync + ", perl=" + perl + ", conffile=" + conffile + ", clientpath=" + clientpath + ", serverport=" + serverport + ", clientport=" + clientport + "]";
+		return "GlobalConfiguration [rsyncuser=" + rsync_user + ", java=" + java + ", rsyncsource=" + rsync_source + ", rsync=" + rsync + ", perl=" + perl + ", conffile=" + conf_file + ", clientpath=" + client_path + ", serverport=" + server_port + ", clientport=" + client_port + "]";
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((clientpath == null) ? 0 : clientpath.hashCode());
-		result = prime * result + clientport;
-		result = prime * result + ((conffile == null) ? 0 : conffile.hashCode());
+		result = prime * result + ((client_path == null) ? 0 : client_path.hashCode());
+		result = prime * result + client_port;
+		result = prime * result + ((conf_file == null) ? 0 : conf_file.hashCode());
 		result = prime * result + ((java == null) ? 0 : java.hashCode());
 		result = prime * result + ((perl == null) ? 0 : perl.hashCode());
 		result = prime * result + ((rsync == null) ? 0 : rsync.hashCode());
-		result = prime * result + ((rsyncsource == null) ? 0 : rsyncsource.hashCode());
-		result = prime * result + ((rsyncuser == null) ? 0 : rsyncuser.hashCode());
-		result = prime * result + serverport;
+		result = prime * result + ((rsync_source == null) ? 0 : rsync_source.hashCode());
+		result = prime * result + ((rsync_user == null) ? 0 : rsync_user.hashCode());
+		result = prime * result + server_port;
 		return result;
 	}
 	
@@ -100,21 +109,21 @@ public class GlobalConfiguration
 		if (getClass() != obj.getClass())
 			return false;
 		GlobalConfiguration other = (GlobalConfiguration)obj;
-		if (clientpath == null)
+		if (client_path == null)
 		{
-			if (other.clientpath != null)
+			if (other.client_path != null)
 				return false;
 		}
-		else if (!clientpath.equals(other.clientpath))
+		else if (!client_path.equals(other.client_path))
 			return false;
-		if (clientport != other.clientport)
+		if (client_port != other.client_port)
 			return false;
-		if (conffile == null)
+		if (conf_file == null)
 		{
-			if (other.conffile != null)
+			if (other.conf_file != null)
 				return false;
 		}
-		else if (!conffile.equals(other.conffile))
+		else if (!conf_file.equals(other.conf_file))
 			return false;
 		if (java == null)
 		{
@@ -137,21 +146,21 @@ public class GlobalConfiguration
 		}
 		else if (!rsync.equals(other.rsync))
 			return false;
-		if (rsyncsource == null)
+		if (rsync_source == null)
 		{
-			if (other.rsyncsource != null)
+			if (other.rsync_source != null)
 				return false;
 		}
-		else if (!rsyncsource.equals(other.rsyncsource))
+		else if (!rsync_source.equals(other.rsync_source))
 			return false;
-		if (rsyncuser == null)
+		if (rsync_user == null)
 		{
-			if (other.rsyncuser != null)
+			if (other.rsync_user != null)
 				return false;
 		}
-		else if (!rsyncuser.equals(other.rsyncuser))
+		else if (!rsync_user.equals(other.rsync_user))
 			return false;
-		if (serverport != other.serverport)
+		if (server_port != other.server_port)
 			return false;
 		return true;
 	}

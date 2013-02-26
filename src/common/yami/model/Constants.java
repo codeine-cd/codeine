@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import yami.configuration.ConfigurationManager;
+
 public class Constants
 {
 	private static final Logger log = Logger.getLogger(Constants.class);
@@ -18,7 +20,8 @@ public class Constants
 	public static final String APP_NAME = "$app_name";
 	public static final String NODE_NAME = "$node_name";
 	public static final String COLLECTOR_NAME = "$collector_name";
-	public static final String CLIENT_LINK = "http://" + NODE_NAME + ":" + getClientPort() + "/" + APP_NAME + "/" + COLLECTOR_NAME + ".txt";
+	public static final String CLIENT_PORT = "$client_port";
+	public static final String CLIENT_LINK = "http://" + NODE_NAME + ":" + CLIENT_PORT + "/" + APP_NAME + "/" + COLLECTOR_NAME + ".txt";
 	
 	public static final String INSTALLATION = ".";
 	public static final String NODES_DIR = "/nodes/";
@@ -39,9 +42,14 @@ public class Constants
 		{
 			return confPath;
 		}
-		if (System.getProperty("yami.conf") != null)
+		if (System.getProperty("conf_file") != null)
 		{
-			return getInstallDir() + "/conf/" + System.getProperty("yami.conf");
+			confPath = System.getProperty("conf_file");
+			if (!confPath.startsWith("/"))
+			{
+				confPath = getInstallDir() + "/conf/" + confPath;
+			}
+			return confPath;
 		}
 		confPath = getInstallDir() + "/conf/yami.conf.xml";
 		log.info("SystemProperty 'yami.conf' not defined, returning default path " + confPath);
@@ -60,41 +68,42 @@ public class Constants
 			installDir = System.getProperty("install.dir");
 			return installDir;
 		}
-		String jarFileString = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		File jarFile = new File(jarFileString);
+		// if install dir not set, get relative to cwd:
+		String sJarPath = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File jarFile = new File(sJarPath);
 		installDir = jarFile.getParentFile().getParent();
 		log.info("SystemProperty 'install.dir' not defined, setting installDir as '" + installDir + "'");
 		return installDir;
 	}
 	
-	public static int getPort(String propertyName, int defaultPort)
-	{
-		int port = defaultPort;
-		if (System.getProperty(propertyName) != null)
-		{
-			try
-			{
-				port = Integer.parseInt(System.getProperty(propertyName));
-			}
-			catch (NumberFormatException e)
-			{
-				e.printStackTrace();
-				log.warn("got an exception at getPort where propertyName='" + propertyName + "' defaultPort='" + defaultPort + "'", e);
-				return defaultPort;
-			}
-		}
-		return port;
-	}
+	// public static int getPort(String propertyName, int defaultPort)
+	// {
+	// int port = defaultPort;
+	// if (System.getProperty(propertyName) != null)
+	// {
+	// try
+	// {
+	// port = Integer.parseInt(System.getProperty(propertyName));
+	// }
+	// catch (NumberFormatException e)
+	// {
+	// log.warn("got an exception at getPort where propertyName='" + propertyName + "' defaultPort='" + defaultPort +
+	// "'", e);
+	// return defaultPort;
+	// }
+	// }
+	// return port;
+	// }
 	
-	public static int getClientPort()
-	{
-		return getPort("client.port", DEFAULT_CLIENT_PORT);
-	}
+	// public static int getClientPort()
+	// {
+	// return getPort("client.port", DEFAULT_CLIENT_PORT);
+	// }
 	
-	public static int getServerPort()
-	{
-		return getPort("server.port", DEFAULT_SERVER_PORT);
-	}
+	// public static int getServerPort()
+	// {
+	// return getPort("server.port", DEFAULT_SERVER_PORT);
+	// }
 	
 	public static String getServerDashboard()
 	{
@@ -107,7 +116,7 @@ public class Constants
 		{
 			throw new RuntimeException(e);
 		}
-		return "http://" + hostname + ":" + getServerPort() + DASHBOARD_CONTEXT;
+		return "http://" + hostname + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getServerPort() + DASHBOARD_CONTEXT;
 	}
 	
 }

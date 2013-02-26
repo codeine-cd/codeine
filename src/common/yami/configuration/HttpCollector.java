@@ -3,12 +3,14 @@ package yami.configuration;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.google.common.collect.Lists;
 
 public class HttpCollector
 {
+	@XmlAttribute
 	public String name;
 	@XmlElement(name = "includedNode")
 	public List<String> includedNodes = Lists.newLinkedList();

@@ -31,36 +31,27 @@ public class ConfigurationManager
 		}
 		catch (Exception e)
 		{
-			log.warn("Configuration manager failed to start, aborting.",e);
+			log.warn("Configuration manager failed to start, aborting.", e);
 		}
 		
 	}
 	
 	private void applySystemPropertiesOverXML()
 	{
-/*		if (System.getProperty("client.port") != null)
-		{
-			configuration.conf.clientport = Integer.parseInt(System.getProperty("client.port"));
-		}
-		if (System.getProperty("server.port") != null)
-		{
-			configuration.conf.serverport = Integer.parseInt(System.getProperty("server.port"));
-		}
-		if (System.getProperty("client.path") != null)
-		{
-			configuration.conf.clientpath = System.getProperty("client.path");
-		}
-		if (System.getProperty("yami.conf") != null)
-		{
-			configuration.conf.conffile = System.getProperty("yami.conf");
-		}
-*/	}
+		/*
+		 * if (System.getProperty("client.port") != null) { configuration.conf.clientport =
+		 * Integer.parseInt(System.getProperty("client.port")); } if (System.getProperty("server.port") != null) {
+		 * configuration.conf.serverport = Integer.parseInt(System.getProperty("server.port")); } if
+		 * (System.getProperty("client.path") != null) { configuration.conf.clientpath =
+		 * System.getProperty("client.path"); } if (System.getProperty("yami.conf") != null) {
+		 * configuration.conf.conffile = System.getProperty("yami.conf"); }
+		 */}
 	
 	public Yami getConfFromFile(String confPath) throws RuntimeException
 	{
 		try
 		{
-			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(Constants.getConfPath()));
+			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(confPath));
 			return (Yami)o;
 		}
 		catch (Exception ex)
@@ -101,5 +92,4 @@ public class ConfigurationManager
 		}
 		return configuration.conf;
 	}
-	
 }

@@ -45,7 +45,7 @@ public class PeerRestartThread
 			log.info("HTTP server stopped successfully");
 			Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 			String[] cmd = createRestartCmd();
-			log.info("restart command: (" + Joiner.on(" ").join(cmd) + ")");
+			log.info("restart command: [" + Joiner.on(" ").join(cmd) + "]");
 			Runtime.getRuntime().exec(cmd, null, null);
 			System.exit(0);
 		}
@@ -64,7 +64,7 @@ public class PeerRestartThread
 				log.info("trying to start http server again");
 				peerHTTPserver.start();
 			}
-			catch (Exception e1)
+			catch (Exception ex)
 			{
 				log.warn("failed to start http server again");
 				System.exit(1);
@@ -78,11 +78,11 @@ public class PeerRestartThread
 	
 	private String[] createRestartCmd()
 	{
-		// TODO: yshabi - hardcoded strings
+		// TODO yshabi : change hard coded strings
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf;
 		String[] cmd = {
-				"/bin/sh", "-c", "/usr/bin/nohup " + Constants.getInstallDir() + "/bin/startYamiClient.pl " + gc.getJavaPath() + " " + gc.getRsyncPath() + " " + gc.getRsyncUser() + " " + gc.getClientPort() + " " + gc.getServerPort() + " " + Constants.getInstallDir() + " yami.conf.xml " + gc.getRsyncSource() +" >/dev/null 2>/dev/null </dev/null &"
+				"/bin/sh", "-c", "/usr/bin/nohup " + Constants.getInstallDir() + "/bin/startYamiClient.pl " + "--conf_file " + gc.getConfFileName() + " >/dev/null 2>/dev/null </dev/null &"
 		};
 		return cmd;
 	}
