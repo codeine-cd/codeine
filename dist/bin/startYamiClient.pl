@@ -62,10 +62,15 @@ error( "Bad parameters: " . join( ",", @ARGV ) ) if (@ARGV);
 
 if ($update)
 {
+	debug("updating fs...");
 	&update_fs;
 	my $rerun_cmd = &recreate_exec;
 	debug("Will rerun start script [$rerun_cmd]");
 	exec($rerun_cmd);
+}
+else
+{
+	debug("will not update fs");
 }
 
 if ($kill)
@@ -80,11 +85,11 @@ sleep(2);
 my @pids = &get_running_pids;
 if ( not( scalar(@pids) ) )
 {
-	error("Failed to start yami client, check $START_LOG for more information");
+	error("Failed to start yami peer, check $START_LOG for more information");
 }
 elsif ( scalar(@pids) == 1 )
 {
-	print "Yami Client started successfully as @pids\n";
+	print "Yami peer started successfully as @pids\n";
 }
 else
 {
