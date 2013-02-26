@@ -110,7 +110,10 @@ public class DashboardServlet extends HttpServlet
 	
 	private String getLink(HttpCollector collector, Node node)
 	{
-		return Constants.CLIENT_LINK.replace(Constants.NODE_NAME, node.peer.name).replace(Constants.APP_NAME, node.name).replace(Constants.COLLECTOR_NAME, collector.name).replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
+		return Constants.CLIENT_LINK.replace(Constants.NODE_NAME, node.peer.name).
+			replace(Constants.APP_NAME, node.name).
+			replace(Constants.COLLECTOR_NAME, collector.name).
+			replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
 	}
 	
 	private DataStore getDataStore()

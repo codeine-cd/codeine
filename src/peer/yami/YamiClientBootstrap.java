@@ -1,18 +1,28 @@
 package yami;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
 
-import org.apache.log4j.*;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.handler.*;
-import org.eclipse.jetty.servlet.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
-import yami.configuration.*;
-import yami.model.*;
+import yami.configuration.ConfigurationManager;
+import yami.configuration.Node;
+import yami.configuration.Nodes;
+import yami.model.Constants;
+import yami.model.DataStoreRetriever;
 
 public class YamiClientBootstrap
 {
@@ -37,7 +47,7 @@ public class YamiClientBootstrap
 		cm = ConfigurationManager.getInstance();
 		int port = cm.getCurrentGlobalConfiguration().getClientPort();
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
-		log.info("Client will try to start on port " + port + " from directory " + Constants.getInstallDir());
+		log.info("Peer will try to start on port " + port + " from directory " + Constants.getInstallDir());
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
 		startNodeMonitoringThreads(nodes);
 		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
@@ -45,7 +55,7 @@ public class YamiClientBootstrap
 		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, rs);
 		contexts.addHandler(restartServlet);
 		contexts.addHandler(createLogContextHandler());
-		log.info("Starting server at port " + port);
+		log.info("Starting peer at port " + port);
 		Server peerHTTPserver = new Server(port);
 		peerHTTPserver.setHandler(contexts);
 		rs.setStoppedObject(peerHTTPserver);

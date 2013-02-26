@@ -10,8 +10,8 @@ public class GlobalConfiguration
 	public String perl = "perl";
 	public String conf_file = "yami.conf.xml";
 	public String client_path = "/tmp/yami.monitor/";
-	public int server_port = 8080;
-	public int client_port = 8112;
+	public Integer server_port = 8080;
+	public Integer client_port = 8112;
 	
 	public String getJavaPath()
 	{
