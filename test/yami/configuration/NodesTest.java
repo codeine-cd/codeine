@@ -16,10 +16,11 @@ public class NodesTest
 	{
 		DataStore a = new DataStore()
 		{
+			@Override
 			public java.util.List<Node> appInstances()
 			{
 				return new ArrayList<Node>();
-			};
+			}
 		};
 		assertTrue(Nodes.getNodes("host", a).isEmpty());
 	}
@@ -29,6 +30,7 @@ public class NodesTest
 	{
 		DataStore a = new DataStore()
 		{
+			@Override
 			public java.util.List<Node> appInstances()
 			{
 				ArrayList<Node> arrayList = new ArrayList<Node>();
@@ -36,7 +38,7 @@ public class NodesTest
 				e.peer = new Peer("host");
 				arrayList.add(e);
 				return arrayList;
-			};
+			}
 		};
 		assertEquals(1, Nodes.getNodes("host", a).size());
 	}
