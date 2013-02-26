@@ -252,7 +252,7 @@ sub is_pid_port_match
 {
 	my $pid = shift;
 	my $LSOF_CMD =
-	  "lsof -p $pid | grep 'TCP \\*:" . get_opt('client_port') . "(LISTEN)'";
+	  "lsof -p $pid | grep 'TCP \\*:" . get_opt('client_port') . " (LISTEN)'";
 	debug("Running [$LSOF_CMD]");
 	my @out = `$LSOF_CMD`;
 	chomp @out;
