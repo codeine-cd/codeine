@@ -1,5 +1,7 @@
 package yami.configuration;
 
+import static com.google.common.collect.Lists.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,8 @@ public class Project
 	@XmlElement(name = "collector")
 	public List<HttpCollector> collectors = Lists.newArrayList();
 	public List<String> mailingList = Lists.newArrayList();
-	public List<MailPolicy> mailingPolicy = Lists.newArrayList();
+	public List<MailPolicy> mailingPolicy = newArrayList();
+	public List<Command> command = Lists.newArrayList();
 	
 	public List<Node> appInstances()
 	{

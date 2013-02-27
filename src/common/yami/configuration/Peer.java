@@ -44,11 +44,16 @@ public class Peer
 	}
 	public String getPeerSwitchVersionLink(String node, String version)
 	{
-	    return getPeerLink() + Constants.SWITCH_NODE_VERSION_CONTEXT + "?node=" + node + "&version=" + version;
+	    return getPeerCommandLink(node, "switch-version") + "&version=" + version;
+	}
+	public String getPeerCommandLink(String node, String command) 
+	{
+	    return getPeerLink() + Constants.COMMAND_NODE_CONTEXT + "?node=" + node + "&command=" + command;
 	}
 	
 	public List<String> mailingList()
 	{
 		return mailingList;
 	}
+
 }

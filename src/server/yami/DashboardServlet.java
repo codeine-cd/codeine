@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import yami.configuration.Command;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
 import yami.configuration.HttpCollector;
@@ -30,7 +31,8 @@ public class DashboardServlet extends HttpServlet
 	{
 		log.debug("dashboard request");
 		String hostname = java.net.InetAddress.getLocalHost().getCanonicalHostName();
-		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
+		ConfigurationManager cm = ConfigurationManager.getInstance();
+		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
 		writer.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -40,14 +42,8 @@ public class DashboardServlet extends HttpServlet
 		// writer.println("<meta http-equiv=\"refresh\" content=\"5\" />");
 		writer.println("<title>YAMI Dashboard</title>");
 		writer.println("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
+		writer.println("<script src=\"../dashboard.js\" type=\"text/javascript\" ></script>");
 		writer.println("");
-		writer.println("<script type=\"text/javascript\">");
-		writer.println("function switchVersion(node,link)");
-		writer.println("{");
-		writer.println(" alert('sending command to node ' + node);");
-		writer.println(" window.location =  link + document.getElementById(node+'_newVersion').value;");
-		writer.println("}");
-		writer.println("</script>");
 		writer.println("</head>");
 		writer.println("<body>");
 		writer.println("<div id=\"container\">");
@@ -108,7 +104,14 @@ public class DashboardServlet extends HttpServlet
 			    String link = node.peer.getPeerSwitchVersionLink(node.name, "");
 			    line += "<li>" +
 			    		"<input class=\"" + className + "\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
-			    		"<button class=\"" + className + "\" id=\""+node.name+"\" onClick=\"switchVersion(this.id,'"+link+"')\">Switch-Version</button>" +
+			    		"<button class=\"" + className + "\" onClick=\"switchVersion('"+node.name+"','"+link+"')\">Switch-Version</button>" +
+			    				"</li>";
+			}
+			for (Command command : cm.getConfiguredProject().command) 
+			{
+			    String link = node.peer.getPeerCommandLink(node.name, command.name);
+			    line += "<li>" +
+				    "<button class=\"" + className + "\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
 			    				"</li>";
 			}
 			line += "</ul><br style=\"clear:left\"/></div></alert>";

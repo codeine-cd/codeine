@@ -12,77 +12,84 @@ import yami.model.Result;
 
 public class ProcessExecuter
 {
-	public static Result execute(List<String> cmd) throws IOException, InterruptedException
+    public static Result execute(List<String> cmd)
+    {
+	Process process = null;
+	Worker worker = null;
+	try
 	{
-		ProcessBuilder pb = new ProcessBuilder(cmd);
-		pb.redirectErrorStream(true);
-		Process process = pb.start();
-		Worker worker = new Worker(process);
-		worker.start();
+	    ProcessBuilder pb = new ProcessBuilder(cmd);
+	    pb.redirectErrorStream(true);
+	    process = pb.start();
+	    worker = new Worker(process);
+	    worker.start();
+	    long timeout = TimeUnit.MINUTES.toMillis(2);
+	    worker.join(timeout);
+	    if (worker.exit != null)
+		return new Result(worker.exit, worker.output);
+	    else
+		throw new RuntimeException();
+	}
+	catch (IOException e) 
+	{
+	    throw new RuntimeException(e);
+	}
+	catch (InterruptedException ex)
+	{
+	    worker.interrupt();
+	    Thread.currentThread().interrupt();
+	    throw new RuntimeException(ex);
+	} 
+	finally
+	{
+	    process.destroy();
+	}
+    }
+
+    public static Result execute(String cmd)
+    {
+	List<String> cmdList = new ArrayList<String>();
+	cmdList.add(cmd);
+	return execute(cmdList);
+    }
+
+    private static class Worker extends Thread
+    {
+	private final Process process;
+	private Integer exit;
+	private String output = "";
+
+	private Worker(Process process)
+	{
+	    this.process = process;
+	}
+
+	@Override
+	public void run()
+	{
+	    try
+	    {
+		InputStream is = process.getInputStream();
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		String line;
 		try
 		{
-			long timeout = TimeUnit.MINUTES.toMillis(2);
-			worker.join(timeout);
-			if (worker.exit != null)
-				return new Result(worker.exit, worker.output);
-			else
-				throw new RuntimeException();
+		    while ((line = br.readLine()) != null)
+		    {
+			output += line + "\n";
+		    }
 		}
-		catch (InterruptedException ex)
+		catch (IOException ex)
 		{
-			worker.interrupt();
-			Thread.currentThread().interrupt();
-			throw ex;
-		} finally
-		{
-			process.destroy();
+		    ex.printStackTrace();
 		}
+		exit = process.waitFor();
+	    }
+	    catch (InterruptedException ignore)
+	    {
+		return;
+	    }
 	}
-	
-	public static Result execute(String cmd) throws IOException, InterruptedException
-	{
-		List<String> cmdList = new ArrayList<String>();
-		cmdList.add(cmd);
-		return execute(cmdList);
-	}
-	
-	private static class Worker extends Thread
-	{
-		private final Process process;
-		private Integer exit;
-		private String output = "";
-		
-		private Worker(Process process)
-		{
-			this.process = process;
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				InputStream is = process.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is);
-				BufferedReader br = new BufferedReader(isr);
-				String line;
-				try
-				{
-					while ((line = br.readLine()) != null)
-					{
-						output += line + "\n";
-					}
-				}
-				catch (IOException ex)
-				{
-					ex.printStackTrace();
-				}
-				exit = process.waitFor();
-			}
-			catch (InterruptedException ignore)
-			{
-				return;
-			}
-		}
-	}
+    }
 }
