@@ -5,6 +5,7 @@ import java.util.List;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
+import yami.mail.SendMailTLS;
 import yami.model.Constants;
 import yami.model.Result;
 
@@ -19,6 +20,14 @@ public class SendMailStrategy
 		content += "Dashboard: " + Constants.getServerDashboard() + "\n\n";
 		content += "Collector Output:\n";
 		content += results.output + "\n";
-		Send.mail(subject, content, mailingList);
+		ConfigurationManager cm = ConfigurationManager.getInstance();
+		if (null == cm.getCurrentGlobalConfiguration() || null == cm.getCurrentGlobalConfiguration().email_configuration)
+		{
+		    Send.mail(subject, content, mailingList);
+		}
+		else
+		{
+		    SendMailTLS.mail(subject, content, mailingList, cm.getCurrentGlobalConfiguration().email_configuration);
+		}
 	}
 }

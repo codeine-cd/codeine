@@ -13,6 +13,7 @@ public class GlobalConfiguration
 	public Integer server_port = 8080;
 	public Integer client_port = 8112;
 	public Boolean switchVersionEnabled = false;
+	public EmailConfiguration email_configuration;
 	
 	public String getJavaPath()
 	{
