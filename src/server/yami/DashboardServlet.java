@@ -104,16 +104,16 @@ public class DashboardServlet extends HttpServlet
 			{
 			    String link = node.peer.getPeerSwitchVersionLink(node.name, "");
 			    line += "<li>" +
-			    		"<input class=\"" + versionClass + "\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
+			    		"<input class=\"version\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
 			    		"</li>" + "<li>" +
-			    		"<button class=\"" + versionClass + "\" onClick=\"switchVersion('"+node.name+"','"+link+"')\">Switch-Version</button>" +
+			    		"<button class=\"command\" onClick=\"switchVersion('"+node.name+"','"+link+"')\">Switch-Version</button>" +
 			    				"</li>";
 			}
 			for (Command command : cm.getConfiguredProject().command) 
 			{
 			    String link = node.peer.getPeerCommandLink(node.name, command.name);
 			    line += "<li>" +
-				    "<button class=\"" + versionClass + "\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
+				    "<button class=\"command\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
 			    				"</li>";
 			}
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
