@@ -76,8 +76,8 @@ public class DashboardServlet extends HttpServlet
 			}
 			// start building monitored instance line:
 			String line = "            <alert><div class=\"alertbar\"><ul>";
-			String className = fail ? "nameb" : "nameg";
-			line += "<li><a class=\"" + className + "\" href=\"" + node.getLogLink() + "\">" + node.nick() + "</a></li>";
+			String className = fail ? "b" : "g";
+			line += "<li><a class=\"name" + className + "\" href=\"" + node.getLogLink() + "\">" + node.nick() + "</a></li>";
 			// build result buttons for each collector:
 			for (HttpCollector collector : ds.collectors())
 			{
@@ -95,23 +95,25 @@ public class DashboardServlet extends HttpServlet
 				}
 			}
 			String version = getVersion(ds, node);
+			String versionClass = "version" + className;
 			if (null != version)
 			{
-			    line += "<li><a class=\"" + className + "\" href=\"none\">"+version+"</a></li>";
+			    line += "<li><a class=\"" + versionClass + "\" href=\"none\">"+version+"</a></li>";
 			}
 			if (gc.isSwitchVersionEnabled())
 			{
 			    String link = node.peer.getPeerSwitchVersionLink(node.name, "");
 			    line += "<li>" +
-			    		"<input class=\"" + className + "\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
-			    		"<button class=\"" + className + "\" onClick=\"switchVersion('"+node.name+"','"+link+"')\">Switch-Version</button>" +
+			    		"<input class=\"" + versionClass + "\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
+			    		"</li>" + "<li>" +
+			    		"<button class=\"" + versionClass + "\" onClick=\"switchVersion('"+node.name+"','"+link+"')\">Switch-Version</button>" +
 			    				"</li>";
 			}
 			for (Command command : cm.getConfiguredProject().command) 
 			{
 			    String link = node.peer.getPeerCommandLink(node.name, command.name);
 			    line += "<li>" +
-				    "<button class=\"" + className + "\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
+				    "<button class=\"" + versionClass + "\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
 			    				"</li>";
 			}
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
