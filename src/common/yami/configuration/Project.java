@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 public class Project
 {
 	@XmlAttribute
-	public String name = "project_name";
+	public String name;
 	@XmlElement(name = "peer")
 	public List<Peer> peers = Lists.newArrayList();
 	@XmlElement(name = "collector")
