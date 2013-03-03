@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
-import yami.configuration.VersionCollector;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 import yami.model.Result;
@@ -86,7 +85,6 @@ public class UpdaterThread implements Runnable
 		{
 			updateResultForCollector(c, d);
 		}
-		updateResultForCollector(new VersionCollector(), d);
 	}
 
 	private void updateResultForCollector(HttpCollector collector, DataStore d) {

@@ -17,7 +17,7 @@ public class Project
 	@XmlElement(name = "peer")
 	public List<Peer> peers = Lists.newArrayList();
 	@XmlElement(name = "collector")
-	public List<HttpCollector> collectors = Lists.newArrayList();
+	public List<HttpCollector> collectors = Lists.<HttpCollector>newArrayList(new VersionCollector());
 	public List<String> mailingList = Lists.newArrayList();
 	public List<MailPolicy> mailingPolicy = newArrayList();
 	public List<Command> command = Lists.newArrayList();
