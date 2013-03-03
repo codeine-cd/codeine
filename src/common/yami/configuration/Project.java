@@ -5,7 +5,6 @@ import static com.google.common.collect.Lists.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -31,11 +30,6 @@ public class Project
 			$.addAll(p.nodes);
 		}
 		return $;
-	}
-	
-	public void afterUnmarshal(Unmarshaller u, Object parent) 
-	{
-		collectors.add(new VersionCollector());
 	}
 	
 	public HttpCollector getCollector(String name)

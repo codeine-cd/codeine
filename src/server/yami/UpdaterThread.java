@@ -85,6 +85,10 @@ public class UpdaterThread implements Runnable
 		{
 			updateResultForCollector(c, d);
 		}
+		for (HttpCollector c : d.implicitCollectors())
+		{
+			updateResultForCollector(c, d);
+		}
 	}
 
 	private void updateResultForCollector(HttpCollector collector, DataStore d) {

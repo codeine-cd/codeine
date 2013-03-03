@@ -1,5 +1,6 @@
 package yami;
 
+import static com.google.common.collect.Lists.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -87,6 +88,12 @@ public class UpdaterThreadTest
 		public void mailingPolicy(ArrayList<MailPolicy> l)
 		{
 			this.l = l;
+		}
+		
+		@Override
+		public List<HttpCollector> implicitCollectors()
+		{
+			return newArrayList();
 		}
 	}
 	

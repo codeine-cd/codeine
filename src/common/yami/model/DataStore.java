@@ -10,6 +10,7 @@ import yami.configuration.MailPolicy;
 import yami.configuration.Node;
 import yami.configuration.Peer;
 import yami.configuration.Project;
+import yami.configuration.VersionCollector;
 import yami.mail.CollectorOnNodeState;
 
 public class DataStore implements IDataStore
@@ -73,6 +74,12 @@ public class DataStore implements IDataStore
 		return $;
 	}
 	
+	public List<HttpCollector> implicitCollectors()
+	{
+		List<HttpCollector> $ = new ArrayList<HttpCollector>();
+		$.add(new VersionCollector());
+		return $;
+	}
 	public List<Peer> peers()
 	{
 		return configuration().peers;
@@ -97,4 +104,5 @@ public class DataStore implements IDataStore
 	{
 		return new DataStoreRetriever().readProject();
 	}
+
 }
