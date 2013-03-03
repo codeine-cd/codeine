@@ -14,14 +14,20 @@ public class ConfigurationManager
 {
 	private static final Logger log = Logger.getLogger(ConfigurationManager.class);
 	private static ConfigurationManager instance = new ConfigurationManager();
+	
 	private Yami configuration = null;
 	private Date updateTime = null;
 	
+	public static ConfigurationManager getInstance()
+	{
+		return instance;
+	}
+	
 	private ConfigurationManager()
 	{
-		updateTime = new Date();
 		try
 		{
+			updateTime = new Date();
 			configuration = getConfFromFile(Constants.getConfPath());
 			applySystemPropertiesOverXML();
 		}
@@ -58,11 +64,6 @@ public class ConfigurationManager
 		{
 			throw new RuntimeException(ex);
 		}
-	}
-	
-	public static ConfigurationManager getInstance()
-	{
-		return instance;
 	}
 	
 	synchronized public Yami getCurrentConfiguration()

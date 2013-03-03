@@ -31,7 +31,8 @@ public class SendMailTLS {
 
 	Session session = Session.getInstance(props,
 		new javax.mail.Authenticator() {
-	    protected PasswordAuthentication getPasswordAuthentication() {
+	    @Override
+		protected PasswordAuthentication getPasswordAuthentication() {
 		return new PasswordAuthentication(conf.username, conf.password);
 	    }
 	});
