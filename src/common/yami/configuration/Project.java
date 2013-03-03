@@ -5,6 +5,7 @@ import static com.google.common.collect.Lists.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -17,7 +18,7 @@ public class Project
 	@XmlElement(name = "peer")
 	public List<Peer> peers = Lists.newArrayList();
 	@XmlElement(name = "collector")
-	public List<HttpCollector> collectors = Lists.<HttpCollector>newArrayList(new VersionCollector());
+	public List<HttpCollector> collectors = Lists.newArrayList();
 	public List<String> mailingList = Lists.newArrayList();
 	public List<MailPolicy> mailingPolicy = newArrayList();
 	public List<Command> command = Lists.newArrayList();
@@ -30,6 +31,11 @@ public class Project
 			$.addAll(p.nodes);
 		}
 		return $;
+	}
+	
+	public void afterUnmarshal(Unmarshaller u, Object parent) 
+	{
+		collectors.add(new VersionCollector());
 	}
 	
 	public HttpCollector getCollector(String name)
