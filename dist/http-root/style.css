@@ -67,11 +67,9 @@ alert {
       background-color: #370f0f;
 }
 .alertbar ul li a.versiong{
-    width:100px;
       background-color: #0d2c0d;
 }
 .alertbar ul li a.versionb{
-    width:100px;
       background-color: #370f0f;
 }
 
@@ -111,12 +109,10 @@ alert {
     background-color: black;
 }
 .alertbar ul li a.versionb:hover{
-    width:100px;
     color:white;
     background-color: black;
 }
 .alertbar ul li a.versiong:hover{
-    width:100px;
     color:white;
     background-color: black;
 }
