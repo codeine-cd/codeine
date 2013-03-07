@@ -1,5 +1,7 @@
 package yami;
 
+import static com.google.common.collect.Maps.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -23,6 +26,7 @@ public class RunMonitors implements Task
 {
 	private Node node;
 	private static final Logger log = Logger.getLogger(RunMonitors.class);
+	private Map<String, Long> lastRun = newHashMap();
 	
 	public RunMonitors(Node node)
 	{
@@ -39,7 +43,7 @@ public class RunMonitors implements Task
 			{
 			    if (monitor.getName().equals(new VersionCollector().name))
 			    {
-				c = new VersionCollector();
+			    	c = new VersionCollector();
 			    }
 			}
 			if (null == c)
@@ -47,8 +51,22 @@ public class RunMonitors implements Task
 				log.debug("no collector defined for monitor file " + monitor.getName() + ", skipping exectution");
 				continue;
 			}
-			runMonitor(monitor, c);
+			Long lastRuntime = lastRun.get(c.name);
+			if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(c))
+			{
+				runMonitor(monitor, c);
+				lastRun.put(c.name, System.currentTimeMillis());
+			}
 		}
+	}
+
+	private int minInterval(HttpCollector c)
+	{
+		if (null == c.minInterval)
+		{
+			return 20000;
+		}
+		return c.minInterval  * 60000;
 	}
 	
 	private void runMonitor(File monitor, HttpCollector c)

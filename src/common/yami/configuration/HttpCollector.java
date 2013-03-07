@@ -20,10 +20,13 @@ public class HttpCollector
 	@XmlElement(name = "rule")
 	public List<CollectorRule> rules = Lists.newLinkedList();
 	public List<String> mailingList = Lists.newLinkedList();
+	public Integer minInterval;
 	
 	public HttpCollector()
 	{
 	}
+	
+	
 	
 	@Override
 	public int hashCode()
@@ -33,11 +36,15 @@ public class HttpCollector
 		result = prime * result + ((dependsOn == null) ? 0 : dependsOn.hashCode());
 		result = prime * result + ((excludedNodes == null) ? 0 : excludedNodes.hashCode());
 		result = prime * result + ((includedNodes == null) ? 0 : includedNodes.hashCode());
+		result = prime * result + ((mailingList == null) ? 0 : mailingList.hashCode());
+		result = prime * result + ((minInterval == null) ? 0 : minInterval.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((rules == null) ? 0 : rules.hashCode());
 		return result;
 	}
-	
+
+
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -69,6 +76,20 @@ public class HttpCollector
 		}
 		else if (!includedNodes.equals(other.includedNodes))
 			return false;
+		if (mailingList == null)
+		{
+			if (other.mailingList != null)
+				return false;
+		}
+		else if (!mailingList.equals(other.mailingList))
+			return false;
+		if (minInterval == null)
+		{
+			if (other.minInterval != null)
+				return false;
+		}
+		else if (!minInterval.equals(other.minInterval))
+			return false;
 		if (name == null)
 		{
 			if (other.name != null)
@@ -85,7 +106,9 @@ public class HttpCollector
 			return false;
 		return true;
 	}
-	
+
+
+
 	public List<HttpCollector> dependsOn()
 	{
 		final List<HttpCollector> l = Lists.newLinkedList();

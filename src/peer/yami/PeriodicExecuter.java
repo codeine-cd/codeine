@@ -6,14 +6,14 @@ import org.apache.log4j.Logger;
 
 public class PeriodicExecuter implements Runnable
 {
-	private final long sleep_time; // = TimeUnit.SECONDS.toMillis(20);
+	private final long sleepTime; // = TimeUnit.SECONDS.toMillis(20);
 	private Task task;
 	private static final Logger log = Logger.getLogger(PeriodicExecuter.class);
 
 
-	public PeriodicExecuter(long sleep_time, Task task) {
+	public PeriodicExecuter(long sleepTime, Task task) {
 		super();
-		this.sleep_time = TimeUnit.SECONDS.toMillis(sleep_time);
+		this.sleepTime = TimeUnit.SECONDS.toMillis(sleepTime);
 		this.task = task;
 	}
 	
@@ -24,8 +24,8 @@ public class PeriodicExecuter implements Runnable
 			log.info("Periodic Executer started");
 			exec();
 			try {
-				log.info("Going to sleep " + TimeUnit.MILLISECONDS.toSeconds(sleep_time) + " seconds");
-				Thread.sleep(sleep_time);
+				log.info("Going to sleep " + TimeUnit.MILLISECONDS.toSeconds(sleepTime) + " seconds");
+				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}

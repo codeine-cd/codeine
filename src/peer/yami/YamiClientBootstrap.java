@@ -74,7 +74,7 @@ public class YamiClientBootstrap
 		for (Node node : nodes)
 		{
 			log.debug("Starting PeriodicExecuter thread for node " + node.name);
-			new Thread(new PeriodicExecuter(20, new RunMonitors(node))).start();
+			new Thread(new PeriodicExecuter(1, new RunMonitors(node))).start();
 		}
 	}
 	
