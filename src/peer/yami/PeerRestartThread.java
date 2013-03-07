@@ -82,7 +82,7 @@ public class PeerRestartThread
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf;
 		String[] cmd = {
-				"/bin/sh", "-c", "/usr/bin/nohup " + Constants.getInstallDir() + "/bin/startYamiClient.pl " + "--conf_file " + gc.getConfFileName() + " >/dev/null 2>/dev/null </dev/null &"
+				"/bin/sh", "-c", "/usr/bin/nohup " + Constants.getInstallDir() + "/bin/startYamiClient.pl " + "--update --conf_file " + gc.getConfFileName() + " >/dev/null 2>/dev/null </dev/null &"
 		};
 		return cmd;
 	}
