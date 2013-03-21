@@ -46,18 +46,22 @@ public class RunMonitors implements Task
 			    	c = new VersionCollector();
 			    }
 			}
-			if (null == c)
-			{
-				log.debug("no collector defined for monitor file " + monitor.getName() + ", skipping exectution");
-				continue;
-			}
-			Long lastRuntime = lastRun.get(c.name);
-			if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(c))
-			{
-				runMonitor(monitor, c);
-				lastRun.put(c.name, System.currentTimeMillis());
-			}
+			runOnce(monitor, c);
 		}
+	}
+
+	protected void runOnce(File monitor, HttpCollector c) {
+	    if (null == c)
+	    {
+	    	log.debug("no collector defined for monitor file " + monitor.getName() + ", skipping exectution");
+	    	return;
+	    }
+	    Long lastRuntime = lastRun.get(c.name);
+	    if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(c))
+	    {
+	    	runMonitor(monitor, c);
+	    	lastRun.put(c.name, System.currentTimeMillis());
+	    }
 	}
 
 	private int minInterval(HttpCollector c)

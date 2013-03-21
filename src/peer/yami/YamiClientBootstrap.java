@@ -2,6 +2,7 @@ package yami;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +24,8 @@ import yami.configuration.Node;
 import yami.configuration.Nodes;
 import yami.model.Constants;
 import yami.model.DataStoreRetriever;
+
+import com.google.common.collect.Lists;
 
 public class YamiClientBootstrap
 {
@@ -49,8 +52,12 @@ public class YamiClientBootstrap
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
 		log.info("Peer will try to start on port " + port + " from directory " + Constants.getInstallDir());
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
+		Node internalNode = new Node("yami_internal_node", "yami_internal_node", nodes.get(0).peer);
+		startInternalNodeMonitoring(internalNode );
 		startNodeMonitoringThreads(nodes);
-		ContextHandlerCollection contexts = createFileServerContexts(nodes, hostname);
+		ArrayList<Node> nodesWithInternalNode = Lists.newArrayList(nodes);
+		nodesWithInternalNode.add(internalNode);
+		ContextHandlerCollection contexts = createFileServerContexts(nodesWithInternalNode, hostname);
 		PeerRestartServlet rs = new PeerRestartServlet();
 		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, rs);
 		contexts.addHandler(restartServlet);
@@ -69,6 +76,10 @@ public class YamiClientBootstrap
 		}
 	}
 	
+	private void startInternalNodeMonitoring(Node node) {
+	    new Thread(new PeriodicExecuter(1, new RunInternalMonitors(node))).start();
+	}
+
 	private void startNodeMonitoringThreads(List<Node> nodes)
 	{
 		for (Node node : nodes)
