@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+use strict;
+use POSIX qw(strftime);
+my $now = strftime "%a %b %e %H:%M:%S %Y", gmtime;
+print "$now\n";
+print "gmt_time\n";
+print time . "\n";
