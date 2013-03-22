@@ -11,6 +11,8 @@ import yami.model.DataStore;
 public class NodesTest
 {
 	
+	private static final String HOST = "host";
+
 	@Test(expected = Exception.class)
 	public void testEmptyNodes() throws Exception
 	{
@@ -22,7 +24,7 @@ public class NodesTest
 				return new ArrayList<Node>();
 			}
 		};
-		assertTrue(Nodes.getNodes("host", a).isEmpty());
+		assertTrue(Nodes.getNodes(HOST, a).isEmpty());
 	}
 	
 	@Test()
@@ -35,12 +37,13 @@ public class NodesTest
 			{
 				ArrayList<Node> arrayList = new ArrayList<Node>();
 				Node e = new Node();
-				e.peer = new Peer("host");
+				e.peer = new Peer();
+				e.peer.name = HOST;
 				arrayList.add(e);
 				return arrayList;
 			}
 		};
-		assertEquals(1, Nodes.getNodes("host", a).size());
+		assertEquals(1, Nodes.getNodes(HOST, a).size());
 	}
 	
 }

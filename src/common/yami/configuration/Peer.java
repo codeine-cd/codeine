@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 import yami.model.Constants;
 
 public class Peer
 {
-	@XmlElement(name = "node")
-	public List<Node> nodes = new ArrayList<Node>();
-	public String dnsName;
+	public List<Node> node = new ArrayList<Node>();
+	public String dns_name;
 	@XmlAttribute
 	public String name;
 	public List<String> mailingList = new ArrayList<String>();
@@ -20,17 +18,6 @@ public class Peer
 	public Peer()
 	{
 		
-	}
-	
-	public Peer(String name)
-	{
-		this.name = name;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return "Peer: name=" + name + ": " + nodes;
 	}
 	
 	public String getPeerLink()
@@ -41,7 +28,7 @@ public class Peer
 	
 	public String dnsName()
 	{
-	    return null == dnsName ? name : dnsName;
+	    return null == dns_name ? name : dns_name;
 	}
 	
 	public String getPeerRestartLink()
@@ -61,5 +48,13 @@ public class Peer
 	{
 		return mailingList;
 	}
+
+	@Override
+	public String toString() {
+	    return "Peer [node=" + node + ", dns_name=" + dns_name + ", name="
+		    + name + ", mailingList=" + mailingList + "]";
+	}
+	
+	
 
 }
