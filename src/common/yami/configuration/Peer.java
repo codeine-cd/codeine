@@ -12,6 +12,7 @@ public class Peer
 {
 	@XmlElement(name = "node")
 	public List<Node> nodes = new ArrayList<Node>();
+	public String dnsName;
 	@XmlAttribute
 	public String name;
 	public List<String> mailingList = new ArrayList<String>();
@@ -35,7 +36,12 @@ public class Peer
 	public String getPeerLink()
 	{
 		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
-		return "http://" + name + ":" + gc.getClientPort();
+		return "http://" + dnsName() + ":" + gc.getClientPort();
+	}
+	
+	public String dnsName()
+	{
+	    return null == dnsName ? name : dnsName;
 	}
 	
 	public String getPeerRestartLink()

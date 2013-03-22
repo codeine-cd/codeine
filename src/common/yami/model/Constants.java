@@ -17,11 +17,11 @@ public class Constants
 	public static final String CLIENT_LOG = "log/yami_client.log";
 	public static final String SERVER_LOG = "yami_server.log";
 	
-	public static final String APP_NAME = "$app_name";
-	public static final String NODE_NAME = "$node_name";
+	public static final String NODE_NAME = "$app_name";
+	public static final String PEER_NAME = "$node_name";
 	public static final String COLLECTOR_NAME = "$collector_name";
 	public static final String CLIENT_PORT = "$client_port";
-	public static final String CLIENT_LINK = "http://" + NODE_NAME + ":" + CLIENT_PORT + "/" + APP_NAME + "/" + COLLECTOR_NAME + ".txt";
+	public static final String CLIENT_LINK = "http://" + PEER_NAME + ":" + CLIENT_PORT + "/" + NODE_NAME + "/" + COLLECTOR_NAME + ".txt";
 	
 	public static final String INSTALLATION = ".";
 	public static final String NODES_DIR = "/nodes/";
