@@ -1,5 +1,7 @@
 package yami.model;
 
+import static com.google.common.collect.Lists.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,6 +105,16 @@ public class DataStore implements IDataStore
 	private Project configuration()
 	{
 		return new DataStoreRetriever().readProject();
+	}
+
+	public List<Node> internalNodes()
+	{
+		List<Node> $ = newArrayList();
+		for (Peer peer : peers())
+		{
+			$.add(peer.internalNode());
+		}
+		return $;
 	}
 
 }

@@ -95,6 +95,12 @@ public class UpdaterThreadTest
 		{
 			return newArrayList();
 		}
+		
+		@Override
+		public List<Peer> peers()
+		{
+			return newArrayList();
+		}
 	}
 	
 	private Node addNode(DataStore d, String string, boolean addToDataStore)

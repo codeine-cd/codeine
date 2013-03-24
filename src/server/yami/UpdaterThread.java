@@ -1,10 +1,12 @@
 package yami;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
 import yami.configuration.HttpCollector;
+import yami.configuration.KeepaliveCollector;
 import yami.configuration.Node;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
@@ -77,10 +79,15 @@ public class UpdaterThread implements Runnable
 				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
 			}
 		}
+		for (Node n : d.internalNodes())
+		{
+			mailSender.sendMailIfNeeded(d, new KeepaliveCollector(), n, d.getResult(n, new KeepaliveCollector()));
+		}
 	}
 
 	private void fetchResultsFromAllCollectors(DataStore d)
 	{
+		updateResultsForCollectorAndNodes(new KeepaliveCollector(), d, d.internalNodes());
 		for (HttpCollector c : d.collectors())
 		{
 			updateResultForCollector(c, d);
@@ -91,8 +98,14 @@ public class UpdaterThread implements Runnable
 		}
 	}
 
-	private void updateResultForCollector(HttpCollector collector, DataStore d) {
-	    for (Node n : d.appInstances())
+	private void updateResultForCollector(HttpCollector collector, DataStore d) 
+	{
+	    updateResultsForCollectorAndNodes(collector, d, d.appInstances());
+	}
+
+	private void updateResultsForCollectorAndNodes(HttpCollector collector, DataStore d, List<Node> nodes)
+	{
+		for (Node n : nodes)
 	    {
 	    	try
 	    	{

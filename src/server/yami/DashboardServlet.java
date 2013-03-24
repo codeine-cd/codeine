@@ -14,6 +14,7 @@ import yami.configuration.Command;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
 import yami.configuration.HttpCollector;
+import yami.configuration.KeepaliveCollector;
 import yami.configuration.Node;
 import yami.configuration.VersionCollector;
 import yami.mail.CollectorOnNodeState;
@@ -64,6 +65,8 @@ public class DashboardServlet extends HttpServlet
 		writer.println("    <div id=\"content\">");
 		for (Node node : ds.appInstances())
 		{
+			Node internalNode = node.peer.internalNode();
+			CollectorOnNodeState keepaliveResult = ds.getResult(internalNode, new KeepaliveCollector());
 			boolean fail = false;
 			for (HttpCollector collector : ds.collectors())
 			{
@@ -83,7 +86,11 @@ public class DashboardServlet extends HttpServlet
 			{
 				CollectorOnNodeState result = ds.getResult(node, collector);
 				log.debug(collector + " result for " + node + " is: " + result);
-				if (null == result)
+				if (!keepaliveResult.state())
+				{
+					line += "<li><a class=\"na\" title=\"keepalive is dead\" href=\"" + getLink(collector, node) + "\">?</a></li>";
+				}
+				else if (null == result)
 				{
 					line += "<li><a class=\"na\" title=\"" + collector.name + "\" href=\"" + getLink(collector, node) + "\">?</a></li>";
 				}

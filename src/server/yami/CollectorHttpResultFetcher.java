@@ -52,9 +52,9 @@ public class CollectorHttpResultFetcher
 		long serverEpoch = System.currentTimeMillis() / 1000;
 		
 		long clientEpoch = 0;
-		if (!lines.isEmpty() && lines.size() >= 4)
+		if (!lines.isEmpty())
 		{
-			clientEpoch = Long.parseLong(lines.get(3));
+			clientEpoch = Long.parseLong(lines.get(lines.size()-1));
 			log.debug("server time - client time :" + serverEpoch + "-" + clientEpoch + "=" + (serverEpoch - clientEpoch));
 		}
 		if (clientEpoch == 0 || serverEpoch - clientEpoch > TimeUnit.MINUTES.toSeconds(5))

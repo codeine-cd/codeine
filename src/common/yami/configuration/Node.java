@@ -48,14 +48,27 @@ public class Node
 	}
 	
 	@Override
+	public String toString()
+	{
+		return "Node [nick=" + nick + ", name=" + name + "]";
+	}
+	
+	public String getLogLink()
+	{
+		return "http://" + peer.dnsName() + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort();
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((nick == null) ? 0 : nick.hashCode());
+		result = prime * result + ((peer == null) ? 0 : peer.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -73,17 +86,22 @@ public class Node
 		}
 		else if (!name.equals(other.name))
 			return false;
+		if (nick == null)
+		{
+			if (other.nick != null)
+				return false;
+		}
+		else if (!nick.equals(other.nick))
+			return false;
+		if (peer == null)
+		{
+			if (other.peer != null)
+				return false;
+		}
+		else if (!peer.equals(other.peer))
+			return false;
 		return true;
 	}
 	
-	@Override
-	public String toString()
-	{
-		return "Node [nick=" + nick + ", name=" + name + "]";
-	}
 	
-	public String getLogLink()
-	{
-		return "http://" + peer.dnsName() + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort();
-	}
 }

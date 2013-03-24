@@ -52,7 +52,7 @@ public class YamiClientBootstrap
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
 		log.info("Peer will try to start on port " + port + " from directory " + Constants.getInstallDir());
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
-		Node internalNode = new Node("yami_internal_node", "yami_internal_node", nodes.get(0).peer);
+		Node internalNode = nodes.get(0).peer.internalNode();//new Node("yami_internal_node", "yami_internal_node", );
 		startInternalNodeMonitoring(internalNode );
 		startNodeMonitoringThreads(nodes);
 		ArrayList<Node> nodesWithInternalNode = Lists.newArrayList(nodes);
