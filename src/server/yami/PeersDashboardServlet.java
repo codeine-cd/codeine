@@ -1,5 +1,6 @@
 package yami;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -57,6 +58,10 @@ public class PeersDashboardServlet extends HttpServlet
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
 		writer.println("    <div id=\"content\">");
+		if (new File(Constants.getInstallDir() + "/bin/restartAllPeers").canExecute())
+		{
+			writer.println("    <a class=\"" + "restartbutton" + "\" title=\"" + "Restart All Peers" + "\" href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.RESTART_ALL_PEERS_CONTEXT + "\">Restart All Peers</a><br/>");
+		}
 		for (Peer peer : ds.peers())
 		{
 			String line = "            <alert><div class=\"alertbar\"><ul>";

@@ -42,9 +42,10 @@ public class YamiServerBootstrap
 		log.info("starting dashboard servlet under '/dashboard'");
 		ServletContextHandler dashboardContext = createServletContext(Constants.DASHBOARD_CONTEXT, new DashboardServlet());
 		ServletContextHandler peerDashboardContext = createServletContext(Constants.PEERS_DASHBOARD_CONTEXT, new PeersDashboardServlet());
+		ServletContextHandler peersRestartContext = createServletContext(Constants.RESTART_ALL_PEERS_CONTEXT, new AllPeersRestartServlet());
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		contexts.setHandlers(new Handler[] {
-				staticResouceContextHandler, dashboardContext, peerDashboardContext
+				staticResouceContextHandler, dashboardContext, peerDashboardContext, peersRestartContext
 		});
 		Server server = new Server(port);
 		server.setHandler(contexts);
