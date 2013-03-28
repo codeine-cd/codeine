@@ -2,6 +2,7 @@ package yami;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,9 +32,9 @@ public class DashboardServlet extends HttpServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 		log.debug("dashboard request");
-		String hostname = java.net.InetAddress.getLocalHost().getCanonicalHostName();
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
+		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
 		writer.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");

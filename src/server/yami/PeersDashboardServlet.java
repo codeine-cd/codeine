@@ -3,6 +3,7 @@ package yami;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +29,7 @@ public class PeersDashboardServlet extends HttpServlet
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 		gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
-		String hostname = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
 		log.debug("dashboard request");
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();

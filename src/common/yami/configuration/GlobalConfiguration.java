@@ -12,6 +12,7 @@ public class GlobalConfiguration
 	public String client_path = "/tmp/yami.monitor/";
 	public Integer server_port = 8080;
 	public Integer client_port = 8112;
+	public String server_dns_name;
 	public Boolean switchVersionEnabled = false;
 	public EmailConfiguration email_configuration;
 	
