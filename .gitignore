@@ -1,5 +1,4 @@
 *.class
 *.gz
-dist/bin/yami.jar
 /junit_output
 /compiled_classes
