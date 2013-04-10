@@ -9,6 +9,7 @@ my $repo = "https://github.com/oshai/yami.git";
 
 #if (defined $ENV{'deploy-yami'} && $ENV{'deploy-yami'} eq 'true')
 {
+	system("git pull");
 	print "update version...\n";
 	my $major = getVersion('major');
 	my $minor = getVersion('minor');
@@ -27,7 +28,7 @@ my $repo = "https://github.com/oshai/yami.git";
 	print "new version is $version\n";
 	system("echo 'YamiVersion.build=$build\nYamiVersion.major=$major\nYamiVersion.minor=$minor\nYamiVersion.date=$date' > $propertiesFile");
 	system("git commit -m 'version updated to $version' $propertiesFile");
-	system("git push --repo origin");
+	system("git push");
 	
 	system("ant");
   	
