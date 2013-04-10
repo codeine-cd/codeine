@@ -32,7 +32,7 @@ my $repo = "https://github.com/oshai/yami.git";
 	system("ant");
   	
 	#upload yami-$version.ta.gz
-	system("upload.rb oshai xxx $repo yami-$version.ta.gz \"release version $version\"");
+	#system("upload.rb oshai xxx $repo yami-$version.ta.gz \"release version $version\"");
 #	my $recepients = "oshai";
 #	open MAIL, "|/usr/sbin/sendmail $recepients ";
 #	print MAIL "To: $recepients\n";
