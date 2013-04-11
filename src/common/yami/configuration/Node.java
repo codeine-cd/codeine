@@ -58,54 +58,55 @@ public class Node
 	{
 		return "http://" + peer.dnsName() + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort();
 	}
-
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((nick == null) ? 0 : nick.hashCode());
-		result = prime * result + ((peer == null) ? 0 : peer.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Node other = (Node)obj;
-		if (name == null)
-		{
-			if (other.name != null)
-				return false;
-		}
-		else if (!name.equals(other.name))
-			return false;
-		if (nick == null)
-		{
-			if (other.nick != null)
-				return false;
-		}
-		else if (!nick.equals(other.nick))
-			return false;
-		if (peer == null)
-		{
-			if (other.peer != null)
-				return false;
-		}
-		else if (!peer.equals(other.peer))
-			return false;
-		return true;
-	}
 	
 	public boolean disabled()
 	{
 		return null != disabled && disabled;
 	}
+
+	@Override
+	public int hashCode() {
+	    final int prime = 31;
+	    int result = 1;
+	    result = prime * result
+		    + ((disabled == null) ? 0 : disabled.hashCode());
+	    result = prime * result + ((name == null) ? 0 : name.hashCode());
+	    result = prime * result + ((nick == null) ? 0 : nick.hashCode());
+	    result = prime * result + ((peer == null) ? 0 : peer.hashCode());
+	    return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj)
+		return true;
+	    if (obj == null)
+		return false;
+	    if (getClass() != obj.getClass())
+		return false;
+	    Node other = (Node) obj;
+	    if (disabled == null) {
+		if (other.disabled != null)
+		    return false;
+	    } else if (!disabled.equals(other.disabled))
+		return false;
+	    if (name == null) {
+		if (other.name != null)
+		    return false;
+	    } else if (!name.equals(other.name))
+		return false;
+	    if (nick == null) {
+		if (other.nick != null)
+		    return false;
+	    } else if (!nick.equals(other.nick))
+		return false;
+	    if (peer == null) {
+		if (other.peer != null)
+		    return false;
+	    } else if (!peer.equals(other.peer))
+		return false;
+	    return true;
+	}
+	
+	
 }
