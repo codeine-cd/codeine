@@ -1,11 +1,14 @@
 package yami.configuration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
 import yami.model.Constants;
+
+import com.google.common.collect.Lists;
 
 public class Peer
 {
@@ -96,6 +99,16 @@ public class Peer
 		else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	public Collection<Node> node()
+	{
+		if (node.isEmpty())
+		{
+			//default node
+			return Lists.newArrayList(new Node(name, null, this));
+		}
+		return node;
 	}
 	
 	

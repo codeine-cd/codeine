@@ -27,7 +27,7 @@ public class Project
 		List<Node> $ = new ArrayList<Node>();
 		for (Peer p : peers)
 		{
-			$.addAll(p.node);
+			$.addAll(p.node());
 		}
 		return $;
 	}
