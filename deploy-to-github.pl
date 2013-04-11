@@ -9,7 +9,7 @@ my $repo = "https://github.com/oshai/yami.git";
 
 #if (defined $ENV{'deploy-yami'} && $ENV{'deploy-yami'} eq 'true')
 {
-	system("git pull");
+	#system("git pull");
 	system("git checkout master");
 	system("ant");
 	print "update version...\n";
