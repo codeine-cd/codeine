@@ -11,7 +11,7 @@ my $repo = "https://github.com/oshai/yami.git";
 {
 	#system("git pull");
 	system("git checkout master");
-	system("ant");
+	#system("ant");
 	print "update version...\n";
 	my $major = getVersion('major');
 	my $minor = getVersion('minor');
