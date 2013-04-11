@@ -84,7 +84,12 @@ public class YamiClientBootstrap
 	{
 		for (Node node : nodes)
 		{
-			log.debug("Starting PeriodicExecuter thread for node " + node.name);
+			if (node.disabled())
+			{
+				log.info("node is disabled " + node.name);
+				continue;
+			}
+			log.info("Starting PeriodicExecuter thread for node " + node.name);
 			new Thread(new PeriodicExecuter(1, new RunMonitors(node))).start();
 		}
 	}

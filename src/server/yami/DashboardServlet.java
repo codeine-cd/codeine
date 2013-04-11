@@ -87,7 +87,11 @@ public class DashboardServlet extends HttpServlet
 			{
 				CollectorOnNodeState result = ds.getResult(node, collector);
 				log.debug(collector + " result for " + node + " is: " + result);
-				if (!keepaliveResult.state())
+				if (node.disabled())
+				{
+					line += "<li><a class=\"na\" title=\"node is disabled\" href=\"na\">?</a></li>";
+				}
+				else if (!keepaliveResult.state())
 				{
 					line += "<li><a class=\"na\" title=\"keepalive is dead\" href=\"" + getLink(collector, node) + "\">?</a></li>";
 				}

@@ -133,6 +133,10 @@ public class UpdaterThread implements Runnable
 	
 	private boolean shouldSkipNode(HttpCollector c, Node n)
 	{
+		if (n.disabled())
+		{
+			return true;
+		}
 		for (String exNode : c.excludedNodes)
 		{
 			if (exNode.equals(n.name) || exNode.equals(n.nick) || (null != n.peer && exNode.equals(n.peer.name)))

@@ -14,6 +14,7 @@ public class Node
 	public String name;
 	@XmlTransient
 	public Peer peer;
+	public Boolean disabled;
 	
 	public Node(String name, String nick, Peer peer)
 	{
@@ -103,5 +104,8 @@ public class Node
 		return true;
 	}
 	
-	
+	public boolean disabled()
+	{
+		return null != disabled && disabled;
+	}
 }
