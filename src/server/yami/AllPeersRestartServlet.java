@@ -31,14 +31,15 @@ public class AllPeersRestartServlet extends HttpServlet
 		log.info("ClientRestartServlet started");
 		writer = res.getWriter();
 		writer.println("Recived restart request");
-		List<String> command = newArrayList(Constants.getInstallDir() + "/bin/restartAllPeers");
 		for (Peer peer : DataStoreRetriever.getD().peers())
 		{
+			List<String> command = newArrayList(Constants.getInstallDir() + "/bin/restartAllPeers");
 			command.add(peer.name);
+			Result r = ProcessExecuter.execute(command);
+			writer.println("===================================================== peer " + peer.name + " ; executing " + command);
+			writer.println(r.output);
+			writer.flush();
 		}
-		Result r = ProcessExecuter.execute(command);
-		writer.println("executing " + command);
-		writer.println(r.output);
 		writer.println("finished!");
 	}
 	
