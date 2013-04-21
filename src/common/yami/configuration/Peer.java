@@ -17,7 +17,7 @@ public class Peer
 	@XmlAttribute
 	public String name;
 	public List<String> mailingList = new ArrayList<String>();
-	private Node internalNode = new Node("yami_internal_node", "yami_internal_node", this);
+	private InternalNode internalNode = new InternalNode(this);
 	
 	public Peer()
 	{

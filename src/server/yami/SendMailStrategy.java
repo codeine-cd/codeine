@@ -20,7 +20,7 @@ public class SendMailStrategy
 	{
 		String successString = results.success() ? "OK" : "FAIL";
 		String version = getVersion(n);
-		String subject = "yami monitor '" + c.name + "' on " + n.nick() + version + " is now " + successString;
+		String subject = "yami monitor '" + c.name + "' on " + n.nick() + " " + version + " is now " + successString;
 		String content = "Collector current status: " + Constants.CLIENT_LINK.replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "").replace(Constants.NODE_NAME, n.name).replace(Constants.PEER_NAME, n.peer.dnsName()).replace(Constants.COLLECTOR_NAME, c.name) + "\n\n";
 		content += "Dashboard: " + Constants.getServerDashboard() + "\n\n";
 		content += "Collector Output:\n";
