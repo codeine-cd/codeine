@@ -38,6 +38,7 @@ public class AllPeersRestartServlet extends HttpServlet
 		DataStore datastore = DataStoreRetriever.getD();
 		for (Peer peer : datastore.peers())
 		{
+			log.info("doGet() - restarting " + peer);
 			datastore.addSilentPeriod(peer, System.currentTimeMillis() + SILENT_PERIOD);
 			List<String> command = newArrayList(Constants.getInstallDir() + "/bin/restartAllPeers");
 			command.add(peer.name);
@@ -48,6 +49,7 @@ public class AllPeersRestartServlet extends HttpServlet
 			writer.flush();
 		}
 		writer.println("finished!");
+		log.info("doGet() - restarting finished");
 	}
 	
 }
