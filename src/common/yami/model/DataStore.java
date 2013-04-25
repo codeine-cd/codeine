@@ -1,6 +1,7 @@
 package yami.model;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import yami.mail.CollectorOnNodeState;
 public class DataStore implements IDataStore
 {
 	public Map<Node, Map<HttpCollector, CollectorOnNodeState>> resultsByNode = new HashMap<Node, Map<HttpCollector, CollectorOnNodeState>>();
-	
+	private Map<Peer, Long> peersToSilentPeriod = newHashMap();
 	public DataStore()
 	{
 	}
@@ -115,6 +116,26 @@ public class DataStore implements IDataStore
 			$.add(peer.internalNode());
 		}
 		return $;
+	}
+
+	public List<Node> enabledInternalNodes()
+	{
+		List<Node> internalNodes = internalNodes();
+		List<Node> $ = newArrayList();
+		for (Node node : internalNodes)
+		{
+			Long silent = peersToSilentPeriod.get(node.peer);
+			if (silent == null || silent < System.currentTimeMillis())
+			{
+				$.add(node);
+			}
+		}
+		return $;
+	}
+	
+	public void addSilentPeriod(Peer peer, long until)
+	{
+		peersToSilentPeriod.put(peer, until);
 	}
 
 }

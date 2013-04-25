@@ -79,7 +79,7 @@ public class UpdaterThread implements Runnable
 				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
 			}
 		}
-		for (Node n : d.internalNodes())
+		for (Node n : d.enabledInternalNodes())
 		{
 			mailSender.sendMailIfNeeded(d, new KeepaliveCollector(), n, d.getResult(n, new KeepaliveCollector()));
 		}
