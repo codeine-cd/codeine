@@ -64,6 +64,7 @@ public class DashboardServlet extends HttpServlet
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
 		writer.println("    <div id=\"content\">");
+		writer.println("<alert><div class=\"alertbar\"><button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch Version To Checked</button></div></alert>");
 		for (Node node : ds.appInstances())
 		{
 			Node internalNode = node.peer.internalNode();
@@ -128,6 +129,7 @@ public class DashboardServlet extends HttpServlet
 				    "<button class=\"command\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
 			    				"</li>";
 			}
+			line += "<li><input type=\"checkbox\" id=\"checkbox_" + node.name + "\"/></li>";
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
 			writer.println(line);
 		}

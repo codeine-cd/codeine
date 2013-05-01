@@ -10,3 +10,9 @@ function commandNode(node, command, link)
 	alert('sending command \'' + command + '\' to node ' + node);
 	window.location =  link;
 }
+
+function switchVersionToCheckedItems()
+{
+	//checkbox_
+	alert('switching node ');
+}
