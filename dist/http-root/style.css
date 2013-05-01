@@ -449,3 +449,8 @@ h5 {
 #footer .footer-bottom p, #footer .footer-bottom p a {
   color: #666;
 }
+
+.checkbox {
+  margin:5;
+  padding:0;
+}
