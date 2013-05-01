@@ -85,12 +85,16 @@ public class AllPeersRestartServlet extends HttpServlet
 		writeResult(peer, command, worker.result());
 	}
 
-	private synchronized void writeResult(Peer peer, List<String> command, Result r)
+	private void writeResult(Peer peer, List<String> command, Result r)
 	{
-		writer.println("===================================================== peer " + peer.name + " ; executing " + command);
-		writer.flush();
-		writer.println(r.output);
-		writer.println("finished with status " + r.exit());
+		writeLine(">>> peer " + peer.name + " ; executing " + command);
+		writeLine(r.output);
+		writeLine("finished with status " + r.exit());
+	}
+
+	private synchronized void writeLine(String x)
+	{
+		writer.println(x);
 		writer.flush();
 	}
 	
