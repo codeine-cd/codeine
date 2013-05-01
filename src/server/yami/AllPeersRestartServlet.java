@@ -39,6 +39,7 @@ public class AllPeersRestartServlet extends HttpServlet
 		{
 			try
 			{
+				log.info("running worker " + m_command);
 				result = ProcessExecuter.execute(m_command);
 			}
 			catch (Exception ex)
