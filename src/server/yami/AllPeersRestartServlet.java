@@ -24,13 +24,14 @@ import yami.utils.ProcessExecuter;
 
 public class AllPeersRestartServlet extends HttpServlet
 {
-	private static class PeerRestartThread implements Runnable
+	private class PeerRestartThread implements Runnable
 	{
 		private final List<String> m_command;
-		private Result result;
+		private final Peer m_peer;
 		
-		private PeerRestartThread(List<String> command)
+		private PeerRestartThread(Peer peer, List<String> command)
 		{
+			m_peer = peer;
 			m_command = command;
 		}
 		
@@ -40,17 +41,20 @@ public class AllPeersRestartServlet extends HttpServlet
 			try
 			{
 				log.info("running worker " + m_command);
-				result = ProcessExecuter.execute(m_command);
+				Result result = ProcessExecuter.execute(m_command);
+				if (null != result)
+				{
+					writeResult(m_peer, m_command, result);
+				}
+				else
+				{
+					log.warn("result is null");
+				}
 			}
 			catch (Exception ex)
 			{
 				log.warn("error in restart" , ex);
 			}
-		}
-
-		public Result result()
-		{
-			return result;
 		}
 	}
 
@@ -61,6 +65,18 @@ public class AllPeersRestartServlet extends HttpServlet
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+	{
+		try
+		{
+			doRestart(res);
+		}
+		catch (Exception ex)
+		{
+			log.warn("error " ,ex);
+		}
+	}
+
+	private void doRestart(HttpServletResponse res) throws IOException
 	{
 		log.info("ClientRestartServlet started");
 		writer = res.getWriter();
@@ -92,9 +108,8 @@ public class AllPeersRestartServlet extends HttpServlet
 		DataStoreRetriever.getD().addSilentPeriod(peer, System.currentTimeMillis() + SILENT_PERIOD);
 		final List<String> command = newArrayList(Constants.getInstallDir() + "/bin/restartAllPeers");
 		command.add(peer.name);
-		PeerRestartThread worker = new PeerRestartThread(command);
+		PeerRestartThread worker = new PeerRestartThread(peer, command);
 		executor.execute(worker);
-		writeResult(peer, command, worker.result());
 	}
 
 	private void writeResult(Peer peer, List<String> command, Result r)
