@@ -27,4 +27,9 @@ public class Result
 	{
 		return "Result [link=" + link + ", output=" + output + ", exit=" + exit + "]";
 	}
+
+	public int exit()
+	{
+		return exit;
+	}
 }

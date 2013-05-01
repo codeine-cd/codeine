@@ -42,7 +42,10 @@ public class ProcessExecuter
 	} 
 	finally
 	{
-	    process.destroy();
+		if (null != process)
+	    {
+			process.destroy();
+	    }
 	}
     }
 
