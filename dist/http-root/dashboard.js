@@ -24,10 +24,14 @@ function switchVersionToCheckedItems()
 	}
 	var length = arr.length;
 	var nodes = "";
-	for (var i = 0; i < length; i++) {
-		arr[i].checked;
-		nodes += arr[i].id + ",";
+	for (var i = 0; i < length; i++) 
+	{
+		if (arr[i].checked)
+		{
+			nodes += arr[i].id.substring("checkbox_".length) + ",";
+		}
 	}
-	alert('switching nodes ' + nodes);
-	window.location =  "/switchVersionAll?ndoes=" + nodes;
+	var version = document.getElementById('newVersionAll').value;
+	alert('switching to version ' + version + ' nodes ' + nodes);
+	window.location =  "/command-node-all?version=" + version + "&nodes=" + nodes;
 }

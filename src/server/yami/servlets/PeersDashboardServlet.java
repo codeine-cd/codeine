@@ -1,4 +1,4 @@
-package yami;
+package yami.servlets;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import yami.YamiVersion;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
 import yami.configuration.Peer;

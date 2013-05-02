@@ -17,6 +17,10 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import yami.configuration.ConfigurationManager;
 import yami.model.Constants;
+import yami.servlets.AllNodesCommandServlet;
+import yami.servlets.AllPeersRestartServlet;
+import yami.servlets.DashboardServlet;
+import yami.servlets.PeersDashboardServlet;
 
 public class YamiServerBootstrap
 {
@@ -43,9 +47,10 @@ public class YamiServerBootstrap
 		ServletContextHandler dashboardContext = createServletContext(Constants.DASHBOARD_CONTEXT, new DashboardServlet());
 		ServletContextHandler peerDashboardContext = createServletContext(Constants.PEERS_DASHBOARD_CONTEXT, new PeersDashboardServlet());
 		ServletContextHandler peersRestartContext = createServletContext(Constants.RESTART_ALL_PEERS_CONTEXT, new AllPeersRestartServlet());
+		ServletContextHandler nodeCommandContext = createServletContext(Constants.COMMAND_NODE_ALL_CONTEXT, new AllNodesCommandServlet());
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		contexts.setHandlers(new Handler[] {
-				staticResouceContextHandler, dashboardContext, peerDashboardContext, peersRestartContext
+				staticResouceContextHandler, dashboardContext, peerDashboardContext, peersRestartContext, nodeCommandContext
 		});
 		Server server = new Server(port);
 		server.setHandler(contexts);

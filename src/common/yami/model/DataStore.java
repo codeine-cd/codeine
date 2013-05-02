@@ -138,4 +138,20 @@ public class DataStore implements IDataStore
 		peersToSilentPeriod.put(peer, until);
 	}
 
+	public Node getNodeByName(String nodeName)
+	{
+		List<Peer> peers = peers();
+		for (Peer peer : peers)
+		{
+			for (Node node : peer.node())
+			{
+				if (nodeName.equals(node.name))
+				{
+					return node;
+				}
+			}
+		}
+		return null;
+	}
+
 }

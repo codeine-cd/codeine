@@ -1,4 +1,4 @@
-package yami;
+package yami.servlets;
 
 import static com.google.common.collect.Lists.*;
 

@@ -1,4 +1,4 @@
-package yami;
+package yami.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import yami.YamiVersion;
 import yami.configuration.Command;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
@@ -64,7 +65,10 @@ public class DashboardServlet extends HttpServlet
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
 		writer.println("    <div id=\"content\">");
-		writer.println("<alert><div class=\"alertbar\"><button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch Version To Checked</button></div></alert>");
+		writer.println("<alert><div class=\"alertbar\">");
+		writer.println("<button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch Version To Checked</button>");
+		writer.println("<input class=\"version\" type=\"text\" id=\"newVersionall\" />");
+		writer.println("</div></alert>");
 		for (Node node : ds.appInstances())
 		{
 			Node internalNode = node.peer.internalNode();
