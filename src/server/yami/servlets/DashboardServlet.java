@@ -67,7 +67,7 @@ public class DashboardServlet extends HttpServlet
 		writer.println("    <div id=\"content\">");
 		writer.println("<alert><div class=\"alertbar\">");
 		writer.println("<button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch Version To Checked</button>");
-		writer.println("<input class=\"version\" type=\"text\" id=\"newVersionall\" />");
+		writer.println("<input class=\"version\" type=\"text\" id=\"newVersionAll\" />");
 		writer.println("</div></alert>");
 		for (Node node : ds.appInstances())
 		{
