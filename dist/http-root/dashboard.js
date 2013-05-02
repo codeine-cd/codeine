@@ -24,9 +24,12 @@ function switchVersionToCheckedItems()
 	}
 	var length = arr.length;
 	var nodes = "";
-	for (var i = 0; i < length; i++) {
-		arr[i].checked;
-		nodes += arr[i].id + ",";
+	for (var i = 0; i < length; i++) 
+	{
+		if (arr[i].checked)
+		{
+			nodes += arr[i].id + ",";
+		}
 	}
 	alert('switching nodes ' + nodes);
 	window.location =  "/switchVersionAll?ndoes=" + nodes;
