@@ -14,9 +14,9 @@ function commandNode(node, command, link)
 function switchVersionToCheckedItems()
 {
 	var dateRE = /^checkbox_/;
-	var dates=[],els=document.getElementsByTagName('*');
-	for (var i=els.length;i--;) if (dateRE.test(els[i].id]) dates.push(els[i]);
-	var length = arr.length,
+	var arr=[],els=document.getElementsByTagName('*');
+	for (var i=els.length;i--;) if (dateRE.test(els[i].id]) arr.push(els[i]);
+	var length = arr.length;
 	var nodes = "";
 	for (var i = 0; i < length; i++) {
 		arr[i].checked;
