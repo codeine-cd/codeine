@@ -129,7 +129,7 @@ public class DashboardServlet extends HttpServlet
 				    "<button class=\"command\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
 			    				"</li>";
 			}
-			line += "<li><input class=\"checkbox\" type=\"checkbox\" id=\"checkbox_" + node.name + "\"/></li>";
+			line += "<li><input type=\"checkbox\" id=\"checkbox_" + node.name + "\"/></li>";
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
 			writer.println(line);
 		}

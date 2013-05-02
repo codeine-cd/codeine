@@ -13,7 +13,6 @@ function commandNode(node, command, link)
 
 function switchVersionToCheckedItems()
 {
-	//checkbox_
 	var dateRE = /^checkbox_/;
 	var dates=[],els=document.getElementsByTagName('*');
 	for (var i=els.length;i--;) if (dateRE.test(els[i].id]) dates.push(els[i]);
