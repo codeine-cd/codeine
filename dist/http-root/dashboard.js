@@ -15,7 +15,13 @@ function switchVersionToCheckedItems()
 {
 	var dateRE = /^checkbox_/;
 	var arr=[],els=document.getElementsByTagName('*');
-	for (var i=els.length;i--;) if (dateRE.test(els[i].id) arr.push(els[i]);
+	for (var i=els.length;i--;) 
+	{
+		if (dateRE.test(els[i].id)) 
+		{
+			arr.push(els[i]);
+		}
+	}
 	var length = arr.length;
 	var nodes = "";
 	for (var i = 0; i < length; i++) {
