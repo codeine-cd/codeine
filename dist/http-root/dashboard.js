@@ -35,6 +35,24 @@ function switchVersionToCheckedItems()
 	alert('switching to version ' + version + ' nodes ' + nodes);
 	window.location =  "/command-node-all?version=" + version + "&nodes=" + nodes;
 }
+function selectAll()
+{
+	var dateRE = /^checkbox_/;
+	var arr=[],els=document.getElementsByTagName('*');
+	for (var i=els.length;i--;) 
+	{
+		if (dateRE.test(els[i].id)) 
+		{
+			arr.push(els[i]);
+		}
+	}
+	var length = arr.length;
+	var nodes = "";
+	for (var i = 0; i < length; i++) 
+	{
+		arr[i].checked = true;
+	}
+}
 
 function viewDashboard(version)
 {
