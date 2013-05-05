@@ -35,3 +35,10 @@ function switchVersionToCheckedItems()
 	alert('switching to version ' + version + ' nodes ' + nodes);
 	window.location =  "/command-node-all?version=" + version + "&nodes=" + nodes;
 }
+
+function viewDashboard(version)
+{
+	var versionCount = document.getElementById(node+'_input').value;
+	window.location =  "/dashboard?version=" + version + "&count=" + versionCount;
+}
+

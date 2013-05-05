@@ -153,5 +153,18 @@ public class DataStore implements IDataStore
 		}
 		return null;
 	}
+	
+	public List<Node> nodes()
+	{
+		List<Node> $ = newArrayList();
+		List<Peer> peers = peers();
+		for (Peer peer : peers)
+		{
+			$.addAll(peer.node());
+		}
+		return $;
+	}
 
 }
+
+

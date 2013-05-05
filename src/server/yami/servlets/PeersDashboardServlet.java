@@ -53,9 +53,9 @@ public class PeersDashboardServlet extends HttpServlet
 		writer.println("    <div id=\"nav\">");
 		writer.println("      <ul>");
 		writer.println("          <li class=\"start\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.DASHBOARD_CONTEXT + "\">Dashboard</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/server" + "\">Server</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/peers" + "\">Peers</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/nodes" + "\">Nodes</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.AGGREGATE_NODE_CONTEXT + "\">Aggregate</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.PEERS_DASHBOARD_CONTEXT + "\">Peers</a></li>");
+//		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/nodes" + "\">Nodes</a></li>");
 		writer.println("        </ul>");
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
