@@ -76,7 +76,7 @@ public class AggregateNodesServlet extends HttpServlet
 			{
 			    String link = "none";//node.peer.getPeerSwitchVersionLink(node.name, "");
 			    line += "<li>" +
-			    		"<input class=\"version\" type=\"text\" id=\""+version+"_input\" >"+item.count()+"</input>" +
+			    		"<input class=\"version\" type=\"text\" id=\""+version+"_input\" value=\"" +item.count()+"\"></input>" +
 			    		"</li>" + "<li>" +
 			    		"<button class=\"command\" onClick=\"viewDashboard('"+version+"')\">View</button>" +
 			    		"</li>";
