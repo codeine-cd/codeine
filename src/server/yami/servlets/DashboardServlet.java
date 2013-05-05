@@ -28,11 +28,21 @@ public class DashboardServlet extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = 1L;
+	private String m_version;
+	private int m_max;
+	private int m_count;
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 		log.debug("dashboard request");
+		m_version = req.getParameter("version");
+		String countString = req.getParameter("count");
+		m_max = Integer.MAX_VALUE;
+		if (null != countString)
+		{
+			m_max = Integer.valueOf(countString);
+		}
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
@@ -57,10 +67,14 @@ public class DashboardServlet extends HttpServlet
 		writer.println("    </div>");
 		writer.println("    <div id=\"nav\">");
 		writer.println("      <ul>");
-		writer.println("          <li class=\"start\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.DASHBOARD_CONTEXT + "\">Dashboard</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.AGGREGATE_NODE_CONTEXT + "\">Aggregate</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.PEERS_DASHBOARD_CONTEXT + "\">Peers</a></li>");
-//		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + "/nodes" + "\">Nodes</a></li>");
+		writer.println("          <li class=\"start\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.DASHBOARD_CONTEXT
+				+ "\">Dashboard</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.AGGREGATE_NODE_CONTEXT
+				+ "\">Aggregate</a></li>");
+		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.PEERS_DASHBOARD_CONTEXT
+				+ "\">Peers</a></li>");
+		// writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() +
+		// "/nodes" + "\">Nodes</a></li>");
 		writer.println("        </ul>");
 		writer.println("    </div>");
 		writer.println("    <div id=\"body\">");
@@ -71,6 +85,11 @@ public class DashboardServlet extends HttpServlet
 		writer.println("</div></alert>");
 		for (Node node : ds.appInstances())
 		{
+			String version = getVersion(ds, node);
+			if (filterByVersion(version))
+			{
+				continue;
+			}
 			Node internalNode = node.peer.internalNode();
 			CollectorOnNodeState keepaliveResult = ds.getResult(internalNode, new KeepaliveCollector());
 			boolean fail = false;
@@ -111,27 +130,22 @@ public class DashboardServlet extends HttpServlet
 					line += "<li><a class=\"" + goodbad + "\" title=\"" + collector.name + "\" href=\"" + getLink(collector, node) + "\">?</a></li>";
 				}
 			}
-			String version = getVersion(ds, node);
 			String versionClass = "version" + className;
 			if (null != version)
 			{
-			    line += "<li><a class=\"" + versionClass + "\" href=\"none\">"+version+"</a></li>";
+				line += "<li><a class=\"" + versionClass + "\" href=\"none\">" + version + "</a></li>";
 			}
 			if (gc.isSwitchVersionEnabled())
 			{
-			    String link = node.peer.getPeerSwitchVersionLink(node.name, "");
-			    line += "<li>" +
-			    		"<input class=\"version\" type=\"text\" id=\""+node.name+"_newVersion\" />" +
-			    		"</li>" + "<li>" +
-			    		"<button class=\"command\" onClick=\"switchVersion('"+node.name+"','"+link+"')\">Switch-Version</button>" +
-			    				"</li>";
+				String link = node.peer.getPeerSwitchVersionLink(node.name, "");
+				line += "<li>" + "<input class=\"version\" type=\"text\" id=\"" + node.name + "_newVersion\" />" + "</li>" + "<li>"
+						+ "<button class=\"command\" onClick=\"switchVersion('" + node.name + "','" + link + "')\">Switch-Version</button>" + "</li>";
 			}
-			for (Command command : cm.getConfiguredProject().command) 
+			for (Command command : cm.getConfiguredProject().command)
 			{
-			    String link = node.peer.getPeerCommandLink(node.name, command.name);
-			    line += "<li>" +
-				    "<button class=\"command\" onClick=\"commandNode('"+node.name+"','"+command.title()+"','"+link+"')\">"+command.title()+"</button>" +
-			    				"</li>";
+				String link = node.peer.getPeerCommandLink(node.name, command.name);
+				line += "<li>" + "<button class=\"command\" onClick=\"commandNode('" + node.name + "','" + command.title() + "','" + link + "')\">"
+						+ command.title() + "</button>" + "</li>";
 			}
 			line += "<li><input class=\"checkbox\" type=\"checkbox\" id=\"checkbox_" + node.name + "\"/></li>";
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
@@ -150,23 +164,40 @@ public class DashboardServlet extends HttpServlet
 		writer.println("</html>");
 		writer.close();
 	}
-
-	private String getVersion(DataStore ds, Node node) 
+	
+	private boolean filterByVersion(String version)
 	{
-	    CollectorOnNodeState result = ds.getResult(node, new VersionCollector());
-	    if (null == result)
-	    {
-		return null;
-	    }
-	    return result.getLast().output;
+		if (null == m_version)
+		{
+			return false;
+		}
+		if (!m_version.equals(version))
+		{
+			return true;
+		}
+		if (m_count >= m_max)
+		{
+			return true;
+		}
+		m_count++;
+		return false;
+	}
+	
+	private String getVersion(DataStore ds, Node node)
+	{
+		CollectorOnNodeState result = ds.getResult(node, new VersionCollector());
+		if (null == result)
+		{
+			return null;
+		}
+		return result.getLast().output;
 	}
 	
 	private String getLink(HttpCollector collector, Node node)
 	{
-		return Constants.CLIENT_LINK.replace(Constants.PEER_NAME, node.peer.dnsName()).
-			replace(Constants.NODE_NAME, node.name).
-			replace(Constants.COLLECTOR_NAME, collector.name).
-			replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
+		return Constants.CLIENT_LINK.replace(Constants.PEER_NAME, node.peer.dnsName()).replace(Constants.NODE_NAME, node.name)
+				.replace(Constants.COLLECTOR_NAME, collector.name)
+				.replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
 	}
 	
 	private DataStore getDataStore()
