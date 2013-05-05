@@ -76,9 +76,15 @@ public class AggregateNodesServlet extends HttpServlet
 			{
 			    String link = "none";//node.peer.getPeerSwitchVersionLink(node.name, "");
 			    line += "<li>" +
+<<<<<<< HEAD
 			    		"<input class=\"version\" type=\"text\" id=\""+version+"_input\" >"+item.count()+"</input>" +
 			    		"</li>" + "<li>" +
 			    		"<button class=\"command\" onClick=\"viewDashboard('"+version+"')\">View</button>" +
+=======
+			    		"<input class=\"version\" type=\"text\" id=\""/*+node.name*/+"_newVersion\" />" +
+			    		"</li>" + "<li>" +
+			    		"<button class=\"command\" onClick=\"switchVersion('"/*+node.name+"','"+link*/+"')\">Switch-Version</button>" +
+>>>>>>> branch 'master' of https://github.com/oshai/yami.git
 			    				"</li>";
 			}
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
