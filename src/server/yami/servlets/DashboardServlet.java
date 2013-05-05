@@ -35,6 +35,17 @@ public class DashboardServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
+		try
+		{
+			showDashboard(req, res);
+		}
+		catch (Exception ex)
+		{
+			log.warn("excption ", ex);
+		}
+	}
+	public void showDashboard(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+	{
 		log.debug("dashboard request");
 		m_version = req.getParameter("version");
 		String countString = req.getParameter("count");
@@ -168,6 +179,10 @@ public class DashboardServlet extends HttpServlet
 	
 	private boolean filterByVersion(String version)
 	{
+		log.info("filterByVersion() - version is " + version);
+		log.info("filterByVersion() - version2 is " + m_version);
+		log.info("filterByVersion() - m_count is " + m_count);
+		log.info("filterByVersion() - m_max is " + m_max);
 		if (null == m_version)
 		{
 			return false;
