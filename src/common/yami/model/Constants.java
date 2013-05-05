@@ -29,6 +29,7 @@ public class Constants
 	public static final String LOG_DIR = "/log/";
 	
 	public static final String DASHBOARD_CONTEXT = "/dashboard";
+	public static final String AGGREGATE_NODE_CONTEXT = "/aggregate-node";
 	public static final String RESTART_ALL_PEERS_CONTEXT = "/restart-all";
 	public static final String PEERS_DASHBOARD_CONTEXT = "/peers";
 	public static final String RESTART_CONTEXT = "/restart";

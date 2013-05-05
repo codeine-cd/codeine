@@ -17,6 +17,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import yami.configuration.ConfigurationManager;
 import yami.model.Constants;
+import yami.servlets.AggregateNodesServlet;
 import yami.servlets.AllNodesCommandServlet;
 import yami.servlets.AllPeersRestartServlet;
 import yami.servlets.DashboardServlet;
@@ -45,12 +46,13 @@ public class YamiServerBootstrap
 		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + Constants.HTTP_ROOT_CONTEXT);
 		log.info("starting dashboard servlet under '/dashboard'");
 		ServletContextHandler dashboardContext = createServletContext(Constants.DASHBOARD_CONTEXT, new DashboardServlet());
+		ServletContextHandler aggregateNodesContext = createServletContext(Constants.AGGREGATE_NODE_CONTEXT, new AggregateNodesServlet());
 		ServletContextHandler peerDashboardContext = createServletContext(Constants.PEERS_DASHBOARD_CONTEXT, new PeersDashboardServlet());
 		ServletContextHandler peersRestartContext = createServletContext(Constants.RESTART_ALL_PEERS_CONTEXT, new AllPeersRestartServlet());
 		ServletContextHandler nodeCommandContext = createServletContext(Constants.COMMAND_NODE_ALL_CONTEXT, new AllNodesCommandServlet());
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		contexts.setHandlers(new Handler[] {
-				staticResouceContextHandler, dashboardContext, peerDashboardContext, peersRestartContext, nodeCommandContext
+				staticResouceContextHandler, dashboardContext, peerDashboardContext, peersRestartContext, nodeCommandContext, aggregateNodesContext
 		});
 		Server server = new Server(port);
 		server.setHandler(contexts);
