@@ -28,9 +28,6 @@ public class DashboardServlet extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = 1L;
-	private String m_version;
-	private int m_max;
-	private int m_count;
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -46,14 +43,17 @@ public class DashboardServlet extends HttpServlet
 	}
 	public void showDashboard(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
+		String paramVersion;
+		int paramMax;
 		log.debug("dashboard request");
-		m_version = req.getParameter("version");
+		paramVersion = req.getParameter("version");
 		String countString = req.getParameter("count");
-		m_max = Integer.MAX_VALUE;
+		paramMax = Integer.MAX_VALUE;
 		if (null != countString)
 		{
-			m_max = Integer.valueOf(countString);
+			paramMax = Integer.valueOf(countString);
 		}
+		VersionFilter versionFilter = new VersionFilter(paramVersion, paramMax);
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
@@ -98,7 +98,7 @@ public class DashboardServlet extends HttpServlet
 		for (Node node : ds.appInstances())
 		{
 			String version = getVersion(ds, node);
-			if (filterByVersion(version))
+			if (versionFilter.filterByVersion(version))
 			{
 				continue;
 			}
@@ -177,27 +177,7 @@ public class DashboardServlet extends HttpServlet
 		writer.close();
 	}
 	
-	private boolean filterByVersion(String version)
-	{
-		log.info("filterByVersion() - version is " + version);
-		log.info("filterByVersion() - version2 is " + m_version);
-		log.info("filterByVersion() - m_count is " + m_count);
-		log.info("filterByVersion() - m_max is " + m_max);
-		if (null == m_version)
-		{
-			return false;
-		}
-		if (!m_version.equals(version))
-		{
-			return true;
-		}
-		if (m_count >= m_max)
-		{
-			return true;
-		}
-		m_count++;
-		return false;
-	}
+	
 	
 	private String getVersion(DataStore ds, Node node)
 	{
