@@ -38,7 +38,7 @@ function switchVersionToCheckedItems()
 
 function viewDashboard(version)
 {
-	var versionCount = document.getElementById(node+'_input').value;
+	var versionCount = document.getElementById(version+'_input').value;
 	window.location =  "/dashboard?version=" + version + "&count=" + versionCount;
 }
 
