@@ -34,6 +34,14 @@ public enum MailPolicy implements ActivePredicate
 			return true;
 		}
 	},
+	Never
+	{
+		@Override
+		public boolean isActive(boolean before, boolean after)
+		{
+			return false;
+		}
+	}
 	;
 	
 }
