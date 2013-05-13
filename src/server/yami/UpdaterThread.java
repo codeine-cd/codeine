@@ -143,6 +143,7 @@ public class UpdaterThread implements Runnable
 			};
 			executor.execute(worker );
 	    }
+		executor.shutdown();
 		while (!executor.isTerminated()) {
 			try
 			{
