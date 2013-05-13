@@ -1,6 +1,8 @@
 package yami;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -103,32 +105,55 @@ public class UpdaterThread implements Runnable
 	    updateResultsForCollectorAndNodes(collector, d, d.appInstances());
 	}
 
-	private void updateResultsForCollectorAndNodes(HttpCollector collector, DataStore d, List<Node> nodes)
+	private void updateResultsForCollectorAndNodes(final HttpCollector collector, final DataStore d, List<Node> nodes)
 	{
-		for (Node n : nodes)
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		log.info("updateResultsForCollectorAndNodes() - starting");
+		for (final Node node : nodes)
 	    {
-	    	try
-	    	{
-	    		if (shouldSkipNode(collector, n))
-	    		{
-	    			continue;
-	    		}
-	    		Result r = fetcher.getResult(collector, n);
-	    		if (r != null)
-	    		{
-	    			log.info("adding result " + r.success() + " to node " + n + " for collector " + collector);
-	    			d.addResults(n, collector, r);
-	    		}
-	    		else
-	    		{
-	    			log.warn("no result fetched for node " + n + " "+ collector);
-	    		}
-	    	}
-	    	catch (Exception e)
-	    	{
-	    		log.warn("Exception in updateResults.", e);
-	    	}
+			if (shouldSkipNode(collector, node))
+			{
+				log.debug("updateResultsForCollectorAndNodes() - skipping " + node + " collector " + collector);
+				continue;
+			}
+			Runnable worker = new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					try
+					{
+						Result r = fetcher.getResult(collector, node);
+						if (r != null)
+						{
+							log.info("adding result " + r.success() + " to node " + node + " for collector " + collector);
+							d.addResults(node, collector, r);
+						}
+						else
+						{
+							log.warn("no result fetched for node " + node + " "+ collector);
+						}
+					}
+					catch (Exception e)
+					{
+						log.warn("Exception in updateResults.", e);
+					}
+					
+				}
+			};
+			executor.execute(worker );
 	    }
+		while (!executor.isTerminated()) {
+			try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+		log.info("updateResultsForCollectorAndNodes() - finished");
 	}
 	
 	private boolean shouldSkipNode(HttpCollector c, Node n)

@@ -83,12 +83,13 @@ public class CollectorHttpResultFetcher
 			}
 			in.close();
 		}
-		catch (SocketException ignore)
+		catch (SocketException e)
 		{
+			log.info("Could not read page " + resultURL + " " + e.getMessage());
 		}
 		catch (FileNotFoundException e)
 		{
-			log.info("Could not read page " + resultURL);
+			log.info("Could not read page " + resultURL + " " + e.getMessage());
 		}
 		catch (Exception e)
 		{
