@@ -145,7 +145,8 @@ public class DashboardServlet extends HttpServlet
 			String versionClass = "version" + className;
 			if (null != version)
 			{
-				line += "<li><a class=\"" + versionClass + "\" href=\"none\">" + version + "</a></li>";
+				String versionInPeerLink = getLink(new VersionCollector(), node);
+				line += "<li><a class=\"" + versionClass + "\" href=\"" + versionInPeerLink  + "\">" + version + "</a></li>";
 			}
 			if (gc.isSwitchVersionEnabled())
 			{
