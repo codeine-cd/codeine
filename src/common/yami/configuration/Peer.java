@@ -39,13 +39,13 @@ public class Peer
 	{
 		return getPeerLink() + Constants.RESTART_CONTEXT;
 	}
-	public String getPeerSwitchVersionLink(String node, String version)
+	public String getPeerSwitchVersionLink(String node1, String version)
 	{
-	    return getPeerCommandLink(node, "switch-version") + "&version=" + version;
+	    return getPeerCommandLink(node1, "switch-version") + "&version=" + version;
 	}
-	public String getPeerCommandLink(String node, String command) 
+	public String getPeerCommandLink(String node1, String command) 
 	{
-	    return getPeerLink() + Constants.COMMAND_NODE_CONTEXT + "?node=" + node + "&command=" + command;
+	    return getPeerLink() + Constants.COMMAND_NODE_CONTEXT + "?node=" + node1 + "&command=" + command;
 	}
 	
 	public List<String> mailingList()

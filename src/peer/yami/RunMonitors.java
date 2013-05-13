@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -115,6 +116,7 @@ public class RunMonitors implements Task
 		if (c.hasStatus())
 		{
 		    out.write(res.success() ? "True\n" : "False\n");
+		    out.write("run at " + new Date() + "\n");
 		}
 		out.write(res.output);
 		out.close();

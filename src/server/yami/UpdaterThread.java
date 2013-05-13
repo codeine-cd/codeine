@@ -116,12 +116,12 @@ public class UpdaterThread implements Runnable
 	    		Result r = fetcher.getResult(collector, n);
 	    		if (r != null)
 	    		{
-	    			log.debug("adding result " + r.success() + " to node " + n);
+	    			log.info("adding result " + r.success() + " to node " + n + " for collector " + collector);
 	    			d.addResults(n, collector, r);
 	    		}
 	    		else
 	    		{
-	    			log.debug("no result fetched for node " + n + " "+ collector);
+	    			log.warn("no result fetched for node " + n + " "+ collector);
 	    		}
 	    	}
 	    	catch (Exception e)
