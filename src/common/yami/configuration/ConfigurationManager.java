@@ -5,6 +5,9 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 
 import org.apache.log4j.Logger;
 
@@ -51,13 +54,24 @@ public class ConfigurationManager
 		 * (System.getProperty("client.path") != null) { configuration.conf.clientpath =
 		 * System.getProperty("client.path"); } if (System.getProperty("yami.conf") != null) {
 		 * configuration.conf.conffile = System.getProperty("yami.conf"); }
-		 */}
+		 */
+	}
 	
 	public Yami getConfFromFile(String confPath) throws RuntimeException
 	{
 		try
 		{
-			Object o = JAXBContext.newInstance(Yami.class).createUnmarshaller().unmarshal(new File(confPath));
+			Unmarshaller unmarshalr = JAXBContext.newInstance(Yami.class).createUnmarshaller();
+			unmarshalr.setEventHandler(new ValidationEventHandler()
+			{
+				@Override
+				public boolean handleEvent(ValidationEvent event)
+				{
+					log.warn("error in xml: " + event, new RuntimeException());
+					return true;
+				}
+			});
+			Object o = unmarshalr.unmarshal(new File(confPath));
 			return (Yami)o;
 		}
 		catch (Exception ex)

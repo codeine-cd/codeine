@@ -63,9 +63,9 @@ public class ShouldSendMailValidator
 		List<MailPolicy> calculatedPolicies = this.policies;
 		for (CollectorRule rule : col.rules) // overwrite mailing policies if there are explicit rules
 		{
-			if (rule.mailPolicy != null && rule.shouldApplyForNode(node))
+			if (rule.mailingPolicy != null && rule.shouldApplyForNode(node))
 			{
-				calculatedPolicies = rule.mailPolicy;
+				calculatedPolicies = rule.mailingPolicy;
 			}
 		}
 		return calculatedPolicies.contains(MailPolicy.EachRun) || (shouldMailByPolicies(calculatedPolicies) && shouldMailByDependencies(col, node, calculatedPolicies));

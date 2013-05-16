@@ -51,7 +51,7 @@ public class ShouldSendMailValidatorTest
 	@Test
 	public void testShouldSendMailValidator_CollectorRule_SkipRule()
 	{
-		rule.mailPolicy = Lists.newArrayList(); // empty list means no policy
+		rule.mailingPolicy = Lists.newArrayList(); // empty list means no policy
 		collector.rules.add(rule);
 		ShouldSendMailValidator validator = new ShouldSendMailValidator(collector, node, state, policies, d);
 		assertFalse(validator.shouldMail());
@@ -64,7 +64,7 @@ public class ShouldSendMailValidatorTest
 		Result r = new Result(1, "");
 		state.addResult(r);
 		
-		rule.mailPolicy = Lists.newArrayList(MailPolicy.EachRun);
+		rule.mailingPolicy = Lists.newArrayList(MailPolicy.EachRun);
 		collector.rules.add(rule);
 		
 		ShouldSendMailValidator validator = new ShouldSendMailValidator(collector, node, state, policies, d);

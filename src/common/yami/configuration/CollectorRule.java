@@ -8,9 +8,7 @@ public class CollectorRule
 {
 	public String node = "^$";
 	public String peer = "^$";
-	// TODO: yshabi:
-	// at the moment this list overides the global list, setting it to null prevents it:
-	public List<MailPolicy> mailPolicy = null;
+	public List<MailPolicy> mailingPolicy = Lists.newArrayList();
 	public List<String> arg = Lists.newArrayList();
 	
 	public CollectorRule()

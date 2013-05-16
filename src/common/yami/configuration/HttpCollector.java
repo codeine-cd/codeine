@@ -115,9 +115,9 @@ public class HttpCollector
 		Project p = ConfigurationManager.getInstance().getConfiguredProject();
 		for (HttpCollector c : p.collectors)
 		{
-			for (String name : dependsOn)
+			for (String name1 : dependsOn)
 			{
-				if (name.equals(c.name))
+				if (name1.equals(c.name))
 				{
 					l.add(c);
 				}
