@@ -26,6 +26,17 @@ public class AggregateNodesServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
+		try
+		{
+			doGetInternal(req, res);
+		}
+		catch (Exception ex)
+		{
+			log.warn("error", ex);
+		}
+	}
+	public void doGetInternal(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+	{
 		log.debug("aggregate request");
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
