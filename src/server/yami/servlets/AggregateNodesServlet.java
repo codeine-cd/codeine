@@ -3,6 +3,9 @@ package yami.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +20,8 @@ import yami.configuration.GlobalConfiguration;
 import yami.model.Constants;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
+
+import com.google.common.collect.Lists;
 
 public class AggregateNodesServlet extends HttpServlet
 {
@@ -71,7 +76,16 @@ public class AggregateNodesServlet extends HttpServlet
 		writer.println("    <div id=\"body\">");
 		writer.println("    <div id=\"content\">");
 		NodeAggregator aggregator = new NodeAggregator();
-		for (VersionItem item : aggregator.aggregate().values())
+		Comparator<VersionItem> comparator = new Comparator<VersionItem>()
+		{
+			@Override
+			public int compare(VersionItem o1, VersionItem o2)
+			{
+				return o1.version().compareTo(o2.version());
+			}};
+		List<VersionItem> values = Lists.newArrayList(aggregator.aggregate().values());
+		Collections.sort(values, comparator);
+		for (VersionItem item : values)
 		{
 			// start building monitored instance line:
 			String line = "            <alert><div class=\"alertbar\"><ul>";
