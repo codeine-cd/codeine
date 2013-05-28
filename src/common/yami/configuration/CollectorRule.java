@@ -83,5 +83,13 @@ public class CollectorRule
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "CollectorRule [node=" + node + ", peer=" + peer + ", mailingPolicy=" + mailingPolicy + ", arg=" + arg + "]";
+	}
+	
+	
 	
 }
