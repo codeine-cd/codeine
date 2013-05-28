@@ -2,8 +2,6 @@ package yami.configuration;
 
 import static com.google.common.collect.Lists.*;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,26 +21,10 @@ public class Project
 	public List<String> mailingList = Lists.newArrayList();
 	public List<MailPolicy> mailingPolicy = newArrayList();
 	public List<Command> command = Lists.newArrayList();
-	public Boolean internal_peer;
 	
 	public List<Node> appInstances()
 	{
 		List<Node> $ = new ArrayList<Node>();
-		if (null != internal_peer && internal_peer)
-		{
-			String name1 = null;
-			try
-			{
-				name1 = InetAddress.getLocalHost().getCanonicalHostName();
-			}
-			catch (UnknownHostException ex)
-			{
-				throw new RuntimeException(ex); 
-			}
-			Peer peer = new Peer();
-			peer.name = name1;
-			$.add(new Node(name1, name1, peer));
-		}
 		for (Peer p : peers)
 		{
 			$.addAll(p.node());

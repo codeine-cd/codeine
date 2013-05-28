@@ -126,7 +126,7 @@ public class UpdaterThread implements Runnable
 						Result r = fetcher.getResult(collector, node);
 						if (r != null)
 						{
-							log.info("adding result " + r.success() + " to node " + node + " for collector " + collector);
+							log.debug("adding result " + r.success() + " to node " + node + " for collector " + collector);
 							d.addResults(node, collector, r);
 						}
 						else
