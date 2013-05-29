@@ -41,15 +41,15 @@ public class UpdaterThread implements Runnable
 		log.info("Starting UpdaterThread");
 		while (true)
 		{
-			DataStore d = DataStoreRetriever.getD();
-			updateResults(d);
 			try
 			{
+				DataStore d = DataStoreRetriever.getD();
+				updateResults(d);
 				Thread.sleep(SLEEP_TIME);
 			}
-			catch (InterruptedException ex)
+			catch (Exception ex)
 			{
-				ex.printStackTrace();
+				log.warn("error", ex);
 			}
 		}
 	}
