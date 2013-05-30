@@ -62,11 +62,14 @@ public class DashboardServlet extends HttpServlet
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
 		HtmlWriter.writeHeader(cm, gc, hostname, writer);
-		writer.println("<alert><div class=\"alertbar\">");
-		writer.println("<input class=\"version\" type=\"text\" id=\"newVersionAll\" />");
-		writer.println("<button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch version to selected nodes</button>");
-		writer.println("<button class=\"command\" onClick=\"selectAll()\">Select all</button>");
-		writer.println("</div></alert>");
+		if (!readOnly)
+		{
+			writer.println("<alert><div class=\"alertbar\">");
+			writer.println("<input class=\"version\" type=\"text\" id=\"newVersionAll\" />");
+			writer.println("<button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch version to selected nodes</button>");
+			writer.println("<button class=\"command\" onClick=\"selectAll()\">Select all</button>");
+			writer.println("</div></alert>");
+		}
 		for (Node node : ds.appInstances())
 		{
 			String version = getVersion(ds, node);
