@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import yami.YamiVersion;
 import yami.configuration.Command;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
@@ -53,43 +52,16 @@ public class DashboardServlet extends HttpServlet
 		{
 			paramMax = Integer.valueOf(countString);
 		}
+		boolean alerts = Boolean.parseBoolean(req.getParameter("alerts") == null ? "false" : req.getParameter("alerts"));
+		boolean readOnly = Boolean.parseBoolean(req.getParameter("readonly") == null ? "true" : req.getParameter("readonly"));
+		
 		VersionFilter versionFilter = new VersionFilter(paramVersion, paramMax);
 		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
-		writer.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-		writer.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-		writer.println("<head>");
-		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-		// writer.println("<meta http-equiv=\"refresh\" content=\"5\" />");
-		writer.println("<title>yami dashboard - " + cm.getConfiguredProject().name + "</title>");
-		writer.println("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
-		writer.println("<script src=\"../dashboard.js\" type=\"text/javascript\" ></script>");
-		writer.println("");
-		writer.println("</head>");
-		writer.println("<body>");
-		writer.println("<div id=\"container\">");
-		writer.println("  <div id=\"header\">");
-		writer.println("      <h1><a href=\"/\">yami</a></h1>");
-		writer.println("        <h2>" + YamiVersion.get() + "</h2>");
-		writer.println("        <div class=\"clear\"></div>");
-		writer.println("    </div>");
-		writer.println("    <div id=\"nav\">");
-		writer.println("      <ul>");
-		writer.println("          <li class=\"start\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.DASHBOARD_CONTEXT
-				+ "\">Dashboard</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.AGGREGATE_NODE_CONTEXT
-				+ "\">Aggregate</a></li>");
-		writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.PEERS_DASHBOARD_CONTEXT
-				+ "\">Peers</a></li>");
-		// writer.println("          <li class=\"last\"><a href=\"http://" + hostname + ":" + gc.getServerPort() +
-		// "/nodes" + "\">Nodes</a></li>");
-		writer.println("        </ul>");
-		writer.println("    </div>");
-		writer.println("    <div id=\"body\">");
-		writer.println("    <div id=\"content\">");
+		HtmlWriter.writeHeader(cm, gc, hostname, writer);
 		writer.println("<alert><div class=\"alertbar\">");
 		writer.println("<input class=\"version\" type=\"text\" id=\"newVersionAll\" />");
 		writer.println("<button class=\"command\" onClick=\"switchVersionToCheckedItems()\">Switch version to selected nodes</button>");
@@ -113,6 +85,10 @@ public class DashboardServlet extends HttpServlet
 					fail = true;
 					break;
 				}
+			}
+			if (!fail && alerts)
+			{
+				continue;
 			}
 			// start building monitored instance line:
 			String line = "            <alert><div class=\"alertbar\"><ul>";
@@ -148,19 +124,22 @@ public class DashboardServlet extends HttpServlet
 				String versionInPeerLink = getLink(new VersionCollector(), node);
 				line += "<li><a class=\"" + versionClass + "\" href=\"" + versionInPeerLink  + "\">" + version + "</a></li>";
 			}
-			if (gc.isSwitchVersionEnabled())
+			if (!readOnly)
 			{
-				String link = node.peer.getPeerSwitchVersionLink(node.name, "");
-				line += "<li>" + "<input class=\"version\" type=\"text\" id=\"" + node.name + "_newVersion\" />" + "</li>" + "<li>"
-						+ "<button class=\"command\" onClick=\"switchVersion('" + node.name + "','" + link + "')\">Switch-Version</button>" + "</li>";
+				if (gc.isSwitchVersionEnabled())
+				{
+					String link = node.peer.getPeerSwitchVersionLink(node.name, "");
+					line += "<li>" + "<input class=\"version\" type=\"text\" id=\"" + node.name + "_newVersion\" />" + "</li>" + "<li>"
+							+ "<button class=\"command\" onClick=\"switchVersion('" + node.name + "','" + link + "')\">Switch-Version</button>" + "</li>";
+				}
+				for (Command command : cm.getConfiguredProject().command)
+				{
+					String link = node.peer.getPeerCommandLink(node.name, command.name);
+					line += "<li>" + "<button class=\"command\" onClick=\"commandNode('" + node.name + "','" + command.title() + "','" + link + "')\">"
+							+ command.title() + "</button>" + "</li>";
+				}
+				line += "<li><input class=\"checkbox\" type=\"checkbox\" id=\"checkbox_" + node.name + "\"/></li>";
 			}
-			for (Command command : cm.getConfiguredProject().command)
-			{
-				String link = node.peer.getPeerCommandLink(node.name, command.name);
-				line += "<li>" + "<button class=\"command\" onClick=\"commandNode('" + node.name + "','" + command.title() + "','" + link + "')\">"
-						+ command.title() + "</button>" + "</li>";
-			}
-			line += "<li><input class=\"checkbox\" type=\"checkbox\" id=\"checkbox_" + node.name + "\"/></li>";
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
 			writer.println(line);
 		}
@@ -177,9 +156,6 @@ public class DashboardServlet extends HttpServlet
 		writer.println("</html>");
 		writer.close();
 	}
-	
-	
-	
 	private String getVersion(DataStore ds, Node node)
 	{
 		CollectorOnNodeState result = ds.getResult(node, new VersionCollector());
