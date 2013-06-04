@@ -23,6 +23,8 @@ import yami.model.Constants;
 import yami.model.Result;
 import yami.utils.ProcessExecuter;
 
+import com.google.common.base.Stopwatch;
+
 public class RunMonitors implements Task
 {
 	private Node node;
@@ -82,9 +84,12 @@ public class RunMonitors implements Task
 			{
 				List<String> cmd = buildCmd(monitor, c);
 				log.info("Will execute " + cmd);
+				Stopwatch stopwatch = new Stopwatch().start();
 				Result res = ProcessExecuter.execute(cmd);
-				log.info(monitor.getName() + " ended with res=" + res.success());
-				writeResult(res, monitor.getName(), c);
+				stopwatch.stop();
+//				long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+				log.info(monitor.getName() + " ended with res=" + res.success() + " that took: " + stopwatch);
+				writeResult(res, monitor.getName(), c , stopwatch, cmd);
 			}
 			catch (Exception e)
 			{
@@ -110,7 +115,7 @@ public class RunMonitors implements Task
 		return cmd;
 	}
 	
-	private void writeResult(Result res, String outputFileName, HttpCollector c) throws IOException
+	private void writeResult(Result res, String outputFileName, HttpCollector c, Stopwatch stopwatch, List<String> cmd) throws IOException
 	{
 		BufferedWriter out = getWriter(outputFileName);
 		if (c.hasStatus())
@@ -118,6 +123,12 @@ public class RunMonitors implements Task
 		    out.write(res.success() ? "True\n" : "False\n");
 		    out.write("run at " + new Date() + "\n");
 		}
+		out.write("+------------------------------------------------------------------+\n");
+		out.write("| command: " + cmd + "\n");
+		out.write("| exitstatus: " + res.exit() + "\n");
+		out.write("| completed at: " + new Date() + "\n");
+		out.write("| length: " + stopwatch + "\n");
+		out.write("+------------------------------------------------------------------+\n");
 		out.write(res.output);
 		out.close();
 	}
