@@ -51,7 +51,8 @@ public class NodeAggregator
 		if (null == last) {
 			return NO_VERSION;
 		}
-		return last.output;
+		String[] split = last.output.split("\n");
+		return split[split.length-1];
 	}
 	
 }

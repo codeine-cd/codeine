@@ -10,10 +10,4 @@ public class VersionCollector extends HttpCollector
 		this.includedNodes.add("all");
 	}
 	
-	@Override
-	public boolean hasStatus()
-	{
-		return false;
-	}
-	
 }

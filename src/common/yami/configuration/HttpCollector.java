@@ -136,9 +136,4 @@ public class HttpCollector
 	{
 		return mailingList;
 	}
-
-	public boolean hasStatus() 
-	{
-	    return true;
-	}
 }

@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import yami.configuration.ConfigurationManager;
 import yami.configuration.HttpCollector;
+import yami.configuration.KeepaliveCollector;
 import yami.configuration.Node;
 import yami.model.Constants;
 import yami.model.Result;
@@ -32,7 +33,7 @@ public class CollectorHttpResultFetcher
 		List<String> lines = readHTTP(resultURL);
 		String output = Joiner.on("\n").join(lines);
 		Result res = new Result(0, output);
-		if (c.name.equals("keepalive"))
+		if (c.name.equals(new KeepaliveCollector().name))
 		{
 			res = getKeepaliveResult(lines, res);
 		}
