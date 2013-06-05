@@ -1,6 +1,6 @@
 package yami.servlets;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -98,7 +98,7 @@ public class AllPeersRestartServlet extends HttpServlet
 				ex.printStackTrace();
 			}
 		}
-		writer.println("finished!");
+		writer.println("finished all peers!");
 		log.info("doGet() - restarting finished");
 	}
 
