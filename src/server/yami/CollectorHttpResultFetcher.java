@@ -43,7 +43,14 @@ public class CollectorHttpResultFetcher
 		}
 		else
 		{
-			res = new Result(lines.get(0).equals("True") ? 0 : 1, output);
+			int exitstatus = 1;
+			for (String line : lines) {
+				if (line.startsWith("| exitstatus:")){
+					exitstatus = Integer.valueOf(line.split(" ")[2]);
+					break;
+				}
+			}
+			res = new Result(exitstatus, output);
 		}
 		return res;
 	}

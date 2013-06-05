@@ -1,6 +1,6 @@
 package yami;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -118,7 +118,6 @@ public class RunMonitors implements Task
 	private void writeResult(Result res, String outputFileName, HttpCollector c, Stopwatch stopwatch, List<String> cmd) throws IOException
 	{
 		BufferedWriter out = getWriter(outputFileName);
-		out.write(res.success() ? "True\n" : "False\n");
 		out.write("+------------------------------------------------------------------+\n");
 		out.write("| command: " + cmd + "\n");
 		out.write("| exitstatus: " + res.exit() + "\n");
