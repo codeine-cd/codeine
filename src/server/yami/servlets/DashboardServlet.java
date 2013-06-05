@@ -166,7 +166,8 @@ public class DashboardServlet extends HttpServlet
 		{
 			return null;
 		}
-		return result.getLast().output;
+		String[] lines = result.getLast().output.split("\n");
+		return lines[lines.length-1];
 	}
 	
 	private String getLink(HttpCollector collector, Node node)

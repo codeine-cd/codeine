@@ -118,11 +118,7 @@ public class RunMonitors implements Task
 	private void writeResult(Result res, String outputFileName, HttpCollector c, Stopwatch stopwatch, List<String> cmd) throws IOException
 	{
 		BufferedWriter out = getWriter(outputFileName);
-		if (c.hasStatus())
-		{
-		    out.write(res.success() ? "True\n" : "False\n");
-		    out.write("run at " + new Date() + "\n");
-		}
+		out.write(res.success() ? "True\n" : "False\n");
 		out.write("+------------------------------------------------------------------+\n");
 		out.write("| command: " + cmd + "\n");
 		out.write("| exitstatus: " + res.exit() + "\n");
