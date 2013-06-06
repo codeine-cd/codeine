@@ -17,14 +17,14 @@ public class HtmlWriter
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
 		// writer.println("<meta http-equiv=\"refresh\" content=\"5\" />");
 		writer.println("<title>yami dashboard - " + cm.getConfiguredProject().name + "</title>");
-		writer.println("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
-		writer.println("<script src=\"../dashboard.js\" type=\"text/javascript\" ></script>");
+		writer.println("<link rel=\"stylesheet\" href=\".."+Constants.RESOURCESS_CONTEXT+"/style.css\" type=\"text/css\" />");
+		writer.println("<script src=\".."+Constants.RESOURCESS_CONTEXT+"/dashboard.js\" type=\"text/javascript\" ></script>");
 		writer.println("");
 		writer.println("</head>");
 		writer.println("<body>");
 		writer.println("<div id=\"container\">");
 		writer.println("  <div id=\"header\">");
-		writer.println("      <h1><a href=\"/\">yami</a></h1>");
+		writer.println("      <h1><a href=\""+Constants.RESOURCESS_CONTEXT+"\">yami</a></h1>");
 		writer.println("        <h2>" + YamiVersion.get() + "</h2>");
 		writer.println("        <div class=\"clear\"></div>");
 		writer.println("    </div>");

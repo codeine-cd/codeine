@@ -3,22 +3,23 @@ package yami;
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
-import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 
 import yami.configuration.ConfigurationManager;
 import yami.model.Constants;
+import yami.servlets.InvalidRequestServlet;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -52,21 +53,20 @@ public class YamiServerBootstrap
 		FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
 		ServletContextHandler handler = new ServletContextHandler();
 		handler.setContextPath("/");
+		handler.addServlet(InvalidRequestServlet.class, "/*");
 		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
 		ConfigurationManager cm = injector.getInstance(ConfigurationManager.class);
 		String installDir = Constants.getInstallDir();
 		log.info("Starting yami server at version " + YamiVersion.get());
 		int port = cm.getCurrentGlobalConfiguration().getServerPort();
 		log.info("Starting on port " + port + ". To set different server port, use -Dserver.port=<port>");
-		log.info("starting static server under '/', serving" + installDir + Constants.HTTP_ROOT_CONTEXT);
-//		ContextHandler staticResouceContextHandler = createStaticContextHandler("/resource", installDir + Constants.HTTP_ROOT_CONTEXT);
-//		log.info("starting dashboard servlet under '/dashboard'");
-//		ContextHandlerCollection contexts = new ContextHandlerCollection();
-//		contexts.setHandlers(new Handler[] {
-//				staticResouceContextHandler, handler,
-//		});
+		ContextHandler staticResouceContextHandler = createStaticContextHandler(Constants.RESOURCESS_CONTEXT, installDir + Constants.HTTP_ROOT_CONTEXT);
+		ContextHandlerCollection contexts = new ContextHandlerCollection();
+		contexts.setHandlers(new Handler[] {
+				staticResouceContextHandler, handler,
+		});
 		Server server = new Server(port);
-		server.setHandler(handler);
+		server.setHandler(contexts);
 		try
 		{
 			new Thread(new UpdaterThread(new YamiMailSender(injector.getInstance(SendMailStrategy.class)), injector.getInstance(CollectorHttpResultFetcher.class), true)).start();
@@ -129,11 +129,4 @@ public class YamiServerBootstrap
 		return ch;
 	}
 	
-	private ServletContextHandler createServletContext(String context, HttpServlet servlet)
-	{
-		ServletContextHandler monitorContext = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-		monitorContext.setContextPath(context);
-		monitorContext.addServlet(new ServletHolder(servlet), "/");
-		return monitorContext;
-	}
 }

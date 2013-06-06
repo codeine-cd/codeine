@@ -30,6 +30,7 @@ public class Constants
 	public static final String COMMAND_NODE_CONTEXT = "/command-node";
 	public static final String COMMAND_NODE_ALL_CONTEXT = "/command-node-all";
 	public static final String HTTP_ROOT_CONTEXT = "/http-root";
+	public static final String RESOURCESS_CONTEXT = "/resources";
 	
 	public static String installDir = null;
 	public static String confPath = null;
