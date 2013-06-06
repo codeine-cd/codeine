@@ -26,7 +26,7 @@ public class ConfigurationManager
 		return instance;
 	}
 	
-	private ConfigurationManager()
+	public ConfigurationManager()
 	{
 		try
 		{
