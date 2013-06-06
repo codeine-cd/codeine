@@ -2,8 +2,6 @@ package yami.model;
 
 import java.io.File;
 
-import yami.configuration.ConfigurationManager;
-
 public class Constants
 {
 	public static final String DEFAULT_CLIENT_INSTALL = "/tmp/yami.monitoring/";
@@ -74,49 +72,6 @@ public class Constants
 		installDir = jarFile.getParentFile().getParent();
 		System.out.println("SystemProperty 'install.dir' not defined, setting installDir as '" + installDir + "'");
 		return installDir;
-	}
-	
-	// public static int getPort(String propertyName, int defaultPort)
-	// {
-	// int port = defaultPort;
-	// if (System.getProperty(propertyName) != null)
-	// {
-	// try
-	// {
-	// port = Integer.parseInt(System.getProperty(propertyName));
-	// }
-	// catch (NumberFormatException e)
-	// {
-	// log.warn("got an exception at getPort where propertyName='" + propertyName + "' defaultPort='" + defaultPort +
-	// "'", e);
-	// return defaultPort;
-	// }
-	// }
-	// return port;
-	// }
-	
-	// public static int getClientPort()
-	// {
-	// return getPort("client.port", DEFAULT_CLIENT_PORT);
-	// }
-	
-	// public static int getServerPort()
-	// {
-	// return getPort("server.port", DEFAULT_SERVER_PORT);
-	// }
-	
-	public static String getServerDashboard()
-	{
-		String hostname = null;
-		try
-		{
-			hostname = java.net.InetAddress.getLocalHost().getHostName();
-		}
-		catch (Exception e)
-		{
-			throw new RuntimeException(e);
-		}
-		return "http://" + hostname + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getServerPort() + DASHBOARD_CONTEXT;
 	}
 	
 }

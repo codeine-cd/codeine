@@ -20,15 +20,25 @@ import yami.model.Constants;
 import yami.model.Result;
 
 import com.google.common.base.Joiner;
+import com.google.inject.Inject;
 
 public class CollectorHttpResultFetcher
 {
 	private static final Logger log = Logger.getLogger(CollectorHttpResultFetcher.class);
+	private ConfigurationManager configurationManager;
 	
+	
+	@Inject
+	public CollectorHttpResultFetcher(ConfigurationManager configurationManager)
+	{
+		super();
+		this.configurationManager = configurationManager;
+	}
+
 	public Result getResult(HttpCollector c, Node n) throws IOException, InterruptedException
 	{
 		String resultURL = Constants.CLIENT_LINK;
-		resultURL = resultURL.replace(Constants.PEER_NAME, n.peer.dnsName()).replace(Constants.NODE_NAME, n.name).replace(Constants.COLLECTOR_NAME, c.name).replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
+		resultURL = resultURL.replace(Constants.PEER_NAME, n.peer.dnsName()).replace(Constants.NODE_NAME, n.name).replace(Constants.COLLECTOR_NAME, c.name).replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getClientPort() + "");
 		log.debug("Will try to fetch result from " + resultURL);
 		List<String> lines = readHTTP(resultURL);
 		String output = Joiner.on("\n").join(lines);

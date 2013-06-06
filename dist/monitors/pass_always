@@ -1,0 +1,5 @@
+#!/usr/intel/bin/perl
+use strict;
+use FindBin;
+
+exit(0);
