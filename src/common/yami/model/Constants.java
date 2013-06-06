@@ -2,6 +2,8 @@ package yami.model;
 
 import java.io.File;
 
+import yami.configuration.ConfigurationManager;
+
 public class Constants
 {
 	public static final String DEFAULT_CLIENT_INSTALL = "/tmp/yami.monitoring/";
