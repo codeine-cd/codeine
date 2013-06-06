@@ -9,6 +9,7 @@ import yami.servlets.AllPeersRestartServlet;
 import yami.servlets.DashboardServlet;
 import yami.servlets.PeersDashboardServlet;
 
+import com.google.inject.Scopes;
 import com.google.inject.servlet.ServletModule;
 
 public class YamiServerServletModule extends ServletModule
@@ -25,7 +26,7 @@ public class YamiServerServletModule extends ServletModule
 
 	public void serveMe(String contextPath, Class<? extends HttpServlet> class1)
 	{
-		bind(class1);
+		bind(class1).in(Scopes.SINGLETON);
 		serve(contextPath).with(class1);
 	}
 }
