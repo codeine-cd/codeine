@@ -12,8 +12,6 @@ public class YamiServerModule extends AbstractModule
 	protected void configure()
 	{
 		bind(ConfigurationManager.class).in(Scopes.SINGLETON);
-		bind(SendMailStrategy.class);
-		bind(CollectorHttpResultFetcher.class);
 	}
 	
 }
