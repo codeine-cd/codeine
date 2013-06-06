@@ -19,32 +19,21 @@ import yami.model.Constants;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 
-import com.google.inject.Inject;
-
 public class PeersDashboardServlet extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = 1L;
-	private GlobalConfiguration gc;
-	private ConfigurationManager configurationManager;
+	GlobalConfiguration gc;
 	
-	
-	@Inject
-	public PeersDashboardServlet(ConfigurationManager configurationManager)
-	{
-		super();
-		this.configurationManager = configurationManager;
-	}
-
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
-		gc = configurationManager.getCurrentGlobalConfiguration();
+		gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
 		log.debug("dashboard request");
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
-		HtmlWriter.writeHeader(configurationManager, gc, hostname, writer);
+		HtmlWriter.writeHeader(ConfigurationManager.getInstance(), gc, hostname, writer);
 		if (new File(Constants.getInstallDir() + "/bin/restartAllPeers").canExecute())
 		{
 			writer.println("    <a class=\"" + "restartbutton" + "\" title=\"" + "Restart All Peers" + "\" href=\"http://" + hostname + ":" + gc.getServerPort() + Constants.RESTART_ALL_PEERS_CONTEXT + "\">Restart All Peers</a><br/>");

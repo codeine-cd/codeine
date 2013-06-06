@@ -23,20 +23,10 @@ import yami.model.Constants;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 
-import com.google.inject.Inject;
-
 public class DashboardServlet extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = 1L;
-	private final ConfigurationManager configurationManager;
-	
-	@Inject
-	public DashboardServlet(ConfigurationManager configurationManager)
-	{
-		super();
-		this.configurationManager = configurationManager;
-	}
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -66,11 +56,12 @@ public class DashboardServlet extends HttpServlet
 		boolean readOnly = Boolean.parseBoolean(req.getParameter("readonly") == null ? "true" : req.getParameter("readonly"));
 		
 		VersionFilter versionFilter = new VersionFilter(paramVersion, paramMax);
-		GlobalConfiguration gc = configurationManager.getCurrentGlobalConfiguration();
+		ConfigurationManager cm = ConfigurationManager.getInstance();
+		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
 		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
-		HtmlWriter.writeHeader(configurationManager, gc, hostname, writer);
+		HtmlWriter.writeHeader(cm, gc, hostname, writer);
 		if (!readOnly)
 		{
 			writer.println("<alert><div class=\"alertbar\">");
@@ -144,7 +135,7 @@ public class DashboardServlet extends HttpServlet
 					line += "<li>" + "<input class=\"version\" type=\"text\" id=\"" + node.name + "_newVersion\" />" + "</li>" + "<li>"
 							+ "<button class=\"command\" onClick=\"switchVersion('" + node.name + "','" + link + "')\">Switch-Version</button>" + "</li>";
 				}
-				for (Command command : configurationManager.getConfiguredProject().command)
+				for (Command command : cm.getConfiguredProject().command)
 				{
 					String link = node.peer.getPeerCommandLink(node.name, command.name);
 					line += "<li>" + "<button class=\"command\" onClick=\"commandNode('" + node.name + "','" + command.title() + "','" + link + "')\">"
@@ -183,7 +174,7 @@ public class DashboardServlet extends HttpServlet
 	{
 		return Constants.CLIENT_LINK.replace(Constants.PEER_NAME, node.peer.dnsName()).replace(Constants.NODE_NAME, node.name)
 				.replace(Constants.COLLECTOR_NAME, collector.name)
-				.replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getClientPort() + "");
+				.replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
 	}
 	
 	private DataStore getDataStore()
