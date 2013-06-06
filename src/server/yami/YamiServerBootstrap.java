@@ -30,7 +30,8 @@ public class YamiServerBootstrap
 	public static void main(String[] args)
 	{
 		System.out.println("Starting yami server " + YamiVersion.get());
-		setLogger(Constants.getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
+		String installDir = Constants.getInstallDir();
+		setLogger(installDir + "/http-root/" + Constants.SERVER_LOG);
 		configureLogLevel();
 		new YamiServerBootstrap().runServer();
 	}

@@ -2,14 +2,10 @@ package yami.model;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
-
 import yami.configuration.ConfigurationManager;
 
 public class Constants
 {
-	private static final Logger log = Logger.getLogger(Constants.class);
-	
 	public static final String DEFAULT_CLIENT_INSTALL = "/tmp/yami.monitoring/";
 	public static final int DEFAULT_CLIENT_PORT = 8112;
 	public static final int DEFAULT_SERVER_PORT = 8080;
@@ -56,7 +52,7 @@ public class Constants
 			return confPath;
 		}
 		confPath = getInstallDir() + "/conf/yami.conf.xml";
-		log.info("SystemProperty 'yami.conf' not defined, returning default path " + confPath);
+		System.out.println("SystemProperty 'yami.conf' not defined, returning default path " + confPath);
 		return confPath;
 	}
 	
@@ -68,7 +64,7 @@ public class Constants
 		}
 		if (System.getProperty("install.dir") != null)
 		{
-			log.debug("setting installDir from properties: " + System.getProperty("install.dir"));
+			System.out.println("setting installDir from properties: " + System.getProperty("install.dir"));
 			installDir = System.getProperty("install.dir");
 			return installDir;
 		}
@@ -76,7 +72,7 @@ public class Constants
 		String sJarPath = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File jarFile = new File(sJarPath);
 		installDir = jarFile.getParentFile().getParent();
-		log.info("SystemProperty 'install.dir' not defined, setting installDir as '" + installDir + "'");
+		System.out.println("SystemProperty 'install.dir' not defined, setting installDir as '" + installDir + "'");
 		return installDir;
 	}
 	
