@@ -1,5 +1,8 @@
 package yami;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.BasicConfigurator;
@@ -7,58 +10,66 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import yami.configuration.ConfigurationManager;
 import yami.model.Constants;
-import yami.servlets.AggregateNodesServlet;
-import yami.servlets.AllNodesCommandServlet;
-import yami.servlets.AllPeersRestartServlet;
-import yami.servlets.DashboardServlet;
-import yami.servlets.PeersDashboardServlet;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.servlet.GuiceFilter;
 
 public class YamiServerBootstrap
 {
 	private final Logger log = Logger.getLogger(YamiServerBootstrap.class);
+	private Injector injector;
 	
 	public static void main(String[] args)
 	{
 		System.out.println("Starting yami server " + YamiVersion.get());
-		setLogger(Constants.getInstallDir() + "/http-root/" + Constants.SERVER_LOG);
+		String installDir = Constants.getInstallDir();
+		setLogger(installDir + "/http-root/" + Constants.SERVER_LOG);
 		configureLogLevel();
 		new YamiServerBootstrap().runServer();
 	}
 	
 	private void runServer()
 	{
-		ConfigurationManager cm = ConfigurationManager.getInstance();
+		injector = Guice.createInjector(new YamiServerModule(), new YamiServerServletModule(), new AbstractModule() {
+		    @Override
+		    protected void configure() {
+		        binder().requireExplicitBindings();
+		        bind(GuiceFilter.class);
+		    }
+		});
+
+		FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
+		ServletContextHandler handler = new ServletContextHandler();
+		handler.setContextPath("/");
+		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
+		ConfigurationManager cm = injector.getInstance(ConfigurationManager.class);
 		String installDir = Constants.getInstallDir();
 		log.info("Starting yami server at version " + YamiVersion.get());
 		int port = cm.getCurrentGlobalConfiguration().getServerPort();
 		log.info("Starting on port " + port + ". To set different server port, use -Dserver.port=<port>");
 		log.info("starting static server under '/', serving" + installDir + Constants.HTTP_ROOT_CONTEXT);
-		ContextHandler staticResouceContextHandler = createStaticContextHandler("/", installDir + Constants.HTTP_ROOT_CONTEXT);
-		log.info("starting dashboard servlet under '/dashboard'");
-		ServletContextHandler dashboardContext = createServletContext(Constants.DASHBOARD_CONTEXT, new DashboardServlet());
-		ServletContextHandler aggregateNodesContext = createServletContext(Constants.AGGREGATE_NODE_CONTEXT, new AggregateNodesServlet());
-		ServletContextHandler peerDashboardContext = createServletContext(Constants.PEERS_DASHBOARD_CONTEXT, new PeersDashboardServlet());
-		ServletContextHandler peersRestartContext = createServletContext(Constants.RESTART_ALL_PEERS_CONTEXT, new AllPeersRestartServlet());
-		ServletContextHandler nodeCommandContext = createServletContext(Constants.COMMAND_NODE_ALL_CONTEXT, new AllNodesCommandServlet());
-		ContextHandlerCollection contexts = new ContextHandlerCollection();
-		contexts.setHandlers(new Handler[] {
-				staticResouceContextHandler, dashboardContext, peerDashboardContext, peersRestartContext, nodeCommandContext, aggregateNodesContext
-		});
+//		ContextHandler staticResouceContextHandler = createStaticContextHandler("/resource", installDir + Constants.HTTP_ROOT_CONTEXT);
+//		log.info("starting dashboard servlet under '/dashboard'");
+//		ContextHandlerCollection contexts = new ContextHandlerCollection();
+//		contexts.setHandlers(new Handler[] {
+//				staticResouceContextHandler, handler,
+//		});
 		Server server = new Server(port);
-		server.setHandler(contexts);
+		server.setHandler(handler);
 		try
 		{
-			new Thread(new UpdaterThread(new YamiMailSender(new SendMailStrategy()), new CollectorHttpResultFetcher(), true)).start();
+			new Thread(new UpdaterThread(new YamiMailSender(injector.getInstance(SendMailStrategy.class)), injector.getInstance(CollectorHttpResultFetcher.class), true)).start();
 			server.start();
 		}
 		catch (Exception e)
@@ -100,6 +111,7 @@ public class YamiServerBootstrap
 		if (System.getProperty("debug") != null && System.getProperty("debug").equals("true"))
 		{
 			Logger.getRootLogger().setLevel(Level.DEBUG);
+			
 		}
 	}
 	

@@ -20,11 +20,21 @@ import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
 public class AggregateNodesServlet extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger(AggregateNodesServlet.class);
 	private static final long serialVersionUID = 1L;
+	
+	private final ConfigurationManager cm;
+
+	@Inject
+	public AggregateNodesServlet(ConfigurationManager cm)
+	{
+		super();
+		this.cm = cm;
+	}
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -41,7 +51,6 @@ public class AggregateNodesServlet extends HttpServlet
 	public void doGetInternal(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 		log.debug("aggregate request");
-		ConfigurationManager cm = ConfigurationManager.getInstance();
 		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
 		DataStore ds = getDataStore();

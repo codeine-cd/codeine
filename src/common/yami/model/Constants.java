@@ -2,8 +2,6 @@ package yami.model;
 
 import java.io.File;
 
-import yami.configuration.ConfigurationManager;
-
 public class Constants
 {
 	public static final String DEFAULT_CLIENT_INSTALL = "/tmp/yami.monitoring/";
@@ -76,17 +74,4 @@ public class Constants
 		return installDir;
 	}
 	
-	public static String getServerDashboard()
-	{
-		String hostname = null;
-		try
-		{
-			hostname = java.net.InetAddress.getLocalHost().getHostName();
-		}
-		catch (Exception e)
-		{
-			throw new RuntimeException(e);
-		}
-		return "http://" + hostname + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getServerPort() + DASHBOARD_CONTEXT;
-	}
 }
