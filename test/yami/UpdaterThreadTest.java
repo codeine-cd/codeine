@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import yami.YamiMailSenderTest.ForTestingSendMailStrategy;
@@ -23,6 +24,7 @@ import yami.model.Result;
 
 import com.google.common.collect.Lists;
 
+@Ignore
 public class UpdaterThreadTest
 {
 	private YamiMailSender yamiMailSender;
