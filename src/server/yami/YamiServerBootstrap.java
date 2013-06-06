@@ -46,7 +46,7 @@ public class YamiServerBootstrap
 		injector = Guice.createInjector(new YamiServerModule(), new YamiServerServletModule(), new AbstractModule() {
 		    @Override
 		    protected void configure() {
-		        binder().requireExplicitBindings();
+//		        binder().requireExplicitBindings();
 		        bind(GuiceFilter.class);
 		    }
 		});
