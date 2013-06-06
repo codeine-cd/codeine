@@ -74,4 +74,17 @@ public class Constants
 		return installDir;
 	}
 	
+	public static String getServerDashboard()
+	{
+		String hostname = null;
+		try
+		{
+			hostname = java.net.InetAddress.getLocalHost().getHostName();
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+		return "http://" + hostname + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getServerPort() + DASHBOARD_CONTEXT;
+	}
 }
