@@ -27,7 +27,7 @@ public class Peer
 	public String getPeerLink()
 	{
 		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
-		return "http://" + dnsName() + ":" + gc.getClientPort();
+		return "http://" + dnsName() + ":" + gc.getPeerPort();
 	}
 	
 	public String dnsName()

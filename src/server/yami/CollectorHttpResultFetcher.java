@@ -38,7 +38,7 @@ public class CollectorHttpResultFetcher
 	public Result getResult(HttpCollector c, Node n) throws IOException, InterruptedException
 	{
 		String resultURL = Constants.CLIENT_LINK;
-		resultURL = resultURL.replace(Constants.PEER_NAME, n.peer.dnsName()).replace(Constants.NODE_NAME, n.name).replace(Constants.COLLECTOR_NAME, c.name).replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getClientPort() + "");
+		resultURL = resultURL.replace(Constants.PEER_NAME, n.peer.dnsName()).replace(Constants.NODE_NAME, n.name).replace(Constants.COLLECTOR_NAME, c.name).replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getPeerPort() + "");
 		log.debug("Will try to fetch result from " + resultURL);
 		List<String> lines = readHTTP(resultURL);
 		String output = Joiner.on("\n").join(lines);

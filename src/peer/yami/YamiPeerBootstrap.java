@@ -3,10 +3,11 @@ package yami;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.DispatcherType;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -16,27 +17,34 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 
 import yami.configuration.ConfigurationManager;
 import yami.configuration.Node;
 import yami.configuration.Nodes;
 import yami.model.Constants;
 import yami.model.DataStoreRetriever;
+import yami.servlets.InvalidRequestServlet;
 
 import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.servlet.GuiceFilter;
 
-public class YamiClientBootstrap
+public class YamiPeerBootstrap
 {
-	private static final Logger log = Logger.getLogger(YamiClientBootstrap.class);
-	ConfigurationManager cm;
+	private final Logger log = Logger.getLogger(YamiPeerBootstrap.class);
+	private Injector injector;
+	
 	public static void main(String[] args)
 	{
+		System.out.println("Starting yami peer " + YamiVersion.get());
+		setLogger(Constants.getInstallDir() + "/" + Constants.CLIENT_LOG);
 		try
 		{
-			setLogger(Constants.getInstallDir() + "/" + Constants.CLIENT_LOG);
-			new YamiClientBootstrap().execute();
+			new YamiPeerBootstrap().execute();
 		}
 		catch (Exception e)
 		{
@@ -47,9 +55,24 @@ public class YamiClientBootstrap
 	
 	private void execute() throws Exception
 	{
-		cm = ConfigurationManager.getInstance();
-		int port = cm.getCurrentGlobalConfiguration().getClientPort();
+		log.info("Starting yami peer at version " + YamiVersion.get());
+		injector = Guice.createInjector(new YamiPeerModule(), new YamiPeerServletModule(), new AbstractModule() {
+		    @Override
+		    protected void configure() {
+		        binder().requireExplicitBindings();
+		        bind(GuiceFilter.class);
+		    }
+		});
+		FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
+		ServletContextHandler handler = new ServletContextHandler();
+		handler.setContextPath("/");
+		handler.addServlet(InvalidRequestServlet.class, "/*");
+		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
+		
+		ConfigurationManager cm = injector.getInstance(ConfigurationManager.class);
+		int port = cm.getCurrentGlobalConfiguration().getPeerPort();
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
+		log.info("Hostname " + hostname);
 		log.info("Peer will try to start on port " + port + " from directory " + Constants.getInstallDir());
 		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
 		Node internalNode = nodes.get(0).peer.internalNode();//new Node("yami_internal_node", "yami_internal_node", );
@@ -57,16 +80,11 @@ public class YamiClientBootstrap
 		startNodeMonitoringThreads(nodes);
 		ArrayList<Node> nodesWithInternalNode = Lists.newArrayList(nodes);
 		nodesWithInternalNode.add(internalNode);
+		
 		ContextHandlerCollection contexts = createFileServerContexts(nodesWithInternalNode, hostname);
-		PeerRestartServlet rs = new PeerRestartServlet();
-		ServletContextHandler restartServlet = createServletContext(Constants.RESTART_CONTEXT, rs);
-		contexts.addHandler(restartServlet);
-		contexts.addHandler(createServletContext(Constants.COMMAND_NODE_CONTEXT, new CommandNodeServlet()));
-		contexts.addHandler(createLogContextHandler());
-		log.info("Starting peer at port " + port);
-		Server peerHTTPserver = new Server(port);
+		contexts.addHandler(handler);
+		Server peerHTTPserver = injector.getInstance(Server.class);
 		peerHTTPserver.setHandler(contexts);
-		rs.setStoppedObject(peerHTTPserver);
 		peerHTTPserver.start();
 		peerHTTPserver.join();
 		while (true)
@@ -111,11 +129,16 @@ public class YamiClientBootstrap
 	}
 	
 	// logger initialization:
-	private static void setLogger(String logfile) throws IOException
+	private static void setLogger(String logfile)
 	{
 		String pattern = "%d{ISO8601} [%c] %p %m %n";
 		PatternLayout layout = new PatternLayout(pattern);
-		RollingFileAppender appender = new RollingFileAppender(layout, logfile, true);
+		RollingFileAppender appender;
+		try {
+			appender = new RollingFileAppender(layout, logfile, true);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		appender.setMaxBackupIndex(5);
 		appender.setMaximumFileSize(10 * 1000000);
 		Logger.getRootLogger().addAppender(appender);
@@ -137,6 +160,7 @@ public class YamiClientBootstrap
 			contexts.addHandler(createStaticContextHandler("/" + node.name, filesPath));
 			log.debug(hostname + ":" + node.name + " is served under " + filesPath);
 		}
+		contexts.addHandler(createLogContextHandler());
 		return contexts;
 	}
 	
@@ -144,7 +168,7 @@ public class YamiClientBootstrap
 	{
 		String logdir = Constants.getInstallDir() + Constants.LOG_DIR;
 		log.debug("Creating log Context Handler under " + logdir);
-		return createStaticContextHandler("/", logdir);
+		return createStaticContextHandler(Constants.RESOURCESS_CONTEXT, logdir);
 	}
 	
 	private ContextHandler createStaticContextHandler(String contextPath, String fsPath)
@@ -159,12 +183,4 @@ public class YamiClientBootstrap
 		return ch;
 	}
 	
-	private ServletContextHandler createServletContext(String context, HttpServlet servlet)
-	{
-		log.info("Creating servlet context at '" + context + "'");
-		ServletContextHandler monitorContext = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-		monitorContext.setContextPath(context);
-		monitorContext.addServlet(new ServletHolder(servlet), "/");
-		return monitorContext;
-	}	
 }

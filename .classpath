@@ -23,6 +23,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/guice-servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="libs/javax.inject.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="compiled_classes"/>
 </classpath>

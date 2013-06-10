@@ -13,10 +13,13 @@ import org.eclipse.jetty.server.Server;
 
 import yami.configuration.GlobalConfiguration;
 
+import com.google.inject.Inject;
+
 public class PeerRestartServlet extends HttpServlet
 {
 	private static final Logger log = Logger.getLogger(PeerRestartServlet.class);
 	private static final long serialVersionUID = 1L;
+	@Inject
 	private Server peerHTTPserver;
 	
 	@Override
@@ -33,9 +36,5 @@ public class PeerRestartServlet extends HttpServlet
 		return true;
 	}
 	
-	public void setStoppedObject(Server peerHTTPserver)
-	{
-		this.peerHTTPserver = peerHTTPserver;
-	}
 	
 }

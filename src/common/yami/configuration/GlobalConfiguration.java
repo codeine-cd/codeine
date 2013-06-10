@@ -43,7 +43,7 @@ public class GlobalConfiguration
 		return rsync_user;
 	}
 	
-	public int getClientPort()
+	public int getPeerPort()
 	{
 		if (System.getProperty("client_port") != null)
 		{

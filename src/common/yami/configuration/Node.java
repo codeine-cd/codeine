@@ -56,7 +56,7 @@ public class Node
 	
 	public String getLogLink()
 	{
-		return "http://" + peer.dnsName() + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort();
+		return "http://" + peer.dnsName() + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getPeerPort();
 	}
 	
 	public boolean disabled()

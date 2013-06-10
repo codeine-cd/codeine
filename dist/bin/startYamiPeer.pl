@@ -110,7 +110,7 @@ sub start_peer_java
 		$java_cmd .= "-D$o=$opt{$o} ";
 	}
 	$java_cmd .=
-"-cp $CLIENT_INSTALL/bin/yami.jar yami.YamiClientBootstrap > $START_LOG 2>&1 < /dev/null &";
+"-cp $CLIENT_INSTALL/bin/yami.jar yami.YamiPeerBootstrap > $START_LOG 2>&1 < /dev/null &";
 	debug("Will run [$java_cmd]");
 	`$java_cmd`;
 }
@@ -239,7 +239,7 @@ sub kill_current_instance
 sub get_running_pids
 {
 	my $pid_cmd =
-"/bin/ps -eo pid,cmd | grep java | grep 'yami.YamiClientBootstrap'| awk '{print \$1}'";
+"/bin/ps -eo pid,cmd | grep java | grep 'yami.YamiPeerBootstrap'| awk '{print \$1}'";
 	debug("will run [$pid_cmd]");
 	my @pids = `$pid_cmd`;
 	chomp @pids;

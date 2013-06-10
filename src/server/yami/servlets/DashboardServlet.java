@@ -178,7 +178,7 @@ public class DashboardServlet extends HttpServlet
 	{
 		return Constants.CLIENT_LINK.replace(Constants.PEER_NAME, node.peer.dnsName()).replace(Constants.NODE_NAME, node.name)
 				.replace(Constants.COLLECTOR_NAME, collector.name)
-				.replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getClientPort() + "");
+				.replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getPeerPort() + "");
 	}
 	
 	private DataStore getDataStore()
