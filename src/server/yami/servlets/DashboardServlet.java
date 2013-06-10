@@ -171,7 +171,7 @@ public class DashboardServlet extends HttpServlet
 	}
 	private String getVersion(DataStore ds, Node node)
 	{
-		return VersionResult.getVersion(ds, node);
+		return VersionResult.getVersionOrNull(ds, node);
 	}
 	
 	private String getLink(HttpCollector collector, Node node)

@@ -2,6 +2,8 @@ package yami.servlets;
 
 import org.apache.log4j.Logger;
 
+import yami.model.VersionResult;
+
 public class VersionFilter
 {
 
@@ -26,7 +28,7 @@ public class VersionFilter
 		{
 			return false;
 		}
-		if (!m_paramVersion.equals(version))
+		if (versionNotMatch(version))
 		{
 			return true;
 		}
@@ -36,5 +38,14 @@ public class VersionFilter
 		}
 		m_count++;
 		return false;
+	}
+
+	private boolean versionNotMatch(String version)
+	{
+		if (VersionResult.NO_VERSION.equals(m_paramVersion))
+		{
+			return null != version;
+		}
+		return !m_paramVersion.equals(version);
 	}
 }
