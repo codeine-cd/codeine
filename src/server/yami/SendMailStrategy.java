@@ -5,13 +5,11 @@ import java.util.List;
 import yami.configuration.ConfigurationManager;
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
-import yami.configuration.VersionCollector;
-import yami.mail.CollectorOnNodeState;
 import yami.mail.SendMailTLS;
 import yami.model.Constants;
-import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
 import yami.model.Result;
+import yami.model.VersionResult;
 
 import com.google.inject.Inject;
 
@@ -48,13 +46,7 @@ public class SendMailStrategy
 	
 	private String getVersion(Node node) 
 	{
-		DataStore ds = DataStoreRetriever.getD();
-		CollectorOnNodeState result = ds.getResult(node, new VersionCollector());
-		if (null == result)
-		{
-			return "";
-		}
-		return "version " + result.getLast().output;
+		return VersionResult.getVersion(DataStoreRetriever.getD(), node);
 	}
 	
 	private String getServerDashboard()

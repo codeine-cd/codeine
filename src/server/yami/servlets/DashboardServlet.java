@@ -22,6 +22,7 @@ import yami.mail.CollectorOnNodeState;
 import yami.model.Constants;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
+import yami.model.VersionResult;
 
 import com.google.inject.Inject;
 
@@ -170,13 +171,7 @@ public class DashboardServlet extends HttpServlet
 	}
 	private String getVersion(DataStore ds, Node node)
 	{
-		CollectorOnNodeState result = ds.getResult(node, new VersionCollector());
-		if (null == result)
-		{
-			return null;
-		}
-		String[] lines = result.getLast().output.split("\n");
-		return lines[lines.length-1];
+		return VersionResult.getVersion(ds, node);
 	}
 	
 	private String getLink(HttpCollector collector, Node node)

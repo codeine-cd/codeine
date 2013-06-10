@@ -6,16 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import yami.configuration.Node;
-import yami.configuration.VersionCollector;
-import yami.mail.CollectorOnNodeState;
 import yami.model.DataStore;
 import yami.model.DataStoreRetriever;
-import yami.model.Result;
+import yami.model.VersionResult;
 
 public class NodeAggregator
 {
-
-	private static final String NO_VERSION = "No version";
 
 	public Map<String, VersionItem> aggregate()
 	{
@@ -24,12 +20,7 @@ public class NodeAggregator
 		List<Node> nodes = d.nodes();
 		for (Node node : nodes)
 		{
-			VersionCollector c = new VersionCollector();
-			String version = getVersion(d, node, c);
-			if (null == version || version.isEmpty())
-			{
-				version = NO_VERSION;
-			}
+			String version = VersionResult.getVersion(d, node);
 			VersionItem versionItem = items.get(version);
 			if (null == versionItem)
 			{
@@ -41,18 +32,4 @@ public class NodeAggregator
 		return items;
 	}
 
-	private String getVersion(DataStore d, Node node, VersionCollector c)
-	{
-		CollectorOnNodeState result = d.getResult(node, c);
-		if (null == result){
-			return NO_VERSION;
-		}
-		Result last = result.getLast();
-		if (null == last) {
-			return NO_VERSION;
-		}
-		String[] split = last.output.split("\n");
-		return split[split.length-1];
-	}
-	
 }
