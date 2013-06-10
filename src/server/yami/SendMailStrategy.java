@@ -29,7 +29,8 @@ public class SendMailStrategy
 	{
 		String successString = results.success() ? "OK" : "FAIL";
 		String version = getVersion(n);
-		String subject = "yami monitor '" + c.name + "' on " + n.nick() + " " + version + " is now " + successString;
+		String versionString = null == version ? "" : " " + version;
+		String subject = "yami monitor '" + c.name + "' on " + n.nick() + versionString + " is now " + successString;
 		String content = "Collector current status: " + Constants.CLIENT_LINK.replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getClientPort() + "").replace(Constants.NODE_NAME, n.name).replace(Constants.PEER_NAME, n.peer.dnsName()).replace(Constants.COLLECTOR_NAME, c.name) + "\n\n";
 		content += "Dashboard: " + getServerDashboard() + "\n\n";
 		content += "Collector Output:\n";
@@ -46,7 +47,7 @@ public class SendMailStrategy
 	
 	private String getVersion(Node node) 
 	{
-		return VersionResult.getVersion(DataStoreRetriever.getD(), node);
+		return VersionResult.getVersionOrNull(DataStoreRetriever.getD(), node);
 	}
 	
 	private String getServerDashboard()
