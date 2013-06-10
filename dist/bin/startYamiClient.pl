@@ -104,7 +104,7 @@ exit 0;
 ###################				###################
 sub start_peer_java
 {
-	my $java_cmd = "/usr/bin/nohup " . get_opt('java') . " -Xmx200m ";
+	my $java_cmd = "cd / ; /usr/bin/nohup " . get_opt('java') . " -Xmx200m ";
 	foreach my $o ( keys %opt )
 	{
 		$java_cmd .= "-D$o=$opt{$o} ";
