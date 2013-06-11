@@ -49,7 +49,7 @@ public class PeersDashboardServlet extends HttpServlet
 		for (Peer peer : configurationManager.getConfiguredProject().peers())
 		{
 			String line = "            <alert><div class=\"alertbar\"><ul>";
-			line += "<li><a class=\"" + "nameg" + "\" href=\"" + peer.getPeerLink() + "\">" + peer.name + "</a></li>";
+			line += "<li><a class=\"" + "nameg" + "\" href=\"" + peer.getPeerLink() +  Constants.RESOURCESS_CONTEXT + "\">" + peer.name + "</a></li>";
 			line += "<li><a class=\"" + "restartbutton" + "\" title=\"" + "Restart" + "\" href=\"" + peer.getPeerRestartLink() + "\">restart</a></li>";
 			line += "</ul><br style=\"clear:left\"/></div></alert>";
 			writer.println(line);

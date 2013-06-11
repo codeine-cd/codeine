@@ -29,7 +29,7 @@ public class Peer implements IConfigurationObject
 	public String getPeerLink()
 	{
 		GlobalConfiguration gc = getConfiguration().getCurrentGlobalConfiguration();
-		return "http://" + dnsName() + ":" + gc.getPeerPort() + Constants.RESOURCESS_CONTEXT;
+		return "http://" + dnsName() + ":" + gc.getPeerPort();
 	}
 	
 	public String dnsName()
