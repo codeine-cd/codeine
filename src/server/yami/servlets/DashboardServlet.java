@@ -89,7 +89,7 @@ public class DashboardServlet extends HttpServlet
 			}
 			Node internalNode = node.peer.internalNode();
 			CollectorOnNodeState keepaliveResult = ds.getResult(internalNode, new KeepaliveCollector());
-			boolean fail = false;
+			boolean fail = !keepaliveResult.state();
 			for (HttpCollector collector : ds.collectors())
 			{
 				CollectorOnNodeState result = ds.getResult(node, collector);
