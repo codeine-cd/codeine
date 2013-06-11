@@ -5,13 +5,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 
+import yami.configuration.ConfigurationManager;
 import yami.configuration.HttpCollector;
 import yami.configuration.KeepaliveCollector;
 import yami.configuration.Node;
-import yami.model.DataStore;
-import yami.model.DataStoreRetriever;
+import yami.model.IDataStore;
 import yami.model.Result;
 
 import com.google.common.base.Stopwatch;
@@ -26,13 +28,18 @@ public class UpdaterThread implements Runnable
 	static final String DASHBOARD_URL = "http://";
 	private final YamiMailSender mailSender;
 	private final CollectorHttpResultFetcher fetcher;
+	private IDataStore dataStore;
+	private ConfigurationManager configurationManager;
 	static boolean isFirstIteration = true;
 	
-	public UpdaterThread(YamiMailSender yamiMailSender, CollectorHttpResultFetcher fetcher, boolean shouldSkipFirst)
+	@Inject
+	public UpdaterThread(YamiMailSender yamiMailSender, CollectorHttpResultFetcher fetcher, IDataStore dataStore, ConfigurationManager configurationManager)
 	{
 		mailSender = yamiMailSender;
 		this.fetcher = fetcher;
-		this.shouldSkipFirst = shouldSkipFirst;
+		this.shouldSkipFirst = true;
+		this.dataStore = dataStore;
+		this.configurationManager = configurationManager;
 	}
 	
 	@Override
@@ -43,8 +50,7 @@ public class UpdaterThread implements Runnable
 		{
 			try
 			{
-				DataStore d = DataStoreRetriever.getD();
-				updateResults(d);
+				updateResults();
 				Thread.sleep(SLEEP_TIME);
 			}
 			catch (Exception ex)
@@ -54,10 +60,10 @@ public class UpdaterThread implements Runnable
 		}
 	}
 	
-	public void updateResults(DataStore d)
+	public void updateResults()
 	{
 		Stopwatch timer = new Stopwatch().start();
-		fetchResultsFromAllCollectors(d);
+		fetchResultsFromAllCollectors();
 		timer.stop();
 		log.info("updateResults cycle time: " + timer.elapsed(TimeUnit.MILLISECONDS) + " " + TimeUnit.MILLISECONDS.name());
 		if (isFirstIteration && shouldSkipFirst)
@@ -65,47 +71,47 @@ public class UpdaterThread implements Runnable
 			isFirstIteration = false;
 			return;
 		}
-		mailResultsForAllCollectors(d);
+		mailResultsForAllCollectors();
 	}
 
-	private void mailResultsForAllCollectors(DataStore d)
+	private void mailResultsForAllCollectors()
 	{
-		for (HttpCollector c : d.collectors())
+		for (HttpCollector c : configurationManager.getConfiguredProject().collectors())
 		{
-			for (Node n : d.appInstances())
+			for (Node n : configurationManager.getConfiguredProject().appInstances())
 			{
 				if (shouldSkipNode(c, n))
 				{
 					continue;
 				}
-				mailSender.sendMailIfNeeded(d, c, n, d.getResult(n, c));
+				mailSender.sendMailIfNeeded(dataStore, c, n, dataStore.getResult(n, c));
 			}
 		}
-		for (Node n : d.enabledInternalNodes())
+		for (Node n : dataStore.enabledInternalNodes())
 		{
-			mailSender.sendMailIfNeeded(d, new KeepaliveCollector(), n, d.getResult(n, new KeepaliveCollector()));
+			mailSender.sendMailIfNeeded(dataStore, new KeepaliveCollector(), n, dataStore.getResult(n, new KeepaliveCollector()));
 		}
 	}
 
-	private void fetchResultsFromAllCollectors(DataStore d)
+	private void fetchResultsFromAllCollectors()
 	{
-		updateResultsForCollectorAndNodes(new KeepaliveCollector(), d, d.internalNodes());
-		for (HttpCollector c : d.collectors())
+		updateResultsForCollectorAndNodes(new KeepaliveCollector(), configurationManager.getConfiguredProject().internalNodes());
+		for (HttpCollector c : configurationManager.getConfiguredProject().collectors())
 		{
-			updateResultForCollector(c, d);
+			updateResultForCollector(c);
 		}
-		for (HttpCollector c : d.implicitCollectors())
+		for (HttpCollector c : configurationManager.getConfiguredProject().implicitCollectors())
 		{
-			updateResultForCollector(c, d);
+			updateResultForCollector(c);
 		}
 	}
 
-	private void updateResultForCollector(HttpCollector collector, DataStore d) 
+	private void updateResultForCollector(HttpCollector collector) 
 	{
-	    updateResultsForCollectorAndNodes(collector, d, d.appInstances());
+	    updateResultsForCollectorAndNodes(collector, configurationManager.getConfiguredProject().appInstances());
 	}
 
-	private void updateResultsForCollectorAndNodes(final HttpCollector collector, final DataStore d, List<Node> nodes)
+	private void updateResultsForCollectorAndNodes(final HttpCollector collector, List<Node> nodes)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		log.info("updateResultsForCollectorAndNodes() - starting");
@@ -127,7 +133,7 @@ public class UpdaterThread implements Runnable
 						if (r != null)
 						{
 							log.debug("adding result " + r.success() + " to node " + node + " for collector " + collector);
-							d.addResults(node, collector, r);
+							dataStore.addResults(node, collector, r);
 						}
 						else
 						{

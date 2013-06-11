@@ -210,7 +210,7 @@ public class ShouldSendMailValidatorTest
 		
 		public ForTestingDataStore(List<HttpCollector> collectors, List<Node> nodes)
 		{
-			super();
+			super(null);
 			this.collectors = collectors;
 			this.nodes = nodes;
 		}

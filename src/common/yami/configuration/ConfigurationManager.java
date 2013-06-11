@@ -26,7 +26,7 @@ public class ConfigurationManager
 		}
 		catch (Exception e)
 		{
-			log.warn("Failed to read new configuration from " + Constants.getConfPath(), e);
+			log.error("Failed to read new configuration from " + Constants.getConfPath(), e);
 		}
 		
 	}
@@ -79,5 +79,9 @@ public class ConfigurationManager
 	public GlobalConfiguration getCurrentGlobalConfiguration()
 	{
 		return configuration.conf;
+	}
+
+	public Project getD() {
+		return getConfiguredProject();
 	}
 }

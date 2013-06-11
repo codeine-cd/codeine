@@ -70,7 +70,7 @@ public class YamiServerBootstrap
 		server.setHandler(contexts);
 		try
 		{
-			new Thread(new UpdaterThread(injector.getInstance(YamiMailSender.class), injector.getInstance(CollectorHttpResultFetcher.class), true)).start();
+			new Thread(injector.getInstance(UpdaterThread.class)).start();
 			server.start();
 		}
 		catch (Exception e)

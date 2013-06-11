@@ -16,8 +16,7 @@ import org.apache.log4j.Logger;
 
 import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
-import yami.model.DataStore;
-import yami.model.DataStoreRetriever;
+import yami.model.IDataStore;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -27,14 +26,16 @@ public class AggregateNodesServlet extends HttpServlet
 	private static final Logger log = Logger.getLogger(AggregateNodesServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	private final ConfigurationManager cm;
+	private final ConfigurationManager configurationManager;
+	private final IDataStore dataStore;
 
 	@Inject
-	public AggregateNodesServlet(ConfigurationManager cm)
-	{
+	public AggregateNodesServlet(ConfigurationManager configurationManager, IDataStore dataStore) {
 		super();
-		this.cm = cm;
+		this.configurationManager = configurationManager;
+		this.dataStore = dataStore;
 	}
+	
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -51,11 +52,10 @@ public class AggregateNodesServlet extends HttpServlet
 	public void doGetInternal(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{
 		log.debug("aggregate request");
-		GlobalConfiguration gc = cm.getCurrentGlobalConfiguration();
+		GlobalConfiguration gc = configurationManager.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
-		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
-		HtmlWriter.writeHeader(cm, gc, hostname, writer);
+		HtmlWriter.writeHeader(configurationManager, gc, hostname, writer);
 		NodeAggregator aggregator = new NodeAggregator();
 		Comparator<VersionItem> comparator = new Comparator<VersionItem>()
 		{
@@ -64,7 +64,7 @@ public class AggregateNodesServlet extends HttpServlet
 			{
 				return o1.version().compareTo(o2.version());
 			}};
-		List<VersionItem> values = Lists.newArrayList(aggregator.aggregate().values());
+		List<VersionItem> values = Lists.newArrayList(aggregator.aggregate(configurationManager.getConfiguredProject().nodes(), dataStore).values());
 		Collections.sort(values, comparator);
 		for (VersionItem item : values)
 		{
@@ -122,9 +122,6 @@ public class AggregateNodesServlet extends HttpServlet
 //			replace(Constants.CLIENT_PORT, ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getClientPort() + "");
 //	}
 	
-	private DataStore getDataStore()
-	{
-		return DataStoreRetriever.getD();
-	}
+	
 	
 }

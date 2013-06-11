@@ -7,7 +7,7 @@ import yami.configuration.HttpCollector;
 import yami.configuration.Node;
 import yami.mail.SendMailTLS;
 import yami.model.Constants;
-import yami.model.DataStoreRetriever;
+import yami.model.IDataStore;
 import yami.model.Result;
 import yami.model.VersionResult;
 
@@ -17,12 +17,14 @@ public class SendMailStrategy
 {
 	
 	private ConfigurationManager configurationManager;
+	private IDataStore dataStore;
 
 	@Inject
-	public SendMailStrategy(ConfigurationManager configurationManager)
+	public SendMailStrategy(ConfigurationManager configurationManager, IDataStore dataStore)
 	{
 		super();
 		this.configurationManager = configurationManager;
+		this.dataStore = dataStore;
 	}
 
 	public void mailCollectorResult(List<String> mailingList, HttpCollector c, Node n, Result results)
@@ -47,7 +49,7 @@ public class SendMailStrategy
 	
 	private String getVersion(Node node) 
 	{
-		return VersionResult.getVersionOrNull(DataStoreRetriever.getD(), node);
+		return VersionResult.getVersionOrNull(dataStore, node);
 	}
 	
 	private String getServerDashboard()

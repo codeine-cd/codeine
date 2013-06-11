@@ -8,7 +8,7 @@ public class VersionResult
 {
 	public static final String NO_VERSION = "No version";
 	
-	public static String getVersionOrNull(DataStore d, Node node)
+	public static String getVersionOrNull(IDataStore d, Node node)
 	{
 		VersionCollector c = new VersionCollector();
 		CollectorOnNodeState result = d.getResult(node, c);
@@ -24,7 +24,7 @@ public class VersionResult
 		String[] split = last.output.split("\n");
 		return split[split.length - 1];
 	}
-	public static String getVersion(DataStore d, Node node)
+	public static String getVersion(IDataStore d, Node node)
 	{
 		String $ = getVersionOrNull(d, node);
 		if (null == $)

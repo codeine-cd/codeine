@@ -20,8 +20,7 @@ import yami.configuration.Node;
 import yami.configuration.VersionCollector;
 import yami.mail.CollectorOnNodeState;
 import yami.model.Constants;
-import yami.model.DataStore;
-import yami.model.DataStoreRetriever;
+import yami.model.IDataStore;
 import yami.model.VersionResult;
 
 import com.google.inject.Inject;
@@ -31,12 +30,14 @@ public class DashboardServlet extends HttpServlet
 	private static final Logger log = Logger.getLogger(DashboardServlet.class);
 	private static final long serialVersionUID = 1L;
 	private final ConfigurationManager configurationManager;
+	private final IDataStore dataStore;
 	
 	@Inject
-	public DashboardServlet(ConfigurationManager configurationManager)
+	public DashboardServlet(ConfigurationManager configurationManager, IDataStore dataStore)
 	{
 		super();
 		this.configurationManager = configurationManager;
+		this.dataStore = dataStore;
 	}
 	
 	@Override
@@ -69,7 +70,6 @@ public class DashboardServlet extends HttpServlet
 		VersionFilter versionFilter = new VersionFilter(paramVersion, paramMax);
 		GlobalConfiguration gc = configurationManager.getCurrentGlobalConfiguration();
 		String hostname = gc.server_dns_name != null ? gc.server_dns_name : InetAddress.getLocalHost().getCanonicalHostName();
-		DataStore ds = getDataStore();
 		PrintWriter writer = res.getWriter();
 		HtmlWriter.writeHeader(configurationManager, gc, hostname, writer);
 		if (!readOnly)
@@ -80,19 +80,19 @@ public class DashboardServlet extends HttpServlet
 			writer.println("<button class=\"command\" onClick=\"selectAll()\">Select all</button>");
 			writer.println("</div></alert>");
 		}
-		for (Node node : ds.appInstances())
+		for (Node node : configurationManager.getConfiguredProject().appInstances())
 		{
-			String version = getVersion(ds, node);
+			String version = getVersion(node);
 			if (versionFilter.filterByVersion(version))
 			{
 				continue;
 			}
 			Node internalNode = node.peer.internalNode();
-			CollectorOnNodeState keepaliveResult = ds.getResult(internalNode, new KeepaliveCollector());
+			CollectorOnNodeState keepaliveResult = dataStore.getResult(internalNode, new KeepaliveCollector());
 			boolean fail = !keepaliveResult.state();
-			for (HttpCollector collector : ds.collectors())
+			for (HttpCollector collector : configurationManager.getConfiguredProject().collectors())
 			{
-				CollectorOnNodeState result = ds.getResult(node, collector);
+				CollectorOnNodeState result = dataStore.getResult(node, collector);
 				if (result == null || !result.state())
 				{
 					fail = true;
@@ -108,9 +108,9 @@ public class DashboardServlet extends HttpServlet
 			String className = fail ? "b" : "g";
 			line += "<li><a class=\"name" + className + "\" href=\"" + node.getLogLink() + "\">" + node.nick() + "</a></li>";
 			// build result buttons for each collector:
-			for (HttpCollector collector : ds.collectors())
+			for (HttpCollector collector : configurationManager.getConfiguredProject().collectors())
 			{
-				CollectorOnNodeState result = ds.getResult(node, collector);
+				CollectorOnNodeState result = dataStore.getResult(node, collector);
 				log.debug(collector + " result for " + node + " is: " + result);
 				if (node.disabled())
 				{
@@ -169,9 +169,9 @@ public class DashboardServlet extends HttpServlet
 		writer.println("</html>");
 		writer.close();
 	}
-	private String getVersion(DataStore ds, Node node)
+	private String getVersion(Node node)
 	{
-		return VersionResult.getVersionOrNull(ds, node);
+		return VersionResult.getVersionOrNull(dataStore, node);
 	}
 	
 	private String getLink(HttpCollector collector, Node node)
@@ -179,11 +179,6 @@ public class DashboardServlet extends HttpServlet
 		return Constants.CLIENT_LINK.replace(Constants.PEER_NAME, node.peer.dnsName()).replace(Constants.NODE_NAME, node.name)
 				.replace(Constants.COLLECTOR_NAME, collector.name)
 				.replace(Constants.CLIENT_PORT, configurationManager.getCurrentGlobalConfiguration().getPeerPort() + "");
-	}
-	
-	private DataStore getDataStore()
-	{
-		return DataStoreRetriever.getD();
 	}
 	
 }

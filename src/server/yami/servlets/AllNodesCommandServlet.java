@@ -12,11 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import yami.configuration.ConfigurationManager;
 import yami.configuration.Node;
-import yami.model.DataStoreRetriever;
 import yami.utils.URLConnectionReader;
 
 import com.google.common.base.Splitter;
+import com.google.inject.Inject;
 
 public class AllNodesCommandServlet extends HttpServlet
 {
@@ -55,6 +56,14 @@ public class AllNodesCommandServlet extends HttpServlet
 	private static final Logger log = Logger.getLogger(AllNodesCommandServlet.class);
 	private static final long serialVersionUID = 1L;
 	private PrintWriter writer;
+	private final ConfigurationManager configurationManager;
+
+	@Inject
+	public AllNodesCommandServlet(ConfigurationManager configurationManager)
+	{
+		super();
+		this.configurationManager = configurationManager;
+	}
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -104,7 +113,7 @@ public class AllNodesCommandServlet extends HttpServlet
 	private void commandNode(String nodeName, ExecutorService executor, String version)
 	{
 		log.info("doGet() - commandNode " + nodeName);
-		Node node = DataStoreRetriever.getD().getNodeByName(nodeName);
+		Node node = configurationManager.getConfiguredProject().getNodeByName(nodeName);
 		String link = node.peer.getPeerSwitchVersionLink(node.name, "") + version;
 		PeerRestartThread worker = new PeerRestartThread(link);
 		executor.execute(worker);

@@ -9,10 +9,13 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.apache.log4j.Logger;
+
 import com.google.common.collect.Lists;
 
 public class Project implements IConfigurationObject
 {
+	private static final Logger log = Logger.getLogger(Project.class);
 	@XmlAttribute
 	public String name;
 	@XmlElement(name = "peer")
@@ -115,5 +118,96 @@ public class Project implements IConfigurationObject
 	public void afterUnmarshal(Unmarshaller u, Object parent)
 	{
 		this.parent = (IConfigurationObject)parent;
+	}
+
+	public Node getNodeByName(String nodeName)
+	{
+		List<Peer> peers = peers();
+		for (Peer peer : peers)
+		{
+			for (Node node : peer.node())
+			{
+				if (nodeName.equals(node.name))
+				{
+					return node;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public List<Node> nodes()
+	{
+		List<Node> $ = newArrayList();
+		List<Peer> peers = peers();
+		for (Peer peer : peers)
+		{
+			$.addAll(peer.node());
+		}
+		return $;
+	}
+
+	public List<Peer> peers() {
+		return peers;
+	}
+
+	public List<HttpCollector> collectors()
+	{
+		List<HttpCollector> $ = new ArrayList<HttpCollector>();
+		$.addAll(configuration().collectors);
+		return $;
+	}
+	
+	public List<HttpCollector> implicitCollectors()
+	{
+		List<HttpCollector> $ = new ArrayList<HttpCollector>();
+		$.add(new VersionCollector());
+		return $;
+	}
+	
+	public List<MailPolicy> mailingPolicy()
+	{
+		return configuration().mailingPolicy;
+	}
+	
+	public List<String> mailingList()
+	{
+		return configuration().mailingList;
+	}
+	
+	private Project configuration()
+	{
+		return this;
+	}
+
+	public List<Node> internalNodes()
+	{
+		List<Node> $ = newArrayList();
+		for (Peer peer : peers())
+		{
+			$.add(peer.internalNode());
+		}
+		return $;
+	}
+	
+	public List<Node> getNodes(String hostname)
+	{
+		boolean found = false;
+		List<Node> nodes = new ArrayList<Node>();
+		for (Node node : appInstances())
+		{
+			if (!hostname.equals(node.peer.name))
+			{
+				continue;
+			}
+			found = true;
+			nodes.add(node);
+		}
+		if (!found)
+		{
+			log.warn("Peer " + hostname + " has no monitoring nodes configured");
+			throw new RuntimeException("Peer is not configured to run on " + hostname);
+		}
+		return nodes;
 	}
 }

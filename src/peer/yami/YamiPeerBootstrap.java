@@ -22,9 +22,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import yami.configuration.ConfigurationManager;
 import yami.configuration.Node;
-import yami.configuration.Nodes;
 import yami.model.Constants;
-import yami.model.DataStoreRetriever;
 import yami.servlets.InvalidRequestServlet;
 
 import com.google.common.collect.Lists;
@@ -61,7 +59,7 @@ public class YamiPeerBootstrap
 		injector = Guice.createInjector(new YamiPeerModule(), new YamiPeerServletModule(), new AbstractModule() {
 		    @Override
 		    protected void configure() {
-		        binder().requireExplicitBindings();
+//		        binder().requireExplicitBindings();
 		        bind(GuiceFilter.class);
 		    }
 		});
@@ -76,7 +74,7 @@ public class YamiPeerBootstrap
 		String hostname = java.net.InetAddress.getLocalHost().getHostName();
 		log.info("Hostname " + hostname);
 		log.info("Peer will try to start on port " + port + " from directory " + Constants.getInstallDir());
-		List<Node> nodes = Nodes.getNodes(hostname, DataStoreRetriever.getD());
+		List<Node> nodes = injector.getInstance(ConfigurationManager.class).getConfiguredProject().getNodes(hostname);
 		Node internalNode = nodes.get(0).peer.internalNode();//new Node("yami_internal_node", "yami_internal_node", );
 		startInternalNodeMonitoring(internalNode );
 		startNodeMonitoringThreads(nodes);

@@ -4,6 +4,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
+import yami.model.Constants;
+
 /**
  * @author oshai 
  * currently names has to be unique
@@ -57,7 +59,7 @@ public class Node implements IConfigurationObject
 	
 	public String getLogLink()
 	{
-		return "http://" + peer.dnsName() + ":" + getConfiguration().getCurrentGlobalConfiguration().getPeerPort();
+		return "http://" + peer.dnsName() + ":" + getConfiguration().getCurrentGlobalConfiguration().getPeerPort() + Constants.RESOURCESS_CONTEXT;
 	}
 	
 	public boolean disabled()

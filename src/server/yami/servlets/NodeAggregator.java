@@ -1,26 +1,23 @@
 package yami.servlets;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 import java.util.List;
 import java.util.Map;
 
 import yami.configuration.Node;
-import yami.model.DataStore;
-import yami.model.DataStoreRetriever;
+import yami.model.IDataStore;
 import yami.model.VersionResult;
 
 public class NodeAggregator
 {
 
-	public Map<String, VersionItem> aggregate()
+	public Map<String, VersionItem> aggregate(List<Node> nodes, IDataStore dataStore)
 	{
-		DataStore d = DataStoreRetriever.getD();
 		Map<String, VersionItem> items = newHashMap();
-		List<Node> nodes = d.nodes();
 		for (Node node : nodes)
 		{
-			String version = VersionResult.getVersion(d, node);
+			String version = VersionResult.getVersion(dataStore, node);
 			VersionItem versionItem = items.get(version);
 			if (null == versionItem)
 			{

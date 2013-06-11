@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import yami.configuration.ConfigurationManager;
 import yami.configuration.HttpCollector;
 import yami.configuration.Node;
 import yami.mail.CollectorOnNodeState;
@@ -17,17 +18,19 @@ public class YamiMailSender
 {
 	private static final Logger log = Logger.getLogger(YamiMailSender.class);
 	private SendMailStrategy sendMailStrategy;
+	private final ConfigurationManager configurationManager;
 	
 	@Inject
-	public YamiMailSender(SendMailStrategy sendMailStrategy)
+	public YamiMailSender(SendMailStrategy sendMailStrategy, ConfigurationManager configurationManager)
 	{
 		super();
 		this.sendMailStrategy = sendMailStrategy;
+		this.configurationManager = configurationManager;
 	}
 	
 	public void sendMailIfNeeded(IDataStore d, HttpCollector c, Node n, CollectorOnNodeState state)
 	{
-		ShouldSendMailValidator needMailValidator = new ShouldSendMailValidator(c, n, state, d.mailingPolicy(), d);
+		ShouldSendMailValidator needMailValidator = new ShouldSendMailValidator(c, n, state, configurationManager.getConfiguredProject().mailingPolicy(), d);
 		if (!needMailValidator.shouldMail())
 		{
 			return;
@@ -49,7 +52,7 @@ public class YamiMailSender
 		}
 		if (d != null)
 		{
-			mailingList.addAll(d.mailingList());
+			mailingList.addAll(configurationManager.getConfiguredProject().mailingList());
 		}
 		if (c != null && c.mailingList() != null)
 		{

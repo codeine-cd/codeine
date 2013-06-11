@@ -16,11 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import yami.configuration.ConfigurationManager;
 import yami.configuration.Peer;
 import yami.model.Constants;
-import yami.model.DataStoreRetriever;
+import yami.model.IDataStore;
 import yami.model.Result;
 import yami.utils.ProcessExecuter;
+
+import com.google.inject.Inject;
 
 public class AllPeersRestartServlet extends HttpServlet
 {
@@ -62,6 +65,16 @@ public class AllPeersRestartServlet extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	private static final long SILENT_PERIOD = TimeUnit.MINUTES.toMillis(5);
 	private PrintWriter writer;
+	private final ConfigurationManager configurationManager;
+	private IDataStore dataStore;
+
+	@Inject
+	public AllPeersRestartServlet(ConfigurationManager configurationManager, IDataStore dataStore)
+	{
+		super();
+		this.configurationManager = configurationManager;
+		this.dataStore = dataStore; 
+	}
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -82,7 +95,7 @@ public class AllPeersRestartServlet extends HttpServlet
 		writer = res.getWriter();
 		writeLine("Recived restart all peers request");
 		ExecutorService executor = Executors.newFixedThreadPool(10);
-		for (Peer peer : DataStoreRetriever.getD().peers())
+		for (Peer peer : configurationManager.getConfiguredProject().peers())
 		{
 			restartPeer(peer, executor);
 		}
@@ -105,7 +118,7 @@ public class AllPeersRestartServlet extends HttpServlet
 	private void restartPeer(Peer peer, ExecutorService executor)
 	{
 		log.info("doGet() - restarting " + peer);
-		DataStoreRetriever.getD().addSilentPeriod(peer, System.currentTimeMillis() + SILENT_PERIOD);
+		dataStore.addSilentPeriod(peer, System.currentTimeMillis() + SILENT_PERIOD);
 		final List<String> command = newArrayList(Constants.getInstallDir() + "/bin/restartAllPeers");
 		command.add(peer.name);
 		PeerRestartThread worker = new PeerRestartThread(peer, command);
