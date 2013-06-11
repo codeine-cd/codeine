@@ -24,7 +24,8 @@ $date = $year.$mon.$mday;
 $version = "$major.$minor.$build.$date";
 print "new version is $version\n";
 system("echo 'YamiVersion.build=$build\nYamiVersion.major=$major\nYamiVersion.minor=$minor\nYamiVersion.date=$date' > $propertiesFile");
-	
+system("git commit -m \"bounce version to $version\" $propertiesFile");
+system("git push");
 
 sub getVersion
 {

@@ -16,7 +16,7 @@ public class HtmlWriter
 		writer.println("<head>");
 		writer.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
 		// writer.println("<meta http-equiv=\"refresh\" content=\"5\" />");
-		writer.println("<title>yami dashboard - " + cm.getConfiguredProject().name + "</title>");
+		writer.println("<title>" + cm.getConfiguredProject().name + " - yami dashboard</title>");
 		writer.println("<link rel=\"stylesheet\" href=\".."+Constants.RESOURCESS_CONTEXT+"/style.css\" type=\"text/css\" />");
 		writer.println("<script src=\".."+Constants.RESOURCESS_CONTEXT+"/dashboard.js\" type=\"text/javascript\" ></script>");
 		writer.println("");
