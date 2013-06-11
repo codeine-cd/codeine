@@ -3,12 +3,13 @@ package yami.configuration;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.google.common.collect.Lists;
 
-public class HttpCollector
+public class HttpCollector implements IConfigurationObject
 {
 	@XmlAttribute
 	public String name;
@@ -21,6 +22,7 @@ public class HttpCollector
 	public List<CollectorRule> rules = Lists.newLinkedList();
 	public List<String> mailingList = Lists.newLinkedList();
 	public Integer minInterval;
+	private IConfigurationObject parent;
 	
 	public HttpCollector()
 	{
@@ -107,12 +109,16 @@ public class HttpCollector
 		return true;
 	}
 
-
-
+	@Override
+	public String toString()
+	{
+		return "HttpCollector [name=" + name + "]";
+	}
+	
 	public List<HttpCollector> dependsOn()
 	{
 		final List<HttpCollector> l = Lists.newLinkedList();
-		Project p = ConfigurationManager.getInstance().getConfiguredProject();
+		Project p = getConfiguration().getConfiguredProject();
 		for (HttpCollector c : p.collectors)
 		{
 			for (String name1 : dependsOn)
@@ -126,14 +132,20 @@ public class HttpCollector
 		return l;
 	}
 	
-	@Override
-	public String toString()
-	{
-		return "HttpCollector [name=" + name + "]";
-	}
-	
 	public Collection<String> mailingList()
 	{
 		return mailingList;
+	}
+
+
+
+	@Override
+	public Yami getConfiguration() {
+		return parent.getConfiguration();
+	}
+	
+	public void afterUnmarshal(Unmarshaller u, Object parent)
+	{
+		this.parent = (IConfigurationObject)parent;
 	}
 }

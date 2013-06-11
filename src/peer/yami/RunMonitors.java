@@ -30,10 +30,12 @@ public class RunMonitors implements Task
 	private Node node;
 	private static final Logger log = Logger.getLogger(RunMonitors.class);
 	private Map<String, Long> lastRun = newHashMap();
+	private ConfigurationManager configurationManager;
 	
-	public RunMonitors(Node node)
+	public RunMonitors(Node node, ConfigurationManager configurationManager)
 	{
 		this.node = node;
+		this.configurationManager = configurationManager;
 	}
 	
 	@Override
@@ -41,7 +43,7 @@ public class RunMonitors implements Task
 	{
 		for (File monitor : getMonitors())
 		{
-			HttpCollector c = ConfigurationManager.getInstance().getConfiguredProject().getCollector(monitor.getName());
+			HttpCollector c = configurationManager.getConfiguredProject().getCollector(monitor.getName());
 			if (null == c)
 			{
 			    if (monitor.getName().equals(new VersionCollector().name))

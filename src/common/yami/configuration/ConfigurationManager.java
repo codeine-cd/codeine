@@ -1,8 +1,6 @@
 package yami.configuration;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.util.Date;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -16,31 +14,19 @@ import yami.model.Constants;
 public class ConfigurationManager
 {
 	private static final Logger log = Logger.getLogger(ConfigurationManager.class);
-	private static ConfigurationManager instance = new ConfigurationManager();
 	
 	private Yami configuration = null;
-	private Date updateTime = null;
-	
-	public static ConfigurationManager getInstance()
-	{
-		return instance;
-	}
 	
 	public ConfigurationManager()
 	{
 		try
 		{
-			updateTime = new Date();
 			configuration = getConfFromFile(Constants.getConfPath());
 			applySystemPropertiesOverXML();
 		}
-		catch (RuntimeException e)
-		{
-			log.warn("Failed to read new configuration from " + Constants.getConfPath() + ". Using original from " + DateFormat.getDateTimeInstance().format(updateTime), e);
-		}
 		catch (Exception e)
 		{
-			log.warn("Configuration manager failed to start, aborting.", e);
+			log.warn("Failed to read new configuration from " + Constants.getConfPath(), e);
 		}
 		
 	}
@@ -80,31 +66,18 @@ public class ConfigurationManager
 		}
 	}
 	
-	synchronized public Yami getCurrentConfiguration()
+	public Yami getCurrentConfiguration()
 	{
 		return configuration;
 	}
 	
-	synchronized public void setCurrentConfiguration(Yami newConf)
+	public Project getConfiguredProject()
 	{
-		configuration = newConf;
-	}
-	
-	synchronized public Project getConfiguredProject()
-	{
-		if (null == configuration)
-		{
-			return null;
-		}
 		return configuration.project;
 	}
 	
-	synchronized public GlobalConfiguration getCurrentGlobalConfiguration()
+	public GlobalConfiguration getCurrentGlobalConfiguration()
 	{
-		if (null == configuration)
-		{
-			return null;
-		}
 		return configuration.conf;
 	}
 }

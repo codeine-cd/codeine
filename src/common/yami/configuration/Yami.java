@@ -1,9 +1,9 @@
 package yami.configuration;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Yami
+public class Yami implements IConfigurationObject
 {
 	public Project project = new Project();
 	public GlobalConfiguration conf = new GlobalConfiguration();
@@ -42,5 +42,15 @@ public class Yami
 		else if (!project.equals(other.project))
 			return false;
 		return true;
+	}
+	public GlobalConfiguration getCurrentGlobalConfiguration() {
+		return conf;
+	}
+	public Project getConfiguredProject() {
+		return project;
+	}
+	@Override
+	public Yami getConfiguration() {
+		return this;
 	}
 }

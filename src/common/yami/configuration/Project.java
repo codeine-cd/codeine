@@ -1,16 +1,17 @@
 package yami.configuration;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.google.common.collect.Lists;
 
-public class Project
+public class Project implements IConfigurationObject
 {
 	@XmlAttribute
 	public String name;
@@ -21,6 +22,7 @@ public class Project
 	public List<String> mailingList = Lists.newArrayList();
 	public List<MailPolicy> mailingPolicy = newArrayList();
 	public List<Command> command = Lists.newArrayList();
+	private IConfigurationObject parent;
 	
 	public List<Node> appInstances()
 	{
@@ -103,5 +105,15 @@ public class Project
 		else if (!peers.equals(other.peers))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Yami getConfiguration() {
+		return parent.getConfiguration();
+	}
+	
+	public void afterUnmarshal(Unmarshaller u, Object parent)
+	{
+		this.parent = (IConfigurationObject)parent;
 	}
 }

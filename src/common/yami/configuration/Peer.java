@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import yami.model.Constants;
 
 import com.google.common.collect.Lists;
 
-public class Peer
+public class Peer implements IConfigurationObject
 {
 	public List<Node> node = new ArrayList<Node>();
 	public String dns_name;
@@ -18,6 +19,7 @@ public class Peer
 	public String name;
 	public List<String> mailingList = new ArrayList<String>();
 	private InternalNode internalNode = new InternalNode(this);
+	private IConfigurationObject parent;
 	
 	public Peer()
 	{
@@ -26,7 +28,7 @@ public class Peer
 	
 	public String getPeerLink()
 	{
-		GlobalConfiguration gc = ConfigurationManager.getInstance().getCurrentGlobalConfiguration();
+		GlobalConfiguration gc = getConfiguration().getCurrentGlobalConfiguration();
 		return "http://" + dnsName() + ":" + gc.getPeerPort();
 	}
 	
@@ -109,6 +111,16 @@ public class Peer
 			return Lists.newArrayList(new Node(name, null, this));
 		}
 		return node;
+	}
+
+	@Override
+	public Yami getConfiguration() {
+		return parent.getConfiguration();
+	}
+	
+	public void afterUnmarshal(Unmarshaller u, Object parent)
+	{
+		this.parent = (IConfigurationObject)parent;
 	}
 	
 	

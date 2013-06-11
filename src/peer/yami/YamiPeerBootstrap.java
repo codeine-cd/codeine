@@ -41,7 +41,9 @@ public class YamiPeerBootstrap
 	public static void main(String[] args)
 	{
 		System.out.println("Starting yami peer " + YamiVersion.get());
-		setLogger(Constants.getInstallDir() + "/" + Constants.CLIENT_LOG);
+		String logfile = Constants.getInstallDir() + "/" + Constants.CLIENT_LOG;
+		System.out.println("writing log to " + logfile);
+		setLogger(logfile);
 		try
 		{
 			new YamiPeerBootstrap().execute();
@@ -95,7 +97,7 @@ public class YamiPeerBootstrap
 	}
 	
 	private void startInternalNodeMonitoring(Node node) {
-	    new Thread(new PeriodicExecuter(1, new RunInternalMonitors(node))).start();
+	    new Thread(new PeriodicExecuter(1, new RunInternalMonitors(node, injector.getInstance(ConfigurationManager.class)))).start();
 	}
 
 	private void startNodeMonitoringThreads(List<Node> nodes)
@@ -108,7 +110,7 @@ public class YamiPeerBootstrap
 				continue;
 			}
 			log.info("Starting PeriodicExecuter thread for node " + node.name);
-			new Thread(new PeriodicExecuter(1, new RunMonitors(node))).start();
+			new Thread(new PeriodicExecuter(1, new RunMonitors(node, injector.getInstance(ConfigurationManager.class)))).start();
 		}
 	}
 	

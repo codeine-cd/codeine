@@ -5,9 +5,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * @author oshai currently names has to be unique
+ * @author oshai 
+ * currently names has to be unique
  */
-public class Node
+public class Node implements IConfigurationObject
 {
 	public String nick;
 	@XmlAttribute
@@ -56,7 +57,7 @@ public class Node
 	
 	public String getLogLink()
 	{
-		return "http://" + peer.dnsName() + ":" + ConfigurationManager.getInstance().getCurrentGlobalConfiguration().getPeerPort();
+		return "http://" + peer.dnsName() + ":" + getConfiguration().getCurrentGlobalConfiguration().getPeerPort();
 	}
 	
 	public boolean disabled()
@@ -106,6 +107,11 @@ public class Node
 	    } else if (!peer.equals(other.peer))
 		return false;
 	    return true;
+	}
+
+	@Override
+	public Yami getConfiguration() {
+		return peer.getConfiguration();
 	}
 	
 	

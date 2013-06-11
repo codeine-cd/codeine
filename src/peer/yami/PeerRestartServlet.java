@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 
+import yami.configuration.ConfigurationManager;
 import yami.configuration.GlobalConfiguration;
 
 import com.google.inject.Inject;
@@ -21,6 +22,8 @@ public class PeerRestartServlet extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	@Inject
 	private Server peerHTTPserver;
+	@Inject
+	private ConfigurationManager configurationManager;
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
@@ -28,7 +31,7 @@ public class PeerRestartServlet extends HttpServlet
 		log.info("ClientRestartServlet started");
 		PrintWriter writer = res.getWriter();
 		writer.println("Recived restart request");
-		new PeerRestartThread(peerHTTPserver,writer);
+		new PeerRestartThread(peerHTTPserver,writer,configurationManager);
 	}
 	
 	boolean verifyConfiguration(GlobalConfiguration conf)

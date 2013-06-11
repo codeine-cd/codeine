@@ -2,6 +2,8 @@ package yami;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 
 import yami.configuration.HttpCollector;
@@ -16,6 +18,7 @@ public class YamiMailSender
 	private static final Logger log = Logger.getLogger(YamiMailSender.class);
 	private SendMailStrategy sendMailStrategy;
 	
+	@Inject
 	public YamiMailSender(SendMailStrategy sendMailStrategy)
 	{
 		super();

@@ -1,8 +1,8 @@
 package yami;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -198,13 +198,6 @@ public class ShouldSendMailValidatorTest
 	{
 		return new HttpCollector()
 		{
-			private List<HttpCollector> l = new ArrayList<HttpCollector>();
-			
-			@Override
-			public List<HttpCollector> dependsOn()
-			{
-				return l;
-			}
 		};
 	}
 	

@@ -35,7 +35,9 @@ public class YamiServerBootstrap
 	{
 		System.out.println("Starting yami server " + YamiVersion.get());
 		String installDir = Constants.getInstallDir();
-		setLogger(installDir + "/http-root/" + Constants.SERVER_LOG);
+		String logfile = installDir + "/http-root/" + Constants.SERVER_LOG;
+		System.out.println("writing log to " + logfile);
+		setLogger(logfile);
 		configureLogLevel();
 		new YamiServerBootstrap().runServer();
 	}
@@ -45,7 +47,6 @@ public class YamiServerBootstrap
 		injector = Guice.createInjector(new YamiServerModule(), new YamiServerServletModule(), new AbstractModule() {
 		    @Override
 		    protected void configure() {
-		        binder().requireExplicitBindings();
 		        bind(GuiceFilter.class);
 		    }
 		});
@@ -69,7 +70,7 @@ public class YamiServerBootstrap
 		server.setHandler(contexts);
 		try
 		{
-			new Thread(new UpdaterThread(new YamiMailSender(injector.getInstance(SendMailStrategy.class)), injector.getInstance(CollectorHttpResultFetcher.class), true)).start();
+			new Thread(new UpdaterThread(injector.getInstance(YamiMailSender.class), injector.getInstance(CollectorHttpResultFetcher.class), true)).start();
 			server.start();
 		}
 		catch (Exception e)

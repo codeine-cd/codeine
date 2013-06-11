@@ -18,11 +18,13 @@ public class PeerRestartThread
 	private Thread thread;
 	private Server peerHTTPserver;
 	private PrintWriter writer;
+	private ConfigurationManager configurationManager;
 	
-	public PeerRestartThread(Server peerHTTPserver, PrintWriter writer)
+	public PeerRestartThread(Server peerHTTPserver, PrintWriter writer, ConfigurationManager configurationManager)
 	{
 		this.peerHTTPserver = peerHTTPserver;
 		this.writer = writer;
+		this.configurationManager = configurationManager;
 		
 		thread = new Thread(new Runnable()
 		{
@@ -79,7 +81,7 @@ public class PeerRestartThread
 	private String[] createRestartCmd()
 	{
 		// TODO yshabi : change hard coded strings
-		ConfigurationManager cm = ConfigurationManager.getInstance();
+		ConfigurationManager cm = configurationManager;
 		GlobalConfiguration gc = cm.getConfFromFile(Constants.getConfPath()).conf;
 		String[] cmd = {
 				"/bin/sh", "-c", "cd / ; /usr/bin/nohup " + Constants.getInstallDir() + "/bin/startYamiClient.pl --update --kill --debug --conf_file " + gc.getConfFileName() + " >/dev/null 2>/dev/null </dev/null &"
