@@ -1,6 +1,9 @@
 yami
 ====
 
+** important : project moved to https://code.google.com/p/codeine-continuous-deployment/
+
+
 how to install:
 1. clone the repository
 2. dist directory is the root for the application (cd dist)
