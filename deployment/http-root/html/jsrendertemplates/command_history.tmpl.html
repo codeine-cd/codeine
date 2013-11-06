@@ -1,0 +1,27 @@
+<li>
+	{{if finished}}	
+	<a class="commandStatus" data-placement="left" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
+		<span style="font-size: smaller;">
+			<i class="icon-play"></i> 
+			{{:name}} - {{:date}}
+		</span>
+	</a>
+	{{else}}
+	<span style="font-size: smaller;">
+		<div class="deleteCommand" data-id="{{:id}}" data-project="{{:project}}">
+		<i class="fa fa-times-circle error fa-lg"></i>
+		</div>
+		<a class="commandStatus" data-placement="left" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
+			{{:name}} - {{:date}}
+		</a>
+	</span>
+	{{/if}} 
+	{{if finished}}
+    	<div class="progress">
+	{{else}}
+	    <div class="progress progress-striped active">
+	{{/if}}
+  		<div class="bar bar-success" style="width: {{:successPercent}}%;"></div>
+  		<div class="bar bar-danger" style="width: {{:failPercent}}%;"></div>
+</div>
+</li>

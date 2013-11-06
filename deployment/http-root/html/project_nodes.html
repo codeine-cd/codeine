@@ -1,0 +1,78 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+      <form class="form-inline navbar-search pull-left" action="">
+      		<label class="checkbox" id="selecAllLabel">
+    			<input type="checkbox" id="selectAll"> Select All
+ 			</label>&nbsp;&nbsp;
+         	<input type="text" id="nodesFilter" class="search-query span2" placeholder="Filter nodes"></input>
+		</form>
+        <ul class="nav">
+          <li class="dropdown">
+            <a href="javascript: void();" class="dropdown-toggle" data-toggle="dropdown"><span id="monitor_drop_down">Any Alert</span>
+            <b class="caret"></b></a>
+            <ul class="dropdown-menu" style="min-width: 300px;" >
+              <li id="Any_Alert" class="codeine_monitor active" data-monitor-name="Any Alert"><a href="javascript: void();">Any Alert <span class="badge pull-right"></span></a></li>
+              {{#monitors}}
+              <li id="{{this}}" class="codeine_monitor" data-monitor-name="{{this}}"><a href="javascript: void();">{{this}} <span class="badge pull-right"></span></a></li>
+              {{/monitors}}
+              <li id="All_Nodes" class="codeine_monitor" data-monitor-name="All Nodes"><a href="javascript: void();">All Nodes <span class="badge pull-right"></span></a></li>
+            </ul>
+          </li>
+        </ul>
+        <i id="monitorHelp" style="margin-top: 10px;" rel="popover" data-placement="bottom" data-title="Filtering Options" data-trigger="hover" class="icon-question-sign"></i>
+        <ul class="nav pull-right">
+          <li class="divider-vertical"></li>
+          <li class="dropdown" id="commandsDropdown">
+            <a href="javascript: void();" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              {{#commands}}
+              <li class="codeine_command" data-command-name="{{name}}" ><a href="javascript: void();">{{alias}}</a></li>
+              {{/commands}}
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.nav-collapse -->
+    </div>
+  </div><!-- /navbar-inner -->
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>{{versionName}}</strong>
+		<div class="text-info pull-right"><small> Showing <span id="numOfNodes"></span> nodes</small></div>
+	</div>
+ 	<div class="panel-body">
+ 		{{#nodes}}
+		<div class="row node" id="{{node_name}}" style="display: none;">
+			<form class="form-inline span9">
+				<fieldset>
+					<div class="span3">
+					<label class="checkbox">
+	    				<input id="checkbox_{{-index}}" data-peer-address={{peer_address}} data-node-name={{node_name}} data-node-alias={{node_alias}} type="checkbox">
+	 				</label>&nbsp;&nbsp;
+	 				{{node_alias}}
+	 				</div>
+	 				<div class="span5">
+		 				{{#failed_monitors}}
+		 				<a href="{{link}}"><span class="label label-important">{{label}}</span></a>
+		 				{{/failed_monitors}}
+		 				{{#success_monitors}}
+		 				<i class="fa fa-check-circle fa-lg success"></i>
+		 				{{/success_monitors}}
+	 				</div>
+				</fieldset>
+			</form>
+		</div>
+		{{/nodes}}
+	</div>
+</div>
+<script>
+var nodesJson = {{nodesJson}};
+var readOnly = {{readonly}};
+</script>

@@ -1,0 +1,21 @@
+.success {
+	color: green;
+}
+
+.error {
+	color: red;
+}
+
+
+.info {
+	color: blue;
+}
+
+.hidden {
+	display: none;
+}
+
+.deleteCommand { 
+	cursor: pointer;
+	display: inline-block;
+}

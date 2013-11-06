@@ -1,0 +1,20 @@
+package codeine;
+
+import codeine.jsons.nodes.NodesManager;
+import codeine.jsons.peer_status.PeerStatus;
+import codeine.nodes.NodesManagerPeer;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
+
+public class CodeinePeerModule extends AbstractModule {
+
+	@Override
+	protected void configure() {
+		bind(PeerStatus.class).in(Scopes.SINGLETON);
+		bind(PeerStatusChangedUpdater.class).in(Scopes.SINGLETON);
+		bind(NodesManager.class).to(NodesManagerPeer.class).in(Scopes.SINGLETON);
+		bind(SnoozeKeeper.class).in(Scopes.SINGLETON);
+	}
+
+}

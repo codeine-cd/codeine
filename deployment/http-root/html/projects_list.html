@@ -1,0 +1,14 @@
+<div id="searchHeader" style="display: none;">
+	<h3>Showing results for '<span id="searchTerm"></span>'</h3>
+</div>
+<div class="panel panel-default">
+	
+  <!-- Default panel contents -->
+  <div class="panel-heading">Projects</div>
+  <!-- List group -->
+  <ul class="list-group">
+	{{#project}}<li class="list-group-item"><a href="{{link}}"><i class="icon-folder-close"></i> {{label}}</a>
+				<span class="badge badge-info">{{nodes}}</span></li>
+	{{/project}}
+  </ul>
+</div>

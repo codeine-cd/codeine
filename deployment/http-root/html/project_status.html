@@ -1,0 +1,85 @@
+<div class="navbar" id="commandsNavbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+      	<form class="form-inline navbar-search pull-left" action="">
+      		<label class="checkbox" style="margin-top: 5px;">
+    			<input type="checkbox" id="selectAll"> Select All
+ 			</label>&nbsp;&nbsp;
+		</form>
+        <ul class="nav">
+          <li class="dropdown">
+            <a href="javascript: void();" class="dropdown-toggle" data-toggle="dropdown"><span id="nodes_drop_down">All Nodes</span>
+            <b class="caret"></b></a>
+            <ul class="dropdown-menu" style="min-width: 300px;" >
+              <li class="codeine_node_selector" data-name="All Nodes" id="All_Nodes" class="active"><a href="javascript: void();">All Nodes</a></li>
+              <li class="codeine_node_selector" data-name="Failing Nodes" id="Failing_Nodes"><a href="javascript: void();">Failing Nodes</a></li>
+              <li class="codeine_node_selector" data-name="Number of Nodes" id="Number_Nodes"><a href="javascript: void();" >Number of Nodes</a></li>
+            </ul>
+          </li>
+        </ul>
+        &nbsp;&nbsp;<i id="monitorHelp" style="margin-top: 10px;" rel="popover" data-placement="bottom" data-title="Filtering Options" data-trigger="hover" class="icon-question-sign"></i>
+        <form class="form-inline navbar-search pull-left" action="">
+      		<input type="text" id="numOfNodes" class="span2" placeholder="Set total number of nodes" style="display: none;"></input>
+		</form>
+        <ul class="nav pull-right">
+          <li class="divider-vertical"></li>
+          <li class="dropdown" id="commandsDropdown">
+            <a href="javascript: void();" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              {{#commands}}
+              <li class="codeine_command" data-command-name="{{name}}" ><a href="javascript: void();">{{alias}}</a></li>
+              {{/commands}}
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.nav-collapse -->
+    </div>
+  </div><!-- /navbar-inner -->
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading"><strong>{{projectName}} Project Status</strong></div>
+ 	<div class="panel-body">
+ 	{{#version}}
+		<div class="row">
+			<form class="form-inline span9" style="margin-bottom: 0px;"><fieldset>
+				<div class="span2">
+					<span class="checkbox">
+	 					<input id="checkbox_{{-index}}" data-version-name="{{version_name}}" type="checkbox">
+					</span>
+					<a href="/dashboard?version={{version_name}}&project={{projectName}}">
+					
+					<span class="version_label">{{version_label}}</span>
+					</a>
+				</div>
+				<div class="span1">
+					<a href="/dashboard?version={{version_name}}&project={{projectName}}">
+						<span class="pull-left badge badge-info">{{count}}</span>
+						<i class="pull-right fa fa-exclamation" style="color: red;{{hideNoErrors}}"></i>
+					</a>
+				</div>
+				<div class="span5">
+					<div class="progress">
+					  <a href="/dashboard?version={{version_name}}&project={{projectName}}"><div class="bar bar-success" style="width: {{successPercent}}%;"></div></a>
+					  <a href="/dashboard?version={{version_name}}&project={{projectName}}"><div class="bar bar-danger" style="width: {{failPercent}}%;"></div></a>
+					</div>
+				</div>
+			</fieldset></form>
+		</div>
+	{{/version}}
+		<hr/>
+		<div class="row">
+			<div class="span8">
+				<a href="/dashboard?version=All versions&project={{projectName}}"><strong>Total Nodes:</strong> <span class="badge badge-success">{{total}}</span></a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+var readOnly = {{readonly}};
+</script>
