@@ -1,4 +1,4 @@
-yami
+codeine
 ====
 
 ** important : project moved to https://code.google.com/p/codeine-continuous-deployment/
