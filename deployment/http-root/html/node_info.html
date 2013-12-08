@@ -1,0 +1,72 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+        <ul class="nav pull-right">
+          <li class="divider-vertical"></li>
+          <li class="dropdown" id="commandsDropdown">
+            <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              {{#commands}}
+              <li class="codeine_command" data-command-name="{{name}}" ><a href="javascript: void(0);">{{alias}}</a></li>
+              {{/commands}}
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.nav-collapse -->
+    </div>
+  </div><!-- /navbar-inner -->
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<strong>Node Info</strong>
+	</div>
+ 	<div class="panel-body">
+ 		<div class="row">
+ 			<div class="span2"><strong>Alias:</strong></div><div class="span6"> {{alias}}</div>
+ 		</div>
+ 		<br/>
+ 		<div class="row">
+ 			<div class="span2"><strong>Name:</strong></div><div class="span6"> {{name}}</div>
+ 		</div>
+ 		<br/>
+ 		<div class="row">
+ 			<div class="span2"><strong>Version:</strong></div><div class="span6"> {{version}}</div>
+ 		</div>
+ 		<br/>
+ 		<div class="row">
+ 			<div class="span2"><strong>Peer Status:</strong></div><div class="span6"><i data-peer-status="{{peer_status}}" class="peerStatus"></i> {{peer_status}}</div>
+ 		</div>
+ 		<br/>
+ 	</div>
+ 	
+ 	<div class="panel-heading">
+		<strong>Node Monitors</strong>
+	</div>
+ 	<div class="panel-body">
+ 		{{#monitors}}
+ 		<div class="row">
+ 			<div class="span8">
+ 				<a href="{{link}}"><i class="{{class_name}} fa fa-desktop lg"></i>  {{label}}</a>
+ 			</div>
+ 			<!-- 
+ 			<div class="span2">
+ 				<a href="{{link}}"><i class="{{class_name}} fa fa-desktop lg"></i></a>
+ 			</div> -->
+ 		</div>
+ 		<br/>
+ 		{{/monitors}}
+ 	</div>
+</div>
+<script>
+var readOnly = {{readonly}};
+var version = "{{version}}";
+var name = "{{name}}";
+var alias = "{{alias}}";
+var peer_address = "{{peer_address}}";
+</script>

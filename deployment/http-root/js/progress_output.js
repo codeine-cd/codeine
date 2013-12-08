@@ -9,9 +9,13 @@ $(document).ready( function () {
 
 function addLines() {
   console.log("addLines");
-  $.get("/file-getter?project=" + projectName + "&path=" + path + "&line=" + lines, function( data ) {
+  $.get("/file-getter?project=" + encodeURIComponent(projectName) + "&path=" + encodeURIComponent(path) + "&line=" + encodeURIComponent(lines), function( data ) {
     var obj = JSON.parse(data);
-    $("#output_pre" ).append( obj.lines.join("\n") );
+    $("#output_pre" ).append( obj.lines.join("\n"));
+    if (obj.lines.length > 0)
+    {
+      $("#output_pre" ).append("\n");
+    }
     lines += obj.lines.length;
     if (obj.eof) {
       clearInterval(interval);

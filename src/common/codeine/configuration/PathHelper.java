@@ -26,7 +26,10 @@ public class PathHelper {
 	}
 
 	public String getMonitorOutputDir(String projectName) {
-		return getProjectsDir() + "/" + projectName + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
+		return getMonitorOutputDirAllProjects() + "/" + projectName + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
+	}
+	public String getMonitorOutputDirAllProjects() {
+		return getProjectsDir();
 	}
 
 	public String getMonitorOutputDirWithNode(String projectName, String nodeName) {
@@ -34,39 +37,31 @@ public class PathHelper {
 	}
 
 	public String getProjectsDir() {
-		return Constants.getInstallDir() + Constants.PROJECT_PATH;
+		return Constants.getWorkarea() + Constants.PROJECT_PATH;
 	}
 
 	public static String getReadLogs() {
-		return getInstallDir() + "/bin/readLogs";
+		return Constants.getHostWorkareaDir() + "/bin/readLogs";
 	}
 
 	public static String getTarFile() {
-		return getInstallDir() + "/tars/codeine.tar.gz";
+		return Constants.getHostWorkareaDir() + "/tars/codeine.tar.gz";
 	}
 
 	public String getPersistentDir() {
-		return Constants.getInstallDir() + "/conf";
+		return Constants.getPersistentDir();
 	}
 
 	public String getVersionMappingFile() {
 		return getPersistentDir() + "/VersionsMapping.json";
 	}
 
-	public String getPeersListFile() {
-		return getPersistentDir() + "/PeersList.json";
-	}
-
 	public String getPidFile() {
-		return getInstallDir() + "/codeine.peer.pid";
-	}
-
-	private static String getInstallDir() {
-		return Constants.getInstallDir() + "/../..";
+		return Constants.getHostWorkareaDir() + "/codeine.peer.pid";
 	}
 
 	public String getPortFile() {
-		return getInstallDir() + "/codeine.peer.port";
+		return Constants.getHostWorkareaDir() + "/codeine.peer.port";
 	}
 
 	public String getVersionLabelFile(String projectName) {
@@ -94,6 +89,10 @@ public class PathHelper {
 
 	public List<File> getPlugins(String project) {
 		return getFilesForDir(getPluginsDir(project));
+	}
+
+	public String getProjectDir(String projectName) {
+		return getProjectsDir() + "/" + projectName;
 	}
 
 }

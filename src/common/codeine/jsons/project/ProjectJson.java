@@ -2,19 +2,26 @@ package codeine.jsons.project;
 
 import java.util.List;
 
-import codeine.configuration.HttpCollector;
-import codeine.jsons.command.CommandJson;
+import codeine.api.NodeInfo;
+import codeine.configuration.NodeMonitor;
+import codeine.jsons.command.CommandInfo;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 
 import com.google.common.collect.Lists;
 
+@SuppressWarnings("unused")
 public class ProjectJson
 {
 	private String name;
-	private List<HttpCollector> collectors = Lists.newArrayList();
+	private List<NodeMonitor> monitors = Lists.newArrayList();
 	private List<MailPolicyJson> mail = Lists.newArrayList();
 	private NodeDiscoveryStrategy node_discovery_startegy = NodeDiscoveryStrategy.Configuration;
-	private List<CommandJson> commands = Lists.newArrayList();
+	private List<CommandInfo> commands = Lists.newArrayList();
+	private String nodes_discovery_script;
+	private String version_detection_script;
+	private List<NodeInfo> nodes_info = Lists.newArrayList();
+	
+	
 	
 	public ProjectJson(String name) {
 		this.name = name;
@@ -24,11 +31,11 @@ public class ProjectJson
 	}
 
 
-	public HttpCollector getCollector(String name1)
+	public NodeMonitor getMonitor(String name)
 	{
-		for (HttpCollector c : collectors)
+		for (NodeMonitor c : monitors)
 		{
-			if (c.name().equals(name1))
+			if (c.name().equals(name))
 			{
 				return c;
 			}
@@ -42,8 +49,8 @@ public class ProjectJson
 	}
 
 
-	public List<HttpCollector> collectors() {
-		return collectors;
+	public List<NodeMonitor> monitors() {
+		return monitors;
 	}
 	
 	public List<MailPolicyJson> mail() {
@@ -59,20 +66,58 @@ public class ProjectJson
 		return name;
 	}
 
-	public List<CommandJson> commands() {
+	public List<CommandInfo> commands() {
 		return commands;
 	}
 
-	public CommandJson getCommand(String command) {
-		for (CommandJson commandJson2 : commands()) {
+	public CommandInfo getCommand(String command) {
+		for (CommandInfo commandJson2 : commands()) {
 			if (commandJson2.name().equals(command)){
 				return commandJson2;
 			}
 		}
 		if (command.equals("switch-version")){
-			return new CommandJson();
+			return new CommandInfo();
 		}
 		throw new IllegalArgumentException("command " + command + " not found in project " + name());
+	}
+
+	public CommandInfo commandForName(String name) {
+		for (CommandInfo c : commands) {
+			if (c.name().equals(name)){
+				return c;
+			}
+		}
+		throw new IllegalArgumentException("no command " + name);
+	}
+
+	public void nodes_discovery_script(String content) {
+		this.nodes_discovery_script = content;
+		
+	}
+
+	public void version_detection_script(String content) {
+		this.version_detection_script = content;
+	}
+
+	public String version_detection_script() {
+		return version_detection_script;
+	}
+
+	public void nodes_info(List<NodeInfo> nodes) {
+		this.nodes_info = nodes;
+	}
+
+	public void name(String name) {
+		this.name = name;
+	}
+
+	public String nodes_discovery_script() {
+		return nodes_discovery_script;
+	}
+
+	public List<NodeInfo> nodes_info() {
+		return nodes_info;
 	}
 
 }

@@ -1,0 +1,524 @@
+.jchartfx {
+    font-family: Arial;
+    font-size: 8pt;
+}
+
+.jchartfxToolTip {
+    background-color: #282828;
+    color: #F0F0F0;
+    padding: 3px;
+    font-size: 9pt;
+    font-family: Arial;
+    font-weight: bold;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #999999;
+}
+
+.jchartfxToolTipVisible {
+    opacity: 1;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    -ms-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out; 
+}
+
+.jchartfxToolTipHidden {
+    opacity: 0;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    -ms-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out; 
+}
+
+.jchartfxToolTip2 {
+    pointer-events: none;
+}
+
+.jchartfxToolTipBorder {
+   fill: #EEFBFBFB;
+   stroke: #000000;
+}
+
+.jchartfxToolTip2Visible {
+    opacity: 1;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    -ms-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out; 
+}
+
+.jchartfxToolTip2Hidden {
+    opacity: 0;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    -ms-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out; 
+}
+
+.jchartfx .Attribute0 {
+	fill: #2664C1;
+	stroke: #5eb95e
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute0Line {
+	stroke: #5eb95e;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute0Alt {
+	fill: #2F7DF1;
+}
+
+.jchartfx .Attribute1 {
+	fill: #C73800;
+	stroke: #dd514c;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute1Line {
+	stroke: #dd514c;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute1Alt {
+	fill: #F84600;
+}
+
+.jchartfx .Attribute2 {
+	fill: #46B1C2;
+	stroke: #358592;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute2Line {
+	stroke: #358592;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute2Alt {
+	fill: #358592;
+}
+
+.jchartfx .Attribute3 {
+	fill: #76C82D;
+	stroke: #599622;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute3Line {
+	stroke: #599622;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute3Alt {
+	fill: #93FA38;
+}
+
+.jchartfx .Attribute4 {
+	fill: #ECB346;
+	stroke: #B18735;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute4Line {
+	stroke: #B18735;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute4Alt {
+	fill: #B18735;
+}
+
+.jchartfx .Attribute5 {
+	fill: #BAA3F0;
+	stroke: #8C7BB4;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute5Line {
+	stroke: #8C7BB4;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute5Alt {
+	fill: #8C7BB4;
+}
+
+.jchartfx .Attribute6 {
+	fill: #228999;
+	stroke: #1A6773;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute6Line {
+	stroke: #1A6773;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute6Alt {
+	fill: #2AABBF;
+}
+
+.jchartfx .Attribute7 {
+	fill: #FA7550;
+	stroke: #BC583C;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute7Line {
+	stroke: #BC583C;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute7Alt {
+	fill: #BC583C;
+}
+
+.jchartfx .Attribute8 {
+	fill: #9ACED6;
+	stroke: #749BA1;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute8Line {
+	stroke: #749BA1;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute8Alt {
+	fill: #749BA1;
+}
+
+.jchartfx .Attribute9 {
+	fill: #1E545C;
+	stroke: #173F45;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute9Line {
+	stroke: #173F45;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute9Alt {
+	fill: #256973;
+}
+
+.jchartfx .Attribute10 {
+	fill: #2D76E3;
+	stroke: #2259AB;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute10Line {
+	stroke: #2259AB;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute10Alt {
+	fill: #2259AB;
+}
+
+.jchartfx .Attribute11 {
+	fill: #CDFCA2;
+	stroke: #9ABD7A;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute11Line {
+	stroke: #9ABD7A;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute11Alt {
+	fill: #9ABD7A;
+}
+
+.jchartfx .Attribute12 {
+	fill: #7426BD;
+	stroke: #571D8E;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute12Line {
+	stroke: #571D8E;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute12Alt {
+	fill: #912FEC;
+}
+
+.jchartfx .Attribute13 {
+	fill: #9ACED6;
+	stroke: #749BA1;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute13Line {
+	stroke: #749BA1;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute13Alt {
+	fill: #749BA1;
+}
+
+.jchartfx .Attribute14 {
+	fill: #FFE7AB;
+	stroke: #C0AE81;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute14Line {
+	stroke: #C0AE81;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute14Alt {
+	fill: #C0AE81;
+}
+
+.jchartfx .Attribute15 {
+	fill: #D739D6;
+	stroke: #A22BA1;
+	stroke-width: 1;
+}
+
+.jchartfx .Attribute15Line {
+	stroke: #A22BA1;
+	stroke-width: 3;
+}
+
+.jchartfx .Attribute15Alt {
+	fill: #A22BA1;
+}
+
+.jchartfx .MarkerHollow {
+	fill: #FFFFFF;
+	stroke-width: 2;
+}
+
+.jchartfx .Marker {
+	stroke-width: 2;
+}
+
+.jchartfx .Border {
+	fill: #FFFFFF;
+	stroke: #6D7D8A;
+	stroke-width: 1;
+}
+
+.jchartfx .PlotArea {
+	fill: transparent;
+	stroke: #C3C8CC;
+	stroke-width: 1;
+}
+
+.jchartfx .PlotArea3D {
+	fill: transparent;
+	stroke: #C3C8CC;
+	stroke-width: 1;
+}
+
+.jchartfx .CustomGridLine {
+	stroke: #F5D0C4;
+}
+
+.jchartfx .CustomGridLineLabel {
+	fill: #000000;
+}
+
+.jchartfx .AxisY_Section {
+	fill: #F7E4DF;
+	stroke: #F7E4DF;
+}
+
+.jchartfx .AxisX_Section {
+	fill: #F7E4DF;
+	stroke: #F7E4DF;
+}
+
+.jchartfx .AxisY_Text {
+	fill: #000000;
+}
+
+.jchartfx .AxisY_Major {
+	stroke: #C3C8CC;
+}
+
+.jchartfx .AxisY_Minor {
+	stroke: #C3C8CC;
+}
+
+.jchartfx .AxisY_Interlaced {
+	fill: #EBF8FA;
+}
+
+.jchartfx .AxisY_Line {
+	stroke: #C3C8CC;
+	stroke-width: 2;
+}
+
+.jchartfx .AxisX_Text {
+	fill: #000000;
+}
+
+.jchartfx .AxisX_Major {
+	stroke: #C3C8CC;
+}
+
+.jchartfx .AxisX_Minor {
+	stroke: #C3C8CC;
+}
+
+.jchartfx .AxisX_Interlaced {
+	fill: #EBF8FA;
+}
+
+.jchartfx .AxisX_Line {
+	stroke: #C3C8CC;
+	stroke-width: 2;
+}
+
+.jchartfx .PointLabel {
+	fill: #000000;
+}
+
+.jchartfx .PointLabelBorder {
+	fill: #000000;
+	stroke: #000000;
+}
+
+.jchartfx .Title {
+	fill: #000000;
+}
+
+.jchartfx .LegendBox {
+	fill: transparent;
+	stroke: #6D7D8A;
+	stroke-width: 1;
+}
+
+.jchartfx .LegendItem {
+	fill: #000000;
+}
+
+.jchartfx .ScrollBar {
+	fill: transparent;
+	stroke: #C3C8CC;
+	stroke-width: 1;
+}
+
+.jchartfx .ScrollThumb {
+	fill: #C3C8CC;
+}
+
+.jchartfx .ScrollArrow {
+	fill: #C3C8CC;
+}
+
+.jchartfx .DataGrid_HeaderBack {
+	fill: #6D7D8A;
+}
+
+.jchartfx .DataGrid_Back {
+	fill: #FFFFFF;
+}
+
+.jchartfx .DataGrid_GridLine {
+	fill: #C3C8CC;
+}
+
+.jchartfx .DataGridText {
+	fill: #000000;
+}
+
+.jchartfx .DataGridTextAlternate {
+	fill: #000000;
+}
+
+.jchartfx .DataGrid_BackInterlaced {
+	fill: #F5F8FC;
+}
+
+.jchartfx .DataGrid_RowHeader {
+	fill: #000000;
+}
+
+.jchartfx .DataGrid_ColumnHeader {
+	fill: #FFFFFF;
+}
+
+.jchartfx .DataGrid_RowHeaderAlternate {
+	fill: #000000;
+}
+
+.jchartfx .AnnotationText {
+	fill: #000000;
+}
+
+.jchartfx .AnnotationTextBorder {
+	fill: transparent;
+	stroke: #000000;
+}
+
+.jchartfx .AnnotationBalloonText {
+	fill: #000000;
+}
+
+.jchartfx .AnnotationBalloon {
+	fill: transparent;
+	stroke: #000000;
+}
+
+.jchartfx .AnnotationCircle {
+	fill: transparent;
+	stroke: #000000;
+}
+
+.jchartfx .AnnotationArrow {
+	fill: #000000;
+	stroke: #000000;
+}
+
+.jchartfx .AnnotationArc {
+	fill: #000000;
+	stroke: #000000;
+}
+
+.jchartfx .AnnotationPolygon {
+	fill: transparent;
+	stroke: #000000;
+}
+
+.jchartfx .AnnotationRectangle {
+	fill: transparent;
+	stroke: #000000;
+}
+
+.jchartfx .HeatMap0 {
+	fill: #2664C1;
+}
+
+.jchartfx .HeatMap1 {
+	fill: #C73800;
+}
+
+.jchartfx .EqualizerTop0 {
+	fill: #C73800;
+}
+
+.jchartfx .EqualizerTop1 {
+	fill: #46B1C2;
+}
+

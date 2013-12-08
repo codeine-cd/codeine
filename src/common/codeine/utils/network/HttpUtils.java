@@ -25,13 +25,7 @@ public class HttpUtils
 	public static String doGET(String url)
 	{
 		final StringBuilder $ = new StringBuilder();
-		Function<String, Void> function = new Function<String, Void>(){
-			@Override
-			public Void apply(String input) {
-				$.append(input + "\n");
-				return null;
-			}};
-		doGET(url, function);
+		doGET(url, new OutputToStringFunction($));
 		return $.toString();
 	}
 	public static void doGET(String url, Function<String, Void> function)
@@ -54,9 +48,7 @@ public class HttpUtils
 			throw ExceptionUtils.asUnchecked(ex);
 		}
 	}
-	
-	public static String post(String url, String urlParameters) {
-		 
+	public static void doPOST(String url, String postData, Function<String, Void> function) {
 		try {
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -70,7 +62,7 @@ public class HttpUtils
 			// Send post request
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.writeBytes(urlParameters);
+			wr.writeBytes(postData);
 			wr.flush();
 			wr.close();
  
@@ -82,18 +74,18 @@ public class HttpUtils
 			BufferedReader in = new BufferedReader(
 			        new InputStreamReader(con.getInputStream()));
 			String inputLine;
-			StringBuffer response = new StringBuffer();
- 
 			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
+				function.apply(inputLine);
 			}
 			in.close();
- 
-			return response.toString();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
- 
+	}
+	public static String doPOST(String url, String postData) {
+		StringBuilder stringBuilder = new StringBuilder();
+		doPOST(url, postData, new OutputToStringFunction(stringBuilder));
+		return stringBuilder.toString();
 	}
 
 	public static String encode(String parameters){
@@ -105,7 +97,17 @@ public class HttpUtils
 	}
 
 	public static String specialEncode(String value) {
-		return value.replace(':', '_').replace(' ', '_');
+		return value.replace(':', '_').
+				replace(' ', '_').
+				replace('>', '_').
+				replace('<', '_').
+				replace('*', '_').
+				replace('"', '_').
+				replace('|', '_').
+				replace('+', '_').
+				replace('/', '_').
+				replace('?', '_').
+				replace('\\', '_');
 	}
 	public static String decode(String parameters) {
 		try {
@@ -114,4 +116,5 @@ public class HttpUtils
 			throw new RuntimeException(e);
 		}
 	}
+	
 }

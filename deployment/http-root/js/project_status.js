@@ -1,22 +1,64 @@
+var chart1;
+var chartDetails;
+var posX;
+var posY;
+var divInTooltip = null;
+
 $(document).ready( function () {
-	console.log("READY");
-	$('.dropdown-toggle').dropdown()
-	if ($('.codeine_command').size() === 0 || readOnly) {
-		$('#commandsNavbar').hide();
-		$('.panel-body').find('[type=checkbox]').remove();
+
+  if ($('.codeine_command').size() === 0 || readOnly) {
+    $('#commandsNavbar').hide();
+    $('.panel-body').find('[type=checkbox]').remove();
+  }
+  
+	loadChart();
+	
+});
+
+function loadChart() {
+	chart1 = new cfx.Chart();
+	chart1.setDataSource(monitors_chart_data_json);
+	chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
+	chart1.getAllSeries().getLine().setStyle(cfx.DashStyle.Dash);
+
+	var chartDiv = document.getElementById('chartDiv');
+	chart1.create(chartDiv);
+}
+
+function onGetTipDiv(args) {
+	if (args.getHitType() == cfx.HitType.Point) {
+		console.log("onGetTipDiv() - " + args);
+		
+		args.replaceDiv = false;
 	}
-});
+}
+
+function drawCommands() {
+	if (commandsHistoryJson === undefined) {
+		console.log("Will wait for commands data for chart");
+		setTimeout(drawCommands,1000);
+		return;
+	}
+	
+	var ann = new cfx.annotation.Annotations();
+	var annList = ann.getList();
+	for(var command in commandsHistoryJson) {
+		console.log("Command Json: " + commandsHistoryJson[command]);
+		addCommandAnnotation(annList,command);
+	}
+	chart1.getExtensions().add(ann);
+}
 
 
-
-$('#selectAll').change(function() {
-	var value = $(this).is(":checked");
-	$('.panel-body').find('[type=checkbox]:visible').prop('checked', value);
-});
-
-$('[type=checkbox').click( function() {
-	resetSelectAll();
-})
+function addCommandAnnotation(annList,command) {
+	var annText3 = new cfx.annotation.AnnotationText();
+    annText3.setText(command['name']);
+    command[''];
+    annText3.attachElastic(2.9, 3200, 6.2, 2800);
+    annText3.getBorder().setColor("#00000000");//transparent border
+    annList.add(annText3);
+	
+}
 
 function resetSelectAll() {
 	var allChecked = true;
@@ -34,7 +76,7 @@ function resetSelectAll() {
 
 
 $('.codeine_command').click( function() {
-	var command = $(this).data('command-name')
+	var command = $(this).data('command-name');
 	console.log("Will run commad " + command);
 
 	var parametrs = {};
@@ -46,7 +88,7 @@ $('.codeine_command').click( function() {
 	}
 	parametrs["versions"] = getSelectedVersions();
 	
-	postToUrl("/schedule-command?project=" + getProjetcName(), parametrs);
+	postToUrl("/schedule-command?project=" + encodeURIComponent(getProjetcName()), parametrs);
 });
 
 function getSelectedVersions() {

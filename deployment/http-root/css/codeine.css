@@ -2,6 +2,10 @@
 	color: green;
 }
 
+.disc {
+	color: gray;
+}
+
 .error {
 	color: red;
 }
@@ -18,4 +22,12 @@
 .deleteCommand { 
 	cursor: pointer;
 	display: inline-block;
+}
+
+.command_parameter {
+	background-color: #F8FAFD;
+	padding: 5px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	margin-top: 10px;
 }

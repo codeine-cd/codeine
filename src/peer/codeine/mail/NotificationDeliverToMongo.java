@@ -23,7 +23,7 @@ public class NotificationDeliverToMongo {
 		String version = new NodeHelper().getVersionOrNull(peerStatus.createJson(), project, node);
 		CollectorNotificationJson collectorNotificationJson = new CollectorNotificationJson(collectorName,
 				project.name(), output, node, version, InetUtils.getLocalHost().getHostName());
-		log.debug("sending " + collectorNotificationJson);
+		log.info("sending notification " + collectorNotificationJson);
 		mongoConnector.put(collectorNotificationJson);
 	}
 

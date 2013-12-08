@@ -7,7 +7,6 @@ import codeine.jsons.peer_status.PeerStatusJsonV2;
 public interface IStatusDatabaseConnector {
 
 	void putReplaceStatus(PeerStatusJsonV2 p);
-	int removeExpiredPeers(int timeToLive);
-	int updatePeerStatusToDisconnected(int timeToLive); 
+	public void updatePeersStatus(final long timeToRemove, final long timeToDisc);
 	Map<String, PeerStatusJsonV2> getPeersStatus();
 }

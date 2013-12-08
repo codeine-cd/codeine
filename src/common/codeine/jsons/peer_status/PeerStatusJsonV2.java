@@ -3,11 +3,10 @@ package codeine.jsons.peer_status;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Maps;
 
-
+@SuppressWarnings("unused")
 public class PeerStatusJsonV2 {
 	private String peer_key;
 	private String peer_host_port;
@@ -19,7 +18,8 @@ public class PeerStatusJsonV2 {
 	private long start_time;
 	private long update_time;//updated in directory server when first seen
 	private String install_dir;
-	
+	private PeerType peer_type;
+	private transient PeerStatusString status;
 	
 	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status) {
 		super();
@@ -33,6 +33,15 @@ public class PeerStatusJsonV2 {
 		this.update_time = System.currentTimeMillis();
 		this.peer_key = host + ":" + install_dir;
 		this.peer_host_port = host + ":" + port;
+		this.peer_type = PeerType.Daemon;
+	}	
+	public PeerStatusJsonV2(String peer_key, ProjectStatus projectStatus) {
+		super();
+		this.project_name_to_status = Maps.newHashMap();
+		this.project_name_to_status.put(projectStatus.project_name(), projectStatus);
+		this.update_time = System.currentTimeMillis();
+		this.peer_key = peer_key;
+		this.peer_type = PeerType.Reporter;
 	}	
 	
 	public void addProjectStatus(String name, ProjectStatus status) {
@@ -57,11 +66,6 @@ public class PeerStatusJsonV2 {
 		return update_time;
 	}
 
-	public boolean isExpired() {
-		long lastUpdate = System.currentTimeMillis() - update_time(); 
-		return lastUpdate > TimeUnit.DAYS.toMillis(3);
-	}
-
 	public String key() {
 		return peer_key();
 	}
@@ -76,6 +80,20 @@ public class PeerStatusJsonV2 {
 
 	public String tar() {
 		return tar;
+	}
+	public void status(PeerStatusString status) {
+		this.status = status;
+	}
+	public PeerStatusString status() {
+		return status;
+	}
+	public void updateNodesWithPeer() {
+		for (ProjectStatus projectStatus : project_name_to_status.values()) {
+			projectStatus.updateNodesWithPeer(this);
+		}
+	}
+	public PeerType peer_type() {
+		return peer_type;
 	}
 	
 	

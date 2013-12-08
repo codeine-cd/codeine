@@ -37,5 +37,9 @@ public class ExceptionUtils
 		t.printStackTrace(pw);
 		return sw.toString(); // stack trace as a string
 	}
+
+	public static String getRootCauseMessage(Throwable t) {
+		return getRootCause(t).getMessage();
+	}
 	
 }

@@ -53,6 +53,10 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	abstract protected List<TemplateLink> generateNavigation(HttpServletRequest request);
 	abstract protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request);
 	
+	protected List<String> getJsRenderTemplateFiles() {
+		return Lists.newArrayList();
+	}
+	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing get request: " + request.getRequestURL());
@@ -122,7 +126,16 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 			}
 		};
 		Template template = Mustache.compiler().escapeHTML(false).withLoader(loader).compile(contents);
-		return template.execute(data);
+		StringBuilder $ = new StringBuilder(template.execute(data));
+		
+		for (String tmpl : getJsRenderTemplateFiles()) {
+			$.append("<script id='" + tmpl + "' type='text/x-jsrender'>");
+			$.append(TextFileUtils.getContents(Constants.getResourcesDir() + "/html/jsrendertemplates/" +  tmpl + ".tmpl.html"));
+			$.append("</script>");
+		}
+		
+		 $.append("</body></html>");
+		return $.toString();
 	}
 	
 	private String getContentTemplateFile() {

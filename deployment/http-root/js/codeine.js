@@ -21,6 +21,19 @@ function postToUrl(url, postData) {
 	form.submit();
 }
 
+function toast(type, msg, autoClose) {
+	if (autoClose === undefined)
+		autoClose = true;
+	$('.top-right').notify({
+	    message: 
+	    { 
+	    	text: msg
+	    },
+		type: type,
+		fadeOut: { enabled: autoClose}
+	  }).show(); 
+}
+
 function getInputValues(container) {
 	var parameters = {};
 	$(container).find(':input').each( function() {
@@ -42,13 +55,13 @@ function displayAlert(txt, type) {
 	$('#mainContainer').prepend('<div class="row"><div class="span12">' +
 	    		'<div id="alertContainer" class="alert alert-' + type + ' fade in">' +
 	            '<button type="button" class="close" data-dismiss="alert">&times;</button>'+ txt
-	            	 + '</div></div>')
+	            	 + '</div></div>');
 	
 	$('#alertMessage').alert();
 }
 
 function dismissAlert() {
-	$("#alertContainer").alert('close')
+	$("#alertContainer").alert('close');
 }
 
 function getParameterByName(name) {

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
-import codeine.configuration.ConfigurationManager;
+import codeine.configuration.IConfigurationManager;
 import codeine.db.IAlertsDatabaseConnector;
 import codeine.executer.Task;
 import codeine.jsons.mails.AlertsCollectionType;
@@ -21,7 +21,7 @@ public class MonitorDBTask implements Task {
 
 	private static final Logger log = Logger.getLogger(MonitorDBTask.class);
 	@Inject
-	private ConfigurationManager configurationManager;
+	private IConfigurationManager configurationManager;
 	@Inject 
 	private AggregateNotification mailCreator;
 	@Inject 
@@ -50,6 +50,7 @@ public class MonitorDBTask implements Task {
 		List<NotificationContent> notificationContent = mailCreator.prepareMailsToUsers(alertsCollectionType, allItems, configurationManager.getConfiguredProjects());
 		List<Mail> mails = mailPrepare.prepare(notificationContent, alertsCollectionType);
 		for (Mail mail : mails) {
+			log.info("sending mail to " + mail.recipients() + " with subject " + mail.subject());
 			mailsStrategy.sendMail(mail);
 		}
 	}

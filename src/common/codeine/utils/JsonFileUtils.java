@@ -22,6 +22,9 @@ public class JsonFileUtils {
 	public <T> T getConfFromFile(String file, Class<T> clazz)
 	{
 		log.info("parsing file " + file);
+		if (!FilesUtils.exists(file)) {
+			return ReflectionUtils.newInstance(clazz);
+		}
 		return gson.fromJson(TextFileUtils.getContents(file), clazz);
 	}
 

@@ -7,10 +7,18 @@ import codeine.executer.PeriodicExecuter;
 import codeine.jsons.global.GlobalConfigurationJson;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 
 public class CodeineMailServerBootstrap extends AbstractCodeineBootstrap
 {
+	public CodeineMailServerBootstrap(Injector injector) {
+		super(injector);
+	}
+
+	public CodeineMailServerBootstrap() {
+	}
+
 	public static void main(String[] args)
 	{
 		boot(Component.MAIL, CodeineMailServerBootstrap.class);
@@ -19,7 +27,7 @@ public class CodeineMailServerBootstrap extends AbstractCodeineBootstrap
 	@Override
 	protected void execute() throws Exception
 	{
-		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(1), injector().getInstance(MonitorDBTask.class), "MonitorDBTask").run();
+		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(1), injector().getInstance(MonitorDBTask.class)).runInThread();
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package simple_server;
 
-import codeine.servlet.AbstractServletModule;
+import codeine.servlet.CodeineServletModule;
 
-public class SimpleServletModule extends AbstractServletModule {
+public class SimpleServletModule extends CodeineServletModule {
 	@Override
 	protected void configureServlets() {
-		serveMe("/welcome", WelcomeServlet.class);
+		serveMe(WelcomeServlet.class, "/welcome");
 	}
 
 }

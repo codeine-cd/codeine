@@ -3,7 +3,6 @@ package codeine;
 import static com.google.common.collect.Maps.newHashMap;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,12 +12,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import codeine.api.MonitorInfo;
+import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeInfo;
-import codeine.configuration.CollectorRule;
-import codeine.configuration.HttpCollector;
+import codeine.api.NodeWithMonitorsInfo;
+import codeine.configuration.IConfigurationManager;
+import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
-import codeine.configuration.VersionCollector;
 import codeine.credentials.CredentialsHelper;
 import codeine.executer.Task;
 import codeine.jsons.peer_status.PeerStatus;
@@ -29,12 +28,19 @@ import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
+import codeine.utils.StringUtils;
+import codeine.utils.network.HttpUtils;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
+import codeine.utils.os_process.ShellScript;
+import codeine.utils.os_process.ShellScriptWithOutput;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class RunMonitors implements Task {
-	private ProjectJson project;
+	private IConfigurationManager configurationManager;
+	private String projectName;
 	private static final Logger log = Logger.getLogger(RunMonitors.class);
 	private Map<String, Long> lastRun = newHashMap();
 	private PeerStatus projectStatusUpdater;
@@ -44,11 +50,13 @@ public class RunMonitors implements Task {
 	private NotificationDeliverToMongo notificationDeliverToMongo;
 	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
 	private SnoozeKeeper snoozeKeeper;
+	private ShellScript shellScript;
 
-	public RunMonitors(ProjectJson project, PeerStatus projectStatusUpdater, MailSender mailSender,
+	public RunMonitors(IConfigurationManager configurationManager, String project, PeerStatus projectStatusUpdater, MailSender mailSender,
 			PathHelper pathHelper, NodeInfo node, NotificationDeliverToMongo notificationDeliverToMongo,
 			PeerStatusChangedUpdater mongoPeerStatusUpdater, SnoozeKeeper snoozeKeeper) {
-		this.project = project;
+		this.configurationManager = configurationManager;
+		this.projectName = project;
 		this.projectStatusUpdater = projectStatusUpdater;
 		this.mailSender = mailSender;
 		this.pathHelper = pathHelper;
@@ -60,92 +68,116 @@ public class RunMonitors implements Task {
 	}
 
 	private void init() {
-		String monitorOutputDirWithNode = pathHelper.getMonitorOutputDirWithNode(project.name(), node.name());
+		String monitorOutputDirWithNode = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name());
 		FilesUtils.mkdirs(monitorOutputDirWithNode);
+	}
+
+	private ProjectJson project() {
+		return configurationManager.getProjectForName(projectName);
 	}
 
 	@Override
 	public void run() {
-		List<File> monitors = pathHelper.getMonitors(project.name());
-		for (File monitor : monitors) {
-			HttpCollector c = project.getCollector(monitor.getName());
-			if (null == c) {
-				if (monitor.getName().equals(new VersionCollector().name())) {
-					c = new VersionCollector();
+		List<NodeMonitor> monitors = Lists.newArrayList(project().monitors());
+		removeNonExistMonitors();
+		for (NodeMonitor monitor : monitors) {
+			try {
+				shellScript = null;
+				runMonitorOnce(monitor);
+			} finally {
+				if (null != shellScript){
+					shellScript.delete();
 				}
 			}
-			runMonitorOnce(monitor, c);
+		}
+		updateVersion();
+	}
+
+	private void removeNonExistMonitors() {
+		projectStatusUpdater.removeNonExistMonitors(project(), node.name(), node.alias());
+	}
+
+	private void updateVersion() {
+		if (StringUtils.isEmpty(project().version_detection_script())) {
+			log.info("version is not configured for project " + projectName);
+			return;
+		}
+		Map<String, String> env = Maps.newHashMap();
+		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+		ShellScriptWithOutput script = new ShellScriptWithOutput(
+				"version_" + projectName + "_" + node.name(), project().version_detection_script(), pathHelper.getProjectDir(projectName), env);
+		String version = script.execute();
+		if (version.isEmpty()){
+			version = Constants.NO_VERSION;
+		}
+		String prevVersion = projectStatusUpdater.updateVersion(project(), node.name(), node.alias(), version);
+		if (!version.equals(prevVersion)) {
+			updateStatusInMongo();
 		}
 	}
 
-	private void runMonitorOnce(File monitor, HttpCollector c) {
-		if (null == c) {
-			log.debug("no collector defined for monitor file " + monitor.getName() + ", skipping exectution");
-			return;
-		}
-		Long lastRuntime = lastRun.get(c.name());
-		if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(c)) {
+	private void runMonitorOnce(NodeMonitor monitor) {
+		Long lastRuntime = lastRun.get(monitor.name());
+		if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(monitor)) {
 			try {
-				runMonitor(monitor, c);
+				runMonitor(monitor);
 			} catch (Exception e) {
 				log.warn("got exception when executing monitor ", e);
 			}
-			lastRun.put(c.name(), System.currentTimeMillis());
+			lastRun.put(monitor.name(), System.currentTimeMillis());
 		} else {
 			log.info("skipping monitor " + monitor);
 		}
 	}
 
-	private int minInterval(HttpCollector c) {
+	private int minInterval(NodeMonitor c) {
 		if (null == c.minInterval()) {
 			return 20000;
 		}
 		return c.minInterval() * 60000;
 	}
 
-	private void runMonitor(File monitor, HttpCollector collector) {
-		boolean hasCredentials = hasCredentials(collector);
-		List<String> cmd = buildCmd(monitor, collector, hasCredentials);
-		List<String> cmdForOutput = hasCredentials ? buildCmd(monitor, collector, false) : cmd;
+	private void runMonitor(NodeMonitor monitor) {
+		boolean hasCredentials = hasCredentials(monitor);
+		List<String> cmd = buildCmd(monitor, hasCredentials);
+		List<String> cmdForOutput = hasCredentials ? buildCmd(monitor, false) : cmd;
 		log.info("will execute " + cmdForOutput);
 		log.info("will execute encoded " + cmd);
 		Stopwatch stopwatch = new Stopwatch().start();
 		Result res = null;
 		try {
-			res = new ProcessExecuterBuilder(cmd, monitor.getParent()).cmdForOutput(cmdForOutput).build().execute();
+			Map<String, String> map = Maps.newHashMap();
+			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
+			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).cmdForOutput(cmdForOutput).env(map).build().execute();
 		} catch (Exception e) {
-			if (monitor.getName().equals("version")) {
-				res = new Result(Constants.ERROR_MONITOR, "");
-			}
-			else {
-				res = new Result(Constants.ERROR_MONITOR, e.getMessage());
-			}
+			res = new Result(Constants.ERROR_MONITOR, e.getMessage());
 			log.debug("error in monitor", e);
 		}
 		stopwatch.stop();
 		// long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-		log.info(monitor.getName() + " ended with result: " + res.success() + ", took: " + stopwatch);
-		writeResult(res, monitor.getName(), collector, stopwatch, cmdForOutput);
-		String result = isVersionCollector(collector) ? res.output.trim() : String.valueOf(res.success());
-		MonitorInfo monitorInfo = new MonitorInfo(monitor.getName(), monitor.getName(), result);
+		writeResult(res, monitor, stopwatch, cmdForOutput);
+		String result = String.valueOf(res.success());
+		MonitorStatusInfo monitorInfo = new MonitorStatusInfo(monitor.name(), result);
 		String previousResult = updateStatusInDatastore(monitorInfo);
-		if (shouldSendStatusToMongo(res, previousResult)) {
+		log.info(monitor.name() + " ended with result: " + res.success() + " , previous result " + previousResult + ", took: " + stopwatch);
+		if (shouldSendStatusToMongo(result, previousResult)) {
 			updateStatusInMongo();
 		}
-		if (collector.notification_enabled()) {
+		if (monitor.notification_enabled()) {
 			if (Constants.IS_MAIL_STARTEGY_MONGO) {
 				if (shouldSendNotificationToMongo(res, previousResult)) {
-					notificationDeliverToMongo.sendCollectorResult(collector.name(), node, project, res.output);
+					notificationDeliverToMongo.sendCollectorResult(monitor.name(), node, project(), res.output);
 				}
 			} else {
 				if (null == previousResult) {
 					previousResult = result;
 				}
-				mailSender.sendMailIfNeeded(Boolean.valueOf(result), Boolean.valueOf(previousResult), collector, node,
-						res.output, project);
+				mailSender.sendMailIfNeeded(Boolean.valueOf(result), Boolean.valueOf(previousResult), monitor, node,
+						res.output, project());
 			}
 		} else {
-			log.debug("notification not enabled for " + collector);
+			log.debug("notification not enabled for " + monitor);
 		}
 
 	}
@@ -155,76 +187,75 @@ public class RunMonitors implements Task {
 	}
 
 	private boolean shouldSendNotificationToMongo(Result res, String previousResult) {
-		if (snoozeKeeper.isSnooze(project.name(), node.name())) {
+		if (snoozeKeeper.isSnooze(project().name(), node.name())) {
+			log.info("in snooze period");
 			return false;
 		}
 		return null != previousResult && Boolean.valueOf(previousResult) && !res.success();
 	}
 
-	private boolean shouldSendStatusToMongo(Result res, String previousResult) {
-		return Boolean.valueOf(previousResult) != res.success();
+	private boolean shouldSendStatusToMongo(String result, String previousResult) {
+		return !result.equals(previousResult);
 	}
 
-	protected boolean hasCredentials(HttpCollector collector) {
+	protected boolean hasCredentials(NodeMonitor collector) {
 		return collector.credentials() != null;
 	}
 
-	private boolean isVersionCollector(HttpCollector c) {
-		return c instanceof VersionCollector;
+	private String updateStatusInDatastore(MonitorStatusInfo monitor) {
+		return projectStatusUpdater.updateStatus(project(), monitor, node.name(), node.alias());
 	}
 
-	private String updateStatusInDatastore(MonitorInfo monitor) {
-		return projectStatusUpdater.updateStatus(project, monitor, node.name(), node.alias());
-	}
-
-	private List<String> buildCmd(File monitor, HttpCollector c, boolean hasCredentials) {
+	private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
+		String fileName = pathHelper.getMonitorsDir(project().name()) + "/" + c.name();
+		if (c.script_content() != null) {
+			shellScript = new ShellScript(fileName, c.script_content());
+			fileName = shellScript.create();
+		}
+		else if (FilesUtils.exists(fileName)){ //TODO remove after build 1100
+			log.warn("monitor is in old format " + fileName);
+		}
+		else {
+			throw new RuntimeException("monitor is missing " + fileName);
+		}
 		List<String> cmd = new ArrayList<String>();
 		if (hasCredentials) {
 			cmd.add(PathHelper.getReadLogs());
 			cmd.add(encode(c.credentials()));
-			cmd.add(encode(monitor.getAbsolutePath()));
+			cmd.add(encode("/bin/sh"));
+			cmd.add(encode("-xe"));
+			cmd.add(encode(fileName));
 		} else {
-			cmd.add(monitor.getAbsolutePath());
-		}
-		for (CollectorRule r : c.rule()) {
-			if (r.shouldApplyForNode(node.name())) {
-				for (String arg : r.arg()) {
-					if (hasCredentials) {
-						cmd.add(encode(replace(arg)));
-					} else {
-						cmd.add(replace(arg));
-					}
-				}
-			}
+			cmd.add("/bin/sh");
+			cmd.add("-xe");
+			cmd.add(fileName);
 		}
 		return cmd;
-	}
-
-	private String replace(String arg) {
-		return arg.replace(Constants.REPLACE_NODE_NAME, node.name());
 	}
 
 	private String encode(final String value1) {
 		return new CredentialsHelper().encode(value1);
 	}
 
-	private void writeResult(Result res, String outputFileName, HttpCollector collector, Stopwatch stopwatch,
+	private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch,
 			List<String> cmd) {
-		String file = pathHelper.getMonitorOutputDirWithNode(project.name(), node.name()) + "/" + outputFileName
+		String file = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name()) + "/" + HttpUtils.specialEncode(collector.name())
 				+ ".txt";
-		log.debug("Output for " + outputFileName + " will be written to: " + file);
-
+		log.debug("Output for " + collector.name() + " will be written to: " + file);
+		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
 			out.write("+------------------------------------------------------------------+\n");
-			out.write("| command: " + cmd + "\n");
+			out.write("| monitor:       " + collector.name() + "\n");
 			if (hasCredentials(collector)) {
-				out.write("| credentials: " + collector.credentials() + "\n");
+			out.write("| credentials:   " + collector.credentials() + "\n");
 			}
-			out.write("| exitstatus: " + res.exit() + "\n");
-			out.write("| completed at: " + new Date() + "\n");
-			out.write("| length: " + stopwatch + "\n");
-			out.write("| project: " + project.name() + "\n");
-			out.write("| node: " + node.alias() + "\n");
+			out.write("| exitstatus:    " + res.exit() + "\n");
+			out.write("| completed at:  " + new Date() + "\n");
+			out.write("| length:        " + stopwatch + "\n");
+			out.write("| project:       " + project().name() + "\n");
+			out.write("| node:          " + node.alias() + "\n");
+			out.write("| node-name:     " + node.name() + "\n");
+			out.write("| version:       " + nodeInfo.version() + "\n");
 			out.write("+------------------------------------------------------------------+\n");
 			out.write(res.output);
 		} catch (IOException e) {
@@ -234,7 +265,7 @@ public class RunMonitors implements Task {
 
 	@Override
 	public String toString() {
-		return "RunMonitors [project=" + project + "]";
+		return "RunMonitors [project=" + project() + "]";
 	}
 
 }

@@ -7,12 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import codeine.configuration.ConfigurationManager;
+import codeine.configuration.IConfigurationManager;
 import codeine.configuration.Links;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
-import codeine.servlet.HtmlHeaderWriter;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -22,8 +21,7 @@ public class ConfigureServlet extends AbstractServlet
 	private static final Logger log = Logger.getLogger(ConfigureServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	@Inject private HtmlHeaderWriter htmlHeaderWriter;
-	@Inject private ConfigurationManager configurationManager;
+	@Inject private IConfigurationManager configurationManager;
 	@Inject private Links links;
 	@Inject private Gson gson;
 	@Inject private GlobalConfigurationJson globalConfigurationJson;
@@ -31,10 +29,8 @@ public class ConfigureServlet extends AbstractServlet
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("myGet request");
-		htmlHeaderWriter.writeHeader(request, response, null, "configure");
 		PrintWriter writer = getWriter(response);
 		printConfigForm(writer);
-		htmlHeaderWriter.writeFooter(response);
 	}
 
 	private void printConfigForm(PrintWriter writer) {

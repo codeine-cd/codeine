@@ -3,11 +3,15 @@ package codeine.utils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class FilesUtils {
 
@@ -24,6 +28,9 @@ public class FilesUtils {
 				return !name.startsWith(".");
 			}
 		});
+		if (null == listOfFiles) {
+			return Lists.newArrayList();
+		}
 		for (File file : listOfFiles) {
 			$.add(file.getName());
 		}
@@ -54,5 +61,36 @@ public class FilesUtils {
 	public static void createNewFile(String file) {
 		createNewFile(new File(file));
 		
+	}
+
+	public static void delete(String fileName) {
+		if (fileName == null) {
+			return;
+		}
+		File file = new File(fileName);
+		
+		if (file.isFile()) {
+			if (file.exists()) {
+				file.delete();
+			}
+		} else {
+			File[] files=file.listFiles();
+			if (files == null){
+				return;
+			}
+			for (File file2 : files) {
+				delete(file2.getAbsolutePath());
+			}
+		  file.delete();
+		}
+	}
+
+	public static void setPermissions(String fileName, PosixFilePermission... permission) {
+		try {
+			Files.setPosixFilePermissions(FileSystems.getDefault().getPath(fileName), Sets.newHashSet(permission));
+		} 
+		catch (IOException e) {
+			throw ExceptionUtils.asUnchecked(e);
+		}
 	}
 }

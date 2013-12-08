@@ -4,20 +4,18 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.Logger;
-
-import codeine.api.NodeDataJson;
+import codeine.api.NodeWithPeerInfo;
+import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 
 public abstract class CommandExecutionStrategy {
 
-	private static final Logger log = Logger.getLogger(CommandExecutionStrategy.class);
-	private ScehudleCommandPostData commandData;
+	private ScehudleCommandExecutionInfo commandData;
 	private AllNodesCommandExecuter allNodesCommandExecuter;
 	private Links links;
 	private boolean cancel;
 	
-	public CommandExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandPostData commandData, Links links) {
+	public CommandExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links) {
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.commandData = commandData;
 		this.links = links;
@@ -29,21 +27,20 @@ public abstract class CommandExecutionStrategy {
 		allNodesCommandExecuter.writeLine(message);
 	}
 	
-	private void commandNode(ExecutorService executor, NodeDataJson hostport) {
-		String link = links.getPeerCommandLink(hostport.peer_address(), commandData.project_name(), commandData.command(),commandData.params());
-		log.info("commandNode link is " + link);
-		PeerCommandWorker worker = new PeerCommandWorker(link, hostport, allNodesCommandExecuter);
+	private void commandNode(ExecutorService executor, NodeWithPeerInfo node, boolean shouldOutputImmediatly) {
+		PeerCommandWorker worker = new PeerCommandWorker(node, allNodesCommandExecuter, commandData.command_info(), shouldOutputImmediatly, links);
 		executor.execute(worker);
 	}
 	
-	protected ScehudleCommandPostData commandData() {
+	protected ScehudleCommandExecutionInfo commandData() {
 		return commandData;
 	}
 
-	protected void executeConcurrent(List<NodeDataJson> nodes, int concurrency) {
+	protected void executeConcurrent(List<NodeWithPeerInfo> nodes, int concurrency) {
+		boolean shouldOutputImmediatly = concurrency < 2 || nodes.size() < 2;
 		ExecutorService executor = Executors.newFixedThreadPool(concurrency);
-		for (NodeDataJson peer : nodes) {
-			commandNode(executor, peer);
+		for (NodeWithPeerInfo peer : nodes) {
+			commandNode(executor, peer, shouldOutputImmediatly);
 		}
 		executor.shutdown();
 		while (!executor.isTerminated()) {

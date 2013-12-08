@@ -1,5 +1,6 @@
+var commandsHistoryJson = undefined;
+
 $(document).ready( function () {
-	console.log("READY getCommandsHistory");
 	getCommandsHistory();
 	setInterval(getCommandsHistory, 5000);
 });
@@ -10,15 +11,21 @@ $(document).ready( function () {
 function getCommandsHistory() {
   $.ajax( {
     type: 'GET',
-    url: '/commands-log?project=' + getProjetcName()  ,
+    url: '/commands-log_json?project=' + getProjetcName()  ,
     success: function(response) {
-      console.log('got ' + response.length + " commands")
+      if (commandsHistoryJson === undefined) {
+    	  commandsHistoryJson = response;
+      }
+      if (response.length === 0) {
+    	  $('#command_history_list').html("<li class='text-center'>No Commands</li>");
+    	  return;
+      }
       renderTemplate('command_history', $("#command_history_list") , response, function() {
         $(".commandStatus").tooltip();
         $('.deleteCommand').click(function() {
     		$.ajax( {
     		    type: 'DELETE',
-    		    url: '/command-nodes?project=' + $(this).data('project') + '&command-id=' + $(this).data('id')  ,
+    		    url: '/command-nodes_json?project=' + $(this).data('project') + '&command-id=' + $(this).data('id')  ,
     		    success: function(resposne) {
     		    	console.log("success");
     		    	displayAlert('Command was canceled','success');

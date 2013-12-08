@@ -1,7 +1,10 @@
 package codeine.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 import com.google.common.base.Function;
 
@@ -49,6 +52,17 @@ public class StringUtils {
 		
 	}
 
+	public static String formatDate(long date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+        Date resultdate = new Date(date);
+		return sdf.format(resultdate);
+	}
+	
+	public static Date parseDate(String date) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+		return sdf.parse(date);
+	}
+	
 	public static String[] getEnumNames(Class<? extends Enum<?>> e) {
 	    return Arrays.toString(e.getEnumConstants()).replaceAll("\\[|]", "").split(", ");
 	}

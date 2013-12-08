@@ -2,6 +2,8 @@ package codeine.utils;
 
 import java.util.Map;
 
+import codeine.utils.network.HttpUtils;
+
 public class UrlUtils {
 
 	
@@ -10,7 +12,7 @@ public class UrlUtils {
 		if (queryParams != null && queryParams.size() > 0) {
 			$.append("?");
 			for (String parameter : queryParams.keySet()) {
-				$.append(parameter + "=" + queryParams.get(parameter) + "&");
+				$.append(parameter + "=" + HttpUtils.encode(queryParams.get(parameter)) + "&");
 			}
 			$.deleteCharAt($.length()-1);
 		}

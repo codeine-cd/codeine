@@ -3,6 +3,7 @@ package codeine.executer;
 import org.apache.log4j.Logger;
 
 import codeine.utils.StringUtils;
+import codeine.utils.ThreadUtils;
 
 import com.google.common.base.Stopwatch;
 
@@ -22,6 +23,10 @@ public class PeriodicExecuter implements Runnable
 		this.taskName = taskName;
 	}
 	
+	public PeriodicExecuter(long sleepTime, Task task) {
+		this(sleepTime, task, task.getClass().getSimpleName());
+	}
+
 	@Override
 	public void run()
 	{
@@ -33,15 +38,19 @@ public class PeriodicExecuter implements Runnable
 			} catch (Exception e1) {
 				log.warn("error executing task " + taskName, e1);
 			}
-			try {
-				s.stop();
-				log.info("task " + taskName + " took " + s + " ; going to sleep " + StringUtils.formatTimePeriod(sleepTimeMilli));
-				Thread.sleep(sleepTimeMilli);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+			s.stop();
+			log.info("task " + taskName + " took " + s + " ; going to sleep " + StringUtils.formatTimePeriod(sleepTimeMilli));
+			ThreadUtils.wait(getSleepObject(), sleepTimeMilli);
 		}
 		log.info("finished for task " + taskName);
+	}
+
+	protected Object getSleepObject() {
+		if (task instanceof NotifiableTask) {
+			NotifiableTask task1 = (NotifiableTask) task;
+			return task1.getSleepObject();
+		}
+		return new Object();
 	}
 
 	private void exec() {
@@ -54,6 +63,6 @@ public class PeriodicExecuter implements Runnable
 	}
 
 	public void runInThread() {
-		new Thread(this).start();
+		ThreadUtils.createThread(this, taskName).start();
 	}
 }

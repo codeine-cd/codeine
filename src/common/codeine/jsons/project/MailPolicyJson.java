@@ -16,7 +16,7 @@ public class MailPolicyJson {
 	
 	public AlertsCollectionType intensity() {
 		if (null == intensity){
-			return AlertsCollectionType.NotCollected;
+			return AlertsCollectionType.Immediately;
 		}
 		return intensity;
 	}

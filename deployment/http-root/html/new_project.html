@@ -1,0 +1,44 @@
+
+<div class="panel panel-default" id="new_project">
+	<div class="panel-heading">Add new Project</div>
+	<div class="row">
+		<br/>
+		<div class="span8">
+			<form class="form-horizontal span8">
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label" for="project_name">Project	Name</label>
+						<div class="controls">
+							<input id="project_name" type="text" placeholder="Enter name" required="required">
+						</div>
+					</div>
+					<br/>
+					<div class="control-group">
+						<div class="controls">
+							<label class="radio"> 
+								<input type="radio" name="optionsRadios" id="optionsRadios1" value="new_config">
+								New Empty Configuration
+							</label> 
+							<label class="radio"> 
+								<input type="radio" name="optionsRadios" id="optionsRadios2" value="copy_config" checked="checked">
+								Copy configuration from Existing Project: &nbsp;&nbsp;
+								<select data-placeholder="Choose a project..." class="chosen-select" id="selected_project">
+								<option value=""></option>
+                                {{#projects}}
+                                <option value="{{this}}">{{this}}</option>
+                                {{/projects}}
+                            </select>
+							</label>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="pull-right">
+			<button id="create_button" style="margin-right: 10px;" class="btn btn-success"><i class="icon-file icon-white"></i> Create Project</button>
+		</div>
+	</div>
+	<br/>
+</div>

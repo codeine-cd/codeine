@@ -33,6 +33,6 @@ public class ManageServlet extends AbstractFrontEndServlet
 
 	@Override
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
-		return getMenuProvider().getMainMenu();
+		return getMenuProvider().getMainMenu(request);
 	}
 }

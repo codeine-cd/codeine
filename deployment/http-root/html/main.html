@@ -4,13 +4,14 @@
   <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le styles -->
-    
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="resources/libs/chartfx/chartfx7.css" />
+	<link rel="stylesheet" type="text/css" href="resources/libs/bootstrap-notify/css/bootstrap-notify.css" />
+	<link href="resources/libs/font-awesome-4.0.3/css/font-awesome.min.css" rel="stylesheet">
     <link href="resources/css/bootstrap.css" rel="stylesheet">
     <link href="resources/libs/chosen/chosen.min.css" rel="stylesheet">
     <link href="resources/css/codeine.css" rel="stylesheet">
@@ -56,7 +57,7 @@
           <a class="brand" href="/"><img src="resources/img/codeine_16x16.png"/> Codeine</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="javascript: void();">{{codeineversion}}</a></li>
+              <li class="active"><a href="javascript: void(0);">{{codeineversion}}</a></li>
             </ul>
 			<p class="navbar-text pull-right" style="margin-left: 15px;">Logged in as {{loggeduser}}
             </p>
@@ -89,7 +90,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Menu</li>
-              {{#menu}}<li {{active}}><a href="{{link}}"><i class="{{icon}}"></i> {{label}}{{/menu}}</a></li>
+              {{#menu}}<li class="{{perrmission_class}}" id="{{id}}" {{active}}><a href="{{link}}"><i class="{{icon}}"></i> {{label}}</a></li>{{/menu}}
             </ul>
           </div><!--/.well -->
           {{>sidebar}}
@@ -101,21 +102,24 @@
       </div><!--/row-->
 
       <hr>
-
+	  <div class='notifications top-right'></div>
       <footer>
         <p>&copy; Codeine {{codeineversionfull}}</p>
       </footer>
-
     </div><!--/.fluid-container-->
-
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="resources/jquery-ui-1.10.3.custom/js/jquery-1.9.1.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/libs/chosen/chosen.jquery.min.js"></script>
-	<script src="resources/js/jsrender.min.js"></script>
-	<script src="resources/js/codeine.js"></script>
+    <script type="text/javascript" src="resources/libs/jquery/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="resources/libs/bootstrap-notify/js/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="resources/libs/jeditable/jquery.jeditable.mini.js"></script>
+    <script type="text/javascript" src="resources/libs/chartfx/jchartfx.system.js"></script>
+    <script type="text/javascript" src="resources/libs/chartfx/jchartfx.coreVector.js"></script>
+    <script type='text/javascript' src="resources/libs/chartfx/jchartfx.annotation.js"></script>
+	<script type="text/javascript" src="resources/libs/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="resources/libs/chosen/chosen.jquery.min.js"></script>
+	<script type="text/javascript" src="resources/libs/jsrender/jsrender.min.js"></script>
+	<script type="text/javascript" src="resources/js/codeine.js"></script>
 	{{javascriptfiles}}
-  </body>
-</html>
+	<script type="text/javascript" src="resources/js/codeine_help.js"></script>
+  

@@ -4,13 +4,13 @@ import java.util.List;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.ConfiguredProjectUtils;
-import codeine.configuration.HttpCollector;
+import codeine.configuration.NodeMonitor;
 import codeine.configuration.MailPolicy;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 
 public class ShouldSendMailValidator {
-	private HttpCollector collector;
+	private NodeMonitor collector;
 	private ConfiguredProjectUtils configuredProjectUtils;
 	private boolean result;
 	private boolean previousResult;
@@ -18,7 +18,7 @@ public class ShouldSendMailValidator {
 	private NodeInfo node;
 	private PeerStatus peerStatus;
 
-	public ShouldSendMailValidator(boolean result, boolean previousResult, HttpCollector collector,	ConfiguredProjectUtils configuredProjectUtils, ProjectJson project, NodeInfo node, PeerStatus peerStatus) {
+	public ShouldSendMailValidator(boolean result, boolean previousResult, NodeMonitor collector,	ConfiguredProjectUtils configuredProjectUtils, ProjectJson project, NodeInfo node, PeerStatus peerStatus) {
 		this.result = result;
 		this.previousResult = previousResult;
 		this.collector = collector;

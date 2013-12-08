@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.utils.ExceptionUtils;
 
 import com.google.common.base.Function;
@@ -21,8 +20,6 @@ public class DbUtils
 	private static Logger log = Logger.getLogger(DbUtils.class);
 	private static int TIMEOUT_SEC = 5; 
 	
-	@Inject
-	private GlobalConfigurationJson conf;
 	@Inject
 	private MysqlHostSelector hostSelector;
 	

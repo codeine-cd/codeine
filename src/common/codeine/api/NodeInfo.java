@@ -11,7 +11,7 @@ public class NodeInfo {
 
 	public NodeInfo(String name, String alias) {
 		this.name = name;
-		this.alias = alias;
+		this.alias = alias == null ? name : alias;
 	}
 
 	public String alias() {

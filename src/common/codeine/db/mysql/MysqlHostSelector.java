@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -22,6 +23,7 @@ import com.google.common.collect.Lists;
 
 public class MysqlHostSelector implements Task{
 
+	public static final long INTERVAL = TimeUnit.HOURS.toMillis(1);
 	private static final Logger log = Logger.getLogger(MysqlHostSelector.class);
 	@Inject
 	private GlobalConfigurationJson conf;

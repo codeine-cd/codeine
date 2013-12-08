@@ -15,25 +15,26 @@
 		</form>
         <ul class="nav">
           <li class="dropdown">
-            <a href="javascript: void();" class="dropdown-toggle" data-toggle="dropdown"><span id="monitor_drop_down">Any Alert</span>
+            <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><span id="monitor_drop_down">All Nodes</span>
             <b class="caret"></b></a>
             <ul class="dropdown-menu" style="min-width: 300px;" >
-              <li id="Any_Alert" class="codeine_monitor active" data-monitor-name="Any Alert"><a href="javascript: void();">Any Alert <span class="badge pull-right"></span></a></li>
               {{#monitors}}
-              <li id="{{this}}" class="codeine_monitor" data-monitor-name="{{this}}"><a href="javascript: void();">{{this}} <span class="badge pull-right"></span></a></li>
+              <li id="{{this}}" class="codeine_monitor" data-monitor-name="{{this}}"><a href="javascript: void(0);">{{this}} <span class="badge pull-right"></span></a></li>
               {{/monitors}}
-              <li id="All_Nodes" class="codeine_monitor" data-monitor-name="All Nodes"><a href="javascript: void();">All Nodes <span class="badge pull-right"></span></a></li>
+              <li class="divider"></li>
+              <li id="Any_Alert" class="codeine_monitor" data-monitor-name="Any Alert"><a href="javascript: void(0);">Any Alert <span class="badge pull-right"></span></a></li>
+              <li id="All_Nodes" class="codeine_monitor active" data-monitor-name="All Nodes"><a href="javascript: void(0);">All Nodes <span class="badge pull-right"></span></a></li>
             </ul>
           </li>
         </ul>
-        <i id="monitorHelp" style="margin-top: 10px;" rel="popover" data-placement="bottom" data-title="Filtering Options" data-trigger="hover" class="icon-question-sign"></i>
+        <i data-help-message="monitorHelp" style="margin-top: 10px;" rel="popover" data-placement="bottom" data-title="Filtering Options" data-trigger="hover" class="icon-question-sign codeine_help"></i>
         <ul class="nav pull-right">
           <li class="divider-vertical"></li>
           <li class="dropdown" id="commandsDropdown">
-            <a href="javascript: void();" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
+            <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
             <ul class="dropdown-menu">
               {{#commands}}
-              <li class="codeine_command" data-command-name="{{name}}" ><a href="javascript: void();">{{alias}}</a></li>
+              <li class="codeine_command disabled" data-command-name="{{name}}" ><a href="javascript: void(0);">{{alias}}</a></li>
               {{/commands}}
             </ul>
           </li>
@@ -56,14 +57,16 @@
 					<label class="checkbox">
 	    				<input id="checkbox_{{-index}}" data-peer-address={{peer_address}} data-node-name={{node_name}} data-node-alias={{node_alias}} type="checkbox">
 	 				</label>&nbsp;&nbsp;
-	 				{{node_alias}}
+	 				<a data-node-name="{{node_name}}" href="javascript: void(0);" class="nodeLink">
+	 					{{node_alias}}
+	 				</a>
 	 				</div>
 	 				<div class="span5">
 		 				{{#failed_monitors}}
-		 				<a href="{{link}}"><span class="label label-important">{{label}}</span></a>
+		 				<a href="{{link}}"><span class="label label-{{class_name}}">{{label}}</span></a>
 		 				{{/failed_monitors}}
 		 				{{#success_monitors}}
-		 				<i class="fa fa-check-circle fa-lg success"></i>
+		 				<i class="fa fa-check-circle fa-lg {{this}}"></i>
 		 				{{/success_monitors}}
 	 				</div>
 				</fieldset>

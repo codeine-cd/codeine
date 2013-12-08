@@ -1,0 +1,60 @@
+package codeine.api;
+
+import codeine.utils.StringUtils;
+
+
+public class CommandStatusJson {
+
+	public String name;
+	public String link;
+	public String project;
+	public int nodes;
+	public int successPercent;
+	public int failPercent;
+	private String date;
+	private long date_long;
+	private long id;
+	private boolean finished;
+	
+	public CommandStatusJson(String name, String link, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished) {
+		super();
+		this.name = name;
+		this.link = link;
+		this.project = project;
+		this.nodes = nodes;
+		this.successPercent = successPercent;
+		this.failPercent = failPercent;
+		this.id = id;
+		this.finished = finished;
+		this.date_long = date;
+		this.date = StringUtils.formatDate(date);
+	}
+
+	public long id() {
+		return id;
+	}
+	
+	public long long_date() {
+		return date_long;
+	}
+	
+	public String date() {
+		return date;
+	}
+
+	public String project() {
+		return project;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	@Override
+	public String toString() {
+		return "CommandStatusJson [name=" + name + ", link=" + link + ", project=" + project + ", nodes=" + nodes
+				+ ", successPercent=" + successPercent + ", failPercent=" + failPercent + ", date=" + date
+				+ ", date_long=" + date_long + ", id=" + id + ", finished=" + finished + "]";
+	}
+	
+}

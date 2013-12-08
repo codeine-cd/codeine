@@ -13,10 +13,10 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.db.mysql.connectors.AlertsMysqlConnector;
+import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.executer.PeriodicExecuter;
 import codeine.executer.Task;
-import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.ExceptionUtils;
 
@@ -43,11 +43,11 @@ public class MysqlProcessControlService {
 	@Inject
 	private DbUtils dbUtils;
 	@Inject
-	private GlobalConfigurationJson conf;
-	@Inject
 	private StatusMysqlConnector statusMysqlConnector;
 	@Inject
 	private AlertsMysqlConnector alertMysqlConnector;
+	@Inject
+	private ProjectsConfigurationMysqlConnector projectsConfiguratioConnector;
 	@Inject
 	private MysqlHostSelector mysqlHostSelector;
 
@@ -151,6 +151,7 @@ public class MysqlProcessControlService {
 	private void createTables() {
 		statusMysqlConnector.createTables();
 		alertMysqlConnector.createTables();
+		projectsConfiguratioConnector.createTables();
 	}
 
 	private boolean createDbUser() throws SQLException {

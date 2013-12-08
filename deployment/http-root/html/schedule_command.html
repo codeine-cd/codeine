@@ -1,120 +1,143 @@
-<div class="panel panel-default" id="commandData">
-	
-  <!-- Default panel contents -->
-  <div class="panel-heading">Command info</div>
-  <div id="info">
-  	<div class="row">
-  		<br/>
-  		<form class="form-horizontal span8">
-  			<fieldset>
-  			<div class="control-group">
-    			<label class="control-label" for="projectName">Project Name</label>
-    			<div class="controls">
-      				<input id="projectName" type="text" placeholder="Label" value="{{projectName}}" readonly>
-    			</div>
-  			</div>
-  			<div class="control-group">
-    			<label class="control-label" for="commandName">Command Name</label>
-    			<div class="controls">
-      				<input id="commandName" type="text" placeholder="Label" value="{{commandName}}" readonly>
-    			</div>
-  			</div>
-  			</fieldset>
-		</form>
-	</div>
-  </div>
-  <div class="panel-heading">Configuration</div>
-  <div id="configuration">
-  	<div class="row">
-	<br/>
-	<form class="form-horizontal span8">
-		<fieldset>
-		<div class="control-group">
-			<label class="control-label" for="parameter">Command Parameter</label>
-			<div class="controls">
-				<input id="parameter" type="text" placeholder="Parameter">
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">Duration</label>
-			<div class="controls">
-				<select  class="chosen-select" id="commandStrategy">
-					{{#commandExcutionTypeOptions}}
-					<option value="{{this}}">{{this}}</option>
-  					{{/commandExcutionTypeOptions}}
-				</select>
-				<span class="progressiveControl">
-					<input id="duration" type="text" class="span1" placeholder="Time">
-					<select  class="chosen-select span1" id="durationUnits">
-						{{#durationUnitsOptions}}
-	  					<option value="{{this}}">{{this}}</option>
-	  					{{/durationUnitsOptions}}
-					</select>
-				</span>
-			</div>
-		</div>
-		<div class="control-group immediatelyControl">
-			<label class="control-label" for="concurrency">Concurrency</label>
-			<div class="controls">
-				<input id="concurrency" type="text" placeholder="Concurrency" value="10">
-			</div>
-		</div>
-		<div class="control-group progressiveControl">
-			<label class="control-label">Ratio</label>
-			<div class="controls">
-				<select class="chosen-select" id="ratio">
-					{{#ratioOptions}}
-					<option value="{{this}}">{{this}}</option>
-					{{/ratioOptions}}
-				</select>
-			</div>
-		</div>
-		<div class="control-group progressiveControl">
-	
-			<div class="controls">
-				<label class="checkbox">
-	      			<input type="checkbox" id="stopOnErrorCheckbox"> Stop on error
-    			</label>
-    			<span class="hidden" id="errorPercent"><input type="text" id="errorPercentVal" class="span1" placeholder="Error"> %</span>
-			</div>
-		</div>
-		</fieldset>
-	</form>
-	</div>
-  </div>
-	<div class="panel-heading">Nodes info</div>
-		<div>
-	  		<div class="accordion" id="nodesInfo">
-	  			{{#versionNodes}}
-				<div class="accordion-group">
-			    	<div class="accordion-heading">
-			      		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{id}}">
-				        	<i class="fa fa-plus-circle"></i> {{version}}
-				        	<span class="badge badge-info pull-right">{{count}}</span>
-				      	</a>
-				    </div>
-				    <div id="{{id}}" class="accordion-body collapse">
-			      		<div class="accordion-inner">
-				        {{#node}}
-				        <div class="row">
-				        	<div class="span8">
-				        	{{node_alias}}
-				        	</div>
-				        </div>
-				        {{/node}}
-			      		</div>
-				    </div>
-		  		</div>
-	  			{{/versionNodes}}
-			</div>
-			<div class="row">
-				<div class="span9">
-					<button id="submitCommand" style="margin-right: 20px;" class="btn btn-info pull-right"><i class="icon-white icon-play"></i> Run</button>
-				</div>
-			</div>
-			<br/>
-		</div>
+<div id="command_info">
+    <div class="panel panel-default" id="general_info">
+        <div class="panel-heading">
+            Command info</div>
+        <div id="info">
+            <div class="row">
+                <br />
+                <form class="form-horizontal span8">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="project_name">
+                            Project</label>
+                        <div class="controls">
+                            <input id="project_name" type="text" placeholder="Label" value="{{project_name}}" readonly>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="commandName">
+                            Command</label>
+                        <div class="controls">
+                            <input id="title" type="text" placeholder="Label" value="{{command_title}}" readonly>
+                            <input id="name" type="hidden" value="{{command_name}}">
+                        </div>
+                    </div>
+                </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="configuration">
+        <div class="panel-heading">
+            Configuration</div>
+        <div>
+            <div class="row">
+                <br />
+                <form class="form-horizontal span8">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label">
+                            How to run</label>
+                        <div class="controls">
+                            <select class="chosen-select" id="command_strategy">
+                                {{#commandExcutionTypeOptions}}
+                                <option value="{{this}}">{{this}}</option>
+                                {{/commandExcutionTypeOptions}}
+                            </select>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="control-group progressiveControl">
+                        <label class="control-label" for="duration">
+                            Duration</label>
+                        <div class="controls">
+                            <input id="duration" type="text" class="span1" placeholder="Time">
+                            <select class="chosen-select span1" id="duration_units">
+                                {{#durationUnitsOptions}}
+                                <option value="{{this}}">{{this}}</option>
+                                {{/durationUnitsOptions}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group immediatelyControl">
+                        <label class="control-label" for="concurrency">
+                            Concurrency</label>
+                        <div class="controls">
+                            <input id="concurrency" type="text" placeholder="Concurrency" value="10">
+                        </div>
+                    </div>
+                    <div class="control-group progressiveControl">
+                        <label class="control-label">
+                            Ratio</label>
+                        <div class="controls">
+                            <select class="chosen-select" id="ratio">
+                                {{#ratioOptions}}
+                                <option value="{{this}}">{{this}}</option>
+                                {{/ratioOptions}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group progressiveControl">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" id="stop_on_error">
+                                Stop on error
+                            </label>
+                            <span class="hidden" id="errorPercent">
+                                <input type="text" id="error_percent_val" class="span1" placeholder="Error">
+                                %</span>
+                        </div>
+                    </div>
+                </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" id="panel_parameters">
+        <div class="panel-heading">Command Parameters</div>
+       	<br/>
+       	<div id="parameters">
+       	</div>
+    </div>
+    <div class="panel panel-default" id="panel_nodes">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Nodes info</div>
+            <div>
+                <div class="accordion" id="nodesInfo">
+                    {{#versionNodes}}
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{id}}"><i class="fa fa-plus-circle"></i>
+                                {{version}} <span class="badge badge-info pull-right">{{count}}</span> </a>
+                        </div>
+                        <div id="{{id}}" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                {{#node}}
+                                <div class="row">
+                                    <div class="span8">
+                                        {{alias}}
+                                    </div>
+                                </div>
+                                {{/node}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/versionNodes}}
+                </div>
+            </div>
+        </div>
+        </div>
+    <div class="row">
+        <div class="span9">
+            <button id="submitCommand" style="margin-right: 20px;" class="btn btn-info pull-right">
+                <i class="icon-white icon-play"></i>Run</button>
+        </div>
+    </div>
+    <br />
 </div>
+
 <script>
-var nodes = {{nodesJson}}
+var command = {{command_info}}
+var nodes = {{nodesJson}};
 </script>

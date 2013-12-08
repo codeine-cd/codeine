@@ -31,12 +31,20 @@ import com.google.inject.servlet.GuiceFilter;
 
 public abstract class AbstractCodeineBootstrap {
 
+	public AbstractCodeineBootstrap() {
+		
+	}
+	public AbstractCodeineBootstrap(Injector injector) {
+		this.injector = injector;
+	}
+
 	protected static void boot(String component, Class<? extends AbstractCodeineBootstrap> clazz) {
 		new CodeineLogBootstrap().init(component, "codeine_" + component + ".log");
 		if (!CodeineLogBootstrap.logToStdout()) {
 			StdoutRedirectToLog.redirect();
 		}
 		Logger log = Logger.getLogger(AbstractCodeineBootstrap.class);
+		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
 		try {
 			clazz.newInstance().execute1(component);
 		} catch (Exception e) {
@@ -44,8 +52,9 @@ public abstract class AbstractCodeineBootstrap {
 			log.error("error - exiting", e);
 			System.exit(1);
 		}
+		log.info("boot sequence finished");
 	}
-
+	
 	final Logger log = Logger.getLogger(AbstractCodeineBootstrap.class);
 	
 	private Injector injector;
@@ -58,7 +67,6 @@ public abstract class AbstractCodeineBootstrap {
 		handler.setContextPath("/");
 		handler.addServlet(InvalidRequestServlet.class, "/*");
 		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
-
 
 		ContextHandlerCollection contexts = createFileServerContexts();
 		contexts.addHandler(handler);
@@ -132,17 +140,25 @@ public abstract class AbstractCodeineBootstrap {
 	}
 		
 	private Module[] getModules(final String component) {
-		List<Module> $ = Lists.<Module>newArrayList(new GeneralServletModule(), new CodeineGeneralModule() , new AbstractModule() {
-			@Override
-			protected void configure() {
-				//		        binder().requireExplicitBindings();
-				bind(CodeineRuntimeInfo.class).toInstance(new CodeineRuntimeInfo(CodeineVersion.get(), component, getPid()));
-				bind(GuiceFilter.class);
-				bind(Server.class).toProvider(new ServerProvider()).in(Scopes.SINGLETON);
-			}
-		});
+		List<Module> $ = Lists.<Module>newArrayList(new GeneralServletModule(), new CodeineGeneralModule() , new BaseModule(component));
 		$.addAll(getGuiceModules());
 		return $.toArray(new Module[]{});
+	}
+
+	private final class BaseModule extends AbstractModule {
+		private final String component;
+
+		private BaseModule(String component) {
+			this.component = component;
+		}
+
+		@Override
+		protected void configure() {
+			//		        binder().requireExplicitBindings();
+			bind(CodeineRuntimeInfo.class).toInstance(new CodeineRuntimeInfo(CodeineVersion.get(), component, getPid()));
+			bind(GuiceFilter.class);
+			bind(Server.class).toProvider(new ServerProvider()).in(Scopes.SINGLETON);
+		}
 	}
 
 	public class ServerProvider implements Provider<Server> {

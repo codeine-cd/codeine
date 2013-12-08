@@ -7,17 +7,19 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import codeine.api.NodeDataJson;
+import codeine.api.CommandExcutionType;
 import codeine.api.NodeGetter;
-import codeine.configuration.ConfigurationManager;
+import codeine.api.NodeWithPeerInfo;
+import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
-import codeine.jsons.CommandDataJson;
+import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
+import codeine.utils.ThreadUtils;
 
 import com.google.common.base.Function;
 import com.google.gson.Gson;
@@ -28,7 +30,6 @@ public class AllNodesCommandExecuter {
 	private static final Logger log = Logger.getLogger(AllNodesCommandExecuter.class);
 
 	@Inject	private Links links;
-	@Inject	private ConfigurationManager configurationManager;
 	@Inject	private PathHelper pathHelper;
 	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
@@ -39,45 +40,45 @@ public class AllNodesCommandExecuter {
 	private boolean active = true;
 	private long dirName;
 	private String dirNameFull;
-	private ScehudleCommandPostData commandData;
-	private CommandDataJson commandDataJson;
+	private ScehudleCommandExecutionInfo commandData;
+	private CommandExecutionStatusInfo commandDataJson;
 
 	private Object fileWriteSync = new Object();
 
 	private CommandExecutionStrategy strategy;
 
-	public long executeOnAllNodes(ScehudleCommandPostData commandData) {
+	public long executeOnAllNodes(ScehudleCommandExecutionInfo commandData) {
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
 			// final int concurrency =
 			// configurationManager.getProjectForName(commandData.project_name()).getCommand(commandData.command()).concurrency();
 			dirName = getNewDirName();
-			dirNameFull = pathHelper.getPluginsOutputDir(commandData.project_name()) + "/" + dirName;
+			dirNameFull = pathHelper.getPluginsOutputDir(commandData.command_info().project_name()) + "/" + dirName;
 			FilesUtils.mkdirs(dirNameFull);
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);
 			FilesUtils.createNewFile(file);
 			createCommandDataFile();
 			writer = TextFileUtils.getWriter(file, false);
-			log.info("running command " + commandData.command() + " with concurrency " + commandData.concurrency());
-			writeLine("running command " + commandData.command() + " with concurrency " + commandData.concurrency());
+			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
+			writeLine("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
 			writeLine("running command on " + commandData.nodes().size() + " nodes");
 			if (commandData.nodes().size() < 11) {
-				Function<NodeDataJson, String> predicate = new Function<NodeDataJson, String>(){
+				Function<NodeWithPeerInfo, String> predicate = new Function<NodeWithPeerInfo, String>(){
 					@Override
-					public String apply(NodeDataJson input) {
-						return input.node_alias();
+					public String apply(NodeWithPeerInfo input) {
+						return input.alias();
 					}
 				};
 				writeLine("nodes list: " + StringUtils.collectionToString(commandData.nodes(), predicate));
 			}
-			new Thread() {
+			ThreadUtils.createThread(new Runnable() {
 				@Override
 				public void run() {
 					execute();
 				};
-			}.start();
+			}, "AllNodesCommandExecuter_"+commandData.command_info().command_name()).start();
 			return dirName;
 		} catch (Exception ex) {
 			finish();
@@ -98,7 +99,7 @@ public class AllNodesCommandExecuter {
 
 	private void execute() {
 		try {
-			if (commandData.commandExcutionType() == CommandExcutionType.Imediatley){
+			if (commandData.command_info().command_strategy() == CommandExcutionType.Immediately){
 				strategy = new ImmediatlyCommandStrategy(this, commandData, links);
 			}
 			else { 
@@ -108,16 +109,26 @@ public class AllNodesCommandExecuter {
 			if (strategy.isCancel()) {
 				writeLine("command was canceled by user");
 			}
-			writeLine("finished!");
-			writeLine("failed nodes: " + commandDataJson.fail_list());
-			writeLine("=========> aggregate-command-statistics (fail/total): " + fail + "/" + total + "\n");
+			writeFooter();
 		} finally {
 			finish();
 		}
 	}
 
+	private void writeFooter() {
+		writeLine("finished!");
+		Function<NodeWithPeerInfo, String> f = new Function<NodeWithPeerInfo, String>() {
+			@Override
+			public String apply(NodeWithPeerInfo n){
+				return n.alias();
+			}
+		};
+		writeLine("failed nodes: " + StringUtils.collectionToString(commandDataJson.fail_list(), f));
+		writeLine("=========> aggregate-command-statistics (fail/total): " + fail + "/" + total + "\n");
+	}
+
 	private void createCommandDataFile() {
-		commandDataJson = new CommandDataJson(commandData.command(), commandData.params(), commandData.project_name(),
+		commandDataJson = new CommandExecutionStatusInfo(commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
 				commandData.nodes(), dirName);
 		FilesUtils.createNewFile(commandFile());
 		updateJson();
@@ -129,7 +140,7 @@ public class AllNodesCommandExecuter {
 
 	private long getNewDirName() {
 		long i = 0;
-		String dir = pathHelper.getPluginsOutputDir(commandData.project_name());
+		String dir = pathHelper.getPluginsOutputDir(commandData.command_info().project_name());
 		List<String> filesInDir = FilesUtils.getFilesInDir(dir);
 		for (String dir1 : filesInDir) {
 			try {
@@ -156,14 +167,16 @@ public class AllNodesCommandExecuter {
 		}
 	}
 
-	public void fail(NodeDataJson node) {
+	public void fail(NodeWithPeerInfo node) {
+		log.debug("node fail " + node.name());
 		fail++;
 		synchronized (commandDataJson) {
 			commandDataJson.addFailedNode(node);
 		}
 	}
 
-	public void nodeSuccess(NodeDataJson node) {
+	public void nodeSuccess(NodeWithPeerInfo node) {
+		log.debug("node success " + node.name());
 		synchronized (commandDataJson) {
 			commandDataJson.addSuccessNode(node);
 		}
@@ -189,7 +202,7 @@ public class AllNodesCommandExecuter {
 	}
 
 	public String name() {
-		return commandData.command();
+		return commandData.command_info().command_name();
 	}
 
 	public int success() {
@@ -201,14 +214,14 @@ public class AllNodesCommandExecuter {
 	}
 
 	public String project() {
-		return commandData.project_name();
+		return commandData.command_info().project_name();
 	}
 
 	public int nodes() {
 		return commandData.nodes().size();
 	}
 
-	public CommandDataJson commandData() {
+	public CommandExecutionStatusInfo commandData() {
 		return commandDataJson;
 	}
 

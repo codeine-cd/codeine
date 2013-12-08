@@ -17,24 +17,43 @@ import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.model.Constants;
+import codeine.statistics.MonitorsStatistics;
 import codeine.users.LoginServlet;
 import codeine.users.LogoutServlet;
 import codeine.users.UsersManager;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 
 public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 {
+	public CodeineWebServerBootstrap(Injector injector) {
+		super(injector);
+	}
+
+	public CodeineWebServerBootstrap() {
+	}
+
 	public static void main(String[] args)
 	{
+		System.setProperty("org.eclipse.jetty.server.Request.maxFormContentSize", "10000000");
 		boot(Component.WEB, CodeineWebServerBootstrap.class);
 	}
 	
 	@Override
 	protected void execute() {
-		new Thread(new PeriodicExecuter(UpdaterThreadV3.SLEEP_TIME ,injector().getInstance(UpdaterThreadV3.class), "UpdaterThreadV3")).start();
+		log.info("executing web server bootstrap");
+		new PeriodicExecuter(PeersProjectsStatus.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
+		try {
+			injector().getInstance(ConfigurationManagerServer.class).updateDb();
+		} catch (Exception e) {
+			log.error("fail to update projects in db", e);
+		}
+		new PeriodicExecuter(Integer.MAX_VALUE ,injector().getInstance(ProjectConfigurationInPeerUpdater.class)).runInThread();
+		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(MonitorsStatistics.class)).runInThread();
 	}
 
 	@Override
@@ -98,12 +117,13 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		return context;
 	}
 	private ServletContextHandler createServletContextHandlerSpnego() {
+		GlobalConfigurationJson config = injector().getInstance(GlobalConfigurationJson.class);
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS
 				| ServletContextHandler.SECURITY);
 
 		Constraint constraint = new Constraint();
 		constraint.setName(Constraint.__SPNEGO_AUTH);
-		constraint.setRoles(new String[] {"GER.CORP.INTEL.COM","GAR.CORP.INTEL.COM","AMR.CORP.INTEL.COM","CCR.CORP.INTEL.COM"});
+		constraint.setRoles(config.roles());
 		constraint.setAuthenticate(true);
 
 		ConstraintMapping constraintMapping = new ConstraintMapping();

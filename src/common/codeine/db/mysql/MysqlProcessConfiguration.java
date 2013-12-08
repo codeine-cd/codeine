@@ -9,7 +9,6 @@ public class MysqlProcessConfiguration {
 	{
 		Map<String, String> options = new HashMap<String, String>();
 		options.put("skip-innodb-use-native-aio", null);
-		options.put("max_allowed_packet", "16M");
 		return options;
 	}
 }

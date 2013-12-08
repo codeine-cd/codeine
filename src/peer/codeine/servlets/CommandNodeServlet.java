@@ -2,17 +2,20 @@ package codeine.servlets;
 
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.http.HttpStatus;
 
-import codeine.configuration.ConfigurationManager;
+import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredentialsHelper;
-import codeine.jsons.command.CommandJson;
+import codeine.jsons.command.CommandInfo;
+import codeine.jsons.command.CommandParameterInfo;
 import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.servlet.AbstractServlet;
@@ -20,30 +23,111 @@ import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.network.InetUtils;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
+import codeine.utils.os_process.ShellScript;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class CommandNodeServlet extends AbstractServlet
 {
 	private static final Logger log = Logger.getLogger(CommandNodeServlet.class);
 	private static final long serialVersionUID = 1L;
 	@Inject private PathHelper pathHelper;
-	@Inject private ConfigurationManager configurationManager;
+	@Inject private IConfigurationManager configurationManager;
 	
+	@Override
+	public void myPost(HttpServletRequest request, HttpServletResponse res)	{
+		log.info("myPost");
+		final PrintWriter writer = getWriter(res);
+		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
+		writer.println("INFO: executing command " + commandInfo.command_name() + " on host " + InetUtils.getLocalHost().getHostName() +" in project " + commandInfo.project_name() + " with args " + parameters(commandInfo));
+		
+		String dir = pathHelper.getPluginsDir(commandInfo.project_name());
+		String script_content = commandInfo.script_content();
+		String file = dir + "/" + commandInfo.command_name();
+		ShellScript cmdScript = null;
+		try {
+			if (null != script_content){
+				//new
+				cmdScript = new ShellScript(file, script_content);
+				file = cmdScript.create();
+			}
+			else if (FilesUtils.exists(file)) { //TODO remove after build 1100
+				log.warn("command is in old file format: " + file);
+			}
+			else {
+				log.info("command not found " + file);
+				writer.println("command not found " + file);
+				res.setStatus(HttpStatus.NOT_FOUND_404);
+				return;
+			}
+			List<String> cmd = Lists.newArrayList();
+			List<String> cmdForOutput = Lists.newArrayList();
+			String credentials = commandInfo.credentials();
+			log.info("credentials: " + credentials);
+			if (credentials != null){
+				writer.println("credentials = " + credentials);
+				cmd.add(PathHelper.getReadLogs());
+				cmd.add(encodeIfNeeded(credentials, credentials));
+			}
+			cmd.add(encodeIfNeeded("/bin/sh", credentials));
+			cmd.add(encodeIfNeeded("-xe", credentials));
+			cmd.add(encodeIfNeeded(file, credentials));
+			cmdForOutput.add("/bin/sh");
+			cmdForOutput.add("-xe");
+			cmdForOutput.add(file);
+			writer.println("$ " + StringUtils.collectionToString(cmdForOutput));
+			Function<String, Void> function = new Function<String, Void>(){
+				@Override
+				public Void apply(String input){
+					writer.println(input);
+					writer.flush();
+					return null;
+				}
+			};
+			Map<String, String> env = getEnvParams(commandInfo);
+			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(10).function(function).env(env).build().execute();
+			writer.println(Constants.COMMAND_RESULT + result.exit());
+//		res.setStatus(result.success() ? HttpStatus.OK_200 : HttpStatus.INTERNAL_SERVER_ERROR_500);
+		} finally {
+			if (null != cmdScript){
+				cmdScript.delete();
+			}
+		}
+	}
+	private Map<String, String> getEnvParams(CommandInfo commandJson) {
+		Map<String, String> $ = Maps.newHashMap();
+		for (CommandParameterInfo p : commandJson.parameters()) {
+			$.put(p.name(), p.value());
+		}
+		return $;
+	}
+	private String parameters(CommandInfo commandInfo) {
+		Function<CommandParameterInfo, String> function = new Function<CommandParameterInfo, String>() {
+			@Override
+			public String apply(CommandParameterInfo input) {
+				return input.name() + "=" + input.value();
+			}
+		};
+		return StringUtils.collectionToString(commandInfo.parameters(), function);
+	}
+	//TODO should be removed after build 1000
 	@Override
 	public void myGet(HttpServletRequest req, HttpServletResponse res)
 	{
 		log.info("CommandNodeServlet doGet");
 		String projectName = req.getParameter("project");
 		final PrintWriter writer = getWriter(res);
+		writer.println("CommandNodeServlet THE OLD DOGET!");
 		String command = req.getParameter("command");
 		String userArgs = req.getParameter("version");
 		writer.println("projectName = " + projectName);
 		writer.println("command = " + command);
 		writer.println("user_args = " + userArgs);
 		writer.println("INFO: CommandNodeServlet - executing command " + command + " on host " + InetUtils.getLocalHost().getHostName() +" in project " + projectName + " with args " + userArgs);
-		CommandJson commandJson = getCommand(command, projectName);
+		CommandInfo commandJson = getCommand(command, projectName);
 		
 		String dir = pathHelper.getPluginsDir(projectName);
 		String file = dir + "/" + command;
@@ -95,7 +179,7 @@ public class CommandNodeServlet extends AbstractServlet
 		return null == credentials ? text: new CredentialsHelper().encode(text);
 	}
 
-	private CommandJson getCommand(String command, String projectName) {
+	private CommandInfo getCommand(String command, String projectName) {
 		return configurationManager.getProjectForName(projectName).getCommand(command);
 	}
 }

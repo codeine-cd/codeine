@@ -24,7 +24,6 @@ public abstract class AbstractServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Inject private Gson gson;
-	@Inject private HtmlHeaderWriter htmlHeaderWriter;
 	
 	@Override
 	protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,10 +65,8 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 
 	private void writeNotFound(HttpServletRequest request, HttpServletResponse response) {
-		htmlHeaderWriter.writeHeader(request, response, null, "not-found");
 		PrintWriter writer = getWriter(response);
 		writer.write("Oooooooooooooops...");
-		htmlHeaderWriter.writeFooter(response);
 	}
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
 		writeNotFound(request, response);
@@ -89,6 +86,9 @@ public abstract class AbstractServlet extends HttpServlet{
 
 	protected final <T> T readBodyJson(HttpServletRequest request, Class<T> clazz) {
 		return gson().fromJson(readBody(request), clazz);
+	}
+	protected final void writeResponseJson(HttpServletResponse response, Object json) {
+		getWriter(response).write(gson().toJson(json));
 	}
 
 	protected String readBody(HttpServletRequest request) {

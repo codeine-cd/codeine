@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import codeine.api.NodeDataJson;
+import codeine.api.NodeWithPeerInfo;
+import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 
 public class ImmediatlyCommandStrategy extends CommandExecutionStrategy {
@@ -13,14 +14,14 @@ public class ImmediatlyCommandStrategy extends CommandExecutionStrategy {
 	private static final Logger log = Logger.getLogger(ImmediatlyCommandStrategy.class);
 	
 
-	public ImmediatlyCommandStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandPostData commandData, Links links) {
+	public ImmediatlyCommandStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links) {
 		super(allNodesCommandExecuter, commandData, links);
 	}
 
 	@Override
 	public void execute() {
-		List<NodeDataJson> nodes = commandData().nodes();
-		int concurrency = commandData().concurrency();
+		List<NodeWithPeerInfo> nodes = commandData().nodes();
+		int concurrency = commandData().command_info().concurrency();
 		executeConcurrent(nodes, concurrency);
 	}
 

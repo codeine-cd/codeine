@@ -3,6 +3,7 @@ package codeine.utils.os_process;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,9 @@ import codeine.model.Result;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ProcessExecuter {
 	
@@ -20,15 +24,17 @@ public class ProcessExecuter {
 	private List<String> cmdForOutput;
 	private Function<String, Void> function;
 	private String runFromDir;
+	private Map<String, String> env;
 	
 
-	private ProcessExecuter(List<String> cmd, List<String> cmdForOutput, long timeoutInMinutes, Function<String, Void> function, String runFromDir) {
+	private ProcessExecuter(List<String> cmd, List<String> cmdForOutput, long timeoutInMinutes, Function<String, Void> function, String runFromDir, Map<String, String> env) {
 		super();
 		this.cmd = cmd;
 		this.cmdForOutput = cmdForOutput;
 		this.timeoutInMinutes = timeoutInMinutes;
 		this.function = function;
 		this.runFromDir = runFromDir;
+		this.env = env;
 	}
 
 	public Result execute() {
@@ -37,6 +43,7 @@ public class ProcessExecuter {
 		ProcessExecuterWorker worker = null;
 		try {
 			ProcessBuilder pb = new ProcessBuilder(cmd);
+			pb.environment().putAll(env);
 			pb.directory(new File(runFromDir));
 			pb.redirectErrorStream(true);
 			process = pb.start();
@@ -68,6 +75,7 @@ public class ProcessExecuter {
 		private List<String> cmdForOutput;
 		private long timeoutInMinutes = 2;
 		private String runFromDir;
+		private Map<String, String> env = Maps.newHashMap();
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		private Function<String, Void> function = (Function)Functions.constant(null);
 		
@@ -77,12 +85,20 @@ public class ProcessExecuter {
 			this.runFromDir = runFromDir;
 		}
 
+		public ProcessExecuterBuilder(List<String> cmd) {
+			this(cmd, ".");
+		}
+
 		public ProcessExecuter build(){
-			return new ProcessExecuter(cmd, cmdForOutput, timeoutInMinutes, function, runFromDir);
+			return new ProcessExecuter(cmd, cmdForOutput, timeoutInMinutes, function, runFromDir, env);
 		}
 		
 		public ProcessExecuterBuilder cmd(List<String> cmd){
 			this.cmd = cmd;
+			return this;
+		}
+		public ProcessExecuterBuilder env(Map<String, String> env){
+			this.env = env;
 			return this;
 		}
 		public ProcessExecuterBuilder cmdForOutput(List<String> cmdForOutput){
@@ -99,6 +115,19 @@ public class ProcessExecuter {
 		}
 		
 		
+	}
+
+	public static Result execute(String cmd) {
+		List<String> cmdList = Lists.newArrayList(Splitter.on(" ").omitEmptyStrings().split(cmd));
+		return new ProcessExecuterBuilder(cmdList).build().execute();
+	}
+
+	public static String executeSuccess(String cmd) {
+		Result r = execute(cmd);
+		if (!r.success()) {
+			throw new RuntimeException("fail with exit status " +  r.exit());
+		}
+		return r.output();
 	}
 	
 //	public static void main(String[] args) {

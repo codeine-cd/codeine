@@ -1,64 +1,54 @@
 package codeine.jsons.peer_status;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import codeine.api.NodeWithMonitorsInfo;
-import codeine.model.Constants;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class ProjectStatus {
 	
-	//TODO can be remove after peer upgrade to 710
-	private Map<String,Map<String,String>> monitor_to_status = Maps.newHashMap();//node->monitor->status
-	private List<NodeWithMonitorsInfo> nodesInfo = Lists.newArrayList();
-	private String projectName;
+	private List<NodeWithMonitorsInfo> nodes_info = Lists.newArrayList();
+	private String project_name;
 	
 	
 	public ProjectStatus() {
 		super();
 	}
 
-	public ProjectStatus(String projectName, List<NodeWithMonitorsInfo> nodesInfo) {
-		this.projectName = projectName;
-		this.nodesInfo = nodesInfo;
+	public ProjectStatus(String project_name, List<NodeWithMonitorsInfo> nodes_info) {
+		this.project_name = project_name;
+		this.nodes_info = nodes_info;
 		
 	}
 	
-	public List<NodeWithMonitorsInfo> nodesInfo() {
-		return nodesInfo;
+	public ProjectStatus(String project_name, NodeWithMonitorsInfo node_info) {
+		this.project_name = project_name;
+		this.nodes_info.add(node_info);
 	}
-	//TODO can be remove after peer upgrade to 710
-	public Map<String,Map<String,String>> nodesInfoOld() {
-		return monitor_to_status;
+	
+	public List<NodeWithMonitorsInfo> nodes_info() {
+		return nodes_info;
 	}
+
 
 	@Override
 	public String toString() {
-		return "ProjectStatus [monitor_to_status=" + monitor_to_status + ", nodesInfo=" + nodesInfo + ", projectName="
-				+ projectName + "]";
+		return "ProjectStatus [nodes_info=" + nodes_info + ", project_name=" + project_name + "]";
 	}
 
 	public String getVersionOrNull(String nodeName) {
-		List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(nodesInfo());
+		List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(nodes_info());
 		for (NodeWithMonitorsInfo nodeInfo : nodes) {
 			if (nodeInfo.name().equals(nodeName)){
 				return nodeInfo.version();
-			}
-		}
-		for (Entry<String, Map<String, String>> e : nodesInfoOld().entrySet()) {
-			if (e.getKey().equals(nodeName)){
-				return e.getValue().get(Constants.VERSION);
 			}
 		}
 		return null;
 	}
 
 	public NodeWithMonitorsInfo nodeInfoOrNull(String nodeName) {
-		for (NodeWithMonitorsInfo n : nodesInfo) {
+		for (NodeWithMonitorsInfo n : nodes_info()) {
 			if (n.name().equals(nodeName)){
 				return n;
 			}
@@ -67,7 +57,20 @@ public class ProjectStatus {
 	}
 
 	public void addNodeInfo(NodeWithMonitorsInfo nodeInfo) {
-		nodesInfo.add(nodeInfo);
+		nodes_info.add(nodeInfo);
+	}
+
+	public String project_name() {
+		return project_name;
+	}
+
+
+
+	public void updateNodesWithPeer(PeerStatusJsonV2 peerStatusJsonV2) {
+		for (NodeWithMonitorsInfo n : nodes_info) {
+			n.peer(peerStatusJsonV2);
+		}
+
 	}
 
 	

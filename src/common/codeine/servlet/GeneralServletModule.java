@@ -2,12 +2,12 @@ package codeine.servlet;
 
 import codeine.model.Constants;
 
-public class GeneralServletModule extends AbstractServletModule {
+public class GeneralServletModule extends CodeineServletModule {
 
 	@Override
 	protected void configureServlets()
 	{
-		serveMe(Constants.INFO_CONTEXT, CodeineInfoServlet.class);
-		serveMe(Constants.VERSION_INFO_CONTEXT, CodeineVersionInfoServlet.class);
+		serveMe(CodeineInfoServlet.class, Constants.INFO_CONTEXT);
+		serveMe(CodeineVersionInfoServlet.class, Constants.VERSION_INFO_CONTEXT);
 	}
 }

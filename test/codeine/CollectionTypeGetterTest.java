@@ -23,7 +23,7 @@ public class CollectionTypeGetterTest {
 		assertEquals(immediatly(), tested.getCollectionType(dateTime.plus(TimeUnit.MINUTES.toMillis(59))));
 	}
 	private ArrayList<AlertsCollectionType> immediatly() {
-		return Lists.newArrayList(AlertsCollectionType.Immediatly);
+		return Lists.newArrayList(AlertsCollectionType.Immediately);
 	}
 	@Test(expected=IllegalArgumentException.class)
 	public void testIllegal() {
@@ -34,7 +34,7 @@ public class CollectionTypeGetterTest {
 		assertEquals(hourly(), tested.getCollectionType(dateTime.plus(TimeUnit.MINUTES.toMillis(61))));
 	}
 	private ArrayList<AlertsCollectionType> hourly() {
-		return Lists.newArrayList(AlertsCollectionType.Immediatly, AlertsCollectionType.Hourly);
+		return Lists.newArrayList(AlertsCollectionType.Immediately, AlertsCollectionType.Hourly);
 	}
 	@Test
 	public void testNotCollectingHourlyTwice() {
@@ -47,7 +47,7 @@ public class CollectionTypeGetterTest {
 		assertEquals(immediatly(), tested.getCollectionType(dateTime.plus(TimeUnit.HOURS.toMillis(7)+1)));
 	}
 	private ArrayList<AlertsCollectionType> daily() {
-		return Lists.newArrayList(AlertsCollectionType.Immediatly, AlertsCollectionType.Hourly, AlertsCollectionType.Daily);
+		return Lists.newArrayList(AlertsCollectionType.Immediately, AlertsCollectionType.Hourly, AlertsCollectionType.Daily);
 	}
 
 }

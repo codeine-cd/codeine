@@ -3,7 +3,7 @@
  	<div class="panel-body">
  		<div id="labels">
  		</div>
-		<div class="row">
+		<div class="row change_element">
 			<div class="span2">
 	    	<input id="label" style="width:100%;" type="text" placeholder="Label">
 	    	</div>
@@ -14,15 +14,15 @@
 	    	<input id="description" style="width:100%;" type="text" placeholder="Description...">
 	    	</div>
 	    	<div class="span1" style="line-height: 30px;">
-				<a href="javascript: void();" onclick="addLabel();">
+				<a href="javascript: void(0);" onclick="addLabel();">
 					<i class="fa fa-plus-circle fa-lg info" style="vertical-align: middle;"></i>
 				</a>
 			</div>
-	    	<!-- <button type="button" id="submitLabel" class="btn">Add</button>-->
 	    	<input id="project" type="hidden" value="{{projectName}}">
 		</div>
 	</div>
 </div>
 <script>
 var labelsJson = {{labelsJson}};
+var readOnly = {{readOnly}};
 </script>

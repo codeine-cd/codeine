@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 public enum AlertsCollectionType {
 	Daily(TimeUnit.DAYS),
 	Hourly(TimeUnit.HOURS),
+	Immediately(TimeUnit.SECONDS),
 	Immediatly(TimeUnit.SECONDS),
 	NotCollected(TimeUnit.NANOSECONDS)
 	;

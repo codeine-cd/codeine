@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.servlet.AbstractServlet;
-import codeine.servlet.HtmlHeaderWriter;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.network.HttpUtils;
 
@@ -19,8 +18,6 @@ public class RegisterServlet extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private HtmlHeaderWriter htmlHeaderWriter;
-	@Inject
 	private UsersManager usersManager;
 	
 	@Override
@@ -30,8 +27,6 @@ public class RegisterServlet extends AbstractServlet {
 
 	private void writeForm(HttpServletRequest request, HttpServletResponse response, boolean wrongPassword) {
 		String projectName = request.getParameter("project");
-		String path = null != projectName ? projectName + "/ login" : "login";
-		htmlHeaderWriter.writeHeader(request, response, projectName, path);
 		String line = "";
 		
 		if (wrongPassword){
@@ -60,7 +55,6 @@ public class RegisterServlet extends AbstractServlet {
 		line += "</ul><br style=\"clear:left\"/></div></alert>";
 
 		getWriter(response).append("<form method='POST' action='/register"+addProjectParam(projectName)+"'>" + line + "</form>");
-		htmlHeaderWriter.writeFooter(response);
 	}
 	
 	@Override

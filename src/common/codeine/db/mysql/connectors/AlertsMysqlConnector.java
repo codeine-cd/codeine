@@ -3,6 +3,7 @@ package codeine.db.mysql.connectors;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -41,6 +42,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 
 	@Override
 	public Multimap<String, CollectorNotificationJson> getAlertsAndUpdate(final AlertsCollectionType collType) {
+		final AtomicInteger count = new AtomicInteger(0);
 		final Multimap<String, CollectorNotificationJson> $ = HashMultimap.create();
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
@@ -54,6 +56,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 					rs.updateLong("collection_type", collType.toLong());
 					$.put(n.project_name(),n);
 					rs.updateRow();
+					count.incrementAndGet();
 					return null;
 				} catch (SQLException e) {
 					throw ExceptionUtils.asUnchecked(e); 
@@ -62,6 +65,9 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		};
 		dbUtils.executeUpdateableQuery("SELECT id, data, collection_type_update_time, collection_type FROM " + tableName + 
 				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL" , function);
+		if (count.intValue() > 0){
+			log.info("handled col type " + collType + " with num of events " + count.intValue());
+		}
 		return $;
 	}
 

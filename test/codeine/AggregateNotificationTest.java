@@ -25,14 +25,14 @@ public class AggregateNotificationTest {
 	
 	@Test
 	public void testNoItems() {
-		assertTrue(tested.prepareMailsToUsers(AlertsCollectionType.Immediatly, HashMultimap.<String, CollectorNotificationJson>create(), Lists.<ProjectJson>newArrayList()).isEmpty());
+		assertTrue(tested.prepareMailsToUsers(AlertsCollectionType.Immediately, HashMultimap.<String, CollectorNotificationJson>create(), Lists.<ProjectJson>newArrayList()).isEmpty());
 	}
 	@Test
 	public void testNoItemsWithConfiguredProject_shouldNotSend() {
 		ProjectJson projectJson = createProject("myproject");
 		createPolicy(projectJson, "oshai");
 		
-		List<NotificationContent> result = tested.prepareMailsToUsers(AlertsCollectionType.Immediatly, projectNameToItems, projects);
+		List<NotificationContent> result = tested.prepareMailsToUsers(AlertsCollectionType.Immediately, projectNameToItems, projects);
 		
 		assertTrue(result.isEmpty());
 	}
@@ -42,7 +42,7 @@ public class AggregateNotificationTest {
 		createNotification(projectJson);
 		MailPolicyJson mailPolicy = createPolicy(projectJson, "oshai");
 		
-		List<NotificationContent> result = tested.prepareMailsToUsers(AlertsCollectionType.Immediatly, projectNameToItems, projects);
+		List<NotificationContent> result = tested.prepareMailsToUsers(AlertsCollectionType.Immediately, projectNameToItems, projects);
 		
 		assertEquals(1, result.size());
 		assertEquals(mailPolicy.user(), result.get(0).user());
@@ -89,7 +89,7 @@ public class AggregateNotificationTest {
 		MailPolicyJson mailPolicy = createPolicy(projectJson, user);
 		createPolicy(projectJson1, user);
 		
-		List<NotificationContent> result = tested.prepareMailsToUsers(AlertsCollectionType.Immediatly, projectNameToItems, projects);
+		List<NotificationContent> result = tested.prepareMailsToUsers(AlertsCollectionType.Immediately, projectNameToItems, projects);
 		
 		assertEquals(1, result.size());
 		assertEquals(mailPolicy.user(), result.get(0).user());
@@ -101,7 +101,7 @@ public class AggregateNotificationTest {
 	
 	
 	private MailPolicyJson createPolicy(ProjectJson projectJson, String user) {
-		AlertsCollectionType intensity = AlertsCollectionType.Immediatly;
+		AlertsCollectionType intensity = AlertsCollectionType.Immediately;
 		return createPolicy(projectJson, user, intensity);
 	}
 	private MailPolicyJson createPolicy(ProjectJson projectJson, String user, AlertsCollectionType intensity) {

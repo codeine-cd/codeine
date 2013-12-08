@@ -45,14 +45,14 @@ public class CollectionTypeGetter {
 			log.info("daily mail collection");
 			lastDailyCollection = dateTime;
 			lastHourlyCollection = dateTime;
-			return Lists.newArrayList(AlertsCollectionType.Immediatly, AlertsCollectionType.Hourly, AlertsCollectionType.Daily);
+			return Lists.newArrayList(AlertsCollectionType.Immediately, AlertsCollectionType.Hourly, AlertsCollectionType.Daily);
 		}
 		if (dateTime.getMinuteOfHour() <= TIME_WINDOW_TO_REPORT_HOUR && Minutes.minutesBetween(lastHourlyCollection, dateTime).getMinutes() > TIME_WINDOW_TO_REPORT_HOUR){
 			log.info("hourly mail collection");
 			lastHourlyCollection = dateTime;
-			return Lists.newArrayList(AlertsCollectionType.Immediatly, AlertsCollectionType.Hourly);
+			return Lists.newArrayList(AlertsCollectionType.Immediately, AlertsCollectionType.Hourly);
 		}
-		return Lists.newArrayList(AlertsCollectionType.Immediatly);
+		return Lists.newArrayList(AlertsCollectionType.Immediately);
 	}
 
 	private int reportingWindowDay() {

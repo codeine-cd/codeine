@@ -1,0 +1,39 @@
+<div class="row">
+	<form class="form-horizontal span8">
+    	<fieldset>
+    		<div class="control-group">
+				{{if type == "String"}}
+					<label class="control-label" for="param_{{:#getIndex()}}">{{:name}}</label>
+					<div class="controls">
+			       		<input id="param_string_{{:#getIndex()}}" type="text" value="{{:default_value}}" data-name="{{:name}}" data-validation-exp="{{:validation_expression}}">
+			       		{{if description }}
+			       		<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-title="{{:name}}" data-trigger="hover" class="icon-question-sign"></i>
+			       		{{/if}}
+			       	</div>
+				{{else type == "Boolean"}}
+					<div class="controls">
+						<label class="checkbox">
+                   			<input type="checkbox" id="param_bool_{{:#getIndex()}}" data-name="{{:name}}" checked="{{:default_value}}">
+                         	{{:name}}
+                         	{{if description }} 
+                         	<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-title="{{:name}}" data-trigger="hover" class="icon-question-sign"></i>
+                         	{{/if}}
+	                    </label>
+                    </div>
+				{{else type == "Selection"}}
+						<label class="control-label">{{:name}}</label>
+                        <div class="controls">
+                            <select class="chosen-select" id="param_selection_{{:#getIndex()}}" data-name="{{:name}}" selected="{{:default_value}}">
+                                {{for allowed_values}}
+                                	<option value="{{:#data}}">{{:#data}}</option>
+                                {{/for}}
+                            </select>
+                            {{if description }}
+                            <i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-title="{{:name}}" data-trigger="hover" class="icon-question-sign"></i>
+                            {{/if}}
+                        </div>
+				{{/if}}
+			</div>
+		</fieldset>
+	 </form>
+</div>

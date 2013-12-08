@@ -1,6 +1,6 @@
 package codeine.nodes;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -8,10 +8,11 @@ import org.apache.log4j.Logger;
 
 import codeine.configuration.PathHelper;
 import codeine.jsons.nodes.NodeListJson;
-import codeine.model.Result;
-import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
+import codeine.jsons.project.ProjectJson;
+import codeine.model.Constants;
+import codeine.utils.os_process.ShellScriptWithOutput;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -21,24 +22,23 @@ public class NodeScriptDiscovery {
 	@Inject private Gson gson;
 	@Inject private PathHelper pathHelper;
 	
-	public NodeListJson get(String projectName) {
-		String dir = pathHelper.getPluginsDir(projectName);
-		String p = dir + "/discovery";
-		List<String> cmd = Lists.newArrayList(p, projectName);
-		Result result = new ProcessExecuterBuilder(cmd, dir).build().execute();
-		if (!result.success()){
-			throw new RuntimeException("error discovering nodes" + result.output);
-		}
-		if (result.output.trim().isEmpty()){
+	public NodeListJson get(ProjectJson projectJson) {
+		String nodes_discovery_script = projectJson.nodes_discovery_script();
+		String dir = pathHelper.getProjectDir(projectJson.name());
+		Map<String, String> env = Maps.newHashMap();
+		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
+		ShellScriptWithOutput shellScript = 
+				new ShellScriptWithOutput("discovery_" + projectJson.name(), nodes_discovery_script, dir, env);
+		String result = shellScript.execute();
+		if (result.trim().isEmpty()){
 			return new NodeListJson();
 		}
-		String json = result.output;
 		NodeListJson nodeListJson = null;
 		try {
-			nodeListJson = gson.fromJson(json, NodeListJson.class);
+			nodeListJson = gson.fromJson(result, NodeListJson.class);
 		} catch (JsonSyntaxException e) {
-			log.warn("json is " + json);
-			log.warn("failed to parsed nodes from discovery ", e);
+			log.warn("json is " + result);
+			log.warn("failed to parse nodes from discovery in project " + projectJson.name(), e);
 		}
 		if (null == nodeListJson){
 			return new NodeListJson();

@@ -6,7 +6,7 @@ import codeine.jsons.project.ProjectJson;
 
 public class ConfiguredProjectUtils {
 
-	public List<HttpCollector> dependsOn(HttpCollector collector, ProjectJson p)
+	public List<NodeMonitor> dependsOn(NodeMonitor collector, ProjectJson p)
 	{
 		throw new UnsupportedOperationException();
 //		final List<HttpCollector> l = Lists.newLinkedList();

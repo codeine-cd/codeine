@@ -4,18 +4,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.model.Constants;
+import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
 
 public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 
 	private String projectName;
-	private Map<String, MonitorInfo> monitors;
+	private Map<String, MonitorStatusInfo> monitors;
+	private String version = Constants.NO_VERSION;
 	
 
-	public NodeWithMonitorsInfo(String peerName, String name, String alias, String projectName, Map<String,MonitorInfo> monitors) {
-		super(name, alias, peerName);
+	public NodeWithMonitorsInfo(PeerStatusJsonV2 peer, String name, String alias, String projectName, Map<String,MonitorStatusInfo> monitors) {
+		super(name, alias, peer);
 		this.projectName = projectName;
 		this.monitors = monitors;
 	}
@@ -24,12 +27,12 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return projectName;
 	}
 	
-	public Map<String, MonitorInfo> monitors() {
+	public Map<String, MonitorStatusInfo> monitors() {
 		return monitors;
 	}
 
 	public boolean status() {
-		for (MonitorInfo m : monitors.values()) {
+		for (MonitorStatusInfo m : monitors.values()) {
 			if (m.fail()){
 				return false;
 			}
@@ -38,16 +41,31 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	}
 	
 	public String version() {
-		MonitorInfo version = monitors.get("version");
+		if (Constants.NO_VERSION != versionOld() && !StringUtils.isEmpty(versionOld()) ) {
+			return versionOld();
+		}
+		if (Constants.NO_VERSION != version && !StringUtils.isEmpty(version)) {
+			return version;
+		}
+		return Constants.NO_VERSION;
+	}
+	//TODO remove after build 1100
+	private String versionOld() {
+		MonitorStatusInfo version = monitors.get("version");
 		if (version == null){
 			return Constants.NO_VERSION;
 		}
 		return version.status();
 	}
+	public String version(String version) {
+		String prevVersion = this.version;
+		this.version = version;
+		return prevVersion;
+	}
 
 	public List<String> failedMonitors() {
 		List<String> $ = Lists.newArrayList();
-		for (Entry<String, MonitorInfo> monitor : monitors.entrySet()) {
+		for (Entry<String, MonitorStatusInfo> monitor : monitors.entrySet()) {
 			if (monitor.getValue().fail())
 				$.add(monitor.getKey());
 		}

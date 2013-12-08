@@ -13,7 +13,7 @@ import codeine.PeerStatusChangedUpdater;
 import codeine.RunMonitors;
 import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
-import codeine.configuration.ConfigurationManager;
+import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
 import codeine.executer.Task;
@@ -35,30 +35,28 @@ public class NodesRunner implements Task{
 	public static final long NODE_RUNNER_INTERVAL = TimeUnit.HOURS.toMillis(1);
 	
 	private String hostname = InetUtils.getLocalHost().getHostName();
-	@Inject
-	private ConfigurationManager configurationManager;
-	@Inject
-	private PathHelper pathHelper;
-	@Inject
-	private PeerStatus projectStatusUpdater;
-	@Inject
-	private MailSender mailSender;
-	@Inject
-	private NotificationDeliverToMongo notificationDeliverToMongo;
-	@Inject
-	private NodesManager nodesManager;
-	@Inject
-	private SnoozeKeeper snoozeKeeper;
-
+	@Inject	private IConfigurationManager configurationManager;
+	@Inject	private PathHelper pathHelper;
+	@Inject	private PeerStatus projectStatusUpdater;
+	@Inject	private MailSender mailSender;
+	@Inject	private NotificationDeliverToMongo notificationDeliverToMongo;
+	@Inject	private NodesManager nodesManager;
+	@Inject	private SnoozeKeeper snoozeKeeper;
 	private Map<String, Map<String, PeriodicExecuter>> executers = Maps.newHashMap();
-
-	@Inject
-	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
+	@Inject	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
+		List<String> removedProjects = Lists.newArrayList(executers.keySet());
 		for (ProjectJson project : getProjects()) {
+			removedProjects.remove(project.name());
 			startExecutorsForProject(project);
+		}
+		for (String project : removedProjects) {
+			Map<String, PeriodicExecuter> map = executers.get(project);
+			for (PeriodicExecuter e : map.values()) {
+				e.stopWhenPossible();
+			}
 		}
 	}
 
@@ -97,9 +95,10 @@ public class NodesRunner implements Task{
 
 	private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
 		log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
-		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, new RunMonitors(project, projectStatusUpdater, mailSender, pathHelper,
+		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, 
+				new RunMonitors(configurationManager, project.name(), projectStatusUpdater, mailSender, pathHelper,
 				nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper), "RunMonitors_" + project.name() + "_" + nodeJson.name());
-		new Thread(periodicExecuter).start();
+		periodicExecuter.runInThread();
 		return periodicExecuter;
 	}
 

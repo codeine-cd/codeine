@@ -302,12 +302,7 @@ public class MongoConnector implements IAlertsDatabaseConnector, LabelJsonProvid
 	}
 
 	@Override
-	public int removeExpiredPeers(int timeToLive) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public int updatePeerStatusToDisconnected(int timeToLive) {
+	public void updatePeersStatus(long timeToRemove, long timeToDisc) {
 		throw new UnsupportedOperationException();
 	}
 

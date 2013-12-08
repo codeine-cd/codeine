@@ -7,16 +7,25 @@ import org.apache.log4j.Logger;
 import codeine.db.mysql.MysqlProcessControlService;
 import codeine.executer.PeriodicExecuter;
 import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.peers_status.OldPeersRemove;
 import codeine.servlets.CodeineDirectoryServletModule;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 
 public class CodeineDirectoryBootstrap extends AbstractCodeineBootstrap
 {
 	
 	private static final Logger log = Logger.getLogger(CodeineDirectoryBootstrap.class);
+
+	public CodeineDirectoryBootstrap(Injector injector) {
+		super(injector);
+	}
+
+	public CodeineDirectoryBootstrap() {
+	}
 
 	public static void main(String[] args)
 	{
@@ -32,7 +41,8 @@ public class CodeineDirectoryBootstrap extends AbstractCodeineBootstrap
 	protected void execute() throws Exception {
 		log.info("starting mysql");
 		injector().getInstance(MysqlProcessControlService.class).execute();
-		new Thread(new PeriodicExecuter(OldPeersRemove.INTERVAL ,injector().getInstance(OldPeersRemove.class), "OldPeersRemove")).start();
+		new PeriodicExecuter(OldPeersRemove.INTERVAL ,injector().getInstance(OldPeersRemove.class)).runInThread();
+		new PeriodicExecuter(PeersProjectsStatus.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
 	}
 
 	@Override

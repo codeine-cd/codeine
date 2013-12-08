@@ -1,7 +1,16 @@
 $(document).ready( function () {
 	console.log("READY");
-	renderTemplate('label', $("#labels") , labelsJson);
+	setPermissions();
+	renderTemplate('label', $("#labels") , labelsJson, setPermissions);
 });
+
+function setPermissions() {
+  if (readOnly) {
+    $('.change_element').hide();
+  } else {
+    $('.change_element').show();
+  } 
+}
 
 function addLabel() {
 
@@ -21,11 +30,12 @@ function addLabel() {
     	  displayAlert("Label '" + data['label'] + "' was added",'success');
     	  labelsJson.push(data);
     	  resetInput();
-    	  renderTemplate('label', $("#labels") , labelsJson);
+    	  renderTemplate('label', $("#labels") , labelsJson, setPermissions);
+    	  
       },
       error: function (err) {
     	  console.log("bad - " + err);
-    	  displayAlert("Failed to add label '" + data['label'] + "'",'error');
+    	  toast("danger", "Failed to add label '" + data['label'] + "'",false);
       }
   });
 }	
@@ -53,8 +63,8 @@ function deleteLabel(projectName, label)
       dataType: 'json',
       success: function () {
     	  console.log("good");
-    	  displayAlert("Label '" + label + "' was removed",'success');
-    	  var index = getLabelIndex(label)
+    	  toast("success", "Label '" + label + "' was removed",true);
+    	  var index = getLabelIndex(label);
     	  if (index !== -1) {
 	    	  labelsJson.splice(index,1);
 	    	  renderTemplate('label', $("#labels") , labelsJson);
@@ -62,7 +72,7 @@ function deleteLabel(projectName, label)
       },
       error: function (err) {
     	  console.log("bad - " + err);
-    	  displayAlert("Failed to remove label '" + label + "'",'error');
+    	  toast("danger", "Failed to add label '" + data['label'] + "'",false);
       }
 	});
 }

@@ -1,5 +1,7 @@
 package codeine.utils;
 
+
+
 public class ThreadUtils {
 
 	public static void sleep(long millis){
@@ -18,5 +20,13 @@ public class ThreadUtils {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static Thread createThread(Runnable runnable) {
+		return createThread(runnable, runnable.getClass().getSimpleName());
+	}
+
+	public static Thread createThread(Runnable runnable, String threadName) {
+		return new Thread(runnable, threadName);
 	}
 }

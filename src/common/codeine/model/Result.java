@@ -2,7 +2,6 @@ package codeine.model;
 
 public class Result
 {
-	public String link;
 	public String output;
 	private int exit;
 
@@ -25,11 +24,15 @@ public class Result
 	
 	public String toStringLong()
 	{
-		return "Result [link=" + link + ", output=" + output + ", exit=" + exit + "]";
+		return "Result [output=" + output + ", exit=" + exit + "]";
 	}
 
 	public int exit()
 	{
 		return exit;
+	}
+
+	public String output() {
+		return output;
 	}
 }

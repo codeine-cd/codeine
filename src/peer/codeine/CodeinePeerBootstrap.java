@@ -5,16 +5,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
-import codeine.configuration.ConfigurationManager;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.db.mysql.MysqlHostSelector;
 import codeine.executer.PeriodicExecuter;
 import codeine.jsons.info.CodeineRuntimeInfo;
-import codeine.jsons.project.ProjectJson;
 import codeine.nodes.NodesRunner;
 import codeine.servlets.CodeinePeerServletModule;
 import codeine.utils.TextFileUtils;
+import codeine.utils.ThreadUtils;
 import codeine.utils.network.InetUtils;
 
 import com.google.common.collect.Lists;
@@ -45,28 +44,25 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 		log.info("Hostname " + hostname);
 		injector().getInstance(SnoozeKeeper.class).snoozeAll();
 		startNodeMonitoringThreads();
+		new PeriodicExecuter(ConfigurationGetter.INTERVAL, injector().getInstance(NodesRunner.class)).runInThread();
 		log.info("starting PeerStatusChangedUpdater");
-		new Thread(injector().getInstance(PeerStatusChangedUpdater.class)).start();
+		ThreadUtils.createThread(injector().getInstance(PeerStatusChangedUpdater.class)).start();
 	}
 
 	private void startNodeMonitoringThreads() {
-		new Thread(new PeriodicExecuter(NodesRunner.NODE_RUNNER_INTERVAL, injector().getInstance(NodesRunner.class), "NodesRunner")).start();
+		new PeriodicExecuter(NodesRunner.NODE_RUNNER_INTERVAL, injector().getInstance(NodesRunner.class)).runInThread();
 	}
 	
 	private void startMysqlSelectorThread() {
-		new Thread(new PeriodicExecuter(NodesRunner.NODE_RUNNER_INTERVAL, injector().getInstance(MysqlHostSelector.class), "MysqlHostSelector")).start();
+		new PeriodicExecuter(MysqlHostSelector.INTERVAL, injector().getInstance(MysqlHostSelector.class)).runInThread();
 	}
 	
 	@Override
 	protected void specificCreateFileServer(ContextHandlerCollection contexts)
 	{
-		List<ProjectJson> projects = injector().getInstance(ConfigurationManager.class).getConfiguredProjects();
 		PathHelper pathHelper = injector().getInstance(PathHelper.class);
-		for (ProjectJson project : projects)
-		{
-			Links links = injector().getInstance(Links.class);
-			addHandler(links.getNodeMonitorOutputContextPath(project.name()), pathHelper.getMonitorOutputDir(project.name()), contexts);
-		}
+		Links links = injector().getInstance(Links.class);
+		addHandler(links.getNodeMonitorOutputContextPathAllProjects(), pathHelper.getMonitorOutputDirAllProjects(), contexts);
 	}
 
 	@Override

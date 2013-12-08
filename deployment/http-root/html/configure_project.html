@@ -1,0 +1,166 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Project Info
+    </div>
+    <div>
+        <div class="row">
+            <br />
+            <form class="form-horizontal span8">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="project_name">
+                        Project Name</label>
+                    <div class="controls">
+                        <input id="project_name" type="text" placeholder="Label" value="{{project_name}}" readonly>
+                    </div>
+                </div>
+            </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Nodes <i data-help-message="nodesHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i>
+    </div>
+    <div>
+        <div class="row">
+            <br />
+            <form class="form-horizontal span8">
+            <fieldset>
+           		<div class="control-group">
+                    <label class="control-label">
+                        Node Discovery Strategy</label>
+                    <div class="controls">
+                        <select class="chosen-select" id="node_discovery_strategy">
+                            {{#node_discovery_strategy_options}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/node_discovery_strategy_options}}
+                        </select>
+                        <br />
+                    </div>
+                </div>
+                <div class="control-group nodes_list" id="nodes_script">
+		            <label class="control-label"> Script <i data-help-message="discoveryScriptHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i></label>
+			            <div class="controls">
+			                <textarea class="form-control span6" id="nodes_discovery_script" rows="10">{{nodes_discovery_script}}</textarea>
+			            </div>
+	            </div>
+            </fieldset>
+            </form>
+        </div>
+        <div class="row nodes_list" id="nodes_table">
+        	<div class="offset2 span5">
+		       	<table class="table table-condensed table-hover table-striped table-bordered">
+		        	<thead>
+			          <tr>
+			            <th style="text-align: center; width: 40%">Host : Unique Key</th>
+			            <th style="text-align: center; width: 40%">Alias</th>
+			            <th style="text-align: center; width: 20%"></th>
+			          </tr>
+		      		</thead>
+	      			<tbody id="nodes_table_body">
+		      		</tbody>
+		       	</table>
+	       </div>
+       </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Version Detection Script <i data-help-message="versionHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i>
+    </div>
+    <div>
+        <div class="row">
+            <br />
+            <form class="form-horizontal span8">
+            <fieldset>
+                <div class="control-group">
+		            <label class="control-label"> Script <i data-help-message="versionScriptHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i></label>
+			            <div class="controls">
+			                <textarea class="form-control span6" id="version_detection_script" rows="10">{{version_detection_script}}</textarea>
+			            </div>
+	            </div>
+            </fieldset>
+            </form>
+        </div>
+        <div class="row nodes_list" id="nodes_table">
+        	<div class="offset2 span5">
+		       	<table class="table table-condensed table-hover table-striped table-bordered">
+		        	<thead>
+			          <tr>
+			            <th style="text-align: center; width: 40%">Host : Unique Key</th>
+			            <th style="text-align: center; width: 40%">Alias</th>
+			            <th style="text-align: center; width: 20%"></th>
+			          </tr>
+		      		</thead>
+	      			<tbody id="nodes_table_body">
+		      		</tbody>
+		       	</table>
+	       </div>
+       </div>
+    </div>
+</div>
+<div class="panel panel-default" id="monitors_panel">
+    <div class="panel-heading">
+        Monitors <i data-help-message="monitorsConfigureHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i>
+    </div>
+    <br/>
+    <div>
+	    <div id="monitors">
+	    	
+	    </div>
+		 <div class="row">
+		    <div class="pull-right">
+		    	<a href="javascript: void(0);" class="btn btn-info btn-small" id="add_monitor" style="margin-right: 10px;margin-bottom: 5px;" >Add Monitor</a>
+		    </div>
+	    </div>
+    </div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+    Email Notifications <i data-help-message="emailHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i>
+</div>
+<div>
+    	<br/>
+        <div class="row mails_list" id="mail_policy_table">
+        	<div class="offset2 span5">
+		       	<table class="table table-condensed table-hover table-striped table-bordered">
+		        	<thead>
+			          <tr>
+			            <th style="text-align: center; width: 50%">Email</th>
+			            <th style="text-align: center; width: 30%">Intensity</th>
+			            <th style="text-align: center; width: 20%"></th>
+			          </tr>
+		      		</thead>
+	      			<tbody id="mail_policy_table_body">
+		      		</tbody>
+		       	</table>
+	       </div>
+       </div>
+    </div>
+</div>
+<div class="panel panel-default" id="commands_panel">
+    <div class="panel-heading">
+        Commands
+    </div>
+    <br/>
+    <div>
+	    <div id="commands">
+	    	
+	    </div>
+		 <div class="row">
+		    <div class="pull-right">
+		    	<a href="javascript: void(0);" id="add_command" class="btn btn-info btn-small" style="margin-right: 10px;margin-bottom: 5px;" >Add Command</a>
+		    </div>
+	    </div>
+    </div>
+</div>
+<div class="row">
+	<div class="pull-right">
+		<a href="javascript: void(0);" id="save_button" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</a>
+	</div>
+</div>
+<script>
+var project = {{project_json}};
+</script>

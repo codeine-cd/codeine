@@ -1,26 +1,30 @@
 package codeine.nodes;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import org.apache.log4j.Logger;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.PathHelper;
 import codeine.jsons.nodes.NodeListJson;
 import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.project.ProjectJson;
-import codeine.model.Constants;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.network.InetUtils;
 
 import com.google.common.collect.Maps;
 
-public class NodesManagerPeer extends NodesManager {
+public class NodesManagerPeer implements NodesManager {
+
+	private static final Logger log = Logger.getLogger(NodesManagerPeer.class);
 
 	@Inject
 	private NodeScriptDiscovery nodeScriptDiscovery;
 
-	private Map<String, NodeListJson> projectToNode = Maps.newHashMap();
+	private Map<String, NodeListJson> projectToNode = Maps.newConcurrentMap();
 	@Inject
 	private JsonFileUtils jsonFileUtils;
 	@Inject
@@ -36,15 +40,12 @@ public class NodesManagerPeer extends NodesManager {
 	}
 	@Override
 	public void init(ProjectJson projectJson){
+		log.info("init NodesManagerPeer nodes in peer for project " + projectJson.name());
 		switch (projectJson.node_discovery_startegy()) {
 		case Configuration: {
-			String file2 = pathHelper.getProjectsDir() + "/" + projectJson.name() + "/" + Constants.NODES_CONF_FILE;
-			NodeListJson nodes = jsonFileUtils.getConfFromFile(file2, NodeListJson.class);
-			if (null == nodes){
-				throw new IllegalArgumentException("bad configuration for project " + projectJson.name() + " in file " + file2);
-			}
+			List<NodeInfo> nodes = projectJson.nodes_info();
 			NodeListJson nodes2 = new NodeListJson();
-			for (NodeInfo nodeJson : nodes.nodes()) {
+			for (NodeInfo nodeJson : nodes) {
 				if (InetUtils.nameWithoutPort(nodeJson.name()).equals(InetUtils.getLocalHost().getHostName())){
 					nodes2.add(nodeJson);
 				}
@@ -53,7 +54,11 @@ public class NodesManagerPeer extends NodesManager {
 			break;
 		}
 		case Script: {
-			projectToNode.put(projectJson.name(), nodeScriptDiscovery.get(projectJson.name()));
+			projectToNode.put(projectJson.name(), nodeScriptDiscovery.get(projectJson));
+			break;
+		}
+		case Reporter: {
+			//this is ok
 			break;
 		}
 		default:

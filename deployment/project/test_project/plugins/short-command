@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+use strict;
+use FindBin;
+use Cwd 'abs_path';
+use File::Basename;
+
+my $hostname = `hostname --fqdn`;
+my $hostname_short = `hostname -s`;
+chomp ($hostname);
+chomp ($hostname_short);
+
+print "running short-command\n";
+print "args: @ARGV\n";
+
+for (my $count = 1; $count >= 1; $count--) {
+ 	print "$count \n";
+ 	`echo $count >> /tmp/restart`;
+ 	sleep 1;
+}
+ 

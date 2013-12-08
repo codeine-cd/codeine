@@ -6,7 +6,19 @@ public class MysqlConfigurationJson {
 	private Integer port;
 	private String dir;
 	private String bin_dir;
-	
+
+	public MysqlConfigurationJson() {
+
+	}
+
+	public MysqlConfigurationJson(String host, Integer port, String dir, String bin_dir) {
+		super();
+		this.host = host;
+		this.port = port;
+		this.dir = dir;
+		this.bin_dir = bin_dir;
+	}
+
 	public String dir() {
 		return dir;
 	}
@@ -28,6 +40,5 @@ public class MysqlConfigurationJson {
 		return "MysqlConfigurationJson [host=" + host + ", port=" + port + ", dir=" + dir + ", bin_dir=" + bin_dir
 				+ "]";
 	}
-	
-	
+
 }

@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+use strict;
+use FindBin;
+
+my $hostname = `hostname --fqdn`;
+my $hostname_short = `hostname -s`;
+chomp ($hostname);
+chomp ($hostname_short);
+
+print "{\"nodes\": [{\"name\": \"${hostname}:1\", \"alias\": \"${hostname_short}\"}]}";
