@@ -7,6 +7,7 @@ how to install:
 * configuration is at conf/codeine.conf.xml (see example in conf/example-conf.xml)
 * to start server: java -jar bin/codeine.jar
 
+
 features:
 * each monitor is a script in monitors dir. 
 exit status 0 is success and other exit status is failure.
