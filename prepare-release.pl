@@ -59,7 +59,7 @@ sub getVersionFull
 {
 	my $major = getVersion('major');
 	my $minor = getVersion('minor');
-	my $build = getVersion('build');
+	my $build = $ENV{BUILD_NUMBER} || getVersion('build');
 	my $date = getVersion('date');
 	my $version = "$major.$minor.$build.$date";	
 	return $version;
@@ -68,7 +68,7 @@ sub getVersionNoDate
 {
 	my $major = getVersion('major');
 	my $minor = getVersion('minor');
-	my $build = getVersion('build');
+	my $build = $ENV{BUILD_NUMBER} || getVersion('build');
 	my $date = getVersion('date');
 	my $version = "$major.$minor.$build";	
 	return $version;
