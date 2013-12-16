@@ -7,16 +7,16 @@
 					<div class="controls">
 			       		<input id="param_string_{{:#getIndex()}}" type="text" value="{{:default_value}}" data-name="{{:name}}" data-validation-exp="{{:validation_expression}}">
 			       		{{if description }}
-			       		<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-title="{{:name}}" data-trigger="hover" class="icon-question-sign"></i>
+			       		<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-trigger="hover" class="icon-question-sign"></i>
 			       		{{/if}}
 			       	</div>
 				{{else type == "Boolean"}}
 					<div class="controls">
 						<label class="checkbox">
-                   			<input type="checkbox" id="param_bool_{{:#getIndex()}}" data-name="{{:name}}" checked="{{:default_value}}">
+                   			<input type="checkbox" id="param_bool_{{:#getIndex()}}" data-name="{{:name}}" {{if default_value}}checked{{/if}}>
                          	{{:name}}
                          	{{if description }} 
-                         	<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-title="{{:name}}" data-trigger="hover" class="icon-question-sign"></i>
+                         	<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-trigger="hover" class="icon-question-sign"></i>
                          	{{/if}}
 	                    </label>
                     </div>
@@ -29,7 +29,7 @@
                                 {{/for}}
                             </select>
                             {{if description }}
-                            <i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-title="{{:name}}" data-trigger="hover" class="icon-question-sign"></i>
+                            <i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-trigger="hover" class="icon-question-sign"></i>
                             {{/if}}
                         </div>
 				{{/if}}

@@ -29,14 +29,25 @@
 					            </div>
 					            <div class="controls">
 									<label class="checkbox">
-										{{if prevent_override }}
-										<input type="checkbox" id="command_prevent_override_index_{{:#getIndex()}}" checked>
-										{{else}}
-										<input type="checkbox" id="command_prevent_override_index_{{:#getIndex()}}">
-										{{/if}}
+										<input type="checkbox" id="command_prevent_override_index_{{:#getIndex()}}" {{if prevent_override }} checked {{/if}}>
 										Prevent override of default configuration
+						            	<i data-help-message="preventOverrideHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 						            </label>
 						        </div>
+						        <div class="control-group">
+			                        <label class="control-label">
+			                            How to run <i data-help-message="howToRunHelp" rel="popover" class="icon-question-sign codeine_help"></i></label>
+			                        <div class="controls">
+			                            <select class="chosen-select" data-index="{{:#getIndex()}}" id="command_strategy_index_{{:#getIndex()}}">
+			                                <option value="Immediately">Immediately</option>
+			                                <option value="Progressive">Progressive</option>
+			                            </select>
+			                            <br />
+			                        </div>
+			                    </div>
+			                    <div id="command_strategy_info_index_{{:#getIndex()}}">
+				                    {{include tmpl="#command_startegy" /}}
+	                    		</div>
 								<div id="command_parameters_index_{{:#getIndex()}}">
 					            {{for parameters tmpl="#configure_command_parameter"/}}
 								</div>
@@ -56,9 +67,9 @@
 					          	</div>
 					            <br/>
 					            <div class="control-group">
-						            <label class="control-label"> Script</label>
+						            <label class="control-label">Script <i data-help-message="commandScriptHelp" rel="popover" class="icon-question-sign codeine_help"></i></label>
 							            <div class="controls">
-							                <textarea class="form-control span6" id="command_script_content_index_{{:#getIndex()}}" rows="10">{{:script_content}}</textarea>
+							                <textarea class="form-control span6 codeine_script" id="command_script_content_index_{{:#getIndex()}}" rows="10">{{:script_content}}</textarea>
 							            </div>
 					            </div>
 					            

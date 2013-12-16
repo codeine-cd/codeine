@@ -26,15 +26,16 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Inject private Gson gson;
 	
 	@Override
-	protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-//			log.info("user is " + request.getUserPrincipal().getName());
 			myGet(request, response);
 		} catch (Exception e) {
 			handleError(e, response);
 		}
 	}
-
+	
+	
+	
 	@Override
 	protected final void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {

@@ -38,7 +38,7 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 
 	@Override 
 	protected List<String> getJsRenderTemplateFiles() {
-		return Lists.newArrayList("configure_command_parameter", "configure_project_command", "configure_project_monitor","nodes_table_row", "mail_policy_table_row");
+		return Lists.newArrayList("configure_command_parameter", "configure_project_command", "configure_project_monitor","nodes_table_row", "mail_policy_table_row", "command_startegy");
 	};
 	
 	@Override

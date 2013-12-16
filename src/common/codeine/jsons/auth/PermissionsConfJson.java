@@ -12,4 +12,9 @@ public class PermissionsConfJson {
 		return users_configuration.get(user);
 	}
 
+	public void makeAdmin(String user) {
+		UserPermissionConfJson p = new UserPermissionConfJson(true);
+		users_configuration.put(user, p);
+	}
+
 }

@@ -33,7 +33,7 @@ public class MenuProvider {
 								  
 				);
 		if (permissionsManager.isAdministrator(request)) {
-			$.add(new TemplateLinkWithIcon("Delete", UrlUtils.buildUrl(Constants.CONFIRM_DELETE_PROJECT_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) , "icon-remove-sign", "deleteMenuItem", "admin"));
+			$.add(new TemplateLinkWithIcon("Delete", "javascript: void(0);",  "icon-remove-sign", "deleteProjectMenuItem", "admin"));
 		}
 		if (permissionsManager.canConfigure(projectName, request)) {
 			$.add(new TemplateLinkWithIcon("Configure", UrlUtils.buildUrl(Constants.CONFIGURE_PROJECT_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) ,"configureMenuItem" ,"icon-cog"));

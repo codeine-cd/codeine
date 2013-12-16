@@ -13,6 +13,7 @@ import codeine.jsons.auth.IdentityConfJson;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.jsons.global.PermissionsConfigurationJsonStore;
 import codeine.jsons.labels.LabelJsonFromFileProvider;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.model.Constants;
@@ -42,7 +43,7 @@ public class CodeineGeneralModule extends AbstractModule
 		//TODO make everybody use store to update immediately
 		bind(GlobalConfigurationJson.class).toProvider(new GlobalConfigurationJsonStore()).in(Scopes.SINGLETON);
 		bind(IdentityConfJson.class).toProvider(new IdentityConfJsonProvider()).in(Scopes.SINGLETON);
-		bind(PermissionsConfJson.class).toProvider(new PermissionsConfJsonProvider()).in(Scopes.SINGLETON);
+		bind(PermissionsConfJson.class).toProvider(new PermissionsConfigurationJsonStore()).in(Scopes.SINGLETON);
 	}
 
 	//TODO move to JsonStore
@@ -51,13 +52,6 @@ public class CodeineGeneralModule extends AbstractModule
 		@Override
 		public IdentityConfJson get() {
 			return jsonFileUtils.getConfFromFile(Constants.getIdentityConfPath(), IdentityConfJson.class);
-		}
-	}
-	private static final class PermissionsConfJsonProvider implements Provider<PermissionsConfJson> {
-		private @Inject JsonFileUtils jsonFileUtils;
-		@Override
-		public PermissionsConfJson get() {
-			return jsonFileUtils.getConfFromFile(Constants.getPermissionsConfPath(), PermissionsConfJson.class);
 		}
 	}
 

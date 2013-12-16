@@ -43,7 +43,7 @@
                 <div class="control-group nodes_list" id="nodes_script">
 		            <label class="control-label"> Script <i data-help-message="discoveryScriptHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i></label>
 			            <div class="controls">
-			                <textarea class="form-control span6" id="nodes_discovery_script" rows="10">{{nodes_discovery_script}}</textarea>
+			                <textarea class="form-control span6 codeine_script" id="nodes_discovery_script" rows="10">{{nodes_discovery_script}}</textarea>
 			            </div>
 	            </div>
             </fieldset>
@@ -78,7 +78,7 @@
                 <div class="control-group">
 		            <label class="control-label"> Script <i data-help-message="versionScriptHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help"></i></label>
 			            <div class="controls">
-			                <textarea class="form-control span6" id="version_detection_script" rows="10">{{version_detection_script}}</textarea>
+			                <textarea class="form-control span6 codeine_script" id="version_detection_script" rows="10">{{version_detection_script}}</textarea>
 			            </div>
 	            </div>
             </fieldset>
@@ -158,6 +158,7 @@
 </div>
 <div class="row">
 	<div class="pull-right">
+		<a href="javascript: void(0);" id="apply_button" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-check-square-o"></i> Apply</a>
 		<a href="javascript: void(0);" id="save_button" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</a>
 	</div>
 </div>

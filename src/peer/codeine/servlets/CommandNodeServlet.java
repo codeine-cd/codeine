@@ -15,6 +15,7 @@ import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredentialsHelper;
 import codeine.jsons.command.CommandInfo;
+import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.model.Constants;
 import codeine.model.Result;
@@ -42,7 +43,9 @@ public class CommandNodeServlet extends AbstractServlet
 		final PrintWriter writer = getWriter(res);
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
-		writer.println("INFO: executing command " + commandInfo.command_name() + " on host " + InetUtils.getLocalHost().getHostName() +" in project " + commandInfo.project_name() + " with args " + parameters(commandInfo));
+		String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
+		CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
+//		writer.println("INFO: Executing on node " + commandInfo2.node_alias());
 		
 		String dir = pathHelper.getPluginsDir(commandInfo.project_name());
 		String script_content = commandInfo.script_content();
@@ -88,6 +91,8 @@ public class CommandNodeServlet extends AbstractServlet
 				}
 			};
 			Map<String, String> env = getEnvParams(commandInfo);
+			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, commandInfo.project_name());
+			env.put(Constants.EXECUTION_ENV_NODE_NAME, commandInfo2.node_name());
 			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(10).function(function).env(env).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
 //		res.setStatus(result.success() ? HttpStatus.OK_200 : HttpStatus.INTERNAL_SERVER_ERROR_500);

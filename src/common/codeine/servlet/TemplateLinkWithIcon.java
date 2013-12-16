@@ -18,7 +18,7 @@ public class TemplateLinkWithIcon extends TemplateLink {
 	}
 	
 	public void setActive() {
-		active ="class='active'";
+		active ="active";
 	}
 
 }

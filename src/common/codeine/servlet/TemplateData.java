@@ -3,6 +3,7 @@ package codeine.servlet;
 import java.util.List;
 
 import codeine.CodeineVersion;
+import codeine.jsons.auth.AuthenticationMethod;
 
 import com.google.common.collect.Lists;
 
@@ -12,6 +13,7 @@ public class TemplateData {
 	private List<TemplateLink> navigationbar;
 	private TemplateLink navigationbarlast;
 	private String loggeduser;
+	private AuthenticationMethod authentication_method;
 	private String title;
 	private String codeineversion;
 	private String codeineversionfull;
@@ -37,6 +39,9 @@ public class TemplateData {
 	
 	public void setLoggedUser(String user) {
 		loggeduser = user;
+	}
+	public void authentication_method(AuthenticationMethod authentication_method) {
+		this.authentication_method = authentication_method;
 	}
 	
 	public void setNavBar(List<TemplateLink> navigation) {

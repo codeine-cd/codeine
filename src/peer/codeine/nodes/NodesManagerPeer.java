@@ -12,6 +12,7 @@ import codeine.configuration.PathHelper;
 import codeine.jsons.nodes.NodeListJson;
 import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.project.ProjectJson;
+import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.network.InetUtils;
 
@@ -41,6 +42,8 @@ public class NodesManagerPeer implements NodesManager {
 	@Override
 	public void init(ProjectJson projectJson){
 		log.info("init NodesManagerPeer nodes in peer for project " + projectJson.name());
+		String dir = pathHelper.getProjectDir(projectJson.name());
+		FilesUtils.mkdirs(dir);
 		switch (projectJson.node_discovery_startegy()) {
 		case Configuration: {
 			List<NodeInfo> nodes = projectJson.nodes_info();

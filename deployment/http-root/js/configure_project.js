@@ -3,6 +3,7 @@ var totalCommands = 0;
 var newParameterIndex = 1000;
 var enterNewNodeConst = "Enter new node";
 var enterNewMailConst = "Enter new Email";
+var codeine_env_vars = ['CODEINE_OUTPUT_FILE', 'CODEINE_PROJECT_NAME', 'CODEINE_NODE_NAME'];
 
 $(document).ready( function () {
 	$("#node_discovery_strategy").change(function() {
@@ -37,6 +38,8 @@ $(document).ready( function () {
 	
 	registerSaveHandler();
 	
+	registerTextAreaAutocomplete($('.codeine_script'));
+	
 	$(".chosen-select").chosen({disable_search_threshold: 10});
 });
 
@@ -44,11 +47,22 @@ function registerSaveHandler() {
 	$('#save_button').click(function () {
 		console.log("Save clicked");
 		var newProjectConf = setNewProjectConfValues();
-		sendNewConfToServer(newProjectConf);
+    sendNewConfToServer(newProjectConf,goToProjectStatus);
+		
 	});
+	
+	$('#apply_button').click(function () {
+	  console.log("Apply clicked");
+	  var newProjectConf = setNewProjectConfValues();
+	  sendNewConfToServer(newProjectConf);
+  });
 }
 
-function sendNewConfToServer(newProjectConf) {
+function goToProjectStatus() {
+  document.location = "/project-status?project=" + encodeURIComponent(getProjetcName());
+}
+
+function sendNewConfToServer(newProjectConf, callback) {
 	$.ajax(
             {
                 type: 'POST',
@@ -56,6 +70,8 @@ function sendNewConfToServer(newProjectConf) {
                 data:  { data : JSON.stringify(newProjectConf, undefined, 2) },
                 success: function () {
                 	toast("success", "Project configuration was saved",true);
+                	if (callback !== undefined)
+                	  callback();
                 },
                 error: function (jqXhr) {
                 	toast("danger", "Failed to save project configuration " + jqXhr.responseText,false);
@@ -120,7 +136,12 @@ function setNewProjectMonitorsAndCommands(newProjectConf) {
 	setNewProjectMonitors(newProjectConf);
 	setNewProjectCommands(newProjectConf);
 }
-
+function setJsonDataInput(elm, property, command){
+  var value = elm.find('[id^="command_'+property+'_index_"]').val();
+  if (value !== '' && value !== undefined) {
+    command[property] = value;
+  }
+}
 function setNewProjectCommands(newProjectConf) {
 	newProjectConf["commands"] = [];
 	console.log("Adding commands:");
@@ -130,11 +151,14 @@ function setNewProjectCommands(newProjectConf) {
 		command["name"] = $(this).find('[id^="command_name_index_"]').val();
 		
 		command["prevent_override"] = $(this).find('[id^="command_prevent_override_index_"]').is(':checked');
+		command["stop_on_error"] = $(this).find('[id^="command_stop_on_error_index_"]').is(':checked');
 		
-		var credentials = $(this).find('[id^="command_credentials_index_"]').val();
-		if (credentials !== '') {
-			command["credentials"] = credentials;
-		}
+		setJsonDataInput($(this), "credentials", command);
+		setJsonDataInput($(this), "duration", command);
+		setJsonDataInput($(this), "concurrency", command);
+		setJsonDataInput($(this), "error_percent_val", command);
+		setJsonDataInput($(this), "duration_units", command);
+		setJsonDataInput($(this), "ratio", command);
 		
 		command["script_content"] = $(this).find('[id^="command_script_content_index_"]').val();
 		
@@ -221,18 +245,12 @@ function drawCommands() {
 	
 	registerItemRenameHandler($('[id^=command_name]'));
 	
-	$('[id^=add_parameter_]').click(function() {
-		var type =  this.id.substring(this.id.toString().lastIndexOf("_")+1);
-		var obj = { type : type};
-		var index = $(this).data("index");
-		var tmp = [];
-		tmp.push(obj);
-		var elm = $("#configure_command_parameter").render(tmp);
-		elm = elm.replace(/index__/g,"index_" + newParameterIndex++ + "_");
-		$("#command_parameters_" + index).append(elm);
-		
-		registerItemRemoveHandlers('command_parameter',$("#command_parameters_" + index).find('.parameter_remove').last());
-	});
+	registerCommandStrategyHandler($('[id^=command_strategy_index_]'));
+
+	registerStopOnErrorHandler($('[id^=command_stop_on_error_index_]'));
+	
+	registerAddParameterHandler($('[id^=add_parameter_]'));
+	
 	
 	registerCommandRemoveHandlers($('.command_remove'));
 }
@@ -250,19 +268,70 @@ function drawMonitors() {
 	registerMonitorRemoveHandlers($('.monitor_remove'));
 }
 
+function registerTextAreaAutocomplete(elm) {
+	elm.each(function() {
+		$(this).textcomplete([
+			{ 
+			    match: /\$(\w*)$/,
+			    search: function (term, callback) {
+			        callback($.map(codeine_env_vars, function (env_var) {
+			            return env_var.indexOf(term) === 0 ? env_var : null;
+			        }));
+			    },
+			    index: 1,
+			    template: function (value) {
+		            return '<img src="resources/img/codeine_16x16.png"></img> ' + value;
+		        },
+			    replace: function (env_var) {
+			        return '$' + env_var + ' ';
+			    }
+			}
+		]);
+	});
+      
+}
+
+function registerAddParameterHandler(elm) {
+  elm.click(function() {
+    var type =  this.id.substring(this.id.toString().lastIndexOf("_")+1);
+    var obj = { type : type};
+    var index = $(this).data("index");
+    var tmp = [];
+    tmp.push(obj);
+    var elm = $("#configure_command_parameter").render(tmp);
+    elm = elm.replace(/index__/g,"index_" + newParameterIndex++ + "_");
+    $("#command_parameters_" + index).append(elm);
+    
+    registerItemRemoveHandlers('command_parameter',$("#command_parameters_" + index).find('.parameter_remove').last());
+    
+    registerHelpElements($("#command_parameters_" + index).find('.command_parameter').last());
+  });
+}
+
 function addItem(counter,itemType) {
-	var elm = $("#configure_project_" + itemType ).render({name:"New " + itemType + " " + counter, notification_enabled : true});
+	var elm = $("#configure_project_" + itemType ).render({name:"new_" + itemType + "_" + counter, notification_enabled : true});
 	elm = elm.replace(/index_/g,"index_" + counter);
+	elm = elm.replace(/data-index=\"\"/g," data-index='" + counter + "' ");
 	$("#" + itemType +"s").append(elm);
 	
-	registerItemRenameHandler($('[id^=' + itemType +'_name]'));
-	
-	counter++;
+	registerItemRenameHandler($('[id^=' + itemType +'_name_index_' + counter + ']'));
+	registerTextAreaAutocomplete($('[id=' + itemType +'_script_content_index_' + counter  + ']'));
+
+	if (itemType === "command")
+	{
+	  registerAddParameterHandler($('#command_row_index_' +  counter).find('[id^=add_parameter_]'));
+	  registerCommandStrategyHandler($('[id^=command_strategy_index_' + counter + ']'));
+	  $('[id^=command_strategy_index_' + counter + ']').chosen({disable_search_threshold: 10});
+	}
 	
 	registerItemRemoveHandlers(itemType,$("#" + itemType +"s").find('.' + itemType + '_remove').last());
 		
 	registerAccordionHandlers($("#" + itemType +"s").find('.accordion').last());
+	$("#" + itemType +"s").find('.accordion').last().find('.collapse').collapse('show');
 	
+	registerHelpElements($("#" + itemType +"s").find('.accordion').last());
+	
+	counter++;
 	return counter;
 }
 
@@ -272,7 +341,32 @@ function registerItemRenameHandler(elm) {
 		$('#accordion_' + this.id).find('span').text(value);
 	});
 }
-
+function registerCommandStrategyHandler(elm) {
+  elm.change(function() {
+    var index = $(this).data("index");
+    var command = { command_strategy: $(this).val() };
+    if (project.commands[index] !== undefined) {
+      project.commands[index]["command_strategy"] = $(this).val();
+      command = project.commands[index];
+    }
+    var innerHtml = $("#command_startegy").render(command);
+    innerHtml = innerHtml.replace(/index_/g,"index_" + index);
+    innerHtml = innerHtml.replace(/data-index=\"\"/g," data-index='" + index + "' ");
+    $("#command_strategy_info_index_" + index).html(innerHtml);
+    $("#command_strategy_info_index_" + index).find(".chosen-select").chosen({disable_search_threshold: 10});
+    registerStopOnErrorHandler($('[id^=command_stop_on_error_index_' + index + ']'));
+  });
+}
+function registerStopOnErrorHandler(elm) {
+  elm.change(function() {
+    var index = $(this).data("index");
+    if ($(this).is(':checked')) {
+      $('#command_errorPercent_index_' + index).removeClass('hidden');
+    } else {
+      $('#command_errorPercent_index_' + index).addClass('hidden');
+    }
+  });
+};
 function registerCommandRemoveHandlers(elm) {
 	registerItemRemoveHandlers('command', elm);
 }
@@ -291,13 +385,13 @@ function registerItemRemoveHandlers(item, elm) {
 
 function registerAccordionHandlers(elm) {
 	elm.on("show",function(event){
-	    collapse_element = event.target;
+	    var collapse_element = event.target;
 	    console.log(collapse_element.id + " show");
 	    $(collapse_element).parent().find('.fa-plus-circle').removeClass('fa-plus-circle').addClass('fa-minus-circle');
 	});
 
 	elm.on("hide",function(event){
-	    collapse_element = event.target;
+	    var collapse_element = event.target;
 	    console.log(collapse_element.id + " hide");
 	    $(collapse_element).parent().find('.fa-minus-circle').removeClass('fa-minus-circle').addClass('fa-plus-circle');
 	    
@@ -385,6 +479,7 @@ function make_element_editable(elm,placeholder) {
 	     tooltip   : 'Click to edit, press Enter to save',
 	     style  : "inherit",
 	     width: 150,
+	     onblur: 'submit',
 	     placeholder: placeholder
 	 });
 }

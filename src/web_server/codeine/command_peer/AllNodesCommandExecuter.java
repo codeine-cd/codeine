@@ -62,8 +62,8 @@ public class AllNodesCommandExecuter {
 			createCommandDataFile();
 			writer = TextFileUtils.getWriter(file, false);
 			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
-			writeLine("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
-			writeLine("running command on " + commandData.nodes().size() + " nodes");
+//			writeLine("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
+			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes");
 			if (commandData.nodes().size() < 11) {
 				Function<NodeWithPeerInfo, String> predicate = new Function<NodeWithPeerInfo, String>(){
 					@Override

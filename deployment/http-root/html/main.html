@@ -59,8 +59,10 @@
             <ul class="nav">
               <li class="active"><a href="javascript: void(0);">{{codeineversion}}</a></li>
             </ul>
-			<p class="navbar-text pull-right" style="margin-left: 15px;">Logged in as {{loggeduser}}
-            </p>
+            <ul class="nav pull-right span2" style="margin-left: 5px;">
+            <li id="login_user" class="dropdown">
+            </li>
+            </ul>
 			<div class="navbar-form pull-right">
               <input id="searchValue" class="span2" type="text" placeholder="Enter a project name">
               <button id="projectSearch" type="submit" class="btn"><i class="icon-search"></i></button>
@@ -90,7 +92,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Menu</li>
-              {{#menu}}<li class="{{perrmission_class}}" id="{{id}}" {{active}}><a href="{{link}}"><i class="{{icon}}"></i> {{label}}</a></li>{{/menu}}
+              {{#menu}}<li class="{{perrmission_class}} {{active}}" id="{{id}}" ><a href="{{link}}"><i class="{{icon}}"></i> {{label}}</a></li>{{/menu}}
             </ul>
           </div><!--/.well -->
           {{>sidebar}}
@@ -106,10 +108,33 @@
       <footer>
         <p>&copy; Codeine {{codeineversionfull}}</p>
       </footer>
+      <div class="modal hide" id="login_modal">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">x</button>
+            <h3><i class="fa fa-suitcase"></i>  Sign in to Codeine</h3>
+          </div>
+          <div class="modal-body">
+            <form id="login_form" method="post" action='/j_security_check'>
+            	
+              <p><input type="text" class="span3" id="j_username" name="j_username" placeholder="Username"></p>
+              <p><input type="password" class="span3" id="j_password" name="j_password" placeholder="Password"></p>
+                <!-- <a href="#">Forgot Password?</a> -->
+            </form>
+              <p><button id="codeine_login" class="btn btn-primary">Sign in</button></p>
+          </div>
+          <div class="modal-footer">
+            New To Codeine?
+            <a href="javascript: void(0);" class="btn btn-primary" id="codeine_register">Register</a>
+          </div>
+        </div>
     </div><!--/.fluid-container-->
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script>
+    	var logged_user = '{{loggeduser}}';
+    	var authentication_method = '{{authentication_method}}';
+    </script>
     <script type="text/javascript" src="resources/libs/jquery/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="resources/libs/bootstrap-notify/js/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="resources/libs/jeditable/jquery.jeditable.mini.js"></script>
@@ -119,6 +144,7 @@
 	<script type="text/javascript" src="resources/libs/bootstrap/bootstrap.min.js"></script>
 	<script type="text/javascript" src="resources/libs/chosen/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="resources/libs/jsrender/jsrender.min.js"></script>
+	<script type="text/javascript" src="resources/libs/textcomplete/jquery.textcomplete.min.js"></script>
 	<script type="text/javascript" src="resources/js/codeine.js"></script>
 	{{javascriptfiles}}
 	<script type="text/javascript" src="resources/js/codeine_help.js"></script>

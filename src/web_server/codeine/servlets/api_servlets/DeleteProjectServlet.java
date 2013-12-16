@@ -33,6 +33,6 @@ public class DeleteProjectServlet extends AbstractServlet {
 		ProjectJson projectToDelete = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
 		configurationManager.deleteProject(projectToDelete);
 		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);
-		getWriter(response).write("project was deleted " + projectName);
+		getWriter(response).write("{}");
 	}
 }

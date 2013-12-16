@@ -7,74 +7,90 @@
 	</h5>
 	{{if type == "String"}}
        	<div class="control-group">
-         <label class="control-label" for="command_patameter_name_index_{{:#getIndex()}}">Name</label>
+         <label class="control-label" for="command_patameter_name_index_{{:#getIndex()}}">Name 
+         	<i data-help-message="command_patameter_name_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_name_index_{{:#getIndex()}}" type="text" value="{{:name}}">
           </div>
         </div>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_default_val_index_{{:#getIndex()}}">Default Value</label>
+         <label class="control-label" for="command_patameter_default_val_index_{{:#getIndex()}}">Default Value 
+         	<i data-help-message="command_patameter_default_val_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_default_val_index_{{:#getIndex()}}" type="text" value="{{:default_value}}">
           </div>
         </div>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_validation_expression_index_{{:#getIndex()}}">Validation Expression</label>
+         <label class="control-label" for="command_patameter_validation_expression_index_{{:#getIndex()}}">Validation Expression 
+         	<i data-help-message="command_patameter_validation_expression_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_validation_expression_index_{{:#getIndex()}}" type="text" value="{{:validation_expression}}">
           </div>
         </div>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_description_index_{{:#getIndex()}}">Description</label>
+         <label class="control-label" for="command_patameter_description_index_{{:#getIndex()}}">Description 
+         	<i data-help-message="command_patameter_description_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_description_index_{{:#getIndex()}}" type="text" value="{{:description}}">
           </div>
         </div>
        {{else type == "Boolean"}}
        	<div class="control-group">
-         <label class="control-label" for="command_patameter_name_index_{{:#getIndex()}}">Name</label>
+         <label class="control-label" for="command_patameter_name_index_{{:#getIndex()}}">Name 
+         	<i data-help-message="command_patameter_name_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_name_index_{{:#getIndex()}}" type="text" value="{{:name}}">
           </div>
         </div>
         <div class="controls">
 			<label class="checkbox">
-				{{if default_value == "true" }}
-				<input type="checkbox" id="command_patameter_default_val_index_{{:#getIndex()}}" checked>
-				{{else}}
-				<input type="checkbox" id="command_patameter_default_val_index_{{:#getIndex()}}">
-				{{/if}}
-				Default
+				<input type="checkbox" id="command_patameter_default_val_index_{{:#getIndex()}}" {{if default_value}}checked{{/if}}>
+				Default Value <i data-help-message="command_patameter_default_val_Help" rel="popover" class="icon-question-sign codeine_help"></i>
             </label>
         </div>
         <br/>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_description_index_{{:#getIndex()}}">Description</label>
+         <label class="control-label" for="command_patameter_description_index_{{:#getIndex()}}">Description 
+         	<i data-help-message="command_patameter_description_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_description_index_{{:#getIndex()}}" type="text" value="{{:description}}">
           </div>
         </div>
        {{else type == "Selection"}}
        	<div class="control-group">
-         <label class="control-label" for="command_patameter_name_index_{{:#getIndex()}}">Name</label>
+         <label class="control-label" for="command_patameter_name_index_{{:#getIndex()}}">Name 
+         	<i data-help-message="command_patameter_name_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_name_index_{{:#getIndex()}}" type="text" value="{{:name}}">
           </div>
         </div>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_default_val_index_{{:#getIndex()}}">Default Value</label>
+         <label class="control-label" for="command_patameter_default_val_index_{{:#getIndex()}}">Default Value 
+         	<i data-help-message="command_patameter_default_val_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_default_val_index_{{:#getIndex()}}" type="text" value="{{:default_value}}">
           </div>
         </div>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_values_index_{{:#getIndex()}}">Values</label>
+         <label class="control-label" for="command_patameter_values_index_{{:#getIndex()}}">Values 
+         	<i data-help-message="command_patameter_values_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
           	<textarea id="command_patameter_values_index_{{:#getIndex()}}" rows="2" class="span5">{{:allowed_values}}</textarea>
           </div>
         </div>
         <div class="control-group">
-         <label class="control-label" for="command_patameter_description_index_{{:#getIndex()}}">Description</label>
+         <label class="control-label" for="command_patameter_description_index_{{:#getIndex()}}">Description 
+         	<i data-help-message="command_patameter_description_Help" rel="popover" class="icon-question-sign codeine_help"></i>
+         </label>
           <div class="controls">
               <input id="command_patameter_description_index_{{:#getIndex()}}" type="text" value="{{:description}}">
           </div>

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.Links;
 import codeine.jsons.command.CommandInfo;
+import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
 import codeine.utils.ExceptionUtils;
@@ -82,7 +83,9 @@ public class PeerCommandWorker implements Runnable {
 				writeNodeHeader();
 			}
 			if (POST) {
-				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info));
+				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias());
+				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info))
+						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info2));
 				HttpUtils.doPOST(url, postData, function);
 			}
 			else {

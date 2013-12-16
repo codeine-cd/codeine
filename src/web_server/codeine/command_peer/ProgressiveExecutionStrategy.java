@@ -27,7 +27,18 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 	public void execute() {
 		List<NodeWithPeerInfo> leftNodes = Lists.newArrayList(commandData().nodes());
 		long endTime = System.currentTimeMillis() + durationInMillis();
-		TimeToSleepCalculator timeCalc = new TimeToSleepCalculator();
+		ProgressiveRateClaculator calc;
+		switch (commandData().command_info().ratio()){
+		case Linear: {
+			calc = new LinearProgressiveRateClaculator();
+			break;
+		}
+		case Exponential: {
+			calc = new ExponentialProgressiveRateClaculator(leftNodes.size(), durationInMillis());
+			break;
+		}
+		default: throw new RuntimeException("no ratio implementation: " + commandData().command_info().ratio());
+		}
 		List<NodeWithPeerInfo> completedNodes = Lists.newArrayList();
 		while (leftNodes.size() > 0 && !isCancel()) {
 			if (commandData().command_info().stop_on_error() && completedNodes.size() > 0) {
@@ -47,19 +58,19 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 			}
 			long startLoop = System.currentTimeMillis();
 			double minutesLeft = (double) TimeUnit.MILLISECONDS.toMinutes(endTime - System.currentTimeMillis());
-			RatioCalculator ratioCalc = new RatioCalculator(minutesLeft, leftNodes.size());
-			writeLine("Will execute on " + ratioCalc.concerency() + " nodes");
-			List<NodeWithPeerInfo> subList = leftNodes.subList(0, ratioCalc.concerency());
-			executeConcurrent(subList, ratioCalc.concerency());
+			calc.iterationStart(minutesLeft, leftNodes.size());
+			writeLine("Will execute on " + calc.numOfNodesToExecute() + " nodes");
+			List<NodeWithPeerInfo> subList = leftNodes.subList(0, calc.numOfNodesToExecute());
+			executeConcurrent(subList, calc.numOfNodesToExecute());
 			completedNodes.addAll(subList);
 			subList.clear();
 			long loopTime = System.currentTimeMillis() - startLoop;
-			long sleepTime = timeCalc.getTimeToSleep(ratioCalc.ratio(), loopTime);
+			long sleepTime = calc.getTimeToSleep(loopTime);
 			if ((sleepTime > 0) && (leftNodes.size() > 0)) {
-				writeLine("Execution of " + ratioCalc.concerency() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", going to sleep for " + StringUtils.formatTimePeriod(sleepTime));
+				writeLine("Execution of " + calc.numOfNodesToExecute() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", going to sleep for " + StringUtils.formatTimePeriod(sleepTime));
 				ThreadUtils.wait(cancelObject, sleepTime);
 			} else {
-				writeLine("Execution of " + ratioCalc.concerency() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", will not go to sleep");
+				writeLine("Execution of " + calc.numOfNodesToExecute() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", will not go to sleep");
 			}
 		}
 	}

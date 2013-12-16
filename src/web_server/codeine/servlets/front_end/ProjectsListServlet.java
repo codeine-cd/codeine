@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,27 +49,35 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
-		List<ProjectsInView> lst = Lists.newArrayList();
+		List<ProjectsInView> views = Lists.newArrayList();
 		List<ProjectTemplateLink> projects = getSortedProjects(request);
 		String file = Constants.getWebConfPath();
 		if (FilesUtils.exists(file)) {
-			CodeineWebConf conf = gson().fromJson(TextFileUtils.getContents(file), CodeineWebConf.class);
-			for (Entry<String, List<String>> e : conf.views().entrySet()) {
-				List<ProjectTemplateLink> projectsInView  = Lists.newArrayList();
-				for (String project : e.getValue()) {
-					if (configurationManager.hasProject(project)) {
-						createProjectTemplateLink(request, projectsInView, project);
+			views = prepareViews(request, file);
+		}
+		return new ProjectListTemplateData(projects, views, permissionsManager.isAdministrator(request));
+	}
+
+	private List<ProjectsInView> prepareViews(HttpServletRequest request, String file) {
+		List<ProjectsInView> views = Lists.newArrayList();
+		CodeineWebConf conf = gson().fromJson(TextFileUtils.getContents(file), CodeineWebConf.class);
+		for (Entry<String, List<String>> e : conf.views().entrySet()) {
+			List<ProjectTemplateLink> projectsInView  = Lists.newArrayList();
+			for (String projectRegexp : e.getValue()) {
+				Pattern pattern = Pattern.compile(projectRegexp);
+				for (ProjectJson p : configurationManager.getConfiguredProjects()) {
+					if (pattern.matcher(p.name()).matches()){
+						createProjectTemplateLink(request, projectsInView, p.name());
 					}
-					else {
-						log.warn("project not configured: " + project);
-					}
-				}
-				if (!projectsInView.isEmpty()) {
-					lst.add(new ProjectsInView(e.getKey(), projectsInView));
 				}
 			}
+			if (!projectsInView.isEmpty()) {
+				views.add(new ProjectsInView(e.getKey(), projectsInView));
+			} else {
+				log.debug("ignoring empty view " + e.getKey());
+			}
 		}
-		return new ProjectListTemplateData(projects, lst, permissionsManager.isAdministrator(request));
+		return views;
 	}
 
 	@Override
@@ -98,10 +107,10 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 		return $;
 	}
 
-	private void createProjectTemplateLink(HttpServletRequest request, List<ProjectTemplateLink> $, String name) {
+	private void createProjectTemplateLink(HttpServletRequest request, List<ProjectTemplateLink> projectsInView, String name) {
 		if (permissionsManager.canRead(name, request)){
 			VersionItemInfo versionItem = aggregator.aggregate(name).get(Constants.ALL_VERSION);
-			$.add(new ProjectTemplateLink(name, links.getProjectLink(name), versionItem.count()));
+			projectsInView.add(new ProjectTemplateLink(name, links.getProjectLink(name), versionItem.count()));
 		}
 	}
 

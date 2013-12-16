@@ -8,13 +8,24 @@ import javax.servlet.http.HttpServletRequest;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.PermissionsConfigurationJsonStore;
 import codeine.model.Constants;
 
 public class PermissionsManager {
 
-	@Inject private PermissionsConfJson permissionConfJson;
-	@Inject private GlobalConfigurationJson globalConfigurationJson;
+	private PermissionsConfigurationJsonStore permissionsConfigurationJsonStore;
+	private GlobalConfigurationJson globalConfigurationJson;
+	private PermissionsConfJson permissionConfJson;
 	
+	
+	@Inject
+	public PermissionsManager(PermissionsConfigurationJsonStore permissionsConfigurationJsonStore,
+			GlobalConfigurationJson globalConfigurationJson, PermissionsConfJson permissionConfJson) {
+		super();
+		this.permissionsConfigurationJsonStore = permissionsConfigurationJsonStore;
+		this.globalConfigurationJson = globalConfigurationJson;
+		this.permissionConfJson = permissionConfJson;
+	}
 	public boolean canRead(String projectName, HttpServletRequest request){
 		if (ignoreSecurity()){
 			return true;
@@ -72,6 +83,10 @@ public class PermissionsManager {
 			return false;
 		}
 		return permissionConfJson.get(user(request)).canConfigure(projectName);
+	}
+	public void makeAdmin(String user) {
+		permissionConfJson.makeAdmin(user);
+		permissionsConfigurationJsonStore.store(permissionConfJson);
 	}
 
 }

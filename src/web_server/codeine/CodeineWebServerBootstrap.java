@@ -20,7 +20,6 @@ import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.model.Constants;
 import codeine.statistics.MonitorsStatistics;
-import codeine.users.LoginServlet;
 import codeine.users.LogoutServlet;
 import codeine.users.UsersManager;
 
@@ -92,25 +91,14 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS
 				| ServletContextHandler.SECURITY);
 
-		context.addServlet(new ServletHolder(injector().getInstance(LoginServlet.class)), "/login");
 		context.addServlet(new ServletHolder(injector().getInstance(LogoutServlet.class)), "/logout");
 
-//		Constraint constraint = new Constraint();
-//		constraint.setName(Constraint.__FORM_AUTH);
-//		constraint.setRoles(new String[] { "user", "admin", "moderator" });
-//		constraint.setAuthenticate(true);
-//
-//		ConstraintMapping constraintMapping = new ConstraintMapping();
-//		constraintMapping.setConstraint(constraint);
-//		constraintMapping.setPathSpec("/*");
-
 		ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
-//		securityHandler.addConstraintMapping(constraintMapping);
 		UsersManager usersManager = injector().getInstance(UsersManager.class);
 		usersManager.initUsers();
 		securityHandler.setLoginService(usersManager.loginService());
 
-		FormAuthenticator authenticator = new FormAuthenticator("/login", "/login", false);
+		FormAuthenticator authenticator = new FormAuthenticator();//"/login", "/login", false);
 		securityHandler.setAuthenticator(authenticator);
 
 		context.setSecurityHandler(securityHandler);

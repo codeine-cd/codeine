@@ -13,7 +13,15 @@ public class UserPermissionConfJson {
 	private Set<String> configure_project = Sets.newHashSet();
 	private Set<String> command_project = Sets.newHashSet();
 	
-	
+	protected UserPermissionConfJson() {
+		super();
+	}
+
+	public UserPermissionConfJson(boolean administer) {
+		this.administer = administer;
+	}
+
+
 	public boolean canRead(String projectName) {
 		return isSetMatch(read_project, projectName) || canCommand(projectName);
 	}

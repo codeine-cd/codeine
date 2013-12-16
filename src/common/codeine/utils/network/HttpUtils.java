@@ -116,5 +116,4 @@ public class HttpUtils
 			throw new RuntimeException(e);
 		}
 	}
-	
 }

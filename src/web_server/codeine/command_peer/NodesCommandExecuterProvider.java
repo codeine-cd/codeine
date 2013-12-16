@@ -21,7 +21,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.inject.Provider;
 
 public class NodesCommandExecuterProvider {
@@ -61,7 +60,7 @@ public class NodesCommandExecuterProvider {
 				int successPercent = successSize * 100 / sizeNotZero;
 				int failPercent = failSize * 100 / sizeNotZero;
 				$.add(new CommandStatusJson(j.command(), link, projectName, size, successPercent, failPercent, j.start_time() ,j.id(), j.finished()));
-			} catch (JsonSyntaxException e) {
+			} catch (Exception e) {
 				log.warn("failed in command " +  dir + " for project " + projectName + " file is " + file, e);
 			}
 		}

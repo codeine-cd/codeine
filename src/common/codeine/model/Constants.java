@@ -29,7 +29,6 @@ public class Constants
 	public static final String NEW_PROJECT_CONTEXT = "/new-project";
 	public static final String CONFIGURE_PROJECT_CONTEXT = "/configure-project";
 	public static final String DELETE_PROJECT_CONTEXT = "/delete-project";
-	public static final String CONFIRM_DELETE_PROJECT_CONTEXT = "/confirm-delete-project";
 	public static final String PROJECT_NODES_CONTEXT = "/project-nodes";
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
 	public static final String COMMANDS_LOG_CONTEXT = "/commands-log";
@@ -152,6 +151,7 @@ public class Constants
 		public static final String DATA_NAME = "data";
 		public static final String REDIRECT = "redirect";
 		public static final String COMMAND_ID = "command-id";
+		public static final String DATA_ADDITIONAL_COMMAND_INFO_NAME = "more-command-info";
 		
 		
 	}

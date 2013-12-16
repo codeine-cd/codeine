@@ -1,3 +1,102 @@
+
+$(document).ready( function () {
+  if (isUserLogged()) {
+    console.log("User is " + logged_user);
+    var html = "<a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='fa fa-user'></i> " + logged_user + "<b class='caret'></b></a>";
+    if (authentication_method === 'Builtin') {
+      html += "<ul class='dropdown-menu'><li><a href='/logout?from=" + location.pathname + location.search + "' ><i class='fa fa-sign-out'></i> Sign out</a></li></ul>";
+    }    
+    $('#login_user').html(html);
+  } else {
+    console.log("User is not logged in");
+    if (authentication_method === 'Builtin') {
+      $('#login_user').html("<a style='color: white;' data-toggle='modal' href='#login_modal'><i class='fa fa-sign-in'></i> Sign in</a>");
+    }
+  } 
+});
+
+function isUserLogged() {
+	return (logged_user !== "");
+}
+
+$('#deleteProjectMenuItem').click(function() {
+	if (confirm("Are you sure you want to delete project " + getProjetcName() +"?") === true) {
+		$.ajax( {
+		    type: 'DELETE',
+		    url: '/delete-project?project=' + getProjetcName() ,
+		    success: function(response) {
+		      console.log('success');
+		      location.href = "/";
+		    }, 
+		    error: function(err) {
+		      console.log('error');
+	      
+		      toast("error", "Failed to delete project", false);
+		    }
+	    });
+	}
+});
+
+$('#codeine_register').click(function() {
+  var data = {};
+  data["password"] = $('#j_password').val();
+  data["username"] = $('#j_username').val();
+  $.ajax( 
+      {
+      	type: 'POST',
+      	url: '/register' ,
+      	dataType: 'json',
+      	data: JSON.stringify(data),
+      	success: function(response) {
+          console.log('success');
+          $('#login_form').submit();
+        }, 
+        error: function(err) {
+            if (err.status === 409) {
+              // show user already exists
+              showLoginError("User already exists, please select a different username");
+            } else {
+              // display general error message
+              console.log('error:');
+              console.dir(err);
+              showLoginError("Error registrating user");
+            }
+         }
+    });
+});
+$('#codeine_login').click(function() {
+  $.ajax({
+    type: "POST",
+    url: "j_security_check",
+    // This is the type what you are waiting back from the server
+    dataType: "text",
+    async: true,
+    crossDomain: false,
+    data: {
+        j_username: $('#j_username').val(),
+        j_password: $('#j_password').val()
+    },
+    success: function(data, textStatus, xhr) {
+        window.location.reload();
+    },
+    error: function(err, textStatus, errorThrown) {
+      if (err.status === 404) {
+        showLoginError("Could not reach server");
+      } else {
+        console.log(textStatus, errorThrown);
+        showLoginError("Wrong username or password, please try again");
+      }
+    }
+  });
+});
+
+function showLoginError(message) {
+  $('#login_form').prepend("<div class='alert alert-error' style='display: none;' id='login_alert'>" +
+                "<button type='button' class='close' data-dismiss='alert'>&times;</button>" +
+                "<span>" + message + "</span> </div>");
+  $('#login_alert').fadeIn();
+}
+
 function formatTemplatePath(name) {
       return "/resources/html/jsrendertemplates/" + name + ".tmpl.html";
 }
@@ -85,14 +184,11 @@ function renderTemplate(tmplName, targetSelector, data, callback) {
       });
 }
 
-
 $("#projectSearch").click( function() {
 	  var val = $("#searchValue").val();
 	  console.log("Will search for " + val);
 	  location.href = "/?projectSearch=" +  val;
 }); 
-
-
 
 function escapeSelector(selector) {
     return selector.replace(/(!|"|#|\$|%|\'|\(|\)|\*|\+|\,|\.|\/|\:|\;|\?|@)/g, function($1, $2) {

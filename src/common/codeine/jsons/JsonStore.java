@@ -2,6 +2,8 @@ package codeine.jsons;
 
 import javax.inject.Inject;
 
+import org.apache.log4j.Logger;
+
 import codeine.utils.JsonFileUtils;
 
 import com.google.inject.Provider;
@@ -9,6 +11,7 @@ import com.google.inject.Provider;
 
 public class JsonStore<T> implements Provider<T>{
 
+	private static final Logger log = Logger.getLogger(JsonStore.class);
 	private @Inject JsonFileUtils jsonFileUtils;
 	private String path;
 	private Class<T> type;
@@ -23,6 +26,7 @@ public class JsonStore<T> implements Provider<T>{
 	@Override
 	public T get() {
 		if (storedJson == null){
+			log.info("loading configuration from " + path() + " for type " + type());
 			storedJson = jsonFileUtils.getConfFromFile(path(), type());
 		}
 		return storedJson;

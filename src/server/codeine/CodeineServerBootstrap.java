@@ -6,13 +6,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
 
-public class CodeineServerBootstrap extends AbstractCodeineBootstrap {
+public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
 
 	
 	private final Logger log = Logger.getLogger(CodeineServerBootstrap.class);
@@ -41,14 +42,19 @@ public class CodeineServerBootstrap extends AbstractCodeineBootstrap {
 	}
 
 	@Override
-	protected void execute() throws Exception {
+	protected void execute() {
+		log.info("execute()");
 		List<AbstractCodeineBootstrap> bootstraps = Lists.newArrayList(
 				new CodeineDirectoryBootstrap(injector()),
 				new CodeineMailServerBootstrap(injector()),
 				new CodeineWebServerBootstrap(injector())
 				);
 		for (AbstractCodeineBootstrap b : bootstraps) {
-			b.execute();
+			try {
+				b.execute();
+			} catch (Exception e) {
+				throw ExceptionUtils.asUnchecked(e);
+			}
 			ThreadUtils.sleep(100);
 		}
 	}

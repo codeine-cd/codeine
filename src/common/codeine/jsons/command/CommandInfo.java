@@ -97,5 +97,9 @@ public class CommandInfo
 		this.credentials = credentials;
 	}
 
+	public RatioType ratio() {
+		return ratio;
+	}
+
 	
 }

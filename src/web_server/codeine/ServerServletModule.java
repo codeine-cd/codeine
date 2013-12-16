@@ -15,7 +15,6 @@ import codeine.servlets.api_servlets.ProjectNodesApiServlet;
 import codeine.servlets.api_servlets.ProjectStatusApiServlet;
 import codeine.servlets.api_servlets.ProjectsListApiServlet;
 import codeine.servlets.front_end.ConfigureProjectServlet;
-import codeine.servlets.front_end.ConfirmDeleteProjectServlet;
 import codeine.servlets.front_end.NewProjectServlet;
 import codeine.servlets.front_end.NodeInfoServlet;
 import codeine.servlets.front_end.ProgressiveRawOutputServlet;
@@ -40,7 +39,6 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(ProjectNodesServlet.class, Constants.PROJECT_NODES_CONTEXT);
 		serveMe(ConfigureProjectServlet.class, Constants.CONFIGURE_PROJECT_CONTEXT);
 		serveMe(DeleteProjectServlet.class, Constants.DELETE_PROJECT_CONTEXT);
-		serveMe(ConfirmDeleteProjectServlet.class, Constants.CONFIRM_DELETE_PROJECT_CONTEXT);
 		serveMe(NewProjectServlet.class, Constants.NEW_PROJECT_CONTEXT);
 		serveMe(NodeInfoServlet.class, Constants.NODE_INFO_CONTEXT);
 		serveMe(ProjectNodesApiServlet.class, apiContext(Constants.PROJECT_NODES_CONTEXT));

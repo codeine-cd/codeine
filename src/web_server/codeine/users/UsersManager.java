@@ -8,7 +8,6 @@ import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.util.security.Credential;
 
-import codeine.configuration.PathHelper;
 import codeine.jsons.auth.IdentityConfJson;
 import codeine.model.Constants;
 import codeine.utils.JsonFileUtils;
@@ -18,7 +17,6 @@ public class UsersManager {
 	@Inject private IdentityConfJson identityConfJson;
 	@Inject private HashLoginService hashLoginService;
 	private @Inject JsonFileUtils jsonFileUtils;
-	private @Inject PathHelper pathHelper;
 	
 	private void store() {
 		jsonFileUtils.setContent(Constants.getIdentityConfPath(), identityConfJson);
@@ -44,5 +42,13 @@ public class UsersManager {
 		identityConfJson.add(name, credentials);
 		store();
 		putUser(name, credentials);
+	}
+	
+	public boolean isUserExists(String username) {
+		return hashLoginService.getUsers().containsKey(username);
+	}
+
+	public boolean hasUsers() {
+		return hashLoginService.getUsers().size() > 0;
 	}
 }

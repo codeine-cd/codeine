@@ -37,7 +37,7 @@
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label">
-                            How to run</label>
+                            How to run <i data-help-message="howToRunHelp" rel="popover" class="icon-question-sign codeine_help"></i></label>
                         <div class="controls">
                             <select class="chosen-select" id="command_strategy">
                                 {{#commandExcutionTypeOptions}}
@@ -47,9 +47,16 @@
                             <br />
                         </div>
                     </div>
+                    <div class="control-group immediatelyControl">
+                        <label class="control-label" for="concurrency">
+                            Concurrency <i data-help-message="concurrencyHelp" rel="popover" class="icon-question-sign codeine_help"></i></label>
+                        <div class="controls">
+                            <input id="concurrency" type="text" placeholder="Concurrency" value="10">
+                        </div>
+                    </div>
                     <div class="control-group progressiveControl">
                         <label class="control-label" for="duration">
-                            Duration</label>
+                            Duration <i data-help-message="durationHelp" rel="popover" class="icon-question-sign codeine_help"></i></label>
                         <div class="controls">
                             <input id="duration" type="text" class="span1" placeholder="Time">
                             <select class="chosen-select span1" id="duration_units">
@@ -59,16 +66,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="control-group immediatelyControl">
-                        <label class="control-label" for="concurrency">
-                            Concurrency</label>
-                        <div class="controls">
-                            <input id="concurrency" type="text" placeholder="Concurrency" value="10">
-                        </div>
-                    </div>
                     <div class="control-group progressiveControl">
                         <label class="control-label">
-                            Ratio</label>
+                            Ratio <i data-help-message="ratioHelp" rel="popover" class="icon-question-sign codeine_help"></i></label>
                         <div class="controls">
                             <select class="chosen-select" id="ratio">
                                 {{#ratioOptions}}
@@ -82,6 +82,7 @@
                             <label class="checkbox">
                                 <input type="checkbox" id="stop_on_error">
                                 Stop on error
+                                <i data-help-message="stopOnErrorHelp" rel="popover" class="icon-question-sign codeine_help"></i>
                             </label>
                             <span class="hidden" id="errorPercent">
                                 <input type="text" id="error_percent_val" class="span1" placeholder="Error">
