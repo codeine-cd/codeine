@@ -60,7 +60,7 @@ sub getVersionFull
 	my $major = getVersion('major');
 	my $minor = getVersion('minor');
 	my $build = $ENV{BUILD_NUMBER} || getVersion('build');
-	my $date = getVersion('date');
+	my $date = getDate();
 	my $version = "$major.$minor.$build.$date";	
 	return $version;
 }
@@ -69,7 +69,6 @@ sub getVersionNoDate
 	my $major = getVersion('major');
 	my $minor = getVersion('minor');
 	my $build = $ENV{BUILD_NUMBER} || getVersion('build');
-	my $date = getVersion('date');
 	my $version = "$major.$minor.$build";	
 	return $version;
 }
@@ -79,6 +78,17 @@ sub getVersion
 	my $value = `cat $propertiesFile | grep $key | awk -F= '{print \$2}'`;
 	chomp($value);
 	return $value;
+}
+
+sub getDate
+{
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime time;
+	$year += 1900;
+	$mon  += 1;
+	$mon = sprintf( "%02d", $mon );
+	$mday = sprintf( "%02d", $mday );
+	my $date = $year.$mon.$mday;
+	return $date;
 }
 
 
