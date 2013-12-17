@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import codeine.users.CodeineUser;
-
 import com.google.common.collect.Sets;
 
 public class IdentityConfJson {

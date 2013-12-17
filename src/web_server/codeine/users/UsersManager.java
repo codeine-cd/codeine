@@ -6,6 +6,7 @@ import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.util.security.Credential;
 
+import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.auth.IdentityConfJson;
 import codeine.model.Constants;
 import codeine.utils.JsonFileUtils;

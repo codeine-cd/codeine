@@ -1,4 +1,4 @@
-package codeine.users;
+package codeine.jsons.auth;
 
 import java.io.IOException;
 import java.util.UUID;
