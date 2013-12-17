@@ -36,9 +36,15 @@ unless ($ENV{'release-to-github'} eq "true")
 {
 	exit(0);
 } 
-print 'Will release new version to Github: $version\n';
-es("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$version\",  \"target_commitish\": \"master\",  \"name\": \"v$version\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
+print "Will release new version to Github: $version\n";
+my $res = r("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$version\",  \"target_commitish\": \"master\",  \"name\": \"v$version\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
+print "release returned: $res\n";
+$res =~ /\"id\":\s([^,]*)/;
+my $id = $1;
+print "release id: $id\n";
+es("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/gzip\" --data-binary \"$tar\" \"https://uploads.github.com/repos/Intel-IT/codeine/releases/$id/assets?name=codeine.tar.gz\"");
 
+print "Done!";
 
 sub es
 {
