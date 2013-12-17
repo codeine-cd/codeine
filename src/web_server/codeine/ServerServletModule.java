@@ -23,6 +23,7 @@ import codeine.servlets.front_end.ProjectStatusServlet;
 import codeine.servlets.front_end.ProjectsListServlet;
 import codeine.servlets.front_end.RawOutputServlet;
 import codeine.servlets.front_end.ScheduleCommandServlet;
+import codeine.servlets.front_end.UserInfoServlet;
 import codeine.servlets.version_label.LabelsServlet;
 import codeine.servlets.version_label.VersionLabelServlet;
 import codeine.users.RegisterServlet;
@@ -41,6 +42,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(DeleteProjectServlet.class, Constants.DELETE_PROJECT_CONTEXT);
 		serveMe(NewProjectServlet.class, Constants.NEW_PROJECT_CONTEXT);
 		serveMe(NodeInfoServlet.class, Constants.NODE_INFO_CONTEXT);
+		serveMe(UserInfoServlet.class, Constants.USER_INFO_CONTEXT);
 		serveMe(ProjectNodesApiServlet.class, apiContext(Constants.PROJECT_NODES_CONTEXT));
 		serveMe(RawOutputServlet.class, Constants.RAW_OUTPUT_CONTEXT);
 		serveMe(FileGetterServlet.class, Constants.FILE_GETTER_CONTEXT);

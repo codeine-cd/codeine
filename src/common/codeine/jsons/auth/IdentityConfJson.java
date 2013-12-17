@@ -1,21 +1,25 @@
 package codeine.jsons.auth;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
+import codeine.users.CodeineUser;
+
+import com.google.common.collect.Sets;
 
 public class IdentityConfJson {
 	
-	private Map<String, String> users = Maps.newHashMap();
+	private Set<CodeineUser> users = Sets.newHashSet();
 	
-	public Set<Entry<String, String>> entries() {
-		return users.entrySet();
+	public Collection<CodeineUser> entries() {
+		return Collections.unmodifiableCollection(users);
 	}
 
-	public void add(String name, String credentials) {
-		users.put(name, credentials);
+	public CodeineUser add(String name, String credentials) {
+		CodeineUser user = CodeineUser.createNewUser(name, credentials);
+		users.add(user);
+		return user;
 	}
 
 }

@@ -15,6 +15,7 @@ public class GlobalConfigurationJson
 	private Integer mail_server_port = 12349;
 	private String directory_host;
 	private String admin_mail;
+	private String server_name;
 	private EmailConfiguration email_configuration;
 	private String web_server_host;
 	private List<String> db_host = Lists.newArrayList();  //TODO should be removed, only for mongo
@@ -74,8 +75,12 @@ public class GlobalConfigurationJson
 	public String[] roles() {
 		return roles;
 	}
+	
 	public boolean large_deployment() {
 		return large_deployment;
 	}
 	
+	public String server_name() {
+		return server_name;
+	}
 }

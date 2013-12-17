@@ -15,6 +15,7 @@ public class TemplateData {
 	private String loggeduser;
 	private AuthenticationMethod authentication_method;
 	private String title;
+	private String server_name = "Codeine";
 	private String codeineversion;
 	private String codeineversionfull;
 	private String javascriptfiles;
@@ -56,6 +57,10 @@ public class TemplateData {
 		this.menu = menu;
 	}
 
+	public void setServerName(String serverName) {
+		server_name = server_name + " - " + serverName;
+	}
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}

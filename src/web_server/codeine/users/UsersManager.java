@@ -1,7 +1,5 @@
 package codeine.users;
 
-import java.util.Map.Entry;
-
 import javax.inject.Inject;
 
 import org.eclipse.jetty.security.HashLoginService;
@@ -14,8 +12,8 @@ import codeine.utils.JsonFileUtils;
 
 public class UsersManager {
 
-	@Inject private IdentityConfJson identityConfJson;
-	@Inject private HashLoginService hashLoginService;
+	private @Inject IdentityConfJson identityConfJson;
+	private @Inject HashLoginService hashLoginService;
 	private @Inject JsonFileUtils jsonFileUtils;
 	
 	private void store() {
@@ -27,10 +25,9 @@ public class UsersManager {
 	}
 
 	public void initUsers() {
-		for (Entry<String, String> i : identityConfJson.entries()) {
-			String name = i.getKey();
-			String credentials = i.getValue();
-			putUser(name, credentials);
+		for (CodeineUser user : identityConfJson.entries()) {
+			user.api_token();
+			putUser(user.username(), user.credentials());
 		}
 	}
 	

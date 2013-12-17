@@ -53,6 +53,7 @@ public class Constants
 	public static final String PEER_PROJECT_STATUS_CONTEXT = "/project/status";
 	public static final String PROJECT_CONF_FILE = "project.conf.json";
 	public static final String NODE_INFO_CONTEXT = "/node-info";
+	public static final String USER_INFO_CONTEXT = "/user-info";
 	
 	public static final String INFO_CONTEXT = "/info";
 	public static final String VERSION_INFO_CONTEXT = INFO_CONTEXT + "/version";

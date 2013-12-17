@@ -2,10 +2,12 @@
 $(document).ready( function () {
   if (isUserLogged()) {
     console.log("User is " + logged_user);
-    var html = "<a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='fa fa-user'></i> " + logged_user + "<b class='caret'></b></a>";
+    var html = "<a href='#' class='dropdown-toggle' data-toggle='dropdown'><i class='fa fa-user'></i> " + logged_user + "<b class='caret'></b></a><ul class='dropdown-menu'>";
+    html += "<li><a href='/user-info' ><i class='fa fa-info'></i> User Info</a></li>";
     if (authentication_method === 'Builtin') {
-      html += "<ul class='dropdown-menu'><li><a href='/logout?from=" + location.pathname + location.search + "' ><i class='fa fa-sign-out'></i> Sign out</a></li></ul>";
+      html += "<li><a href='/logout?from=" + location.pathname + location.search + "' ><i class='fa fa-sign-out'></i> Sign Out</a></li>";
     }    
+    html += "</ul>";
     $('#login_user').html(html);
   } else {
     console.log("User is not logged in");

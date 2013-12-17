@@ -118,6 +118,9 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		templateData.setMenu(generateMenuWithActive(request));
 		templateData.setJavascriptFiles(jsFiles);
 		templateData.setTitle(title);
+		if (!StringUtils.isEmpty(globalConfigurationJson.server_name())) {
+				templateData.setServerName(globalConfigurationJson.server_name());
+		}
 	}
 
 	private List<TemplateLinkWithIcon> generateMenuWithActive(HttpServletRequest request) {
