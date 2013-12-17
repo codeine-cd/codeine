@@ -32,6 +32,13 @@ my $tar = "codeine_".getVersionNoDate().".tar.gz";
 es("cd dist; tar -czf ../$tar ./*");
 print "tar is ready '$tar' for version $version\n";
 
+unless ($ENV{'release-to-github'} eq "true") 
+{
+	exit(0);
+} 
+print 'Will release new version to Github: $version\n';
+es("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$version\",  \"target_commitish\": \"master\",  \"name\": \"v$version\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
+
 
 sub es
 {
