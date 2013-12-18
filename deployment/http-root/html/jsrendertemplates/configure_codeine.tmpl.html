@@ -1,0 +1,53 @@
+<div class="control-group">
+	<label class="control-label" for=server_name">Codeine Server Name</label>
+    <div class="controls">
+        <input id="server_name" type="text" value="{{:server_name}}">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for=web_server_host">Web Server Host</label>
+    <div class="controls">
+        <input id="web_server_host" type="text" value="{{:web_server_host}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for=web_server_port">Web Server Port</label>
+    <div class="controls">
+        <input id="web_server_port" type="text" pattern="\d*" title="Integer Number" value="{{:web_server_port}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for=directory_host">Directory Host</label>
+    <div class="controls">
+        <input id="directory_host" type="text" value="{{:directory_host}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for=directory_port">Directory Port</label>
+    <div class="controls">
+        <input id="directory_port" type="text" pattern="\d*" title="Integer Number" value="{{:directory_port}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for=admin_mail">Admin Mail</label>
+    <div class="controls">
+        <input id="admin_mail" type="email" pattern="[^ @]*@[^ @]*"  value="{{:admin_mail}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">Authentication Method</label>
+    <div class="controls">
+        <select class="chosen-select" id="authentication_method">
+            	<option value="Disabled">Disabled</option>
+            	<option value="Builtin">Builtin</option>
+            	<option value="WindowsCredentials">WindowsCredentials</option>
+        </select>
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label">Roles</label>
+ 	<div class="controls">
+		<textarea class="form-control span6" id="roles" rows="10">{{:roles}}</textarea>
+	</div>
+</div>
+
