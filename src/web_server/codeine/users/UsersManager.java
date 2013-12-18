@@ -9,6 +9,7 @@ import org.eclipse.jetty.util.security.Credential;
 import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.auth.IdentityConfJson;
 import codeine.model.Constants;
+import codeine.utils.ExceptionUtils;
 import codeine.utils.JsonFileUtils;
 
 public class UsersManager {
@@ -40,6 +41,14 @@ public class UsersManager {
 		identityConfJson.add(name, credentials);
 		store();
 		putUser(name, credentials);
+	}
+	
+	public CodeineUser user(String name) {
+		
+		for (CodeineUser user : identityConfJson.entries()) {
+			if (user.username().equals(name)) return user;
+		}
+		throw ExceptionUtils.asUnchecked(new IllegalArgumentException("No such user " + name));
 	}
 	
 	public boolean isUserExists(String username) {

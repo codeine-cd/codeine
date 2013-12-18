@@ -5,10 +5,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.ConfigurationManagerServer;
 import codeine.jsons.project.ProjectJson;
@@ -27,7 +25,7 @@ import com.google.common.collect.Lists;
 public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 
 	@Inject private ConfigurationManagerServer configurationManager;
-	private @Inject PermissionsManager permissionsManager;
+	@Inject private  PermissionsManager permissionsManager;
 	
 	private static final Logger log = Logger.getLogger(ConfigureProjectServlet.class);
 	private static final long serialVersionUID = 1L;
@@ -42,33 +40,27 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 	};
 	
 	@Override
-	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
+	protected boolean checkPermissions(HttpServletRequest request) {
 		String user = permissionsManager.user(request);
-		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		if (!permissionsManager.canConfigure(projectName, request)) {
 			log.info("User " + user + " is not allowed to configure project " + projectName);
-			response.setStatus(HttpStatus.FORBIDDEN_403);
-			return;
+			return false;
 		}
+		return true;
+	};
+	
+	@Override
+	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) {
+		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		log.info("Updating configuration of " + projectName + ", new configuration is " + data);
 		ProjectJson projectJson = gson().fromJson(data, ProjectJson.class);
 		configurationManager.updateProject(projectJson);
-		response.setStatus(HttpStatus.OK_200);
-		getWriter(response).write("{}");
+		writer.write("{}");
+		return TemplateData.emptyTemplateData();
 	}
 	
-	@Override
-	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String user = permissionsManager.user(request);
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		if (!permissionsManager.canConfigure(projectName, request)) {
-			log.info("User " + user + " is not allowed to configure project " + projectName);
-			response.setStatus(HttpStatus.FORBIDDEN_403);
-			return;
-		}
-		super.myGet(request, response);
-	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);

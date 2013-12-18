@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
@@ -14,11 +13,12 @@ import codeine.ConfigurationManagerServer;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
+import codeine.servlet.FrontEndServletException;
+import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
 import codeine.servlets.template.NewProjetTemplateData;
-import codeine.utils.ExceptionUtils;
 import codeine.utils.JsonUtils;
 
 import com.google.common.collect.Lists;
@@ -28,7 +28,8 @@ public class NewProjectServlet extends AbstractFrontEndServlet {
 
 	private static final Logger log = Logger.getLogger(NewProjectServlet.class);
 	private static final long serialVersionUID = 1L;
-	@Inject private ConfigurationManagerServer configurationManager;
+	private @Inject ConfigurationManagerServer configurationManager;
+	private @Inject PermissionsManager permissionsManager;
 	
 	protected NewProjectServlet() {
 		super("New Project", "new_project", "command_executor", "new_project", "command_executor");
@@ -46,17 +47,7 @@ public class NewProjectServlet extends AbstractFrontEndServlet {
 	}
 	
 	@Override
-	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
-		return Lists.<TemplateLink>newArrayList(new TemplateLink("New Project", "#"));
-	}
-
-	@Override
-	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
-		return getMenuProvider().getMainMenu(request);
-	}
-
-	@Override
-	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
+	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) throws  FrontEndServletException{
 		try {
 			String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 			log.info("creating project " + data);
@@ -68,12 +59,30 @@ public class NewProjectServlet extends AbstractFrontEndServlet {
 			}
 			newProject.name(newProjectParamsJson.project_name);
 			configurationManager.createNewProject(newProject);
-			response.setStatus(HttpStatus.OK_200);
-			getWriter(response).write("{}");
+			writer.write("{}");
+			return TemplateData.emptyTemplateData();
 		} catch (Exception e) {
-			getWriter(response).write(ExceptionUtils.getRootCause(e).getMessage());
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			throw new FrontEndServletException(e,HttpStatus.BAD_REQUEST_400);
+		}	
+	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		if (!permissionsManager.isAdministrator(request)) {
+			log.info("User can not define new project");
+			return false;
 		}
+		return true;
+	}
+	
+	@Override
+	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
+		return Lists.<TemplateLink>newArrayList(new TemplateLink("New Project", "#"));
+	}
+
+	@Override
+	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
+		return getMenuProvider().getMainMenu(request);
 	}
 	
 	public static class CreateNewProjectJson {

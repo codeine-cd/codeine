@@ -35,11 +35,11 @@ public class LabelsServlet extends AbstractFrontEndServlet {
 	}
 	
 	@Override
-	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
-		PrintWriter writer = getWriter(response);
+	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) {
 		ProjectLabelVersionJson versionLabelJson = readBodyJson(request, ProjectLabelVersionJson.class);
 		versionLabelJsonProvider.updateLabel(versionLabelJson);
 		writer.write("{}");
+		return new TemplateData();
 	}
 	
 	@Override
