@@ -24,6 +24,10 @@
 	display: inline-block;
 }
 
+.readonly_item {
+	cursor: default !important;
+}
+
 .command_parameter {
 	background-color: #F8FAFD;
 	padding: 5px;

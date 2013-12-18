@@ -3,6 +3,7 @@
 $(document).ready( function () {
 	if (isAdmin) {
 	  $('.admin').show();
+	  checkForNewCodeine();
 	} else {
 	  $('.admin').hide();
 	}
@@ -16,4 +17,26 @@ $(document).ready( function () {
 		displayAlert("No configured projects, press <a href='/new-project'>'New Project'</a> to create one.", "warning");
 	}
 });
+
+function checkForNewCodeine() {
+	console.log("Will look for new Codeine version in Github");
+	$.ajax(
+        {
+            type: 'GET',
+            url: 'https://api.github.com/repos/Intel-IT/codeine/releases',
+            success: function (releases) {
+            	var latest_version =  releases[0]["name"].substring(1);
+            	var current_version = $('#codeine_version').html();
+            	console.log("Current Version: " + current_version + " Latest Version: " + latest_version);
+            	if (latest_version > current_version) {
+            		displayAlert("New Codeine Version (" + latest_version + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'>Github</a>, click <a href='#'>here</a> to upgrade now", "info");
+            	}
+            },
+            error: function (jqXhr) {
+            	console.warn('Failed to get releases from Github: ' + jqXhr);
+            },
+            dataType: 'json'
+        }
+    );
+}
 
