@@ -1,72 +1,69 @@
 package codeine.manage;
 
+
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import codeine.configuration.IConfigurationManager;
-import codeine.configuration.Links;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractFrontEndServlet;
+import codeine.servlet.ConfigureCodeineTemplateData;
+import codeine.servlet.FrontEndServletException;
+import codeine.servlet.PermissionsManager;
+import codeine.servlet.TemplateData;
+import codeine.servlet.TemplateLink;
+import codeine.servlet.TemplateLinkWithIcon;
 
-import com.google.gson.Gson;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-public class ConfigureServlet extends AbstractServlet
+public class ConfigureServlet extends AbstractFrontEndServlet
 {
 	private static final Logger log = Logger.getLogger(ConfigureServlet.class);
 	private static final long serialVersionUID = 1L;
-	
-	@Inject private IConfigurationManager configurationManager;
-	@Inject private Links links;
-	@Inject private Gson gson;
-	@Inject private GlobalConfigurationJson globalConfigurationJson;
+	private @Inject GlobalConfigurationJson globalConfigurationJson;
+	private @Inject PermissionsManager permissionsManager;
 
-	@Override
-	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		log.debug("myGet request");
-		PrintWriter writer = getWriter(response);
-		printConfigForm(writer);
+	protected ConfigureServlet() {
+		super("Configure", "configure_codeine", "command_executor", "configure_codeine", "command_executor");
 	}
 
-	private void printConfigForm(PrintWriter writer) {
-		
-		writer.write("<div id='metawidget'>\n");
-		writer.write("<button onclick='save()'>Save</button>\n");
-		writer.write("</div>\n");
-		writer.write("<script type='text/javascript'>\n");
-		writer.write("var toinspect = " + gson.toJson(globalConfigurationJson) + ";\n");
-		writer.write("var mw = new metawidget.Metawidget( document.getElementById( 'metawidget' ));\n");
-		writer.write("mw.toInspect = toinspect;\n");
-		writer.write("mw.buildWidgets();\n");
-		writer.write("function save() {\n");
-		writer.write("    mw.getWidgetProcessor(\n");
-		writer.write("      function( widgetProcessor ) {\n");
-		writer.write("         return widgetProcessor instanceof metawidget.widgetprocessor.SimpleBindingProcessor;\n");
-		writer.write("     }\n");
-		writer.write("  ).save( mw );\n");
-		writer.write("  console.log( mw.toInspect );\n");
-		writer.write("  postJson( '"+Constants.CONFIG_SUBMIT_CONTEXT+"', mw.toInspect );\n");
-		writer.write("}\n");
-		writer.write("</script>\n");
-//		
-//		writer.write("<script type='text/javascript'>\n");
-//		writer.write("$(function() {\n");
-//		writer.write("var frm = $(document.input);\n");
-//		writer.write("var dat = JSON.stringify(frm.serializeArray());\n");
-//		writer.write("alert('I am about to POST this:\\n\\n' + dat);\n");
-//		writer.write("$.post(\n");
-//		writer.write("frm.attr('action'),\n");
-//		writer.write("dat,\n");
-//		writer.write("function(data) {\n");
-//		writer.write("alert('Response: ' + data);\n");
-//		writer.write(" }\n");
-//		writer.write(" );\n");
-//		writer.write(" });\n");
-//		writer.write("</script>\n");
+	@Override
+	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
+		return new ConfigureCodeineTemplateData(gson().toJson(globalConfigurationJson));
+	}
+	
+	@Override
+	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException {
+		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		log.info("Will update codeine configuration. New Config is: " + data);
+		// TODO - Save new configuration and update all parts of the system
+		writer.write("{}");
+		return TemplateData.emptyTemplateData();
+	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return permissionsManager.isAdministrator(request);
+	}
+	
+	
+	@Override 
+	protected List<String> getJsRenderTemplateFiles() {
+		return Lists.newArrayList("configure_codeine");
+	};
+	
+	@Override
+	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
+		return Lists.<TemplateLink>newArrayList(new TemplateLink("Manage Codeine", "/manage"), new TemplateLink("Configure", "#")); 
+	}
+
+	@Override
+	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
+		return getMenuProvider().getMainMenu(request);
 	}
 }
