@@ -19,6 +19,7 @@ public class TemplateData {
 	private String codeineversion;
 	private String codeineversionfull;
 	private String javascriptfiles;
+	private boolean is_empty = false;
 	
 	public TemplateData() {
 		super();
@@ -26,6 +27,15 @@ public class TemplateData {
 		this.codeineversionfull = CodeineVersion.get();
 	}
 
+	public TemplateData(boolean empty) { 
+		this();
+		is_empty = empty;
+	}
+	
+	public boolean is_empty() {
+		return is_empty;
+	}
+	
 	private String addJsTags(List<String> jsFiles) {
 		String $ = "";
 		for (String file : jsFiles) {
@@ -65,4 +75,7 @@ public class TemplateData {
 		this.title = title;
 	}
 	
+	public static TemplateData emptyTemplateData() {
+		return new TemplateData(true);
+	}
 }

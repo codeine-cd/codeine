@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.security.authentication.FormAuthenticator;
 
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.model.Constants;
+import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 
@@ -49,25 +51,26 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	
 	@Override
 	protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (this instanceof AbstractFrontEndServlet) {
-			try {
-				if (request.getSession() != null) {
-					request.getSession().setAttribute(FormAuthenticator.__J_URI, getUrl(request));
-				}
-			} catch(Exception e) {
-				
+		try {
+			if (request.getSession() != null) {
+				request.getSession().setAttribute(FormAuthenticator.__J_URI, getUrl(request));
 			}
+		} catch(Exception e) {
+			
 		}
 		super.doGet(request, response);
 	}
 	
 
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 	
-	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
+	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException{
 		return null;
 	}
 	
-	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) {
+	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException {
 		return null;
 	}
 	
@@ -79,26 +82,48 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	}
 	
 	@Override
-	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
+	protected final void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing get request: " + request.getRequestURL());
 		writer = getWriter(response);
-		TemplateData templateData = doGet(request, writer);
-		if (templateData == null) {
-			super.myGet(request, response);
-		} else {
-			returnResponse(request, templateData);
+		if (!checkPermissions(request)) {
+			response.setStatus(HttpStatus.FORBIDDEN_403);
+			return;
+		}
+		try {
+			TemplateData templateData = doGet(request, writer);
+			if (templateData == null) {
+				super.myGet(request, response);
+			} else {
+				response.setStatus(HttpStatus.OK_200);
+				writeTemplateData(request, templateData);
+			}
+		} catch (FrontEndServletException e) {
+			response.setStatus(e.http_status());
+			getWriter(response).write(ExceptionUtils.getRootCause(e.inner_exception()).getMessage());
+			// TODO - Generate / redirect to error page / bug reporting
 		}
 	}
 
 	@Override
-	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
+	protected final void myPost(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing post request: " + request.getRequestURL());
 		writer = getWriter(response);
-		TemplateData templateData = doPost(request, writer);
-		if (templateData == null) {
-			super.myPost(request, response);
-		} else {
-			returnResponse(request, templateData);
+		if (!checkPermissions(request)) {
+			response.setStatus(HttpStatus.FORBIDDEN_403);
+			return;
+		}
+		TemplateData templateData;
+		try {
+			templateData = doPost(request, writer);
+			if (templateData == null) {
+				super.myPost(request, response);
+			} else {
+				response.setStatus(HttpStatus.OK_200);
+				writeTemplateData(request, templateData);
+			}
+		} catch (FrontEndServletException e) {
+			response.setStatus(e.http_status());
+			getWriter(response).write(ExceptionUtils.getRootCause(e.inner_exception()).getMessage());
 		}
 	}
 	
@@ -171,9 +196,11 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		return sidebarTemplateFile;
 	}
 
-	private void returnResponse(HttpServletRequest request, TemplateData templateData) {
-		String mainTemplate = getMainTemplate(templateData, request, getContentTemplateFile(), getSidebarTemplateFile());
-		writer.write(mainTemplate);
+	private void writeTemplateData(HttpServletRequest request, TemplateData templateData) {
+		if (!templateData.is_empty()) {
+			String mainTemplate = getMainTemplate(templateData, request, getContentTemplateFile(), getSidebarTemplateFile());
+			writer.write(mainTemplate);
+		}
 	}
 	
 	private String getUrl(HttpServletRequest request) {

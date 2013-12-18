@@ -19,8 +19,8 @@ public class MenuProvider {
 	public List<TemplateLinkWithIcon> getMainMenu(HttpServletRequest request) {
 		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Projects", "/","projectsMenuItem","icon-th-list"));
 		if (permissionsManager.isAdministrator(request)) {
-			$.add(new TemplateLinkWithIcon("New project", UrlUtils.buildUrl(Constants.NEW_PROJECT_CONTEXT,null) , "icon-file", "newProjectMenuItem" , "admin"));
-			$.add(new TemplateLinkWithIcon("Manage codeine", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"icon-wrench", "manageMenuItem", "admin"));
+			$.add(new TemplateLinkWithIcon("New Project", UrlUtils.buildUrl(Constants.NEW_PROJECT_CONTEXT,null) , "icon-file", "newProjectMenuItem" , "admin"));
+			$.add(new TemplateLinkWithIcon("Manage Codeine", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"icon-wrench", "manageMenuItem", "admin"));
 		}
 		return $;
 	}
