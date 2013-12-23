@@ -94,8 +94,8 @@ public class Constants
 	public static String getConfPath() {
 		return getConfDir() + "/codeine.conf.json";
 	}
-	public static String getWebConfPath() {
-		return getConfDir() + "/codeine.web.conf.json";
+	public static String getViewConfPath() {
+		return getConfDir() + "/codeine.view.conf.json";
 	}
 	public static String getIdentityConfPath() {
 		return getConfDir() + "/identity.json";
@@ -153,6 +153,7 @@ public class Constants
 		public static final String REDIRECT = "redirect";
 		public static final String COMMAND_ID = "command-id";
 		public static final String DATA_ADDITIONAL_COMMAND_INFO_NAME = "more-command-info";
+		public static final String SECTION = "section";
 		
 		
 	}

@@ -1,10 +1,11 @@
 package codeine.servlets.front_end;
 
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import codeine.utils.TextFileUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 
 public class ProjectsListServlet extends AbstractFrontEndServlet
@@ -51,7 +53,7 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		List<ProjectsInView> views = Lists.newArrayList();
 		List<ProjectTemplateLink> projects = getSortedProjects(request);
-		String file = Constants.getWebConfPath();
+		String file = Constants.getViewConfPath();
 		if (FilesUtils.exists(file)) {
 			views = prepareViews(request, file);
 		}
@@ -60,10 +62,11 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 
 	private List<ProjectsInView> prepareViews(HttpServletRequest request, String file) {
 		List<ProjectsInView> views = Lists.newArrayList();
-		CodeineWebConf conf = gson().fromJson(TextFileUtils.getContents(file), CodeineWebConf.class);
-		for (Entry<String, List<String>> e : conf.views().entrySet()) {
+		Type listType = new TypeToken<ArrayList<ProjectsTab>>() { }.getType();
+		List<ProjectsTab> projects_tabs = gson().fromJson(TextFileUtils.getContents(file), listType);
+		for (ProjectsTab tab : projects_tabs) {
 			List<ProjectTemplateLink> projectsInView  = Lists.newArrayList();
-			for (String projectRegexp : e.getValue()) {
+			for (String projectRegexp : tab.exp()) {
 				Pattern pattern = Pattern.compile(projectRegexp);
 				for (ProjectJson p : configurationManager.getConfiguredProjects()) {
 					if (pattern.matcher(p.name()).matches()){
@@ -72,9 +75,9 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 				}
 			}
 			if (!projectsInView.isEmpty()) {
-				views.add(new ProjectsInView(e.getKey(), projectsInView));
+				views.add(new ProjectsInView(tab.name(), projectsInView));
 			} else {
-				log.debug("ignoring empty view " + e.getKey());
+				log.debug("ignoring empty view " + tab.name());
 			}
 		}
 		return views;

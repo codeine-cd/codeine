@@ -17,6 +17,9 @@ import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
+import codeine.utils.ExceptionUtils;
+import codeine.utils.FilesUtils;
+import codeine.utils.TextFileUtils;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -29,19 +32,36 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	private @Inject PermissionsManager permissionsManager;
 
 	protected ConfigureServlet() {
-		super("Configure", "configure_codeine", "command_executor", "configure_codeine", "command_executor");
+		super("Configure Codiene", "configure_codeine", "command_executor", "configure_codeine", "command_executor");
 	}
 
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
-		return new ConfigureCodeineTemplateData(gson().toJson(globalConfigurationJson));
+		String viewConf = "";
+		if (FilesUtils.exists(Constants.getViewConfPath())) {
+			viewConf = TextFileUtils.getContents(Constants.getViewConfPath());
+		}
+		return new ConfigureCodeineTemplateData(gson().toJson(globalConfigurationJson),viewConf);
 	}
 	
 	@Override
 	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException {
+		String section = request.getParameter(Constants.UrlParameters.SECTION);
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
-		log.info("Will update codeine configuration. New Config is: " + data);
-		// TODO - Save new configuration and update all parts of the system
+		switch (section)
+		{
+			case "view_configuration":
+				log.info("Will update codeine view configuration. New Config is: " + data);
+				TextFileUtils.setContents(Constants.getViewConfPath(), data);
+				break;
+			case "configuration":
+				log.info("Will update codeine configuration. New Config is: " + data);
+				// TODO - Save new configuration and update all parts of the system
+				break;
+			default:
+				log.error("Unknown section parameter: " + section);
+				throw ExceptionUtils.asUnchecked(new IllegalArgumentException("Unknown section parameter: " + section));
+		}
 		writer.write("{}");
 		return TemplateData.emptyTemplateData();
 	}
@@ -54,16 +74,16 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	
 	@Override 
 	protected List<String> getJsRenderTemplateFiles() {
-		return Lists.newArrayList("configure_codeine");
+		return Lists.newArrayList("configure_codeine", "projects_tab");
 	};
 	
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
-		return Lists.<TemplateLink>newArrayList(new TemplateLink("Manage Codeine", "/manage"), new TemplateLink("Configure", "#")); 
+		return Lists.<TemplateLink>newArrayList(new TemplateLink("Management", "/manage"), new TemplateLink("Configure Codeine", "#")); 
 	}
 
 	@Override
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
-		return getMenuProvider().getMainMenu(request);
+		return getMenuProvider().getManageMenu(request);
 	}
 }

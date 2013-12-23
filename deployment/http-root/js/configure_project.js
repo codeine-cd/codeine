@@ -1,7 +1,7 @@
 var totalMonitors = 0;
 var totalCommands = 0;
 var newParameterIndex = 1000;
-var enterNewNodeConst = "Enter new node";
+var enterNewNodeConst = "Enter new Node";
 var enterNewMailConst = "Enter new Email";
 var codeine_env_vars = ['CODEINE_OUTPUT_FILE', 'CODEINE_PROJECT_NAME', 'CODEINE_NODE_NAME'];
 
@@ -476,7 +476,7 @@ function make_element_editable(elm,placeholder) {
 	     console.log(settings);
 	     return(value);
 	  }, { 
-	     tooltip   : 'Click to edit, press Enter to save',
+	     tooltip   : 'Click to edit',
 	     style  : "inherit",
 	     width: 150,
 	     onblur: 'submit',

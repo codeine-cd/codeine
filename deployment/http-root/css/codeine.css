@@ -19,6 +19,11 @@
 	display: none;
 }
 
+.fixed_table {
+	table-layout: fixed;
+	word-wrap: break-word;
+}
+
 .deleteCommand { 
 	cursor: pointer;
 	display: inline-block;

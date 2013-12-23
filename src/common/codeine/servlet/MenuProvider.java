@@ -20,8 +20,16 @@ public class MenuProvider {
 		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Projects", "/","projectsMenuItem","icon-th-list"));
 		if (permissionsManager.isAdministrator(request)) {
 			$.add(new TemplateLinkWithIcon("New Project", UrlUtils.buildUrl(Constants.NEW_PROJECT_CONTEXT,null) , "icon-file", "newProjectMenuItem" , "admin"));
-			$.add(new TemplateLinkWithIcon("Manage Codeine", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"icon-wrench", "manageMenuItem", "admin"));
+			$.add(new TemplateLinkWithIcon("Management", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"icon-wrench", "manageMenuItem", "admin"));
 		}
+		return $;
+	}
+	
+	
+	public List<TemplateLinkWithIcon> getManageMenu(HttpServletRequest request) {
+		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Manage Codiene", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"icon-wrench", "manageMenuItem", "admin"));
+		$.add(new TemplateLinkWithIcon("Configure Codiene", UrlUtils.buildUrl(Constants.CONFIGURE_CONTEXT,null) ,"fa fa-gears", "configureMenuItem", "admin"));
+		$.add(new TemplateLinkWithIcon("Codiene Logs", UrlUtils.buildUrl(Constants.RESOURCESS_CONTEXT,null) ,"fa fa-suitcase", "logsMenuItem", "admin"));
 		return $;
 	}
 	

@@ -1,24 +1,93 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Codeine Configuration
+<div class="accordion" id="config_accordion">
+	<div class="accordion-group">
+    	<div class="accordion-heading">
+      		<a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#config_collapse">
+        	Codeine Configuration
+      		</a>
+    	</div>
+    	<div id="config_collapse" class="accordion-body collapse in">
+      		<div class="accordion-inner">
+        		<form id="config_form">
+			        <div class="row">
+			            <br />
+			            <div id="config_container"class="form-horizontal span8">
+			            </div>
+			        </div>
+			        <div class="row">
+						<div class="pull-right">
+							<button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+						</div>
+						<br/><br/>
+					</div>
+				</form>
+      		</div>
+   		</div>
+  	</div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#view_collapse">
+        Projects Tabs Configuration
+      </a>
     </div>
-    <div>
-    	<form id="config_form">
+    <div id="view_collapse" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <form id="view_config_form">
         <div class="row">
             <br />
-            <div id="config_container"class="form-horizontal span8">
+            <div id="view_config_container"class="form-horizontal span8">
+            	<div class="offset1 span6">
+	            	<table class="table table-condensed table-hover table-striped table-bordered fixed_table">
+			        	<thead>
+				          <tr>
+				            <th style="text-align: center; width: 40%">Tab Name</th>
+				            <th style="text-align: center; width: 40%">Expression</th>
+				            <th style="text-align: center; width: 20%"></th>
+				          </tr>
+			      		</thead>
+		      			<tbody id="tabs_table_body">
+		      			
+			      		</tbody>
+			       	</table>
+			       	<br/>
+			       	<table class="table table-condensed table-hover table-striped table-bordered fixed_table">
+		      			<tbody>
+		      				<tr>
+		      					<td id="new_tab_name" style="width: 40%" class="editable"></td>
+		      					<td id="new_tab_exp" style="width: 40%" class="editable"></td>
+		      					<td id="new_tab_exp" style="text-align: center; width: 20%">
+		      						<a href="javascript: void(0);" class="btn btn-info btn-mini" id="add_tab" style="margin-bottom: 5px;" ><i class="fa fa-plus"></i>  Add Tab</a>
+		      					</td>
+		      				</tr>
+			      		</tbody>
+			       	</table>
+
+		       	</div>
             </div>
         </div>
         <div class="row">
 			<div class="pull-right">
-				<!-- <a href="javascript: void(0);" id="save_button" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</a> -->
 				<button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
 			</div>
 			<br/><br/>
 		</div>
 		</form>
+      </div>
     </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#view_collapse">
+        Users Permissions
+      </a>
+    </div>
+    <div id="view_collapse" class="accordion-body collapse">
+      <div class="accordion-inner">
+        
+      </div>
+    </div>
+  </div>
 </div>
 <script>
 var codeine_configuration = {{configuration}}
+var view_config = {{view_config}}
 </script>

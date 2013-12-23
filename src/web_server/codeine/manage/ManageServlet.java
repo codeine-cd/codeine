@@ -18,10 +18,10 @@ public class ManageServlet extends AbstractFrontEndServlet
 {
 	private @Inject PermissionsManager permissionsManager;
 	private static final long serialVersionUID = 1L;
-	private static final String title = "Manage Codeine";
+	private static final String title = "Management";
 
 	protected ManageServlet() {
-		super(title, "config","command_executor", "projects");
+		super(title, "manage","command_executor", "projects");
 	}
 
 	@Override
@@ -41,6 +41,6 @@ public class ManageServlet extends AbstractFrontEndServlet
 
 	@Override
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
-		return getMenuProvider().getMainMenu(request);
+		return getMenuProvider().getManageMenu(request);
 	}
 }
