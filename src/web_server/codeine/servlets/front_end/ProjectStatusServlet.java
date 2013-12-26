@@ -21,7 +21,6 @@ import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
 import codeine.servlets.template.NameAndAlias;
 import codeine.servlets.template.ProjectStatusTemplateData;
-import codeine.statistics.MonitorsStatistics;
 import codeine.utils.UrlUtils;
 import codeine.version.VersionItemTemplate;
 
@@ -36,7 +35,7 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private NodeAggregator aggregator;
 	@Inject	private PermissionsManager permissionsManager;
-	@Inject	private MonitorsStatistics monitorsStatistics;
+	
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -61,6 +60,7 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 				return new VersionItemTemplate(input);
 			}
 		};
+		
 		Map<String, VersionItemTemplate> nodesVersions = Maps.transformValues(nodesVersions2, function);
 		VersionItemInfo allVersions = nodesVersions.remove(Constants.ALL_VERSION);
 		List<VersionItemTemplate> values = Lists.newArrayList(nodesVersions.values());
@@ -70,7 +70,7 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		
-		return new ProjectStatusTemplateData(projectName, values, monitorsStatistics.getDataJson(projectName), allVersions.count(), getCommandsName(project.commands()), readOnly);
+		return new ProjectStatusTemplateData(projectName, values, allVersions.count(), getCommandsName(project.commands()), readOnly);
 	}
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {

@@ -16,13 +16,29 @@ $(document).ready( function () {
 });
 
 function loadChart() {
-	chart1 = new cfx.Chart();
-	chart1.setDataSource(monitors_chart_data_json);
-	chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
-	chart1.getAllSeries().getLine().setStyle(cfx.DashStyle.Dash);
+	$.ajax( {
+	    type: 'GET',
+	    url: '/monitors-statistics_json?project=' + getProjetcName(),
+	    beforeSend: function() {
+	    	console.log("Sending chart data request...");
+	    	// TODO - Show loader...
+	    },
+	    success: function(response) {
+	    	// TODO - Hide loader...
+	    	chart1 = new cfx.Chart();
+	    	chart1.setDataSource(jQuery.parseJSON(response));
+	    	chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
+	    	chart1.getAllSeries().getLine().setStyle(cfx.DashStyle.Dash);
 
-	var chartDiv = document.getElementById('chartDiv');
-	chart1.create(chartDiv);
+	    	var chartDiv = document.getElementById('chartDiv');
+	    	chart1.create(chartDiv);
+	    },
+	    error:  function(err) { 
+	    	// TODO - Hide loader...
+	    	console.log('error is ' + err);
+	    },
+	    dataType: 'json'
+	  });
 }
 
 function onGetTipDiv(args) {
