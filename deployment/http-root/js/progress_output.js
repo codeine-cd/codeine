@@ -16,8 +16,11 @@ function addLines() {
     {
       $("#output_pre" ).append("\n");
     }
+    
     lines += obj.lines.length;
-    $(document).scrollTop($(document).height());
+    if ($(window).scrollTop() == $(document).height()-$(window).height()){
+    	$(document).scrollTop($(document).height());
+    }
     if (obj.eof) {
       clearInterval(interval);
       $('#output_spinner').fadeOut();
