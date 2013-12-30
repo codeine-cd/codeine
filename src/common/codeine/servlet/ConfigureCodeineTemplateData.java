@@ -1,5 +1,7 @@
 package codeine.servlet;
 
+import codeine.utils.StringUtils;
+
 
 @SuppressWarnings("unused")
 public class ConfigureCodeineTemplateData extends TemplateData {
@@ -8,8 +10,8 @@ public class ConfigureCodeineTemplateData extends TemplateData {
 	private String view_config;
 
 	public ConfigureCodeineTemplateData(String config, String view_config) {
-		configuration = config;
-		this.view_config = view_config; 
+		this.configuration = config;
+		this.view_config = StringUtils.isEmpty(view_config) ? "[]" : view_config; 
 	}
 	
 }
