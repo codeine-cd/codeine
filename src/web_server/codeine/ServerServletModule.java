@@ -37,7 +37,7 @@ public class ServerServletModule extends CodeineServletModule
 	{
 		serveMe(ProjectStatusServlet.class, Constants.PROJECT_STATUS_CONTEXT);
 		serveMe(ProjectStatusApiServlet.class, apiContext(Constants.PROJECT_STATUS_CONTEXT));
-		serveMe(UpgradeApiServlet.class, apiContext(Constants.UPGRADE_SERVER_CONTEXT));
+		serveMe(UpgradeApiServlet.class, Constants.UPGRADE_SERVER_CONTEXT);
 		serveMe(CommandLogApiServlet.class, apiContext(Constants.COMMANDS_LOG_CONTEXT));
 		serveMe(MonitorsStatisticsApiServlet.class, apiContext(Constants.MONITORS_STATISTICS_CONTEXT));
 		serveMe(CommandExecutorApiServlet.class, apiContext(Constants.COMMANDS_EXECUTER_STATUS));
