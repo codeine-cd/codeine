@@ -14,6 +14,7 @@ my $codeineDir = "$dir";
 print "codeineDir is $codeineDir\n";
 print "prepare codeine...\n";
 my $propertiesFile = "$codeineDir/src/common/codeine/version.properties";
+updateVersionFile();
 es("rm -rf dist");
 es("mkdir -p dist");
 #es("bounce_minor_version.pl");
@@ -27,7 +28,7 @@ es("rsync -ur $codeineDir/deployment/* dist/");
 #es("cp $codeineDir/dist/bin/codeine.jar dist/bin/codeine.jar");
 #es("rsync -ur deployment/project dist/");
 #es("rsync -ur deployment/conf dist/");
-es("grep \"CodeineVersion.build=\" $propertiesFile | awk -F= '{print \$2}' > dist/build_number.txt");
+es("echo '$ENV{BUILD_NUMBER}' > dist/build_number.txt");
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
 es("cd dist; tar -czf ../$tar ./*");
 print "tar is ready '$tar' for version $version\n";
@@ -70,6 +71,14 @@ sub r
 	my $cmd = shift;
 	print "executing $cmd\n";
 	return `$cmd`;
+}
+sub updateVersionFile
+{
+	my $major = getVersion('major');
+	my $minor = getVersion('minor');
+	my $build = $ENV{BUILD_NUMBER};
+	my $date = getDate();
+	es("echo 'CodeineVersion.build=$build\nCodeineVersion.major=$major\nCodeineVersion.minor=$minor\nCodeineVersion.date=$date\n' > $propertiesFile");
 }
 sub getVersionFull
 {
