@@ -8,9 +8,10 @@ use Getopt::Long;
 
 my $script = __FILE__;
 my $dir = dirname($script);
-my $baseDir = $dir."../../";
-chdir $baseDir;
-
+chdir $dir."/../../";
+my $baseDir = `pwd`;
+chomp $baseDir;
+print "baseDir is $baseDir\n";
 my $version = undef;
 
 GetOptions(
