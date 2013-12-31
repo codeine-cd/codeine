@@ -32,7 +32,7 @@ my $tar = "codeine_".getVersionNoDate().".tar.gz";
 es("cd dist; tar -czf ../$tar ./*");
 print "tar is ready '$tar' for version $version\n";
 my $zip = "codeine_".getVersionNoDate().".zip";
-es("cd dist; zip ../$tar ./*");
+es("cd dist; zip ../$zip ./*");
 print "zip is ready '$zip' for version $version\n";
 
 unless ($ENV{'release-to-github'} eq "true") 
