@@ -20,6 +20,7 @@ es("mkdir -p dist");
 #es("bounce_minor_version.pl");
 
 my $version = getVersionFull();
+my $versionNoDate = getVersionNoDate();
 print "java is $ENV{JAVA_HOME}\n";#1.7
 print "ant is ant\n";#1.8?
 es("cd $codeineDir ; ant", 1);
@@ -40,8 +41,8 @@ unless ($ENV{'release-to-github'} eq "true")
 {
 	exit(0);
 } 
-print "Will release new version to Github: $version\n";
-my $res = r("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$version\",  \"target_commitish\": \"master\",  \"name\": \"v$version\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
+print "Will release new version to Github: $versionNoDate\n";
+my $res = r("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
 print "release returned: $res\n";
 $res =~ /\"id\":\s([^,]*)/;
 my $id = $1;
