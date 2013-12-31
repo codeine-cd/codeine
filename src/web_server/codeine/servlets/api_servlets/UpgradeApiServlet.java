@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.model.Constants;
+import codeine.model.Constants.UrlParameters;
 import codeine.servlet.AbstractServlet;
 import codeine.utils.os_process.ProcessExecuter;
 
@@ -16,8 +17,9 @@ public class UpgradeApiServlet extends AbstractServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String cmd = Constants.getInstallDir() + "/bin/upgrade.pl";
-		log.info("going to upgrade " + cmd);
+		String version = request.getParameter(UrlParameters.VERSION_NAME);
+		String cmd = Constants.getInstallDir() + "/bin/upgrade.pl --version " + version;
+		log.info("going to upgrade: " + cmd);
 		ProcessExecuter.execute(cmd);
 	}
 	

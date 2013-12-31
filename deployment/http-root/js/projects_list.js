@@ -25,11 +25,12 @@ function checkForNewCodeine() {
             type: 'GET',
             url: 'https://api.github.com/repos/Intel-IT/codeine/releases',
             success: function (releases) {
+              var verString = releases[0]["name"];
             	var latest_version =  releases[0]["name"].substring(1);
             	var current_version = $('#codeine_version').html();
             	console.log("Current Version: " + current_version + " Latest Version: " + latest_version);
             	if (latest_version > current_version) {
-            		displayAlert("New Codeine Version (" + latest_version + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'>Github</a>, click <a href='/upgrade-server'>here</a> to upgrade now", "info");
+            		displayAlert("New Codeine Version (" + latest_version + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'>Github</a>, click <a href='/upgrade-server?version=" + encodeURIComponent(verString) + "'>here</a> to upgrade now", "info");
             	}
             },
             error: function (jqXhr) {
