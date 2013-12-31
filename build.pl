@@ -31,6 +31,9 @@ es("grep \"CodeineVersion.build=\" $propertiesFile | awk -F= '{print \$2}' > dis
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
 es("cd dist; tar -czf ../$tar ./*");
 print "tar is ready '$tar' for version $version\n";
+my $zip = "codeine_".getVersionNoDate().".zip";
+es("cd dist; zip ../$tar ./*");
+print "zip is ready '$zip' for version $version\n";
 
 unless ($ENV{'release-to-github'} eq "true") 
 {
@@ -42,7 +45,7 @@ print "release returned: $res\n";
 $res =~ /\"id\":\s([^,]*)/;
 my $id = $1;
 print "release id: $id\n";
-es("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/gzip\" --data-binary \"\@$tar\" \"https://uploads.github.com/repos/Intel-IT/codeine/releases/$id/assets?name=codeine.tar.gz\"");
+es("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/zip\" --data-binary \"\@$zip\" \"https://uploads.github.com/repos/Intel-IT/codeine/releases/$id/assets?name=codeine.zip\"");
 
 print "Done!";
 
