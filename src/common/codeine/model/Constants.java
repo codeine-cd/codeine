@@ -31,6 +31,7 @@ public class Constants
 	public static final String DELETE_PROJECT_CONTEXT = "/delete-project";
 	public static final String PROJECT_NODES_CONTEXT = "/project-nodes";
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
+	public static final String UPGRADE_SERVER_CONTEXT = "/upgrade-server";
 	public static final String COMMANDS_LOG_CONTEXT = "/commands-log";
 	public static final String COMMANDS_EXECUTER_STATUS = "/commands-status";
 	public static final String RESTART_ALL_PEERS_CONTEXT = "/restart-all";

@@ -29,7 +29,7 @@ function checkForNewCodeine() {
             	var current_version = $('#codeine_version').html();
             	console.log("Current Version: " + current_version + " Latest Version: " + latest_version);
             	if (latest_version > current_version) {
-            		displayAlert("New Codeine Version (" + latest_version + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'>Github</a>, click <a href='#'>here</a> to upgrade now", "info");
+            		displayAlert("New Codeine Version (" + latest_version + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'>Github</a>, click <a href='/upgrade-server'>here</a> to upgrade now", "info");
             	}
             },
             error: function (jqXhr) {
