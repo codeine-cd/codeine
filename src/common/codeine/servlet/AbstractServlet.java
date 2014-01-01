@@ -28,6 +28,10 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			if (!checkPermissions(request)) {
+				response.setStatus(HttpStatus.FORBIDDEN_403);
+				return;
+			}
 			myGet(request, response);
 		} catch (Exception e) {
 			handleError(e, response);
@@ -39,6 +43,10 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Override
 	protected final void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			if (!checkPermissions(request)) {
+				response.setStatus(HttpStatus.FORBIDDEN_403);
+				return;
+			}
 			myPost(request, response);
 		} catch (Exception e) {
 			handleError(e, response);
@@ -48,12 +56,21 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			if (!checkPermissions(request)) {
+				response.setStatus(HttpStatus.FORBIDDEN_403);
+				return;
+			}
 			myDelete(request, response);
 		} catch (Exception e) {
 			handleError(e, response);
 		}
 	}
 
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
+	
+	
 	private void handleError(Exception e, HttpServletResponse response) {
 		log.warn("error in servlet", e);
 		getWriter(response).write("error in servlet\n");

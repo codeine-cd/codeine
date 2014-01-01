@@ -7,24 +7,27 @@ import javax.servlet.http.HttpServletRequest;
 
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.PermissionsConfJson;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.PermissionsConfigurationJsonStore;
 import codeine.model.Constants;
+import codeine.users.UsersManager;
+import codeine.utils.StringUtils;
 
 public class PermissionsManager {
 
 	private PermissionsConfigurationJsonStore permissionsConfigurationJsonStore;
-	private GlobalConfigurationJson globalConfigurationJson;
+	private GlobalConfigurationJsonStore globalConfigurationJson;
 	private PermissionsConfJson permissionConfJson;
-	
-	
+	private UsersManager usersManager;
+		
 	@Inject
 	public PermissionsManager(PermissionsConfigurationJsonStore permissionsConfigurationJsonStore,
-			GlobalConfigurationJson globalConfigurationJson, PermissionsConfJson permissionConfJson) {
+			GlobalConfigurationJsonStore globalConfigurationJson, PermissionsConfJson permissionConfJson, UsersManager usersManager) {
 		super();
 		this.permissionsConfigurationJsonStore = permissionsConfigurationJsonStore;
 		this.globalConfigurationJson = globalConfigurationJson;
 		this.permissionConfJson = permissionConfJson;
+		this.usersManager = usersManager;
 	}
 	public boolean canRead(String projectName, HttpServletRequest request){
 		if (ignoreSecurity()){
@@ -39,7 +42,7 @@ public class PermissionsManager {
 		return user(request) == null || permissionConfJson.get(user(request)) == null;
 	}
 	private boolean ignoreSecurity() {
-		return Boolean.getBoolean("ignoreSecurity") || globalConfigurationJson.authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
+		return Boolean.getBoolean("ignoreSecurity") || globalConfigurationJson.get().authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
 	}
 	public boolean canCommand(String projectName, HttpServletRequest request){
 		if (ignoreSecurity()){
@@ -65,6 +68,12 @@ public class PermissionsManager {
 		if (null != userFromCommandLine){
 			return userFromCommandLine;
 		}
+		
+		String api_token = request.getHeader(Constants.API_TOKEN);
+		if (!StringUtils.isEmpty(api_token)) { 
+			return usersManager.userByApiToken(api_token).username();
+		}
+		
 		Principal userPrincipal = request.getUserPrincipal();
 		if (null == userPrincipal){
 			return null;

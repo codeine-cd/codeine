@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import codeine.api.CommandStatusJson;
-import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.api.VersionItemInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
+import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
 import com.google.common.collect.Maps;
@@ -24,10 +24,19 @@ public class CodeineApiClient {
 	private String host;
 	private int port;
 	private Gson gson = new Gson();
+	private Map<String,String> headers;
 
 	public CodeineApiClient(String host, int port) {
+		this(host,port,null);
+	}
+	
+	public CodeineApiClient(String host, int port, String api_token) {
 		this.host = host;
 		this.port = port;
+		if (!StringUtils.isEmpty(api_token)) {
+			headers = Maps.newHashMap();
+			headers.put(Constants.API_TOKEN, api_token);
+		}
 	}
 
 	public List<ProjectJson> projects() {
@@ -40,12 +49,12 @@ public class CodeineApiClient {
 
 
 	private <T> T apiCall(String path, String params, Type type) {
-		String json = HttpUtils.doGET(getServerPath(path) + params);
+		String json = HttpUtils.doGET(getServerPath(path) + params,headers);
 		return gson.fromJson(json, type);
 	}
 	
 	private String apiPostCall(String path, String params, Object bodyData) {
-		return HttpUtils.doPOST(getServerPath(path) + params, gson.toJson(bodyData));
+		return HttpUtils.doPOST(getServerPath(path) + params, gson.toJson(bodyData),headers);
 	}
 
 
@@ -89,7 +98,7 @@ public class CodeineApiClient {
 	public String runCommand(ScehudleCommandExecutionInfo data) {
 		String url = getServerPath(Constants.COMMAND_NODES_CONTEXT);
 		String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encode(gson.toJson(data));
-		return HttpUtils.doPOST(url, postData);
+		return HttpUtils.doPOST(url, postData,headers);
 	}
 
 
@@ -99,8 +108,9 @@ public class CodeineApiClient {
 	}
 	
 	public static void main(String[] args) {
-		CodeineApiClient api = new CodeineApiClient("localhost", 12347);
+		CodeineApiClient api = new CodeineApiClient("localhost", 12347, "36b887b6-fe4e-46c9-838f-abc3feee180f");
 		
-		api.report(new NodeWithMonitorsInfo("localhost", "roi", "test_project",  Maps.<String,MonitorStatusInfo>newHashMap(),"1"));
+		System.out.println(api.projects());
+		//api.report(new NodeWithMonitorsInfo("localhost", "roi", "test_project",  Maps.<String,MonitorStatusInfo>newHashMap(),"1"));
 	}
 }

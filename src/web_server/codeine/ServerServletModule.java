@@ -1,7 +1,6 @@
 package codeine;
 
 import static codeine.model.Constants.apiContext;
-import codeine.manage.ConfigSubmitServlet;
 import codeine.manage.ConfigureServlet;
 import codeine.manage.ManageServlet;
 import codeine.model.Constants;
@@ -57,7 +56,6 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(ProjectsListApiServlet.class, apiContext(Constants.PROJECTS_LIST_CONTEXT));
 		serveMe(ManageServlet.class, Constants.MANAGEMENT_CONTEXT);
 		serveMe(ConfigureServlet.class, Constants.CONFIGURE_CONTEXT);
-		serveMe(ConfigSubmitServlet.class, Constants.CONFIG_SUBMIT_CONTEXT);
 		serveMe(NodesCommandApiServlet.class, apiContext(Constants.COMMAND_NODES_CONTEXT));
 		serveMe(ScheduleCommandServlet.class, Constants.SCHEDULE_COMMAND_CONTEXT);
 		serveMe(LabelsServlet.class, Constants.LABELS_CONTEXT);

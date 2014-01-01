@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import codeine.executer.PeriodicExecuter;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
@@ -39,7 +39,7 @@ public class CodeineMailServerBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	public int getHttpPort() {
-		return injector().getInstance(GlobalConfigurationJson.class).mail_server_port();
+		return injector().getInstance(GlobalConfigurationJsonStore.class).get().mail_server_port();
 	}
 	
 }

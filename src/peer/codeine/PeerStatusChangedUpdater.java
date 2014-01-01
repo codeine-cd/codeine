@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.db.IStatusDatabaseConnector;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.utils.ThreadUtils;
 
@@ -24,19 +24,16 @@ public class PeerStatusChangedUpdater implements Runnable{
 	private static final Logger log = Logger.getLogger(PeerStatusChangedUpdater.class);
 	private PeerStatus peerStatus;
 	private IStatusDatabaseConnector databaseConnector;
-	private GlobalConfigurationJson globalConfigurationJson;
 	private BlockingQueue<Object> blockingQueue = new LinkedBlockingQueue<>();
 	private Random random = new Random();
 			
 	
 	@Inject
-	public PeerStatusChangedUpdater(PeerStatus peerStatus, IStatusDatabaseConnector databaseConnector,
-			GlobalConfigurationJson globalConfigurationJson) {
+	public PeerStatusChangedUpdater(PeerStatus peerStatus, IStatusDatabaseConnector databaseConnector,GlobalConfigurationJsonStore globalConfigurationJson) {
 		super();
 		this.peerStatus = peerStatus;
 		this.databaseConnector = databaseConnector;
-		this.globalConfigurationJson = globalConfigurationJson;
-		if (!globalConfigurationJson.large_deployment()) {
+		if (!globalConfigurationJson.get().large_deployment()) {
 			MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(5);
 			MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(55);
 		}

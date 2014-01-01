@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
 import codeine.utils.Asserter;
 
@@ -20,12 +20,12 @@ public class MongoClientProvider implements Provider<MongoClient>{
 
 	private static final Logger log = Logger.getLogger(MongoClientProvider.class);
 	@Inject
-	private GlobalConfigurationJson globalConfiguration;
+	private GlobalConfigurationJsonStore globalConfiguration;
 
 	@Override
 	public MongoClient get() {
 		List<ServerAddress> addrs = Lists.newArrayList();
-		for (String host : globalConfiguration.db_host()) {
+		for (String host : globalConfiguration.get().db_host()) {
 			try {
 				addrs.add(new ServerAddress(host, Constants.DB_PORT));
 			} catch (UnknownHostException e) {

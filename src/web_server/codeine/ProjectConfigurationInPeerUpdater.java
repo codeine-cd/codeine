@@ -41,7 +41,7 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 			List<PeerStatusJsonV2> failedPeers = Lists.newArrayList();
 			for (PeerStatusJsonV2 e : allPeers) {
 				try {
-					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT));
+					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null);
 					log.debug("updated " + e.host_port() + " result " + result);
 				} catch (Exception e1) {
 					failedPeers.add(e);

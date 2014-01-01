@@ -142,6 +142,8 @@ public class Constants
 
 	public static final String DISCOVERY_PLUGIN = "discovery";
 
+	public static final String API_TOKEN = "api_token";
+
 	
 	
 	public static class UrlParameters {

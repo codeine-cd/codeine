@@ -10,6 +10,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -22,18 +24,20 @@ public class HttpUtils
 	private static final Logger log = Logger.getLogger(HttpUtils.class);
 	private final static String USER_AGENT = "Mozilla/5.0";
 	
-	public static String doGET(String url)
+	public static String doGET(String url,Map<String,String> headers)
 	{
 		final StringBuilder $ = new StringBuilder();
-		doGET(url, new OutputToStringFunction($));
+		doGET(url, new OutputToStringFunction($), headers);
 		return $.toString();
 	}
-	public static void doGET(String url, Function<String, Void> function)
+	
+	public static void doGET(String url, Function<String, Void> function, Map<String,String> headers)
 	{
 		try
 		{
 			URL u = new URL(url);
 			URLConnection c = u.openConnection();
+			addHeaders(headers, c);
 			BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
 			String inputLine;
 			//TODO should have some kind of timeout mechanism
@@ -48,7 +52,8 @@ public class HttpUtils
 			throw ExceptionUtils.asUnchecked(ex);
 		}
 	}
-	public static void doPOST(String url, String postData, Function<String, Void> function) {
+	
+	public static void doPOST(String url, String postData, Function<String, Void> function, Map<String,String> headers) {
 		try {
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -57,7 +62,8 @@ public class HttpUtils
 			con.setRequestMethod("POST");
 			con.setRequestProperty("User-Agent", USER_AGENT);
 			con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
- 
+
+			addHeaders(headers, con);
  
 			// Send post request
 			con.setDoOutput(true);
@@ -82,9 +88,11 @@ public class HttpUtils
 			throw new RuntimeException(e);
 		}
 	}
-	public static String doPOST(String url, String postData) {
+	
+	
+	public static String doPOST(String url, String postData, Map<String,String> headers) {
 		StringBuilder stringBuilder = new StringBuilder();
-		doPOST(url, postData, new OutputToStringFunction(stringBuilder));
+		doPOST(url, postData, new OutputToStringFunction(stringBuilder), headers);
 		return stringBuilder.toString();
 	}
 
@@ -114,6 +122,14 @@ public class HttpUtils
 			return URLDecoder.decode(parameters, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	private static void addHeaders(Map<String, String> headers, URLConnection c) {
+		if (headers != null) {
+			for (Entry<String, String> e : headers.entrySet()) {
+				c.setRequestProperty(e.getKey(), e.getValue());
+			}
 		}
 	}
 }

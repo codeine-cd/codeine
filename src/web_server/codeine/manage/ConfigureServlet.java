@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
 import codeine.servlet.ConfigureCodeineTemplateData;
@@ -28,7 +29,7 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 {
 	private static final Logger log = Logger.getLogger(ConfigureServlet.class);
 	private static final long serialVersionUID = 1L;
-	private @Inject GlobalConfigurationJson globalConfigurationJson;
+	private @Inject GlobalConfigurationJsonStore store;
 	private @Inject PermissionsManager permissionsManager;
 
 	protected ConfigureServlet() {
@@ -41,7 +42,7 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 		if (FilesUtils.exists(Constants.getViewConfPath())) {
 			viewConf = TextFileUtils.getContents(Constants.getViewConfPath());
 		}
-		return new ConfigureCodeineTemplateData(gson().toJson(globalConfigurationJson),viewConf);
+		return new ConfigureCodeineTemplateData(gson().toJson(store.get()),viewConf);
 	}
 	
 	@Override
@@ -56,7 +57,8 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 				break;
 			case "configuration":
 				log.info("Will update codeine configuration. New Config is: " + data);
-				// TODO - Save new configuration and update all parts of the system
+				GlobalConfigurationJson json = gson().fromJson(data, GlobalConfigurationJson.class);
+				store.store(json);
 				break;
 			default:
 				log.error("Unknown section parameter: " + section);

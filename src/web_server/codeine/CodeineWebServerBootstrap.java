@@ -16,7 +16,7 @@ import org.eclipse.jetty.util.security.Constraint;
 import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
 import codeine.jsons.auth.AuthenticationMethod;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.model.Constants;
 import codeine.statistics.MonitorsStatistics;
@@ -62,11 +62,11 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	public int getHttpPort() {
-		return injector().getInstance(GlobalConfigurationJson.class).web_server_port();
+		return injector().getInstance(GlobalConfigurationJsonStore.class).get().web_server_port();
 	}
 	@Override
 	protected ServletContextHandler createServletContextHandler() {
-		AuthenticationMethod a = injector().getInstance(GlobalConfigurationJson.class).authentication_method();
+		AuthenticationMethod a = injector().getInstance(GlobalConfigurationJsonStore.class).get().authentication_method();
 		if (Boolean.getBoolean("ignoreSecurity")){
 			a = AuthenticationMethod.Disabled;
 		}
@@ -105,13 +105,13 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		return context;
 	}
 	private ServletContextHandler createServletContextHandlerSpnego() {
-		GlobalConfigurationJson config = injector().getInstance(GlobalConfigurationJson.class);
+		GlobalConfigurationJsonStore config = injector().getInstance(GlobalConfigurationJsonStore.class);
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS
 				| ServletContextHandler.SECURITY);
 
 		Constraint constraint = new Constraint();
 		constraint.setName(Constraint.__SPNEGO_AUTH);
-		constraint.setRoles(config.roles());
+		constraint.setRoles(config.get().roles());
 		constraint.setAuthenticate(true);
 
 		ConstraintMapping constraintMapping = new ConstraintMapping();

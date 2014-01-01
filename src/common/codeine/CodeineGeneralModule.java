@@ -11,7 +11,6 @@ import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.jsons.auth.IdentityConfJson;
 import codeine.jsons.auth.PermissionsConfJson;
-import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.PermissionsConfigurationJsonStore;
 import codeine.jsons.labels.LabelJsonFromFileProvider;
@@ -41,7 +40,8 @@ public class CodeineGeneralModule extends AbstractModule
 		bind(LabelJsonProvider.class).to(LabelJsonFromFileProvider.class).in(Scopes.SINGLETON);
 		bind(MysqlHostSelector.class).in(Scopes.SINGLETON);
 		//TODO make everybody use store to update immediately
-		bind(GlobalConfigurationJson.class).toProvider(new GlobalConfigurationJsonStore()).in(Scopes.SINGLETON);
+		//bind(GlobalConfigurationJson.class).toProvider(new GlobalConfigurationJsonStore()).in(Scopes.SINGLETON);
+		bind(GlobalConfigurationJsonStore.class).in(Scopes.SINGLETON);
 		bind(IdentityConfJson.class).toProvider(new IdentityConfJsonProvider()).in(Scopes.SINGLETON);
 		bind(PermissionsConfJson.class).toProvider(new PermissionsConfigurationJsonStore()).in(Scopes.SINGLETON);
 	}

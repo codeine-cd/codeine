@@ -3,18 +3,17 @@ package codeine.configuration;
 import javax.inject.Inject;
 
 import codeine.jsons.CommandExecutionStatusInfo;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.network.HttpUtils;
 
 public class Links {
 
-	private @Inject
-	GlobalConfigurationJson globalConfiguration;
+	private @Inject	GlobalConfigurationJsonStore globalConfiguration;
 
 	public String directoryPeerStatus() {
-		return "http://" + globalConfiguration.directory_host() + ":" + globalConfiguration.directory_port()
+		return "http://" + globalConfiguration.get().directory_host() + ":" + globalConfiguration.get().directory_port()
 				+ Constants.PEER_STATUS_CONTEXT;
 	}
 
@@ -46,7 +45,7 @@ public class Links {
 	}
 
 	public String getWebServerLink() {
-		return "http://" + globalConfiguration.web_server_host() + ":" + globalConfiguration.web_server_port();
+		return "http://" + globalConfiguration.get().web_server_host() + ":" + globalConfiguration.get().web_server_port();
 	}
 
 	public String getNodeMonitorOutputContextPath(String projectName) {

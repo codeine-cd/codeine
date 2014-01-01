@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 
 
 public class JavaMailSendWrapper
@@ -23,11 +23,11 @@ public class JavaMailSendWrapper
 	private static final Logger log = Logger.getLogger(JavaMailSendWrapper.class);
 	
 	@Inject
-	private GlobalConfigurationJson globalConfiguration;
+	private GlobalConfigurationJsonStore globalConfiguration;
 	
 	public void sendMail(String subject, String content, List<String> recipients)
 	{
-		String from = globalConfiguration.admin_mail();
+		String from = globalConfiguration.get().admin_mail();
 		String host = "localhost";
 		Properties props = new Properties();
 		props.put("mail.smtp.host", host);

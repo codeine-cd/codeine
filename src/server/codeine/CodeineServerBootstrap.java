@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 
@@ -40,7 +40,7 @@ public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
 
 	@Override
 	public int getHttpPort() {
-		return injector().getInstance(GlobalConfigurationJson.class).web_server_port();
+		return injector().getInstance(GlobalConfigurationJsonStore.class).get().web_server_port();
 	}
 
 	@Override

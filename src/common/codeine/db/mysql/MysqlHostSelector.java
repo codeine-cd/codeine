@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.executer.Task;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.network.InetUtils;
 
@@ -26,7 +26,7 @@ public class MysqlHostSelector implements Task{
 	public static final long INTERVAL = TimeUnit.HOURS.toMillis(1);
 	private static final Logger log = Logger.getLogger(MysqlHostSelector.class);
 	@Inject
-	private GlobalConfigurationJson conf;
+	private GlobalConfigurationJsonStore conf;
 	
 	private MysqlConfigurationJson mysqlConf; 
 	
@@ -47,7 +47,7 @@ public class MysqlHostSelector implements Task{
 	}
 
 	private MysqlConfigurationJson selectNearestConf() {
-		List<Map.Entry<String, Integer>> hosts = Lists.newArrayList(Iterables.transform(conf.mysql(), new Function<MysqlConfigurationJson, Map.Entry<String, Integer>>(){
+		List<Map.Entry<String, Integer>> hosts = Lists.newArrayList(Iterables.transform(conf.get().mysql(), new Function<MysqlConfigurationJson, Map.Entry<String, Integer>>(){
 			@Override
 			public Map.Entry<String, Integer> apply(MysqlConfigurationJson m){
 				return new AbstractMap.SimpleEntry<String,Integer>(m.host(),m.port());
@@ -60,11 +60,11 @@ public class MysqlHostSelector implements Task{
 				return m.host().equals(host.getKey()) && m.port().equals(host.getValue());
 			}
 		};
-		return Iterables.find(conf.mysql(), predicate);
+		return Iterables.find(conf.get().mysql(), predicate);
 	}
 
 	private MysqlConfigurationJson getLocalConfOrNull() {
-		for (MysqlConfigurationJson mysqlConfigurationJson : conf.mysql()) {
+		for (MysqlConfigurationJson mysqlConfigurationJson : conf.get().mysql()) {
 			try {
 				if (InetAddress.getByName(mysqlConfigurationJson.host()).equals(InetUtils.getLocalHost())){
 					return mysqlConfigurationJson;
@@ -78,7 +78,7 @@ public class MysqlHostSelector implements Task{
 	public MysqlConfigurationJson getLocalConf() {
 		MysqlConfigurationJson localConf = getLocalConfOrNull();
 		if (null == localConf) {
-			throw new RuntimeException("could not find mysql configuration to start with. host is " + InetUtils.getLocalHost() + " and configuration is " + conf.mysql());
+			throw new RuntimeException("could not find mysql configuration to start with. host is " + InetUtils.getLocalHost() + " and configuration is " + conf.get().mysql());
 		}
 		return localConf;
 	}

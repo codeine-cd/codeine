@@ -25,11 +25,16 @@ public class CodeineUser {
 	private CodeineUser(String username, String credentials) {
 		this.username = username;
 		this.credentials = credentials;
-		this.api_token = new String(new BASE64Encoder().encode(encrypt(CODEINE_API_TOKEN_SECRET_KEY, UUID.randomUUID().toString())));
+		this.api_token = encryptToken(UUID.randomUUID().toString());
 	}
 	
 	public static CodeineUser createNewUser(String username, String credentials) {
 		return new  CodeineUser(username, credentials);
+	}
+	
+	private static String encryptToken(String token)
+	{
+		return new String(new BASE64Encoder().encode(encrypt(CODEINE_API_TOKEN_SECRET_KEY, token)));
 	}
 	
 	public String username() {

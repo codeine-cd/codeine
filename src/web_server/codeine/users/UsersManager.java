@@ -43,6 +43,14 @@ public class UsersManager {
 		putUser(name, credentials);
 	}
 	
+	public CodeineUser userByApiToken(String api_token) {
+		for (CodeineUser user : identityConfJson.entries()) {
+			if (user.api_token().equals(api_token))
+				return user;
+		}
+		throw ExceptionUtils.asUnchecked(new IllegalArgumentException("No such user with api token " + api_token));
+	}
+	
 	public CodeineUser user(String name) {
 		
 		for (CodeineUser user : identityConfJson.entries()) {

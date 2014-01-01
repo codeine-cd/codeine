@@ -15,7 +15,6 @@ public class ProjectsListApiServlet extends AbstractServlet
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ProjectsListApiServlet.class);
 	private static final long serialVersionUID = 1L;
-	
 	@Inject private IConfigurationManager configurationManager;
 
 	@Override

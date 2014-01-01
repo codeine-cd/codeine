@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 import codeine.db.mysql.MysqlProcessControlService;
 import codeine.executer.PeriodicExecuter;
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.peers_status.OldPeersRemove;
 import codeine.servlets.CodeineDirectoryServletModule;
@@ -47,7 +47,7 @@ public class CodeineDirectoryBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	public int getHttpPort() {
-		return injector().getInstance(GlobalConfigurationJson.class).directory_port();
+		return injector().getInstance(GlobalConfigurationJsonStore.class).get().directory_port();
 	}
 	
 }

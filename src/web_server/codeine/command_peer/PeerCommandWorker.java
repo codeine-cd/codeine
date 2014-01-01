@@ -86,11 +86,11 @@ public class PeerCommandWorker implements Runnable {
 				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias());
 				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info))
 						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info2));
-				HttpUtils.doPOST(url, postData, function);
+				HttpUtils.doPOST(url, postData, function,null);
 			}
 			else {
 				String link = links.getPeerCommandLink(node.peer_address(), "codeine", "switch-version", "beta");
-				HttpUtils.doGET(link, function);
+				HttpUtils.doGET(link, function,null);
 			}
 			if (result.length() > 0) {
 				if (!shouldOutputImmediatly){

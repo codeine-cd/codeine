@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.security.authentication.FormAuthenticator;
 
-import codeine.jsons.global.GlobalConfigurationJson;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
@@ -32,7 +32,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	
 	@Inject	private PermissionsManager permissionsManager;
 	@Inject	private MenuProvider menuProvider;
-	@Inject	private GlobalConfigurationJson globalConfigurationJson;
+	@Inject	private GlobalConfigurationJsonStore globalConfigurationJson;
 	
 	private static final Logger log = Logger.getLogger(AbstractFrontEndServlet.class);
 	private static final long serialVersionUID = 1L;
@@ -62,9 +62,6 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	}
 	
 
-	protected boolean checkPermissions(HttpServletRequest request) {
-		return true;
-	}
 	
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException{
 		return null;
@@ -85,10 +82,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	protected final void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing get request: " + request.getRequestURL());
 		writer = getWriter(response);
-		if (!checkPermissions(request)) {
-			response.setStatus(HttpStatus.FORBIDDEN_403);
-			return;
-		}
+		
 		try {
 			TemplateData templateData = doGet(request, writer);
 			if (templateData == null) {
@@ -108,10 +102,6 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	protected final void myPost(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing post request: " + request.getRequestURL());
 		writer = getWriter(response);
-		if (!checkPermissions(request)) {
-			response.setStatus(HttpStatus.FORBIDDEN_403);
-			return;
-		}
 		TemplateData templateData;
 		try {
 			templateData = doPost(request, writer);
@@ -138,13 +128,13 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	private void prepareTemplateData(HttpServletRequest request, TemplateData templateData) {
 		String user = permissionsManager.user(request);
 		templateData.setLoggedUser(StringUtils.safeToString(user));
-		templateData.authentication_method(globalConfigurationJson.authentication_method());
+		templateData.authentication_method(globalConfigurationJson.get().authentication_method());
 		templateData.setNavBar(generateNavigation(request));
 		templateData.setMenu(generateMenuWithActive(request));
 		templateData.setJavascriptFiles(jsFiles);
 		templateData.setTitle(title);
-		if (!StringUtils.isEmpty(globalConfigurationJson.server_name())) {
-				templateData.setServerName(globalConfigurationJson.server_name());
+		if (!StringUtils.isEmpty(globalConfigurationJson.get().server_name())) {
+				templateData.setServerName(globalConfigurationJson.get().server_name());
 		}
 	}
 

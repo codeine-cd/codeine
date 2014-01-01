@@ -77,7 +77,10 @@ $('#view_config_form').submit(function(event) {
 
 
 $('#config_form').submit(function(event) {
-	var formValues = getInputValues($('#config_container'));;
+	var formValues = getInputValues($('#config_container'));
+	if (formValues["roles"] !== undefined) {
+		formValues["roles"] = formValues["roles"].split(",");
+	}
 	console.log("Will submit the following config: ");
 	console.dir(formValues);
 	$.ajax({
