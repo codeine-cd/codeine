@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import codeine.api.CommandStatusJson;
+import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.api.VersionItemInfo;
@@ -13,6 +14,7 @@ import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
 import codeine.utils.network.HttpUtils;
 
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,26 +30,28 @@ public class CodeineApiClient {
 		this.port = port;
 	}
 
-	
-
 	public List<ProjectJson> projects() {
 		return apiCall(Constants.PROJECTS_LIST_CONTEXT,"", new TypeToken<List<ProjectJson>>(){}.getType());
 	}
-
+	
+	public void report(NodeWithMonitorsInfo nodeWithMonitorsInfo) {
+		apiPostCall(Constants.REPORTER_CONTEXT, "", nodeWithMonitorsInfo);
+	}
 
 
 	private <T> T apiCall(String path, String params, Type type) {
 		String json = HttpUtils.doGET(getServerPath(path) + params);
 		return gson.fromJson(json, type);
 	}
-
+	
+	private String apiPostCall(String path, String params, Object bodyData) {
+		return HttpUtils.doPOST(getServerPath(path) + params, gson.toJson(bodyData));
+	}
 
 
 	private String getServerPath(String contextPath) {
 		return "http://"+host+":"+port + Constants.apiContext(contextPath);
 	}
-
-
 
 	public Map<String, VersionItemInfo> projectStatus(String projectName) {
 		return apiCall(
@@ -92,5 +96,11 @@ public class CodeineApiClient {
 
 	public List<CommandStatusJson> commandHistory(String projectName) {
 		return apiCall(Constants.COMMANDS_LOG_CONTEXT, "?" + projectNameParam(projectName) , new TypeToken<List<CommandStatusJson>>(){}.getType()); 
+	}
+	
+	public static void main(String[] args) {
+		CodeineApiClient api = new CodeineApiClient("localhost", 12347);
+		
+		api.report(new NodeWithMonitorsInfo("localhost", "roi", "test_project",  Maps.<String,MonitorStatusInfo>newHashMap(),"1"));
 	}
 }

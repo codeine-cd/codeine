@@ -23,6 +23,11 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		this.monitors = monitors;
 	}
 	
+	public NodeWithMonitorsInfo(String name, String alias, String projectName, Map<String,MonitorStatusInfo> monitors, String version) {
+		this(null, name, alias, projectName, monitors);
+		this.version = version;
+	}
+	
 	public String projectName() {
 		return projectName;
 	}
