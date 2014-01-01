@@ -19,6 +19,7 @@ public class AggregateMailPrepare {
 	@Inject private Links links;
 	@Inject	private LabelJsonProvider labelJsonProvider;
 	
+	
 	public List<Mail> prepare(List<NotificationContent> notificationContent, AlertsCollectionType alertsCollectionType) {
 		List<Mail> $ = Lists.newArrayList();
 		for (NotificationContent item : notificationContent) {
