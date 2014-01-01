@@ -13,7 +13,7 @@ import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
 import codeine.servlet.UserInfoTemplateData;
-import codeine.users.UsersManager;
+import codeine.servlet.UsersManager;
 
 import com.google.common.collect.Lists;
 

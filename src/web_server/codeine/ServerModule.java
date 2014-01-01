@@ -4,8 +4,8 @@ package codeine;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.peer_status.PeersProjectsStatus;
+import codeine.servlet.UsersManager;
 import codeine.statistics.MonitorsStatistics;
-import codeine.users.UsersManager;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;

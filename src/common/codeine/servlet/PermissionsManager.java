@@ -10,7 +10,6 @@ import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.PermissionsConfigurationJsonStore;
 import codeine.model.Constants;
-import codeine.users.UsersManager;
 import codeine.utils.StringUtils;
 
 public class PermissionsManager {

@@ -19,9 +19,9 @@ import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.model.Constants;
+import codeine.servlet.UsersManager;
 import codeine.statistics.MonitorsStatistics;
 import codeine.users.LogoutServlet;
-import codeine.users.UsersManager;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;

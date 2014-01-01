@@ -1,4 +1,4 @@
-package codeine.users;
+package codeine.servlet;
 
 import javax.inject.Inject;
 

@@ -8,6 +8,7 @@ import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.servlet.AbstractServlet;
 import codeine.servlet.PermissionsManager;
+import codeine.servlet.UsersManager;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
