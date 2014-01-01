@@ -16,7 +16,7 @@ import com.google.inject.Module;
 public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
 
 	
-	
+		
 	
 	private final Logger log = Logger.getLogger(CodeineServerBootstrap.class);
 
