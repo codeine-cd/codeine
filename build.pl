@@ -42,12 +42,14 @@ unless ($ENV{'release-to-github'} eq "true")
 	exit(0);
 } 
 print "Will release new version to Github: $versionNoDate\n";
-my $res = r("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
+my $githubUser = $ENV{GITHUB_USER};
+my $githubPassword = $ENV{GITHUB_PASSWORD};
+my $res = r("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
 print "release returned: $res\n";
 $res =~ /\"id\":\s([^,]*)/;
 my $id = $1;
 print "release id: $id\n";
-es("curl -X POST -u ezraroi:ir123456 -H \"Content-Type: application/zip\" --data-binary \"\@$zip\" \"https://uploads.github.com/repos/Intel-IT/codeine/releases/$id/assets?name=codeine.zip\"");
+es("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/zip\" --data-binary \"\@$zip\" \"https://uploads.github.com/repos/Intel-IT/codeine/releases/$id/assets?name=codeine.zip\"");
 
 print "Done!";
 
