@@ -1,0 +1,15 @@
+<tr>
+	<td style="text-align: center">{{:username}}</td>
+	<td style="text-align: center">
+		<input type="checkbox" {{if administer }} checked {{/if}}>
+	</td>
+	<td style="text-align: center">
+		<input data-permission="can_read" data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+	</td>
+	<td style="text-align: center">
+		<input data-permission="can_command" data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+	</td>
+	<td style="text-align: center">
+		<input data-permission="can_configure" data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+	</td>
+</tr>

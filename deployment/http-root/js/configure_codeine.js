@@ -1,6 +1,5 @@
 $(document).ready( function () {
 	$('#config_container').html($('#configure_codeine').render(codeine_configuration));
-	$(".chosen-select").chosen({disable_search_threshold: 10});
 	
 	$("#authentication_method").val(codeine_configuration["authentication_method"]);
 	$("#authentication_method").trigger("chosen:updated");
@@ -10,6 +9,12 @@ $(document).ready( function () {
     	view_config = [];
     }
     drawTabs();
+    
+    drawPermissions();
+    
+    $(".chosen-select").chosen({disable_search_threshold: 10});
+    
+    $(".projects_selector").select2({tags: projects , tokenSeparators: [",", " "]});
     
 });
 
@@ -21,6 +26,10 @@ $('.editable').editable(function(value, settings) {
     width: 150,
     onblur: 'submit'
 });
+
+function drawPermissions() {
+	$('#permissions_table_body').html($('#configure_permissions').render(permissions_config['permissions']));
+} 
 
 function drawTabs() {
 	$('#tabs_table_body').html($('#projects_tab').render(view_config));
@@ -81,6 +90,12 @@ $('#config_form').submit(function(event) {
 	if (formValues["roles"] !== undefined) {
 		formValues["roles"] = formValues["roles"].split(",");
 	}
+	formValues['mysql'] = [];
+	formValues['mysql'][0] = {};
+	formValues['mysql'][0].host = formValues['mysql_host'];
+	formValues['mysql'][0].port = formValues['mysql_port'];
+	formValues['mysql'][0].dir = formValues['mysql_dir'];
+	formValues['mysql'][0].bin_dir = formValues['mysql_bin_dir'];
 	console.log("Will submit the following config: ");
 	console.dir(formValues);
 	$.ajax({

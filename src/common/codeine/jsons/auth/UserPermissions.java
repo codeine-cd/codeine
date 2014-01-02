@@ -5,23 +5,29 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 
-public class UserPermissionConfJson {
+public class UserPermissions {
 
 	
 	private boolean administer;
 	private Set<String> read_project = Sets.newHashSet();
 	private Set<String> configure_project = Sets.newHashSet();
 	private Set<String> command_project = Sets.newHashSet();
+	private String username;
 	
-	protected UserPermissionConfJson() {
+	protected UserPermissions() {
 		super();
 	}
 
-	public UserPermissionConfJson(boolean administer) {
+	public UserPermissions(String username, boolean administer) {
+		this.username = username;
 		this.administer = administer;
 	}
 
-
+	public String username()
+	{
+		return username;
+	}
+	
 	public boolean canRead(String projectName) {
 		return isSetMatch(read_project, projectName) || canCommand(projectName);
 	}

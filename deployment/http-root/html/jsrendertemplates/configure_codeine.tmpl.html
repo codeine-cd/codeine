@@ -1,35 +1,61 @@
 <div class="control-group">
-	<label class="control-label" for=server_name">Codeine Server Name</label>
+	<label class="control-label" for="server_name">Codeine Server Name</label>
     <div class="controls">
         <input id="server_name" type="text" value="{{:server_name}}">
     </div>
 </div>
 <div class="control-group">
-	<label class="control-label" for=web_server_host">Web Server Host</label>
+	<label class="control-label" for="web_server_host">Web Server Host</label>
     <div class="controls">
         <input id="web_server_host" type="text" value="{{:web_server_host}}" required="required">
     </div>
 </div>
 <div class="control-group">
-	<label class="control-label" for=web_server_port">Web Server Port</label>
+	<label class="control-label" for="web_server_port">Web Server Port</label>
     <div class="controls">
         <input id="web_server_port" type="text" pattern="\d*" title="Integer Number" value="{{:web_server_port}}" required="required">
     </div>
 </div>
 <div class="control-group">
-	<label class="control-label" for=directory_host">Directory Host</label>
+	<label class="control-label" for="directory_host">Directory Host</label>
     <div class="controls">
         <input id="directory_host" type="text" value="{{:directory_host}}" required="required">
     </div>
 </div>
 <div class="control-group">
-	<label class="control-label" for=directory_port">Directory Port</label>
+	<label class="control-label" for="directory_port">Directory Port</label>
     <div class="controls">
         <input id="directory_port" type="text" pattern="\d*" title="Integer Number" value="{{:directory_port}}" required="required">
     </div>
 </div>
 <div class="control-group">
-	<label class="control-label" for=admin_mail">Admin Mail</label>
+	<label class="control-label" for="mysql_host">MySQL Host</label>
+    <div class="controls">
+        <input id="mysql_host" type="text" value="{{:mysql[0].host}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="mysql_port">MySQL Port</label>
+    <div class="controls">
+        <input id="mysql_port" type="text" pattern="\d*" title="Integer Number" value="{{:mysql[0].port}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="mysql_dir">MySQL Persistency Dir</label>
+    <div class="controls">
+        <input id="mysql_dir" type="text" value="{{:mysql[0].dir}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="mysql_bin_dir">MySQL Bin Dir</label>
+    <div class="controls">
+        <input id="mysql_bin_dir" type="text" value="{{:mysql[0].bin_dir}}" required="required">
+    </div>
+</div>
+
+
+<div class="control-group">
+	<label class="control-label" for="admin_mail">Admin Mail</label>
     <div class="controls">
         <input id="admin_mail" type="email" pattern="[^ @]*@[^ @]*"  value="{{:admin_mail}}" required="required">
     </div>

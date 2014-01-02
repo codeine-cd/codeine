@@ -5,7 +5,7 @@
         	Codeine Configuration
       		</a>
     	</div>
-    	<div id="config_collapse" class="accordion-body collapse in">
+    	<div id="config_collapse" class="accordion-body collapse">
       		<div class="accordion-inner">
         		<form id="config_form">
 			        <div class="row">
@@ -76,13 +76,27 @@
   </div>
   <div class="accordion-group">
     <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#view_collapse">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#permission_collapse">
         Users Permissions
       </a>
     </div>
-    <div id="view_collapse" class="accordion-body collapse">
+    <div id="permission_collapse" class="accordion-body collapse">
       <div class="accordion-inner">
-        
+        <table class="table table-condensed table-hover table-striped table-bordered fixed_table">
+	       	<thead>
+	          <tr>
+	            <th style="text-align: center; width:15%;">Username</th>
+	            <th style="text-align: center; width:10%;">Admin</th>
+	            <th style="text-align: center;">Read</th>
+	            <th style="text-align: center;">Command</th>
+	            <th style="text-align: center;">Config</th>
+	          </tr>
+	     		</thead>
+	    			<tbody id="permissions_table_body">
+	    			
+	     		</tbody>
+	      	</table>
+	      	<br/>
       </div>
     </div>
   </div>
@@ -90,4 +104,6 @@
 <script>
 var codeine_configuration = {{configuration}};
 var view_config = {{view_config}};
+var permissions_config = {{permissions_config}};
+var projects = {{projects}};
 </script>

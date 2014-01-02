@@ -8,20 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
-import codeine.jsons.global.PermissionsConfigurationJsonStore;
+import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.model.Constants;
 import codeine.utils.StringUtils;
 
 public class PermissionsManager {
 
-	private PermissionsConfigurationJsonStore permissionsConfigurationJsonStore;
+	private UserPermissionsJsonStore permissionsConfigurationJsonStore;
 	private GlobalConfigurationJsonStore globalConfigurationJson;
-	private PermissionsConfJson permissionConfJson;
+	private UserPermissionsJsonStore permissionConfJson;
 	private UsersManager usersManager;
 		
 	@Inject
-	public PermissionsManager(PermissionsConfigurationJsonStore permissionsConfigurationJsonStore,
-			GlobalConfigurationJsonStore globalConfigurationJson, PermissionsConfJson permissionConfJson, UsersManager usersManager) {
+	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore,
+			GlobalConfigurationJsonStore globalConfigurationJson, UserPermissionsJsonStore permissionConfJson, UsersManager usersManager) {
 		super();
 		this.permissionsConfigurationJsonStore = permissionsConfigurationJsonStore;
 		this.globalConfigurationJson = globalConfigurationJson;
@@ -35,10 +35,10 @@ public class PermissionsManager {
 		if (permissionsNotConfigured(request)){
 			return false;
 		}
-		return permissionConfJson.get(user(request)).canRead(projectName);
+		return permissionConfJson.get().get(user(request)).canRead(projectName);
 	}
 	private boolean permissionsNotConfigured(HttpServletRequest request) {
-		return user(request) == null || permissionConfJson.get(user(request)) == null;
+		return user(request) == null || permissionConfJson.get().get(user(request)) == null;
 	}
 	private boolean ignoreSecurity() {
 		return Boolean.getBoolean("ignoreSecurity") || globalConfigurationJson.get().authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
@@ -50,7 +50,7 @@ public class PermissionsManager {
 		if (permissionsNotConfigured(request)){
 			return false;
 		}
-		return permissionConfJson.get(user(request)).canCommand(projectName);
+		return permissionConfJson.get().get(user(request)).canCommand(projectName);
 	}
 	public boolean isAdministrator(HttpServletRequest request){
 		if (ignoreSecurity()){
@@ -59,7 +59,7 @@ public class PermissionsManager {
 		if (permissionsNotConfigured(request)){
 			return false;
 		}
-		return permissionConfJson.get(user(request)).isAdministrator();
+		return permissionConfJson.get().get(user(request)).isAdministrator();
 	}
 
 	public String user(HttpServletRequest request) {
@@ -90,11 +90,12 @@ public class PermissionsManager {
 		if (permissionsNotConfigured(request)){
 			return false;
 		}
-		return permissionConfJson.get(user(request)).canConfigure(projectName);
+		return permissionConfJson.get().get(user(request)).canConfigure(projectName);
 	}
 	public void makeAdmin(String user) {
-		permissionConfJson.makeAdmin(user);
-		permissionsConfigurationJsonStore.store(permissionConfJson);
+		PermissionsConfJson permissionsConfJson = permissionConfJson.get();
+		permissionsConfJson.makeAdmin(user);
+		permissionsConfigurationJsonStore.store(permissionsConfJson);
 	}
 
 }

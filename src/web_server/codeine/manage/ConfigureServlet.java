@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import codeine.configuration.IConfigurationManager;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.jsons.global.UserPermissionsJsonStore;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
 import codeine.servlet.ConfigureCodeineTemplateData;
@@ -31,6 +34,8 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	private static final long serialVersionUID = 1L;
 	private @Inject GlobalConfigurationJsonStore store;
 	private @Inject PermissionsManager permissionsManager;
+	private @Inject UserPermissionsJsonStore permissionConfJson;
+	private @Inject IConfigurationManager configurationManager;
 
 	protected ConfigureServlet() {
 		super("Configure Codiene", "configure_codeine", "command_executor", "configure_codeine", "command_executor");
@@ -42,7 +47,12 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 		if (FilesUtils.exists(Constants.getViewConfPath())) {
 			viewConf = TextFileUtils.getContents(Constants.getViewConfPath());
 		}
-		return new ConfigureCodeineTemplateData(gson().toJson(store.get()),viewConf);
+		List<ProjectJson> configuredProjects = configurationManager.getConfiguredProjects();
+		List<String> projectsNames = Lists.newArrayList();
+		for (ProjectJson projectJson : configuredProjects) {
+			projectsNames.add(projectJson.name());
+		}
+		return new ConfigureCodeineTemplateData(gson().toJson(store.get()),viewConf,gson().toJson(permissionConfJson.get()), gson().toJson(projectsNames));
 	}
 	
 	@Override
@@ -76,7 +86,7 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	
 	@Override 
 	protected List<String> getJsRenderTemplateFiles() {
-		return Lists.newArrayList("configure_codeine", "projects_tab");
+		return Lists.newArrayList("configure_codeine", "projects_tab", "configure_permissions");
 	};
 	
 	@Override

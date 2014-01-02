@@ -12,7 +12,7 @@ import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.jsons.auth.IdentityConfJson;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
-import codeine.jsons.global.PermissionsConfigurationJsonStore;
+import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.jsons.labels.LabelJsonFromFileProvider;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.model.Constants;
@@ -43,7 +43,7 @@ public class CodeineGeneralModule extends AbstractModule
 		//bind(GlobalConfigurationJson.class).toProvider(new GlobalConfigurationJsonStore()).in(Scopes.SINGLETON);
 		bind(GlobalConfigurationJsonStore.class).in(Scopes.SINGLETON);
 		bind(IdentityConfJson.class).toProvider(new IdentityConfJsonProvider()).in(Scopes.SINGLETON);
-		bind(PermissionsConfJson.class).toProvider(new PermissionsConfigurationJsonStore()).in(Scopes.SINGLETON);
+		bind(PermissionsConfJson.class).toProvider(new UserPermissionsJsonStore()).in(Scopes.SINGLETON);
 	}
 
 	//TODO move to JsonStore

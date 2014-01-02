@@ -1,20 +1,25 @@
 package codeine.jsons.auth;
 
-import java.util.Map;
+import java.util.List;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 
 public class PermissionsConfJson {
 
-	private Map<String, UserPermissionConfJson> users_configuration = Maps.newHashMap();
+	private List<UserPermissions> permissions = Lists.newArrayList();
 
-	public UserPermissionConfJson get(String user) {
-		return users_configuration.get(user);
+	public UserPermissions get(String user) {
+		for (UserPermissions u : permissions) {
+			if (user.equals(u.username())) {
+				return u;
+			}
+		}
+		throw new IllegalArgumentException("user does not have permissions");
 	}
 
 	public void makeAdmin(String user) {
-		UserPermissionConfJson p = new UserPermissionConfJson(true);
-		users_configuration.put(user, p);
+		UserPermissions p = new UserPermissions(user,true);
+		permissions.add(p);
 	}
 
 }
