@@ -27,9 +27,13 @@ public class JsonStore<T> implements Provider<T>{
 	public T get() {
 		if (storedJson == null){
 			log.info("loading configuration from " + path() + " for type " + type());
-			storedJson = jsonFileUtils.getConfFromFile(path(), type());
+			storedJson = getNew();
 		}
 		return storedJson;
+	}
+
+	public T getNew() {
+		return jsonFileUtils.getConfFromFile(path(), type());
 	}
 	
 	public void store(T json){

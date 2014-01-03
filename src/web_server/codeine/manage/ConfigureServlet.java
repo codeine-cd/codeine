@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
@@ -52,7 +54,12 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 		for (ProjectJson projectJson : configuredProjects) {
 			projectsNames.add(projectJson.name());
 		}
-		return new ConfigureCodeineTemplateData(gson().toJson(store.get()),viewConf,gson().toJson(permissionConfJson.get()), gson().toJson(projectsNames));
+		GlobalConfigurationJson globalConfigurationJson = store.getNew();
+		if (globalConfigurationJson.mysql().isEmpty()) {
+			globalConfigurationJson.mysql().add(new MysqlConfigurationJson());
+		}
+		PermissionsConfJson permissionsConfJson = permissionConfJson.get();
+		return new ConfigureCodeineTemplateData(gson().toJson(globalConfigurationJson),viewConf,gson().toJson(permissionsConfJson), gson().toJson(projectsNames));
 	}
 	
 	@Override
