@@ -10,7 +10,7 @@ function registerHelpElements(elm) {
       placement : "bottom",
       trigger : "hover",
       delay : {
-        hide : 300
+        hide : 500
       }
     });
   });
@@ -20,7 +20,9 @@ function getHelpHtml(elm) {
   var text = helpStrings[$(elm).data("help-message")];
   if (text === undefined) {
     console.warn("No help text for element " + elm.id);
-    return "No help yet for id '" + $(elm).data("help-message") + "'";
+    return "No help yet for id '" + $(elm).data("help-message") + 
+    "' <a href='mailto:ohad.shai@intel.com?Subject=Please%20provide%20help%20for%20" + $(elm).data("help-message") 
+    + "' target='_top'>Suggest a message</a>";
   }
   return text;
 }
