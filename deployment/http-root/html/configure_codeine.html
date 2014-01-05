@@ -39,8 +39,12 @@
 	            	<table class="table table-condensed table-hover table-striped table-bordered fixed_table">
 			        	<thead>
 				          <tr>
-				            <th style="text-align: center; width: 40%">Tab Name</th>
-				            <th style="text-align: center; width: 40%">Expression</th>
+				            <th style="text-align: center; width: 40%">Tab Name
+				            	<i data-help-message="tabNameHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+				            </th>
+				            <th style="text-align: center; width: 40%">Expression 
+				            	<i data-help-message="tabExpressionHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+				            </th>
 				            <th style="text-align: center; width: 20%"></th>
 				          </tr>
 			      		</thead>
@@ -85,18 +89,42 @@
         <table class="table table-condensed table-hover table-striped table-bordered fixed_table">
 	       	<thead>
 	          <tr>
-	            <th style="text-align: center; width:15%;">Username</th>
-	            <th style="text-align: center; width:10%;">Admin</th>
-	            <th style="text-align: center;">View Project</th>
-	            <th style="text-align: center;">Command Project</th>
-	            <th style="text-align: center;">Config Project</th>
+	            <th style="text-align: center; width:15%;">Username
+	            	<i data-help-message="usernamePermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	            </th>
+	            <th style="text-align: center; width:10%;">Admin
+	            	<i data-help-message="adminPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	            </th>
+	            <th style="text-align: center;">View Project
+	            	<i data-help-message="viewProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	            </th>
+	            <th style="text-align: center;">Command Project
+	            	<i data-help-message="commandProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	            </th>
+	            <th style="text-align: center;">Config Project
+	            	<i data-help-message="configProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	            </th>
+	            <th style="text-align: center; width:5%;"></th>
 	          </tr>
 	     		</thead>
 	    			<tbody id="permissions_table_body">
 	    			
 	     		</tbody>
 	      	</table>
-	      	<br/>
+	      	<div class="row">
+	      		<div class="span2">
+			        <input id="add_user_permissions_input" type="text">
+		        </div>
+	      		<div class="span2">
+				    <button id="add_user_permissions" type="submit" style="margin-right: 10px;" class="btn btn-success" disabled><i class="fa fa-plus"></i> Add User</button>
+		        </div>
+			</div>
+        <div class="row">
+			<div class="pull-right">
+				<button id="config_permissions_save" type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+			</div>
+			<br/><br/>
+		</div>
       </div>
     </div>
   </div>

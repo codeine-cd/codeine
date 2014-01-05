@@ -34,9 +34,9 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 {
 	private static final Logger log = Logger.getLogger(ConfigureServlet.class);
 	private static final long serialVersionUID = 1L;
-	private @Inject GlobalConfigurationJsonStore store;
+	private @Inject GlobalConfigurationJsonStore globalConfigurationJsonStore;
 	private @Inject PermissionsManager permissionsManager;
-	private @Inject UserPermissionsJsonStore permissionConfJson;
+	private @Inject UserPermissionsJsonStore permissionsJsonStore;
 	private @Inject IConfigurationManager configurationManager;
 
 	protected ConfigureServlet() {
@@ -54,11 +54,11 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 		for (ProjectJson projectJson : configuredProjects) {
 			projectsNames.add(projectJson.name());
 		}
-		GlobalConfigurationJson globalConfigurationJson = store.getNew();
+		GlobalConfigurationJson globalConfigurationJson = globalConfigurationJsonStore.getNew();
 		if (globalConfigurationJson.mysql().isEmpty()) {
 			globalConfigurationJson.mysql().add(new MysqlConfigurationJson());
 		}
-		PermissionsConfJson permissionsConfJson = permissionConfJson.get();
+		PermissionsConfJson permissionsConfJson = permissionsJsonStore.get();
 		return new ConfigureCodeineTemplateData(gson().toJson(globalConfigurationJson),viewConf,gson().toJson(permissionsConfJson), gson().toJson(projectsNames));
 	}
 	
@@ -68,15 +68,23 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		switch (section)
 		{
-			case "view_configuration":
+			case "view_configuration": {
 				log.info("Will update codeine view configuration. New Config is: " + data);
 				TextFileUtils.setContents(Constants.getViewConfPath(), data);
 				break;
-			case "configuration":
+			}
+			case "configuration": {
 				log.info("Will update codeine configuration. New Config is: " + data);
 				GlobalConfigurationJson json = gson().fromJson(data, GlobalConfigurationJson.class);
-				store.store(json);
+				globalConfigurationJsonStore.store(json);
 				break;
+			}
+			case "permissions": {
+				log.info("Will update codeine configuration. New Config is: " + data);
+				PermissionsConfJson json = gson().fromJson(data, PermissionsConfJson.class);
+				permissionsJsonStore.store(json);
+				break;
+			}
 			default:
 				log.error("Unknown section parameter: " + section);
 				throw ExceptionUtils.asUnchecked(new IllegalArgumentException("Unknown section parameter: " + section));

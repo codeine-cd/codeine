@@ -1,15 +1,16 @@
-<tr>
+<tr class="user_permissions_data" data-username="{{:username}}">
 	<td style="text-align: center">{{:username}}</td>
 	<td style="text-align: center">
-		<input type="checkbox" {{if administer }} checked {{/if}}>
+		<input data-id="administer" type="checkbox" {{if administer }} checked {{/if}}>
 	</td>
 	<td style="text-align: center">
-		<input data-permission="can_read" data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+		<input data-id="read_project" data-separator="," style="width:170px;" class="projects_selector"/>
 	</td>
 	<td style="text-align: center">
-		<input data-permission="can_command" data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+		<input data-id="command_project" data-separator="," style="width:170px;" class="projects_selector"/>
 	</td>
 	<td style="text-align: center">
-		<input data-permission="can_configure" data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+		<input data-id="configure_project" data-separator="," data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
 	</td>
+	<td style="text-align: center;"><a href="javascript: void(0);" title="Remove User" data-username="{{:username}}" class="btn btn-default btn-mini premissions_user_remove"><i class="fa fa-times"></i></a></td>
 </tr>

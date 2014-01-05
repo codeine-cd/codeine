@@ -145,6 +145,17 @@ function getInputValues(container) {
 				parameters[this.id] = $(this).val();
 			}
 		}
+		else if (($(this).data('id') !== '') && ($(this).val() !== '')) {
+			if (this.type === 'checkbox') {
+				parameters[$(this).data('id')] = this.checked;
+			} else  { 
+				var val = $(this).val();
+				if ($(this).data('separator') !== undefined) {
+					val = val.split($(this).data('separator'));
+				}
+				parameters[$(this).data('id')] = val;
+			}
+		}
 	});
 	return parameters;
 }
