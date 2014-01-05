@@ -74,5 +74,25 @@ var helpStrings = {
       + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
   "versionScriptHelp" : "Type a shell script to specify the version the node.<br/><br/>"
       + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> and should contain the version number (e.g: 1.0.3).<br/><br/>"
-      + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>"
+      + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
+  "tabsConfigureHelp" : "Enables separate view for a group of projects",
+  "serverNameHelp" : "A name to be displayed when accessing UI or on mail messages",
+  "webServerHostHelp" : "Full host name of the web server",
+  "webServerPortHelp" : "Port of the web server (requires restart)",
+  "directory_hostHelp" : "Full host name of the directory server",
+  "directory_portHelp" : "Port of the directory server",
+  "mysql_hostHelp" : "Full host name of the mysql server",
+  "MysqlPortConfigureHelp" : "Port of the mysql server",
+  "MysqlDirConfigureHelp" : "A directory for mysql data",
+  "MysqlBinDirConfigureHelp" : "The directory of mysql binaries (mysqld, ...)",
+  "AdminMailConfigureHelp" : "The mail of the admin of Codeine",
+  "AuthenticationMethodConfigureHelp" : "The way Codeine will authenticate users.<br/><strong>Disabled</strong> - No authentication<br/><strong>Builtin</strong> - Codeine internal database will store users<br/><strong>WindowsCredentials</strong> - Using spnego to authenticate users<br/>",
+  "rolesConfigureHelp" : "Internal domains for windows credentials",
+  "permissionsConfigureHelp" : "Configure access rights for the users of Codeine",
+  "tabExpressionHelp" : "Comma separated list of project names or regular expressions",
+  "adminPermissionsConfigureHelp" : "Is administrator of Codeine",
+  "viewProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user can view only",
+  "commandProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user can view and execute commands",
+  "configProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user has full priviliges on them",
+  "codeineConfigureHelp" : "Here admin can configure all the global settings of codeine.<br/>Some changes might require restart."
 };

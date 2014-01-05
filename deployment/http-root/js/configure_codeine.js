@@ -13,17 +13,11 @@ $(document).ready( function () {
     drawPermissions();
     
     $(".chosen-select").chosen({disable_search_threshold: 10});
+
     
 });
 
-$('.editable').editable(function(value, settings) { 
-    return(value);
- }, { 
-    tooltip   : 'Click to edit',
-    style  : "inherit",
-    width: 150,
-    onblur: 'submit'
-});
+
 
 function drawPermissions() {
 	$('#permissions_table_body').html($('#configure_permissions').render(permissions_config['permissions']));
@@ -62,6 +56,15 @@ function drawTabs() {
 			drawTabs();
 		}
 	});
+	
+	$('.editable').editable(function(value, settings) { 
+        return(value);
+     }, { 
+        tooltip   : 'Click to edit',
+        style  : "inherit",
+        width: 150,
+        onblur: 'submit'
+    });
 }
 
 $('#add_tab').click(function() {
