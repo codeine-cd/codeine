@@ -4,13 +4,13 @@
 		<input data-id="administer" type="checkbox" {{if administer }} checked {{/if}}>
 	</td>
 	<td style="text-align: center">
-		<input data-id="read_project" data-separator="," style="width:170px;" class="projects_selector"/>
+		<input data-id="read_project" data-separator="," style="width:170px;" class="projects_selector" value="{{:read_project}}"/>
 	</td>
 	<td style="text-align: center">
-		<input data-id="command_project" data-separator="," style="width:170px;" class="projects_selector"/>
+		<input data-id="command_project" data-separator="," style="width:170px;" class="projects_selector" value="{{:command_project}}"/>
 	</td>
 	<td style="text-align: center">
-		<input data-id="configure_project" data-separator="," data-username="{{:username}}" style="width:170px;" class="projects_selector"/>
+		<input data-id="configure_project" data-separator="," data-username="{{:username}}" style="width:170px;" class="projects_selector" value="{{:configure_project}}"/>
 	</td>
 	<td style="text-align: center;"><a href="javascript: void(0);" title="Remove User" data-username="{{:username}}" class="btn btn-default btn-mini premissions_user_remove"><i class="fa fa-times"></i></a></td>
 </tr>
