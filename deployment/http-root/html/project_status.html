@@ -52,21 +52,21 @@
 					<span class="checkbox">
 	 					<input id="checkbox_{{-index}}" data-version-name="{{version_name}}" type="checkbox">
 					</span>
-					<a href="/project-nodes?version={{version_name_encoded}}&project={{project_name_encoded}}">
+					<a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}">
 					
 					<span class="version_label">{{version_label}}</span>
 					</a>
 				</div>
 				<div class="span1">
-					<a href="/project-nodes?version={{version_name_encoded}}&project={{project_name_encoded}}">
+					<a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}">
 						<span class="pull-left badge badge-info">{{count}}</span>
 						<i class="pull-right fa fa-exclamation" style="color: red;{{hide_no_errors}}"></i>
 					</a>
 				</div>
 				<div class="span5">
 					<div class="progress">
-					  <a href="/project-nodes?version={{version_name_encoded}}&project={{project_name_encoded}}"><div class="bar bar-success" style="width: {{success_percent}}%;"></div></a>
-					  <a href="/project-nodes?version={{version_name_encoded}}&project={{project_name_encoded}}"><div class="bar bar-danger" style="width: {{fail_percent}}%;"></div></a>
+					  <a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}"><div class="bar bar-success" style="width: {{success_percent}}%;"></div></a>
+					  <a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}"><div class="bar bar-danger" style="width: {{fail_percent}}%;"></div></a>
 					</div>
 				</div>
 			</fieldset></form>
@@ -75,7 +75,7 @@
 		<hr/>
 		<div class="row">
 			<div class="span8">
-				<a href="/project-nodes?version=All%20versions&project={{project_name_encoded}}"><strong>Total Nodes:</strong> <span class="badge badge-success">{{total}}</span></a>
+				<a href="{{project_nodes_context}}?version=All%20versions&project={{project_name_encoded}}"><strong>Total Nodes:</strong> <span class="badge badge-success">{{total}}</span></a>
 			</div>
 		</div>
 	</div>

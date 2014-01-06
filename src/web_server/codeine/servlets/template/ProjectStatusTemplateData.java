@@ -15,11 +15,13 @@ public class ProjectStatusTemplateData extends TemplateData {
 	private String project_name;
 	private String project_name_encoded;
 	private boolean readonly;
+	private String project_nodes_context;
 	
 	
-	public ProjectStatusTemplateData(String projectName, List<VersionItemTemplate> version, int total, List<NameAndAlias> commands, boolean readOnly) {
+	public ProjectStatusTemplateData(String projectName, List<VersionItemTemplate> version, int total, List<NameAndAlias> commands, boolean readOnly, String project_nodes_context) {
 		super();
 		this.project_name = projectName;
+		this.project_nodes_context = project_nodes_context;
 		this.project_name_encoded = HttpUtils.encode(projectName);
 		this.version = version;
 		this.total = total;

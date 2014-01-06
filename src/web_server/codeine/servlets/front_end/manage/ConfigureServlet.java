@@ -1,4 +1,4 @@
-package codeine.manage;
+package codeine.servlets.front_end.manage;
 
 
 import java.io.PrintWriter;
@@ -106,7 +106,7 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
-		return Lists.<TemplateLink>newArrayList(new TemplateLink("Management", "/manage"), new TemplateLink("Configure Codeine", "#")); 
+		return Lists.<TemplateLink>newArrayList(new TemplateLink("Management", Constants.CONFIGURE_CONTEXT), new TemplateLink("Configure Codeine", "#")); 
 	}
 
 	@Override

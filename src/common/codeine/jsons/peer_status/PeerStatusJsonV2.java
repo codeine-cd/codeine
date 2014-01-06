@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import codeine.api.MonitorStatusInfo;
+import codeine.api.NodeWithMonitorsInfo;
+import codeine.model.Constants;
+
 import com.google.common.collect.Maps;
 
 @SuppressWarnings("unused")
@@ -29,11 +33,18 @@ public class PeerStatusJsonV2 {
 		this.start_time = start_time;
 		this.install_dir = install_dir;
 		this.tar = tar;
-		this.project_name_to_status = project_name_to_status;
-		this.update_time = System.currentTimeMillis();
+		this.project_name_to_status = Maps.newHashMap(project_name_to_status);
 		this.peer_key = host + ":" + install_dir;
 		this.peer_host_port = host + ":" + port;
 		this.peer_type = PeerType.Daemon;
+		this.project_name_to_status.put(Constants.CODEINE_NODES_PROJECT_NAME, createInternalProject());
+		this.update_time = System.currentTimeMillis();
+	}
+	private ProjectStatus createInternalProject() {
+		NodeWithMonitorsInfo node_info = new NodeWithMonitorsInfo(this, this.peer_key, this.host, Constants.CODEINE_NODES_PROJECT_NAME, Maps.<String, MonitorStatusInfo>newHashMap());
+		node_info.version(this.version);
+		ProjectStatus ps = new ProjectStatus(Constants.CODEINE_NODES_PROJECT_NAME, node_info);
+		return ps;
 	}	
 	public PeerStatusJsonV2(String peer_key, ProjectStatus projectStatus) {
 		super();

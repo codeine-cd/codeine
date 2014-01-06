@@ -1,13 +1,10 @@
 
 $(document).ready( function () {
-	if (filterNodes($('#monitor_drop_down').text(), $('#nodesFilter').val()) === 0) {
-		displayAlert("None of your nodes has alerts, select <a href='javascript: void(0)' onclick='selectMonitor(All_Nodes);'>'All Nodes'</a> filter to see nodes", 'warning');
-	}
-	
+	filterNodes($('#monitor_drop_down').text(), $('#nodesFilter').val());
 	if ($('.codeine_command').size() === 0 || readOnly) {
-    $('#commandsDropdown').hide();
-    $('.panel-body').find('[type=checkbox]').remove();
-    $('#selecAllLabel').remove();
+	    $('#commandsDropdown').hide();
+	    $('.panel-body').find('[type=checkbox]').remove();
+	    $('#selecAllLabel').remove();
   }
 	
 	setAlertsCount();
@@ -15,7 +12,12 @@ $(document).ready( function () {
 	$('.nodeLink').click(function() {
 		var name = encodeURIComponent($(this).data('node-name'));
 		var projectName = encodeURIComponent(getProjetcName());
-		window.location = "/node-info?project=" + projectName + "&node-name=" + name;
+		if (projectName === "Codeine_Internal_Nodes_Project") {
+			window.location = "/codeine-node-info?project=" + projectName + "&node-name=" + name;
+		}
+		else {
+			window.location = "/node-info?project=" + projectName + "&node-name=" + name;
+		}
 	});
 });
 

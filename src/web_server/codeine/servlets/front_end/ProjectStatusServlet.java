@@ -2,7 +2,6 @@ package codeine.servlets.front_end;
 
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import codeine.api.NodeAggregator;
 import codeine.api.VersionItemInfo;
 import codeine.configuration.IConfigurationManager;
-import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
@@ -19,12 +17,10 @@ import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
-import codeine.servlets.template.NameAndAlias;
 import codeine.servlets.template.ProjectStatusTemplateData;
 import codeine.utils.UrlUtils;
 import codeine.version.VersionItemTemplate;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -46,31 +42,17 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		Comparator<VersionItemInfo> comparator = new Comparator<VersionItemInfo>() {
-			@Override
-			public int compare(VersionItemInfo o1, VersionItemInfo o2) {
-				return Integer.compare(o2.count(), o1.count());
-			}
-		};
-		
 		Map<String, VersionItemInfo> nodesVersions2 = aggregator.aggregate(projectName);
-		Function<VersionItemInfo, VersionItemTemplate> function = new Function<VersionItemInfo, VersionItemTemplate>(){
-			@Override
-			public VersionItemTemplate apply(VersionItemInfo input){
-				return new VersionItemTemplate(input);
-			}
-		};
-		
-		Map<String, VersionItemTemplate> nodesVersions = Maps.transformValues(nodesVersions2, function);
+		Map<String, VersionItemTemplate> nodesVersions = Maps.transformValues(nodesVersions2, ProjectsStatusUtils.getVersionItemTemplateFunction());
 		VersionItemInfo allVersions = nodesVersions.remove(Constants.ALL_VERSION);
 		List<VersionItemTemplate> values = Lists.newArrayList(nodesVersions.values());
-		Collections.sort(values, comparator);
+		Collections.sort(values, ProjectsStatusUtils.getVersionComparator());
 		setTitle(projectName);
 		
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		
-		return new ProjectStatusTemplateData(projectName, values, allVersions.count(), getCommandsName(project.commands()), readOnly);
+		return new ProjectStatusTemplateData(projectName, values, allVersions.count(), ProjectsStatusUtils.getCommandsName(project.commands()), readOnly, Constants.PROJECT_NODES_CONTEXT);
 	}
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
@@ -80,13 +62,5 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	@Override
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
 		return getMenuProvider().getProjectMenu(request);
-	}
-	
-	private List<NameAndAlias> getCommandsName(List<CommandInfo> commands) {
-		List<NameAndAlias> $ = Lists.newArrayList();
-		for (CommandInfo command : commands) {
-			$.add(new NameAndAlias(command.name(), command.title()));
-		}
-		return $;
 	}
 }

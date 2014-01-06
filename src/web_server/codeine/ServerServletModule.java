@@ -1,8 +1,6 @@
 package codeine;
 
-import static codeine.model.Constants.apiContext;
-import codeine.manage.ConfigureServlet;
-import codeine.manage.ManageServlet;
+import static codeine.model.Constants.*;
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
 import codeine.servlets.FileGetterServlet;
@@ -26,6 +24,10 @@ import codeine.servlets.front_end.ProjectsListServlet;
 import codeine.servlets.front_end.RawOutputServlet;
 import codeine.servlets.front_end.ScheduleCommandServlet;
 import codeine.servlets.front_end.UserInfoServlet;
+import codeine.servlets.front_end.manage.ConfigureServlet;
+import codeine.servlets.front_end.manage.InternalNodeInfoServlet;
+import codeine.servlets.front_end.manage.InternalNodesServlet;
+import codeine.servlets.front_end.manage.InternalNodesStatusServlet;
 import codeine.servlets.version_label.LabelsServlet;
 import codeine.servlets.version_label.VersionLabelServlet;
 import codeine.users.RegisterServlet;
@@ -54,8 +56,10 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(ProgressiveRawOutputServlet.class, Constants.PROGRESSIVE_RAW_OUTPUT_CONTEXT);
 		serveMe(ProjectsListServlet.class, Constants.PROJECTS_LIST_CONTEXT, "/");
 		serveMe(ProjectsListApiServlet.class, apiContext(Constants.PROJECTS_LIST_CONTEXT));
-		serveMe(ManageServlet.class, Constants.MANAGEMENT_CONTEXT);
 		serveMe(ConfigureServlet.class, Constants.CONFIGURE_CONTEXT);
+		serveMe(InternalNodesStatusServlet.class, Constants.CODEINE_STATUS_CONTEXT);
+		serveMe(InternalNodeInfoServlet.class, Constants.INTERNAL_NODE_INFO_CONTEXT);
+		serveMe(InternalNodesServlet.class, Constants.CODEINE_NODES_CONTEXT);
 		serveMe(NodesCommandApiServlet.class, apiContext(Constants.COMMAND_NODES_CONTEXT));
 		serveMe(ScheduleCommandServlet.class, Constants.SCHEDULE_COMMAND_CONTEXT);
 		serveMe(LabelsServlet.class, Constants.LABELS_CONTEXT);

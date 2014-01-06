@@ -20,7 +20,7 @@ import com.google.common.collect.Maps;
 public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 {
 	private static final Logger log = Logger.getLogger(ConfigurationManagerServer.class);
-	
+
 	private ProjectsConfigurationConnector projectsConfigurationConnector;
 	private ProjectConfigurationInPeerUpdater projectsUpdater;
 

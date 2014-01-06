@@ -1,4 +1,4 @@
-package codeine.servlets.front_end;
+package codeine.servlets.front_end.manage;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,13 +17,13 @@ import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
+import codeine.servlets.front_end.ProjectsStatusUtils;
 import codeine.servlets.template.NodeInfoTemplateData;
-import codeine.utils.network.HttpUtils;
 
 import com.google.common.collect.Lists;
 
 
-public class NodeInfoServlet extends AbstractFrontEndServlet {
+public class InternalNodeInfoServlet extends AbstractFrontEndServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject private NodeGetter nodesGetter;
@@ -31,8 +31,8 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 	@Inject private IConfigurationManager configurationManager;
 	@Inject private PermissionsManager permissionsManager;
 	
-	protected NodeInfoServlet() {
-		super("", "node_info", "command_history", "node_info", "command_history");
+	protected InternalNodeInfoServlet() {
+		super("", "node_info", "command_executor", "node_info", "commands_toolbar");
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 		String nodeName = request.getParameter(Constants.UrlParameters.NODE_NAME);
 		
 		ProjectJson project = configurationManager.getProjectForName(projectName);
-		boolean readOnly = !permissionsManager.canCommand(projectName, request);
+		boolean readOnly = false;
 		
 		setTitle(nodeName);
 		
@@ -54,13 +54,17 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String nodeName = request.getParameter(Constants.UrlParameters.NODE_NAME);
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByName(projectName, nodeName);
-		return Lists.<TemplateLink>newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?"+Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encode(projectName)),new TemplateLink(node.alias(), "#"));
+		return Lists.<TemplateLink>newArrayList(new TemplateLink("Management", Constants.CONFIGURE_CONTEXT), new TemplateLink(node.alias(), "#"));
 	}
 
 	@Override
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
-		return getMenuProvider().getProjectMenu(request);
+		return getMenuProvider().getManageMenu(request);
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return permissionsManager.isAdministrator(request);
+	}
 
 }

@@ -11,6 +11,8 @@ public class Constants
 
 	public static final String HTTP_ROOT_CONTEXT = "/http-root";
 	
+	public static final String CODEINE_NODES_PROJECT_NAME = "Codeine_Internal_Nodes_Project";
+	
 	public static final String PEER_LOG = "codeine_peer.log";
 	public static final String DIRECTORY_LOG = "codeine_directory.log";
 	public static final String SERVER_LOG = "codeine_server.log";
@@ -37,7 +39,6 @@ public class Constants
 	public static final String COMMANDS_EXECUTER_STATUS = "/commands-status";
 	public static final String RESTART_ALL_PEERS_CONTEXT = "/restart-all";
 	public static final String PROJECTS_LIST_CONTEXT = "/projects";
-	public static final String MANAGEMENT_CONTEXT = "/manage";
 	public static final String PROJECT_PATH = "/project";
 	public static final String NODE_PATH = "/node";
 	public static final String COMMAND_NODE_CONTEXT = "/command-node";
@@ -143,6 +144,11 @@ public class Constants
 	public static final String DISCOVERY_PLUGIN = "discovery";
 
 	public static final String API_TOKEN = "api_token";
+
+	public static final String CODEINE_STATUS_CONTEXT = "/codeine-status";
+	public static final String INTERNAL_NODE_INFO_CONTEXT = "/codeine-node-info";
+
+	public static final String CODEINE_NODES_CONTEXT = "/codeine-nodes";
 
 	
 	

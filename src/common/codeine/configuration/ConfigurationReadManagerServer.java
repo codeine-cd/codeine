@@ -19,6 +19,9 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 {
 	private static final Logger log = Logger.getLogger(ConfigurationReadManagerServer.class);
 	
+	public static final ProjectJson NODES_INTERNAL_PROJECT = new ProjectJson(Constants.CODEINE_NODES_PROJECT_NAME);
+	
+	
 	private Map<String, ProjectJson> projects = Maps.newHashMap();
 	private JsonFileUtils jsonFileUtils;
 	private PathHelper pathHelper;
@@ -70,6 +73,9 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	
 	@Override
 	public ProjectJson getProjectForName(String projectName) {
+		if (Constants.CODEINE_NODES_PROJECT_NAME.equals(projectName)) {
+			return NODES_INTERNAL_PROJECT;
+		}
 		List<ProjectJson> configuredProjects = getConfiguredProjects();
 		for (ProjectJson projectJson : configuredProjects) {
 			if (projectName.equals(projectJson.name())){

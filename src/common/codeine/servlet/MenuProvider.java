@@ -19,32 +19,34 @@ public class MenuProvider {
 	public List<TemplateLinkWithIcon> getMainMenu(HttpServletRequest request) {
 		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Projects", "/","projectsMenuItem","icon-th-list"));
 		if (permissionsManager.isAdministrator(request)) {
-			$.add(new TemplateLinkWithIcon("New Project", UrlUtils.buildUrl(Constants.NEW_PROJECT_CONTEXT,null) , "icon-file", "newProjectMenuItem" , "admin"));
-			$.add(new TemplateLinkWithIcon("Manage Codeine", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"icon-wrench", "manageMenuItem", "admin"));
+			$.add(new TemplateLinkWithIcon("New Project", UrlUtils.buildUrl(Constants.NEW_PROJECT_CONTEXT,null) , "fa fa-file", "newProjectMenuItem" , "admin"));
+			$.add(new TemplateLinkWithIcon("Manage Codeine", UrlUtils.buildUrl(Constants.CONFIGURE_CONTEXT,null) ,"fa fa-wrench", "manageMenuItem", "admin"));
 		}
 		return $;
 	}
 	
 	
 	public List<TemplateLinkWithIcon> getManageMenu(HttpServletRequest request) {
-		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Manage Codeine", UrlUtils.buildUrl(Constants.MANAGEMENT_CONTEXT,null) ,"fa fa-wrench", "manageMenuItem", "admin"));
+		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList();
 		$.add(new TemplateLinkWithIcon("Configure Codeine", UrlUtils.buildUrl(Constants.CONFIGURE_CONTEXT,null) ,"fa fa-gears", "configureMenuItem", "admin"));
-		$.add(new TemplateLinkWithIcon("Codeine Logs", UrlUtils.buildUrl(Constants.RESOURCESS_CONTEXT,null) ,"fa fa-suitcase", "logsMenuItem", "admin"));
+		$.add(new TemplateLinkWithIcon("Codeine Nodes Status", UrlUtils.buildUrl(Constants.CODEINE_STATUS_CONTEXT,ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, Constants.CODEINE_NODES_PROJECT_NAME)) ,"fa fa-signal", "codeineStatusMenuItem", "admin"));
+		$.add(new TemplateLinkWithIcon("Codeine Nodes Info", UrlUtils.buildUrl(Constants.CODEINE_NODES_CONTEXT,ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, Constants.CODEINE_NODES_PROJECT_NAME,Constants.UrlParameters.VERSION_NAME, Constants.ALL_VERSION)) ,"fa fa-list-alt", "codeineNodesMenuItem", "admin"));
+		$.add(new TemplateLinkWithIcon("Codeine Server Logs", UrlUtils.buildUrl(Constants.RESOURCESS_CONTEXT,null) ,"fa fa-suitcase", "logsMenuItem", "admin"));
 		return $;
 	}
 	
 	public List<TemplateLinkWithIcon> getProjectMenu(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		ArrayList<TemplateLinkWithIcon> $ = Lists.newArrayList(new TemplateLinkWithIcon("Status", UrlUtils.buildUrl(Constants.PROJECT_STATUS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) ,"statusMenuItem","icon-signal"),
-								  new TemplateLinkWithIcon("Nodes", UrlUtils.buildUrl(Constants.PROJECT_NODES_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName,Constants.UrlParameters.VERSION_NAME, "All versions")), "nodesMenuItem", "icon-list-alt"),
-								  new TemplateLinkWithIcon("Labels", UrlUtils.buildUrl(Constants.LABELS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)), "lablesMenuItem","icon-tags")
+		ArrayList<TemplateLinkWithIcon> $ = Lists.newArrayList(new TemplateLinkWithIcon("Status", UrlUtils.buildUrl(Constants.PROJECT_STATUS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) ,"statusMenuItem","fa fa-signal"),
+								  new TemplateLinkWithIcon("Nodes", UrlUtils.buildUrl(Constants.PROJECT_NODES_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName,Constants.UrlParameters.VERSION_NAME, Constants.ALL_VERSION)), "nodesMenuItem", "fa fa-list-alt"),
+								  new TemplateLinkWithIcon("Labels", UrlUtils.buildUrl(Constants.LABELS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)), "lablesMenuItem","fa fa-tags")
 								  
 				);
 		if (permissionsManager.isAdministrator(request)) {
-			$.add(new TemplateLinkWithIcon("Delete", "javascript: void(0);",  "icon-remove-sign", "deleteProjectMenuItem", "admin"));
+			$.add(new TemplateLinkWithIcon("Delete", "javascript: void(0);",  "fa fa-times-circle", "deleteProjectMenuItem", "admin"));
 		}
 		if (permissionsManager.canConfigure(projectName, request)) {
-			$.add(new TemplateLinkWithIcon("Configure", UrlUtils.buildUrl(Constants.CONFIGURE_PROJECT_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) ,"configureMenuItem" ,"icon-cog"));
+			$.add(new TemplateLinkWithIcon("Configure", UrlUtils.buildUrl(Constants.CONFIGURE_PROJECT_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) ,"configureMenuItem" ,"fa fa-cog"));
 		}
 		return $;
 	}

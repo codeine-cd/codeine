@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
+import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
 import codeine.executer.Task;
 import codeine.jsons.project.ProjectJson;
@@ -59,6 +60,7 @@ public class MonitorsStatistics implements Task{
 	private void collectData() {
 		long currentTime = System.currentTimeMillis();
 		List<ProjectJson> projects = configurationManager.getConfiguredProjects();
+		projects.add(ConfigurationReadManagerServer.NODES_INTERNAL_PROJECT);
 		for (ProjectJson projectJson : projects) {
 			int fail = 0, success = 0;
 			List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectJson.name());
