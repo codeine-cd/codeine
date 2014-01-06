@@ -38,7 +38,7 @@ public class PermissionsManager {
 		return permissionConfJson.get().get(user(request)).canRead(projectName);
 	}
 	private boolean permissionsNotConfigured(HttpServletRequest request) {
-		return user(request) == null || permissionConfJson.get().get(user(request)) == null;
+		return user(request) == null || permissionConfJson.get().getOrNull(user(request)) == null;
 	}
 	private boolean ignoreSecurity() {
 		return Boolean.getBoolean("ignoreSecurity") || globalConfigurationJson.get().authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
