@@ -1,3 +1,9 @@
+
+html {
+     overflow-y: -moz-scrollbars-vertical;
+     overflow-y: scroll;
+}
+
 .success {
 	color: green;
 }
