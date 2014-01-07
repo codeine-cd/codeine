@@ -13,11 +13,7 @@ $(document).ready( function () {
     drawPermissions();
     
     $(".chosen-select").chosen({disable_search_threshold: 10});
-
-    
 });
-
-
 
 function drawPermissions() {
 	$('#permissions_table_body').html($('#configure_permissions').render(permissions_config['permissions']));
@@ -41,6 +37,11 @@ function drawPermissions() {
 
 function drawTabs() {
 	$('#tabs_table_body').html($('#projects_tab').render(view_config));
+	$(".exp_selector").select2({tags: projects , tokenSeparators: [",", " "]});
+	$('#tabs_table_body').find(".exp_selector").on("change", function(e) {
+		var index = $(this).data("index");
+    	view_config[index].exp = e.val;
+	});
 	$('.tab_remove').click(function() {
 		var tab_name = $(this).data("tab-name");
 		console.log("Will remove tab '" + tab_name + "'");
@@ -63,7 +64,11 @@ function drawTabs() {
         tooltip   : 'Click to edit',
         style  : "inherit",
         width: 150,
-        onblur: 'submit'
+        onblur: 'submit',
+        callback : function(value, settings) {
+        	var index = $(this).data("index");
+        	view_config[index].name = value;
+        }
     });
 }
 
