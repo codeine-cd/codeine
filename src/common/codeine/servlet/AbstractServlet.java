@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
+import codeine.exceptions.UnAuthorizedException;
 import codeine.utils.ServletUtils;
 
 import com.google.gson.Gson;
@@ -29,8 +30,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				response.setStatus(HttpStatus.FORBIDDEN_403);
-				return;
+				throw new UnAuthorizedException();
 			}
 			myGet(request, response);
 		} catch (Exception e) {
@@ -44,8 +44,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected final void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				response.setStatus(HttpStatus.FORBIDDEN_403);
-				return;
+				throw new UnAuthorizedException();
 			}
 			myPost(request, response);
 		} catch (Exception e) {
@@ -57,8 +56,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				response.setStatus(HttpStatus.FORBIDDEN_403);
-				return;
+				throw new UnAuthorizedException();
 			}
 			myDelete(request, response);
 		} catch (Exception e) {
@@ -70,22 +68,28 @@ public abstract class AbstractServlet extends HttpServlet{
 		return true;
 	}
 	
-	
-	private void handleError(Exception e, HttpServletResponse response) {
-		log.warn("error in servlet", e);
-		getWriter(response).write("error in servlet\n");
-		e.printStackTrace(getWriter(response));
-		response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
-	}
-	
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
 		writeNotFound(request, response);
 	}
 
-	private void writeNotFound(HttpServletRequest request, HttpServletResponse response) {
-		PrintWriter writer = getWriter(response);
-		writer.write("Oooooooooooooops...");
+	protected void handleError(Exception e, HttpServletResponse response) {
+		log.warn("Error in servlet", e);
+		if (e instanceof UnAuthorizedException) {
+			response.setStatus(HttpStatus.UNAUTHORIZED_401);
+			getWriter(response).write("UNAUTHORIZED Request, please provide API Token");
+		} else {
+			getWriter(response).write("Internak Server Error: \n");
+			e.printStackTrace(getWriter(response));
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
+		}
 	}
+	
+	protected void writeNotFound(HttpServletRequest request, HttpServletResponse response) {
+		response.setStatus(HttpStatus.METHOD_NOT_ALLOWED_405);
+		PrintWriter writer = getWriter(response);
+		writer.write("Codeine dosen't support this action");
+	}
+	
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
 		writeNotFound(request, response);
 	}

@@ -5,12 +5,12 @@ $(document).ready( function () {
 	} else {
 		$('.peerStatus').addClass("fa fa-chain-broken lg");
 	}
-	
-	if ($('.codeine_command').size() === 0 || readOnly) {
-		$('#commandsDropdown').hide();
-	}
 });
 
+
+if ($('.codeine_command').size() === 0 || readOnly) {
+	$('#node_info_navbar').hide();
+}
 
 $('.codeine_command').click( function() {
 	var command = $(this).data('command-name');

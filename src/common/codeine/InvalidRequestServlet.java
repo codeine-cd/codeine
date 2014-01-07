@@ -29,8 +29,6 @@ public class InvalidRequestServlet extends HttpServlet{
     		return;
     	}
     	response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        response.setContentType("text/plain");
-        response.setContentType("UTF-8");
-        response.getWriter().append("Sorry - 404");
+    	response.sendRedirect("/resources/html/404.html");
     }
 }

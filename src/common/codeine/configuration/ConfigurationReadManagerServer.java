@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.exceptions.ProjectNotFoundException;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
@@ -82,7 +83,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 				return projectJson;
 			}
 		}
-		throw new IllegalArgumentException("project not found " + projectName);
+		throw new ProjectNotFoundException(projectName);
 	}
 
 	public Map<String, ProjectJson> projects() {

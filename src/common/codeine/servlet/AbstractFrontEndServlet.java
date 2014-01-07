@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.security.authentication.FormAuthenticator;
 
+import codeine.exceptions.ProjectNotFoundException;
+import codeine.exceptions.UnAuthorizedException;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
@@ -23,6 +26,7 @@ import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Mustache.TemplateLoader;
@@ -82,7 +86,6 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	protected final void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing get request: " + request.getRequestURL());
 		writer = getWriter(response);
-		
 		try {
 			TemplateData templateData = doGet(request, writer);
 			if (templateData == null) {
@@ -91,10 +94,10 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 				response.setStatus(HttpStatus.OK_200);
 				writeTemplateData(request, templateData);
 			}
+			
 		} catch (FrontEndServletException e) {
 			response.setStatus(e.http_status());
-			getWriter(response).write(ExceptionUtils.getRootCause(e.inner_exception()).getMessage());
-			// TODO - Generate / redirect to error page / bug reporting
+			handleError(e.inner_exception(), response);
 		}
 	}
 
@@ -113,8 +116,41 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 			}
 		} catch (FrontEndServletException e) {
 			response.setStatus(e.http_status());
-			getWriter(response).write(ExceptionUtils.getRootCause(e.inner_exception()).getMessage());
+			handleError(e.inner_exception(), response);
 		}
+	}
+	
+	@Override
+	protected void handleError(Exception e, HttpServletResponse response) {
+		log.warn("Error in servlet", e);
+		HashMap<String, String> dic = Maps.newHashMap();
+		String contents;
+		String message;
+		if (e instanceof ProjectNotFoundException) {
+			response.setStatus(HttpStatus.NOT_FOUND_404);
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
+			message = e.getMessage();
+			
+		} else if  (e instanceof UnAuthorizedException) {
+			response.setStatus(HttpStatus.UNAUTHORIZED_401);
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
+			message = "You are not authorized to access this page";
+		} else {
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/500.html");
+			message = ExceptionUtils.getRootCauseMessage(e) == null ? "No Message was Provided" : ExceptionUtils.getRootCauseMessage(e); 
+			dic.put("stack_trace", ExceptionUtils.getStackTrace(e)); 
+		}
+		Template template = Mustache.compiler().escapeHTML(false).compile(contents);
+		dic.put("message", message);		
+		getWriter(response).write(template.execute(dic));
+	}
+	
+	@Override
+	protected void writeNotFound(HttpServletRequest request, HttpServletResponse response) {
+		response.setStatus(HttpStatus.METHOD_NOT_ALLOWED_405);
+		String contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/405.html");
+		getWriter(response).write(contents);
 	}
 	
 	protected MenuProvider getMenuProvider() {
