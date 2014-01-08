@@ -20,6 +20,7 @@ public class TemplateData {
 	private String codeineversionfull;
 	private String javascriptfiles;
 	private boolean is_empty = false;
+	private String new_issue_link = "https://github.com/Intel-IT/codeine";
 	
 	public TemplateData() {
 		super();
@@ -53,6 +54,9 @@ public class TemplateData {
 	}
 	public void authentication_method(AuthenticationMethod authentication_method) {
 		this.authentication_method = authentication_method;
+	}
+	public void new_issue_link(String new_issue_link) {
+		this.new_issue_link = new_issue_link;
 	}
 	
 	public void setNavBar(List<TemplateLink> navigation) {

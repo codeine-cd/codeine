@@ -101,6 +101,9 @@ public class Constants
 	public static String getViewConfPath() {
 		return getConfDir() + "/codeine.view.conf.json";
 	}
+	public static String getExperimentalConfPath() {
+		return getConfDir() + "/codeine.experimental.conf.json";
+	}
 	public static String getIdentityConfPath() {
 		return getConfDir() + "/identity.json";
 	}
@@ -191,4 +194,5 @@ public class Constants
 	public static String apiContext(String projectNodesContext) {
 		return projectNodesContext + "_json";
 	}
+	
 }

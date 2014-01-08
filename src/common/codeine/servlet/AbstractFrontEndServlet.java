@@ -19,6 +19,7 @@ import org.eclipse.jetty.security.authentication.FormAuthenticator;
 
 import codeine.exceptions.ProjectNotFoundException;
 import codeine.exceptions.UnAuthorizedException;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
@@ -37,6 +38,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	@Inject	private PermissionsManager permissionsManager;
 	@Inject	private MenuProvider menuProvider;
 	@Inject	private GlobalConfigurationJsonStore globalConfigurationJson;
+	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
 	
 	private static final Logger log = Logger.getLogger(AbstractFrontEndServlet.class);
 	private static final long serialVersionUID = 1L;
@@ -165,6 +167,9 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		String user = permissionsManager.user(request);
 		templateData.setLoggedUser(StringUtils.safeToString(user));
 		templateData.authentication_method(globalConfigurationJson.get().authentication_method());
+		if (!StringUtils.isEmpty(webConfJsonStore.get().new_issue_link())) {
+			templateData.new_issue_link(webConfJsonStore.get().new_issue_link());
+		}
 		templateData.setNavBar(generateNavigation(request));
 		templateData.setMenu(generateMenuWithActive(request));
 		templateData.setJavascriptFiles(jsFiles);
