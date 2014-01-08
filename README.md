@@ -1,5 +1,6 @@
 # Codeine
 
+## Getting started
 
 ### How to install:
 * download latest zip file
@@ -9,8 +10,13 @@
 * set environment variables: JAVA_HOME, CODEINE_WORKAREA
 * execute: deployment/bin/run-server.pl
 
+### Configure mysql
+TBD
 
-### Features:
+### Basic terms
+TBD
+
+## Features:
 * Deployment and upgrades of new versions
  * Script based automation
  * Immediate / Progressive execution
