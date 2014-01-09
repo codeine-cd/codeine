@@ -134,7 +134,7 @@ public class DbUtils
 	private Connection getConnection() {
 		String url = "jdbc:mysql://"+hostSelector.mysql().host()+":" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME;
 		try {
-			return DriverManager.getConnection(url, MysqlConstants.DB_USER, MysqlConstants.DB_PASSWORD);
+			return DriverManager.getConnection(url, hostSelector.mysql().user(), hostSelector.mysql().password());
 		} catch (SQLException e) {
 			throw ExceptionUtils.asUnchecked(e);
 		}
@@ -148,11 +148,11 @@ public class DbUtils
 		}
 	}
 	
-	public static boolean checkConnection(String host, Integer port) {
+	public static boolean checkConnection(String host, Integer port, String user, String password) {
 		String url = "jdbc:mysql://"+host+":" + port + "/" + MysqlConstants.DB_NAME;
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(url, MysqlConstants.DB_USER, MysqlConstants.DB_PASSWORD);			
+			connection = DriverManager.getConnection(url, user, password);			
 			return connection.isValid(TIMEOUT_SEC);
 		} catch (SQLException e) {
 			log.warn("error while testing connection to " + url + " " + e.getMessage());

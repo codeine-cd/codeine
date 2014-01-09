@@ -12,9 +12,6 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import codeine.db.mysql.connectors.AlertsMysqlConnector;
-import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
-import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.executer.PeriodicExecuter;
 import codeine.executer.Task;
 import codeine.jsons.global.MysqlConfigurationJson;
@@ -33,21 +30,10 @@ public class MysqlProcessControlService {
 	private MXJController m_slaveMysql = null;
 	private MysqlProcessConfiguration m_conf = null;
 
-	/**
-	 * when true, set global transaction isolation level to READ UNCOMMITED to
-	 * prevent locking
-	 */
-	private boolean m_bNoLock = false;
 	private String m_sSlavePath;
 
 	@Inject
 	private DbUtils dbUtils;
-	@Inject
-	private StatusMysqlConnector statusMysqlConnector;
-	@Inject
-	private AlertsMysqlConnector alertMysqlConnector;
-	@Inject
-	private ProjectsConfigurationMysqlConnector projectsConfiguratioConnector;
 	@Inject
 	private MysqlHostSelector mysqlHostSelector;
 
@@ -133,29 +119,9 @@ public class MysqlProcessControlService {
 		chmodDBPermissions();
 	}
 
-	private void initDatabase() {
-		try {
-			dbUtils.executeUpdateAsRoot("CREATE DATABASE IF NOT EXISTS " + MysqlConstants.DB_NAME);
-			if (isNoLock()) {
-				dbUtils.executeUpdateAsRoot("SET GLOBAL TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-			}
-			boolean exists = createDbUser();
-			if (!exists) {
-				createTables();
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private void createTables() {
-		statusMysqlConnector.createTables();
-		alertMysqlConnector.createTables();
-		projectsConfiguratioConnector.createTables();
-	}
-
-	private boolean createDbUser() throws SQLException {
-		String sql = "SELECT user FROM mysql.user WHERE user='" + MysqlConstants.DB_USER + "'";
+	private boolean initDatabase(){
+		MysqlConfigurationJson mysqlConf = mysqlHostSelector.getLocalConf();
+		String sql = "SELECT user FROM mysql.user WHERE user='" + mysqlConf.user() + "'";
 		final List<String> result = Lists.newArrayList();
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
@@ -169,17 +135,17 @@ public class MysqlProcessControlService {
 			}
 		};
 		dbUtils.executeQueryAsRoot(sql, function);
-		if (!result.isEmpty() && !(result.contains(MysqlConstants.DB_USER))) {
-			log.info("createDbUser() - user already exists " + MysqlConstants.DB_USER);
+		if (!result.isEmpty() && !(result.contains(mysqlConf.user()))) {
+			log.info("createDbUser() - user already exists " + mysqlConf.user());
 			return true;
 		} else {
 			log.info("createDbUser() - creating user in database");
-			sql = "CREATE USER '" + MysqlConstants.DB_USER + "'@'%' identified by '" + MysqlConstants.DB_PASSWORD + "'";
+			sql = "CREATE USER '" + mysqlConf.user() + "'@'%' identified by '" + MysqlConstants.DB_PASSWORD + "'";
 			int rs = dbUtils.executeUpdateAsRoot(sql);
 			if (rs != -1) {
 				log.info("user created successfully");
 			}
-			sql = "GRANT ALL PRIVILEGES ON *.* TO '" + MysqlConstants.DB_USER + "'@'%' WITH GRANT OPTION";
+			sql = "GRANT ALL PRIVILEGES ON *.* TO '" + mysqlConf.user() + "'@'%' WITH GRANT OPTION";
 			rs = dbUtils.executeUpdateAsRoot(sql);
 			if (rs != -1) {
 				log.info("permissions for the user created successfully");
@@ -298,14 +264,6 @@ public class MysqlProcessControlService {
 	// DbUtils.executeStatement("START SLAVE", CONNECTION_ID);
 	// ServiceLocator.serviceOf(IDBAccessService.class).destroyConnection(CONNECTION_ID);
 	// }
-
-	public boolean isNoLock() {
-		return m_bNoLock;
-	}
-
-	public void setNoLock(boolean noLock) {
-		m_bNoLock = noLock;
-	}
 
 	public void execute() {
 		config();

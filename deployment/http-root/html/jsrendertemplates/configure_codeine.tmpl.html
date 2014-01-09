@@ -55,6 +55,31 @@
     </div>
 </div>
 <div class="control-group">
+	<label class="control-label" for="mysql_user">MySQL User
+		<i data-help-message="MysqlUserConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	</label>
+    <div class="controls">
+        <input id="mysql_user" type="text" value="{{:mysql[0].user}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+	<label class="control-label" for="mysql_password">MySQL Password
+		<i data-help-message="MysqlPasswordConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	</label>
+    <div class="controls">
+        <input id="mysql_password" type="password" value="{{:mysql[0].password}}" required="required">
+    </div>
+</div>
+<div class="control-group">
+    <div class="controls">
+        <label class="checkbox">
+     		<input type="checkbox" id="mysql_managed_by_codeine" {{if mysql[0].managed_by_codeine}}checked{{/if}}>
+           	Managed by Codeine
+			<i data-help-message="MysqlManagedByCodeineConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+       </label>
+    </div>
+</div>
+<div class="control-group">
 	<label class="control-label" for="mysql_dir">MySQL Persistency Dir
 		<i data-help-message="MysqlDirConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>

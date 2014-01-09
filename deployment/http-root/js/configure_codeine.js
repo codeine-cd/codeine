@@ -160,6 +160,9 @@ $('#config_form').submit(function(event) {
 	formValues['mysql'][0].port = formValues['mysql_port'];
 	formValues['mysql'][0].dir = formValues['mysql_dir'];
 	formValues['mysql'][0].bin_dir = formValues['mysql_bin_dir'];
+	formValues['mysql'][0].user = formValues['mysql_user'];
+	formValues['mysql'][0].password = formValues['mysql_password'];
+	formValues['mysql'][0].managed_by_codeine = formValues['mysql_managed_by_codeine'];
 	console.log("Will submit the following config: ");
 	console.dir(formValues);
 	$.ajax({

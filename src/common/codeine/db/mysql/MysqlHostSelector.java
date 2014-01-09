@@ -2,9 +2,6 @@ package codeine.db.mysql;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -16,10 +13,8 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.network.InetUtils;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 public class MysqlHostSelector implements Task{
 
@@ -47,23 +42,17 @@ public class MysqlHostSelector implements Task{
 	}
 
 	private MysqlConfigurationJson selectNearestConf() {
-		List<Map.Entry<String, Integer>> hosts = Lists.newArrayList(Iterables.transform(conf.get().mysql(), new Function<MysqlConfigurationJson, Map.Entry<String, Integer>>(){
-			@Override
-			public Map.Entry<String, Integer> apply(MysqlConfigurationJson m){
-				return new AbstractMap.SimpleEntry<String,Integer>(m.host(),m.port());
-			}
-		}));
-		final Map.Entry<String, Integer> host = new NearestHostSelector(hosts).select();
+		final MysqlConfigurationJson mysql = new NearestHostSelector(conf.get().mysql()).select();
 		Predicate<MysqlConfigurationJson> predicate = new Predicate<MysqlConfigurationJson>(){
 			@Override
 			public boolean apply(MysqlConfigurationJson m){
-				return m.host().equals(host.getKey()) && m.port().equals(host.getValue());
+				return m.host().equals(mysql.host()) && m.port().equals(mysql.port());
 			}
 		};
 		return Iterables.find(conf.get().mysql(), predicate);
 	}
 
-	private MysqlConfigurationJson getLocalConfOrNull() {
+	public MysqlConfigurationJson getLocalConfOrNull() {
 		for (MysqlConfigurationJson mysqlConfigurationJson : conf.get().mysql()) {
 			try {
 				if (InetAddress.getByName(mysqlConfigurationJson.host()).equals(InetUtils.getLocalHost())){
