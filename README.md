@@ -33,8 +33,8 @@ TBD
  * Access level separation per user / project (view / command / configure)
  * Easily manageable
 * Web view with all the deployment information of your project in one place
- * Versions
- * Status
- * Commands History
- * Graph
+ * Aggregated view based on versions
+ * Status of the nodes of your application
+ * Commands history for previous deployments
+ * Graph view of nodes status
 
