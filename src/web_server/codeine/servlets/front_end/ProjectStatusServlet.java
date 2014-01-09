@@ -36,7 +36,13 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ProjectStatusServlet() {
-		super("", "project_status", "command_history", "command_history", "project_status", "commands_toolbar");
+		super("project_status", "command_history", "command_history", "project_status", "commands_toolbar");
+	}
+	
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return projectName;
 	}
 	
 	@Override
@@ -47,7 +53,6 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 		VersionItemInfo allVersions = nodesVersions.remove(Constants.ALL_VERSION);
 		List<VersionItemTemplate> values = Lists.newArrayList(nodesVersions.values());
 		Collections.sort(values, ProjectsStatusUtils.getVersionComparator());
-		setTitle(projectName);
 		
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);

@@ -32,14 +32,17 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	@Inject	private Links links;
 
 	protected InternalNodesServlet() {
-		super(CODEINE_NODES, "project_nodes", "command_executor", "project_nodes","commands_toolbar");
+		super("project_nodes", "command_executor", "project_nodes","commands_toolbar");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return CODEINE_NODES;
+	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException {
 		String projectName = Constants.CODEINE_NODES_PROJECT_NAME;
 		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
-		setTitle(projectName + " - " + versionName);
 		
 		List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, ConfigurationManagerServer.NODES_INTERNAL_PROJECT, nodesGetter, links);
 		List<NameAndAlias> cmd = ProjectsStatusUtils.getCommandsName(ConfigurationManagerServer.NODES_INTERNAL_PROJECT.commands());

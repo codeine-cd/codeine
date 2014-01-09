@@ -40,9 +40,14 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	private @Inject IConfigurationManager configurationManager;
 
 	protected ConfigureServlet() {
-		super("Configure Codiene", "configure_codeine", "command_executor", "configure_codeine", "command_executor");
+		super("configure_codeine", "command_executor", "configure_codeine", "command_executor");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return "Configure Codiene";
+	}
+	
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String viewConf = "";

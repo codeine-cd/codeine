@@ -24,9 +24,14 @@ public class UserInfoServlet extends AbstractFrontEndServlet {
 	private @Inject UsersManager usersManager;
 	
 	protected UserInfoServlet() {
-		super("User Info", "user_info","command_executor", "user_info","command_executor");
+		super("user_info","command_executor", "user_info","command_executor");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return "User Info";
+	}
+	
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String user = permissionsManager.user(request);

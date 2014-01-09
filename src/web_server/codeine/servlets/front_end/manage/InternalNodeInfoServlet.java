@@ -32,9 +32,15 @@ public class InternalNodeInfoServlet extends AbstractFrontEndServlet {
 	@Inject private PermissionsManager permissionsManager;
 	
 	protected InternalNodeInfoServlet() {
-		super("", "node_info", "command_executor", "node_info", "commands_toolbar");
+		super("node_info", "command_executor", "node_info", "commands_toolbar");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return "Configure " + projectName;
+	}
+	
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
@@ -42,8 +48,6 @@ public class InternalNodeInfoServlet extends AbstractFrontEndServlet {
 		
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		boolean readOnly = false;
-		
-		setTitle(nodeName);
 		
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByName(projectName, nodeName);
 		return new NodeInfoTemplateData(node,links, ProjectsStatusUtils.getCommandsName(project.commands()),readOnly);

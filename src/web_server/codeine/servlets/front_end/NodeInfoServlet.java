@@ -32,9 +32,13 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 	@Inject private PermissionsManager permissionsManager;
 	
 	protected NodeInfoServlet() {
-		super("", "node_info", "command_history", "node_info", "command_history");
+		super("node_info", "command_history", "node_info", "command_history");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return request.getParameter(Constants.UrlParameters.NODE_NAME);
+	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
@@ -42,8 +46,6 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 		
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
-		
-		setTitle(nodeName);
 		
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByName(projectName, nodeName);
 		return new NodeInfoTemplateData(node,links, ProjectsStatusUtils.getCommandsName(project.commands()),readOnly);

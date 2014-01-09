@@ -14,7 +14,6 @@ import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
-import codeine.servlets.template.HtmlMainTemplate;
 import codeine.servlets.template.LabelsTemplateData;
 import codeine.utils.UrlUtils;
 
@@ -25,15 +24,18 @@ import com.google.inject.Inject;
 public class LabelsServlet extends AbstractFrontEndServlet {
 	
 	@Inject	private LabelJsonProvider versionLabelJsonProvider;
-	@Inject private HtmlMainTemplate htmlMainTemplate;
 	@Inject private PermissionsManager permissionsManager;
 	
 	private static final long serialVersionUID = 1L;
 	
 	protected LabelsServlet() {
-		super("", "labels", "command_history", "labels", "command_history");
+		super("labels", "command_history", "labels", "command_history");
 	}
 	
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+	}
 	@Override
 	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) {
 		ProjectLabelVersionJson versionLabelJson = readBodyJson(request, ProjectLabelVersionJson.class);
@@ -54,7 +56,6 @@ public class LabelsServlet extends AbstractFrontEndServlet {
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		setTitle(projectName);
 		
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		

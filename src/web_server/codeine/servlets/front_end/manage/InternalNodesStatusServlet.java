@@ -32,9 +32,14 @@ public class InternalNodesStatusServlet extends AbstractFrontEndServlet {
 	@Inject	private NodeAggregator aggregator;
 	
 	protected InternalNodesStatusServlet() {
-		super(CODEINE_STATUS, "project_status", "command_executor", "project_status","commands_toolbar");
+		super("project_status", "command_executor", "project_status","commands_toolbar");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return CODEINE_STATUS;
+	}
+	
 	private static final long serialVersionUID = 1L;
 
 	@Override

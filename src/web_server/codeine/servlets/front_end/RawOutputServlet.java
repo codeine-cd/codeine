@@ -22,9 +22,14 @@ public class RawOutputServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected RawOutputServlet() {
-		super("", "raw_output", "command_history", "command_history");
+		super("raw_output", "command_history", "command_history");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return "Output";
+	}
+	
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String link = request.getParameter(Constants.UrlParameters.LINK_NAME);

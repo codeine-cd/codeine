@@ -31,7 +31,7 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ConfigureProjectServlet() {
-		super("", "configure_project", "command_history", "configure_project", "command_history");
+		super("configure_project", "command_history", "configure_project", "command_history");
 	}
 
 	@Override 
@@ -65,8 +65,13 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		ProjectJson projectJson = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
-		setTitle("Configure " + projectName);
 		return new ConfigureProjectTemplateData(projectJson);
+	}
+	
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return "Configure " + projectName;
 	}
 		
 	@Override

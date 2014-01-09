@@ -33,7 +33,7 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 	private ScheduleInfoPostDataJson data;
 	
 	protected ScheduleCommandServlet() {
-		super("", "schedule_command", "command_history", "schedule_command", "command_history");
+		super("schedule_command", "command_history", "schedule_command", "command_history");
 	}
 	
 	@Override
@@ -49,10 +49,14 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 	}
 	
 	@Override
+	protected String getTitle(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return projectName;
+	}
+	@Override
 	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		data = gson().fromJson(request.getParameter(Constants.UrlParameters.DATA_NAME), ScheduleInfoPostDataJson.class);
-		setTitle(projectName);
 		if (data.isNodeMode()) { 
 			for (VersionNodesJson versionNodesJson : data.nodes()) {
 				versionNodesJson.setId();

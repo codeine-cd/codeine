@@ -40,15 +40,20 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 	private static final Logger log = Logger.getLogger(ProjectsListServlet.class);
 	private static final long serialVersionUID = 1L;
 	
-	protected ProjectsListServlet() {
-		super("Codeine", "projects_list","command_executor", "projects_list","command_executor");
-	}
 	
 	@Inject private Links links;
 	@Inject	private NodeAggregator aggregator;
 	@Inject private IConfigurationManager configurationManager;
 	@Inject private PermissionsManager permissionsManager;
 
+	protected ProjectsListServlet() {
+		super("projects_list","command_executor", "projects_list","command_executor");
+	}
+
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		return "Codeine";
+	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		List<ProjectsInView> views = Lists.newArrayList();

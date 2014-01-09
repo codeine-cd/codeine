@@ -32,14 +32,19 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ProjectNodesServlet() {
-		super("", "project_nodes", "command_history", "project_nodes", "command_history", "commands_toolbar");
+		super("project_nodes", "command_history", "project_nodes", "command_history", "commands_toolbar");
 	}
 	
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
+		return projectName + " - " + versionName;
+	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
-		setTitle(projectName + " - " + versionName);
 		
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);

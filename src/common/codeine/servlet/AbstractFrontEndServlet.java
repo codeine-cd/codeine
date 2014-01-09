@@ -45,11 +45,8 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	private List<String> jsFiles;
 	private String contentTemplateFile;
 	private String sidebarTemplateFile;
-	private PrintWriter writer;
-	private String title;
 	
-	protected AbstractFrontEndServlet(String title, String contentTemplateFile, String sidebarTemplateFile, String... jsFiles) {
-		this.title = title;
+	protected AbstractFrontEndServlet(String contentTemplateFile, String sidebarTemplateFile, String... jsFiles) {
 		this.contentTemplateFile = contentTemplateFile;
 		this.sidebarTemplateFile = sidebarTemplateFile;
 		this.jsFiles = Lists.newArrayList(jsFiles);
@@ -87,14 +84,14 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	@Override
 	protected final void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing get request: " + request.getRequestURL());
-		writer = getWriter(response);
+		PrintWriter writer = getWriter(response);
 		try {
 			TemplateData templateData = doGet(request, writer);
 			if (templateData == null) {
 				super.myGet(request, response);
 			} else {
 				response.setStatus(HttpStatus.OK_200);
-				writeTemplateData(request, templateData);
+				writeTemplateData(request, templateData, response);
 			}
 			
 		} catch (FrontEndServletException e) {
@@ -106,7 +103,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	@Override
 	protected final void myPost(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing post request: " + request.getRequestURL());
-		writer = getWriter(response);
+		PrintWriter writer = getWriter(response);
 		TemplateData templateData;
 		try {
 			templateData = doPost(request, writer);
@@ -114,7 +111,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 				super.myPost(request, response);
 			} else {
 				response.setStatus(HttpStatus.OK_200);
-				writeTemplateData(request, templateData);
+				writeTemplateData(request, templateData, response);
 			}
 		} catch (FrontEndServletException e) {
 			response.setStatus(e.http_status());
@@ -159,9 +156,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		return menuProvider;
 	}
 	
-	protected void setTitle(String title) {
-		this.title = title;
-	}
+	protected abstract String getTitle(HttpServletRequest request);
 	
 	private void prepareTemplateData(HttpServletRequest request, TemplateData templateData) {
 		String user = permissionsManager.user(request);
@@ -173,7 +168,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		templateData.setNavBar(generateNavigation(request));
 		templateData.setMenu(generateMenuWithActive(request));
 		templateData.setJavascriptFiles(jsFiles);
-		templateData.setTitle(title);
+		templateData.setTitle(getTitle(request));
 		if (!StringUtils.isEmpty(globalConfigurationJson.get().server_name())) {
 				templateData.setServerName(globalConfigurationJson.get().server_name());
 		}
@@ -227,7 +222,8 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		return sidebarTemplateFile;
 	}
 
-	private void writeTemplateData(HttpServletRequest request, TemplateData templateData) {
+	private void writeTemplateData(HttpServletRequest request, TemplateData templateData, HttpServletResponse response) {
+		PrintWriter writer = getWriter(response);
 		if (!templateData.is_empty()) {
 			String mainTemplate = getMainTemplate(templateData, request, getContentTemplateFile(), getSidebarTemplateFile());
 			writer.write(mainTemplate);

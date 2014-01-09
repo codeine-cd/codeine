@@ -23,16 +23,20 @@ public class ProgressiveRawOutputServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ProgressiveRawOutputServlet() {
-		super("", "progress_output", "command_history", "progress_output", "command_history");
-	
+		super("progress_output", "command_history", "progress_output", "command_history");
 	}
 
+	@Override
+	protected String getTitle(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String command = request.getParameter(Constants.UrlParameters.COMMAND_NAME);
+		return projectName + "-" + command;
+	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String command = request.getParameter(Constants.UrlParameters.COMMAND_NAME);
 		String path = request.getParameter(Constants.UrlParameters.PATH_NAME);
-		setTitle(projectName + "-" + command);
 		return new ProgressiveOutputTemplateData(projectName, command, path);
 	}
 
