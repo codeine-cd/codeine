@@ -26,6 +26,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 	private IStatusDatabaseConnector databaseConnector;
 	private BlockingQueue<Object> blockingQueue = new LinkedBlockingQueue<>();
 	private Random random = new Random();
+	private GlobalConfigurationJsonStore globalConfigurationJson;
 			
 	
 	@Inject
@@ -33,9 +34,10 @@ public class PeerStatusChangedUpdater implements Runnable{
 		super();
 		this.peerStatus = peerStatus;
 		this.databaseConnector = databaseConnector;
+		this.globalConfigurationJson = globalConfigurationJson;
 		if (!globalConfigurationJson.get().large_deployment()) {
 			MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(5);
-			MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(55);
+			MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(10);
 		}
 	}
 
@@ -47,7 +49,11 @@ public class PeerStatusChangedUpdater implements Runnable{
 	@Override
 	public void run() {
 		log.info("start updating");
-		ThreadUtils.sleep(TimeUnit.SECONDS.toMillis(31 + random.nextInt(30)));
+		long initialSleep = TimeUnit.SECONDS.toMillis(31 + random.nextInt(30));
+		if (!globalConfigurationJson.get().large_deployment()) {
+			initialSleep = TimeUnit.SECONDS.toMillis(10);
+		}
+		ThreadUtils.sleep(initialSleep);
 		while (true){
 			try {
 				pushUpdateNow();
