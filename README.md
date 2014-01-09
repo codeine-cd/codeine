@@ -32,7 +32,7 @@ TBD
 * Permissions management
  * Access level separation per user / project (view / command / configure)
  * Easily manageable
-* Dashboard with all the deployment information of your project in one place
+* Web view with all the deployment information of your project in one place
  * Versions
  * Status
  * Commands History
