@@ -27,7 +27,7 @@ function checkForNewCodeine() {
             success: function (releases) {
               var verString = releases[0]["name"];
             	var latest_version =  releases[0]["name"].substring(releases[0]["name"].lastIndexOf(".")+1);
-            	var current_version = $('#codeine_version').html().substring($('#codeine_version').html().lastIndexOf(".")+11);
+            	var current_version = $('#codeine_version').html().substring($('#codeine_version').html().lastIndexOf(".")+1);
             	console.log("Current Version: " + current_version + " Latest Version: " + latest_version);
             	if (latest_version > current_version) {
             		displayAlert("New Codeine Version (" + verString + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'><i class='fa fa-github'></i> GitHub</a>, click <a href='/upgrade-server?version=" + encodeURIComponent(verString) + "'>here</a> to upgrade now", "info");
