@@ -5,6 +5,8 @@ import java.security.Principal;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
@@ -14,6 +16,8 @@ import codeine.utils.StringUtils;
 
 public class PermissionsManager {
 
+	private static final Logger log = Logger.getLogger(PermissionsManager.class);
+	
 	private UserPermissionsJsonStore permissionsConfigurationJsonStore;
 	private GlobalConfigurationJsonStore globalConfigurationJson;
 	private UserPermissionsJsonStore permissionConfJson;
@@ -78,6 +82,7 @@ public class PermissionsManager {
 			return null;
 		}
 		String username = userPrincipal.getName();
+		log.info("handling request from user " + username);
 		if (username.contains("@")){
 			username = username.substring(0, username.indexOf("@"));
 		}

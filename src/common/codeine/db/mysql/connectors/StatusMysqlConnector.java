@@ -87,13 +87,15 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 					long timeToRemovePeer = peerType == PeerType.Reporter ? timeToRemove + TimeUnit.DAYS.toMinutes(7) : timeToRemove;
 					long timeToDiscPeer = peerType == PeerType.Reporter ? timeToDisc + TimeUnit.DAYS.toMinutes(7) : timeToDisc;
 					long timeDiff = rs.getLong("TIME_DIFF");
-					log.info("time diff is " + timeDiff);
+					log.debug("time diff is " + timeDiff);
 					if (timeDiff > timeToRemovePeer){
+						log.info("time diff is " + timeDiff);
 						log.info("deleting " + peerStatus);
 //						rs.deleteRow();
 						idToRemove.add(key);
 					}
 					else if (timeDiff > timeToDiscPeer && !status.equals("Disc")){
+						log.info("time diff is " + timeDiff);
 						log.info("update to disc " + peerStatus);
 						idToDisc.add(key);
 //						rs.updateString("status", "Disc");
