@@ -125,23 +125,28 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		HashMap<String, String> dic = Maps.newHashMap();
 		String contents;
 		String message;
+		String title;
 		if (e instanceof ProjectNotFoundException) {
 			response.setStatus(HttpStatus.NOT_FOUND_404);
 			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
 			message = e.getMessage();
+			title = "Error 404";
 			
 		} else if  (e instanceof UnAuthorizedException) {
 			response.setStatus(HttpStatus.UNAUTHORIZED_401);
 			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
 			message = "You are not authorized to access this page";
+			title = "Error 401";
 		} else {
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
 			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/500.html");
 			message = ExceptionUtils.getRootCauseMessage(e) == null ? "No Message was Provided" : ExceptionUtils.getRootCauseMessage(e); 
 			dic.put("stack_trace", ExceptionUtils.getStackTrace(e)); 
+			title = "Error 500";
 		}
 		Template template = Mustache.compiler().escapeHTML(false).compile(contents);
 		dic.put("message", message);		
+		dic.put("title", title);		
 		getWriter(response).write(template.execute(dic));
 	}
 	
