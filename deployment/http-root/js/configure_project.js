@@ -439,10 +439,9 @@ function add_new_mail_line() {
 }
 
 function add_new_node_line() {
-	$("#nodes_table_body").append($("#nodes_table_row").render({}));
-	$("#nodes_table_body").find("td").last().find("a").removeClass("node_remove").addClass("node_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
-	
-	make_node_element_editable($("#nodes_table_body").find("tr").last().find('.editable'));
+	$("#add_node_table_body").html($("#nodes_table_row").render({}));
+	$("#add_node_table_body").find("td").last().find("a").removeClass("node_remove").addClass("node_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
+	make_node_element_editable($("#add_node_table_body").find("tr").last().find('.editable'));
 	
 	$('.node_add').click(function() {
 		var valid = true;
@@ -458,7 +457,6 @@ function add_new_node_line() {
 			values.push($(this).html());
 		});
 		if (valid) {
-			$(this).parent().parent().remove();
 			$("#nodes_table_body").append($("#nodes_table_row").render({ name : values[0], alias : values[1]}));
 			make_node_element_editable($("#nodes_table_body").find("tr").last().find('.editable'));
 			registerIconRemoveHandler($("#nodes_table_body").find("td").last().find("a"));
@@ -502,7 +500,7 @@ function drawNodes() {
 	$("#nodes_table_body").html($("#nodes_table_row").render(project["nodes_info"]));
 	
 	make_node_element_editable($("#nodes_table_body").find('.editable'));
-	registerIconRemoveHandler($('.node_remove'));	
+	registerIconRemoveHandler($('.node_remove'));
 	add_new_node_line();
 }
 
