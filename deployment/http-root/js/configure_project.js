@@ -4,6 +4,7 @@ var newParameterIndex = 1000;
 var enterNewNodeConst = "Enter new Node";
 var enterNewMailConst = "Enter new Email";
 var codeine_env_vars = ['CODEINE_OUTPUT_FILE', 'CODEINE_PROJECT_NAME', 'CODEINE_NODE_NAME'];
+var codeine_env_vars_no_output = ['CODEINE_PROJECT_NAME', 'CODEINE_NODE_NAME'];
 
 $(document).ready( function () {
 	$("#node_discovery_strategy").change(function() {
@@ -38,7 +39,8 @@ $(document).ready( function () {
 	
 	registerSaveHandler();
 	
-	registerTextAreaAutocomplete($('.codeine_script'));
+	registerTextAreaAutocomplete($('.codeine_script'));//discovery, version
+	registerTextAreaAutocompleteNoOutput($('.codeine_script_no_output'));//commands, monitors
 	
 	$(".chosen-select").chosen({disable_search_threshold: 10});
 });
@@ -269,12 +271,18 @@ function drawMonitors() {
 }
 
 function registerTextAreaAutocomplete(elm) {
+	registerTextAreaAutocompleteInternal(elm, codeine_env_vars);
+}
+function registerTextAreaAutocompleteNoOutput(elm) {
+	registerTextAreaAutocompleteInternal(elm, codeine_env_vars_no_output);
+}
+function registerTextAreaAutocompleteInternal(elm, list) {
 	elm.each(function() {
 		$(this).textcomplete([
 			{ 
 			    match: /\$(\w*)$/,
 			    search: function (term, callback) {
-			        callback($.map(codeine_env_vars, function (env_var) {
+			        callback($.map(list, function (env_var) {
 			            return env_var.indexOf(term) === 0 ? env_var : null;
 			        }));
 			    },
@@ -315,7 +323,7 @@ function addItem(counter,itemType) {
 	$("#" + itemType +"s").append(elm);
 	
 	registerItemRenameHandler($('[id^=' + itemType +'_name_index_' + counter + ']'));
-	registerTextAreaAutocomplete($('[id=' + itemType +'_script_content_index_' + counter  + ']'));
+	registerTextAreaAutocompleteNoOutput($('[id=' + itemType +'_script_content_index_' + counter  + ']'));
 
 	if (itemType === "command")
 	{
