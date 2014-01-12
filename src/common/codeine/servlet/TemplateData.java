@@ -20,7 +20,7 @@ public class TemplateData {
 	private String codeineversionfull;
 	private String javascriptfiles;
 	private boolean is_empty = false;
-	private String new_issue_link = "https://github.com/Intel-IT/codeine";
+	private String new_issue_link = "https://github.com/Intel-IT/codeine/issues/new";
 	
 	public TemplateData() {
 		super();
