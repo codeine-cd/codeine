@@ -440,7 +440,7 @@ function add_new_mail_line() {
 
 function add_new_node_line() {
 	$("#add_node_table_body").html($("#nodes_table_row").render({}));
-	$("#add_node_table_body").find("td").last().find("a").removeClass("node_remove").addClass("node_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
+	$("#add_node_table_body").find("td").last().find("a").prop("title", "Add Node").removeClass("node_remove").addClass("node_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
 	make_node_element_editable($("#add_node_table_body").find("tr").last().find('.editable'));
 	
 	$('.node_add').click(function() {
