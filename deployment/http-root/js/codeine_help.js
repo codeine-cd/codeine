@@ -94,5 +94,8 @@ var helpStrings = {
   "viewProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user can view only",
   "commandProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user can view and execute commands",
   "configProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user has full priviliges on them",
+  "MysqlUserConfigureHelp" : "Username for mysql connctions",
+  "MysqlPasswordConfigureHelp" : "Password for mysql connctions",
+  "MysqlManagedByCodeineConfigureHelp" : "Codeine is responsible to start/stop mysql server instance",
   "codeineConfigureHelp" : "Here admin can configure all the global settings of codeine.<br/>Some changes might require restart."
 };

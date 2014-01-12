@@ -13,8 +13,33 @@ $(document).ready( function () {
     drawPermissions();
     
     $(".chosen-select").chosen({disable_search_threshold: 10});
+    
+    displayRelevantElementsOnly();
+    
+    $("#mysql_managed_by_codeine").change(function() {
+    	if (this.checked) {
+    		$("#mysql_dir_configure_control").show();
+    		$("#mysql_bin_dir_configure_control").show();
+    	} else {
+    		$("#mysql_dir_configure_control").hide();
+    		$("#mysql_bin_dir_configure_control").hide();
+    	}
+    });
+    $("#mysql_managed_by_codeine").change();
+    $("#authentication_method").change(function() {
+    	if ($(this).val() === "WindowsCredentials") {
+    		$("#roles_configure_control").show();
+    	} else {
+    		$("#roles_configure_control").hide();
+    	}
+    });
+    $("#authentication_method").change();
 });
 
+function displayRelevantElementsOnly() {
+	$("#directory_host_control").hide();
+	
+}
 function drawPermissions() {
 	$('#permissions_table_body').html($('#configure_permissions').render(permissions_config['permissions']));
 	$(".projects_selector").select2({tags: projects , tokenSeparators: [",", " "]});

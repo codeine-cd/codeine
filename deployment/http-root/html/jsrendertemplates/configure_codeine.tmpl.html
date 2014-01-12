@@ -7,6 +7,14 @@
     </div>
 </div>
 <div class="control-group">
+	<label class="control-label" for="admin_mail">Admin Mail
+		<i data-help-message="AdminMailConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+	</label>
+    <div class="controls">
+        <input id="admin_mail" type="email" pattern="[^ @]*@[^ @]*"  value="{{:admin_mail}}" required="required">
+    </div>
+</div>
+<div class="control-group">
 	<label class="control-label" for="web_server_host">Web Server Host
 		<i data-help-message="webServerHostHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
@@ -22,12 +30,12 @@
         <input id="web_server_port" type="text" pattern="\d*" title="Integer Number" value="{{:web_server_port}}" required="required">
     </div>
 </div>
-<div class="control-group">
+<div class="control-group" id="directory_host_control">
 	<label class="control-label" for="directory_host">Directory Host
 		<i data-help-message="directory_hostHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="directory_host" type="text" value="{{:directory_host}}" required="required">
+        <input id="directory_host" type="text" value="{{:directory_host}}">
     </div>
 </div>
 <div class="control-group">
@@ -79,7 +87,7 @@
        </label>
     </div>
 </div>
-<div class="control-group">
+<div class="control-group" id="mysql_dir_configure_control">
 	<label class="control-label" for="mysql_dir">MySQL Persistency Dir
 		<i data-help-message="MysqlDirConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
@@ -87,22 +95,12 @@
         <input id="mysql_dir" type="text" value="{{:mysql[0].dir}}" required="required">
     </div>
 </div>
-<div class="control-group">
+<div class="control-group" id="mysql_bin_dir_configure_control">
 	<label class="control-label" for="mysql_bin_dir">MySQL Bin Dir
 		<i data-help-message="MysqlBinDirConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
         <input id="mysql_bin_dir" type="text" value="{{:mysql[0].bin_dir}}" required="required">
-    </div>
-</div>
-
-
-<div class="control-group">
-	<label class="control-label" for="admin_mail">Admin Mail
-		<i data-help-message="AdminMailConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-	</label>
-    <div class="controls">
-        <input id="admin_mail" type="email" pattern="[^ @]*@[^ @]*"  value="{{:admin_mail}}" required="required">
     </div>
 </div>
 <div class="control-group">
@@ -117,7 +115,7 @@
         </select>
     </div>
 </div>
-<div class="control-group">
+<div class="control-group" id="roles_configure_control">
 	<label class="control-label">Roles
 		<i data-help-message="rolesConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
