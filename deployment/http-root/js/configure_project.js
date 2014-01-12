@@ -408,11 +408,11 @@ function registerAccordionHandlers(elm) {
 
 
 function add_new_mail_line() {
-	$("#mail_policy_table_body").append($("#mail_policy_table_row").render({}));
-	$("#mail_policy_table_body").find("td").last().find("a").removeClass("mail_remove").addClass("mail_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
+	$("#add_mail_policy_table_body").html($("#mail_policy_table_row").render({}));
+	$("#add_mail_policy_table_body").find("td").last().find("a").prop("title", "Add Email").removeClass("mail_remove").addClass("mail_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
 	
-	make_mail_element_editable($("#mail_policy_table_body").find("tr").last().find('.editable'));
-	$("#mail_policy_table_body").find("tr").last().find(".chosen-select").chosen({disable_search_threshold: 10});
+	make_mail_element_editable($("#add_mail_policy_table_body").find("tr").last().find('.editable'));
+	$("#add_mail_policy_table_body").find("tr").last().find(".chosen-select").chosen({disable_search_threshold: 10});
 	
 	$('.mail_add').click(function() {
 		var valid = true;
