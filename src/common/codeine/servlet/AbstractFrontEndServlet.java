@@ -168,10 +168,15 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		templateData.setNavBar(generateNavigation(request));
 		templateData.setMenu(generateMenuWithActive(request));
 		templateData.setJavascriptFiles(jsFiles);
-		templateData.setTitle(getTitle(request));
+		templateData.setTitle(getFullTitle(request));
 		if (!StringUtils.isEmpty(globalConfigurationJson.get().server_name())) {
 				templateData.setServerName(globalConfigurationJson.get().server_name());
 		}
+	}
+
+	private String getFullTitle(HttpServletRequest request) {
+		String server_name = globalConfigurationJson.get().server_name();
+		return (StringUtils.isEmpty(server_name)) ? getTitle(request) : server_name + " [" + getTitle(request) + "]";
 	}
 
 	private List<TemplateLinkWithIcon> generateMenuWithActive(HttpServletRequest request) {

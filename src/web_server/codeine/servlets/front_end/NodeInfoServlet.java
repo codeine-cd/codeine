@@ -37,7 +37,7 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 
 	@Override
 	protected String getTitle(HttpServletRequest request) {
-		return request.getParameter(Constants.UrlParameters.NODE_NAME);
+		return request.getParameter(Constants.UrlParameters.NODE_NAME) + " Node Info";
 	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {

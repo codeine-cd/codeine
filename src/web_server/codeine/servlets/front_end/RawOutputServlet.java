@@ -27,7 +27,8 @@ public class RawOutputServlet extends AbstractFrontEndServlet {
 
 	@Override
 	protected String getTitle(HttpServletRequest request) {
-		return "Output";
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return projectName + " Command Output";
 	}
 	
 	@Override

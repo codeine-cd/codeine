@@ -45,7 +45,7 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 
 	@Override
 	protected String getTitle(HttpServletRequest request) {
-		return "Configure Codiene";
+		return "Configure Codeine";
 	}
 	
 	@Override

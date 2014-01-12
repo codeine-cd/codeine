@@ -38,8 +38,7 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
-		return projectName + " - " + versionName;
+		return projectName + " Nodes";
 	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {

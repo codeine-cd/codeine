@@ -52,7 +52,7 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 
 	@Override
 	protected String getTitle(HttpServletRequest request) {
-		return "Codeine";
+		return "Codeine Projects";
 	}
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
@@ -67,6 +67,7 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 
 	private List<ProjectsInView> prepareViews(HttpServletRequest request, String file) {
 		List<ProjectsInView> views = Lists.newArrayList();
+		@SuppressWarnings("serial")
 		Type listType = new TypeToken<ArrayList<ProjectsTab>>() { }.getType();
 		List<ProjectsTab> projects_tabs = gson().fromJson(TextFileUtils.getContents(file), listType);
 		for (ProjectsTab tab : projects_tabs) {
