@@ -11,7 +11,7 @@
 		<i data-help-message="AdminMailConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="admin_mail" type="email" pattern="[^ @]*@[^ @]*"  value="{{:admin_mail}}" required="required">
+        <input id="admin_mail" type="email" value="{{:admin_mail}}">
     </div>
 </div>
 <div class="control-group">
@@ -19,7 +19,7 @@
 		<i data-help-message="webServerHostHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="web_server_host" type="text" value="{{:web_server_host}}" required="required">
+        <input id="web_server_host" type="text" value="{{:web_server_host}}">
     </div>
 </div>
 <div class="control-group">
@@ -27,7 +27,7 @@
 		<i data-help-message="webServerPortHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="web_server_port" type="text" pattern="\d*" title="Integer Number" value="{{:web_server_port}}" required="required">
+        <input id="web_server_port" type="text" pattern="\d*" title="Port Number" value="{{:web_server_port}}" required="required">
     </div>
 </div>
 <div class="control-group" id="directory_host_control">
@@ -43,7 +43,7 @@
 		<i data-help-message="directory_portHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="directory_port" type="text" pattern="\d*" title="Integer Number" value="{{:directory_port}}" required="required">
+        <input id="directory_port" type="text" pattern="\d*" title="Port Number" value="{{:directory_port}}" required="required">
     </div>
 </div>
 <div class="control-group">
@@ -92,7 +92,7 @@
 		<i data-help-message="MysqlDirConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="mysql_dir" type="text" value="{{:mysql[0].dir}}" required="required">
+        <input id="mysql_dir" type="text" value="{{:mysql[0].dir}}">
     </div>
 </div>
 <div class="control-group" id="mysql_bin_dir_configure_control">
@@ -100,7 +100,7 @@
 		<i data-help-message="MysqlBinDirConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
     <div class="controls">
-        <input id="mysql_bin_dir" type="text" value="{{:mysql[0].bin_dir}}" required="required">
+        <input id="mysql_bin_dir" type="text" value="{{:mysql[0].bin_dir}}">
     </div>
 </div>
 <div class="control-group">
@@ -120,7 +120,7 @@
 		<i data-help-message="rolesConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
 	</label>
  	<div class="controls">
-		<textarea class="form-control span6" id="roles" rows="10">{{:roles}}</textarea>
+		<textarea class="form-control span6" id="roles" rows="3">{{:roles}}</textarea>
 	</div>
 </div>
 
