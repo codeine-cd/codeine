@@ -1,5 +1,7 @@
 package codeine;
 
+import codeine.configuration.ConfigurationReadManagerServer;
+import codeine.configuration.IConfigurationManager;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.version.VersionsMapping;
 import codeine.version.VersionsMappingProvider;
@@ -18,6 +20,7 @@ public class CodeineDirectoryModule extends AbstractModule
 		bind(PeersProjectsStatus.class).in(Scopes.SINGLETON);
 		bind(VersionsMappingStore.class).in(Scopes.SINGLETON);
 		bind(VersionsMapping.class).toProvider(VersionsMappingProvider.class).in(Scopes.SINGLETON);
+		bind(IConfigurationManager.class).to(ConfigurationReadManagerServer.class).in(Scopes.SINGLETON);
 	}
 
 }
