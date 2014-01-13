@@ -5,13 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import codeine.api.NodeGetter;
 import codeine.configuration.IConfigurationManager;
-import codeine.configuration.Links;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
-import codeine.servlet.NodeTemplate;
 import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
@@ -24,10 +21,8 @@ import com.google.inject.Inject;
 
 public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	
-	@Inject	private NodeGetter nodesGetter;
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private PermissionsManager permissionsManager;
-	@Inject	private Links links;
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -48,8 +43,8 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		
-		List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, project, nodesGetter, links);
-		return new ProjectNodesTemplateData(projectName, versionName, readOnly, versionNodes, ProjectsStatusUtils.getCommandsName(project.commands()), ProjectsStatusUtils.getMonitorsName(project.monitors()));
+		//List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, project, nodesGetter, links);
+		return new ProjectNodesTemplateData(projectName, versionName, readOnly, ProjectsStatusUtils.getCommandsName(project.commands()), ProjectsStatusUtils.getMonitorsName(project.monitors()));
 	}
 	
 	@Override
@@ -64,10 +59,9 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 		return getMenuProvider().getProjectMenu(request);
 	}
 	
-
-	
-
-	
-
+	@Override
+	protected List<String> getJsRenderTemplateFiles() {
+		return Lists.newArrayList("project_nodes_by_version");
+	}
 	
 }

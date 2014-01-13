@@ -43,39 +43,13 @@
     </div>
   </div><!-- /navbar-inner -->
 </div>
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<strong>{{versionName}}</strong>
-		<div class="text-info pull-right"><small> Showing <span id="numOfNodes"></span> nodes</small></div>
-	</div>
- 	<div class="panel-body">
- 		{{#nodes}}
-		<div class="row node" id="{{node_name}}" style="display: none;">
-			<form class="form-inline span9">
-				<fieldset>
-					<div class="span3">
-					<label class="checkbox">
-	    				<input id="checkbox_{{-index}}" data-peer-address={{peer_address}} data-node-name={{node_name}} data-node-alias={{node_alias}} type="checkbox">
-	 				</label>&nbsp;&nbsp;
-	 				<a data-node-name="{{node_name}}" href="javascript: void(0);" class="nodeLink">
-	 					{{node_alias}}
-	 				</a>
-	 				</div>
-	 				<div class="span5">
-		 				{{#failed_monitors}}
-		 				<a href="{{link}}"><span class="label label-{{class_name}}">{{label}}</span></a>
-		 				{{/failed_monitors}}
-		 				{{#success_monitors}}
-		 				<i class="fa fa-check-circle fa-lg {{this}}"></i>
-		 				{{/success_monitors}}
-	 				</div>
-				</fieldset>
-			</form>
-		</div>
-		{{/nodes}}
+<div class="row" id="nodes_loader">
+	<div class="span6 offset3">
+		<h4><i class="fa fa-spinner fa-spin" style="color: blue;"></i>  Loading Nodes...</h4>
 	</div>
 </div>
+<div id="nodes_container" style="display: none">
+</div>
 <script>
-var nodesJson = {{nodesJson}};
 var readOnly = {{readonly}};
 </script>

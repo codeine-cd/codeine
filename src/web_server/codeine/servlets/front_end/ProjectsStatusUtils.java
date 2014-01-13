@@ -75,7 +75,7 @@ public class ProjectsStatusUtils {
 				}
 			};
 			Collections.sort(failingMonitors, c);
-			versionNodes.add(new NodeTemplate(nodeInfo.alias(), nodeInfo.name(), nodeInfo.peer().host_port(), failingMonitors,nodeInfo.peer().status() == PeerStatusString.On ? "success" : "disc"));
+			versionNodes.add(new NodeTemplate(nodeInfo.alias(), nodeInfo.name(), nodeInfo.peer().host_port(), failingMonitors,nodeInfo.peer().status() == PeerStatusString.On ? "success" : "disc", nodeInfo.version()));
 		}
 		return versionNodes;
 	}

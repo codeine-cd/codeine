@@ -17,6 +17,18 @@ $(document).ready( function () {
   } 
 });
 
+
+function hashCode(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (var i = 0; i < str.length; i++) {
+        char = str.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 function isUserLogged() {
 	return (logged_user !== "");
 }
@@ -105,6 +117,10 @@ function formatTemplatePath(name) {
 
 function getProjetcName() {
 	return getParameterByName('project');
+}
+
+function getVersion() {
+	return getParameterByName('version');
 }
 
 function postToUrl(url, postData) {
@@ -204,7 +220,7 @@ $("#projectSearch").click( function() {
 }); 
 
 function escapeSelector(selector) {
-    return selector.replace(/(!|"|#|\$|%|\'|\(|\)|\*|\+|\,|\.|\/|\:|\;|\?|@)/g, function($1, $2) {
+    return selector.replace(/(!|"|#|\$|%|\'|\(|\)|\*|\+|\,|\.|\/|\\|\:|\;|\?|@)/g, function($1, $2) {
         return "\\" + $2;
     });
 }

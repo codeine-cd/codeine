@@ -6,12 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import codeine.ConfigurationManagerServer;
-import codeine.api.NodeGetter;
-import codeine.configuration.Links;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
 import codeine.servlet.FrontEndServletException;
-import codeine.servlet.NodeTemplate;
 import codeine.servlet.PermissionsManager;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
@@ -28,8 +25,6 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	private static final String CODEINE_NODES = "Codeine Nodes";
 	private static final long serialVersionUID = 1L;
 	@Inject	private PermissionsManager permissionsManager;
-	@Inject	private NodeGetter nodesGetter;
-	@Inject	private Links links;
 
 	protected InternalNodesServlet() {
 		super("project_nodes", "command_executor", "project_nodes","commands_toolbar");
@@ -44,10 +39,10 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 		String projectName = Constants.CODEINE_NODES_PROJECT_NAME;
 		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
 		
-		List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, ConfigurationManagerServer.NODES_INTERNAL_PROJECT, nodesGetter, links);
+		//List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, ConfigurationManagerServer.NODES_INTERNAL_PROJECT, nodesGetter, links);
 		List<NameAndAlias> cmd = ProjectsStatusUtils.getCommandsName(ConfigurationManagerServer.NODES_INTERNAL_PROJECT.commands());
 		List<String> mon = ProjectsStatusUtils.getMonitorsName(ConfigurationManagerServer.NODES_INTERNAL_PROJECT.monitors());
-		return new ProjectNodesTemplateData(projectName, versionName, false, versionNodes, cmd, mon);
+		return new ProjectNodesTemplateData(projectName, versionName, false, cmd, mon);
 	}
 	
 	@Override
@@ -62,6 +57,11 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
 		return permissionsManager.isAdministrator(request);
+	}
+	
+	@Override
+	protected List<String> getJsRenderTemplateFiles() {
+		return Lists.newArrayList("project_nodes_by_version");
 	}
 
 }
