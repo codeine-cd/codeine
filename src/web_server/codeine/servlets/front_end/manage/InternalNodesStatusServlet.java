@@ -37,7 +37,7 @@ public class InternalNodesStatusServlet extends AbstractFrontEndServlet {
 
 	@Override
 	protected List<String> getJSFiles() {
-		return Lists.newArrayList( "project_status","commands_toolbar");
+		return Lists.newArrayList( "project_status", "command_executor", "commands_toolbar");
 	}
 	
 	@Override

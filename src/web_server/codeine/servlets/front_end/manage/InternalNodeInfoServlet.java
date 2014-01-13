@@ -42,7 +42,7 @@ public class InternalNodeInfoServlet extends AbstractFrontEndServlet {
 	
 	@Override
 	protected List<String> getJSFiles() {
-		return Lists.newArrayList("node_info", "commands_toolbar");
+		return Lists.newArrayList("node_info", "command_executor", "commands_toolbar");
 	}
 	
 	@Override
