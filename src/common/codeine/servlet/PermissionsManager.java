@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import codeine.jsons.auth.AuthenticationMethod;
+import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.UserPermissionsJsonStore;
@@ -63,7 +64,8 @@ public class PermissionsManager {
 		if (permissionsNotConfigured(request)){
 			return false;
 		}
-		return permissionConfJson.get().get(user(request)).isAdministrator();
+		String user = user(request);
+		return permissionConfJson.get().get(user).isAdministrator();
 	}
 
 	public String user(HttpServletRequest request) {
@@ -76,16 +78,25 @@ public class PermissionsManager {
 		if (!StringUtils.isEmpty(api_token)) { 
 			return usersManager.userByApiToken(api_token).username();
 		}
-		
+				
 		Principal userPrincipal = request.getUserPrincipal();
 		if (null == userPrincipal){
 			return null;
 		}
+		
 		String username = userPrincipal.getName();
 		log.info("handling request from user " + username);
 		if (username.contains("@")){
 			username = username.substring(0, username.indexOf("@"));
 		}
+		
+		String viewas = request.getParameter(Constants.UrlParameters.VIEW_AS);
+		if (!StringUtils.isEmpty(viewas) && permissionConfJson.get().get(username).isAdministrator()) {
+			CodeineUser user = usersManager.user(viewas);
+			log.info("Using VIEW_AS Mode - " + user.username());
+			return user.username();
+		}
+		
 		return username;
 	}
 	public boolean canConfigure(String projectName, HttpServletRequest request) {
