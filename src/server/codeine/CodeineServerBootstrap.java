@@ -1,6 +1,5 @@
 package codeine;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,7 +9,6 @@ import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.inject.Module;
 
 public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
@@ -26,16 +24,7 @@ public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
 	}
 	@Override
 	protected List<Module> getGuiceModules() {
-		List<AbstractCodeineBootstrap> bootstraps = Lists.<AbstractCodeineBootstrap>newArrayList(
-//				new CodeineDirectoryBootstrap(),
-//				new CodeineMailServerBootstrap(),
-				new CodeineWebServerBootstrap()
-				);
-		HashSet<Module> $ = Sets.newHashSet();
-		for (AbstractCodeineBootstrap b : bootstraps) {
-			$.addAll(b.getGuiceModules());
-		}
-		return Lists.newArrayList($);
+		return Lists.<Module>newArrayList(new ServerModule(), new ServerServletModule());
 	}
 
 	@Override

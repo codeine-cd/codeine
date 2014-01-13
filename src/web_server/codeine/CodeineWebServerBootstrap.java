@@ -57,7 +57,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	protected List<Module> getGuiceModules() {
-		return Lists.<Module>newArrayList(new ServerModule(), new ServerServletModule());
+		return Lists.<Module>newArrayList(new WebServerModule(), new ServerServletModule());
 	}
 
 	@Override
