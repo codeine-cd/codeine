@@ -2,12 +2,14 @@ package codeine.api;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 
 public class NodeInfo {
 
 	private String name;
 	private String alias;
-	private List<String> tags;
+	private List<String> tags = Lists.newArrayList();
 
 	public NodeInfo(String name) {
 		this.name = name;

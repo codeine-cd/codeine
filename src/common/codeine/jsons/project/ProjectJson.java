@@ -9,7 +9,6 @@ import codeine.jsons.nodes.NodeDiscoveryStrategy;
 
 import com.google.common.collect.Lists;
 
-@SuppressWarnings("unused")
 public class ProjectJson
 {
 	private String name;

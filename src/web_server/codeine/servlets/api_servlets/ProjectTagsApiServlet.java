@@ -7,8 +7,13 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
+import codeine.api.NodeGetter;
 import codeine.api.NodeInfo;
+import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
@@ -20,7 +25,9 @@ import com.google.inject.Inject;
 public class ProjectTagsApiServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(ProjectTagsApiServlet.class);
 	@Inject	private IConfigurationManager configurationManager;
+	@Inject	private NodeGetter nodesGetter;
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
@@ -29,13 +36,16 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		Map<String,Integer> map = Maps.newHashMap();
 		
-		for (NodeInfo node : project.nodes_info()) {
-			for (String tag : node.tags()) {
-				if (!map.containsKey(tag)) {
-					map.put(tag, 1);
-				} else {
-					map.put(tag, map.get(tag) + 1);
-				}
+		if (project.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration && !projectName.equals(Constants.CODEINE_NODES_PROJECT_NAME)) {
+			log.info("getting static tags");
+			for (NodeInfo node : project.nodes_info()) {
+				updateMapWithNode(map, node);
+			}
+		}
+		else {
+			List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName);
+			for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
+				updateMapWithNode(map, nodeWithMonitorsInfo);
 			}
 		}
 		List<NodeTag> list = Lists.newArrayList();
@@ -45,12 +55,23 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 		
 		writeResponseJson(response, list);
 	}
+
+
+	public void updateMapWithNode(Map<String, Integer> map, NodeInfo node) {
+		if (node.tags() == null) {
+			return;
+		}
+		for (String tag : node.tags()) {
+			if (!map.containsKey(tag)) {
+				map.put(tag, 1);
+			} else {
+				map.put(tag, map.get(tag) + 1);
+			}
+		}
+	}
 	
 	
 	public static class NodeTag {
-		
-		
-		
 		public NodeTag(String name, int count) {
 			super();
 			this.name = name;
