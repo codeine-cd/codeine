@@ -6,6 +6,9 @@ import codeine.configuration.IConfigurationManager;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.servlet.UsersManager;
 import codeine.statistics.MonitorsStatistics;
+import codeine.version.VersionsMapping;
+import codeine.version.VersionsMappingProvider;
+import codeine.version.VersionsMappingStore;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -23,6 +26,8 @@ public class ServerModule extends AbstractModule
 		bind(UsersManager.class).in(Scopes.SINGLETON);
 		bind(NodesCommandExecuterProvider.class).in(Scopes.SINGLETON);
 		bind(MonitorsStatistics.class).in(Scopes.SINGLETON);
+		bind(VersionsMappingStore.class).in(Scopes.SINGLETON);
+		bind(VersionsMapping.class).toProvider(VersionsMappingProvider.class).in(Scopes.SINGLETON);
 	}
 	
 }

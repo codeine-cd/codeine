@@ -26,8 +26,8 @@ public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
 	}
 	@Override
 	protected List<Module> getGuiceModules() {
-		List<AbstractCodeineBootstrap> bootstraps = Lists.newArrayList(
-				new CodeineDirectoryBootstrap(),
+		List<AbstractCodeineBootstrap> bootstraps = Lists.<AbstractCodeineBootstrap>newArrayList(
+//				new CodeineDirectoryBootstrap(),
 //				new CodeineMailServerBootstrap(),
 				new CodeineWebServerBootstrap()
 				);
