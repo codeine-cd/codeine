@@ -4,7 +4,6 @@ var activeTags = [];
 
 $(document).ready( function () {
 	getNodes();
-	
 	getTags();
 });
 
@@ -75,6 +74,9 @@ function getNodes() {
 	    	setupFilters();
 	    	$('#nodes_loader').fadeOut(function() {
 	    		$('#nodes_container').fadeIn();
+	    	});
+	    	$('#nodes_container').find('[type=checkbox]').click( function() {
+	    		  resetSelectAll();
 	    	});
 	    }, 
 	    error: function(err) {
