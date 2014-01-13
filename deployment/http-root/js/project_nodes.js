@@ -65,7 +65,7 @@ function setupFilters() {
 function getNodes() {
 	$.ajax( {
 	    type: 'GET',
-	    url: '/project-nodes_json?project=' + encodeURIComponent(getProjetcName())  +'&version=' + getVersion(),
+	    url: '/project-nodes_json?project=' + encodeURIComponent(getProjetcName())  +'&version=' + encodeURIComponent(getVersion()),
 	    success: function(response) {
 	    	nodesJson = jQuery.parseJSON(response);
 	    	buildNodesByVersion();
