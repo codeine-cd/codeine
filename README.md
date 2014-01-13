@@ -34,6 +34,7 @@ TBD
  * Easily manageable
 * Web view with all the deployment information of your project in one place
  * Aggregated view based on versions
+ * Filtering of Nodes by Name or Tag
  * Status of the nodes of your application
  * Commands history for previous deployments
  * Graph view of nodes status
