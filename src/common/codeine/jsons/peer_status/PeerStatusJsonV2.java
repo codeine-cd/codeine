@@ -8,6 +8,7 @@ import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.model.Constants;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @SuppressWarnings("unused")
@@ -43,6 +44,7 @@ public class PeerStatusJsonV2 {
 	private ProjectStatus createInternalProject() {
 		NodeWithMonitorsInfo node_info = new NodeWithMonitorsInfo(this, this.peer_key, this.host, Constants.CODEINE_NODES_PROJECT_NAME, Maps.<String, MonitorStatusInfo>newHashMap());
 		node_info.version(this.version);
+		node_info.tags(Lists.newArrayList(project_name_to_status.keySet()));
 		ProjectStatus ps = new ProjectStatus(Constants.CODEINE_NODES_PROJECT_NAME, node_info);
 		return ps;
 	}	

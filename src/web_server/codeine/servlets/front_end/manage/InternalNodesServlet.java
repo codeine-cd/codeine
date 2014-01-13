@@ -31,16 +31,6 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	}
 
 	@Override
-	protected List<String> getJSFiles() {
-		return Lists.newArrayList("project_nodes","commands_toolbar");
-	}
-	
-	@Override
-	protected List<String> getSidebarTemplateFiles() {
-		return Lists.newArrayList("command_executor");
-	}
-	
-	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return CODEINE_NODES;
 	}
@@ -48,8 +38,6 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) throws FrontEndServletException {
 		String projectName = Constants.CODEINE_NODES_PROJECT_NAME;
 		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
-		
-		//List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, ConfigurationManagerServer.NODES_INTERNAL_PROJECT, nodesGetter, links);
 		List<NameAndAlias> cmd = ProjectsStatusUtils.getCommandsName(ConfigurationManagerServer.NODES_INTERNAL_PROJECT.commands());
 		List<String> mon = ProjectsStatusUtils.getMonitorsName(ConfigurationManagerServer.NODES_INTERNAL_PROJECT.monitors());
 		return new ProjectNodesTemplateData(projectName, versionName, false, cmd, mon);
@@ -71,7 +59,17 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	
 	@Override
 	protected List<String> getJsRenderTemplateFiles() {
-		return Lists.newArrayList("project_nodes_by_version");
+		return Lists.newArrayList("project_nodes_by_version", "nodes_tags");
+	}
+	
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("project_nodes", "command_executor", "commands_toolbar");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("nodes_tags", "command_executor");
 	}
 
 }
