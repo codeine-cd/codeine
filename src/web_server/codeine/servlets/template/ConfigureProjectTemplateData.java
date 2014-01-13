@@ -17,12 +17,14 @@ public class ConfigureProjectTemplateData extends TemplateData {
 	private List<String> node_discovery_strategy_options;
 	private String project_json;
 	private String nodes_discovery_script;
+	private String tags_discovery_script;
 	private String version_detection_script;
 	
 	public ConfigureProjectTemplateData(ProjectJson project) {
 		this.project_json = new Gson().toJson(project);
 		this.project_name = project.name();
 		this.node_discovery_strategy_options = Lists.newArrayList(StringUtils.getEnumNames(NodeDiscoveryStrategy.class));
+		this.tags_discovery_script = StringUtils.safeToString(project.tags_discovery_script());
 		this.nodes_discovery_script = StringUtils.safeToString(project.nodes_discovery_script());
 		this.version_detection_script = StringUtils.safeToString(project.version_detection_script());
 	}

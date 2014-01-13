@@ -1,9 +1,13 @@
 package codeine.api;
 
+import java.util.List;
+
+
 public class NodeInfo {
 
 	private String name;
 	private String alias;
+	private List<String> tags;
 
 	public NodeInfo(String name) {
 		this.name = name;
@@ -20,12 +24,20 @@ public class NodeInfo {
 
 	@Override
 	public String toString() {
-		return "NodeJson [name=" + name + ", alias=" + alias + "]";
+		return "NodeInfo [name=" + name + ", alias=" + alias + "]";
 	}
 
+	public List<String> tags() {
+		return tags;
+	}
+	
 	public String name() {
 		return name;
 	}
 
-	
+	public List<String> tags(List<String> tags) {
+		List<String> $ = this.tags;
+		this.tags = tags;
+		return $;
+	}	
 }

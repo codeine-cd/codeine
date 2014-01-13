@@ -36,7 +36,12 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ProjectStatusServlet() {
-		super("project_status", "command_history", "command_history", "project_status", "commands_toolbar");
+		super("project_status");
+	}
+	
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("command_history", "project_status", "commands_toolbar");
 	}
 	
 	@Override

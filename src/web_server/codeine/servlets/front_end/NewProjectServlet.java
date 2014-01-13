@@ -32,9 +32,20 @@ public class NewProjectServlet extends AbstractFrontEndServlet {
 	private @Inject PermissionsManager permissionsManager;
 	
 	protected NewProjectServlet() {
-		super("new_project", "command_executor", "new_project", "command_executor");
+		super("new_project");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList( "new_project", "command_executor");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList( "command_executor");
+	}
+	
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return "New Project";

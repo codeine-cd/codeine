@@ -78,6 +78,10 @@ public class PeerStatus {
 		return nodeInfo.version(version);
 	}
 
+	public List<String> updateTags(ProjectJson project, String node, String alias, List<String> tagsList) {
+		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
+		return nodeInfo.tags(tagsList);
+	}
 	public void removeNonExistMonitors(ProjectJson project, String node, String alias) {
 		List<String> monitorsNotToRemove = Lists.newArrayList();
 		for (NodeMonitor nodeMonitor : project.monitors()) {
@@ -100,5 +104,5 @@ public class PeerStatus {
 	public NodeWithMonitorsInfo nodeInfo(ProjectJson project, String node, String alias) {
 		return initStatus(project, node, alias);
 	}
-	
+
 }

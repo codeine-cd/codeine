@@ -27,7 +27,6 @@ public class ProjectNodesApiServlet extends AbstractServlet {
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
-		//List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName,versionName);
 		List<NodeTemplate> nodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, configurationManager.getProjectForName(projectName), nodesGetter, links);
 		writeResponseJson(response, nodes);
 	}

@@ -1,9 +1,44 @@
 var nodesJson;
 var versionMap;
+var activeTags = [];
 
 $(document).ready( function () {
 	getNodes();
+	
+	getTags();
 });
+
+
+
+
+function getTags() {
+	$.ajax( {
+	    type: 'GET',
+	    url: '/project-tags_json?project=' + encodeURIComponent(getProjetcName()),
+	    success: function(response) {
+	    	console.dir(response);
+	    	$('#tags_list').append($('#nodes_tags').render(jQuery.parseJSON(response)));
+	    	$('.node_tag').click(function() {
+	    		var tag_name = $(this).data("tag-name");
+	    		if ($(this).hasClass("active")) {
+	    			$(this).removeClass("active");
+	    			var index = activeTags.indexOf(tag_name);
+	    			if (index > -1) {
+	    				activeTags.splice(index, 1);
+	    			}
+	    		} else {
+	    			$(this).addClass("active");
+	    			activeTags.push(tag_name);
+	    		}
+	    		filterNodes($('#monitor_drop_down').text(), $('#nodesFilter').val());
+	    	});
+	    }, 
+	    error: function(err) {
+	      console.log('error - ' + err);
+	      toast("error", "Failed to get project tags", false);
+	    }
+    });
+}
 
 function setupFilters() {
 	filterNodes($('#monitor_drop_down').text(), $('#nodesFilter').val());
@@ -122,50 +157,57 @@ function selectMonitor(monitor) {
 }
 
 function filterNodes(monitor, filterText) {
-	console.log("filterNodes started @ " + new Date().toUTCString());
-	console.log("Filtering for monitor '" + monitor + "' , filter text is:" + filterText);
-
+	console.log("Filtering for monitor '" + monitor + "' , filter text is:" + filterText + ", active tags:" + activeTags);
 	$('[type=checkbox]').prop('checked', false);
 
-	var res = [];
-	if (monitor === "All Nodes") {
-		if (filterText === '') {
-			$('.node').show();
-			for (var item in versionMap) {
-				$('#' + getVersioHash(item) + '_num_of_nodes').text(versionMap[item].num_of_nodes);
-			}
-			return nodesJson.length;
-		} else {
-			$('.node').hide();
-			res = nodesJson.filter(function(o){return matchNodeName(o, filterText);});
+	if ((monitor === "All Nodes") && (filterText === '') && (activeTags.length == 0)) {
+		$('.node').show();
+		for (var item in versionMap) {
+			$('#' + getVersioHash(item) + '_num_of_nodes').text(versionMap[item].num_of_nodes);
 		}
-	} else {
-		$('.node').hide();
-
-		res = nodesJson.filter(function(o) {
-			if (monitor === "Any Alert") {
-				return o.failed_monitors.length > 0;
-			}
-
-			var temp =  o.failed_monitors.filter( function(a) {
-				return a.label === monitor;
-			});
-			return temp.length > 0;
-		});
-		res = res.filter(function(o){return matchNodeName(o, filterText);});
+		return nodesJson.length;
 	}
+	
+	$('.node').hide();
+	var res = nodesJson.filter(function(o) {return  doFilter(o, filterText, monitor);});
 
 	setNodesNumber(res);
-	
 
 	for (var i=0; i < res.length ; i++) {
 		$('#' + escapeSelector(res[i].node_name)).show();
 	}
-
-	console.log("filterNodes finished @ " + new Date().toUTCString());
-
 	return res.length;
 } 
+
+function doFilter(node,filterText,monitor) {
+	 return ((matchNodeName(node, filterText)) && (matchAlerts(node,monitor)) && (matchTags(node))); 
+}
+
+function matchTags(node) {
+	for(var i=0 ; i< activeTags.length ; i++) {
+		if (jQuery.inArray(activeTags[i],node.tags) === -1)
+			return false;
+	}
+	return true;
+}
+
+function matchNodeName(node, filterText) {
+	var regexp = new RegExp(filterText, 'i');
+	return node.node_alias.match(regexp) !== null;
+}
+
+function matchAlerts(node,monitor) {
+	if (monitor === "All Nodes") {
+		return true;
+	}
+	if (monitor === "Any Alert") {
+		return node.failed_monitors.length > 0;
+	}
+	var temp =  node.failed_monitors.filter( function(a) {
+		return a.label === monitor;
+	});
+	return temp.length > 0;	
+}
 
 function setNodesNumber(res) {
 	var versions = {};
@@ -212,10 +254,7 @@ function getSelectedNodes() {
 	return res;
 }
 
-function matchNodeName(node, filterText) {
-	var regexp = new RegExp(filterText, 'i');
-	return node.node_alias.match(regexp) !== null;
-}
+
 
 
 

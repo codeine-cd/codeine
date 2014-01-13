@@ -77,5 +77,4 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return $;
 	}
 
-	
 }

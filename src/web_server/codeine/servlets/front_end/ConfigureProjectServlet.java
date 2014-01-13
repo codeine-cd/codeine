@@ -31,9 +31,14 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ConfigureProjectServlet() {
-		super("configure_project", "command_history", "configure_project", "command_history");
+		super("configure_project");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("configure_project", "command_history");
+	}
+	
 	@Override 
 	protected List<String> getJsRenderTemplateFiles() {
 		return Lists.newArrayList("configure_command_parameter", "configure_project_command", "configure_project_monitor","nodes_table_row", "mail_policy_table_row", "command_startegy");

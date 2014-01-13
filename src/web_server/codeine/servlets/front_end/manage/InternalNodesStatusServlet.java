@@ -32,9 +32,19 @@ public class InternalNodesStatusServlet extends AbstractFrontEndServlet {
 	@Inject	private NodeAggregator aggregator;
 	
 	protected InternalNodesStatusServlet() {
-		super("project_status", "command_executor", "project_status","commands_toolbar");
+		super("project_status");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList( "project_status","commands_toolbar");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("command_executor");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return CODEINE_STATUS;

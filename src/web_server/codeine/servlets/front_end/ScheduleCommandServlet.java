@@ -33,7 +33,12 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 	private ScheduleInfoPostDataJson data;
 	
 	protected ScheduleCommandServlet() {
-		super("schedule_command", "command_history", "schedule_command", "command_history");
+		super("schedule_command");
+	}
+	
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("schedule_command", "command_history");
 	}
 	
 	@Override

@@ -23,9 +23,14 @@ public class ProgressiveRawOutputServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ProgressiveRawOutputServlet() {
-		super("progress_output", "command_history", "progress_output", "command_history");
+		super("progress_output");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("progress_output", "command_history");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);

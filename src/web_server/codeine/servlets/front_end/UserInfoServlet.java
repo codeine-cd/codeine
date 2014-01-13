@@ -24,9 +24,19 @@ public class UserInfoServlet extends AbstractFrontEndServlet {
 	private @Inject UsersManager usersManager;
 	
 	protected UserInfoServlet() {
-		super("user_info","command_executor", "user_info","command_executor");
+		super("user_info");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("user_info","command_executor");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("command_executor");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return "User Info";

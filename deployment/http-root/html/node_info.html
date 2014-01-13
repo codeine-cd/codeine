@@ -40,6 +40,14 @@
  		</div>
  		<br/>
  		<div class="row">
+ 			<div class="span2"><strong>Tags:</strong></div><div class="span6"> 
+			 	{{#tags}}
+			 	<span class="badge badge-info">{{this}}</span>
+ 				{{/tags}}
+ 			</div>
+ 		</div>
+ 		<br/>
+ 		<div class="row">
  			<div class="span2"><strong>Peer Status:</strong></div><div class="span6"><i data-peer-status="{{peer_status}}" class="peerStatus"></i> {{peer_status}}</div>
  		</div>
  		<br/>

@@ -40,9 +40,19 @@ public class ConfigureServlet extends AbstractFrontEndServlet
 	private @Inject IConfigurationManager configurationManager;
 
 	protected ConfigureServlet() {
-		super("configure_codeine", "command_executor", "configure_codeine", "command_executor");
+		super("configure_codeine");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("configure_codeine", "command_executor");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("command_executor");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return "Configure Codeine";

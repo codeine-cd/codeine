@@ -22,9 +22,14 @@ public class RawOutputServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected RawOutputServlet() {
-		super("raw_output", "command_history", "command_history");
+		super("raw_output");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("command_history");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);

@@ -29,8 +29,14 @@ public class LabelsServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected LabelsServlet() {
-		super("labels", "command_history", "labels", "command_history");
+		super("labels");
 	}
+	
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("labels", "command_history");
+	}
+	
 	
 	@Override
 	protected String getTitle(HttpServletRequest request) {

@@ -26,6 +26,7 @@ public class NodeInfoTemplateData extends TemplateData {
 	private List<NameAndAlias> commands;
 	private List<MonitorTemplateLink> monitors;
 	private boolean readonly;
+	private List<String> tags;
 	
 	public NodeInfoTemplateData(NodeWithMonitorsInfo node, Links linkHelper,List<NameAndAlias> commands, boolean readonly) 
 	{
@@ -35,6 +36,7 @@ public class NodeInfoTemplateData extends TemplateData {
 		this.project_name = node.projectName();
 		this.name = node.name();
 		this.alias = node.alias();
+		this.tags = node.tags();
 		this.peer_status = node.peer().status().name();
 		this.peer_address = node.peer_address();
 		monitors = Lists.newArrayList();

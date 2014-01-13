@@ -32,9 +32,14 @@ public class NodeInfoServlet extends AbstractFrontEndServlet {
 	@Inject private PermissionsManager permissionsManager;
 	
 	protected NodeInfoServlet() {
-		super("node_info", "command_history", "node_info", "command_history");
+		super("node_info");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("node_info", "command_history");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return request.getParameter(Constants.UrlParameters.NODE_NAME) + " Node Info";

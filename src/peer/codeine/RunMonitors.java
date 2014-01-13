@@ -20,6 +20,7 @@ import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredentialsHelper;
 import codeine.executer.Task;
+import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
@@ -37,6 +38,8 @@ import codeine.utils.os_process.ShellScriptWithOutput;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 public class RunMonitors implements Task {
 	private IConfigurationManager configurationManager;
@@ -91,12 +94,34 @@ public class RunMonitors implements Task {
 			}
 		}
 		updateVersion();
+		updateTags();
 	}
 
 	private void removeNonExistMonitors() {
 		projectStatusUpdater.removeNonExistMonitors(project(), node.name(), node.alias());
 	}
 
+	@SuppressWarnings("serial")
+	private void updateTags() {
+		if (project().node_discovery_startegy() != NodeDiscoveryStrategy.Script || StringUtils.isEmpty(project().tags_discovery_script())) {
+			log.info("tags discovery is not configured for project " + projectName);
+			return;
+		}
+		Map<String, String> env = Maps.newHashMap();
+		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+		ShellScriptWithOutput script = new ShellScriptWithOutput(
+				"tags_" + projectName + "_" + node.name(), project().tags_discovery_script(), pathHelper.getProjectDir(projectName), env);
+		String tags = script.execute();
+		if (tags.isEmpty()){
+			tags = "[]";
+		}
+		List<String> tagsList = new Gson().fromJson(tags, new TypeToken<List<String>>(){}.getType());
+		List<String> prevTags = projectStatusUpdater.updateTags(project(), node.name(), node.alias(), tagsList);
+		if (!tagsList.equals(prevTags)) {
+			updateStatusInMongo();
+		}
+	}
+	
 	private void updateVersion() {
 		if (StringUtils.isEmpty(project().version_detection_script())) {
 			log.info("version is not configured for project " + projectName);

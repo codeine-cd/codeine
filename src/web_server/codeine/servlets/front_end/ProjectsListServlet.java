@@ -47,7 +47,17 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 	@Inject private PermissionsManager permissionsManager;
 
 	protected ProjectsListServlet() {
-		super("projects_list","command_executor", "projects_list","command_executor");
+		super("projects_list");
+	}
+	
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("projects_list","command_executor");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("command_executor");
 	}
 
 	@Override

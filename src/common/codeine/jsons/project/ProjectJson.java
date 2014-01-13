@@ -18,6 +18,7 @@ public class ProjectJson
 	private NodeDiscoveryStrategy node_discovery_startegy = NodeDiscoveryStrategy.Configuration;
 	private List<CommandInfo> commands = Lists.newArrayList();
 	private String nodes_discovery_script;
+	private String tags_discovery_script;
 	private String version_detection_script;
 	private List<NodeInfo> nodes_info = Lists.newArrayList();
 	
@@ -118,6 +119,10 @@ public class ProjectJson
 
 	public List<NodeInfo> nodes_info() {
 		return nodes_info;
+	}
+	
+	public String tags_discovery_script() {
+		return tags_discovery_script;
 	}
 
 }

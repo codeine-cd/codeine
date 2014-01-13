@@ -27,9 +27,19 @@ public class InternalNodesServlet extends AbstractFrontEndServlet {
 	@Inject	private PermissionsManager permissionsManager;
 
 	protected InternalNodesServlet() {
-		super("project_nodes", "command_executor", "project_nodes","commands_toolbar");
+		super("project_nodes");
 	}
 
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("project_nodes","commands_toolbar");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("command_executor");
+	}
+	
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		return CODEINE_NODES;

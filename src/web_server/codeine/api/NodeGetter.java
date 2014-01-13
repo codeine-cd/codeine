@@ -3,10 +3,13 @@ package codeine.api;
 import java.util.Collection;
 import java.util.List;
 
+import codeine.configuration.IConfigurationManager;
 import codeine.jsons.labels.LabelJsonProvider;
+import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.ProjectStatus;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.version.ViewNodesFilter;
 
@@ -17,6 +20,7 @@ import com.google.inject.Inject;
 
 public class NodeGetter {
 	@Inject	private PeersProjectsStatus peersProjectsStatus;
+	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private LabelJsonProvider versionLabelJsonProvider;
 	
 	
@@ -39,6 +43,7 @@ public class NodeGetter {
 	}
 
 	public List<NodeWithMonitorsInfo> getNodes(String projectName, String versionName) {
+		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
 		versionName = versionLabelJsonProvider.versionForLabel(versionName, projectName);
 		ViewNodesFilter versionFilter = new ViewNodesFilter(versionName, Integer.MAX_VALUE, "", 0);
 		Collection<PeerStatusJsonV2> allPeers = peersProjectsStatus.peer_to_projects().values();
@@ -51,11 +56,23 @@ public class NodeGetter {
 			for (NodeWithMonitorsInfo node : project.nodes_info()) {
 				String alias = node.alias();
 				if ((versionName.equals(Constants.ALL_VERSION)) || (!versionFilter.filter(node.version(), alias))) {
+					if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration) {
+						node.tags(findTags(projectJson, node));
+					}
 					$.add(node);
 				} 
 			}
 		}
 		return $;
+	}
+
+	private List<String> findTags(ProjectJson projectJson, NodeWithMonitorsInfo node) {
+		for (NodeInfo n : projectJson.nodes_info()) {
+			if (n.name().equals(node.name())) {
+				return n.tags();
+			}
+		}
+		return Lists.newArrayList();
 	}
 
 	public List<NodeWithMonitorsInfo> getNodes(String projectName, final List<NodeWithPeerInfo> filterNodes) {

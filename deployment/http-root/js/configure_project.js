@@ -15,6 +15,7 @@ $(document).ready( function () {
 		console.log(value + " selected");
 		if (value === "Script") {
 			$('#nodes_script').removeClass("hidden");
+			$('#tags_script').removeClass("hidden");
 		} else if (value === "Configuration") {
 			$('#nodes_table').removeClass("hidden");
 		} else if (value === "Reporter") {
@@ -43,13 +44,15 @@ $(document).ready( function () {
 	registerTextAreaAutocompleteNoOutput($('.codeine_script_no_output'));//commands, monitors
 	
 	$(".chosen-select").chosen({disable_search_threshold: 10});
+	
+	$(".tags_selector").select2({tags: [], tokenSeparators: [",", " "]});
 });
 
 function registerSaveHandler() {
 	$('#save_button').click(function () {
 		console.log("Save clicked");
 		var newProjectConf = setNewProjectConfValues();
-    sendNewConfToServer(newProjectConf,goToProjectStatus);
+		sendNewConfToServer(newProjectConf,goToProjectStatus);
 		
 	});
 	
@@ -96,6 +99,7 @@ function setNewProjectConfValues() {
 			break;
 		case "Script":
 			newProjectConf["nodes_discovery_script"] = $('#nodes_discovery_script').val();
+			newProjectConf["tags_discovery_script"] = $('#tags_discovery_script').val();
 			setNewProjectMonitorsAndCommands(newProjectConf);
 			break;
 		case "Configuration":
@@ -103,10 +107,12 @@ function setNewProjectConfValues() {
 			$('#nodes_table_body').find('tr').each( function() {
 				var nameElm = $(this).children().first();
 				var aliasElm = nameElm.next();
+				var tagsElm = aliasElm.next();
+				
 				if ((nameElm.text() === enterNewNodeConst) || (aliasElm.text() === enterNewNodeConst)) {
 					return;
 				}
-				newProjectConf["nodes_info"].push({ name: nameElm.text(), alias: aliasElm.text()});
+				newProjectConf["nodes_info"].push({ name: nameElm.text(), alias: aliasElm.text(), tags: $(tagsElm).find('.tags_selector').select2("val")});
 			});
 			setNewProjectMonitorsAndCommands(newProjectConf);
 			break;
@@ -442,6 +448,7 @@ function add_new_node_line() {
 	$("#add_node_table_body").html($("#nodes_table_row").render({}));
 	$("#add_node_table_body").find("td").last().find("a").prop("title", "Add Node").removeClass("node_remove").addClass("node_add").removeClass("btn-danger").addClass("btn-info").find("i").removeClass("fa-times").addClass("fa-plus");
 	make_node_element_editable($("#add_node_table_body").find("tr").last().find('.editable'));
+	$("#add_node_table_body").find(".tags_selector").select2({tags: [], tokenSeparators: [",", " "]});
 	
 	$('.node_add').click(function() {
 		var valid = true;
@@ -457,8 +464,9 @@ function add_new_node_line() {
 			values.push($(this).html());
 		});
 		if (valid) {
-			$("#nodes_table_body").append($("#nodes_table_row").render({ name : values[0], alias : values[1]}));
+			$("#nodes_table_body").append($("#nodes_table_row").render({ name : values[0], alias : values[1], tags: $(this).parent().parent().find(".tags_selector").select2("val")}));
 			make_node_element_editable($("#nodes_table_body").find("tr").last().find('.editable'));
+			$("#nodes_table_body").find(".tags_selector").select2({tags: [], tokenSeparators: [",", " "]});
 			registerIconRemoveHandler($("#nodes_table_body").find("td").last().find("a"));
 			add_new_node_line();
 		}
@@ -497,6 +505,7 @@ function drawNodes() {
 	$("#nodes_table_body").html($("#nodes_table_row").render(project["nodes_info"]));
 	
 	make_node_element_editable($("#nodes_table_body").find('.editable'));
+	$("#nodes_table_body").find(".tags_selector").select2({tags: [], tokenSeparators: [",", " "]});
 	registerIconRemoveHandler($('.node_remove'));
 	add_new_node_line();
 }

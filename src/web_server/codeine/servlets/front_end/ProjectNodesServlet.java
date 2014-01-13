@@ -27,7 +27,7 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	private static final long serialVersionUID = 1L;
 	
 	protected ProjectNodesServlet() {
-		super("project_nodes", "command_history", "project_nodes", "command_history", "commands_toolbar");
+		super("project_nodes");
 	}
 	
 	@Override
@@ -43,7 +43,6 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		
-		//List<NodeTemplate> versionNodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, project, nodesGetter, links);
 		return new ProjectNodesTemplateData(projectName, versionName, readOnly, ProjectsStatusUtils.getCommandsName(project.commands()), ProjectsStatusUtils.getMonitorsName(project.monitors()));
 	}
 	
@@ -61,7 +60,17 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	
 	@Override
 	protected List<String> getJsRenderTemplateFiles() {
-		return Lists.newArrayList("project_nodes_by_version");
+		return Lists.newArrayList("project_nodes_by_version", "nodes_tags");
+	}
+
+	@Override
+	protected List<String> getJSFiles() {
+		return Lists.newArrayList("project_nodes", "command_history", "commands_toolbar");
+	}
+	
+	@Override
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList("nodes_tags", "command_history");
 	}
 	
 }

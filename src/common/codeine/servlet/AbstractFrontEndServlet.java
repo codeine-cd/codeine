@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,14 +43,17 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	
 	private static final Logger log = Logger.getLogger(AbstractFrontEndServlet.class);
 	private static final long serialVersionUID = 1L;
-	private List<String> jsFiles;
 	private String contentTemplateFile;
-	private String sidebarTemplateFile;
 	
-	protected AbstractFrontEndServlet(String contentTemplateFile, String sidebarTemplateFile, String... jsFiles) {
+	protected AbstractFrontEndServlet(String contentTemplateFile) {
 		this.contentTemplateFile = contentTemplateFile;
-		this.sidebarTemplateFile = sidebarTemplateFile;
-		this.jsFiles = Lists.newArrayList(jsFiles);
+	}
+	
+	
+	abstract protected List<String> getJSFiles();
+	
+	protected List<String> getSidebarTemplateFiles() {
+		return Lists.newArrayList( "command_history");
 	}
 	
 	@Override
@@ -172,7 +176,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		}
 		templateData.setNavBar(generateNavigation(request));
 		templateData.setMenu(generateMenuWithActive(request));
-		templateData.setJavascriptFiles(jsFiles);
+		templateData.setJavascriptFiles(getJSFiles());
 		templateData.setTitle(getFullTitle(request));
 		if (!StringUtils.isEmpty(globalConfigurationJson.get().server_name())) {
 				templateData.setServerName(globalConfigurationJson.get().server_name());
@@ -195,7 +199,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		return $;
 	}
 	
-	private String getMainTemplate(TemplateData data, HttpServletRequest request, final String contentTemplateFile, final String sidebarTemplateFile) {
+	private String getMainTemplate(TemplateData data, HttpServletRequest request, final String contentTemplateFile, final List<String> sidebarTemplateFiles) {
 		String contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/main.html");
 		prepareTemplateData(request, data);
 		TemplateLoader loader = new TemplateLoader() {
@@ -205,7 +209,11 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 				case "maincontent":
 					return new FileReader(new File(Constants.getResourcesDir() + "/html/" + contentTemplateFile + ".html"));
 				case "sidebar":
-					return new FileReader(new File(Constants.getResourcesDir() + "/html/" + sidebarTemplateFile + ".html"));
+					StringBuilder content = new StringBuilder();
+					for (String sidebarFile : sidebarTemplateFiles) {
+						content.append(TextFileUtils.getContents(Constants.getResourcesDir() + "/html/" + sidebarFile + ".html"));
+					}
+					return new StringReader(content.toString());
 				default: 
 					return new FileReader(new File(Constants.getResourcesDir() + "/html/" + name + ".html")); 
 				}
@@ -227,15 +235,11 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	private String getContentTemplateFile() {
 		return contentTemplateFile;
 	}
-	
-	private String getSidebarTemplateFile() {
-		return sidebarTemplateFile;
-	}
 
 	private void writeTemplateData(HttpServletRequest request, TemplateData templateData, HttpServletResponse response) {
 		PrintWriter writer = getWriter(response);
 		if (!templateData.is_empty()) {
-			String mainTemplate = getMainTemplate(templateData, request, getContentTemplateFile(), getSidebarTemplateFile());
+			String mainTemplate = getMainTemplate(templateData, request, getContentTemplateFile(), getSidebarTemplateFiles());
 			writer.write(mainTemplate);
 		}
 	}

@@ -1,6 +1,6 @@
 package codeine;
 
-import static codeine.model.Constants.*;
+import static codeine.model.Constants.apiContext;
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
 import codeine.servlets.FileGetterServlet;
@@ -11,6 +11,7 @@ import codeine.servlets.api_servlets.MonitorsStatisticsApiServlet;
 import codeine.servlets.api_servlets.NodesCommandApiServlet;
 import codeine.servlets.api_servlets.ProjectNodesApiServlet;
 import codeine.servlets.api_servlets.ProjectStatusApiServlet;
+import codeine.servlets.api_servlets.ProjectTagsApiServlet;
 import codeine.servlets.api_servlets.ProjectsListApiServlet;
 import codeine.servlets.api_servlets.ReporterServlet;
 import codeine.servlets.api_servlets.UpgradeApiServlet;
@@ -45,6 +46,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(MonitorsStatisticsApiServlet.class, apiContext(Constants.MONITORS_STATISTICS_CONTEXT));
 		serveMe(CommandExecutorApiServlet.class, apiContext(Constants.COMMANDS_EXECUTER_STATUS));
 		serveMe(ProjectNodesServlet.class, Constants.PROJECT_NODES_CONTEXT);
+		serveMe(ProjectTagsApiServlet.class, apiContext(Constants.PROJECT_TAGS_CONTEXT));
 		serveMe(ConfigureProjectServlet.class, Constants.CONFIGURE_PROJECT_CONTEXT);
 		serveMe(DeleteProjectServlet.class, Constants.DELETE_PROJECT_CONTEXT);
 		serveMe(NewProjectServlet.class, Constants.NEW_PROJECT_CONTEXT);

@@ -153,6 +153,8 @@ public class Constants
 
 	public static final String CODEINE_NODES_CONTEXT = "/codeine-nodes";
 
+	public static final String PROJECT_TAGS_CONTEXT = "/project-tags";
+
 	
 	
 	public static class UrlParameters {
