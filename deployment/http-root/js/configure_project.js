@@ -477,9 +477,6 @@ function make_mail_element_editable(elm) {
 
 function make_element_editable(elm,placeholder) {
 	elm.editable(function(value, settings) { 
-	     console.log(this);
-	     console.log(value);
-	     console.log(settings);
 	     return(value);
 	  }, { 
 	     tooltip   : 'Click to edit',
