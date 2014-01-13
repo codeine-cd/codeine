@@ -45,7 +45,6 @@ $(document).ready( function () {
 	
 	$(".chosen-select").chosen({disable_search_threshold: 10});
 	
-	$(".tags_selector").select2({tags: [], tokenSeparators: [",", " "]});
 });
 
 function registerSaveHandler() {
