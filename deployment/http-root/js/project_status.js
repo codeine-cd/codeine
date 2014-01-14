@@ -76,21 +76,6 @@ function addCommandAnnotation(annList,command) {
 	
 }
 
-function resetSelectAll() {
-	var allChecked = true;
-	var index = 1;
-	var checkbox;
-	while ((checkbox = $('#checkbox_' + index)).length > 0) {
-		if (checkbox.is(':visible') && !checkbox.is(':checked')) {
-			allChecked = false;
-			break;
-		}
-		index++;
-	}
-	$("#selectAll").prop("checked", allChecked);
-}
-
-
 $('.codeine_command').click( function() {
 	var command = $(this).data('command-name');
 	console.log("Will run commad " + command);

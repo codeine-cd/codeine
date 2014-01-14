@@ -26,24 +26,25 @@ $('[type=checkbox]').click( function() {
   resetSelectAll();
 });
 
+function allChecked() {
+	$('.panel-body').find('[type=checkbox]:visible').each(function(){
+		  if ($(this).prop('checked') != true){
+			  return false;
+		  }
+	  });
+	return true;
+}
+function hasChecked() {
+	$('.panel-body').find('[type=checkbox]:visible').each(function(){
+		if ($(this).prop('checked') == true){
+			return true;
+		}
+	});
+	return false;
+}
 function resetSelectAll() {
-  var allChecked = true;
-  var hasChecked = false;
-  var index = 1;
-  var checkbox;
-  while ((checkbox = $('#checkbox_' + index)).length > 0) {
-    if (checkbox.is(':visible') && checkbox.is(':checked')) {
-      hasChecked = true;
-    }
-    if (checkbox.is(':visible') && !checkbox.is(':checked')) {
-      allChecked = false;
-    }
-    if (hasChecked && !allChecked)
-    {
-      break;
-    }
-    index++;
-  }
+  var allChecked = allChecked();
+  var hasChecked = hasChecked();
   $("#selectAll").prop("checked", allChecked);
   if (hasChecked) {
     $('.codeine_command').removeClass("disabled");

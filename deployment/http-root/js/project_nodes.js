@@ -72,8 +72,8 @@ function getNodes() {
 	    		$('#nodes_container').append($('#project_nodes_by_version').render(versionMap[version]));
 	    	}
 	    	setupFilters();
-	    	$('#nodes_loader').fadeOut(function() {
-	    		$('#nodes_container').fadeIn();
+	    	$('#nodes_loader').fadeOut("fast", "swing", function() {
+	    		$('#nodes_container').fadeIn("fast");
 	    	});
 	    	$('#nodes_container').find('[type=checkbox]').click( function() {
 	    		  resetSelectAll();
