@@ -26,25 +26,29 @@ $('[type=checkbox]').click( function() {
   resetSelectAll();
 });
 
-function allChecked() {
+function allComboChecked() {
+	var allChecked = true;
 	$('.panel-body').find('[type=checkbox]:visible').each(function(){
 		  if ($(this).prop('checked') != true){
+			  allChecked = false;
 			  return false;
 		  }
 	  });
-	return true;
+	return allChecked;
 }
-function hasChecked() {
+function hasComboChecked() {
+	var hasChecked = false;
 	$('.panel-body').find('[type=checkbox]:visible').each(function(){
 		if ($(this).prop('checked') == true){
-			return true;
+			hasChecked = true;
+			return false;
 		}
 	});
-	return false;
+	return hasChecked;
 }
 function resetSelectAll() {
-  var allChecked = allChecked();
-  var hasChecked = hasChecked();
+  var allChecked = allComboChecked();
+  var hasChecked = hasComboChecked();
   $("#selectAll").prop("checked", allChecked);
   if (hasChecked) {
     $('.codeine_command').removeClass("disabled");
