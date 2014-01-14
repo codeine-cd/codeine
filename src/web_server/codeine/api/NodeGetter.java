@@ -56,7 +56,7 @@ public class NodeGetter {
 			for (NodeWithMonitorsInfo node : project.nodes_info()) {
 				String alias = node.alias();
 				if ((versionName.equals(Constants.ALL_VERSION)) || (!versionFilter.filter(node.version(), alias))) {
-					if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration) {
+					if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration && !projectName.equals(Constants.CODEINE_NODES_PROJECT_NAME)) {
 						node.tags(findTags(projectJson, node));
 					}
 					$.add(node);
