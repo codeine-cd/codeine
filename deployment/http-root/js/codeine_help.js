@@ -50,6 +50,7 @@ var helpStrings = {
   "preventOverrideHelp" : "If checked, when executing the command user will not be able to change the configuration below",
   "commandHistoryHelp" : "All the currently running and finished commands of the selected project",
   "commandExecutorHelp" : "All the currently running commands on Codeine server from all projects",
+  "nodeTagsHelp" : "Tags on nodes. Press a tag to filter only nodes tagged with it.",
   "emailHelp" : "Codeine will notify on failing monitors to configured users. "
       + "<br/><br/><strong>'Immediately'</strong> - send mail immediately after a monitor has failed"
       + "<br/><br/><strong>'Hourly'/'Daily'</strong> - send mail after a monitor has failed, Codeine will aggregate the notifications to send them on the specified frequency",
@@ -60,7 +61,7 @@ var helpStrings = {
   "discoveryScriptHelp" : "Type a shell script to discover nodes for the project. The script runs on each individual Codeine peer <br/><br/>"
       + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[{name:\"&lt;name&gt;\", alias:\"&lt;alias&gt;\"}, ...]</pre> <br/>"
       + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>",
-  "tagDiscoveryScriptHelp" : "Type a shell script to discover tags for nodes of the project. The script runs on each individual Codeine peer <br/><br/>"
+  "tagsdiscoveryScriptHelp" : "Type a shell script to discover tags for nodes of the project. The script runs on each individual Codeine peer <br/><br/>"
     	  + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[\"&lt;tag-string&gt;\", ...]</pre> <br/>"
     	  + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
   "commandScriptHelp" : "Type a shell script to execute on nodes<br/><br/>"
