@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -165,8 +165,7 @@ public class RunMonitors implements Task {
 	private void runMonitor(NodeMonitor monitor) {
 		boolean hasCredentials = hasCredentials(monitor);
 		List<String> cmd = buildCmd(monitor, hasCredentials);
-		List<String> cmdForOutput = hasCredentials ? buildCmd(monitor, false) : cmd;
-		log.info("will execute " + cmdForOutput);
+		log.info("will execute " + cmd);
 		log.info("will execute encoded " + cmd);
 		Stopwatch stopwatch = new Stopwatch().start();
 		Result res = null;
@@ -174,14 +173,14 @@ public class RunMonitors implements Task {
 			Map<String, String> map = Maps.newHashMap();
 			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
 			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
-			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).cmdForOutput(cmdForOutput).env(map).build().execute();
+			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).env(map).build().execute();
 		} catch (Exception e) {
 			res = new Result(Constants.ERROR_MONITOR, e.getMessage());
 			log.debug("error in monitor", e);
 		}
 		stopwatch.stop();
 		// long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-		writeResult(res, monitor, stopwatch, cmdForOutput);
+		writeResult(res, monitor, stopwatch);
 		String result = String.valueOf(res.success());
 		MonitorStatusInfo monitorInfo = new MonitorStatusInfo(monitor.name(), result);
 		String previousResult = updateStatusInDatastore(monitorInfo);
@@ -234,8 +233,13 @@ public class RunMonitors implements Task {
 	private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
 		String fileName = pathHelper.getMonitorsDir(project().name()) + "/" + c.name();
 		if (c.script_content() != null) {
+			if (null != shellScript){
+				log.warn("'shellScript' should be null but not", new RuntimeException());
+			}
+			fileName += node.name();
 			shellScript = new ShellScript(fileName, c.script_content());
 			fileName = shellScript.create();
+			log.info("file is " + fileName);
 		}
 		else if (FilesUtils.exists(fileName)){ //TODO remove after build 1100
 			log.warn("monitor is in old format " + fileName);
@@ -262,8 +266,7 @@ public class RunMonitors implements Task {
 		return new CredentialsHelper().encode(value1);
 	}
 
-	private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch,
-			List<String> cmd) {
+	private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch) {
 		String file = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name()) + "/" + HttpUtils.specialEncode(collector.name())
 				+ ".txt";
 		log.debug("Output for " + collector.name() + " will be written to: " + file);
