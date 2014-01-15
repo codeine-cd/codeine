@@ -1,30 +1,30 @@
-
 var lines = 0;
 var interval;
 
-$(document).ready( function () {
+$(document).ready(function() {
 	addLines();
-	interval =  setInterval(addLines, 5000);
+	interval = setInterval(addLines, 5000);
 });
 
 function addLines() {
-  console.log("addLines");
-  $.get("/file-getter?project=" + encodeURIComponent(projectName) + "&path=" + encodeURIComponent(path) + "&line=" + encodeURIComponent(lines), function( data ) {
-    var obj = JSON.parse(data);
-    $("#output_pre" ).append( obj.lines.join("\n"));
-    if (obj.lines.length > 0)
-    {
-      $("#output_pre" ).append("\n");
-    }
-    
-    lines += obj.lines.length;
-    if ($(window).scrollTop() == $(document).height()-$(window).height()){
-    	$(document).scrollTop($(document).height());
-    }
-    if (obj.eof) {
-      clearInterval(interval);
-      $('#output_spinner').fadeOut();
-    }
-  }); 
-     
+	console.log("addLines");
+	$.get("/file-getter?project=" + encodeURIComponent(projectName) + "&path="
+			+ encodeURIComponent(path) + "&line=" + encodeURIComponent(lines),
+			function(data) {
+				var scrolledToBottom = ($(window).scrollTop() == $(document).height() - $(window).height());
+				var obj = JSON.parse(data);
+				$("#output_pre").append(obj.lines.join("\n"));
+				if (obj.lines.length > 0) {
+					$("#output_pre").append("\n");
+				}
+				lines += obj.lines.length;
+				if (scrolledToBottom) {
+					$(document).scrollTop($(document).height());
+				}
+				if (obj.eof) {
+					clearInterval(interval);
+					$('#output_spinner').fadeOut();
+				}
+			});
+
 }
