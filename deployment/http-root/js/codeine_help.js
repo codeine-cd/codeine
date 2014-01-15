@@ -58,8 +58,11 @@ var helpStrings = {
       + "<br/><br/><strong>'Reporter'</strong> - nodes are dynmacillay created when they are reporting to Codeine via Codeine api"
       + "<br/><br/><strong>'Script'</strong> - nodes are dinamically discovered by a script",
   "discoveryScriptHelp" : "Type a shell script to discover nodes for the project. The script runs on each individual Codeine peer <br/><br/>"
-      + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>{nodes:[{name:\"&lt;name&gt;\", alias:\"&lt;alias&gt;\"}, ...]}</pre> <br/>"
+      + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[{name:\"&lt;name&gt;\", alias:\"&lt;alias&gt;\"}, ...]</pre> <br/>"
       + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>",
+  "tagDiscoveryScriptHelp" : "Type a shell script to discover tags for nodes of the project. The script runs on each individual Codeine peer <br/><br/>"
+    	  + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[\"&lt;tag-string&gt;\", ...]</pre> <br/>"
+    	  + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
   "commandScriptHelp" : "Type a shell script to execute on nodes<br/><br/>"
       + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
   "monitorsConfigureHelp" : "Monitors used to detect malfunctions and errors on the running nodes.<br/><br/>"

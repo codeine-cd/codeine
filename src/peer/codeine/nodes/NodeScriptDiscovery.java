@@ -1,11 +1,13 @@
 package codeine.nodes;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.NodeInfo;
 import codeine.configuration.PathHelper;
 import codeine.jsons.nodes.NodeListJson;
 import codeine.jsons.project.ProjectJson;
@@ -15,6 +17,7 @@ import codeine.utils.os_process.ShellScriptWithOutput;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 public class NodeScriptDiscovery {
 
@@ -35,7 +38,13 @@ public class NodeScriptDiscovery {
 		}
 		NodeListJson nodeListJson = null;
 		try {
-			nodeListJson = gson.fromJson(result, NodeListJson.class);
+			if (result.trim().startsWith("{")) { //OLD FORMAT 
+				//TODO remove after build 150, and all projects converted
+				nodeListJson = gson.fromJson(result, NodeListJson.class);
+			} else {
+				List<NodeInfo> fromJson = gson.fromJson(result, new TypeToken<List<NodeInfo>>(){}.getType());
+				nodeListJson = new NodeListJson(fromJson);
+			}
 		} catch (JsonSyntaxException e) {
 			log.warn("json is " + result);
 			log.warn("failed to parse nodes from discovery in project " + projectJson.name(), e);

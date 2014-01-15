@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -109,6 +109,7 @@ public class RunMonitors implements Task {
 		}
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project().name());
 		ShellScriptWithOutput script = new ShellScriptWithOutput(
 				"tags_" + projectName + "_" + node.name(), project().tags_discovery_script(), pathHelper.getProjectDir(projectName), env);
 		String tags = script.execute();

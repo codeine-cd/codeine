@@ -10,6 +10,13 @@ public class NodeListJson {
 	
 	private List<NodeInfo> nodes = Lists.newArrayList();
 
+	public NodeListJson() {
+		
+	}
+	public NodeListJson(List<NodeInfo> nodes) {
+		this.nodes = nodes;
+	}
+
 	public List<NodeInfo> nodes() {
 		return nodes;
 	}
