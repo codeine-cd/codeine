@@ -11,7 +11,7 @@ function addLines() {
 	$.get("/file-getter?project=" + encodeURIComponent(projectName) + "&path="
 			+ encodeURIComponent(path) + "&line=" + encodeURIComponent(lines),
 			function(data) {
-				var scrolledToBottom = ($(window).scrollTop() == $(document).height() - $(window).height());
+				var scrolledToBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
 				var obj = JSON.parse(data);
 				$("#output_pre").append(obj.lines.join("\n"));
 				if (obj.lines.length > 0) {
