@@ -16,7 +16,7 @@ $(document).ready( function () {
 	  		$("#myTabContent").html("<div class='row'><div class='span9 text-center'><h2 class='center'>- No Projects found -</h2></div></div>");
 	  	}
 	}
-	else if (($('.codeine_project').length === 0) && (isUserLogged()) && (isAdmin)) {
+	else if (($('.codeine_project').length === 0) && (isUserLogged() || authentication_method === 'Disabled') && (isAdmin)) {
 		displayAlert("No configured projects, press <a href='/new-project'>'New Project'</a> to create one.", "warning");
 		if ($(".codeine_project").length === 0) {
 			$("#myTabContent").html("<div class='row'><div class='span9 text-center'><h2 class='center'>- No Projects -</h2></div></div>");
