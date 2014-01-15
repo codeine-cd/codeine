@@ -165,7 +165,7 @@ function filterNodes(monitor, filterText) {
 	if ((monitor === "All Nodes") && (filterText === '') && (activeTags.length == 0)) {
 		$('.node').show();
 		for (var item in versionMap) {
-			$('#' + getVersioHash(item) + '_num_of_nodes').text(versionMap[item].num_of_nodes);
+			updateNodesNumber(item, versionMap[item].num_of_nodes);
 		}
 		return nodesJson.length;
 	}
@@ -220,10 +220,18 @@ function setNodesNumber(res) {
 		versions[res[i].version] = versions[res[i].version] + 1;
 	}
 	for(var key in versions) {
-		$('#' + getVersioHash(key) + '_num_of_nodes').text(versions[key]);	
+		updateNodesNumber(key,versions[key]);
 	}
 }
 
+function updateNodesNumber(version,number) {
+	$('#' + getVersioHash(version) + '_num_of_nodes').text(number);
+	if (number === 0) {
+		$('#' + getVersioHash(version) + '_row').fadeOut('fast');
+	} else {
+		$('#' + getVersioHash(version) + '_row').fadeIn('fast');
+	} 
+}
 
 $('.codeine_command').click( function() {
 	var command = $(this).data('command-name');
