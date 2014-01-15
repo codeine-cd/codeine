@@ -212,11 +212,19 @@ function renderTemplate(tmplName, targetSelector, data, callback) {
         return htmlString;
       });
 }
-
+$("#searchValue").bind('keypress', function(e) {
+	var code = e.keyCode || e.which;
+	 if(code == 13) { //Enter keycode
+		 doSearch();
+	 }
+});
+function doSearch(){
+	var val = $("#searchValue").val();
+	console.log("Will search for " + val);
+	location.href = "/?projectSearch=" +  val;
+}
 $("#projectSearch").click( function() {
-	  var val = $("#searchValue").val();
-	  console.log("Will search for " + val);
-	  location.href = "/?projectSearch=" +  val;
+	doSearch();
 }); 
 
 function escapeSelector(selector) {
