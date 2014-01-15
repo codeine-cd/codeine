@@ -16,6 +16,9 @@ $(document).ready(function(){
 	} else {
 	  $('#configuration').addClass("hidden");
 	}
+	if ($(".node_row").length <= 1) {
+		$(".immediatelyControl").addClass("hidden");
+	}
 	$('.progressiveControl').addClass('hidden');
 	
 	if (command["parameters"].length == 0){
