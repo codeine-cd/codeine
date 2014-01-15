@@ -123,7 +123,9 @@ public class AllNodesCommandExecuter {
 				return n.alias();
 			}
 		};
-		writeLine("failed nodes: " + StringUtils.collectionToString(commandDataJson.fail_list(), f));
+		if (!commandDataJson.fail_list().isEmpty()) {
+			writeLine("failed nodes: " + StringUtils.collectionToString(commandDataJson.fail_list(), f));
+		}
 		writeLine("=========> aggregate-command-statistics (fail/total): " + fail + "/" + total + "\n");
 	}
 
