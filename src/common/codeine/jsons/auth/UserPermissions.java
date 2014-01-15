@@ -8,11 +8,11 @@ import com.google.common.collect.Sets;
 public class UserPermissions {
 
 	
+	private String username;
 	private boolean administer;
 	private Set<String> read_project = Sets.newHashSet();
 	private Set<String> configure_project = Sets.newHashSet();
 	private Set<String> command_project = Sets.newHashSet();
-	private String username;
 	
 	protected UserPermissions() {
 		super();
@@ -59,4 +59,15 @@ public class UserPermissions {
 	public boolean canConfigure(String projectName) {
 		return isSetMatch(configure_project, projectName) || isAdministrator();
 	}
+
+	@Override
+	public String toString() {
+		return "UserPermissions [username=" + username + ", administer=" + administer + ", read_project="
+				+ read_project + ", configure_project=" + configure_project + ", command_project=" + command_project
+				+ "]";
+	}
+
+	
+	
+	
 }

@@ -10,10 +10,9 @@ import codeine.db.mysql.connectors.AlertsMysqlConnector;
 import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.jsons.auth.IdentityConfJson;
-import codeine.jsons.auth.PermissionsConfJson;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.UserPermissionsJsonStore;
-import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.labels.LabelJsonFromFileProvider;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.model.Constants;
@@ -44,7 +43,7 @@ public class CodeineGeneralModule extends AbstractModule
 		//bind(GlobalConfigurationJson.class).toProvider(new GlobalConfigurationJsonStore()).in(Scopes.SINGLETON);
 		bind(GlobalConfigurationJsonStore.class).in(Scopes.SINGLETON);
 		bind(IdentityConfJson.class).toProvider(new IdentityConfJsonProvider()).in(Scopes.SINGLETON);
-		bind(PermissionsConfJson.class).toProvider(new UserPermissionsJsonStore()).in(Scopes.SINGLETON);
+		bind(UserPermissionsJsonStore.class).in(Scopes.SINGLETON);
 		bind(ExperimentalConfJsonStore.class).in(Scopes.SINGLETON);
 	}
 
