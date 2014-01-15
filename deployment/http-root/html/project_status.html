@@ -45,6 +45,12 @@
 <div class="panel panel-default">
 	<div class="panel-heading"><strong>{{project_name}} Project Status</strong></div>
  	<div class="panel-body">
+ 		<div class="row">
+			<div class="span8">
+				<a href="{{project_nodes_context}}?version=All%20versions&project={{project_name_encoded}}"><strong>Total Nodes:</strong> <span class="badge badge-success">{{total}}</span></a>
+			</div>
+		</div>
+		<hr/>
  	{{#version}}
 		<div class="row">
 			<form class="form-inline span9" style="margin-bottom: 0px;"><fieldset>
@@ -72,12 +78,8 @@
 			</fieldset></form>
 		</div>
 	{{/version}}
-		<hr/>
-		<div class="row">
-			<div class="span8">
-				<a href="{{project_nodes_context}}?version=All%20versions&project={{project_name_encoded}}"><strong>Total Nodes:</strong> <span class="badge badge-success">{{total}}</span></a>
-			</div>
-		</div>
+		
+		
 	</div>
 </div>
 <div class="row">
