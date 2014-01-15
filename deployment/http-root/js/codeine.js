@@ -212,6 +212,34 @@ function renderTemplate(tmplName, targetSelector, data, callback) {
         return htmlString;
       });
 }
+//$("#searchValue").select2({
+//		placeholder: "Enter a project name",
+//		minimumInputLength: 1,
+//		ajax: { 
+//	        url: "/projects_json",
+//	        dataType: 'json',
+//	        data: function(term,page) {
+//	        	return {
+//	        		projectSearch: term
+//        		};
+//	        },
+//	        results: function (data, page) {
+//	        	console.log("results: ");
+//	        	console.dir(data);
+//	            return {results: data};
+//	        }
+//	    },
+//	    formatResult: function(object, container, query) {
+//	    	return object.name; 
+//	},
+//	
+//});
+
+function matchProjectName(project, term) {
+	var regexp = new RegExp(term, 'i');
+	return project.name.match(regexp) !== null;
+}
+
 $("#searchValue").bind('keypress', function(e) {
 	var code = e.keyCode || e.which;
 	 if(code == 13) { //Enter keycode
