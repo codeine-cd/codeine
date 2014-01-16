@@ -1,5 +1,7 @@
 # Codeine
 
+[![Build Status](https://travis-ci.org/Intel-IT/codeine.png?branch=master)](https://travis-ci.org/Intel-IT/codeine)
+
 ## Overview
 Codeine is a Continuous Deployment tool that enables teams to deploy their product faster and safer using automation.
 Continuous Deployment is an emergin agile paradigm. Continuous deployment allows developers to deploy their product continuously and gradually, thus reducing risk and time to market, and improving the products developed using that paradigm.
