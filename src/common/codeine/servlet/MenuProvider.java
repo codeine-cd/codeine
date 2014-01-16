@@ -38,8 +38,8 @@ public class MenuProvider {
 	public List<TemplateLinkWithIcon> getProjectMenu(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		ArrayList<TemplateLinkWithIcon> $ = Lists.newArrayList(new TemplateLinkWithIcon("Status", UrlUtils.buildUrl(Constants.PROJECT_STATUS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)) ,"statusMenuItem","fa fa-signal"),
-								  new TemplateLinkWithIcon("Nodes", UrlUtils.buildUrl(Constants.PROJECT_NODES_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName,Constants.UrlParameters.VERSION_NAME, Constants.ALL_VERSION)), "nodesMenuItem", "fa fa-list-alt"),
-								  new TemplateLinkWithIcon("Labels", UrlUtils.buildUrl(Constants.LABELS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)), "lablesMenuItem","fa fa-tags")
+								  new TemplateLinkWithIcon("Nodes", UrlUtils.buildUrl(Constants.PROJECT_NODES_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName,Constants.UrlParameters.VERSION_NAME, Constants.ALL_VERSION)), "nodesMenuItem", "fa fa-list-alt")
+//								  new TemplateLinkWithIcon("Labels", UrlUtils.buildUrl(Constants.LABELS_CONTEXT, ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, projectName)), "lablesMenuItem","fa fa-tags")
 								  
 				);
 		if (permissionsManager.isAdministrator(request)) {
