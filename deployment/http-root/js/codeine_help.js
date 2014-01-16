@@ -65,10 +65,11 @@ var helpStrings = {
     	  + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[\"&lt;tag-string&gt;\", ...]</pre> <br/>"
     	  + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
   "commandScriptHelp" : "Type a shell script to execute on nodes<br/><br/>"
-      + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
+	  + "Parameters will be provided to the script as <strong>Environment Variables</strong>.<br/>"
+      + "In addition the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
   "monitorsConfigureHelp" : "Monitors used to detect malfunctions and errors on the running nodes.<br/><br/>"
       + "Codeine runs the monitors periodically on all nodes, and notify when a node fails",
-  "versionHelp" : "Type a shell script to specify the version of each node.",
+  "versionHelp" : "A version will be reported by each node",
   "minIntervalHelp" : "The minimal interval that Codeine will run the monitor.<br/><br/>"
       + "This option is good when the monitor execution itself is time consuming or may cause load on the node itself and hence should not execurte in high frequency.<br/><br/>"
       + "Specify an <strong>integer in minutes</strong>. Default is less than a minute.",
@@ -79,7 +80,7 @@ var helpStrings = {
   "versionScriptHelp" : "Type a shell script to specify the version the node.<br/><br/>"
       + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> and should contain the version number (e.g: 1.0.3).<br/><br/>"
       + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
-  "tabsConfigureHelp" : "Enables separate view for a group of projects",
+  "tabsConfigureHelp" : "Enables separate view for a group of projects in the main page of Codeine",
   "serverNameHelp" : "A name to be displayed when accessing UI or on mail messages",
   "webServerHostHelp" : "Full host name of the web server",
   "webServerPortHelp" : "Port of the web server (requires restart)",
@@ -92,7 +93,7 @@ var helpStrings = {
   "AdminMailConfigureHelp" : "The mail of the admin of Codeine",
   "AuthenticationMethodConfigureHelp" : "The way Codeine will authenticate users.<br/><strong>Disabled</strong> - No authentication<br/><strong>Builtin</strong> - Codeine internal database will store users<br/><strong>WindowsCredentials</strong> - Using spnego to authenticate users<br/>",
   "rolesConfigureHelp" : "Internal domains for windows credentials",
-  "permissionsConfigureHelp" : "Configure access rights for the users of Codeine",
+  "permissionsConfigureHelp" : "Configure access priviliges for the users of Codeine",
   "tabExpressionHelp" : "Comma separated list of project names or regular expressions",
   "adminPermissionsConfigureHelp" : "Is administrator of Codeine",
   "viewProjectPermissionsConfigureHelp" : "List of projects or regular expressions that the user can view only",

@@ -72,7 +72,7 @@ public class TemplateData {
 	}
 
 	public void setServerName(String serverName) {
-		server_name = server_name + " - " + serverName;
+		server_name = serverName;
 	}
 	
 	public void setTitle(String title) {
