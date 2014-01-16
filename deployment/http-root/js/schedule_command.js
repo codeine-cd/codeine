@@ -6,11 +6,11 @@ $(document).ready(function(){
 	// config values
 	updateUiInput('duration');
 	updateUiInput('concurrency');
-  updateUiInput('error_percent_val');
-  updateUiSelect('ratio');
-  updateUiSelect('duration_units');
-  updateUiSelect('command_strategy');
-  updateUiCheckbox('stop_on_error');
+	updateUiInput('error_percent_val');
+	updateUiSelect('ratio');
+	updateUiSelect('duration_units');
+	updateUiSelect('command_strategy');
+	updateUiCheckbox('stop_on_error');
 	if (!command['prevent_override']) {
 	  $('#configuration').removeClass("hidden");
 	} else {
@@ -28,14 +28,6 @@ $(document).ready(function(){
   	renderTemplate('command_parameter', $("#parameters") , command["parameters"], function() {
   	  $("[id^=param_selection_]").chosen({disable_search_threshold: 10});
   	  
-  	  $('[id^=param_string_]').each(function() {
-  	    validateCommandParam(this);
-  	  });
-  	  
-  	  $('[id^=param_string_]').change(function() {
-  	    validateCommandParam(this);
-  	  });
-  	  
   	  $('[id^=help_param').each(function() {
   	    $(this).popover({ content: $(this).data("help-content"), html: false });
   	  });
@@ -43,30 +35,6 @@ $(document).ready(function(){
 	}
 	setUI();
 });
-
-
-function validateCommandParam(input) {
-  var expr = $(input).data("validation-exp");
-  var value = $(input).val();
-  var regExp = new RegExp(expr,"g");
-  if (!regExp.test(value)) {
-    console.log("Value '" + value + "' is not ok! [Req Exp = " + expr + "]");
-    parametersState[input.id] = false;
-    $(input).closest('.control-group').removeClass("success").addClass("error");
-  } else {
-    parametersState[input.id] = true;
-    $(input).closest('.control-group').removeClass("error").addClass("success");
-  } 
-  $('#submitCommand').prop('disabled', !isAllParamsValid());
-}
-
-function isAllParamsValid() {
-  for (var param in parametersState) {
-    if (parametersState[param] === false) 
-      return false;
-  }
-  return true;
-}
 
 function updateUiCheckbox(id){
   if (command[id]){
@@ -90,7 +58,7 @@ $('#command_strategy').change(function() {
 	setUI();
 });
 
-$('#submitCommand').click(function() {
+$('#commandForm').submit(function() {
 	var parameters = {};
 	parameters["command_info"] = {};
 	parameters["command_info"]["parameters"] = [];
