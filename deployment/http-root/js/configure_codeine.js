@@ -110,6 +110,8 @@ $('#add_tab').click(function() {
 	console.dir(new_tab);
 	view_config.push(new_tab);
 	drawTabs();
+	$('#new_tab_name').text('');
+	$('#new_tab_exp').find('.exp_selector').select2('data', null);
 });
 
 
