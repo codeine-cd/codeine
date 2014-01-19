@@ -29,6 +29,7 @@ public class CommandLogApiServlet extends AbstractServlet {
 		for (CommandStatusJson commandStatusJson : allCommands) {
 			CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
 			c.can_cancel(permissionsManager.canCommand(c.project(), request));
+			allCommandsWithPermissions.add(c);
 		}
 		writeResponseJson(response, allCommandsWithPermissions);
 	}

@@ -28,6 +28,7 @@ public class CommandExecutorApiServlet extends AbstractServlet {
 		for (CommandStatusJson commandStatusJson : active) {
 			CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
 			c.can_cancel(permissionsManager.canCommand(c.project(), request));
+			activeWithPermissions.add(c);
 		}
 		writeResponseJson(response, activeWithPermissions);
 	}

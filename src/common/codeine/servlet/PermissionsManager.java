@@ -85,7 +85,7 @@ public class PermissionsManager {
 		}
 		
 		String username = userPrincipal.getName();
-		log.info("handling request from user " + username);
+		log.debug("handling request from user " + username);
 		if (username.contains("@")){
 			username = username.substring(0, username.indexOf("@"));
 		}
@@ -93,7 +93,7 @@ public class PermissionsManager {
 		String viewas = request.getParameter(Constants.UrlParameters.VIEW_AS);
 		if (!StringUtils.isEmpty(viewas) && permissionConfJson.get().get(username).isAdministrator()) {
 			CodeineUser user = usersManager.user(viewas);
-			log.info("Using VIEW_AS Mode - " + user.username());
+			log.debug("Using VIEW_AS Mode - " + user.username());
 			return user.username();
 		}
 		
