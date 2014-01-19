@@ -1,6 +1,6 @@
 $(document).ready( function () {
 	
-	$('#new_project').find('form').find('input').change(function() {
+	$('#new_project').find('form').find('input').keypress(function() {
 		validate();
 	});
 	
