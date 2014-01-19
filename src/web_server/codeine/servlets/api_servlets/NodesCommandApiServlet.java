@@ -30,15 +30,24 @@ public class NodesCommandApiServlet extends AbstractServlet {
 	@Inject private PermissionsManager permissionsManager;
 	
 	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
+		String projectName = commandData.command_info().project_name();
+		if (!permissionsManager.canCommand(projectName, request)){
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("NodesCommandServlet request");
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		boolean redirect = Boolean.valueOf(request.getParameter(Constants.UrlParameters.REDIRECT));
 		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
 		String projectName = commandData.command_info().project_name();
-		if (!permissionsManager.canCommand(projectName, request)){
-			throw new RuntimeException("no command permission for user on project " + projectName);
-		}
+		
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
 		overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
