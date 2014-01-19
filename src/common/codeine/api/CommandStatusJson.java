@@ -15,6 +15,7 @@ public class CommandStatusJson {
 	private long date_long;
 	private long id;
 	private boolean finished;
+	private boolean can_cancel;
 	
 	public CommandStatusJson(String name, String link, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished) {
 		super();
@@ -50,11 +51,17 @@ public class CommandStatusJson {
 		return name;
 	}
 
+	public void can_cancel(boolean can_cancel) {
+		this.can_cancel = can_cancel;
+	}
+
 	@Override
 	public String toString() {
 		return "CommandStatusJson [name=" + name + ", link=" + link + ", project=" + project + ", nodes=" + nodes
 				+ ", successPercent=" + successPercent + ", failPercent=" + failPercent + ", date=" + date
-				+ ", date_long=" + date_long + ", id=" + id + ", finished=" + finished + "]";
+				+ ", date_long=" + date_long + ", id=" + id + ", finished=" + finished + ", can_cancel=" + can_cancel
+				+ "]";
 	}
+	
 	
 }

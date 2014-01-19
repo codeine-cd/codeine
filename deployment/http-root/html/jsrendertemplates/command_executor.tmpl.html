@@ -8,9 +8,11 @@
 	</a>
 	{{else}}
 	<span style="font-size: smaller;">
+		{{if can_cancel}}
 		<div class="deleteCommand" data-id="{{:id}}" data-project="{{:project}}">
 		<i class="fa fa-times-circle error fa-lg"></i>
 		</div>
+		{{/if}}
 		<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
 			{{:name}} - {{:date}}
 		</a>
