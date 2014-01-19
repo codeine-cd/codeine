@@ -121,7 +121,7 @@ $('#view_config_form').submit(function(event) {
 	$.ajax({
         type: 'POST',
         url: '/configure?section=view_configuration',
-        data:  { data : JSON.stringify(view_config)},
+        data:  { data : JSON.stringify(view_config, undefined, 2)},
         success: function () {
         	toast("success", "Codeine View Configuration was Saved",true);
         },
