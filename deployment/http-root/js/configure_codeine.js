@@ -83,7 +83,7 @@ function drawTabs() {
 		}
 	});
 	
-	$('.editable').editable(function(value, settings) { 
+	$('#tabs_table_body').find('.editable').editable(function(value, settings) { 
         return(value);
      }, { 
         tooltip   : 'Click to edit',
@@ -98,11 +98,11 @@ function drawTabs() {
 }
 
 $('#add_tab').click(function() {
-	var tab_name = $('#new_tab_name').text();
-	var tab_exp = $('#new_tab_exp').text();
+	var tab_name = $('#new_tab_name').val();
+	var tab_exp = $('#new_tab_exp').find('.exp_selector').select2('val');
 	var new_tab = { "name" : tab_name, "exp" : []};
 	
-	var values = tab_exp.split(",");
+	var values = tab_exp;
 	for (var i=0; i<values.length ; i++) {
 		new_tab["exp"].push(values[i]);
 	}
@@ -110,7 +110,7 @@ $('#add_tab').click(function() {
 	console.dir(new_tab);
 	view_config.push(new_tab);
 	drawTabs();
-	$('#new_tab_name').text('');
+	$('#new_tab_name').val('');
 	$('#new_tab_exp').find('.exp_selector').select2('data', null);
 });
 

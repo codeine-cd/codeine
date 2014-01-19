@@ -23,4 +23,11 @@ public class ProjectsTab {
 	public Collection<String> exp() {
 		return Collections.unmodifiableCollection(exp);
 	}
+
+	@Override
+	public String toString() {
+		return "ProjectsTab [name=" + name + ", exp=" + exp + "]";
+	}
+	
+	
 }
