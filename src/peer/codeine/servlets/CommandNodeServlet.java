@@ -187,4 +187,9 @@ public class CommandNodeServlet extends AbstractServlet
 	private CommandInfo getCommand(String command, String projectName) {
 		return configurationManager.getProjectForName(projectName).getCommand(command);
 	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

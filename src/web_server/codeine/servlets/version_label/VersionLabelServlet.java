@@ -19,8 +19,14 @@ public class VersionLabelServlet extends AbstractServlet {
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("VersionsServlet request");
-		String projectName = request.getParameter("project");
+		String projectName = projectName(request);
 		String label = request.getParameter("label");
 		getWriter(response).write(versionLabelJsonProvider.versionForLabel(label, projectName));
 	}
+
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }
+

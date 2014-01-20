@@ -36,5 +36,10 @@ public class VersionsMappingServlet extends AbstractServlet {
 		PrintWriter writer = getWriter(resp);
 		writer.println(gson().toJson(versionsMapping));
 	}
+
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 	
 }

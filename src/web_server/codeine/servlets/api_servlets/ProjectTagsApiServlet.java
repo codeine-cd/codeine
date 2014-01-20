@@ -81,5 +81,8 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 		int count;
 	}
 	
-
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }

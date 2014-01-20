@@ -21,4 +21,8 @@ public class ProjectStatusApiServlet extends AbstractServlet {
 		writeResponseJson(response, aggregator.aggregate(projectName));
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }

@@ -73,4 +73,9 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
 		return getMenuProvider().getProjectMenu(request);
 	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }

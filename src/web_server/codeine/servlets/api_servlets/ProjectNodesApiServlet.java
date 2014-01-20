@@ -31,5 +31,8 @@ public class ProjectNodesApiServlet extends AbstractServlet {
 		writeResponseJson(response, nodes);
 	}
 	
-	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }

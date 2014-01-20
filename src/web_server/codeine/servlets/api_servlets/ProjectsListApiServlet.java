@@ -51,4 +51,8 @@ public class ProjectsListApiServlet extends AbstractServlet
 		return Lists.newArrayList(Iterables.filter(configuredProjects, type));
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

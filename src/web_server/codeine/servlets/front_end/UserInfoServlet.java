@@ -60,4 +60,9 @@ public class UserInfoServlet extends AbstractFrontEndServlet {
 		return getMenuProvider().getMainMenu(request);
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
+
 }

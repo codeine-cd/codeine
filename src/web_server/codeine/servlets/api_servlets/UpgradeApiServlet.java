@@ -28,4 +28,8 @@ public class UpgradeApiServlet extends AbstractServlet {
 		writer.write(r.output);
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return isAdministrator(request);
+	}
 }

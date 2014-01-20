@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.exceptions.UnAuthorizedException;
+import codeine.model.Constants;
 import codeine.utils.ServletUtils;
 
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Inject private Gson gson;
+	private @Inject PermissionsManager permissionsManager;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,9 +66,7 @@ public abstract class AbstractServlet extends HttpServlet{
 		}
 	}
 
-	protected boolean checkPermissions(HttpServletRequest request) {
-		return true;
-	}
+	protected abstract boolean checkPermissions(HttpServletRequest request) ;
 	
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
 		writeNotFound(request, response);
@@ -129,5 +129,25 @@ public abstract class AbstractServlet extends HttpServlet{
 			throw new RuntimeException(e);
 		}
 		return post;
+	}
+	
+	protected final boolean canReadProject(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return permissionsManager.canRead(projectName, request);
+	}
+	protected final boolean canCommandProject(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return permissionsManager.canCommand(projectName, request);
+	}
+	protected final boolean canConfigureProject(HttpServletRequest request) {
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return permissionsManager.canConfigure(projectName, request);
+	}
+	protected final boolean isAdministrator(HttpServletRequest request) {
+		return permissionsManager.isAdministrator(request);
+	}
+	
+	protected final String projectName(HttpServletRequest request) {
+		return request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 	}
 }

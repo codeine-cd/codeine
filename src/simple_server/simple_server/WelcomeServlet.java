@@ -37,4 +37,9 @@ public class WelcomeServlet extends AbstractServlet {
 		writer.println("</body>");
 		writer.println("</html>");
 	}
+
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return false;
+	}
 } 

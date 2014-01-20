@@ -35,4 +35,9 @@ public class DeleteProjectServlet extends AbstractServlet {
 		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);
 		getWriter(response).write("{}");
 	}
+
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return permissionsManager.isAdministrator(request);
+	}
 }

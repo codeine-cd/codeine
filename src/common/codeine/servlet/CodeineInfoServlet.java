@@ -24,4 +24,9 @@ public class CodeineInfoServlet extends AbstractServlet {
 		writer.print(gson.toJson(codeineRuntimeInfo));
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
+
 }

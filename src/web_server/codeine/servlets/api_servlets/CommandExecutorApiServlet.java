@@ -26,11 +26,17 @@ public class CommandExecutorApiServlet extends AbstractServlet {
 		List<CommandStatusJson> active = nodesCommandExecuterProvider.getActive();
 		List<CommandStatusJson> activeWithPermissions = Lists.newArrayList();
 		for (CommandStatusJson commandStatusJson : active) {
-			CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-			c.can_cancel(permissionsManager.canCommand(c.project(), request));
-			activeWithPermissions.add(c);
+			if (permissionsManager.canRead(commandStatusJson.project(), request)){
+				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
+				c.can_cancel(permissionsManager.canCommand(c.project(), request));
+				activeWithPermissions.add(c);
+			}
 		}
 		writeResponseJson(response, activeWithPermissions);
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

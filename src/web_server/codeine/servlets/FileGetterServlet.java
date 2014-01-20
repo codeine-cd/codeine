@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import codeine.configuration.PathHelper;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
-import codeine.servlets.template.HtmlMainTemplate;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
 
@@ -21,13 +20,12 @@ public class FileGetterServlet extends AbstractServlet {
 	private static final Logger log = Logger.getLogger(FileGetterServlet.class);
 	private static final long serialVersionUID = 1L;
 
-	@Inject private HtmlMainTemplate htmlMainTemplate;
 	@Inject	private PathHelper pathHelper;
 
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("RawOutputServlet request");
-		String projectName = request.getParameter("project");
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String path = request.getParameter("path");
 		String line = request.getParameter("line");
 		int fromLine = Integer.valueOf(line);
@@ -48,6 +46,11 @@ public class FileGetterServlet extends AbstractServlet {
 			this.lines = lines;
 		}
 		
+	}
+
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
 	}
 
 }

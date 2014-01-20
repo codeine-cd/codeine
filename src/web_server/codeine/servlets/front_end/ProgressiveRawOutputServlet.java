@@ -58,4 +58,8 @@ public class ProgressiveRawOutputServlet extends AbstractFrontEndServlet {
 		return getMenuProvider().getProjectMenu(request);
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }

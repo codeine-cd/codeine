@@ -33,4 +33,8 @@ public class RsyncSourceForVersionServlet extends AbstractServlet{
 		}
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

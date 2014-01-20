@@ -130,4 +130,8 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 		}
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canCommandProject(request);
+	}
 }

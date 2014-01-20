@@ -47,4 +47,8 @@ public class RegisterServlet extends AbstractServlet {
         getWriter(response).write("{}");
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

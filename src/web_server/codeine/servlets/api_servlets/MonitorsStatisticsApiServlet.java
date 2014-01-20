@@ -20,4 +20,9 @@ public class MonitorsStatisticsApiServlet extends AbstractServlet {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		writeResponseJson(response, monitorsStatistics.getDataJson(projectName));
 	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }

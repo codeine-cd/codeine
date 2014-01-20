@@ -27,11 +27,17 @@ public class CommandLogApiServlet extends AbstractServlet {
 		List<CommandStatusJson> allCommands = nodesCommandExecuterProvider.getAllCommands(projectName);
 		List<CommandStatusJson> allCommandsWithPermissions = Lists.newArrayList();
 		for (CommandStatusJson commandStatusJson : allCommands) {
-			CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-			c.can_cancel(permissionsManager.canCommand(c.project(), request));
-			allCommandsWithPermissions.add(c);
+			if (permissionsManager.canRead(commandStatusJson.project(), request)){
+				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
+				c.can_cancel(permissionsManager.canCommand(c.project(), request));
+				allCommandsWithPermissions.add(c);
+			}
 		}
 		writeResponseJson(response, allCommandsWithPermissions);
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

@@ -34,5 +34,10 @@ public class ReporterServlet extends AbstractServlet {
 		ProjectStatus projectStatus = new ProjectStatus(nodeWithMonitorsInfo.projectName(),nodeWithMonitorsInfo);
 		return projectStatus;
 	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }
 

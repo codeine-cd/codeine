@@ -79,4 +79,8 @@ public class LabelsServlet extends AbstractFrontEndServlet {
 		return getMenuProvider().getProjectMenu(request);
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

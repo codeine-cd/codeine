@@ -145,4 +145,9 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 		};
 		return Lists.newArrayList(Iterables.filter(configuredProjects, type));
 	}
+	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

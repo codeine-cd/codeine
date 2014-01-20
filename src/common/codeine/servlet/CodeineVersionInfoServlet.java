@@ -21,4 +21,8 @@ public class CodeineVersionInfoServlet extends AbstractServlet {
 		writer.print(codeineRuntimeInfo.version());
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
 }

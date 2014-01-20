@@ -23,4 +23,9 @@ public class PeerReportServlet extends AbstractServlet {
 		databaseConnector.putReplaceStatus(json);
 	}
 
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return true;
+	}
+
 }

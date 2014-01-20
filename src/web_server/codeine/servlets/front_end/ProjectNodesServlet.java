@@ -73,4 +73,8 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 		return Lists.newArrayList("nodes_tags", "command_history");
 	}
 	
+	@Override
+	protected boolean checkPermissions(HttpServletRequest request) {
+		return canReadProject(request);
+	}
 }
