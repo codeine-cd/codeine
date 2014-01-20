@@ -23,6 +23,8 @@ function getCommandsHistory() {
       renderTemplate('command_history', $("#command_history_list") , response, function() {
         $(".commandStatus").tooltip();
         $('.deleteCommand').click(function() {
+        	if (confirm("Aare you sure you would like to stop the command?") === false) 
+        		return;
     		$.ajax( {
     		    type: 'DELETE',
     		    url: '/command-nodes_json?project=' + $(this).data('project') + '&command-id=' + $(this).data('id')  ,

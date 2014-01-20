@@ -15,6 +15,8 @@ function getCommandsStatus() {
     	renderTemplate('command_executor', $("#command_executer_list") , response, function() {
     		$(".commandStatus").tooltip();
 	        $('.deleteCommand').click(function() {
+	        	if (confirm("Aare you sure you would like to stop the command?") === false) 
+	        		return;
 	    		$.ajax( {
 	    		    type: 'DELETE',
 	    		    url: '/command-nodes_json?project=' + encodeURIComponent($(this).data('project')) + '&command-id=' + $(this).data('id')  ,
