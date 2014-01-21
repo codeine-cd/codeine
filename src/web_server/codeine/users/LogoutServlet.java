@@ -17,6 +17,6 @@ public class LogoutServlet extends DefaultServlet {
 			IOException {
 		request.getSession().invalidate();
 		response.getWriter().append("done");
-		response.sendRedirect(request.getParameter("from"));
+		response.sendRedirect("/");
 	}
 }
