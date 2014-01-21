@@ -412,3 +412,9 @@ div.sidebar-nav div.popover {
   font-size: 14px;
   font-weight: normal;
 }
+
+/* This cuts off wide node names in status view. */
+form.form-inline div.span2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
