@@ -394,3 +394,27 @@ pre {
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
     margin: 0;
 }
+
+/* Already fixed by Ohad and Roi:
+td.editable {
+  vertical-align: center;
+} */
+
+td.editable input{
+  height: 28px;                 /* Makes it the same height as the tag selector. */
+}
+
+/* This stops the tooltips in the sidebar inheriting the font characteristics from the headings (small, grey, all caps). */
+div.sidebar-nav div.popover {
+  color: #000000;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-transform: none;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* This cuts off wide node names in status view. */
+form.form-inline div.span2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

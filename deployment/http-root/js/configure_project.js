@@ -1,8 +1,8 @@
 var totalMonitors = 0;
 var totalCommands = 0;
 var newParameterIndex = 1000;
-var enterNewNodeConst = "Enter new Node";
-var enterNewMailConst = "Enter new Email";
+var enterNewNodeConst = "Enter New Node";
+var enterNewMailConst = "Enter New Email";
 var codeine_env_vars = ['CODEINE_OUTPUT_FILE', 'CODEINE_PROJECT_NAME', 'CODEINE_NODE_NAME'];
 var codeine_env_vars_no_output = ['CODEINE_PROJECT_NAME', 'CODEINE_NODE_NAME'];
 
