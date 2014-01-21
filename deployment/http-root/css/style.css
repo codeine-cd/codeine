@@ -401,7 +401,7 @@ td.editable {
 } */
 
 td.editable input{
-  height: 20px;                 /* Makes it the same height as the tag selector. */
+  height: 28px;                 /* Makes it the same height as the tag selector. */
 }
 
 /* This stops the tooltips in the sidebar inheriting the font characteristics from the headings (small, grey, all caps). */
