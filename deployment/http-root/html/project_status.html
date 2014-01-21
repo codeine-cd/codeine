@@ -70,10 +70,12 @@
 					</a>
 				</div>
 				<div class="span5">
-					<div class="progress">
-					  <a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}"><div class="bar bar-success" style="width: {{success_percent}}%;"></div></a>
-					  <a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}"><div class="bar bar-danger" style="width: {{fail_percent}}%;"></div></a>
-					</div>
+					<a href="{{project_nodes_context}}?version={{version_name_encoded}}&project={{project_name_encoded}}">
+						<div class="progress">
+						  <div class="bar bar-success" style="width: {{success_percent}}%;"></div>
+						  <div class="bar bar-danger" style="width: {{fail_percent}}%;"></div>
+						</div>
+					</a>
 				</div>
 			</fieldset></form>
 		</div>

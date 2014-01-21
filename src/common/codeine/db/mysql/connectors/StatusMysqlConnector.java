@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.mysql.DbUtils;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.peer_status.PeerStatusString;
 import codeine.jsons.peer_status.PeerType;
@@ -28,9 +29,13 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	private DbUtils dbUtils;
 	@Inject
 	private Gson gson;
-
+	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
 	private String tableName = "ProjectStatusList";
 	public void createTables() {
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		String colsDefinition = "peer_key VARCHAR(150) NOT NULL PRIMARY KEY, data text, update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, status VARCHAR(50) DEFAULT 'On' NOT NULL";
 		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
 	}
@@ -109,6 +114,10 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 
 		};
 		dbUtils.executeUpdateableQuery("select *,TIMESTAMPDIFF(MINUTE,update_time,CURRENT_TIMESTAMP()) as TIME_DIFF from " + tableName, function);
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		for (String key : idToRemove) {
 			log.info("deleting " + key);
 			dbUtils.executeUpdate("DELETE from " + tableName + " WHERE peer_key = ?", key);

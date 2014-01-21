@@ -36,7 +36,6 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		this.projectsConfigurationConnector = projectsConfigurationConnector;
 		this.pathHelper = pathHelper;
 		this.projectsUpdater = projectsUpdater; 
-//		updateDb();
 	}
 
 	public synchronized void deleteProject(ProjectJson projectToDelete) {

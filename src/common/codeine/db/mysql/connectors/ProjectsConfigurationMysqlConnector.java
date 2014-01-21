@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import codeine.db.ProjectsConfigurationConnector;
 import codeine.db.mysql.DbUtils;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.project.ProjectJson;
 
 import com.google.common.base.Function;
@@ -22,10 +23,15 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 	private DbUtils dbUtils;
 	@Inject
 	private Gson gson;
+	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
 
 	private String tableName = "ProjectsConfiguration";
 	
 	public void createTables() {
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		String colsDefinition = "project_name CHAR(100) NOT NULL PRIMARY KEY, data text";
 		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
 	}
@@ -56,6 +62,10 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 	@Override
 	public void updateProject(ProjectJson project){
 		log.info("updating project in database " + project.name());
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		int executeUpdate = dbUtils.executeUpdate("REPLACE INTO "+tableName+" (project_name, data) VALUES (?, ?)", project.name(), gson.toJson(project));
 		if (executeUpdate == 0) {
 			throw new RuntimeException("failed to update project " + project.name());
@@ -65,6 +75,10 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 	@Override
 	public void deleteProject(ProjectJson project) {
 		log.info("deleting project from database " + project.name());
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		int deleted = dbUtils.executeUpdate("DELETE FROM "+tableName+" WHERE project_name = '" + project.name() + "'");
 		if (deleted == 0) {
 			throw new RuntimeException("failed to delete project " + project.name());
