@@ -123,6 +123,10 @@ function getVersion() {
 	return getParameterByName('version');
 }
 
+function getUrlParameter(name) {
+    return getParameterByName(name);
+}
+
 function postToUrl(url, postData) {
 	var form = document.createElement("form");
 	form.setAttribute("method", "post");

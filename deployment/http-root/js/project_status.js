@@ -6,12 +6,12 @@ var divInTooltip = null;
 
 $(document).ready( function () {
 
-  if ($('.codeine_command').size() === 0 || readOnly) {
-    $('#commandsNavbar').hide();
-    $('.panel-body').find('[type=checkbox]').remove();
-  }
-  
-	loadChart();
+    if ($('.codeine_command').size() === 0 || readOnly) {
+        $('#commandsNavbar').hide();
+        $('.panel-body').find('[type=checkbox]').remove();
+    }
+
+    loadChart();
 	
 });
 

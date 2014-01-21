@@ -3,7 +3,9 @@ var versionMap;
 var activeTags = [];
 
 $(document).ready( function () {
+
 	getNodes();
+
 	getTags();
 });
 
@@ -71,6 +73,10 @@ function getNodes() {
 	    	for (var version in versionMap) {
 	    		$('#nodes_container').append($('#project_nodes_by_version').render(versionMap[version]));
 	    	}
+            var filter = getUrlParameter('filter');
+            if ((filter) && (filter === 'Any_Alert')) {
+                $('#Any_Alert').trigger("click");
+            }
 	    	setupFilters();
 	    	$('#nodes_loader').fadeOut("fast", "swing", function() {
 	    		$('#nodes_container').fadeIn("fast");
