@@ -9,7 +9,7 @@ function getCommandsStatus() {
     url: '/commands-status_json',
     success: function(response) {
     	if (response.length === 0) {
-      	  $('#command_executer_list').html("<li class='text-center'>No Running Commands</li>");
+      	  $('#command_executer_list').html("<li class='text-center'>No running ommands</li>");
       	  return;
         }
     	renderTemplate('command_executor', $("#command_executer_list") , response, function() {

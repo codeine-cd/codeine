@@ -17,7 +17,7 @@ public class MenuProvider {
 	private @Inject PermissionsManager permissionsManager;
 	
 	public List<TemplateLinkWithIcon> getMainMenu(HttpServletRequest request) {
-		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Projects", "/","projectsMenuItem","icon-th-list"));
+		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Projects", "/","projectsMenuItem","fa fa-th-list"));
 		if (permissionsManager.isAdministrator(request)) {
 			$.add(new TemplateLinkWithIcon("New Project", UrlUtils.buildUrl(Constants.NEW_PROJECT_CONTEXT,null) , "fa fa-file", "newProjectMenuItem" , "admin"));
 			$.add(new TemplateLinkWithIcon("Manage Codeine", UrlUtils.buildUrl(Constants.CONFIGURE_CONTEXT,null) ,"fa fa-wrench", "manageMenuItem", "admin"));
