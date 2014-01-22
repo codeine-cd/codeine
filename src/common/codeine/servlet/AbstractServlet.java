@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
+import codeine.exceptions.InShutdownException;
 import codeine.exceptions.UnAuthorizedException;
 import codeine.model.Constants;
 import codeine.utils.ServletUtils;
@@ -77,8 +78,11 @@ public abstract class AbstractServlet extends HttpServlet{
 		if (e instanceof UnAuthorizedException) {
 			response.setStatus(HttpStatus.UNAUTHORIZED_401);
 			getWriter(response).write("UNAUTHORIZED Request, please provide API Token");
+		} else if (e instanceof InShutdownException){
+			getWriter(response).write("Cannot execute - preparing for shutdown\n");
+			response.setStatus(HttpStatus.FORBIDDEN_403);
 		} else {
-			getWriter(response).write("Internak Server Error: \n");
+			getWriter(response).write("Internal Server Error: \n");
 			e.printStackTrace(getWriter(response));
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
 		}

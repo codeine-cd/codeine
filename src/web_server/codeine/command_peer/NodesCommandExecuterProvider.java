@@ -12,8 +12,10 @@ import org.apache.log4j.Logger;
 import codeine.api.CommandStatusJson;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
+import codeine.exceptions.InShutdownException;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
+import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
 
@@ -27,12 +29,16 @@ public class NodesCommandExecuterProvider {
 
 	private static final Logger log = Logger.getLogger(NodesCommandExecuterProvider.class);
 	@Inject private Provider<AllNodesCommandExecuter> allNodesCommandExecuterProvider;
+	@Inject private PrepareForShutdown prepareForShutdown;
 	@Inject private Gson gson;
 	@Inject	private Links links;
 	@Inject private PathHelper pathHelper;
 	private List<AllNodesCommandExecuter> executers = Lists.newArrayList();
 	
 	public AllNodesCommandExecuter createExecutor() {
+		if (prepareForShutdown.isSequnceActivated()) {
+			throw new InShutdownException();
+		}
 		cleanAndGet();
 		AllNodesCommandExecuter executer = allNodesCommandExecuterProvider.get();
 		synchronized (executers) {

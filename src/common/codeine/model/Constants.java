@@ -67,6 +67,8 @@ public class Constants
 	public static final String COMMAND_NODE_IN_SERVER_CONTEXT = "/command-to-node";
 	public static final String PEER_PORT_CONTEXT = "/peer/port";
 	public static final String REGISTER_CONTEXT = "/register";
+	public static final String PREPARE_FOR_SHUTDOWN_CONTEXT = "/prepare-for-shutdown";
+	public static final String CANCEL_SHUTDOWN_CONTEXT = "/cancel-shutdown";
 
 	public static final String REPLACE_NODE_NAME = "$node_name";	
 	public static final String DB_NAME = "codeineDB";

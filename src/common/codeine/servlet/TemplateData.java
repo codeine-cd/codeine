@@ -20,6 +20,7 @@ public class TemplateData {
 	private String codeineversionfull;
 	private String javascriptfiles;
 	private boolean is_empty = false;
+	private boolean prepare_for_shutdown = false;
 	private String new_issue_link = "https://github.com/Intel-IT/codeine/issues/new";
 	
 	public TemplateData() {
@@ -35,6 +36,9 @@ public class TemplateData {
 	
 	public boolean is_empty() {
 		return is_empty;
+	}
+	public void prepare_for_shutdown(boolean prepare_for_shutdown) {
+		this.prepare_for_shutdown = prepare_for_shutdown;
 	}
 	
 	private String addJsTags(List<String> jsFiles) {

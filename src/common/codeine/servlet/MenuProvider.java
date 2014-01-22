@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 public class MenuProvider {
 
 	private @Inject PermissionsManager permissionsManager;
+	private @Inject PrepareForShutdown prepareForShutdown;
 	
 	public List<TemplateLinkWithIcon> getMainMenu(HttpServletRequest request) {
 		ArrayList<TemplateLinkWithIcon> $ =Lists.newArrayList(new TemplateLinkWithIcon("Projects", "/","projectsMenuItem","fa fa-th-list fa-fw"));
@@ -31,6 +32,12 @@ public class MenuProvider {
 		$.add(new TemplateLinkWithIcon("Configure Codeine", UrlUtils.buildUrl(Constants.CONFIGURE_CONTEXT,null) ,"fa fa-gears fa-fw", "configureMenuItem", "admin"));
 		$.add(new TemplateLinkWithIcon("Codeine Nodes Status", UrlUtils.buildUrl(Constants.CODEINE_STATUS_CONTEXT,ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, Constants.CODEINE_NODES_PROJECT_NAME)) ,"fa fa-signal fa-fw", "codeineStatusMenuItem", "admin"));
 		$.add(new TemplateLinkWithIcon("Codeine Nodes Info", UrlUtils.buildUrl(Constants.CODEINE_NODES_CONTEXT,ImmutableMap.of(Constants.UrlParameters.PROJECT_NAME, Constants.CODEINE_NODES_PROJECT_NAME,Constants.UrlParameters.VERSION_NAME, Constants.ALL_VERSION)) ,"fa fa-list-alt fa-fw", "codeineNodesMenuItem", "admin"));
+		if (prepareForShutdown.isSequnceActivated()) {
+			$.add(new TemplateLinkWithIcon("Cancel shutdown", UrlUtils.buildUrl(Constants.CANCEL_SHUTDOWN_CONTEXT ,ImmutableMap.of(Constants.UrlParameters.REDIRECT, "true")) ,"fa fa-eraser fa-fw", "prepareForShutdownMenuItem", "admin"));
+		}
+		else {
+			$.add(new TemplateLinkWithIcon("Prepare for shutdown", UrlUtils.buildUrl(Constants.PREPARE_FOR_SHUTDOWN_CONTEXT ,ImmutableMap.of(Constants.UrlParameters.REDIRECT, "true")) ,"fa fa-bullhorn fa-fw", "prepareForShutdownMenuItem", "admin"));
+		}
 		$.add(new TemplateLinkWithIcon("Codeine Server Logs", UrlUtils.buildUrl(Constants.RESOURCESS_CONTEXT,null) ,"fa fa-suitcase fa-fw", "logsMenuItem", "admin"));
 		return $;
 	}

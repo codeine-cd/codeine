@@ -1,14 +1,16 @@
 package codeine;
 
-import static codeine.model.Constants.apiContext;
+import static codeine.model.Constants.*;
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
 import codeine.servlets.FileGetterServlet;
+import codeine.servlets.api_servlets.CancelShutdownApiServlet;
 import codeine.servlets.api_servlets.CommandExecutorApiServlet;
 import codeine.servlets.api_servlets.CommandLogApiServlet;
 import codeine.servlets.api_servlets.DeleteProjectServlet;
 import codeine.servlets.api_servlets.MonitorsStatisticsApiServlet;
 import codeine.servlets.api_servlets.NodesCommandApiServlet;
+import codeine.servlets.api_servlets.PrepareForShutdownApiServlet;
 import codeine.servlets.api_servlets.ProjectNodesApiServlet;
 import codeine.servlets.api_servlets.ProjectStatusApiServlet;
 import codeine.servlets.api_servlets.ProjectTagsApiServlet;
@@ -67,6 +69,8 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(LabelsServlet.class, Constants.LABELS_CONTEXT);
 		serveMe(VersionLabelServlet.class, Constants.LABEL_CONTEXT);
 		serveMe(RegisterServlet.class, Constants.REGISTER_CONTEXT);
+		serveMe(PrepareForShutdownApiServlet.class, Constants.PREPARE_FOR_SHUTDOWN_CONTEXT);
+		serveMe(CancelShutdownApiServlet.class, Constants.CANCEL_SHUTDOWN_CONTEXT);
 	}
 
 	

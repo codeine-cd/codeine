@@ -40,6 +40,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	@Inject	private MenuProvider menuProvider;
 	@Inject	private GlobalConfigurationJsonStore globalConfigurationJson;
 	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
+	@Inject	private PrepareForShutdown prepareForShutdown;
 	
 	private static final Logger log = Logger.getLogger(AbstractFrontEndServlet.class);
 	private static final long serialVersionUID = 1L;
@@ -178,6 +179,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 		templateData.setMenu(generateMenuWithActive(request));
 		templateData.setJavascriptFiles(getJSFiles());
 		templateData.setTitle(getFullTitle(request));
+		templateData.prepare_for_shutdown(prepareForShutdown.isSequnceActivated());
 		if (!StringUtils.isEmpty(globalConfigurationJson.get().server_name())) {
 				templateData.setServerName(globalConfigurationJson.get().server_name());
 		}

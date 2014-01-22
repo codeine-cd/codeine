@@ -14,7 +14,10 @@ $(document).ready( function () {
     if (authentication_method === 'Builtin') {
       $('#login_user').html("<a style='color: white;' data-toggle='modal' href='#login_modal'><i class='fa fa-sign-in'></i> Sign in</a>");
     }
-  } 
+  }
+  if (prepare_for_shutdown) {
+	  displayAlert("Prepare for shutdown - No further commands will be executed", "danger", false);
+  }
 });
 
 
@@ -180,14 +183,20 @@ function getInputValues(container) {
 	return parameters;
 }
 
-function displayAlert(txt, type) {
+function displayAlert(txt, type, allowDismiss) {
 	if (type === undefined) {
 		type = 'info';
 	}
-	$('#mainContainer').prepend('<div class="row"><div class="span12">' +
-	    		'<div id="alertContainer" class="alert alert-' + type + ' fade in">' +
-	            '<button type="button" class="close" data-dismiss="alert">&times;</button>'+ txt
-	            	 + '</div></div>');
+	if (allowDismiss === undefined) {
+		allowDismiss = true;
+	}
+	var html = '<div class="row"><div class="span12">';
+	html += '<div id="alertContainer" class="alert alert-' + type + ' fade in">';
+	if (allowDismiss) {
+		html += '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+	}
+	html += txt + '</div></div>';
+	$('#mainContainer').prepend(html);
 	
 	$('#alertMessage').alert();
 }
