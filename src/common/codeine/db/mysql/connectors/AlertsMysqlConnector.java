@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import codeine.db.IAlertsDatabaseConnector;
 import codeine.db.mysql.DbUtils;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.utils.ExceptionUtils;
@@ -26,10 +27,14 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 	private DbUtils dbUtils;
 	@Inject
 	private Gson gson;
-
+	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
 	private String tableName = "Alerts";
 	
 	public void createTables() {
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		String colsDefinition = "id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, data text, collection_type_update_time BIGINT, collection_type BIGINT";
 		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
 	}
@@ -44,6 +49,10 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 	public Multimap<String, CollectorNotificationJson> getAlertsAndUpdate(final AlertsCollectionType collType) {
 		final AtomicInteger count = new AtomicInteger(0);
 		final Multimap<String, CollectorNotificationJson> $ = HashMultimap.create();
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return $;
+		}
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
 			public Void apply(ResultSet rs){
@@ -73,6 +82,10 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 
 	@Override
 	public void removeOldAlerts() {
+		if (webConfJsonStore.get().readonly_web_server()) {
+			log.info("read only mode");
+			return;
+		}
 		long timeToRemove = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7);
 		log.info("will remove older than " + timeToRemove);
 		String deleteSql = "delete from " + tableName + " where collection_type_update_time < " + timeToRemove + " AND collection_type = " + AlertsCollectionType.Daily.toLong();
