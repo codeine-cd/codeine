@@ -396,8 +396,8 @@ pre {
 }
 
 td, th {
-  vertical-align: middle;
-  text-align: center;
+  vertical-align: middle !important;
+  text-align: center !important;
 }
 
 td.editable input{
