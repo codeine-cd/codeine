@@ -4,6 +4,7 @@ package codeine;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.peer_status.PeersProjectsStatus;
+import codeine.servlet.PrepareForShutdown;
 import codeine.servlet.UsersManager;
 import codeine.statistics.MonitorsStatistics;
 import codeine.version.VersionsMapping;
@@ -28,6 +29,7 @@ public class ServerModule extends AbstractModule
 		bind(MonitorsStatistics.class).in(Scopes.SINGLETON);
 		bind(VersionsMappingStore.class).in(Scopes.SINGLETON);
 		bind(VersionsMapping.class).toProvider(VersionsMappingProvider.class).in(Scopes.SINGLETON);
+		bind(PrepareForShutdown.class).in(Scopes.SINGLETON);
 	}
 	
 }
