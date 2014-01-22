@@ -44,7 +44,7 @@ unless ($ENV{'release-to-github'} eq "true")
 print "Will release new version to Github: $versionNoDate\n";
 my $githubUser = $ENV{GITHUB_USER};
 my $githubPassword = $ENV{GITHUB_PASSWORD};
-my $res = r("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": false}' https://api.github.com/repos/Intel-IT/codeine/releases");
+my $res = r("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Offical Release\",  \"draft\": false,  \"prerelease\": true}' https://api.github.com/repos/Intel-IT/codeine/releases");
 print "release returned: $res\n";
 $res =~ /\"id\":\s([^,]*)/;
 my $id = $1;
