@@ -43,7 +43,7 @@ var helpStrings = {
   "command_patameter_name_Help" : "The name of the parameter, will also be used as environment variable in the executing command.",
   "command_patameter_default_val_Help" : "The default value that will be suggested to the user when executing the command.",
   "command_patameter_validation_expression_Help" : "A regular expression that will validate the parameter in the UI.<br/><br/>" + 
-              "For example: <strong>\\S</strong> - non-empty string, <strong>^\\d$</strong> - one digit number.",
+              "For example: <strong>\\S*</strong> - non-empty string, <strong>\\d</strong> - one digit number.",
   "concurrencyHelp" : "On how many nodes to execute the command in parallel.",
   "stopOnErrorHelp" : "Check for errors during command execution, and stop commanding more nodes if the percent of nodes with failing monitors is greater than the configured value.",
   "durationHelp" : "The time period for the command execution. Codeine will spread execution on nodes across that time based on the ratio.",

@@ -5,7 +5,7 @@
 				{{if type == "String"}}
 					<label class="control-label" for="param_{{:#getIndex()}}">{{:name}}</label>
 					<div class="controls">
-			       		<input id="param_string_{{:#getIndex()}}" type="text" value="{{:default_value}}" data-name="{{:name}}" pattern="{{:validation_expression}}"  data-validation-exp="{{:validation_expression}}" required="required">
+			       		<input id="param_string_{{:#getIndex()}}" type="text" value="{{:default_value}}" data-name="{{:name}}" {{if validation_expression}} pattern="{{:validation_expression}}" required {{/if}} data-validation-exp="{{:validation_expression}}">
 			       		{{if description }}
 			       		<i id=help_param_{{:#getIndex()}} rel="popover" data-help-content="{{:description}}" data-placement="right" data-trigger="hover" class="icon-question-sign"></i>
 			       		{{/if}}
