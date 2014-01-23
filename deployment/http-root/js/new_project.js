@@ -7,6 +7,9 @@ $(document).ready( function () {
 	$('#selected_project').change(function() {
 		validate();
 	});
+	$('.options_radio').change(function() {
+		validate();
+	});
 	
 	$(".chosen-select").chosen({disable_search_threshold: 10});
 	
@@ -52,6 +55,9 @@ function validate() {
 		if (selectedProject === '') {
 			valid = false;
 		} 
+	}
+	if (!$("#optionsRadios1").is(':checked') && !$("#optionsRadios2").is(':checked')) {
+		valid = false;
 	}
 	$('#create_button').prop('disabled', !valid);
 }
