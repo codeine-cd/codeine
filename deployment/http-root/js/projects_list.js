@@ -43,27 +43,6 @@ function getLatestAndGreatest(releases) {
 }
 function checkForNewCodeine() {
 	console.log("Will look for new Codeine version in Github");
-<<<<<<< HEAD
-	$.ajax(
-        {
-            type: 'GET',
-            url: 'https://api.github.com/repos/Intel-IT/codeine/releases',
-            success: function (releases) {
-              var verString = releases[0]["name"];
-            	var latest_version =  parseInt(releases[0]["name"].substring(releases[0]["name"].lastIndexOf(".")+1));
-            	var current_version = parseInt($('#codeine_version').html().substring($('#codeine_version').html().lastIndexOf(".")+1));
-            	console.log("Current Version: " + current_version + " Latest Version: " + latest_version);
-            	if (latest_version > current_version) {
-            		toast('info',"New Codeine Version (" + verString + ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'><i class='fa fa-github'></i> GitHub</a>, click <a href='/upgrade-server?version=" + encodeURIComponent(verString) + "'>here</a> to upgrade now",true );
-            	}
-            },
-            error: function (jqXhr) {
-            	console.warn('Failed to get releases from Github: ' + jqXhr);
-            },
-            dataType: 'json'
-        }
-    );
-=======
 	$
 			.ajax({
 				type : 'GET',
@@ -80,12 +59,12 @@ function checkForNewCodeine() {
 					console.log("Current Version: " + current_version
 							+ " Latest Version: " + latest_version);
 					if (latest_version > current_version) {
-						displayAlert(
+						toast("info",
 								"New Codeine Version ("
 										+ verString
 										+ ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'><i class='fa fa-github'></i> GitHub</a>, click <a href='/upgrade-server?version="
 										+ encodeURIComponent(verString)
-										+ "'>here</a> to upgrade now", "info");
+										+ "'>here</a> to upgrade now");
 					}
 				},
 				error : function(jqXhr) {
@@ -95,5 +74,4 @@ function checkForNewCodeine() {
 				},
 				dataType : 'json'
 			});
->>>>>>> 9716273398c7ef5aed402a501e8782b29cff78ce
 }
