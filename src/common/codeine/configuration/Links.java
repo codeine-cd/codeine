@@ -66,13 +66,13 @@ public class Links {
 	public String getCommandOutputGuiLink(CommandExecutionStatusInfo j) {
 		String project_name = j.project_name();
 		String command = j.command();
-		long path = j.id();
+		String path = String.valueOf(j.id());
 		return j.finished() ? 
-				Constants.RAW_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encode(project_name) + "&resource=" + HttpUtils.encode(command) + "&link=" + HttpUtils.encode(getPluginOutLink(project_name, path + Constants.COMMAND_LOG_FILE))) : 
+				Constants.RAW_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encode(project_name) + "&resource=" + HttpUtils.encode(command) + "&link=" + HttpUtils.encode(getPluginOutLink(project_name, path))) : 
 			getCommandOutputGui(project_name, command, path);
 	}
 
-	public String getCommandOutputGui(String project_name, String command, long path) {
+	public String getCommandOutputGui(String project_name, String command, String path) {
 		return Constants.PROGRESSIVE_RAW_OUTPUT_CONTEXT + "?project=" + HttpUtils.encode(project_name) + "&command=" + HttpUtils.encode(command) + "&path=" + HttpUtils.encode(String.valueOf(path));
 	}
 	

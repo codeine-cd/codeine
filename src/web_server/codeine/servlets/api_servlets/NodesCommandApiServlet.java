@@ -61,7 +61,7 @@ public class NodesCommandApiServlet extends AbstractServlet {
 		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(commandData);
 		if (redirect){
 			try {
-				response.sendRedirect(links.getCommandOutputGui(projectName, commandData.command_info().command_name(), dir));
+				response.sendRedirect(links.getCommandOutputGui(projectName, commandData.command_info().command_name(), String.valueOf(dir)));
 			} catch (IOException e) {
 				throw ExceptionUtils.asUnchecked(e);
 			}
