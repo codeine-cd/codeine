@@ -54,6 +54,7 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 		for (Entry<String, Integer> e : map.entrySet()) {
 			list.add(new NodeTag(e.getKey(), e.getValue()));
 		}
+<<<<<<< HEAD
 		
 		Comparator<NodeTag> c = new Comparator<NodeTag>() {
 			@Override
@@ -63,6 +64,15 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 		};
 		Collections.sort(list, c);
 		
+=======
+		Comparator<NodeTag> c = new Comparator<ProjectTagsApiServlet.NodeTag>() {
+			@Override
+			public int compare(NodeTag o1, NodeTag o2) {
+				return o1.name.compareTo(o2.name);
+			}
+		};
+		Collections.sort(list, c);
+>>>>>>> 9716273398c7ef5aed402a501e8782b29cff78ce
 		writeResponseJson(response, list);
 	}
 

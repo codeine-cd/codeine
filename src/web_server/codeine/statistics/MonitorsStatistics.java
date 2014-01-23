@@ -76,6 +76,10 @@ public class MonitorsStatistics implements Task{
 				projectData = new LimitedQueue<>(MAX_SIZE);
 				data.put(projectJson.name(), projectData);
 			}
+			if (success + fail == 0 && projectData.isEmpty()){
+				log.info("ignoring empty statistics on project " + projectJson.name());
+				continue;
+			}
 			MonitorStatusItem item = new MonitorStatusItem(StringUtils.formatDate(currentTime), success, fail);
 			synchronized (projectData) {
 				projectData.addFirst(item);

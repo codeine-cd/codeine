@@ -73,7 +73,7 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 				List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName, version);
 				for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
 					switch (data.nodes_selector()) {
-					case "All Nodes":
+					case "All Selected Nodes":
 						versionNodes.node().add(nodeWithMonitorsInfo);
 						break;
 					case "Failing Nodes":

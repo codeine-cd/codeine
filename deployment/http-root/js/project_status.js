@@ -3,6 +3,7 @@ var chartDetails;
 var posX;
 var posY;
 var divInTooltip = null;
+var command = "no command yet";
 
 $(document).ready( function () {
 
@@ -76,10 +77,16 @@ function addCommandAnnotation(annList,command) {
 	
 }
 
-$('.codeine_command').click( function() {
-	var command = $(this).data('command-name');
+$('.codeine_command_name').click( function() {
+	command = $(this).data('command-name');
 	console.log("Will run commad " + command);
-
+	// Set active in drop down
+	$('.codeine_command_name').removeClass("active");
+	$(this).addClass("active");
+	$('#command_dropdown_text').html(command);
+	resetSelectAll();
+});
+$('.codeine_command').click( function() {
 	var parametrs = {};
 	parametrs["command"] = command;
 	parametrs["project"] = getProjetcName();

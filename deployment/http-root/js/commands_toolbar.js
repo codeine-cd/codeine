@@ -50,7 +50,10 @@ function resetSelectAll() {
   var allChecked = allComboChecked();
   var hasChecked = hasComboChecked();
   $("#selectAll").prop("checked", allChecked);
-  if (hasChecked) {
+  enableRunCommandButton(hasChecked);
+}
+function enableRunCommandButton(hasChecked) {
+  if (hasChecked && command !== "no command yet") {
     $('.codeine_command').removeClass("disabled");
   } else {
     $('.codeine_command').addClass("disabled");

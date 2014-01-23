@@ -33,7 +33,7 @@ var helpStrings = {
   "monitorHelp" : "Select which nodes to show.<br/><br/><strong>'Any Alert'</strong> - show nodes with alerts (no matter which monitor).<br/><br/>"
       + "<strong>'All Nodes'</strong> - also show nodes without alerts.<br/><br/>"
       + "<strong>Specific Monitor</strong> - show only nodes with alerts from that monitor.",
-  "commandNodesFilterHelp" : "Select the nodes on which the command will be executed. <br/><br/><strong>'All Nodes'</strong> - All the nodes in the selected versions.<br/><br/>"
+  "commandNodesFilterHelp" : "Select the nodes on which the command will be executed. <br/><br/><strong>'All Selected Nodes'</strong> - All the nodes in the selected versions.<br/><br/>"
       + "<strong>'Failing Nodes'</strong> - Only on nodes that have failing monitors.<br/><br/>"
       + "<strong>'Number of Nodes'</strong> - the command will be executed on this number of nodes from all selected versions (total).<br/><br/>",
       "ratioHelp" : "The rate for command execution.<br/><br/><strong>'Linear'</strong> - Spread nodes evenly in the specified time period.<br/><br/>"
