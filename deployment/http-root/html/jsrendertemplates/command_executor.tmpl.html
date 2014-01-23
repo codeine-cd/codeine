@@ -28,6 +28,9 @@
 	{{/if}}
 	  		<div class="bar bar-success" style="width: {{:successPercent}}%;"></div>
 	  		<div class="bar bar-danger" style="width: {{:failPercent}}%;"></div>
+	  		{{if finished && (successPercent + failPercent < 100)}}
+	  		<div class="bar bar-warning" style="width: {{:100 - successPercent - failPercent}}%;"></div>
+	  		{{/if}}
 		</div>
 	</a>
 </li>
