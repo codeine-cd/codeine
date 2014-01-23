@@ -151,7 +151,7 @@ function toast(type, msg, autoClose) {
 	$('.top-right').notify({
 	    message: 
 	    { 
-	    	text: msg
+	    	html: msg
 	    },
 		type: type,
 		fadeOut: { enabled: autoClose}
