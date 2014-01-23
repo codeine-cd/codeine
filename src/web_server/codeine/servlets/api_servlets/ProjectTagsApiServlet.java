@@ -1,5 +1,7 @@
 package codeine.servlets.api_servlets;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -53,6 +55,14 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 			list.add(new NodeTag(e.getKey(), e.getValue()));
 		}
 		
+		Comparator<NodeTag> c = new Comparator<NodeTag>() {
+			@Override
+			public int compare(NodeTag o1, NodeTag o2) {
+				return o1.name().compareTo(o2.name());
+			}
+		};
+		Collections.sort(list, c);
+		
 		writeResponseJson(response, list);
 	}
 
@@ -77,8 +87,13 @@ public class ProjectTagsApiServlet extends AbstractServlet {
 			this.name = name;
 			this.count = count;
 		}
+		
 		String name;
 		int count;
+		
+		public String name() {
+			return name;
+		}
 	}
 	
 	@Override
