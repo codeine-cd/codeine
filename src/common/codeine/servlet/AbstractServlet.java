@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -15,11 +16,18 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.model.Constants;
+import codeine.utils.ExceptionUtils;
 import codeine.utils.ServletUtils;
+import codeine.utils.TextFileUtils;
+import codeine.utils.exceptions.FileReadWriteException;
 import codeine.utils.exceptions.InShutdownException;
+import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.exceptions.UnAuthorizedException;
 
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 
 public abstract class AbstractServlet extends HttpServlet{
 
@@ -86,6 +94,40 @@ public abstract class AbstractServlet extends HttpServlet{
 			e.printStackTrace(getWriter(response));
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
 		}
+	}
+	protected void handleErrorRequestFromBrowser(Exception e, HttpServletResponse response) {
+		log.warn("Error in servlet", e);
+		HashMap<String, String> dic = Maps.newHashMap();
+		String contents;
+		String message;
+		String title;
+		if (e instanceof ProjectNotFoundException) {
+			response.setStatus(HttpStatus.NOT_FOUND_404);
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
+			message = e.getMessage();
+			title = "Error 404";
+			
+		} else if  (e instanceof UnAuthorizedException) {
+			response.setStatus(HttpStatus.UNAUTHORIZED_401);
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
+			message = "You are not authorized to access this page";
+			title = "Error 401";
+		} else if  (e instanceof FileReadWriteException) {
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/500.html");
+			message = e.getMessage(); 
+			dic.put("stack_trace", ExceptionUtils.getStackTrace(e)); 
+			title = "Error 500";
+		} else {
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
+			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/500.html");
+			message = ExceptionUtils.getRootCauseMessage(e) == null ? "No Message was Provided" : ExceptionUtils.getRootCauseMessage(e); 
+			dic.put("stack_trace", ExceptionUtils.getStackTrace(e)); 
+			title = "Error 500";
+		}
+		Template template = Mustache.compiler().escapeHTML(false).compile(contents);
+		dic.put("message", message);		
+		dic.put("title", title);		
+		getWriter(response).write(template.execute(dic));
 	}
 	
 	protected void writeNotFound(HttpServletRequest request, HttpServletResponse response) {

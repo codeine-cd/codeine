@@ -27,7 +27,8 @@ public class CancelShutdownApiServlet extends AbstractServlet {
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.info("prepare for shutdown canceled by user " + permissionsManager.user(request));
 		prepareForShutdown.sequenceActivated(false);
-		if ("true".equals(request.getParameter(Constants.UrlParameters.REDIRECT))) {
+		Boolean redirect = Boolean.valueOf(request.getParameter(Constants.UrlParameters.REDIRECT));
+		if (redirect) {
 			try {
 				response.sendRedirect(Constants.CONFIGURE_CONTEXT);
 			} catch (IOException e) {

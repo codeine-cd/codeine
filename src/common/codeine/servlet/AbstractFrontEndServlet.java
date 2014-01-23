@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -21,14 +20,10 @@ import org.eclipse.jetty.security.authentication.FormAuthenticator;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
-import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
-import codeine.utils.exceptions.ProjectNotFoundException;
-import codeine.utils.exceptions.UnAuthorizedException;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Mustache.TemplateLoader;
@@ -126,33 +121,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	
 	@Override
 	protected void handleError(Exception e, HttpServletResponse response) {
-		log.warn("Error in servlet", e);
-		HashMap<String, String> dic = Maps.newHashMap();
-		String contents;
-		String message;
-		String title;
-		if (e instanceof ProjectNotFoundException) {
-			response.setStatus(HttpStatus.NOT_FOUND_404);
-			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
-			message = e.getMessage();
-			title = "Error 404";
-			
-		} else if  (e instanceof UnAuthorizedException) {
-			response.setStatus(HttpStatus.UNAUTHORIZED_401);
-			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/generalError.html");
-			message = "You are not authorized to access this page";
-			title = "Error 401";
-		} else {
-			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
-			contents = TextFileUtils.getContents(Constants.getResourcesDir() + "/html/500.html");
-			message = ExceptionUtils.getRootCauseMessage(e) == null ? "No Message was Provided" : ExceptionUtils.getRootCauseMessage(e); 
-			dic.put("stack_trace", ExceptionUtils.getStackTrace(e)); 
-			title = "Error 500";
-		}
-		Template template = Mustache.compiler().escapeHTML(false).compile(contents);
-		dic.put("message", message);		
-		dic.put("title", title);		
-		getWriter(response).write(template.execute(dic));
+		handleErrorRequestFromBrowser(e, response);
 	}
 	
 	@Override

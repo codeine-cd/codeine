@@ -14,6 +14,7 @@ import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
+import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
@@ -62,15 +63,8 @@ public class AllNodesCommandExecuter {
 			writer = TextFileUtils.getWriter(file, false);
 			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + user);
 			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + user);
-			if (commandData.nodes().size() < 11) {
-				Function<NodeWithPeerInfo, String> predicate = new Function<NodeWithPeerInfo, String>(){
-					@Override
-					public String apply(NodeWithPeerInfo input) {
-						return input.alias();
-					}
-				};
-				writeLine("nodes list: " + StringUtils.collectionToString(commandData.nodes(), predicate));
-			}
+			writeNodesList(commandData);
+			updatePeersAddresses();
 			ThreadUtils.createThread(new Runnable() {
 				@Override
 				public void run() {
@@ -81,6 +75,29 @@ public class AllNodesCommandExecuter {
 		} catch (Exception ex) {
 			finish();
 			throw ExceptionUtils.asUnchecked(ex);
+		}
+	}
+
+	private void updatePeersAddresses() {
+		for (NodeWithPeerInfo n : commandData.nodes()) {
+			PeerStatusJsonV2 p = nodeGetter.peer(n.peer_key());
+			if (null == p) {
+				writeLine("Warning: ignoring node '" + n.alias() + "' since peer not found");
+				continue;
+			}
+			n.peer_address(p.host_port());
+		}
+	}
+
+	public void writeNodesList(ScehudleCommandExecutionInfo commandData) {
+		if (commandData.nodes().size() < 11) {
+			Function<NodeWithPeerInfo, String> predicate = new Function<NodeWithPeerInfo, String>(){
+				@Override
+				public String apply(NodeWithPeerInfo input) {
+					return input.alias();
+				}
+			};
+			writeLine("nodes list: " + StringUtils.collectionToString(commandData.nodes(), predicate));
 		}
 	}
 

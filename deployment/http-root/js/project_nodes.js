@@ -258,6 +258,7 @@ function getSelectedNodes() {
 	$('.panel-body').find('input:checked').each(function() {
 		var obj = { 
 				"peer_address" : $(this).data('peer-address'),
+				"peer_key" : $(this).data('peer-key'),
 				"name" : $(this).data('node-name'),
 				"alias" : $(this).data('node-alias')
 		};

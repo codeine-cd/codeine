@@ -23,6 +23,7 @@ public class NodeInfoTemplateData extends TemplateData {
 	private String alias;
 	private String peer_status;
 	private String peer_address;
+	private String peer_key;
 	private List<NameAndAlias> commands;
 	private List<MonitorTemplateLink> monitors;
 	private boolean readonly;
@@ -39,6 +40,7 @@ public class NodeInfoTemplateData extends TemplateData {
 		this.tags = node.tags();
 		this.peer_status = node.peer().status().name();
 		this.peer_address = node.peer_address();
+		this.peer_key = node.peer().peer_key();
 		monitors = Lists.newArrayList();
 		version = node.version();
 		for (Entry<String, MonitorStatusInfo> monitor : node.monitors().entrySet()) {

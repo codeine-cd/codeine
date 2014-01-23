@@ -27,7 +27,7 @@ public class PrepareForShutdownApiServlet extends AbstractServlet {
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.info("prepare for shutdown initiated by user " + permissionsManager.user(request));
 		prepareForShutdown.sequenceActivated(true);
-		if ("true".equals(request.getParameter(Constants.UrlParameters.REDIRECT))) {
+		if (Boolean.valueOf(request.getParameter(Constants.UrlParameters.REDIRECT))) {
 			try {
 				response.sendRedirect(Constants.CONFIGURE_CONTEXT);
 			} catch (IOException e) {

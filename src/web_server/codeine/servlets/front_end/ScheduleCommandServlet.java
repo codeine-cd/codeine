@@ -68,39 +68,43 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 				versionNodesJson.setId();
 			}
 		} else {
-			int total = 0;
-			for (String version : data.versions()) {
-				VersionNodesJson versionNodes = new VersionNodesJson(version);
-				List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName, version);
-				for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
-					switch (data.nodes_selector()) {
-					case "All Selected Nodes":
-						versionNodes.node().add(nodeWithMonitorsInfo);
-						break;
-					case "Failing Nodes":
-						if (!nodeWithMonitorsInfo.status()){
-							versionNodes.node().add(nodeWithMonitorsInfo);
-						}
-						break;
-					case "Number of Nodes":
-						if (total < data.num_of_nodes){
-							total++;
-							versionNodes.node().add(nodeWithMonitorsInfo);
-						}
-						break;
-					default:
-						throw new UnsupportedOperationException(data.nodes_selector() + " is not a valid selector");
-					}
-					
-				}
-				versionNodes.updateCount();
-				data.nodes().add(versionNodes);
-			}
+			updateNodesFromVersions(projectName, data);
 		}
 
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		CommandInfo command = project.commandForName(data.command());
 		return new SechudleCommandTemplateData(projectName, command, data.nodes());
+	}
+
+	public void updateNodesFromVersions(String projectName, ScheduleInfoPostDataJson data) {
+		int total = 0;
+		for (String version : data.versions()) {
+			VersionNodesJson versionNodes = new VersionNodesJson(version);
+			List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName, version);
+			for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
+				switch (data.nodes_selector()) {
+				case "All Selected Nodes":
+					versionNodes.node().add(nodeWithMonitorsInfo);
+					break;
+				case "Failing Nodes":
+					if (!nodeWithMonitorsInfo.status()){
+						versionNodes.node().add(nodeWithMonitorsInfo);
+					}
+					break;
+				case "Number of Nodes":
+					if (total < data.num_of_nodes){
+						total++;
+						versionNodes.node().add(nodeWithMonitorsInfo);
+					}
+					break;
+				default:
+					throw new UnsupportedOperationException(data.nodes_selector() + " is not a valid selector");
+				}
+				
+			}
+			versionNodes.updateCount();
+			data.nodes().add(versionNodes);
+		}
 	}
 	
 	public static class ScheduleInfoPostDataJson {

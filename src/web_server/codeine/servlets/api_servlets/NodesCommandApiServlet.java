@@ -52,22 +52,28 @@ public class NodesCommandApiServlet extends AbstractServlet {
 		log.debug("NodesCommandServlet request");
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		boolean redirect = Boolean.valueOf(request.getParameter(Constants.UrlParameters.REDIRECT));
-		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
-		String projectName = commandData.command_info().project_name();
-		
-		ProjectJson project = configurationManager.getProjectForName(projectName);
-		CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
-		overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
-		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData);
-		if (redirect){
-			try {
-				response.sendRedirect(links.getCommandOutputGui(projectName, commandData.command_info().command_name(), String.valueOf(dir)));
-			} catch (IOException e) {
-				throw ExceptionUtils.asUnchecked(e);
+		try {
+			ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
+			String projectName = commandData.command_info().project_name();
+			
+			ProjectJson project = configurationManager.getProjectForName(projectName);
+			CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
+			overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
+			long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData);
+			if (redirect){
+				try {
+					response.sendRedirect(links.getCommandOutputGui(projectName, commandData.command_info().command_name(), String.valueOf(dir)));
+				} catch (IOException e) {
+					throw ExceptionUtils.asUnchecked(e);
+				}
 			}
-		}
-		else {
-			writeResponseJson(response, dir);
+			else {
+				writeResponseJson(response, dir);
+			}
+		} catch (RuntimeException e) {
+			if (redirect) {
+				handleErrorRequestFromBrowser(e, response);
+			}
 		}
 	}
 	

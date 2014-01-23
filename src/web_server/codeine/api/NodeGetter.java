@@ -2,6 +2,7 @@ package codeine.api;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.labels.LabelJsonProvider;
@@ -34,9 +35,19 @@ public class NodeGetter {
 		throw new IllegalArgumentException("Node " + nodeName + " not found in project " + projectName);
 	}
 
+	public PeerStatusJsonV2 peer(String peer_key) {
+		for (Entry<String, PeerStatusJsonV2> e : peersProjectsStatus.peer_to_projects().entrySet()) {
+			if (e.getKey().equals(peer_key)){
+				return e.getValue();
+			}
+		}
+		throw new IllegalArgumentException("peer not found " + peer_key);
+	}
 	public List<PeerStatusJsonV2> peers() {
 		return Lists.newArrayList(peersProjectsStatus.peer_to_projects().values());
 	}
+	
+	
 
 	public List<NodeWithMonitorsInfo> getNodes(String projectName) {
 		return getNodes(projectName, Constants.ALL_VERSION);

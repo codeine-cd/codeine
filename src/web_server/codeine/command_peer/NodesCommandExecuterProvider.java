@@ -67,7 +67,7 @@ public class NodesCommandExecuterProvider {
 				int failPercent = failSize * 100 / sizeNotZero;
 				$.add(new CommandStatusJson(j.command(), link, projectName, size, successPercent, failPercent, j.start_time() ,j.id(), j.finished()));
 			} catch (Exception e) {
-				log.warn("failed in command " +  dir + " for project " + projectName + " file is " + file, e);
+				log.warn("failed in command " +  dir + " for project " + projectName + " file is '" + file + "' and error is " + e.getMessage());
 			}
 		}
 		Comparator<CommandStatusJson> comp = new Comparator<CommandStatusJson>() {

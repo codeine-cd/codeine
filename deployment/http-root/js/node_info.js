@@ -30,6 +30,7 @@ function getSelectedNodes() {
 	
 	var arr = [];
 	var obj = { 
+		"peer_key" : peer_key,
 		"peer_address" : peer_address,
 		"name" : name,
 		"alias" : alias
