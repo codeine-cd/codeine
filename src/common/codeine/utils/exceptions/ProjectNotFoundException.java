@@ -1,4 +1,4 @@
-package codeine.exceptions;
+package codeine.utils.exceptions;
 
 public class ProjectNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

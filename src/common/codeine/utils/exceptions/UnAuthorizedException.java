@@ -1,4 +1,4 @@
-package codeine.exceptions;
+package codeine.utils.exceptions;
 
 public class UnAuthorizedException extends RuntimeException {
 

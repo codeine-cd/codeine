@@ -18,14 +18,14 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.security.authentication.FormAuthenticator;
 
-import codeine.exceptions.ProjectNotFoundException;
-import codeine.exceptions.UnAuthorizedException;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
+import codeine.utils.exceptions.ProjectNotFoundException;
+import codeine.utils.exceptions.UnAuthorizedException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

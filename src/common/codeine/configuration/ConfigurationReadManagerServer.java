@@ -7,11 +7,11 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import codeine.exceptions.ProjectNotFoundException;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
+import codeine.utils.exceptions.ProjectNotFoundException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

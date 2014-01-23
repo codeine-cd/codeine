@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
-import codeine.exceptions.InShutdownException;
-import codeine.exceptions.UnAuthorizedException;
 import codeine.model.Constants;
 import codeine.utils.ServletUtils;
+import codeine.utils.exceptions.InShutdownException;
+import codeine.utils.exceptions.UnAuthorizedException;
 
 import com.google.gson.Gson;
 

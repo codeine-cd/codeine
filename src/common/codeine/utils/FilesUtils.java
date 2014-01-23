@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import codeine.utils.exceptions.FileReadWriteException;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -54,7 +56,7 @@ public class FilesUtils {
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw new FileReadWriteException(file.getAbsolutePath(), e);
 		}
 	}
 
@@ -90,7 +92,7 @@ public class FilesUtils {
 			Files.setPosixFilePermissions(FileSystems.getDefault().getPath(fileName), Sets.newHashSet(permission));
 		} 
 		catch (IOException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw new FileReadWriteException(fileName, e);
 		}
 	}
 }

@@ -12,12 +12,12 @@ import org.apache.log4j.Logger;
 import codeine.api.CommandStatusJson;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
-import codeine.exceptions.InShutdownException;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
 import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
+import codeine.utils.exceptions.InShutdownException;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
