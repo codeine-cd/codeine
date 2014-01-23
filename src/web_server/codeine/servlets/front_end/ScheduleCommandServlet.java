@@ -25,13 +25,12 @@ import com.google.inject.Inject;
 
 public class ScheduleCommandServlet extends AbstractFrontEndServlet
 {
+	private static final String DATA_PARSED = "data_parsed";
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject private NodeGetter nodesGetter;
 	
 	private static final long serialVersionUID = 1L;
 
-	private ScheduleInfoPostDataJson data;
-	
 	protected ScheduleCommandServlet() {
 		super("schedule_command");
 	}
@@ -44,6 +43,7 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		ScheduleInfoPostDataJson data = (ScheduleInfoPostDataJson) request.getAttribute(DATA_PARSED);
 		String commandName = data.command();
 		return Lists.<TemplateLink> newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?project=" + HttpUtils.encode(projectName)),new TemplateLink(commandName, "#"));
 	}
@@ -61,7 +61,8 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 	@Override
 	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		data = gson().fromJson(request.getParameter(Constants.UrlParameters.DATA_NAME), ScheduleInfoPostDataJson.class);
+		ScheduleInfoPostDataJson data = gson().fromJson(request.getParameter(Constants.UrlParameters.DATA_NAME), ScheduleInfoPostDataJson.class);
+		request.setAttribute(DATA_PARSED, data);
 		if (data.isNodeMode()) { 
 			for (VersionNodesJson versionNodesJson : data.nodes()) {
 				versionNodesJson.setId();
