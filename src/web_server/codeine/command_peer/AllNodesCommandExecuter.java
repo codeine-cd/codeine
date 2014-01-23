@@ -33,6 +33,7 @@ public class AllNodesCommandExecuter {
 	@Inject	private PathHelper pathHelper;
 	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
+	
 	private int total;
 	private int count;
 	private int fail;
@@ -47,23 +48,20 @@ public class AllNodesCommandExecuter {
 
 	private CommandExecutionStrategy strategy;
 
-	public long executeOnAllNodes(ScehudleCommandExecutionInfo commandData) {
+	public long executeOnAllNodes(String user, ScehudleCommandExecutionInfo commandData) {
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
-			// final int concurrency =
-			// configurationManager.getProjectForName(commandData.project_name()).getCommand(commandData.command()).concurrency();
 			dirName = getNewDirName();
 			dirNameFull = pathHelper.getPluginsOutputDir(commandData.command_info().project_name()) + "/" + dirName;
 			FilesUtils.mkdirs(dirNameFull);
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);
 			FilesUtils.createNewFile(file);
-			createCommandDataFile();
+			createCommandDataFile(user);
 			writer = TextFileUtils.getWriter(file, false);
-			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
-//			writeLine("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency());
-			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes");
+			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + user);
+			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + user);
 			if (commandData.nodes().size() < 11) {
 				Function<NodeWithPeerInfo, String> predicate = new Function<NodeWithPeerInfo, String>(){
 					@Override
@@ -129,8 +127,8 @@ public class AllNodesCommandExecuter {
 		writeLine("=========> aggregate-command-statistics (fail/total): " + fail + "/" + total + "\n");
 	}
 
-	private void createCommandDataFile() {
-		commandDataJson = new CommandExecutionStatusInfo(commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
+	private void createCommandDataFile(String user) {
+		commandDataJson = new CommandExecutionStatusInfo(user, commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
 				commandData.nodes(), dirName);
 		FilesUtils.createNewFile(commandFile());
 		updateJson();

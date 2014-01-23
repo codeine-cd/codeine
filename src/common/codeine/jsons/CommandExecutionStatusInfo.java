@@ -4,6 +4,7 @@ import java.util.List;
 
 import codeine.api.NodeWithPeerInfo;
 import codeine.jsons.command.CommandParameterInfo;
+import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
 
@@ -16,6 +17,7 @@ public class CommandExecutionStatusInfo {
 	private List<NodeWithPeerInfo> fail_list = Lists.newArrayList();
 	private List<NodeWithPeerInfo> success_list = Lists.newArrayList();
 	private long start_time;
+	private String user = "Anonymous";
 	private long id;
 	private boolean finished;
 	
@@ -24,13 +26,14 @@ public class CommandExecutionStatusInfo {
 	}
 
 
-	public CommandExecutionStatusInfo(String command, List<CommandParameterInfo> params, String projectName, List<NodeWithPeerInfo> nodes_list, long id) {
+	public CommandExecutionStatusInfo(String user, String command, List<CommandParameterInfo> params, String projectName, List<NodeWithPeerInfo> nodes_list, long id) {
 		this.command = command;
 		this.params = params;
 		this.project_name = projectName;
 		this.nodes_list = nodes_list;
 		this.id = id;
 		this.start_time = System.currentTimeMillis();
+		this.user = StringUtils.isEmpty(user) ? "Anonymous" : user; 
 	}
 
 
@@ -55,6 +58,10 @@ public class CommandExecutionStatusInfo {
 	}
 
 
+	public String user() {
+		return user;
+	}
+	
 	public String command() {
 		return command;
 	}

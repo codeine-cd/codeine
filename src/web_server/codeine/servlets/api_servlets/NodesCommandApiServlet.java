@@ -58,7 +58,7 @@ public class NodesCommandApiServlet extends AbstractServlet {
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
 		overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
-		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(commandData);
+		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData);
 		if (redirect){
 			try {
 				response.sendRedirect(links.getCommandOutputGui(projectName, commandData.command_info().command_name(), String.valueOf(dir)));
