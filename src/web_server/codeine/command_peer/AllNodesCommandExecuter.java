@@ -85,7 +85,9 @@ public class AllNodesCommandExecuter {
 	}
 
 	private void finish() {
-		commandDataJson.finish();
+		if (null != commandDataJson) {
+			commandDataJson.finish();
+		}
 		try {
 			updateJson();
 			FilesUtils.createNewFile(dirNameFull + Constants.COMMAND_FINISH_FILE);
