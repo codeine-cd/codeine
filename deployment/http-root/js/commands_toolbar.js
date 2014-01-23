@@ -18,6 +18,7 @@ $('#selectAll').change(function() {
   $('.panel-body').find('[type=checkbox]:visible').prop('checked', value);
   if (value === true) {
     $('.codeine_command').removeClass("disabled");
+    $('.codeine_command').prop('disabled', false);
   }
 });
 
