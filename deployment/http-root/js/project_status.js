@@ -3,15 +3,15 @@ var chartDetails;
 var posX;
 var posY;
 var divInTooltip = null;
-var command = "no command yet";
+var command = "'command not selected'";
 
 $(document).ready( function () {
 
-    if ($('.codeine_command').size() === 0 || readOnly) {
+    if ($('.codeine_command_name').size() === 0 || readOnly) {
         $('#commandsNavbar').hide();
         $('.panel-body').find('[type=checkbox]').remove();
     }
-
+    $('.codeine_command').prop('disabled', true);
     loadChart();
 	
 });

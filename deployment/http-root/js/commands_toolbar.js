@@ -53,9 +53,11 @@ function resetSelectAll() {
   enableRunCommandButton(hasChecked);
 }
 function enableRunCommandButton(hasChecked) {
-  if (hasChecked && command !== "no command yet") {
+  if (hasChecked && (typeof command === 'undefined' || command !== "'command not selected'")) {
     $('.codeine_command').removeClass("disabled");
+    $('.codeine_command').prop('disabled', false);
   } else {
     $('.codeine_command').addClass("disabled");
+    $('.codeine_command').prop('disabled', true);
   }
 }
