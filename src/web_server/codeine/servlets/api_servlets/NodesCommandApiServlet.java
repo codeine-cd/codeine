@@ -31,13 +31,20 @@ public class NodesCommandApiServlet extends AbstractServlet {
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
-		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
-		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
-		String projectName = commandData.command_info().project_name();
+		String projectName = getProjectName(request);
 		if (!permissionsManager.canCommand(projectName, request)){
 			return false;
 		}
 		return true;
+	}
+	
+	private String getProjectName(HttpServletRequest request) {
+		if (request.getMethod().equals("DELETE")) {
+			return request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		}
+		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
+		return commandData.command_info().project_name(); 
 	}
 	
 	@Override
