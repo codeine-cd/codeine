@@ -33,9 +33,9 @@ var helpStrings = {
   "monitorHelp" : "Select which nodes to show.<br/><br/><strong>'Any Alert'</strong> - show nodes with alerts (no matter which monitor).<br/><br/>"
       + "<strong>'All Nodes'</strong> - also show nodes without alerts.<br/><br/>"
       + "<strong>Specific Monitor</strong> - show only nodes with alerts from that monitor.",
-  "commandNodesFilterHelp" : "Select the nodes on which the command will be executed. <br/><br/><strong>'All Selected Nodes'</strong> - All the nodes in the selected versions.<br/><br/>"
-      + "<strong>'Failing Nodes'</strong> - Only on nodes that have failing monitors.<br/><br/>"
-      + "<strong>'Number of Nodes'</strong> - the command will be executed on this number of nodes from all selected versions (total).<br/><br/>",
+  "commandNodesFilterHelp" : "Select the nodes on which the command will be executed on nodes of checked versiosns. <br/><br/><strong>'All Selected'</strong> - All the nodes in the selected versions.<br/><br/>"
+      + "<strong>'Only Failing'</strong> - Only on nodes that have failing monitors.<br/><br/>"
+      + "<strong>'Limited Number'</strong> - the command will be executed on this number of nodes from all selected versions (total).<br/><br/>",
       "ratioHelp" : "The rate for command execution.<br/><br/><strong>'Linear'</strong> - Spread nodes evenly in the specified time period.<br/><br/>"
         + "<strong>'Exponential'</strong> - execute on one node first, then increase number of nodes exponentially (1, 2, 4, ...).<br/><br/>",
   "command_patameter_description_Help" : "A description that will be displayed as a tooltip to the user executing the command.",
