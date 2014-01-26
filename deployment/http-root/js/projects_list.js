@@ -59,12 +59,12 @@ function checkForNewCodeine() {
 					console.log("Current Version: " + current_version
 							+ " Latest Version: " + latest_version);
 					if (latest_version > current_version) {
-						toast("info",
+						displayAlert(
 								"New Codeine Version ("
 										+ verString
 										+ ") is avaliable on <a href='https://github.com/Intel-IT/codeine/releases/latest'><i class='fa fa-github'></i> GitHub</a>, click <a href='/upgrade-server?version="
 										+ encodeURIComponent(verString)
-										+ "'>here</a> to upgrade now");
+										+ "'>here</a> to upgrade now", "info",true);
 					}
 				},
 				error : function(jqXhr) {
