@@ -1,6 +1,6 @@
 package codeine;
 
-import static codeine.model.Constants.*;
+import static codeine.model.Constants.apiContext;
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
 import codeine.servlets.FileGetterServlet;
@@ -17,6 +17,7 @@ import codeine.servlets.api_servlets.ProjectTagsApiServlet;
 import codeine.servlets.api_servlets.ProjectsListApiServlet;
 import codeine.servlets.api_servlets.ReporterServlet;
 import codeine.servlets.api_servlets.UpgradeApiServlet;
+import codeine.servlets.front_end.CommandOutputServlet;
 import codeine.servlets.front_end.ConfigureProjectServlet;
 import codeine.servlets.front_end.NewProjectServlet;
 import codeine.servlets.front_end.NodeInfoServlet;
@@ -56,6 +57,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(UserInfoServlet.class, Constants.USER_INFO_CONTEXT);
 		serveMe(ProjectNodesApiServlet.class, apiContext(Constants.PROJECT_NODES_CONTEXT));
 		serveMe(RawOutputServlet.class, Constants.RAW_OUTPUT_CONTEXT);
+		serveMe(CommandOutputServlet.class, Constants.COMMAND_OUTPUT_CONTEXT);
 		serveMe(FileGetterServlet.class, Constants.FILE_GETTER_CONTEXT);
 		serveMe(ProgressiveRawOutputServlet.class, Constants.PROGRESSIVE_RAW_OUTPUT_CONTEXT);
 		serveMe(ProjectsListServlet.class, Constants.PROJECTS_LIST_CONTEXT, "/");
