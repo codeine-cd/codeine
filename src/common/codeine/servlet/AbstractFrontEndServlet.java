@@ -84,19 +84,25 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	@Override
 	protected final void myGet(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("processing get request: " + request.getRequestURL());
-		PrintWriter writer = getWriter(response);
 		try {
-			TemplateData templateData = doGet(request, writer);
-			if (templateData == null) {
-				super.myGet(request, response);
-			} else {
-				response.setStatus(HttpStatus.OK_200);
-				writeTemplateData(request, templateData, response);
-			}
+			myGetFrontEnd(request, response);
 			
 		} catch (FrontEndServletException e) {
 			response.setStatus(e.http_status());
 			handleError(e.inner_exception(), response);
+		}
+	}
+
+
+	protected void myGetFrontEnd(HttpServletRequest request, HttpServletResponse response)
+			throws FrontEndServletException {
+		PrintWriter writer = getWriter(response);
+		TemplateData templateData = doGet(request, writer);
+		if (templateData == null) {
+			super.myGet(request, response);
+		} else {
+			response.setStatus(HttpStatus.OK_200);
+			writeTemplateData(request, templateData, response);
 		}
 	}
 

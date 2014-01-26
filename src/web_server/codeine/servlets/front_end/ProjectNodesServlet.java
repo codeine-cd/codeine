@@ -38,18 +38,22 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
+		String versionName = getVersion(request);
 		
 		boolean readOnly = !permissionsManager.canCommand(projectName, request);
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		
 		return new ProjectNodesTemplateData(projectName, versionName, readOnly, ProjectsStatusUtils.getCommandsName(project.commands()), ProjectsStatusUtils.getMonitorsName(project.monitors()));
 	}
+
+	private String getVersion(HttpServletRequest request) {
+		return request.getParameter(Constants.UrlParameters.VERSION_NAME);
+	}
 	
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
+		String versionName = getVersion(request);
 		return Lists.<TemplateLink>newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?"+Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encode(projectName)),new TemplateLink(versionName, "#"));
 	}
 

@@ -1,5 +1,6 @@
 package codeine.servlets.front_end;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +21,7 @@ import codeine.configuration.Links;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
+import codeine.servlet.FrontEndServletException;
 import codeine.servlet.PermissionsManager;
 import codeine.servlet.ProjectTemplateLink;
 import codeine.servlet.TemplateData;
@@ -26,8 +29,10 @@ import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
 import codeine.servlets.template.ProjectListTemplateData;
 import codeine.servlets.template.ProjectsInView;
+import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
+import codeine.utils.network.HttpUtils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -108,7 +113,30 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 	protected List<TemplateLinkWithIcon> generateMenu(HttpServletRequest request) {
 		return getMenuProvider().getMainMenu(request);
 	}
-	
+	@Override
+	protected void myGetFrontEnd(HttpServletRequest request, HttpServletResponse response)
+			throws FrontEndServletException {
+		String query = request.getParameter("projectSearch");
+		if (null == query || !query.contains(":")) {
+			super.myGetFrontEnd(request, response);
+			return;
+		}
+		String project = query.substring(0, query.indexOf(":"));
+		String filter = query.substring(query.indexOf(":") + 1);
+		List<ProjectJson> configuredProjects = filter(configurationManager.getConfiguredProjects(), project);
+		if (configuredProjects.isEmpty()){
+			super.myGetFrontEnd(request, response);
+			return;
+		}
+		try {
+			response.sendRedirect(Constants.PROJECT_NODES_CONTEXT + "?" + Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encode(configuredProjects.get(0).name()) + "&"
+					+ Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encode(Constants.ALL_VERSION) + "&"
+					+ Constants.UrlParameters.FILTER + "=" + HttpUtils.encode(filter)
+					);
+		} catch (IOException e) {
+			throw ExceptionUtils.asUnchecked(e);
+		}
+	}
 	private List<ProjectTemplateLink> getSortedProjects(HttpServletRequest request) {
 		String query = request.getParameter("projectSearch");
 		List<ProjectJson> configuredProjects = filter(configurationManager.getConfiguredProjects(), query);
