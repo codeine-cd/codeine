@@ -13,7 +13,7 @@ $(document).ready( function () {
     }
     $('.codeine_command').prop('disabled', true);
     loadChart();
-	
+    $(".version_status").tooltip();
 });
 
 function loadChart() {
