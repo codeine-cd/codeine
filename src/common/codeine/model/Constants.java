@@ -174,7 +174,7 @@ public class Constants
 		public static final String DATA_ADDITIONAL_COMMAND_INFO_NAME = "more-command-info";
 		public static final String SECTION = "section";
 		public static final String VIEW_AS = "viewas";
-		public static final String FILTER = "filter";
+		public static final String FILTER = "text-filter";
 		
 		
 	}
