@@ -1,4 +1,4 @@
-var nodesJson;
+var nodesJson = [];
 var versionMap;
 var activeTags = [];
 
