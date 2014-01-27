@@ -33,6 +33,7 @@ function loadChart() {
 
 	    	var chartDiv = document.getElementById('chartDiv');
 	    	chart1.create(chartDiv);
+	    	chartDiv.find('svg').removeAttr('height').removeAttr('width').attr('viewBox', '0 0 870 600');
 	    },
 	    error:  function(err) { 
 	    	// TODO - Hide loader...
