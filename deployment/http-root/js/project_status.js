@@ -38,7 +38,7 @@ function loadChart() {
 		    // Change the chart's attributes to make it responsive.
     		var svgelem = document.getElementsByTagName("svg");
 			svgelem.chart.setAttribute('width','100%');
-			svgelem.chart.setAttribute('height','');
+			// svgelem.chart.setAttribute('height',''); 			// Removing height makes the chart disappear in Chrome :(
 			svgelem.chart.setAttribute('viewBox','0 0 870 600');
 	    },
 	    error:  function(err) { 
