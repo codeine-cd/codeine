@@ -13,16 +13,8 @@ $(document).ready( function () {
     }
     $('.codeine_command').prop('disabled', true);
     loadChart();
-<<<<<<< HEAD
-    // Change the chart's attributes to make it responsive.
-	while (document.getElementsByTagName("svg").length==0) {}
-	svgelem = document.getElementsByTagName("svg");
-	svgelem.chart.setAttribute('width','100%');
-	svgelem.chart.setAttribute('viewBox','0 0 870 600');
-	
-=======
+
     $(".version_status").tooltip();
->>>>>>> upstream/master
 });
 
 function loadChart() {
@@ -42,6 +34,12 @@ function loadChart() {
 
 	    	var chartDiv = document.getElementById('chartDiv');
 	    	chart1.create(chartDiv);
+
+		    // Change the chart's attributes to make it responsive.
+    		var svgelem = document.getElementsByTagName("svg");
+			svgelem.chart.setAttribute('width','100%');
+			svgelem.chart.setAttribute('height','');
+			svgelem.chart.setAttribute('viewBox','0 0 870 600');
 	    },
 	    error:  function(err) { 
 	    	// TODO - Hide loader...
