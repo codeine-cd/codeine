@@ -1,4 +1,4 @@
-var nodesJson;
+var nodesJson = [];
 var versionMap;
 var activeTags = [];
 
@@ -7,6 +7,11 @@ $(document).ready( function () {
 	getNodes();
 
 	getTags();
+	var filter = getUrlParameter("text-filter");
+	if (filter !== undefined) {
+		$("#nodesFilter").val(filter);
+		filterNodes($('#monitor_drop_down').text(),$('#nodesFilter').val());
+	}
 });
 
 

@@ -11,7 +11,8 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
-import codeine.utils.ExceptionUtils;
+import codeine.utils.exceptions.ConnectToDatabaseException;
+import codeine.utils.exceptions.DatabaseException;
 
 import com.google.common.base.Function;
 
@@ -73,10 +74,18 @@ public class DbUtils
 				function.apply(rs);
 			}
 		} catch (SQLException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw prepareException(sql, connection, e);
 		} finally {
 			closeResultSet(rs);
 			closeConnection(connection);
+		}
+	}
+
+	private DatabaseException prepareException(String sql, Connection connection, SQLException e) {
+		try {
+			return new DatabaseException(sql, connection.getMetaData().getURL(), e);
+		} catch (SQLException e1) {
+			return new DatabaseException(sql, "url could not be resolved", e);
 		}
 	}
 	public void executeUpdateableQuery(String sql, Function<ResultSet, Void> function)
@@ -90,7 +99,7 @@ public class DbUtils
 				function.apply(rs);
 			}
 		} catch (SQLException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw prepareException(sql, connection, e);
 		} finally {
 			closeResultSet(rs);
 			closeConnection(connection);
@@ -110,7 +119,7 @@ public class DbUtils
 			}
 			return preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw prepareException(sql, connection, e);
 		} finally {
 			closeStatement(preparedStatement);
 			closeConnection(connection);
@@ -136,7 +145,7 @@ public class DbUtils
 		try {
 			return DriverManager.getConnection(url, hostSelector.mysql().user(), hostSelector.mysql().password());
 		} catch (SQLException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw new ConnectToDatabaseException(url, e);
 		}
 	}
 	private Connection getConnectionForRoot() {
@@ -144,7 +153,7 @@ public class DbUtils
 		try {
 			return DriverManager.getConnection(url);
 		} catch (SQLException e) {
-			throw ExceptionUtils.asUnchecked(e);
+			throw new ConnectToDatabaseException(url, e);
 		}
 	}
 	

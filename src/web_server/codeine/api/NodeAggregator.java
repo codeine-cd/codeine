@@ -1,14 +1,12 @@
 package codeine.api;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import codeine.api.NodeWithMonitorsInfo;
-import codeine.api.VersionItemInfo;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.model.Constants;
 
@@ -37,13 +35,9 @@ public class NodeAggregator
 		Map<String, VersionItemInfo> $ = newHashMap();
 		int max = getMax(items);
 		for (Entry<String, Collection<NodeWithMonitorsInfo>> e : items.asMap().entrySet()) {
-			int percentBad = percent(false, e.getValue(), max);
-			int percentGood = percent(true, e.getValue(), max);
-			if (percentGood + percentBad > 100){
-				percentGood = 100 - percentBad;
-			}
+			int countBad = percent(false, e.getValue(), max);
 			String versionName = versionLabelJsonProvider.versionForLabel(e.getKey(), projectName);
-			$.put(e.getKey(), new VersionItemInfo(e.getKey(), versionName, percentBad, percentGood, e.getValue().size()));
+			$.put(e.getKey(), new VersionItemInfo(e.getKey(), versionName, countBad, e.getValue().size(), max));
 		}
 		if ($.isEmpty()){
 			$.put(Constants.ALL_VERSION, new VersionItemInfo(Constants.ALL_VERSION, Constants.ALL_VERSION, 0,0,0));
@@ -68,7 +62,7 @@ public class NodeAggregator
 				count++;
 			}
 		}
-		return (int) Math.ceil(count * 100 / (double)total);
+		return count;
 	}
 
 }

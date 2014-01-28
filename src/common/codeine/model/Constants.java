@@ -24,6 +24,7 @@ public class Constants
 	public static final String PLUGINS_OUTPUT_DIR = "/plugins_output";
 	public static final String MONITOR_OUTPUT_CONTEXT = "/monitor-output";
 	public static final String RAW_OUTPUT_CONTEXT = "/raw-output";
+	public static final String COMMAND_OUTPUT_CONTEXT = "/command-output";
 	public static final String PROGRESSIVE_RAW_OUTPUT_CONTEXT = "/progressive-raw-output";
 	public static final String FILE_GETTER_CONTEXT = "/file-getter";
 	public static final String PROJECT_FILES_CONTEXT = "/projects-files";
@@ -173,6 +174,7 @@ public class Constants
 		public static final String DATA_ADDITIONAL_COMMAND_INFO_NAME = "more-command-info";
 		public static final String SECTION = "section";
 		public static final String VIEW_AS = "viewas";
+		public static final String FILTER = "text-filter";
 		
 		
 	}

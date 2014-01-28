@@ -68,7 +68,7 @@ public class Links {
 		String command = j.command();
 		String path = String.valueOf(j.id());
 		return j.finished() ? 
-				Constants.RAW_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encode(project_name) + "&resource=" + HttpUtils.encode(command) + "&link=" + HttpUtils.encode(getPluginOutLink(project_name, path))) : 
+				Constants.COMMAND_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encode(project_name) + "&resource=" + HttpUtils.encode(command) + "&link=" + HttpUtils.encode(getPluginOutLink(project_name, path))) : 
 			getCommandOutputGui(project_name, command, path);
 	}
 

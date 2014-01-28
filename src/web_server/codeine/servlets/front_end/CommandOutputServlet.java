@@ -5,24 +5,25 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
 import codeine.servlet.AbstractFrontEndServlet;
 import codeine.servlet.TemplateData;
 import codeine.servlet.TemplateLink;
 import codeine.servlet.TemplateLinkWithIcon;
-import codeine.servlets.template.RawOutputTemplateData;
+import codeine.servlets.template.CommandOutputTemplateData;
 import codeine.utils.UrlUtils;
 import codeine.utils.network.HttpUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
-public class RawOutputServlet extends AbstractFrontEndServlet {
+public class CommandOutputServlet extends AbstractFrontEndServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected RawOutputServlet() {
-		super("raw_output");
+	protected CommandOutputServlet() {
+		super("command_output");
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class RawOutputServlet extends AbstractFrontEndServlet {
 	@Override
 	protected String getTitle(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return projectName + " Monitor Output";
+		return projectName + " Command Output";
 	}
 	
 	@Override
@@ -44,7 +45,8 @@ public class RawOutputServlet extends AbstractFrontEndServlet {
 			String address = request.getRequestURL().substring(0, request.getRequestURL().lastIndexOf(request.getRequestURI()));
 			link = address + link;
 		}
-		return new RawOutputTemplateData(HttpUtils.doGET(link,null));
+		CommandExecutionStatusInfo commandInfo = gson().fromJson(HttpUtils.doGET(link + Constants.JSON_COMMAND_FILE_NAME ,null),CommandExecutionStatusInfo.class); 		
+		return new CommandOutputTemplateData(commandInfo, HttpUtils.doGET(link + Constants.COMMAND_LOG_FILE,null));
 	}
 
 	@Override
