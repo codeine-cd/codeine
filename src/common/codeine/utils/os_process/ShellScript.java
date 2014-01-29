@@ -21,7 +21,9 @@ public class ShellScript {
 		TextFileUtils.setContents(fileName, content);
 		FilesUtils.setPermissions(fileName, 
 				PosixFilePermission.OWNER_EXECUTE, PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE,
-				PosixFilePermission.GROUP_EXECUTE, PosixFilePermission.GROUP_READ);
+				PosixFilePermission.GROUP_EXECUTE, PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_WRITE,
+				PosixFilePermission.OTHERS_EXECUTE, PosixFilePermission.OTHERS_READ
+				);
 		return fileName;
 	}
 
