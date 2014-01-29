@@ -71,6 +71,9 @@ form.form-inline div.span2 {
   text-overflow: ellipsis;
 }
 
+.codeine_help {
+	opacity: 0.25;
+}
 /* Makes the help icons line up with the text in the left panels */
 div.sidebar-nav i.codeine_help {
 	vertical-align: text-bottom; 
