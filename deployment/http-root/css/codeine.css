@@ -58,7 +58,7 @@ td.editable input{
 
 /* This stops the tooltips in the sidebar inheriting the font characteristics from the headings (small, grey, all caps). */
 div.sidebar-nav div.popover {
-  color: #000000;
+ color: #000000;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   text-transform: none;
   font-size: 14px;
