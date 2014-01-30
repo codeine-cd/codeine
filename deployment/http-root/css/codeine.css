@@ -70,6 +70,7 @@ form.form-inline fieldset div:first-child {
   overflow: hidden;
   /* text-overflow: ellipsis; */
   position: relative;
+  max-height: 1.1rem;
 }
 
 /* This applies a gradient fade over the node name (instead of an ellipsis) */
