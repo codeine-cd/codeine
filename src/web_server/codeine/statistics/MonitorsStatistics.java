@@ -14,31 +14,51 @@ import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
-import codeine.executer.Task;
+import codeine.configuration.PathHelper;
 import codeine.jsons.project.ProjectJson;
+import codeine.utils.FilesUtils;
 import codeine.utils.LimitedQueue;
+import codeine.utils.SerializationUtils;
 import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 
-public class MonitorsStatistics implements Task{
+public class MonitorsStatistics implements IMonitorStatistics{
 
+	private static final Logger log = Logger.getLogger(MonitorsStatistics.class);
+	private static final int SAMPLE_TIME_MINUTES = 2;
+	private static final int MAX_SIZE =(int) (TimeUnit.DAYS.toMinutes(30) / SAMPLE_TIME_MINUTES);
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private NodeGetter nodesGetter;
 	@Inject private Gson gson;
+	@Inject private PathHelper pathHelper;
 	
-	private static final Logger log = Logger.getLogger(MonitorsStatistics.class);
-	private static final int MAX_SIZE = 2 * 24 * 7 * 1;
 	private Map<String, LimitedQueue<MonitorStatusItem>> data = Maps.newConcurrentMap();
 	
-	public static final long SLEEP_TIME = TimeUnit.MINUTES.toMillis(2);
+	public static final long SLEEP_TIME = TimeUnit.MINUTES.toMillis(SAMPLE_TIME_MINUTES);
 	
 	public MonitorsStatistics() {
 		super();
 	}
 
+	public void restore() {
+		try {
+			String statisticsFile = pathHelper.getStatisticsFile();
+			if (FilesUtils.exists(statisticsFile)) {
+				log.info("reading statistics from " + statisticsFile);
+				data = SerializationUtils.fromFile(statisticsFile);
+			}
+		} catch (Exception e) {
+			log.warn("failed to read statistics,  will reset", e);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see codeine.statistics.IMonitorStatistics#getDataJson(java.lang.String)
+	 */
+	@Override
 	public String getDataJson(String projectName) {
 		LimitedQueue<MonitorStatusItem> d = data.get(projectName);
 		if (null == d){
@@ -86,5 +106,7 @@ public class MonitorsStatistics implements Task{
 			}
 			log.info("Project: " + projectJson.name() + " , Total Success: " + success + " , Total Fail: " + fail);
 		}
+		log.info("saving statistics data to file");
+		SerializationUtils.toFile(pathHelper.getStatisticsFile(), data);
 	}
 }

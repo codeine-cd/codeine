@@ -5,13 +5,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
-import codeine.statistics.MonitorsStatistics;
+import codeine.statistics.IMonitorStatistics;
 
 import com.google.inject.Inject;
 
 public class MonitorsStatisticsApiServlet extends AbstractServlet {
 	
-	private @Inject MonitorsStatistics monitorsStatistics;
+	private @Inject IMonitorStatistics monitorsStatistics;
 	private static final long serialVersionUID = 1L;
 	
 	

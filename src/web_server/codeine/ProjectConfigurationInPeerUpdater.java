@@ -3,6 +3,7 @@ package codeine;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -21,6 +22,7 @@ import com.google.inject.Inject;
 public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 
 	private static final Logger log = Logger.getLogger(ProjectConfigurationInPeerUpdater.class);
+	public static final long MAX_SLEEP_TIME_MILLI = TimeUnit.HOURS.toMillis(2);
 	@Inject	private PeersProjectsStatus peersProjectsStatus;
 	@Inject	private Links links;
 	private Object sleepObject = new Object();
