@@ -1,11 +1,22 @@
 var nodesJson = [];
 var versionMap;
 var activeTags = [];
+var queryString;
 
 $(document).ready( function () {
-
 	getNodes();
 
+	window.onpopstate  = function(event) {
+		var message =
+			"onpopstate: "+
+			"location: " + location.href + ", " +
+			"data: " + JSON.stringify(event.state) +
+			"\n\n"
+			;
+		console.log(message);
+		setTagsFromQueryString();
+	};
+	
 	getTags();
 	var filter = getUrlParameter("text-filter");
 	if (filter !== undefined) {
@@ -14,8 +25,23 @@ $(document).ready( function () {
 	}
 });
 
-
-
+function setTagsFromQueryString() {
+	activeTags = [];
+	queryString = location.search;
+	if (queryString.indexOf("tags", 0) !== -1) {
+		var choosenTags = getUrlParameter("tags");
+		if (choosenTags !== ""){
+			activeTags = choosenTags.split(",");
+		}
+		queryString = removeURLParameter(location.search,"tags");
+	}
+	console.log("activeTags=" + activeTags);
+	$('.node_tag').removeClass("active");
+	for (var i = 0; i < activeTags.length; i++) {
+		$("#tag_" + activeTags[i]).addClass("active");
+	}
+	filterNodes($('#monitor_drop_down').text(), $('#nodesFilter').val());
+}
 
 function getTags() {
 	$.ajax( {
@@ -24,6 +50,7 @@ function getTags() {
 	    success: function(response) {
 	    	console.dir(response);
 	    	$('#tags_list').append($('#nodes_tags').render(jQuery.parseJSON(response)));
+	    	setTagsFromQueryString();
 	    	$('.node_tag').click(function() {
 	    		var tag_name = $(this).data("tag-name");
 	    		if ($(this).hasClass("active")) {
@@ -36,7 +63,7 @@ function getTags() {
 	    			$(this).addClass("active");
 	    			activeTags.push(tag_name);
 	    		}
-	    		filterNodes($('#monitor_drop_down').text(), $('#nodesFilter').val());
+	    		History.pushState({state:activeTags.join(",")}, document.title, queryString +"&tags=" + activeTags.join(","));
 	    	});
 	    }, 
 	    error: function(err) {
