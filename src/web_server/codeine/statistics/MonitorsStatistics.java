@@ -49,6 +49,9 @@ public class MonitorsStatistics implements IMonitorStatistics{
 			if (FilesUtils.exists(statisticsFile)) {
 				log.info("reading statistics from " + statisticsFile);
 				data = SerializationUtils.fromFile(statisticsFile);
+			} else {
+				//make sure directory exists
+				FilesUtils.mkdirs(pathHelper.getPersistentDir());
 			}
 		} catch (Exception e) {
 			log.warn("failed to read statistics,  will reset", e);
