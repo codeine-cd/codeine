@@ -20,6 +20,7 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.model.Constants;
 import codeine.servlet.UsersManager;
+import codeine.statistics.IMonitorStatistics;
 import codeine.statistics.MonitorsStatistics;
 import codeine.users.LogoutServlet;
 
@@ -51,8 +52,8 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		} catch (Exception e) {
 			log.error("fail to update projects in db", e);
 		}
-		new PeriodicExecuter(Integer.MAX_VALUE ,injector().getInstance(ProjectConfigurationInPeerUpdater.class)).runInThread();
-		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(MonitorsStatistics.class)).runInThread();
+		new PeriodicExecuter(ProjectConfigurationInPeerUpdater.MAX_SLEEP_TIME_MILLI ,injector().getInstance(ProjectConfigurationInPeerUpdater.class)).runInThread();
+		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(IMonitorStatistics.class)).runInThreadSleepFirst();
 	}
 
 	@Override

@@ -55,6 +55,9 @@ public class PathHelper {
 	public String getVersionMappingFile() {
 		return getPersistentDir() + "/VersionsMapping.json";
 	}
+	public String getStatisticsFile() {
+		return getPersistentDir() + "/statistics.data";
+	}
 
 	public String getPidFile() {
 		return Constants.getHostWorkareaDir() + "/codeine.peer.pid";

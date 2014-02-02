@@ -13,6 +13,7 @@ public class PeriodicExecuter implements Runnable
 	private Task task;
 	private volatile boolean shouldStop;
 	private String taskName;
+	private boolean sleepFirst;
 	private static final Logger log = Logger.getLogger(PeriodicExecuter.class);
 
 
@@ -31,6 +32,10 @@ public class PeriodicExecuter implements Runnable
 	public void run()
 	{
 		log.info("started for task " + taskName);
+		if (sleepFirst) {
+			log.info("going to sleep first for " + StringUtils.formatTimePeriod(sleepTimeMilli));
+			ThreadUtils.wait(getSleepObject(), sleepTimeMilli);
+		}
 		while (!shouldStop) {
 			Stopwatch s = new Stopwatch().start();
 			try {
@@ -63,6 +68,10 @@ public class PeriodicExecuter implements Runnable
 	}
 
 	public void runInThread() {
+		ThreadUtils.createThread(this, taskName).start();
+	}
+	public void runInThreadSleepFirst() {
+		this.sleepFirst = true;
 		ThreadUtils.createThread(this, taskName).start();
 	}
 }
