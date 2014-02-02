@@ -1,7 +1,9 @@
+
 var nodesJson = [];
 var versionMap;
 var activeTags = [];
 var queryString;
+var maxTagsSizeToShow = 15;
 
 $(document).ready( function () {
 	getNodes();
@@ -49,7 +51,21 @@ function getTags() {
 	    url: '/project-tags_json?project=' + encodeURIComponent(getProjetcName()),
 	    success: function(response) {
 	    	console.dir(response);
-	    	$('#tags_list').append($('#nodes_tags').render(jQuery.parseJSON(response)));
+	    	$('#tags_list').html($('#nodes_tags').render(response));
+	        if (response.length > maxTagsSizeToShow) {
+	      	  $("#tags_list_more").show();
+	      	  var i = 0;
+	      	  $('.node_tag').each(function() {
+	    		if (i >= maxTagsSizeToShow){
+	    			$(this).hide();
+	    		}
+	    		i++;
+	      	  });
+	      	$("#more_tags_button").click(function(){
+	      		$('.node_tag').fadeIn();
+	      		$("#tags_list_more").fadeOut();
+	      	});
+	        }
 	    	setTagsFromQueryString();
 	    	$('.node_tag').click(function() {
 	    		var tag_name = $(this).data("tag-name");
@@ -69,7 +85,8 @@ function getTags() {
 	    error: function(err) {
 	      console.log('error - ' + err);
 	      toast("error", "Failed to get project tags", false);
-	    }
+	    },
+	    dataType: 'json'
     });
 }
 
@@ -100,7 +117,7 @@ function getNodes() {
 	    type: 'GET',
 	    url: '/project-nodes_json?project=' + encodeURIComponent(getProjetcName())  +'&version=' + encodeURIComponent(getVersion()),
 	    success: function(response) {
-	    	nodesJson = jQuery.parseJSON(response);
+	    	nodesJson = response;
 	    	buildNodesByVersion();
 	    	for (var version in versionMap) {
 	    		$('#nodes_container').append($('#project_nodes_by_version').render(versionMap[version]));
@@ -120,7 +137,8 @@ function getNodes() {
 	    error: function(err) {
 	      console.log('error - ' + err);
 	      toast("error", "Failed to get nodes", false);
-	    }
+	    },
+	    dataType: 'json'
     });
 }
 
