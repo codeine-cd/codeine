@@ -65,7 +65,7 @@ public class MonitorsStatistics implements IMonitorStatistics{
 	public String getDataJson(String projectName) {
 		LimitedQueue<MonitorStatusItem> d = data.get(projectName);
 		if (null == d){
-			return "";
+			return "[]";
 		}
 		ArrayList<MonitorStatusItem> l;
 		synchronized (d) {
