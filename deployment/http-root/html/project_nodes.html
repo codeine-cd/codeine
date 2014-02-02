@@ -7,13 +7,27 @@
         <span class="icon-bar"></span>
       </a>
       <div class="nav-collapse collapse navbar-responsive-collapse">
-      <form class="form-inline navbar-search pull-left" onsubmit="javascript: return false;">
-      		<label class="checkbox" id="selecAllLabel">
-    			<input type="checkbox" id="selectAll"> Select All
- 			</label>&nbsp;&nbsp;
-         	<input type="text" id="nodesFilter" class="search-query span2" placeholder="Filter nodes"></input>
-		</form>
-        <ul class="nav">
+      
+		 <ul class="nav pull-left">
+		 	<li style="margin-top: 7px;">
+    			<input type="checkbox" id="selectAll">
+ 			</li>
+ 			
+          <li style="margin-top: 10px;">&nbsp;Select All</li>
+          <li class="divider-vertical"></li>
+          <li class="dropdown" id="commandsDropdown">
+            <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              {{#commands}}
+              <li class="codeine_command disabled" data-command-name="{{name}}" ><a href="javascript: void(0);">{{alias}}</a></li>
+              {{/commands}}
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav pull-right">
+        <li>
+        	&nbsp;<i data-help-message="monitorHelp" style="margin-top: 10px;" rel="popover" data-placement="bottom" data-title="Filtering Options" data-trigger="hover" class="icon-question-sign codeine_help"></i>
+          </li>
           <li class="dropdown">
             <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><span id="monitor_drop_down">All Nodes</span>
             <b class="caret"></b></a>
@@ -26,19 +40,12 @@
               <li id="All_Nodes" class="codeine_monitor row-fluid active" data-monitor-name="All Nodes"><a href="javascript: void(0);" style="height: 20px"><div class="span11">All Nodes </div><div class="span1"><span class="badge pull-right"></span></div></a></li>
             </ul>
           </li>
-        </ul>
-        <i data-help-message="monitorHelp" style="margin-top: 10px;" rel="popover" data-placement="bottom" data-title="Filtering Options" data-trigger="hover" class="icon-question-sign codeine_help"></i>
-        <ul class="nav pull-right">
-          <li class="divider-vertical"></li>
-          <li class="dropdown" id="commandsDropdown">
-            <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              {{#commands}}
-              <li class="codeine_command disabled" data-command-name="{{name}}" ><a href="javascript: void(0);">{{alias}}</a></li>
-              {{/commands}}
-            </ul>
+          <li>
           </li>
         </ul>
+       <form class="form-inline navbar-search pull-right" onsubmit="javascript: return false;">
+         	<input type="text" id="nodesFilter" class="search-query span2" placeholder="Filter nodes"></input>
+		</form>
       </div><!-- /.nav-collapse -->
     </div>
   </div><!-- /navbar-inner -->
