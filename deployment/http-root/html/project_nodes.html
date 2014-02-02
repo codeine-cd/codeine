@@ -19,11 +19,11 @@
             <b class="caret"></b></a>
             <ul class="dropdown-menu" style="min-width: 300px;" >
               {{#monitors}}
-              <li id="{{this}}" class="codeine_monitor" data-monitor-name="{{this}}"><a href="javascript: void(0);">{{this}} <span class="badge pull-right"></span></a></li>
+              <li id="{{this}}" class="codeine_monitor row-fluid" data-monitor-name="{{this}}"><a href="javascript: void(0);" style="height: 20px"><div class="span11">{{this}} </div><div class="span1"><span class="badge pull-right"></span></div></a></li>
               {{/monitors}}
               <li class="divider"></li>
-              <li id="Any_Alert" class="codeine_monitor" data-monitor-name="Any Alert"><a href="javascript: void(0);">Any Alert <span class="badge pull-right"></span></a></li>
-              <li id="All_Nodes" class="codeine_monitor active" data-monitor-name="All Nodes"><a href="javascript: void(0);">All Nodes <span class="badge pull-right"></span></a></li>
+              <li id="Any_Alert" class="codeine_monitor row-fluid" data-monitor-name="Any Alert"><a href="javascript: void(0);" style="height: 20px"><div class="span11">Any Alert </div><div class="span1"><span class="badge pull-right"></span></div></a></li>
+              <li id="All_Nodes" class="codeine_monitor row-fluid active" data-monitor-name="All Nodes"><a href="javascript: void(0);" style="height: 20px"><div class="span11">All Nodes </div><div class="span1"><span class="badge pull-right"></span></div></a></li>
             </ul>
           </li>
         </ul>
