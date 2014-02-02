@@ -1,4 +1,7 @@
 var commandsHistoryJson = undefined;
+var historyMore = false;
+var allHistory = [];
+var maxHistorySizeToShow = 10;
 
 $(document).ready( function () {
 	getCommandsHistory();
@@ -6,21 +9,14 @@ $(document).ready( function () {
 });
 
 
+$("#more_history_button").click(function(){
+	historyMore = true;
+	renderHistory(allHistory);
+	$("#command_history_more").fadeOut();
+});
 
-
-function getCommandsHistory() {
-  $.ajax( {
-    type: 'GET',
-    url: '/commands-log_json?project=' + getProjetcName()  ,
-    success: function(response) {
-      if (commandsHistoryJson === undefined) {
-    	  commandsHistoryJson = response;
-      }
-      if (response.length === 0) {
-    	  $('#command_history_list').html("<li class='text-center'>No Commands</li>");
-    	  return;
-      }
-      renderTemplate('command_history', $("#command_history_list") , response, function() {
+function renderHistory(historyArray){
+	renderTemplate('command_history', $("#command_history_list") , historyArray, function() {
         $(".commandStatus").tooltip();
         $('.deleteCommand').click(function() {
         	if (confirm("Are you sure you would like to stop the command?") === false) 
@@ -40,6 +36,28 @@ function getCommandsHistory() {
     		});
     	});
       });
+}
+function getCommandsHistory() {
+  $.ajax( {
+    type: 'GET',
+    url: '/commands-log_json?project=' + getProjetcName()  ,
+    success: function(response) {
+      if (commandsHistoryJson === undefined) {
+    	  commandsHistoryJson = response;
+      }
+      if (response.length === 0) {
+    	  $('#command_history_list').html("<li class='text-center'>No Commands</li>");
+    	  return;
+      }
+      allHistory = response;
+      var historyArray = response;
+      if (response.length > maxHistorySizeToShow && !historyMore) {
+    	  historyArray = response.slice(0,maxHistorySizeToShow);
+    	  $("#command_history_more").show();
+      } else {
+    	  $("#command_history_more").hide();
+      }
+      renderHistory(historyArray);
     },
     error:  function(err) { 
       console.log('error is ' + err);
