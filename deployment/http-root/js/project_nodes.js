@@ -51,7 +51,7 @@ function getTags() {
 	    url: '/project-tags_json?project=' + encodeURIComponent(getProjetcName()),
 	    success: function(response) {
 	    	console.dir(response);
-	    	$('#tags_list').html($('#nodes_tags').render(response));
+	    	$('#tags_list').append($('#nodes_tags').render(response));
 	        if (response.length > maxTagsSizeToShow) {
 	      	  $("#tags_list_more").show();
 	      	  var i = 0;
