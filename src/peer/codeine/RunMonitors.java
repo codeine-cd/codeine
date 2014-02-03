@@ -98,7 +98,10 @@ public class RunMonitors implements Task {
 	}
 
 	private void removeNonExistMonitors() {
-		projectStatusUpdater.removeNonExistMonitors(project(), node.name(), node.alias());
+		boolean removed = projectStatusUpdater.removeNonExistMonitors(project(), node.name(), node.alias());
+		if (removed) {
+			updateStatusInMongo();
+		}
 	}
 
 	@SuppressWarnings("serial")

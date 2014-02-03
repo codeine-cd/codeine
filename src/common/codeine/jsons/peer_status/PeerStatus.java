@@ -82,7 +82,7 @@ public class PeerStatus {
 		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
 		return nodeInfo.tags(tagsList);
 	}
-	public void removeNonExistMonitors(ProjectJson project, String node, String alias) {
+	public boolean removeNonExistMonitors(ProjectJson project, String node, String alias) {
 		List<String> monitorsNotToRemove = Lists.newArrayList();
 		for (NodeMonitor nodeMonitor : project.monitors()) {
 			monitorsNotToRemove.add(nodeMonitor.name());
@@ -98,7 +98,7 @@ public class PeerStatus {
 			log.info("removing not exist monitor " + m);
 			nodeInfo.monitors().remove(m);
 		}
-		
+		return !monitorsToRemove.isEmpty();
 	}
 
 	public NodeWithMonitorsInfo nodeInfo(ProjectJson project, String node, String alias) {
