@@ -119,8 +119,13 @@ function getNodes() {
 	    success: function(response) {
 	    	nodesJson = response;
 	    	buildNodesByVersion();
+	    	var versions = [];
 	    	for (var version in versionMap) {
-	    		$('#nodes_container').append($('#project_nodes2_by_version').render(versionMap[version]));
+	    		versions.push(version);
+	    	}
+	    	versions.sort(function(a,b) { return versionMap[a].num_of_nodes - versionMap[b].num_of_nodes; } );
+	    	for (var i = 0; i < versions.length; i++) {
+	    		$('#nodes_container').append($('#project_nodes2_by_version').render(versionMap[versions[i]]));
 	    	}
             var filter = getUrlParameter('filter');
             if ((filter) && (filter === 'Any_Alert')) {
@@ -164,6 +169,12 @@ function buildNodesByVersion() {
 			fail[nodesJson[i].version].push(nodesJson[i]);
 		}
 	}
+	var max = 0;
+	for (var item1 in a) {
+		if (a[item1].length > max){
+			max = a[item1].length;
+		}
+	}
 	versionMap = {};
 	for (var item in a) {
 		var temp = {};
@@ -173,9 +184,9 @@ function buildNodesByVersion() {
 		temp["version_hash"] = getVersioHash(item);
 		var s = success[item].length;
 		var f = fail[item].length;
-		if (f + s > 0){
-			temp["success"] = 100 * s / (s+f);
-			temp["fail"] = 100 * f / (s+f);
+		if (max > 0){
+			temp["success"] = 100 * s / max;
+			temp["fail"] = 100 * f / max;
 		} else {
 			temp["success"] = 0;
 			temp["fail"] = 0;

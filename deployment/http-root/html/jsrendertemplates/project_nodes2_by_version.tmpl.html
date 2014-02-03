@@ -4,18 +4,18 @@
 			<a class="accordion-toggle" data-toggle="collapse"
 				data-parent="#accordion2" href="#{{:version_hash}}_all_nodes"><i
 				class="fa fa-plus-circle"></i> <strong>{{:version}}</strong>
-				<small class="pull-right">
-					Showing <span id="{{:version_hash}}_num_of_nodes">{{:num_of_nodes}}</span>
-					nodes
-			</small>  
 				<div class="progress pull-right" style="display:inline-block;margin-left: 5px;margin-right: 5px;margin-bottom:0px;width: 80px;" >
 					<div class="bar bar-success" style="display:inline-block;width: {{:success}}%;"></div>
 	  				<div class="bar bar-danger" style="display:inline-block;width: {{:fail}}%;"></div>
 				</div>
+				<small class="pull-right">
+					Showing <span id="{{:version_hash}}_num_of_nodes">{{:num_of_nodes}}</span>
+					nodes
+			</small>  
 				
 				</a>
 		</div>
-		<div id="{{:version_hash}}_all_nodes" class="accordion-body collapse in">
+		<div id="{{:version_hash}}_all_nodes" class="accordion-body collapse">
 			<div class="accordion-inner">
 				{{for nodes}}
 				<div class="row node" id="{{:node_name}}">
