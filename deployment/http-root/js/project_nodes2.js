@@ -123,7 +123,7 @@ function getNodes() {
 	    	for (var version in versionMap) {
 	    		versions.push(version);
 	    	}
-	    	versions.sort(function(a,b) { return versionMap[a].num_of_nodes - versionMap[b].num_of_nodes; } );
+	    	versions.sort(function(a,b) { return versionMap[b].num_of_nodes - versionMap[a].num_of_nodes; } );
 	    	for (var i = 0; i < versions.length; i++) {
 	    		$('#nodes_container').append($('#project_nodes2_by_version').render(versionMap[versions[i]]));
 	    	}
