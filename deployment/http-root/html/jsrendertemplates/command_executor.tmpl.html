@@ -3,7 +3,10 @@
 	<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
 		<span style="font-size: smaller;">
 			<i class="fa fa-info-circle fa-lg"></i>
-			{{:name}} - {{:date}}
+			{{:name}}
+		</span>
+		<span style="font-size: smaller;" class="pull-right">
+			{{:date}}
 		</span>
 	</a>
 	{{else}}
@@ -16,7 +19,12 @@
 		<i class="fa fa-play-circle fa-lg"></i>
 		{{/if}}
 		<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
-			{{:name}} - {{:date}}
+			<span>
+				{{:name}}
+			</span>
+			<span class="pull-right">
+				{{:date}}
+			</span>
 		</a>
 	</span>
 	{{/if}} 
