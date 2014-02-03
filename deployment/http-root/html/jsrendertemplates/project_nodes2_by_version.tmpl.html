@@ -1,0 +1,46 @@
+<div class="accordion">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse"
+				data-parent="#accordion2" href="#{{:version_hash}}_all_nodes"><i
+				class="fa fa-plus-circle"></i> <strong>{{:version}}</strong>
+				<small class="pull-right">
+					Showing <span id="{{:version_hash}}_num_of_nodes">{{:num_of_nodes}}</span>
+					nodes
+			</small>  
+				<div class="progress pull-right" style="display:inline-block;margin-left: 5px;margin-right: 5px;margin-bottom:0px;width: 80px;" >
+					<div class="bar bar-success" style="display:inline-block;width: {{:success}}%;"></div>
+	  				<div class="bar bar-danger" style="display:inline-block;width: {{:fail}}%;"></div>
+				</div>
+				
+				</a>
+		</div>
+		<div id="{{:version_hash}}_all_nodes" class="accordion-body collapse in">
+			<div class="accordion-inner">
+				{{for nodes}}
+				<div class="row node" id="{{:node_name}}">
+					<form class="form-inline span9" action="javascript:void(0);">
+						<fieldset>
+							<div class="span3">
+								<label class="checkbox"> <input
+									data-peer-address={{:peer_address}} data-peer-key={{:peer_key}}
+									data-node-name={{:node_name}} data-node-alias={{:node_alias}}
+									type="checkbox">
+								</label>&nbsp;&nbsp; <a data-node-name="{{:node_name}}"
+									href="javascript: void(0);" class="nodeLink">
+									{{:node_alias}} </a>
+							</div>
+							<div class="span5">
+								{{for failed_monitors}} <a href="{{:link}}"><span
+									class="label label-{{:class_name}}">{{:label}}</span></a> {{/for}}
+								{{for success_monitors}} <i
+									class="fa fa-check-circle fa-lg {{>#data}}"></i> {{/for}}
+							</div>
+						</fieldset>
+					</form>
+				</div>
+				{{/for}}
+			</div>
+		</div>
+	</div>
+</div>
