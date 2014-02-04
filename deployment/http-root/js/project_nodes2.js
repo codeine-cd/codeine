@@ -191,6 +191,7 @@ function buildNodesByVersion() {
 			temp["success"] = 0;
 			temp["fail"] = 0;
 		}
+		temp["has_errors"] = f > 0 ? "" : "hidden";
 		versionMap[item] = (temp);
 	}
 }
@@ -315,6 +316,8 @@ function setNodesNumber(res) {
 
 function updateNodesNumber(version,number) {
 	$('#' + getVersioHash(version) + '_num_of_nodes').text(number);
+	var hidden = versionMap[version].num_of_nodes - number;
+	$('#' + getVersioHash(version) + '_num_of_nodes_hidden').text(hidden);
 	if (number === 0) {
 		$('#' + getVersioHash(version) + '_row').fadeOut('fast');
 	} else {
