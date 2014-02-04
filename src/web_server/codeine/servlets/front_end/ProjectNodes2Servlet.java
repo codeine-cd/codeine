@@ -65,7 +65,7 @@ public class ProjectNodes2Servlet extends AbstractFrontEndServlet {
 
 	@Override
 	protected List<String> getJSFiles() {
-		return Lists.newArrayList("project_nodes2", "command_history", "commands_toolbar");
+		return Lists.newArrayList("project_nodes2", "command_history", "commands_toolbar", "chart_loader");
 	}
 	
 	@Override
