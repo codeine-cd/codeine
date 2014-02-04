@@ -1,33 +1,38 @@
 <li>
 	{{if finished}}	
-	<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
-		<span style="font-size: smaller;">
-			<i class="fa fa-info-circle fa-lg"></i>
-			{{:name}}
+		<span style="font-size: 11px;" class="pull-left">
+			<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
+				<i class="fa fa-info-circle fa-lg"></i>
+				{{:name}}
+			</a>
 		</span>
-		<span style="font-size: smaller;" class="pull-right">
-			{{:date}}
+		<span style="font-size: 11px;" class="pull-right">
+			<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
+				{{:date}}
+			</a>
 		</span>
-	</a>
 	{{else}}
-	<span style="font-size: smaller;">
+	<span style="font-size: 11px;">
 		{{if can_cancel}}
-		<div class="deleteCommand" data-id="{{:id}}" data-project="{{:project}}">
+		<div class="deleteCommand pull-left" style="padding-right: 3px;" data-id="{{:id}}" data-project="{{:project}}">
 		<i class="fa fa-times-circle error fa-lg"></i>
 		</div>
 		{{else}}
 		<i class="fa fa-play-circle fa-lg"></i>
 		{{/if}}
-		<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
-			<span>
-				{{:name}}
+			<span class="pull-left">
+				<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
+					{{:name}}
+				</a>
 			</span>
 			<span class="pull-right">
-				{{:date}}
+				<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
+					{{:date}}
+				</a>
 			</span>
-		</a>
 	</span>
 	{{/if}} 
+	<div style="clear: both;"></div>
 	<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
 	{{if finished}}
     	<div class="progress">
