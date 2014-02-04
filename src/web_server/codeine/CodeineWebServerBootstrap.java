@@ -57,6 +57,16 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 	}
 
 	@Override
+	protected void createMoreContext(ContextHandlerCollection contexts) {
+		ServletContextHandler handler = createServletContextHandler();
+		handler.setContextPath("/");
+		handler.addServlet(AngularServlet.class, Constants.ANGULAR_WEB_URLS_PATH_SPEC);
+		contexts.addHandler(handler);
+		addHandler(Constants.ANGULAR_RESOURCES_CONTEXT_PATH, Constants.getAngularDir(), contexts);
+		log.info("context " + Constants.ANGULAR_WEB_URLS_PATH_SPEC + " is serving " + Constants.getAngularMainHtml());
+	}
+	
+	@Override
 	protected List<Module> getGuiceModules() {
 		return Lists.<Module>newArrayList(new WebServerModule(), new ServerServletModule());
 	}

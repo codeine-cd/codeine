@@ -69,6 +69,7 @@ public abstract class AbstractCodeineBootstrap {
 		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
 
 		ContextHandlerCollection contexts = createFileServerContexts();
+		createMoreContext(contexts);
 		contexts.addHandler(handler);
 		Server jettyServer = injector.getInstance(Server.class);
 		jettyServer.getConnectors()[0].setRequestHeaderSize(30000);
@@ -78,6 +79,8 @@ public abstract class AbstractCodeineBootstrap {
 		log.info("jetty started on port " + port);
 		injector.getInstance(CodeineRuntimeInfo.class).setPort(port);
 		execute();
+	}
+	protected void createMoreContext(ContextHandlerCollection contexts) {
 	}
 
 	protected ServletContextHandler createServletContextHandler() {

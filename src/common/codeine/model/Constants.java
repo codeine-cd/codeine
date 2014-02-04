@@ -123,6 +123,12 @@ public class Constants
 	public static String getResourcesDir() {
 		return Constants.getInstallDir() + HTTP_ROOT_CONTEXT;
 	}
+	public static String getAngularDir() {
+		return Constants.getResourcesDir() + "/ajs";
+	}
+	public static String getAngularMainHtml() {
+		return Constants.getAngularDir() + "/index.html";
+	}
 	
 	public static String getInstallDir(){
 		if (installDir != null)
@@ -158,8 +164,10 @@ public class Constants
 
 	public static final String PROJECT_TAGS_CONTEXT = "/project-tags";
 
-	
-	
+	public static final String ANGULAR_WEB_URLS_PATH_SPEC = "/codeine/*";
+
+	public static final String ANGULAR_RESOURCES_CONTEXT_PATH = "/ajs";
+
 	public static class UrlParameters {
 		public static final String PROJECT_NAME = "project";
 		public static final String VERSION_NAME = "version";
