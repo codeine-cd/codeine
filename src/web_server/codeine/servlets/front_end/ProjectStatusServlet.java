@@ -41,7 +41,7 @@ public class ProjectStatusServlet extends AbstractFrontEndServlet {
 	
 	@Override
 	protected List<String> getJSFiles() {
-		return Lists.newArrayList("command_history", "project_status", "commands_toolbar");
+		return Lists.newArrayList("command_history", "project_status", "commands_toolbar", "chart_loader");
 	}
 	
 	@Override

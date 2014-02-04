@@ -1,8 +1,4 @@
-var chart1;
-var chartDetails;
-var posX;
-var posY;
-var divInTooltip = null;
+
 var command = "'command not selected'";
 
 $(document).ready( function () {
@@ -12,42 +8,8 @@ $(document).ready( function () {
         $('.panel-body').find('[type=checkbox]').remove();
     }
     $('.codeine_command').prop('disabled', true);
-    loadChart();
-
     $(".version_status").tooltip();
 });
-
-function loadChart() {
-	$.ajax( {
-	    type: 'GET',
-	    url: '/monitors-statistics_json?project=' + getProjetcName(),
-	    beforeSend: function() {
-	    	console.log("Sending chart data request...");
-	    	// TODO - Show loader...
-	    },
-	    success: function(response) {
-	    	// TODO - Hide loader...
-	    	chart1 = new cfx.Chart();
-	    	chart1.setDataSource(jQuery.parseJSON(response));
-	    	chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
-	    	chart1.getAllSeries().getLine().setStyle(cfx.DashStyle.Dash);
-
-	    	var chartDiv = document.getElementById('chartDiv');
-	    	chart1.create(chartDiv);
-
-		    // Change the chart's attributes to make it responsive.
-    		var svgelem = document.getElementsByTagName("svg");
-			svgelem.chart.setAttribute('width','100%');
-			// svgelem.chart.setAttribute('height',''); 			// Removing height makes the chart disappear in Chrome :(
-			svgelem.chart.setAttribute('viewBox','0 0 870 600');
-	    },
-	    error:  function(err) { 
-	    	// TODO - Hide loader...
-	    	console.log('error is ' + err);
-	    },
-	    dataType: 'json'
-	  });
-}
 
 function onGetTipDiv(args) {
 	if (args.getHitType() == cfx.HitType.Point) {
@@ -63,14 +25,6 @@ function drawCommands() {
 		setTimeout(drawCommands,1000);
 		return;
 	}
-	
-	var ann = new cfx.annotation.Annotations();
-	var annList = ann.getList();
-	for(var command in commandsHistoryJson) {
-		console.log("Command Json: " + commandsHistoryJson[command]);
-		addCommandAnnotation(annList,command);
-	}
-	chart1.getExtensions().add(ann);
 }
 
 
