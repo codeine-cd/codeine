@@ -30,9 +30,9 @@
 	{{/if}} 
 	<a class="commandStatus" data-placement="right" data-toggle="tooltip" title="{{:nodes}} nodes @ {{:date}}" href="{{:link}}">
 	{{if finished}}
-    	<div class="progress">
+    	<div class="progress" style="margin-bottom: 5px;">
 	{{else}}
-	    <div class="progress progress-striped active">
+	    <div class="progress progress-striped active" style="margin-bottom: 5px;">
 	{{/if}}
 	  		<div class="bar bar-success" style="width: {{:successPercent}}%;"></div>
 	  		<div class="bar bar-danger" style="width: {{:failPercent}}%;"></div>
