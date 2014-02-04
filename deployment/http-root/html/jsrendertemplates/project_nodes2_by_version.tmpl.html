@@ -1,4 +1,4 @@
-<div class="accordion" style="margin-bottom: 5px;">
+<div class="accordion" style="margin-bottom: 5px;" id="{{:version_hash}}_row">
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"
@@ -8,9 +8,10 @@
 					<div class="bar bar-success" style="display:inline-block;width: {{:success}}%;"></div>
 	  				<div class="bar bar-danger" style="display:inline-block;width: {{:fail}}%;"></div>
 				</div>
+				<i class="version_status pull-right fa fa-exclamation {{:has_errors}}" style="color: red;"></i>
 				<small class="pull-right">
-					Showing <span id="{{:version_hash}}_num_of_nodes">{{:num_of_nodes}}</span>
-					nodes
+					<span id="{{:version_hash}}_num_of_nodes">{{:num_of_nodes}}</span>
+					nodes (<span id="{{:version_hash}}_num_of_nodes_hidden">{{:num_of_nodes_hidden}}</span> hidden)
 			</small>  
 				
 				</a>
