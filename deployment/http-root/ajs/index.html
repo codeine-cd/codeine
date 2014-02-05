@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/ajs/bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="/ajs/bower_components/select2/select2.css">
-        <link rel="stylesheet" href="/ajs/bower_components/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/ajs/bower_components/components-font-awesome/css/font-awesome.min.css">
         <style>
             body {
                 padding-top: 70px;
@@ -25,10 +25,10 @@
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
-        <div class="loading" ng-show="app.loading">
+        <div class="loading" ng-show="app.loading || !app.sessionInfo || !app.globalConfiguration">
             <h3><i class="fa fa-spin fa-spinner fa-lg"></i> Loading Codeine...</h3>
         </div>
-        <div class="ng-cloak" ng-show="!app.loading">
+        <div class="ng-cloak" ng-hide="app.loading || !app.sessionInfo || !app.globalConfiguration">
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="navbarCtrl">
                 <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
@@ -39,17 +39,17 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/"><img src="/resources/img/codeine_16x16.png"/> {{serverName}}</a>
+                        <a class="navbar-brand" href="/"><img src="/resources/img/codeine_16x16.png"/> {{app.globalConfiguration.server_name}}</a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="/">{{codeineVersion}}</a></li>
+                            <li><a href="/">{{app.sessionInfo.version}}</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{loggedUser}}<b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{app.sessionInfo.user}}<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#"><i class="fa fa-info"></i> User Info</a></li>
                                 </ul>
@@ -118,19 +118,20 @@
         </div>
 
 		<!-- bower:js -->
-		<script src="bower_components/jquery/jquery.js"></script>
-		<script src="bower_components/angular/angular.js"></script>
-		<script src="bower_components/angular-animate/angular-animate.js"></script>
-		<script src="bower_components/angular-route/angular-route.js"></script>
-		<script src="bower_components/angular-ui-utils/modules/utils.js"></script>
-		<script src="bower_components/select2/select2.js"></script>
-		<script src="bower_components/angular-ui-select2/src/select2.js"></script>
-		<script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
-		<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="/ajs/bower_components/jquery/jquery.js"></script>
+		<script src="/ajs/bower_components/angular/angular.js"></script>
+		<script src="/ajs/bower_components/angular-animate/angular-animate.js"></script>
+		<script src="/ajs/bower_components/angular-route/angular-route.js"></script>
+		<script src="/ajs/bower_components/angular-ui-utils/ui-utils.js"></script>
+		<script src="/ajs/bower_components/select2/select2.js"></script>
+		<script src="/ajs/bower_components/angular-ui-select2/src/select2.js"></script>
+		<script src="/ajs/bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+		<script src="/ajs/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 		<!-- endbower -->
 
         <!-- Codeine AngularJs Files -->
         <script src="/ajs/app/app.js"></script>
         <script src="/ajs/app/Controllers/navbarCtrl.js"></script>
+        <script src="/ajs/app/Services/codeineService.js"></script>
     </body>
 </html>

@@ -70,6 +70,8 @@ public class Constants
 	public static final String REGISTER_CONTEXT = "/register";
 	public static final String PREPARE_FOR_SHUTDOWN_CONTEXT = "/prepare-for-shutdown";
 	public static final String CANCEL_SHUTDOWN_CONTEXT = "/cancel-shutdown";
+	public static final String GLOBAL_CONFIGURATION_CONTEXT = "/global-configuration";
+	public static final String SESSION_INFO_CONTEXT = "/session-info";
 
 	public static final String REPLACE_NODE_NAME = "$node_name";	
 	public static final String DB_NAME = "codeineDB";

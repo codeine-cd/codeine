@@ -11,12 +11,21 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                     redirectTo: '/codeine'
                 });
         }])
-    .run(['$rootScope', '$log',  function($rootScope, $log) {
-
-
+    .run(['$rootScope', '$log','CodeineService',  function($rootScope, $log, CodeineService) {
         $rootScope.app = {
             loading: null
         };
+
+        CodeineService.getSessionInfo().success(function(data) {
+            $log.debug('run: got session info ' + angular.toJson(data));
+            $rootScope.app.sessionInfo = data;
+        });
+
+        CodeineService.getGlobalConfiguration().success(function(data) {
+            $log.debug('run: got configuration ' + angular.toJson(data));
+            $rootScope.app.globalConfiguration = data;
+        });
+
         $rootScope.$on('$locationChangeStart', function (event) {
             $log.debug('$locationChangeStart');
             $rootScope.app.loading = true;
