@@ -47,14 +47,10 @@
                         <ul class="nav navbar-nav">
                             <li><a href="/">{{app.sessionInfo.version}}</a></li>
                         </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{app.sessionInfo.user}}<b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#"><i class="fa fa-info"></i> User Info</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <user-info></user-info>
+                        <!--
+
+                        -->
                         <form class="navbar-form navbar-right">
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="Enter a project name">
@@ -98,17 +94,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="well sidebar-nav">
-                            <ul class="nav nav-list">
-                                <li class="nav-header">Menu</li>
-
-                            </ul>
-                        </div><!--/.well -->
-
+                        <div ng-include="getSiderBarFile()"></div>
                     </div><!--/span-->
                     <div class="col-md-9">
                         <div ng-view ng-animate="enter">
-                        </div>
+                    </div>
                     </div><!--/span-->
                 </div><!--/row-->
                 <footer>
@@ -132,6 +122,7 @@
         <!-- Codeine AngularJs Files -->
         <script src="/ajs/app/app.js"></script>
         <script src="/ajs/app/Controllers/navbarCtrl.js"></script>
+        <script src="/ajs/app/Directives/userInfoDirective.js"></script>
         <script src="/ajs/app/Services/codeineService.js"></script>
     </body>
 </html>
