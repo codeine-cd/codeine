@@ -5,7 +5,21 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
             $sceProvider.enabled(false);
             $routeProvider.
                 when('/codeine', {
-                    templateUrl: '/ajs/partials/projects.html'
+                    templateUrl: '/ajs/partials/projects.html',
+                    controller: function($rootScope, projects) {
+                        $rootScope.app.sideBarFile = "/ajs/partials/menus/main.html";
+                    },
+                    resolve: {
+                        projects : function($q,$log,CodeineService) {
+                            $log.debug("resolving projects");
+                            var deferred = $q.defer();
+                            CodeineService.getProjects().success(function(data) {
+                                $log.debug("Resolved projects: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        }
+                    }
                 }).
                 otherwise({
                     redirectTo: '/codeine'

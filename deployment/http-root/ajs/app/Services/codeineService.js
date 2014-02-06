@@ -8,6 +8,9 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http','$log
         },
         getSessionInfo: function () {
             return $http.get("/session-info_json", { cache: true });
+        },
+        getProjects: function () {
+            return $http.get("/projects_json", { cache: true });
         }
     };
     return Api;
