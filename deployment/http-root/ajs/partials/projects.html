@@ -1,0 +1,16 @@
+<tabset ng-show="tabs.length > 0">
+    <tab ng-repeat="tab in tabs" heading="{{tab}}" select="setTab(tab)" active="tab.active" disabled="tab.disabled">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="project in projects"><a href="{{project}}">
+                            <i class="icon-folder-close"></i> {{project}}</a>
+                            <span class="badge badge-info">{{project}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </tab>
+</tabset>

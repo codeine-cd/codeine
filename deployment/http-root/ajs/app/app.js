@@ -6,11 +6,18 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
             $routeProvider.
                 when('/codeine', {
                     templateUrl: '/ajs/partials/projects.html',
-                    controller: function($rootScope, projects) {
+                    controller: function($rootScope, $scope, $log, projects, tabs) {
                         $rootScope.app.sideBarFile = "/ajs/partials/menus/main.html";
+                        $scope.tabs = tabs;
+                        $scope.projects = projects;
+                        $scope.setTab = function(tab) {
+                            $log.debug('selected tab is ' + tab);
+                        };
                     },
                     resolve: {
                         projects : function($q,$log,CodeineService) {
+                            return ["Project A","Project B"];
+                            /*
                             $log.debug("resolving projects");
                             var deferred = $q.defer();
                             CodeineService.getProjects().success(function(data) {
@@ -18,6 +25,10 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                                 deferred.resolve(data);
                             });
                             return deferred.promise;
+                            */
+                        },
+                        tabs: function() {
+                            return ["Tab A","Tab B"];
                         }
                     }
                 }).
