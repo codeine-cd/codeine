@@ -54,10 +54,10 @@ Codeine is a continuous deployment tool that makes product deployment faster and
         "mysql":[{
                 "host": "<db_hostname>",
                 "port": <db_port>,
-                "dir": "codeine/workarea/mysql_work",
-                "bin_dir":"codeine/mysql_lib",
-                "user": "codeine",
-                "password": "codeine",
+                "dir": "workarea/mysql_work",
+                "bin_dir":"mysql_lib",
+                "user": "<user>",
+                "password": "<password>",
                 "managed_by_codeine": true
                 }]
         }
@@ -79,19 +79,23 @@ Codeine is a continuous deployment tool that makes product deployment faster and
     (This is for tcsh. For bash, use `export` instead of `setenv`.)
 2. On both the server machine and on each client machine, set the value of the `CODEINE_WORKAREA` environment variable:
 
-        setenv CODEINE_WORKAREA /path/to/workarea
+        setenv CODEINE_WORKAREA /full/path/to/workarea
 
     (This is the workarea directory that you created above.)
 3. Start the server. From the `codeine` directory, type:
 
         deployment/bin/run-server.pl
 
+you can now see it at the following link:
+
+        http://localhost:<port>/        
+
 4. On each client machine, run the Codeine client. From the `codeine` directory, type:
 
         deployment/bin/run-peer.pl
 
-You can see all the connected clients by going to **Manage Codeine | Codeine Nodes Info**.
-
+You can see all the connected clients by going to **Manage Codeine | Codeine Nodes Info**:
+        http://localhost:<port>/codeine-nodes?project=Codeine_Internal_Nodes_Project&version=All+versions
 
 
 ## Basic terms
