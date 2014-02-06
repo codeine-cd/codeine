@@ -59,7 +59,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 	@Override
 	protected void createMoreContext(ContextHandlerCollection contexts) {
 		ServletContextHandler handler = createServletContextHandler();
-		handler.setContextPath("/");
+		handler.setContextPath(Constants.ANGULAR_RESOURCES_CONTEXT_PATH);
 		handler.addServlet(AngularServlet.class, Constants.ANGULAR_WEB_URLS_PATH_SPEC);
 		contexts.addHandler(handler);
 		addHandler(Constants.ANGULAR_RESOURCES_CONTEXT_PATH, Constants.getAngularDir(), contexts);
