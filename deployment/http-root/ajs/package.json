@@ -1,11 +1,7 @@
 {
   "name": "codeine",
   "version": "1.1.0",
-  "description": "",
   "main": "index.html",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Intel-IT/codeine"
@@ -15,5 +11,15 @@
   "bugs": {
     "url": "https://github.com/Intel-IT/codeine/issues"
   },
-  "homepage": "https://github.com/Intel-IT/codeine"
+  "homepage": "https://github.com/Intel-IT/codeine",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-qunit": "~0.4.0",
+    "grunt-bower-install": "~0.8.0"
+  }
 }

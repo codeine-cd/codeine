@@ -1,10 +1,11 @@
 {
-  "name": "ajs",
+  "name": "codeine",
   "version": "1.1.197",
   "homepage": "https://github.com/Intel-IT/codeine",
   "authors": [
-    "oshai <ohadshai@gmail.com>"
+    "ezraroi <ezraroi@gmail.com>"
   ],
+  "main": "index.html",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -14,9 +15,12 @@
     "tests"
   ],
   "dependencies": {
+    "angular-animate": "~1.2.11",
+    "angular-route": "~1.2.11",
+    "angular-ui-utils": "~0.1.0",
     "angular-ui-select2": "~0.0.5",
-    "bootstrap": "~3.1.0",
     "angular-ui-bootstrap-bower": "~0.10.0",
-    "angular-ui-utils": "~0.1.0"
+    "bootstrap": "~3.1.0",
+    "components-font-awesome": "~4.0.3"
   }
 }
