@@ -16,6 +16,34 @@ html {
     display: none;
 }
 
+div.appAlerts {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 1200;
+    width: 90%;
+    max-width: 300px;
+}
+
+#toast-container > div.ng-enter,
+#toast-container > div.ng-leave
+{
+    -webkit-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+}
+
+#toast-container > div.ng-enter.ng-enter-active,
+#toast-container > div.ng-leave {
+    opacity: 1;
+}
+
+#toast-container > div.ng-leave.ng-leave-active,
+#toast-container > div.ng-enter {
+    opacity: 0;
+}
 
 .success {
 	color: green;

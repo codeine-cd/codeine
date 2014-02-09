@@ -1,5 +1,7 @@
 package codeine.servlets.api_servlets;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,10 +9,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import codeine.configuration.IConfigurationManager;
+import codeine.ConfigurationManagerServer;
+import codeine.api.NodeAggregator;
+import codeine.api.VersionItemInfo;
+import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
+import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
 import codeine.servlet.PermissionsManager;
+import codeine.servlets.front_end.NewProjectServlet.CreateNewProjectJson;
+import codeine.servlets.front_end.NewProjectServlet.NewProjectType;
+import codeine.utils.JsonUtils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -19,23 +28,50 @@ import com.google.inject.Inject;
 
 public class ProjectsListApiServlet extends AbstractServlet
 {
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(ProjectsListApiServlet.class);
 	private static final long serialVersionUID = 1L;
-	@Inject private IConfigurationManager configurationManager;
+	@Inject private ConfigurationManagerServer configurationManager;
 	@Inject private PermissionsManager permissionsManager;
+	@Inject	private NodeAggregator aggregator;
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String query = request.getParameter("projectSearch");
 		List<ProjectJson> configuredProjects = filter(configurationManager.getConfiguredProjects(), query);
-		List<ProjectJson> projects = Lists.newArrayList();
+		
+		Comparator<ProjectJson> c = new Comparator<ProjectJson>() {
+			@Override
+			public int compare(ProjectJson o1, ProjectJson o2) {
+				return o1.name().compareTo(o2.name());
+			}
+		};
+		Collections.sort(configuredProjects, c);
+		
+		List<CodeineProject> projects = Lists.newArrayList();
 		for (ProjectJson projectJson : configuredProjects) {
 			if (permissionsManager.canRead(projectJson.name(), request)){
-				projects.add(projectJson);
+				VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
+				projects.add(new CodeineProject(projectJson.name(), versionItem.count()));
 			}
 		}
 		writeResponseJson(response, projects);
+	}
+	
+	@Override
+	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			CreateNewProjectJson newProjectParamsJson = readBodyJson(request, CreateNewProjectJson.class);
+			log.info("creating project " + newProjectParamsJson);
+			ProjectJson newProject = new ProjectJson();
+			if (newProjectParamsJson.type == NewProjectType.Copy) {
+				ProjectJson projectForCopy = configurationManager.getProjectForName(newProjectParamsJson.selected_project);
+				newProject = JsonUtils.cloneJson(projectForCopy, ProjectJson.class);
+			}
+			newProject.name(newProjectParamsJson.project_name);
+			configurationManager.createNewProject(newProject);
+		} catch (Exception e) {
+			throw new IllegalArgumentException();  
+		}	
 	}
 	
 	private List<ProjectJson> filter(List<ProjectJson> configuredProjects, final String query) {
@@ -53,6 +89,13 @@ public class ProjectsListApiServlet extends AbstractServlet
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
+		if (request.getMethod().equals("POST")) {
+			if (!permissionsManager.isAdministrator(request)) {
+				log.info("User can not define new project");
+				return false;
+			}
+			return true;
+		}
 		return true;
 	}
 }

@@ -1,9 +1,6 @@
 package codeine.servlets.api_servlets.angular;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +21,7 @@ public class RuntimeInfoApiServlet extends AbstractServlet {
 	}
 	
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		writeResponseJson(response, new SessionInfo(runtimeInfo.version(), permissionsManager.user(request)));
 	}
 

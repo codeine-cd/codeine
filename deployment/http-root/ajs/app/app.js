@@ -2,22 +2,14 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
+            $httpProvider.interceptors.push('myHttpInterceptor');
             $sceProvider.enabled(false);
             $routeProvider.
                 when('/codeine', {
                     templateUrl: '/ajs/partials/projects.html',
-                    controller: function($rootScope, $scope, $log, projects, tabs) {
-                        $rootScope.app.sideBarFile = "/ajs/partials/menus/main.html";
-                        $scope.tabs = tabs;
-                        $scope.projects = projects;
-                        $scope.setTab = function(tab) {
-                            $log.debug('selected tab is ' + tab);
-                        };
-                    },
+                    controller: 'projectsListCtrl',
                     resolve: {
                         projects : function($q,$log,CodeineService) {
-                            return ["Project A","Project B"];
-                            /*
                             $log.debug("resolving projects");
                             var deferred = $q.defer();
                             CodeineService.getProjects().success(function(data) {
@@ -25,10 +17,54 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                                 deferred.resolve(data);
                             });
                             return deferred.promise;
-                            */
                         },
-                        tabs: function() {
-                            return ["Tab A","Tab B"];
+                        tabs: function($q,$log,CodeineService) {
+                            $log.debug("resolving tabs");
+                            var deferred = $q.defer();
+                            CodeineService.getViewTabs().success(function(data) {
+                                $log.debug("Resolved tabs: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        }
+                    }
+                }).
+                when('/codeine/manage-codeine', {
+                    templateUrl: '/ajs/partials/manage_codeine.html',
+                    controller: 'manageCodeineCtrl',
+                    resolve: {
+                        tabs: function($q,$log,CodeineService) {
+                            $log.debug("resolving tabs");
+                            var deferred = $q.defer();
+                            CodeineService.getViewTabs().success(function(data) {
+                                $log.debug("Resolved tabs: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        },
+                        permissions : function($q,$log,CodeineService) {
+                            $log.debug("resolving permissions");
+                            var deferred = $q.defer();
+                            CodeineService.getPermissions().success(function(data) {
+                                $log.debug("Resolved permissions: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        }
+                    }
+                }).
+                when('/codeine/new_project', {
+                    templateUrl: '/ajs/partials/new_project.html',
+                    controller: 'newProjectCtrl',
+                    resolve: {
+                        projects : function($q,$log,CodeineService) {
+                            $log.debug("resolving projects");
+                            var deferred = $q.defer();
+                            CodeineService.getProjects().success(function(data) {
+                                $log.debug("Resolved projects: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
                         }
                     }
                 }).

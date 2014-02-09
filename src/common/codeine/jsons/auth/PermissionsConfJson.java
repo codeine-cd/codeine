@@ -24,6 +24,9 @@ public class PermissionsConfJson {
 		return null;
 	}
 
+	public List<UserPermissions> permissions() {
+		return permissions;
+	}
 	public void makeAdmin(String user) {
 		UserPermissions p = new UserPermissions(user,true);
 		permissions.add(p);

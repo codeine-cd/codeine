@@ -62,6 +62,7 @@ public class NewProjectServlet extends AbstractFrontEndServlet {
 		return new NewProjetTemplateData(names);
 	}
 	
+	// TODO - Remove from front end servlet
 	@Override
 	protected TemplateData doPost(HttpServletRequest request, PrintWriter writer) throws  FrontEndServletException{
 		try {
@@ -102,9 +103,9 @@ public class NewProjectServlet extends AbstractFrontEndServlet {
 	}
 	
 	public static class CreateNewProjectJson {
-		private String project_name;
-		private String selected_project;
-		private NewProjectType type;
+		public String project_name;
+		public String selected_project;
+		public NewProjectType type;
 	}
 	
 	public enum NewProjectType {

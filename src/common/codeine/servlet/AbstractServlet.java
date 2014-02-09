@@ -83,9 +83,13 @@ public abstract class AbstractServlet extends HttpServlet{
 
 	protected void handleError(Exception e, HttpServletResponse response) {
 		log.warn("Error in servlet", e);
+		
 		if (e instanceof UnAuthorizedException) {
 			response.setStatus(HttpStatus.UNAUTHORIZED_401);
 			getWriter(response).write("UNAUTHORIZED Request, please provide API Token");
+		} else if (e instanceof IllegalArgumentException){
+			getWriter(response).write("Bad request - please check api help\n");
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		} else if (e instanceof InShutdownException){
 			getWriter(response).write("Cannot execute - preparing for shutdown\n");
 			response.setStatus(HttpStatus.FORBIDDEN_403);

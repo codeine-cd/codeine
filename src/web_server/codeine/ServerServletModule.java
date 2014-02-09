@@ -18,6 +18,8 @@ import codeine.servlets.api_servlets.ProjectsListApiServlet;
 import codeine.servlets.api_servlets.ReporterServlet;
 import codeine.servlets.api_servlets.UpgradeApiServlet;
 import codeine.servlets.api_servlets.angular.CodeineConfigurationApiServlet;
+import codeine.servlets.api_servlets.angular.CodeinePermissionsApiServlet;
+import codeine.servlets.api_servlets.angular.ProjectsTabsApiServlet;
 import codeine.servlets.api_servlets.angular.RuntimeInfoApiServlet;
 import codeine.servlets.front_end.CommandOutputServlet;
 import codeine.servlets.front_end.ConfigureProjectServlet;
@@ -79,6 +81,8 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(CancelShutdownApiServlet.class, Constants.CANCEL_SHUTDOWN_CONTEXT);
 		serveMe(CodeineConfigurationApiServlet.class, apiContext(Constants.GLOBAL_CONFIGURATION_CONTEXT));
 		serveMe(RuntimeInfoApiServlet.class, apiContext(Constants.SESSION_INFO_CONTEXT));
+		serveMe(ProjectsTabsApiServlet.class, apiContext(Constants.PROJECTS_TABS_CONTEXT));
+		serveMe(CodeinePermissionsApiServlet.class, apiContext(Constants.PERMISSIONS_CONFIGURATION_CONTEXT));
 	}
 
 	

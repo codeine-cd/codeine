@@ -137,6 +137,7 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 			throw ExceptionUtils.asUnchecked(e);
 		}
 	}
+	
 	private List<ProjectTemplateLink> getSortedProjects(HttpServletRequest request) {
 		String query = request.getParameter("projectSearch");
 		List<ProjectJson> configuredProjects = filter(configurationManager.getConfiguredProjects(), query);

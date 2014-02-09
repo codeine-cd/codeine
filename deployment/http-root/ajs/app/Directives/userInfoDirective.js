@@ -8,7 +8,7 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log',function ($
             $log.debug("userInfo is linking...");
             $scope.getTemplateUrl = function() {
                 if (!$scope.app.sessionInfo || !$scope.app.globalConfiguration) return "";
-                $log.debug("userInfo: getTemplateUrl called, " + angular.toJson($scope.app.sessionInfo));
+                //$log.debug("userInfo: getTemplateUrl called, " + angular.toJson($scope.app.sessionInfo));
                 switch ($scope.app.globalConfiguration["authentication_method"])
                 {
                     case "Disabled":
