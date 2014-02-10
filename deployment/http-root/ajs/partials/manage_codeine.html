@@ -1,256 +1,235 @@
 <accordion close-others="true">
-    <accordion-group is-open="config_is_open">
-        <accordion-heading>
-            Codeine Configuration <i class='fa fa-question-circle codeine_help'></i>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': config_is_open, 'glyphicon-chevron-right': !config_is_open}"></i>
-        </accordion-heading>
-        <form name="codeineConfigurationForm" class="form-horizontal" novalidate ng-submit="saveConfiguration()">
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.server_name.$invalid}">
-                <label for="server_name" class="col-sm-3 control-label">Server Name <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <input type="text" ng-model="currentConfiguration.server_name" class="form-control" name="server_name" id="server_name" placeholder="Server Name">
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.admin_mail.$invalid}">
-                <label for="admin_mail" class="col-sm-3 control-label">Admin Mail <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <input type="text" ng-model="currentConfiguration.admin_mail" class="form-control" name="admin_mail" id="admin_mail" placeholder="Admin Mail">
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.web_server_host.$invalid}">
-                <label for="web_server_host" class="col-sm-3 control-label">Web Server Host <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <input type="text" ng-model="currentConfiguration.web_server_host" class="form-control" name="web_server_host" id="web_server_host" placeholder="Web Server Host">
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.web_server_port.$invalid}">
-                <label for="web_server_port" class="col-sm-3 control-label">Web Server Port <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <input type="text" ng-model="currentConfiguration.web_server_port" class="form-control" name="web_server_port" id="web_server_port" placeholder="Web Server Port" required>
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.directory_host.$invalid}">
-                <label for="directory_host" class="col-sm-3 control-label">Directory Host <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <input type="text" ng-model="currentConfiguration.directory_host" class="form-control" name="directory_host" id="directory_host" placeholder="Directory Host">
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.directory_port.$invalid}">
-                <label for="directory_port" class="col-sm-3 control-label">Directory Port <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <input type="text" ng-model="currentConfiguration.directory_port" class="form-control" name="directory_port" id="directory_port" placeholder="Directory Port">
-                </div>
-            </div>
-            <div ng-repeat="mysql_host in currentConfiguration.mysql">
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_host.$invalid }" >
-                    <label class="col-sm-3 control-label">MySQL Host <i class="fa fa-question-circle codeine_help"></i></label>
-                    <div class="col-sm-4">
-                        <input type="text" ng-model="mysql_host.host" class="form-control" name="mysql_host" placeholder="MySQL Host" required>
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_port.$invalid }" >
-                    <label for="mysql_port" class="col-sm-3 control-label">MySQL Port <i class="fa fa-question-circle codeine_help"></i></label>
-                    <div class="col-sm-4">
-                        <input type="text" ng-model="mysql_host.port" class="form-control" id="mysql_port" name="mysql_port" placeholder="MySQL Port" required>
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_user.$invalid }" >
-                    <label for="mysql_user" class="col-sm-3 control-label">MySQL User <i class="fa fa-question-circle codeine_help"></i></label>
-                    <div class="col-sm-4">
-                        <input type="text" ng-model="mysql_host.user" class="form-control" id="mysql_user" name="mysql_user" placeholder="MySQL User" required>
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_password.$invalid }" >
-                    <label for="mysql_password" class="col-sm-3 control-label">MySQL Password <i class="fa fa-question-circle codeine_help"></i></label>
-                    <div class="col-sm-4">
-                        <input type="password" ng-model="mysql_host.password" class="form-control" id="mysql_password" name="mysql_password" placeholder="MySQL Password" required>
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.managed_by_codeine.$invalid }" >
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"  ng-model="mysql_host.managed_by_codeine"> Managed by Codeine <i class="fa fa-question-circle codeine_help"></i>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_dir.$invalid }" ng-show="currentConfiguration.mysql[0].managed_by_codeine" >
-                    <label for="mysql_dir" class="col-sm-3 control-label">MySQL Persistency Dir <i class="fa fa-question-circle codeine_help"></i></label>
-                    <div class="col-sm-4">
-                        <input type="text" ng-model="mysql_host.mysql_dir" class="form-control" id="mysql_dir" name="mysql_dir" placeholder="MySQL Persistency Dir">
-                    </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_bin_dir.$invalid }" ng-show="currentConfiguration.mysql[0].managed_by_codeine" >
-                    <label for="mysql_bin_dir" class="col-sm-3 control-label">MySQL Bin Dir <i class="fa fa-question-circle codeine_help"></i></label>
-                    <div class="col-sm-4">
-                        <input type="text" ng-model="mysql_host.mysql_bin_dir" class="form-control" id="mysql_bin_dir" name="mysql_bin_dir" placeholder="MySQL Bin Dir">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.authentication_method.$invalid}">
-                <label for="authentication_method" class="col-sm-3 control-label">Authentication Method <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-4">
-                    <select  class="form-control select2" name="authentication_method" id="authentication_method"  ui-select2="{ allowClear: false}" ng-model="currentConfiguration.authentication_method">
-                        <option value="Disabled">Disabled</option>
-                        <option value="Builtin">Built In</option>
-                        <option value="WindowsCredentials">Windows Credentials</option>
-
-                    </select>
-                </div>
-            </div>
-            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.roles.$invalid}" ng-show="currentConfiguration.authentication_method == 'WindowsCredentials'">
-                <label for="roles" class="col-sm-3 control-label">Roles <i class="fa fa-question-circle codeine_help"></i></label>
-                <div class="col-sm-9">
-                    <textarea ng-model="currentConfiguration.roles" rows="3" class="form-control" name="roles" id="roles" placeholder="Roles"></textarea>
-                </div>
-            </div>
-
-        </form>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="pull-right">
-                    <button type="submit" ng-disabled="codeineConfigurationForm.$invalid" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
-                </div>
-            </div>
-            <br/><br/>
-        </div>
-
-    </accordion-group>
-    <accordion-group is-open="tabs_is_open">
-        <accordion-heading>
-            Projects Tabs Configuration <i class='fa fa-question-circle codeine_help'></i>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': tabs_is_open, 'glyphicon-chevron-right': !tabs_is_open}"></i>
-        </accordion-heading>
-        <form name="codeineTabsForm" novalidate>
-            <div class="row">
-                <div class="pull-right">
-                    <button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
-                </div>
-                <br/><br/>
-            </div>
-        </form>
-    </accordion-group>
-    <accordion-group is-open="permissions_is_open">
-        <accordion-heading>
-            Users Permissions <i class='fa fa-question-circle codeine_help'></i>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': permissions_is_open, 'glyphicon-chevron-right': !permissions_is_open}"></i>
-        </accordion-heading>
-        <form name="codeineTabsForm" novalidate>
-            <div class="row">
-                <div class="pull-right">
-                    <button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
-                </div>
-                <br/><br/>
-            </div>
-        </form>
-    </accordion-group>
-
-
-    <!--
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#view_collapse">
-                Projects Tabs Configuration <i data-help-message="tabsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-            </a>
-        </div>
-        <div id="view_collapse" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <form id="view_config_form" action="javascript:void(0);">
-                    <div class="row">
-                        <br />
-                        <div id="view_config_container"class="form-horizontal span8">
-                            <div class="offset1 span6">
-                                <table class="table table-condensed table-hover table-striped table-bordered fixed_table">
-                                    <thead>
-                                    <tr>
-                                        <th style="width: 40%">Tab Name
-                                        </th>
-                                        <th style="width: 40%">Projects
-                                            <i data-help-message="tabExpressionHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-                                        </th>
-                                        <th style="width: 20%"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tabs_table_body">
-
-                                    </tbody>
-                                </table>
-                                <br/>
-                                <table class="table table-condensed table-hover table-striped table-bordered fixed_table">
-                                    <tbody>
-                                    <tr >
-                                        <td style="width: 40%;">
-                                            <input id="new_tab_name"/>
-                                        </td>
-                                        <td id="new_tab_exp" style="width: 40%;">
-                                            <input data-separator="," style="width:170px;" class="exp_selector"/>
-                                        </td>
-                                        <td id="new_tab_exp" style="width: 20%">
-                                            <a href="javascript: void(0);" class="btn btn-info btn-mini" id="add_tab" ><i class="fa fa-plus"></i>  Add Tab</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="pull-right">
-                            <button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
-                        </div>
-                        <br/><br/>
-                    </div>
-                </form>
+<accordion-group is-open="config_is_open">
+    <accordion-heading>
+        Codeine Configuration <i class='fa fa-question-circle codeine_help'></i>
+        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': config_is_open, 'glyphicon-chevron-right': !config_is_open}"></i>
+    </accordion-heading>
+    <form name="codeineConfigurationForm" class="form-horizontal" novalidate ng-submit="saveConfiguration()">
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.server_name.$invalid}">
+            <label for="server_name" class="col-sm-3 control-label">Server Name <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <input type="text" ng-model="globalConfigurationForEditing.server_name" class="form-control" name="server_name" id="server_name" placeholder="Server Name">
             </div>
         </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.admin_mail.$invalid}">
+            <label for="admin_mail" class="col-sm-3 control-label">Admin Mail <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <input type="text" ng-model="globalConfigurationForEditing.admin_mail" class="form-control" name="admin_mail" id="admin_mail" placeholder="Admin Mail">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.web_server_host.$invalid}">
+            <label for="web_server_host" class="col-sm-3 control-label">Web Server Host <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <input type="text" ng-model="globalConfigurationForEditing.web_server_host" class="form-control" name="web_server_host" id="web_server_host" placeholder="Web Server Host">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.web_server_port.$invalid}">
+            <label for="web_server_port" class="col-sm-3 control-label">Web Server Port <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <input type="text" ng-model="globalConfigurationForEditing.web_server_port" class="form-control" name="web_server_port" id="web_server_port" placeholder="Web Server Port" required>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.directory_host.$invalid}">
+            <label for="directory_host" class="col-sm-3 control-label">Directory Host <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <input type="text" ng-model="globalConfigurationForEditing.directory_host" class="form-control" name="directory_host" id="directory_host" placeholder="Directory Host">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.directory_port.$invalid}">
+            <label for="directory_port" class="col-sm-3 control-label">Directory Port <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <input type="text" ng-model="globalConfigurationForEditing.directory_port" class="form-control" name="directory_port" id="directory_port" placeholder="Directory Port">
+            </div>
+        </div>
+        <!-- TODO: we have to fix it for array -->
+        <div ng-repeat="mysql_instance in globalConfigurationForEditing.mysql">
+            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_host.$invalid }" >
+                <label for="mysql_host" class="col-sm-3 control-label">MySQL Host <i class="fa fa-question-circle codeine_help"></i></label>
+                <div class="col-sm-4">
+                    <input type="text" ng-model="mysql_instance.host" class="form-control" name="mysql_host" id="mysql_host" placeholder="MySQL Host" required>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_port.$invalid }" >
+                <label for="mysql_port" class="col-sm-3 control-label">MySQL Port <i class="fa fa-question-circle codeine_help"></i></label>
+                <div class="col-sm-4">
+                    <input type="text" ng-model="mysql_instance.port" class="form-control" id="mysql_port" name="mysql_port" placeholder="MySQL Port" required>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_user.$invalid }" >
+                <label for="mysql_user" class="col-sm-3 control-label">MySQL User <i class="fa fa-question-circle codeine_help"></i></label>
+                <div class="col-sm-4">
+                    <input type="text" ng-model="mysql_instance.user" class="form-control" id="mysql_user" name="mysql_user" placeholder="MySQL User" required>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_password.$invalid }" >
+                <label for="mysql_password" class="col-sm-3 control-label">MySQL Password <i class="fa fa-question-circle codeine_help"></i></label>
+                <div class="col-sm-4">
+                    <input type="password" ng-model="mysql_instance.password" class="form-control" id="mysql_password" name="mysql_password" placeholder="MySQL Password" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"  ng-model="mysql_instance.managed_by_codeine"> Managed by Codeine <i class="fa fa-question-circle codeine_help"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_dir.$invalid }" ng-show="globalConfigurationForEditing.mysql[0].managed_by_codeine" >
+                <label for="mysql_dir" class="col-sm-3 control-label">MySQL Work Dir <i class="fa fa-question-circle codeine_help"></i></label>
+                <div class="col-sm-4">
+                    <input type="text" ng-model="mysql_instance.mysql_dir" class="form-control" id="mysql_dir" name="mysql_dir" placeholder="MySQL Work Dir">
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.mysql_bin_dir.$invalid }" ng-show="globalConfigurationForEditing.mysql[0].managed_by_codeine" >
+                <label for="mysql_bin_dir" class="col-sm-3 control-label">MySQL Bin Dir <i class="fa fa-question-circle codeine_help"></i></label>
+                <div class="col-sm-4">
+                    <input type="text" ng-model="mysql_instance.mysql_bin_dir" class="form-control" id="mysql_bin_dir" name="mysql_bin_dir" placeholder="MySQL Bin Dir">
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.authentication_method.$invalid}">
+            <label for="authentication_method" class="col-sm-3 control-label">Authentication Method <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-4">
+                <select  class="form-control select2" name="authentication_method" id="authentication_method"  ui-select2="{ allowClear: false}" ng-model="globalConfigurationForEditing.authentication_method">
+                    <option value="Disabled">Disabled</option>
+                    <option value="Builtin">Built In</option>
+                    <option value="WindowsCredentials">Windows Credentials</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.roles.$invalid}" ng-show="globalConfigurationForEditing.authentication_method == 'WindowsCredentials'">
+            <label for="roles" class="col-sm-3 control-label">Roles <i class="fa fa-question-circle codeine_help"></i></label>
+            <div class="col-sm-9">
+                <textarea ng-model="globalConfigurationForEditing.roles" rows="3" class="form-control" name="roles" id="roles" placeholder="Roles"></textarea>
+            </div>
+        </div>
+
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button type="submit" ng-disabled="codeineConfigurationForm.$invalid" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+            </div>
+        </div>
+        <br/><br/>
     </div>
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#config_accordion" href="#permission_collapse">
-                Users Permissions <i data-help-message="permissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-            </a>
-        </div>
-        <div id="permission_collapse" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <table class="table table-condensed table-hover table-striped table-bordered fixed_table">
-                    <thead>
-                    <tr>
-                        <th style="width:15%;">Username
-                        </th>
-                        <th style="width:10%;">Admin
-                            <i data-help-message="adminPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-                        </th>
-                        <th>View Project
-                            <i data-help-message="viewProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-                        </th>
-                        <th>Command Project
-                            <i data-help-message="commandProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-                        </th>
-                        <th>Config Project
-                            <i data-help-message="configProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
-                        </th>
-                        <th style="width:5%;"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="permissions_table_body">
 
-                    </tbody>
-                </table>
-                <div class="row">
-                    <div class="form-inline span8">
-                        <input id="add_user_permissions_input" class="span2" type="text">
-                        <button id="add_user_permissions" type="submit" style="margin-right: 10px;" class="btn btn-success" disabled><i class="fa fa-plus"></i> Add User</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="pull-right">
-                        <button id="config_permissions_save" type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
-                    </div>
-                    <br/><br/>
-                </div>
-            </div>
+</accordion-group>
+<accordion-group is-open="tabs_is_open">
+    <accordion-heading>
+        Projects Tabs Configuration <i class='fa fa-question-circle codeine_help'></i>
+        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': tabs_is_open, 'glyphicon-chevron-right': !tabs_is_open}"></i>
+    </accordion-heading>
+    <form name="codeineTabsForm" novalidate>
+
+        <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+            <thead>
+            <tr>
+                <th style="width: 35%">Tab Name
+                </th>
+                <th style="width: 60%">Projects
+                    <i class="icon-question-sign codeine_help"></i>
+                </th>
+                <th style="width: 5%"></th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="tab_view in tabsForEditing">
+            <tr>
+                <td style="width: 35%"><input class="form-control" type="text" value="{{tab_view.name}}" placeholder="Tab Name">
+                </td>
+                <td style="width: 60%">
+                    <select style="width: 100%" ui-select2="{multiple: true}" ng-model="tab_view.exp" class="form-control select2"  multiple style="width:300px">
+                        <option></option>
+                        <option ng-repeat="exp in tab_view.exp" value="{{exp}}">{{exp}}</option>
+                    </select>
+                </td>
+                <td style="width: 5%">
+                    <a href="javascript: void(0);" title="Remove Tab" class="btn btn-default btn-mini tab_remove"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </form>
+    <div class="row">
+        <div class="pull-left">
+            <button type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add row</button>
         </div>
-    </div> -->
+        <br/><br/>
+    </div>
+    <div class="row">
+        <div class="pull-right">
+            <button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+        </div>
+        <br/><br/>
+    </div>
+</accordion-group>
+<accordion-group is-open="permissions_is_open">
+    <accordion-heading>
+        Users Permissions <i class='fa fa-question-circle codeine_help'></i>
+        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': permissions_is_open, 'glyphicon-chevron-right': !permissions_is_open}"></i>
+    </accordion-heading>
+
+    <form name="codeinePermissionsForm" novalidate>
+
+        <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
+            <thead>
+            <tr>
+                <th style="width:15%;">Username
+                </th>
+                <th style="width:10%;">Admin
+                    <i data-help-message="adminPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+                </th>
+                <th>View Project
+                    <i data-help-message="viewProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+                </th>
+                <th>Command Project
+                    <i data-help-message="commandProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+                </th>
+                <th>Config Project
+                    <i data-help-message="configProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
+                </th>
+                <th style="width:5%;"></th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="permissionObject in permissionsForEditing">
+                <tr>
+                    <td>{{permissionObject.username}}</td>
+                    <td>
+                        <input style="margin: 0px;" type="checkbox" ng-model="permissionObject.administer">
+                    </td>
+                    <!-- GOT TO HERE-->
+                    <td>
+                        <input data-separator="," style="width:170px;" class="projects_selector" value="{{permissionObject.read_project}}"/>
+                    </td>
+                    <td>
+                        <input  data-separator="," style="width:170px;" class="projects_selector" value="{{permissionObject.command_project}}"/>
+                    </td>
+                    <td>
+                        <input data-id="configure_project" data-separator="," data-username="{{username}}" style="width:170px;" class="projects_selector" value="{{permissionObject.configure_project}}"/>
+                    </td>
+                    <td><a href="javascript: void(0);" title="Remove User" data-username="{{username}}" class="btn btn-default btn-mini "><i class="fa fa-times"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+    <div class="row">
+        <div class="pull-left">
+            <button type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add row</button>
+        </div>
+        <br/><br/>
+    </div>
+    <div class="row">
+        <div class="pull-right">
+            <button type="submit" style="margin-right: 10px;" class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+        </div>
+        <br/><br/>
+    </div>
+</accordion-group>
+
 </accordion>
