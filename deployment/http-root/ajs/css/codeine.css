@@ -143,3 +143,7 @@ form.form-inline span.version_label:before {
 div.sidebar-nav i.codeine_help {
 	vertical-align: text-bottom; 
 }
+/* This fixes the pointer look on links in angular. see http://angular-ui.github.io/bootstrap*/
+.nav, .pagination, .carousel, .panel-title a { 
+	cursor: pointer; 
+}

@@ -138,10 +138,9 @@
             </thead>
             <tbody ng-repeat="tab_view in tabsForEditing">
             <tr>
-                <td style="width: 35%"><input class="form-control" type="text" value="{{tab_view.name}}" placeholder="Tab Name">
-                </td>
+                <td style="width: 35%">{{tab_view.name}}</td>
                 <td style="width: 60%">
-                    <select style="width: 100%" ui-select2="{multiple: true}" ng-model="tab_view.exp" class="form-control select2"  multiple style="width:300px">
+                    <select style="width: 100%" ui-select2="select2Options" ng-model="tab_view.exp" class="form-control select2"  multiple>
                         <option></option>
                         <option ng-repeat="exp in tab_view.exp" value="{{exp}}">{{exp}}</option>
                     </select>
@@ -156,8 +155,11 @@
 
     </form>
     <div class="row">
-        <div class="pull-left">
-            <button type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add row</button>
+    	<div class="col-sm-3">
+        	<input type="text" class="form-control" ng-model="new_tab" placeholder="Tab name">
+        </div>
+        <div>
+            <button ng-click="addTab()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Tab</button>
         </div>
         <br/><br/>
     </div>
@@ -179,48 +181,59 @@
         <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
             <thead>
             <tr>
-                <th style="width:15%;">Username
+                <th class="col-sm-2">Username
                 </th>
-                <th style="width:10%;">Admin
+                <th class="col-sm-1">Admin
                     <i data-help-message="adminPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
                 </th>
-                <th>View Project
+                <th class="col-sm-3">View Project
                     <i data-help-message="viewProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
                 </th>
-                <th>Command Project
+                <th class="col-sm-3">Command Project
                     <i data-help-message="commandProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
                 </th>
-                <th>Config Project
+                <th class="col-sm-3">Config Project
                     <i data-help-message="configProjectPermissionsConfigureHelp" rel="popover" class="icon-question-sign codeine_help"></i>
                 </th>
-                <th style="width:5%;"></th>
+                <th class="col-sm-1"></th>
             </tr>
             </thead>
             <tbody ng-repeat="permissionObject in permissionsForEditing">
                 <tr>
-                    <td>{{permissionObject.username}}</td>
-                    <td>
+                    <td class="col-sm-2">{{permissionObject.username}}</td>
+                    <td class="col-sm-1">
                         <input style="margin: 0px;" type="checkbox" ng-model="permissionObject.administer">
                     </td>
-                    <!-- GOT TO HERE-->
-                    <td>
-                        <input data-separator="," style="width:170px;" class="projects_selector" value="{{permissionObject.read_project}}"/>
+                    <td class="col-sm-3">
+	                    <select style="width: 95%" ui-select2="select2Options" ng-model="permissionObject.read_project" class="form-control select2"  multiple>
+	                        <option></option>
+	                        <option ng-repeat="exp in permissionObject.read_project" value="{{exp}}">{{exp}}</option>
+	                    </select>
                     </td>
-                    <td>
-                        <input  data-separator="," style="width:170px;" class="projects_selector" value="{{permissionObject.command_project}}"/>
+                    <td class="col-sm-3">
+                    	<select style="width: 95%" ui-select2="select2Options" ng-model="permissionObject.command_project" class="form-control select2"  multiple>
+	                        <option></option>
+	                        <option ng-repeat="exp in permissionObject.command_project" value="{{exp}}">{{exp}}</option>
+	                    </select>
                     </td>
-                    <td>
-                        <input data-id="configure_project" data-separator="," data-username="{{username}}" style="width:170px;" class="projects_selector" value="{{permissionObject.configure_project}}"/>
+                    <td class="col-sm-3">
+                    	<select style="width: 95%" ui-select2="select2Options" ng-model="permissionObject.configure_project" class="form-control select2"  multiple>
+	                        <option></option>
+	                        <option ng-repeat="exp in permissionObject.configure_project" value="{{exp}}">{{exp}}</option>
+	                    </select>
                     </td>
-                    <td><a href="javascript: void(0);" title="Remove User" data-username="{{username}}" class="btn btn-default btn-mini "><i class="fa fa-times"></i></a></td>
+                    <td class="col-sm-1"><a href="javascript: void(0);" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></a></td>
                 </tr>
             </tbody>
         </table>
 
     </form>
     <div class="row">
-        <div class="pull-left">
-            <button type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add row</button>
+        <div class="col-sm-3">
+        	<input type="text" class="form-control" name="new_username" id="new_username" ng-model="new_username" placeholder="User name">
+        </div>
+        <div>
+            <button type="button" ng-click="addUser()" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add User</button>
         </div>
         <br/><br/>
     </div>
