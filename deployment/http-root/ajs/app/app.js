@@ -50,6 +50,15 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                                 deferred.resolve(data);
                             });
                             return deferred.promise;
+                        },
+                        projects: function($q,$log,CodeineService) {
+                            $log.debug("resolving projects");
+                            var deferred = $q.defer();
+                            CodeineService.getProjects().success(function(data) {
+                                $log.debug("Resolved projects: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
                         }
                     }
                 }).
