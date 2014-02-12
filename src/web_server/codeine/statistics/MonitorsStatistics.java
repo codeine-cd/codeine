@@ -62,17 +62,17 @@ public class MonitorsStatistics implements IMonitorStatistics{
 	 * @see codeine.statistics.IMonitorStatistics#getDataJson(java.lang.String)
 	 */
 	@Override
-	public String getDataJson(String projectName) {
+	public List<MonitorStatusItem> getData(String projectName) {
 		LimitedQueue<MonitorStatusItem> d = data.get(projectName);
 		if (null == d){
-			return "[]";
+			return Lists.newArrayList();
 		}
 		ArrayList<MonitorStatusItem> l;
 		synchronized (d) {
 			l = Lists.newArrayList(d);
 		}
 		Collections.reverse(l);
-		return gson.toJson(l);
+		return l;
 	}
 
 	@Override
