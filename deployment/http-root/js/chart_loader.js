@@ -16,20 +16,16 @@ function loadChart() {
 	    	// TODO - Show loader...
 	    },
 	    success: function(response) {
-	    	// TODO - Hide loader...
-	    	chart1 = new cfx.Chart();
-	    	chart1.setDataSource(jQuery.parseJSON(response));
-	    	chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
-	    	chart1.getAllSeries().getLine().setStyle(cfx.DashStyle.Dash);
-
-	    	var chartDiv = document.getElementById('chartDiv');
-	    	chart1.create(chartDiv);
-
-		    // Change the chart's attributes to make it responsive.
-    		var svgelem = document.getElementsByTagName("svg");
-			svgelem.chart.setAttribute('width','100%');
-			// svgelem.chart.setAttribute('height',''); 			// Removing height makes the chart disappear in Chrome :(
-			svgelem.chart.setAttribute('viewBox','0 0 870 600');
+//	    	if(typeof(Worker) !== "undefined")
+//	    	  {
+//	    	  // Yes! Web worker support!
+//	    	  // Some code.....
+//	    	  }
+//	    	else
+//	    	  {
+//	    	  // Sorry! No Web Worker support..
+//	    	  }
+	    	drawChart(response);
 	    },
 	    error:  function(err) { 
 	    	// TODO - Hide loader...
@@ -37,4 +33,24 @@ function loadChart() {
 	    },
 	    dataType: 'json'
 	  });
+}
+
+function drawChart(response)
+{
+	console.log("drawChart");
+	// TODO - Hide loader...
+	chart1 = new cfx.Chart();
+	chart1.setDataSource(jQuery.parseJSON(response));
+	chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
+	chart1.getAllSeries().getLine().setStyle(cfx.DashStyle.Dash);
+
+	var chartDiv = document.getElementById('chartDiv');
+	chart1.create(chartDiv);
+
+    // Change the chart's attributes to make it responsive.
+	var svgelem = document.getElementsByTagName("svg");
+	svgelem.chart.setAttribute('width','100%');
+	// svgelem.chart.setAttribute('height',''); 			// Removing height makes the chart disappear in Chrome :(
+	svgelem.chart.setAttribute('viewBox','0 0 870 600');
+	console.log("drawChart - finish");
 }
