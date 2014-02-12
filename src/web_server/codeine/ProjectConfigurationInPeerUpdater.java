@@ -54,7 +54,7 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 				}
 			}
 			if ((numTry++ <= 3) && (failedPeers.size() > 0)) {
-				log.info("Will terty to send update to " + failedPeers.size() + " peers");
+				log.info("Will retry to send update to " + failedPeers.size() + " peers");
 				restart = true;
 				allPeers = Lists.newArrayList(failedPeers);
 				failedPeers.clear();
