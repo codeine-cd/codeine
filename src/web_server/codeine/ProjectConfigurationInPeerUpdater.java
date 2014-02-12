@@ -29,18 +29,19 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 	volatile boolean restart = false;
 	
 	public void updateAllPeers() {
-		restart = true;
 		synchronized (sleepObject) {
 			sleepObject.notifyAll();
 		}
 	}
 	@Override
 	public void run() {
+		restart = true;
 		int numTry = 1;
 		Collection<PeerStatusJsonV2> allPeers = peersProjectsStatus.peer_to_projects().values();
 		while (restart) {
 			restart = false;
 			List<PeerStatusJsonV2> failedPeers = Lists.newArrayList();
+			log.info("sending refresh request to " + allPeers.size() + " peers");
 			for (PeerStatusJsonV2 e : allPeers) {
 				try {
 					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null);
