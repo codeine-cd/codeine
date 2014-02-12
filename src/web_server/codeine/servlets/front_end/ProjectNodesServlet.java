@@ -54,7 +54,7 @@ public class ProjectNodesServlet extends AbstractFrontEndServlet {
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String versionName = getVersion(request);
-		return Lists.<TemplateLink>newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?"+Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encode(projectName)),new TemplateLink(versionName, "#"));
+		return Lists.<TemplateLink>newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?"+Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encodeURL(projectName)),new TemplateLink(versionName, "#"));
 	}
 
 	@Override

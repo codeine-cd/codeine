@@ -26,12 +26,12 @@ public class Links {
 	}
 
 	public String getPeerCommandLink(String hostport, String project, String command, String userArgs) {
-		String args = null == userArgs ? "" : "&version=" + HttpUtils.encode(userArgs);
-		return getPeerLink(hostport) + Constants.COMMAND_NODE_CONTEXT + "?project=" + HttpUtils.encode(project) + "&command=" + HttpUtils.encode(command) + args;
+		String args = null == userArgs ? "" : "&version=" + HttpUtils.encodeURL(userArgs);
+		return getPeerLink(hostport) + Constants.COMMAND_NODE_CONTEXT + "?project=" + HttpUtils.encodeURL(project) + "&command=" + HttpUtils.encodeURL(command) + args;
 	}
 
 	public String getProjectLink(String name) {
-		return Constants.PROJECT_STATUS_CONTEXT + "?project="+HttpUtils.encode(name);
+		return Constants.PROJECT_STATUS_CONTEXT + "?project="+HttpUtils.encodeURL(name);
 	}
 
 	public String getPeerMonitorResultLink(String hostport, String projectName, String collectorName, String nodeName) {
@@ -41,7 +41,7 @@ public class Links {
 
 	public String getWebServerProjectAlerts(ProjectJson project)
 	{
-		return getWebServerLink() + Constants.PROJECT_NODES_CONTEXT + "?alerts=true&project=" + HttpUtils.encode(project.name());
+		return getWebServerLink() + Constants.PROJECT_NODES_CONTEXT + "?alerts=true&project=" + HttpUtils.encodeURL(project.name());
 	}
 
 	public String getWebServerLink() {
@@ -49,7 +49,7 @@ public class Links {
 	}
 
 	public String getNodeMonitorOutputContextPath(String projectName) {
-		return getNodeMonitorOutputContextPathAllProjects() + "/" + HttpUtils.encode(projectName) + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
+		return getNodeMonitorOutputContextPathAllProjects() + "/" + HttpUtils.encodeURL(projectName) + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
 	}
 	public String getNodeMonitorOutputContextPathAllProjects() {
 		return Constants.PROJECT_PATH;
@@ -60,7 +60,7 @@ public class Links {
 	}
 
 	public String getPluginOutLink(String projectName, String file) {
-		return Constants.PROJECT_FILES_CONTEXT + "/" + HttpUtils.encode(projectName) + Constants.PLUGINS_OUTPUT_DIR + "/" + file;
+		return Constants.PROJECT_FILES_CONTEXT + "/" + HttpUtils.encodeURL(projectName) + Constants.PLUGINS_OUTPUT_DIR + "/" + file;
 	}
 
 	public String getCommandOutputGuiLink(CommandExecutionStatusInfo j) {
@@ -68,16 +68,16 @@ public class Links {
 		String command = j.command();
 		String path = String.valueOf(j.id());
 		return j.finished() ? 
-				Constants.COMMAND_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encode(project_name) + "&resource=" + HttpUtils.encode(command) + "&link=" + HttpUtils.encode(getPluginOutLink(project_name, path))) : 
+				Constants.COMMAND_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encodeURL(project_name) + "&resource=" + HttpUtils.encodeURL(command) + "&link=" + HttpUtils.encodeURL(getPluginOutLink(project_name, path))) : 
 			getCommandOutputGui(project_name, command, path);
 	}
 
 	public String getCommandOutputGui(String project_name, String command, String path) {
-		return Constants.PROGRESSIVE_RAW_OUTPUT_CONTEXT + "?project=" + HttpUtils.encode(project_name) + "&command=" + HttpUtils.encode(command) + "&path=" + HttpUtils.encode(String.valueOf(path));
+		return Constants.PROGRESSIVE_RAW_OUTPUT_CONTEXT + "?project=" + HttpUtils.encodeURL(project_name) + "&command=" + HttpUtils.encodeURL(command) + "&path=" + HttpUtils.encodeURL(String.valueOf(path));
 	}
 	
 	public String getMonitorOutputGuiLink(String projectName, String peerName, String nodeName, String monitorName) {
-		return Constants.RAW_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encode(projectName) + "&link=" + HttpUtils.encode(getPeerMonitorResultLink(peerName, projectName, monitorName, nodeName)) + "&resource=" + HttpUtils.encode(monitorName));
+		return Constants.RAW_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encodeURL(projectName) + "&link=" + HttpUtils.encodeURL(getPeerMonitorResultLink(peerName, projectName, monitorName, nodeName)) + "&resource=" + HttpUtils.encodeURL(monitorName));
 	}
 	
 }

@@ -22,7 +22,7 @@ public class ProjectStatusTemplateData extends TemplateData {
 		super();
 		this.project_name = projectName;
 		this.project_nodes_context = project_nodes_context;
-		this.project_name_encoded = HttpUtils.encode(projectName);
+		this.project_name_encoded = HttpUtils.encodeURL(projectName);
 		this.version = version;
 		this.total = total;
 		this.commands = commands;

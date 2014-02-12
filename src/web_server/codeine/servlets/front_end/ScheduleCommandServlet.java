@@ -45,7 +45,7 @@ public class ScheduleCommandServlet extends AbstractFrontEndServlet
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		ScheduleInfoPostDataJson data = (ScheduleInfoPostDataJson) request.getAttribute(DATA_PARSED);
 		String commandName = data.command();
-		return Lists.<TemplateLink> newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?project=" + HttpUtils.encode(projectName)),new TemplateLink(commandName, "#"));
+		return Lists.<TemplateLink> newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?project=" + HttpUtils.encodeURL(projectName)),new TemplateLink(commandName, "#"));
 	}
 	
 	@Override

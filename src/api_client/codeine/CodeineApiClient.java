@@ -71,14 +71,14 @@ public class CodeineApiClient {
 
 
 	private String projectNameParam(String projectName) {
-		return Constants.UrlParameters.PROJECT_NAME + "=" + HttpUtils.encode(projectName);
+		return Constants.UrlParameters.PROJECT_NAME + "=" + HttpUtils.encodeURL(projectName);
 	}
 
 
 
 	public List<NodeWithMonitorsInfo> projectNodes(String projectName, String version) {
 		return apiCall(
-				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encode(version),
+				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
 				new TypeToken<List<NodeWithMonitorsInfo>>(){}.getType());
 	}
 
@@ -97,7 +97,7 @@ public class CodeineApiClient {
 
 	public String runCommand(ScehudleCommandExecutionInfo data) {
 		String url = getServerPath(Constants.COMMAND_NODES_CONTEXT);
-		String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encode(gson.toJson(data));
+		String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encodeURL(gson.toJson(data));
 		return HttpUtils.doPOST(url, postData,headers);
 	}
 

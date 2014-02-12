@@ -129,9 +129,9 @@ public class ProjectsListServlet extends AbstractFrontEndServlet
 			return;
 		}
 		try {
-			response.sendRedirect(Constants.PROJECT_NODES_CONTEXT + "?" + Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encode(configuredProjects.get(0).name()) + "&"
-					+ Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encode(Constants.ALL_VERSION) + "&"
-					+ Constants.UrlParameters.FILTER + "=" + HttpUtils.encode(filter)
+			response.sendRedirect(Constants.PROJECT_NODES_CONTEXT + "?" + Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encodeURL(configuredProjects.get(0).name()) + "&"
+					+ Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(Constants.ALL_VERSION) + "&"
+					+ Constants.UrlParameters.FILTER + "=" + HttpUtils.encodeURL(filter)
 					);
 		} catch (IOException e) {
 			throw ExceptionUtils.asUnchecked(e);

@@ -84,8 +84,8 @@ public class PeerCommandWorker implements Runnable {
 			}
 			if (POST && !command_info.name().equals("upgrade_old_peers")) {
 				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias());
-				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info))
-						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encode(new Gson().toJson(command_info2));
+				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info))
+						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info2));
 				HttpUtils.doPOST(url, postData, function,null);
 			}
 			else {

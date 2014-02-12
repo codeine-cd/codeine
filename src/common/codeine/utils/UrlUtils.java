@@ -12,7 +12,7 @@ public class UrlUtils {
 		if (queryParams != null && queryParams.size() > 0) {
 			$.append("?");
 			for (String parameter : queryParams.keySet()) {
-				$.append(parameter + "=" + HttpUtils.encode(queryParams.get(parameter)) + "&");
+				$.append(parameter + "=" + HttpUtils.encodeURL(queryParams.get(parameter)) + "&");
 			}
 			$.deleteCharAt($.length()-1);
 		}

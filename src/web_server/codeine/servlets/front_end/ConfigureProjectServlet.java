@@ -82,7 +82,7 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return Lists.<TemplateLink>newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?"+Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encode(projectName)),new TemplateLink("Configure", "#"));
+		return Lists.<TemplateLink>newArrayList(new TemplateLink(projectName, Constants.PROJECT_STATUS_CONTEXT + "?"+Constants.UrlParameters.PROJECT_NAME+"=" + HttpUtils.encodeURL(projectName)),new TemplateLink("Configure", "#"));
 	}
 
 	@Override

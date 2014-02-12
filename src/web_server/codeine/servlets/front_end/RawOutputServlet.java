@@ -44,7 +44,7 @@ public class RawOutputServlet extends AbstractFrontEndServlet {
 			String address = request.getRequestURL().substring(0, request.getRequestURL().lastIndexOf(request.getRequestURI()));
 			link = address + link;
 		}
-		return new RawOutputTemplateData(HttpUtils.encode(HttpUtils.doGET(link,null)));
+		return new RawOutputTemplateData(HttpUtils.encodeHTML(HttpUtils.doGET(link,null)));
 	}
 
 	@Override

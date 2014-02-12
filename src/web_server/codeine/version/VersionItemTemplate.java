@@ -10,7 +10,7 @@ public class VersionItemTemplate extends VersionItemInfo{
 	
 	public VersionItemTemplate(VersionItemInfo input) {
 		super(input.version_label(), input.version_name(), input.total_fail(), input.count(), input.max());
-		this.version_name_encoded = HttpUtils.encode(input.version_name());
+		this.version_name_encoded = HttpUtils.encodeURL(input.version_name());
 		this.hide_no_errors = input.fail_percent() == 0 ? "display: none;" : "";
 	}
 }
