@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.auth.PermissionsConfJson;
+import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.model.Constants;
@@ -23,6 +24,7 @@ public class PermissionsManager {
 	private GlobalConfigurationJsonStore globalConfigurationJson;
 	private UserPermissionsJsonStore permissionConfJson;
 	private UsersManager usersManager;
+	private final UserPermissions ADMIN_GUEST = new UserPermissions("Guest", true);
 		
 	@Inject
 	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore,
@@ -33,42 +35,37 @@ public class PermissionsManager {
 		this.permissionConfJson = permissionConfJson;
 		this.usersManager = usersManager;
 	}
+	
 	public boolean canRead(String projectName, HttpServletRequest request){
-		if (ignoreSecurity()){
-			return true;
-		}
-		if (permissionsNotConfigured(request)){
-			return false;
-		}
-		return permissionConfJson.get().get(user(request)).canRead(projectName);
+		return user(request).canRead(projectName);
 	}
-	private boolean permissionsNotConfigured(HttpServletRequest request) {
-		return user(request) == null || permissionConfJson.get().getOrNull(user(request)) == null;
-	}
+	
 	private boolean ignoreSecurity() {
 		return Boolean.getBoolean("ignoreSecurity") || globalConfigurationJson.get().authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
 	}
+	
 	public boolean canCommand(String projectName, HttpServletRequest request){
-		if (ignoreSecurity()){
-			return true;
-		}
-		if (permissionsNotConfigured(request)){
-			return false;
-		}
-		return permissionConfJson.get().get(user(request)).canCommand(projectName);
+		return user(request).canCommand(projectName);
 	}
+	
 	public boolean isAdministrator(HttpServletRequest request){
-		if (ignoreSecurity()){
-			return true;
-		}
-		if (permissionsNotConfigured(request)){
-			return false;
-		}
-		String user = user(request);
-		return permissionConfJson.get().get(user).isAdministrator();
+		return user(request).isAdministrator();
 	}
-
-	public String user(HttpServletRequest request) {
+	public UserPermissions user(HttpServletRequest request){
+		if (ignoreSecurity()) {
+			return ADMIN_GUEST;
+		}
+		String user = userInternal(request);
+		UserPermissions userPermissions = permissionConfJson.get().getOrNull(user);
+		return null == userPermissions ? guest(user) : userPermissions; 
+		
+	}
+	
+	private final UserPermissions guest(String user) {
+		return new UserPermissions(user, false);
+	}
+	
+	private String userInternal(HttpServletRequest request) {
 		String userFromCommandLine = System.getProperty("codeineUser");
 		if (null != userFromCommandLine){
 			return userFromCommandLine;
@@ -81,7 +78,7 @@ public class PermissionsManager {
 				
 		Principal userPrincipal = request.getUserPrincipal();
 		if (null == userPrincipal){
-			return null;
+			return "Guest";
 		}
 		
 		String username = userPrincipal.getName();
@@ -100,13 +97,7 @@ public class PermissionsManager {
 		return username;
 	}
 	public boolean canConfigure(String projectName, HttpServletRequest request) {
-		if (ignoreSecurity()){
-			return true;
-		}
-		if (permissionsNotConfigured(request)){
-			return false;
-		}
-		return permissionConfJson.get().get(user(request)).canConfigure(projectName);
+		return user(request).canConfigure(projectName);
 	}
 	public void makeAdmin(String user) {
 		PermissionsConfJson permissionsConfJson = permissionConfJson.get();

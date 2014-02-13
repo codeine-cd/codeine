@@ -44,14 +44,14 @@ public class UserInfoServlet extends AbstractFrontEndServlet {
 	
 	@Override
 	protected TemplateData doGet(HttpServletRequest request, PrintWriter writer) {
-		String user = permissionsManager.user(request);
+		String user = permissionsManager.user(request).username();
 		CodeineUser codeineUser = usersManager.user(user);
 		return new UserInfoTemplateData(codeineUser.username(), codeineUser.api_token());
 	}
 	
 	@Override
 	protected List<TemplateLink> generateNavigation(HttpServletRequest request) {
-		String user = permissionsManager.user(request);
+		String user = permissionsManager.user(request).username();
 		return Lists.<TemplateLink>newArrayList(new TemplateLink(user, "#"));
 	}
 

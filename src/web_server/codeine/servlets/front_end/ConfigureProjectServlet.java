@@ -46,7 +46,7 @@ public class ConfigureProjectServlet extends AbstractFrontEndServlet {
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
-		String user = permissionsManager.user(request);
+		String user = permissionsManager.user(request).username();
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		if (!permissionsManager.canConfigure(projectName, request)) {
 			log.info("User " + user + " is not allowed to configure project " + projectName);

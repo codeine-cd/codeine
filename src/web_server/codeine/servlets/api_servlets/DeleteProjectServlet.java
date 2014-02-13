@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.ConfigurationManagerServer;
+import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
@@ -23,8 +24,8 @@ public class DeleteProjectServlet extends AbstractServlet {
 	
 	@Override
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
-		String user = permissionsManager.user(request);
-		if (!permissionsManager.isAdministrator(request)) {
+		UserPermissions user = permissionsManager.user(request);
+		if (!user.isAdministrator()) {
 			log.info("Non admin user (" + user + ") cannot delete project");
 			response.setStatus(HttpStatus.FORBIDDEN_403);
 			return;

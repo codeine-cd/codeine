@@ -23,6 +23,14 @@ public class UserPermissions {
 		this.administer = administer;
 	}
 
+	public UserPermissions(String username, boolean administrator, Set<String> canRead, Set<String> canCommand,
+			Set<String> canConfigure) {
+		this(username, administrator);
+		this.read_project = canRead;
+		this.command_project = canCommand;
+		this.configure_project = canConfigure;
+	}
+
 	public String username()
 	{
 		return username;

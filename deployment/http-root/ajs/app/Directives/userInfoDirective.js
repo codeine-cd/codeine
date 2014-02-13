@@ -14,7 +14,7 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log',function ($
                     case "Disabled":
                         return "/ajs/partials/directives/empty.html";
                     case "Builtin":
-                        if ($scope.app.sessionInfo.user) {
+                        if (($scope.app.sessionInfo.permissions.username) && ($scope.app.sessionInfo.permissions.username !== 'Guest')) {
                             return "/ajs/partials/directives/builtin-logged.html";
                         }
                         return "/ajs/partials/directives/builtin-not-logged.html";

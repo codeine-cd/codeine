@@ -1,13 +1,15 @@
 package codeine.jsons.info;
 
+import codeine.jsons.auth.UserPermissions;
+
 public class SessionInfo {
 
 	private String version;
-	private String user;
+	private UserPermissions permissions;
 	
-	public SessionInfo(String version, String user) {
+	public SessionInfo(String version, UserPermissions permissions) {
 		this.version = version;
-		this.user = user;
+		this.permissions = permissions;
 	}
 	
 }

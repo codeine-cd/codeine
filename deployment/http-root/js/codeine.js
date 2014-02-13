@@ -32,7 +32,7 @@ function hashCode(str){
 }
 
 function isUserLogged() {
-	return (logged_user !== "");
+	return (logged_user !== "" && logged_user !== "Guest");
 }
 
 $('#deleteProjectMenuItem').click(function() {

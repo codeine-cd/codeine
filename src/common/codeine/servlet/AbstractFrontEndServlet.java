@@ -144,7 +144,7 @@ public abstract class AbstractFrontEndServlet extends AbstractServlet {
 	protected abstract String getTitle(HttpServletRequest request);
 	
 	private void prepareTemplateData(HttpServletRequest request, TemplateData templateData) {
-		String user = permissionsManager.user(request);
+		String user = permissionsManager.user(request).username();
 		templateData.setLoggedUser(StringUtils.safeToString(user));
 		templateData.authentication_method(globalConfigurationJson.get().authentication_method());
 		if (!StringUtils.isEmpty(webConfJsonStore.get().new_issue_link())) {
