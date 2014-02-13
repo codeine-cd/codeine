@@ -1,4 +1,4 @@
-angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tabs','permissions', 'projects', function($scope, $log, tabs, permissions, projects) {
+angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tabs','permissions', 'projects','CodeineService','AlertService', function($scope, $log, tabs, permissions, projects, CodeineService, AlertService) {
     $scope.projects  = [];
     angular.forEach(projects, function(key,value) {
         $scope.projects.push(key['name']);
@@ -10,10 +10,29 @@ angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tab
 
     $scope.saveConfiguration = function() {
         $log.debug('manageCodeineCtrl: saveConfiguration');
+        CodeineService.updateGlobalConfiguration($scope.globalConfigurationForEditing).success(function(data) {
+            $log.debug('manageCodeineCtrl: update configuration -' + angular.toJson(data));
+            AlertService.addAlert('success','Configuration was saved successfully');
+            $scope.app.globalConfiguration = data;
+        });
     }
 
     $scope.saveTabs = function() {
         $log.debug('manageCodeineCtrl: saveTabs');
+        CodeineService.updateViewTabs($scope.tabsForEditing).success(function(data) {
+            $log.debug('manageCodeineCtrl: update tabs -' + angular.toJson(data));
+            AlertService.addAlert('success','Tabs were saved successfully');
+        });
+
+    }
+
+    $scope.savePermissions = function() {
+        $log.debug('manageCodeineCtrl: savePermissions');
+        CodeineService.updatePermissions($scope.permissionsForEditing).success(function(data) {
+            $log.debug('manageCodeineCtrl: update permissions -' + angular.toJson(data));
+            AlertService.addAlert('success','Permissions were saved successfully');
+        });
+
     }
 
     $scope.addUser = function() {

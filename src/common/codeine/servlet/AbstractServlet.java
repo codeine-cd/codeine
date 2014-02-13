@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Inject private Gson gson;
 	private @Inject PermissionsManager permissionsManager;
 	
+	// TODO - Add final after removing front end servlets
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -48,7 +50,18 @@ public abstract class AbstractServlet extends HttpServlet{
 			handleError(e, response);
 		}
 	}
-	
+
+	@Override
+	protected final void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			if (!checkPermissions(request)) {
+				throw new UnAuthorizedException();
+			}
+			myPut(request, response);
+		} catch (Exception e) {
+			handleError(e, response);
+		}
+	}
 	
 	
 	@Override
@@ -64,7 +77,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 	
 	@Override
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected final void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
 				throw new UnAuthorizedException();
@@ -81,6 +94,10 @@ public abstract class AbstractServlet extends HttpServlet{
 		writeNotFound(request, response);
 	}
 
+	protected void myPut(HttpServletRequest request, HttpServletResponse response) {
+		writeNotFound(request, response);
+	}
+	
 	protected void handleError(Exception e, HttpServletResponse response) {
 		log.warn("Error in servlet", e);
 		
@@ -159,6 +176,11 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected final <T> T readBodyJson(HttpServletRequest request, Class<T> clazz) {
 		return gson().fromJson(readBody(request), clazz);
 	}
+	
+	protected final <T> T readBodyJson(HttpServletRequest request, Type listType) {
+		return gson().fromJson(readBody(request), listType);
+	}
+	
 	protected final void writeResponseJson(HttpServletResponse response, Object json) {
 		getWriter(response).write(gson().toJson(json));
 	}

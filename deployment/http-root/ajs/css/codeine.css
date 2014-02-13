@@ -139,6 +139,11 @@ form.form-inline span.version_label:before {
 .codeine_help {
 	opacity: 0.25;
 }
+
+.codeine_help_content {
+    font-weight: normal !important;
+}
+
 /* Makes the help icons line up with the text in the left panels */
 div.sidebar-nav i.codeine_help {
 	vertical-align: text-bottom; 

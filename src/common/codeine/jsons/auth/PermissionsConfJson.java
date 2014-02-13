@@ -8,6 +8,12 @@ public class PermissionsConfJson {
 
 	private List<UserPermissions> permissions = Lists.newArrayList();
 
+	public PermissionsConfJson() {}
+	
+	public PermissionsConfJson(List<UserPermissions> permissions) {
+		this.permissions = permissions;
+	}
+	
 	public UserPermissions get(String user) {
 		UserPermissions userPermissions = getOrNull(user);
 		if (null == userPermissions) {
