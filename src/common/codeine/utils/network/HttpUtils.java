@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import codeine.utils.ExceptionUtils;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Maps;
 
 public class HttpUtils
 {
@@ -149,5 +150,9 @@ public class HttpUtils
 				c.setRequestProperty(e.getKey(), e.getValue());
 			}
 		}
+	}
+
+	public static String doGET(String url) {
+		return doGET(url, Maps.<String, String>newHashMap());
 	}
 }
