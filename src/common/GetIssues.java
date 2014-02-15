@@ -6,8 +6,8 @@ import codeine.utils.network.HttpUtils;
 public class GetIssues {
 
 	public static void main(String[] args) {
-//		System.setProperty("http.proxyHost", "proxy.iil.intel.com");
-//		System.setProperty("http.proxyPort", "911");
+		System.setProperty("https.proxyHost", "proxy.iil.intel.com");
+		System.setProperty("https.proxyPort", "911");
 		for (int i = 61; i < 121; i++) {
 			try {
 				System.out.println(i);
