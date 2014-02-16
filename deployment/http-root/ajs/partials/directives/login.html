@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <a type="button" class="close"  aria-hidden="true" ng-click="cancel()">&times;</a>
+    <h3><i class="fa fa-suitcase"></i>  Sign in to Codeine</h3>
+</div>
+<form novalidate name="loginForm">
+<div class="modal-body">
+    <alert class='alert alert-danger' ng-repeat="message in errors track by message.id"  close="message.close(message,$index)">
+        <span class="message" ng-bind-html="message.msg"></span>
+    </alert>
+    <div class="form-group" ng-class="{'has-error': loginForm.j_username.$invalid}">
+        <label for="j_username">Username</label>
+        <input type="text" ng-model="data.username" class="form-control" id="j_username" name="j_username" placeholder="Username" required>
+    </div>
+    <div class="form-group" ng-class="{'has-error': loginForm.j_password.$invalid}">
+        <label for="j_password">Password</label>
+        <input type="password" ng-model="data.password" class="form-control" id="j_password" name="j_password" placeholder="Password">
+    </div>
+    <button ng-click="signin()" ng-disabled="loginForm.$invalid" class="btn btn-primary pull-left">Sign in</button>
+    <button ng-click="register()" ng-disabled="loginForm.$invalid" class="btn btn-info pull-right">Register</button>
+</div>
+<div class="modal-footer">
+    <div class="text-left">
+        New To Codeine?<br/>
+        Enter username and password and click 'Register' to create an account
+    </div>
+</div>
+</form>

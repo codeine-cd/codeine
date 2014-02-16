@@ -1,4 +1,4 @@
-angular.module('codeine').directive('userInfo', ['$rootScope','$log',function ($rootScope, $log ) {
+angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window','CodeineService' , function ($rootScope, $log , $window, CodeineService) {
     return {
         restrict: "E",
         transclude: false,
@@ -6,6 +6,14 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log',function ($
         template : '<div ng-include="getTemplateUrl()"></div>',
         link: function ($scope, element, attrs) {
             $log.debug("userInfo is linking...");
+
+            $scope.logout = function() {
+                $log.debug('userInfo: logout');
+                CodeineService.logout().success(function() {
+                    $window.location.reload();
+                });
+            }
+
             $scope.getTemplateUrl = function() {
                 if (!$scope.app.sessionInfo || !$scope.app.globalConfiguration) return "";
                 //$log.debug("userInfo: getTemplateUrl called, " + angular.toJson($scope.app.sessionInfo));

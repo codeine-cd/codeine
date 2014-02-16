@@ -29,6 +29,15 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         },
         updateGlobalConfiguration: function(data) {
             return $http.put('/global-configuration_json',data);
+        },
+        login: function(user,password) {
+            return $http.post('/j_security_check',"j_username=" + user +"&j_password=" + password, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} });
+        },
+        logout: function() {
+            return $http.get('/logout');
+        },
+        register: function(user, password) {
+            return $http.post('/register',{username : user, password:  password });
         }
     };
     return Api;

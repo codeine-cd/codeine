@@ -4,6 +4,12 @@ angular.module('codeine')
     var ErrorHandler = this;
 
     ErrorHandler.handle = function (data, status, headers, config) {
+
+        if ((config['url'] === '/j_security_check') || (config['url'] === '/register')) {
+            $log.info('ErrorHandler: Ignoring error');
+            return;
+        }
+
         $log.error(angular.toJson(data));
         var message = [];
         if (data.title) {
