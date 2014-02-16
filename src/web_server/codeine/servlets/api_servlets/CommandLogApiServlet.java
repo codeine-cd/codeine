@@ -23,6 +23,7 @@ public class CommandLogApiServlet extends AbstractServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
+		setNoCache(response);
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		List<CommandStatusJson> allCommands = nodesCommandExecuterProvider.getAllCommands(projectName);
 		List<CommandStatusJson> allCommandsWithPermissions = Lists.newArrayList();

@@ -23,6 +23,7 @@ public class CommandExecutorApiServlet extends AbstractServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response){
+		setNoCache(response);
 		List<CommandStatusJson> active = nodesCommandExecuterProvider.getActive();
 		List<CommandStatusJson> activeWithPermissions = Lists.newArrayList();
 		for (CommandStatusJson commandStatusJson : active) {
