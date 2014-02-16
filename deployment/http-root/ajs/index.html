@@ -62,8 +62,9 @@
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
+            
             <div class="container">
-
+		        <div ng-show="app.sessionInfo.isPrepareForShutdown" class="row"><div class="span12"><div id="alertContainer" class="alert alert-danger fade in">Prepare for shutdown - No further commands will be executed</div></div></div>
                 <!--
                 <div ng-animate="enter" ng-show="app.contentLoading" ng-cloak><br><br>
                     <div class="row">
@@ -128,6 +129,7 @@
         <script src="/ajs/app/app.js"></script>
         <script src="/ajs/app/helpConstants.js"></script>
         <script src="/ajs/app/Controllers/navbarCtrl.js"></script>
+        <script src="/ajs/app/Controllers/manageMenuCtrl.js"></script>
         <script src="/ajs/app/Controllers/projectsListCtrl.js"></script>
         <script src="/ajs/app/Controllers/newProjectCtrl.js"></script>
         <script src="/ajs/app/Controllers/manageCodeineCtrl.js"></script>

@@ -15,7 +15,7 @@ angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tab
             AlertService.addAlert('success','Configuration was saved successfully');
             $scope.app.globalConfiguration = data;
         });
-    }
+    };
 
     $scope.saveTabs = function() {
         $log.debug('manageCodeineCtrl: saveTabs');
@@ -24,7 +24,7 @@ angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tab
             AlertService.addAlert('success','Tabs were saved successfully');
         });
 
-    }
+    };
 
     $scope.savePermissions = function() {
         $log.debug('manageCodeineCtrl: savePermissions');

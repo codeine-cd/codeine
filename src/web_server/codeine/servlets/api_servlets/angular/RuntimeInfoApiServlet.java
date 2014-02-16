@@ -13,6 +13,7 @@ import codeine.jsons.info.SessionInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.servlet.AbstractServlet;
 import codeine.servlet.PermissionsManager;
+import codeine.servlet.PrepareForShutdown;
 
 import com.google.common.collect.Sets;
 
@@ -21,7 +22,8 @@ public class RuntimeInfoApiServlet extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 	@Inject private CodeineRuntimeInfo runtimeInfo;
 	@Inject private PermissionsManager permissionsManager;
-	@Inject private IConfigurationManager configurationManager ;
+	@Inject private IConfigurationManager configurationManager;
+	@Inject private PrepareForShutdown prepareForShutdown;
 
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -46,7 +48,7 @@ public class RuntimeInfoApiServlet extends AbstractServlet {
 			}
 		}
 		UserPermissions userPermissions = new UserPermissions(user.username(), user.isAdministrator(), canRead, canCommand, canConfigure);
-		writeResponseJson(response, new SessionInfo(runtimeInfo.version(), userPermissions));
+		writeResponseJson(response, new SessionInfo(runtimeInfo.version(), userPermissions, prepareForShutdown.isSequnceActivated()));
 	}
 
 }

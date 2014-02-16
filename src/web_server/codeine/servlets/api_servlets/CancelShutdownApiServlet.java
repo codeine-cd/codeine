@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.servlet.PrepareForShutdown;
+import codeine.servlets.api_servlets.angular.RuntimeInfoApiServlet;
 import codeine.utils.ExceptionUtils;
 
 import com.google.inject.Inject;
 
-public class CancelShutdownApiServlet extends AbstractServlet {
+public class CancelShutdownApiServlet extends RuntimeInfoApiServlet {
 	private static final Logger log = Logger.getLogger(CancelShutdownApiServlet.class);
 	private static final long serialVersionUID = 1L;
 
@@ -34,6 +34,9 @@ public class CancelShutdownApiServlet extends AbstractServlet {
 			} catch (IOException e) {
 				throw ExceptionUtils.asUnchecked(e);
 			}
+		}
+		else {
+			super.myGet(request, response);
 		}
 	}
 

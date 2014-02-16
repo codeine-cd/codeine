@@ -35,7 +35,7 @@ public class ProjectsTabsApiServlet extends AbstractServlet {
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String file = Constants.getViewConfPath();
-		List<ProjectsTab> projects_tabs = Lists.newArrayList(new ProjectsTab("main", Lists.newArrayList(".*")));
+		List<ProjectsTab> projects_tabs = Lists.newArrayList();
 		if (FilesUtils.exists(file)) {
 			Type listType = new TypeToken<ArrayList<ProjectsTab>>() { }.getType();
 			projects_tabs.addAll((Collection<? extends ProjectsTab>) gson().fromJson(TextFileUtils.getContents(file), listType));

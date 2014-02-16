@@ -21,6 +21,12 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         createProject: function(project) {
             return $http.post("/projects_json", project,  { cache: false });
         },
+        prepareForShutdown: function() {
+        	return $http.get("/prepare-for-shutdown", { cache: false });
+        },
+        cancelShutdown: function() {
+        	return $http.get("/cancel-shutdown", { cache: false });
+        },
         getPermissions: function() {
             return $http.get("/permissions_json", { cache: false });
         },
