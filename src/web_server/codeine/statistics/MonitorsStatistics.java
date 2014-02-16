@@ -69,7 +69,7 @@ public class MonitorsStatistics implements IMonitorStatistics{
 		}
 		ArrayList<MonitorStatusItem> l;
 		synchronized (d) {
-			l = Lists.newArrayList(d);
+			l = Lists.newArrayList(d.subList(0, Math.min(d.size(), 1000)));
 		}
 		Collections.reverse(l);
 		return l;
