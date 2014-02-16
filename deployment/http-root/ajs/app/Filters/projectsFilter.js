@@ -10,5 +10,5 @@ angular.module('codeine').filter('projectsFilter', [ '$log', function($log) {
             }
         }
         return res;
-    }
+    };
 }]);
