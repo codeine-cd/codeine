@@ -77,6 +77,10 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                         }
                     }
                 }).
+                when('/codeine/project/:project_name', {
+                    templateUrl: '/ajs/partials/project_status.html',
+                    controller: 'projectStatusCtrl'
+                }).
                 otherwise({
                     redirectTo: '/codeine'
                 });
