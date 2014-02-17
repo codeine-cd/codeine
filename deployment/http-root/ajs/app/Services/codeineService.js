@@ -22,7 +22,7 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
             return $http.post("/projects_json", project,  { cache: false });
         },
         getProjectConfiguration: function(project) {
-            return $http.get("/project-configuration_json", project,  { cache: false });
+            return $http.get("/project-configuration_json", {params: { project: project }},  { cache: false });
         },
         prepareForShutdown: function() {
         	return $http.get("/prepare-for-shutdown", { cache: false });

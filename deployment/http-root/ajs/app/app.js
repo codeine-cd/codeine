@@ -83,7 +83,18 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                 }).
                 when('/codeine/project/:project_name/configure', {
                     templateUrl: '/ajs/partials/project_configure.html',
-                    controller: 'projectConfigureCtrl'
+                    controller: 'projectConfigureCtrl',
+                    resolve: {
+                        projectConfigurationForEditing : function($q,$log,$route,CodeineService) {
+                            $log.debug("resolving projects");
+                            var deferred = $q.defer();
+                            CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
+                                $log.debug("Resolved project configuration: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        }
+                    }
                 }).
                 otherwise({
                     redirectTo: '/codeine'
