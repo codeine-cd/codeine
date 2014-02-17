@@ -3,7 +3,7 @@ angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tab
     angular.forEach(projects, function(key,value) {
         $scope.projects.push(key['name']);
     });
-    $scope.app.sideBarFile = "/ajs/partials/menus/manage.html";
+    $scope.app.sideBarFile = "/ajs/partials/menus/manageMenu.html";
     $scope.tabsForEditing = angular.copy(tabs);
     $scope.permissionsForEditing = angular.copy(permissions);
     $scope.globalConfigurationForEditing = angular.copy($scope.app.globalConfiguration);
