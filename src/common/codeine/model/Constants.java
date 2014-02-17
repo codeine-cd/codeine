@@ -71,6 +71,7 @@ public class Constants
 	public static final String PREPARE_FOR_SHUTDOWN_CONTEXT = "/prepare-for-shutdown";
 	public static final String CANCEL_SHUTDOWN_CONTEXT = "/cancel-shutdown";
 	public static final String GLOBAL_CONFIGURATION_CONTEXT = "/global-configuration";
+	public static final String PROJECT_CONFIGURATION_CONTEXT = "/project-configuration";
 	public static final String PERMISSIONS_CONFIGURATION_CONTEXT = "/permissions";
 	public static final String SESSION_INFO_CONTEXT = "/session-info";
 

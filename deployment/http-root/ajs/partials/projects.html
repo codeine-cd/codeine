@@ -5,7 +5,7 @@
                 <div class="panel panel-default">
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="project in projects | projectsFilter:tab">
-                            <a href="/codeine/project/{{project.name}}">
+                            <a href="/codeine/project/{{project.name}}/status">
                                 <i class="icon-folder-close"></i> {{project.name}}
                             </a>
                             <span class="badge badge-info">{{project.nodes_count}}</span>

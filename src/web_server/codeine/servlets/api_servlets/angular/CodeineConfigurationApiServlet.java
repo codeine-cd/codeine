@@ -22,7 +22,7 @@ public class CodeineConfigurationApiServlet extends AbstractServlet {
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
-		return true;
+		return isAdministrator(request);
 	}
 	
 	@Override
