@@ -90,7 +90,7 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 			
 			@Override
 			public int compare(NodesForVersion o1, NodesForVersion o2) {
-				return o1.nodes.size() - o2.nodes.size();
+				return o2.nodes.size() - o1.nodes.size();
 			}
 		};
 		Collections.sort($, c);
@@ -144,8 +144,8 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 			if (totalNumberOfNodes == 0) {
 				return;
 			}
-			failing_nodes_precent = failing_nodes_count / totalNumberOfNodes * 100;
-			not_failing_nodes_precent = (nodes.size() - failing_nodes_count) / totalNumberOfNodes * 100;
+			failing_nodes_precent = failing_nodes_count * 100 / totalNumberOfNodes;
+			not_failing_nodes_precent = (nodes.size() - failing_nodes_count)  * 100 / totalNumberOfNodes;
 		}
 
 		public void add(NodeStatusInfo nodeStatusInfo) {

@@ -2,7 +2,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $scope.projectName = $routeParams.project_name;
     $scope.projectConfiguration= projectConfiguration;
     $scope.projectStatus = projectStatus;
-    $scope.projectStatus.tags = [{name: "a", count: 5},{name: "ba", count: 3},{name: "ca", count: 7}];
     $scope.selectedMonitor = 'All Nodes';
     $scope.maxTags = 10;
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
