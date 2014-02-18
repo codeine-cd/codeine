@@ -33,6 +33,9 @@ public class NodeInfo {
 	}
 
 	public List<String> tags() {
+		if (null == tags) {
+			return Lists.newArrayList();
+		}
 		return tags;
 	}
 	
