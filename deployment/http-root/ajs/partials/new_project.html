@@ -1,52 +1,57 @@
-<div class="panel panel-default">
-    <div class="panel-heading"><i class="fa fa-file"></i> Add New Project</div>
-    <div class="row">
-        <br/>
-        <div class="col-md-8">
-            <form class="form-horizontal" novalidate name="newProjectForm" role="form">
-                <div class="form-group" ng-class="{'has-error': newProjectForm.project_name.$invalid}">
-                    <label for="project_name" class="col-sm-4 control-label">Project Name</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Enter name" ng-model="new_project_data.project_name" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios" ng-model="new_project_data.type" value="New" required>
-                                New Empty Configuration
-                            </label>
+<div class="col-md-3">
+    <div ng-include="'/ajs/partials/menus/mainMenu.html'"></div>
+</div>
+<div class="col-md-9">
+    <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-file"></i> Add New Project</div>
+        <div class="row">
+            <br/>
+            <div class="col-md-8">
+                <form class="form-horizontal" novalidate name="newProjectForm" role="form">
+                    <div class="form-group" ng-class="{'has-error': newProjectForm.project_name.$invalid}">
+                        <label for="project_name" class="col-sm-4 control-label">Project Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="project_name" name="project_name" placeholder="Enter name" ng-model="new_project_data.project_name" required>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="optionsRadios" ng-model="new_project_data.type" value="Copy" required>
-                                Copy Configuration from Existing Project
-                            </label>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="optionsRadios" ng-model="new_project_data.type" value="New" required>
+                                    New Empty Configuration
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group" ng-class="{'has-error': newProjectForm.copy_from.$invalid}">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <select  class="form-control select2" name="copy_from" ng-required="new_project_data.type == 'Copy'" ng-disabled="new_project_data.type != 'Copy'" ui-select2="{ allowClear: true}" ng-model="new_project_data.selected_project" data-placeholder="Select project">
-                            <option></option>
-                            <option ng-repeat="project in projects" value="{{project.name}}">{{project.name}}</option>
-                        </select>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="optionsRadios" ng-model="new_project_data.type" value="Copy" required>
+                                    Copy Configuration from Existing Project
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="pull-right">
-                <button create-project project="new_project_data" style="margin-right: 10px;" class="btn btn-success" ng-disabled="newProjectForm.$invalid"><i class="icon-file icon-white"></i> Create Project</button>
+                    <div class="form-group" ng-class="{'has-error': newProjectForm.copy_from.$invalid}">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <select  class="form-control select2" name="copy_from" ng-required="new_project_data.type == 'Copy'" ng-disabled="new_project_data.type != 'Copy'" ui-select2="{ allowClear: true}" ng-model="new_project_data.selected_project" data-placeholder="Select project">
+                                <option></option>
+                                <option ng-repeat="project in projects" value="{{project.name}}">{{project.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button create-project project="new_project_data" style="margin-right: 10px;" class="btn btn-success" ng-disabled="newProjectForm.$invalid"><i class="icon-file icon-white"></i> Create Project</button>
+                </div>
+            </div>
+        </div>
+        <br/>
     </div>
-    <br/>
 </div>

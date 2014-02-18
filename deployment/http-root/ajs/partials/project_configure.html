@@ -1,35 +1,42 @@
-<accordion close-others="true">
-<accordion-group is-open="info_is_open">
-    <accordion-heading>
-        Project Info
-        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': info_is_open, 'glyphicon-chevron-right': !info_is_open}"></i>
-    </accordion-heading>
-    <div name="projectInfoForm" class="form-horizontal">
-        <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.name.$invalid}">
-            <label for="name" class="col-md-4 control-label">Project Name</label>
-            <div class="col-md-4">
-                <input type="text" ng-model="projectConfigurationForEditing.name" class="form-control readonly_item" name="name" id="name" readonly>
+<div class="col-md-3">
+    <div ng-include="'/ajs/partials/menus/projectMenu.html'"></div>
+    <div ng-include="'/ajs/partials/menus/commandHistory.html'"></div>
+</div>
+<div class="col-md-9">
+    <accordion close-others="true">
+        <accordion-group is-open="info_is_open">
+            <accordion-heading>
+                Project Info
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': info_is_open, 'glyphicon-chevron-right': !info_is_open}"></i>
+            </accordion-heading>
+            <div name="projectInfoForm" class="form-horizontal">
+                <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.name.$invalid}">
+                    <label for="name" class="col-md-4 control-label">Project Name</label>
+                    <div class="col-md-4">
+                        <input type="text" ng-model="projectConfigurationForEditing.name" class="form-control readonly_item" name="name" id="name" readonly>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</accordion-group>
-<accordion-group is-open="nodes_is_open">
-    <accordion-heading>
-        Nodes
-        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
-    </accordion-heading>
-    <div name="nodesInfoForm" class="form-horizontal">
-        <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_strategy.$invalid}">
-            <label for="node_discovery_strategy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
-            <div class="col-md-4">
-                <select  class="form-control select2" name="node_discovery_strategy" id="node_discovery_strategy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_strategy">
-                    <option value="Configuration">Configuration</option>
-                    <option value="Reporter">Reporter</option>
-                    <option value="Script">Script</option>
-                </select>
+        </accordion-group>
+        <accordion-group is-open="nodes_is_open">
+            <accordion-heading>
+                Nodes
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
+            </accordion-heading>
+            <div name="nodesInfoForm" class="form-horizontal">
+                <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_strategy.$invalid}">
+                    <label for="node_discovery_strategy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
+                    <div class="col-md-4">
+                        <select  class="form-control select2" name="node_discovery_strategy" id="node_discovery_strategy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_strategy">
+                            <option value="Configuration">Configuration</option>
+                            <option value="Reporter">Reporter</option>
+                            <option value="Script">Script</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</accordion-group>
+        </accordion-group>
 
-</accordion>
+    </accordion>
+</div>
+

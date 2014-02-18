@@ -1,18 +1,23 @@
-<tabset ng-show="tabs.length > 0">
-    <tab ng-repeat="tab in tabs" heading="{{tab.name}}" active="tab.active" disabled="tab.disabled">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="project in projects | projectsFilter:tab">
-                            <a href="/codeine/project/{{project.name}}/status">
-                                <i class="icon-folder-close"></i> {{project.name}}
-                            </a>
-                            <span class="badge badge-info">{{project.nodes_count}}</span>
-                        </li>
-                    </ul>
+<div class="col-md-3">
+    <div ng-include="'/ajs/partials/menus/mainMenu.html'"></div>
+</div>
+<div class="col-md-9">
+    <tabset ng-show="tabs.length > 0">
+        <tab ng-repeat="tab in tabs" heading="{{tab.name}}" active="tab.active" disabled="tab.disabled">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="project in projects | projectsFilter:tab">
+                                <a href="/codeine/project/{{project.name}}/status">
+                                    <i class="icon-folder-close"></i> {{project.name}}
+                                </a>
+                                <span class="badge badge-info">{{project.nodes_count}}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </tab>
-</tabset>
+        </tab>
+    </tabset>
+</div>

@@ -2,17 +2,11 @@
     <div class="panel-heading">
         <span class="panel-title">Menu</span>
     </div>
-    <div class="list-group" ng-controller="projectMenuCtrl">
+    <div class="list-group">
         <a ng-href="/codeine/project/{{projectName}}/status" class="list-group-item" active-menu-item><i class="fa fa-signal fa-fw"></i> Status</a>
         <a href="#" class="list-group-item" admin-action><i class="fa fa-times-circle fa-fw"></i> Delete</a>
         <a ng-href="/codeine/project/{{projectName}}/configure" class="list-group-item" active-menu-item><i class="fa fa-cog fa-fw"></i> Configure</a>
     </div>
 </div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <span class="panel-title">Command History <i data-help-message="commandExecutorHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help" data-original-title="" title=""></i></span>
-    </div>
-    <div class="list-group">
-        <a href="/" class="list-group-item"><div class="text-center">No running commands</div></a>
-    </div>
-</div>
+
+

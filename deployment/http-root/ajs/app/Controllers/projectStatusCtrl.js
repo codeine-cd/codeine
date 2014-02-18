@@ -1,12 +1,17 @@
 angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', function($scope, $log,$routeParams, projectConfiguration, projectStatus ) {
-    $scope.app.sideBarFile = "/ajs/partials/menus/projectMenu.html";
     $scope.projectName = $routeParams.project_name;
     $scope.projectConfiguration= projectConfiguration;
     $scope.projectStatus = projectStatus;
+    $scope.projectStatus.tags = [{name: "a", count: 5},{name: "ba", count: 3},{name: "ca", count: 7}];
     $scope.selectedMonitor = 'All Nodes';
+    $scope.maxTags = 10;
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
+
+    $scope.showAllTags = function() {
+        $scope.maxTags = 99999;
+    }
 
     $scope.selectMonitor = function(monitor) {
         $scope.selectedMonitor = monitor;
