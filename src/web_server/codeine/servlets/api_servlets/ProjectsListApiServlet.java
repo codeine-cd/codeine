@@ -90,7 +90,7 @@ public class ProjectsListApiServlet extends AbstractServlet
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
 		if (request.getMethod().equals("POST")) {
-			if (!permissionsManager.isAdministrator(request)) {
+			if (!isAdministrator(request)) {
 				log.info("User can not define new project");
 				return false;
 			}

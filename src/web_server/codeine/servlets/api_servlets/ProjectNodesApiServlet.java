@@ -12,6 +12,7 @@ import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
 import codeine.servlet.NodeTemplate;
 import codeine.servlets.front_end.ProjectsStatusUtils;
+import codeine.utils.StringUtils;
 
 import com.google.inject.Inject;
 
@@ -27,6 +28,8 @@ public class ProjectNodesApiServlet extends AbstractServlet {
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String versionName = request.getParameter(Constants.UrlParameters.VERSION_NAME);
+		if (StringUtils.isEmpty(versionName))
+			versionName = Constants.ALL_VERSION;
 		List<NodeTemplate> nodes = ProjectsStatusUtils.getVersionsNodes(projectName, versionName, configurationManager.getProjectForName(projectName), nodesGetter, links);
 		writeResponseJson(response, nodes);
 	}

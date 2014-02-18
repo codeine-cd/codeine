@@ -22,7 +22,14 @@ public class CodeineConfigurationApiServlet extends AbstractServlet {
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
-		return isAdministrator(request);
+		if (request.getMethod().equals("POST")) {
+			if (!isAdministrator(request)) {
+				log.info("User can not define new project");
+				return false;
+			}
+			return true;
+		}
+		return true;
 	}
 	
 	@Override

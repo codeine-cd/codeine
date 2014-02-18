@@ -2,10 +2,10 @@ angular.module('codeine').directive('activeMenuItem', ['$location', function ($l
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
-            var nestedA = (element.is("a")) ? element[0] :  element.find('a')[0];
-            var path = nestedA.href;
             scope.location = $location;
             scope.$watch('location.absUrl()', function (newPath) {
+                var nestedA = (element.is("a")) ? element[0] :  element.find('a')[0];
+                var path = nestedA.href;
                 if (path === newPath) {
                     element.addClass('active');
                 } else {

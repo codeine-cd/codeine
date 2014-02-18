@@ -42,4 +42,9 @@ public class NodeInfo {
 		this.tags = tags;
 		return $;
 	}	
+	
+
+	public String node_alias() {
+		return alias;
+	}
 }

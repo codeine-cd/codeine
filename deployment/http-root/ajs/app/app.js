@@ -79,7 +79,25 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                 }).
                 when('/codeine/project/:project_name/status', {
                     templateUrl: '/ajs/partials/project_status.html',
-                    controller: 'projectStatusCtrl'
+                    controller: 'projectStatusCtrl',
+                    resolve: {
+                        projectConfiguration : function($q,$log,$route,CodeineService) {
+                            var deferred = $q.defer();
+                            CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
+                                $log.debug("Resolved project configuration: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        },
+                        projectStatus :  function($q,$log,$route,CodeineService) {
+                            var deferred = $q.defer();
+                            CodeineService.getProjectStatus($route.current.params.project_name).success(function(data) {
+                                $log.debug("Resolved projectStatus");
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        }
+                    }
                 }).
                 when('/codeine/project/:project_name/configure', {
                     templateUrl: '/ajs/partials/project_configure.html',

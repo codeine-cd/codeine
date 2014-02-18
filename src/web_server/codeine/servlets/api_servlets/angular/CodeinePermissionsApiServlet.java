@@ -12,7 +12,6 @@ import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.servlet.AbstractServlet;
-import codeine.servlet.PermissionsManager;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -22,13 +21,19 @@ public class CodeinePermissionsApiServlet extends AbstractServlet {
 
 	private static final Logger log = Logger.getLogger(CodeinePermissionsApiServlet.class);
 	private static final long serialVersionUID = 1L;
-	private @Inject PermissionsManager permissionsManager;
 	private @Inject UserPermissionsJsonStore permissionsJsonStore;
 	
 
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
-		return permissionsManager.isAdministrator(request);
+		if (request.getMethod().equals("POST")) {
+			if (!isAdministrator(request)) {
+				log.info("User can not define new project");
+				return false;
+			}
+			return true;
+		}
+		return true;
 	}
 	
 	@Override

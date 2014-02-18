@@ -47,6 +47,9 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         },
         register: function(user, password) {
             return $http.post('/register',{username : user, password:  password });
+        },
+        getProjectStatus : function(project) {
+            return $http.get("/project-status2_json", {params: { project: project }},  { cache: false });
         }
     };
     return Api;

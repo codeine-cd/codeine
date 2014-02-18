@@ -106,6 +106,14 @@ div.sidebar-nav div.popover {
   font-weight: normal;
 }
 
+.project-status-progress {
+    display:inline-block !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    margin-bottom:0px !important;
+    padding: 0px !important;
+}
+
 /* This cuts off wide node names in status view. */
 form.form-inline fieldset div:first-child {
   overflow: hidden;

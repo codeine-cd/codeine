@@ -27,6 +27,13 @@ public class ProjectsTabsApiServlet extends AbstractServlet {
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
+		if (request.getMethod().equals("POST")) {
+			if (!isAdministrator(request)) {
+				log.info("User can not define new project");
+				return false;
+			}
+			return true;
+		}
 		return true;
 	}
 	
