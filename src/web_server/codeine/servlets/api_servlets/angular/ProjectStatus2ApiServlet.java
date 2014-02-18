@@ -42,7 +42,6 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 	}
 	
 	private ProjectStatusInfo create(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
-		int totalNumberOfNodes = nodes.size();
 		Map<String, Integer> tagCount = Maps.newHashMap();
 		Map<String, Integer> monitorCount = Maps.newHashMap();
 		Map<String, NodesForVersion> nodesByVersion = Maps.newHashMap();
@@ -68,16 +67,17 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 			}
 			nodeStatusInfoList.add(new NodeStatusInfo(nodeWithMonitorsInfo));
 		}
-		calculatePrecent(totalNumberOfNodes, nodesByVersion);
 		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion);
+		int totalNumberOfNodes = nodes_for_version.isEmpty() ? 0 : nodes_for_version.get(0).nodes.size();
+		calculatePrecent(totalNumberOfNodes, nodes_for_version);
 		List<CountInfo> tag_info = createSortedList(tagCount);
 		List<CountInfo> monitor_info = createSortedList(monitorCount);
 		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info);
 	}
 
-	private void calculatePrecent(int totalNumberOfNodes, Map<String, NodesForVersion> nodesByVersion) {
-		for (Entry<String, NodesForVersion> e : nodesByVersion.entrySet()) {
-			e.getValue().calculatePrecent(totalNumberOfNodes);
+	private void calculatePrecent(int totalNumberOfNodes, List<NodesForVersion> nodes_for_version) {
+		for (NodesForVersion e : nodes_for_version) {
+			e.calculatePrecent(totalNumberOfNodes);
 		}
 	}
 
