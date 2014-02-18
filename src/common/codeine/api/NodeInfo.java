@@ -11,6 +11,9 @@ public class NodeInfo {
 	private String alias;
 	private List<String> tags = Lists.newArrayList();
 
+	public NodeInfo(){
+		
+	}
 	public NodeInfo(String name) {
 		this.name = name;
 	}
