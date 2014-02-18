@@ -6,6 +6,7 @@ angular.module('codeine').filter('projectsFilter', [ '$log', function($log) {
                 var patt = new RegExp(selectedTab.exp[j],"g");
                 if (patt.test(projects[i].name)) {
                     res.push(projects[i]);
+                    break;
                 }
             }
         }
