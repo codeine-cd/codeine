@@ -142,16 +142,19 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
             $rootScope.app.loading = false;
         });
 
-        /*
+
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
+            $log.debug('$routeChangeStart');
             $rootScope.app.contentLoading = true;
         });
         $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
+            $log.debug('$routeChangeSuccess');
             $rootScope.app.contentLoading = false;
         });
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
+            $log.debug('$routeChangeError');
             // todo: show error in this case
             $rootScope.app.contentLoading = false;
         });
-        */
+
     }]);
