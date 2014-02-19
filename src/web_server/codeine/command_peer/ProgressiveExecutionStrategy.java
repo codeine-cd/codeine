@@ -49,7 +49,7 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 						failedNodes.add(nodeInfo.alias());
 					}
 				}
-				int errorPercent = failedNodes.size() / (completedNodes.size()) * 100;
+				int errorPercent = failedNodes.size() * 100 / completedNodes.size();
 				if (errorPercent > commandData().command_info().error_percent_val()) {
 					writeLine("nodes with error: " + failedNodes);
 					writeLine("Execution stopped because of errors. error percent is " + errorPercent + "% number of nodes with error: " + failedNodes.size());
