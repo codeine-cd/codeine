@@ -1,11 +1,13 @@
 angular.module('codeine').filter('nodesFilter', [ '$log', function($log) {
     return function(nodes, query, monitor, tags) {
-        $log.debug("nodesFilter: got " + nodes.length + " nodes, query = '" + query  + "' , monitor = '" + monitor + "' , tags = " + angular.toJson(tags));
+        var startTime = new Date();
         var res = [];
         for (var i=0; i < nodes.length ; i++) {
             if (showByName(query, nodes[i].node_alias) && showByMonitor(monitor, nodes[i].failed_monitors) && showByTags(tags,nodes[i].tags))
                 res.push(nodes[i]);
         }
+        var endtime = new Date();
+        $log.debug("nodesFilter: took " + startTime.getTime() - endtime.getTime() + " ms");
         return res;
     };
 }]);
