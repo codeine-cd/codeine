@@ -3,11 +3,10 @@
     <div ng-include="'/ajs/partials/menus/commandHistory.html'"></div>
 </div>
 <div class="col-md-9">
-    <accordion close-others="true">
-        <accordion-group is-open="info_is_open">
+    <accordion close-others="false">
+        <accordion-group is-open="true">
             <accordion-heading>
                 Project Info
-                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': info_is_open, 'glyphicon-chevron-right': !info_is_open}"></i>
             </accordion-heading>
             <div name="projectInfoForm" class="form-horizontal">
                 <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.name.$invalid}">
@@ -20,7 +19,7 @@
         </accordion-group>
         <accordion-group is-open="nodes_is_open">
             <accordion-heading>
-                Nodes
+                Nodes Info
                 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
             </accordion-heading>
             <div name="nodesInfoForm" class="form-horizontal">
@@ -34,9 +33,74 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group" ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Script'" ng-class="{'has-error': projectConfigurationForEditing.nodes_discovery_script.$invalid}">
+                    <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
+                    <div class="col-md-4">
+                        <textarea class="form-control" id="nodes_discovery_script" name="nodes_discovery_script" rows="3" ng-model="projectConfigurationForEditing.nodes_discovery_script"></textarea>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Script'" ng-class="{'has-error': projectConfigurationForEditing.tags_discovery_script.$invalid}">
+                    <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
+                    <div class="col-md-4">
+                        <textarea class="form-control" id="tags_discovery_script" name="tags_discovery_script" rows="3" ng-model="projectConfigurationForEditing.tags_discovery_script"></textarea>
+                    </div>
+                </div>
+            </div>
+                    <table ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Configuration'" class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                        <thead>
+                        <tr>
+                            <th class="col-md-3" style="text-align: center;">Host : Unique Key</th>
+                            <th class="col-md-3" style="text-align: center;">Alias</th>
+                            <th class="col-md-5" style="text-align: center">Tags</th>
+                            <th class="col-md-1" style="text-align: center;"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tbody ng-repeat="node_info in projectConfigurationForEditing.nodes_info">
+                        <tr>
+                            <td class="col-md-3">
+                                <input type="text" class="form-control" ng-model="node_info.name" required>
+                            </td>
+                            <td class="col-md-3">
+                                <input type="text" class="form-control" ng-model="node_info.alias" required>
+                            </td>
+                            <td class="col-md-5">
+                                <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2" required>
+                            </td>
+                            <td class="col-md-1">
+                                <button ng-click="removeNode($index)" title="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Configuration'" >
+                        <div class="col-md-12">
+                            <button ng-click="addNode()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
+                        </div>
+                        <br/><br/>
+                    </div>
+        </accordion-group>
+        <accordion-group is-open="version_is_open">
+            <accordion-heading>
+                Version Detection
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': version_is_open, 'glyphicon-chevron-right': !version_is_open}"></i>
+            </accordion-heading>
+            <div name="versionInfoForm" class="form-horizontal">
+                <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.version_detection_script.$invalid}">
+                    <label for="version_detection_script" class="col-md-4 control-label">Script <help help-id="versionScriptHelp"></help></label>
+                    <div class="col-md-4">
+                        <textarea ng-model="projectConfigurationForEditing.version_detection_script" class="form-control" name="version_detection_script" id="version_detection_script"></textarea>
+                    </div>
+                </div>
             </div>
         </accordion-group>
-
     </accordion>
+    <div class="row">
+        <div class="col-md-12">
+            <button ng-disabled="codeinePermissionsForm.$invalid" type="submit" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
+            <button ng-disabled="codeinePermissionsForm.$invalid" type="submit" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
+        </div>
+        <br/><br/>
+    </div>
 </div>
 
