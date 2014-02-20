@@ -15,7 +15,7 @@ public class CommandParameterInfo {
 	private CommandParameterType type;
 	private List<String> allowed_values;
 	
-	enum CommandParameterType {String, Boolean, Selection}
+	enum CommandParameterType {String, Boolean, Selection, Password}
 
 	public String name() {
 		return name;

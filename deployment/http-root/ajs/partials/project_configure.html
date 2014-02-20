@@ -113,6 +113,46 @@
                         <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
                         <button title="Remove Monitor" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
                     </accordion-heading>
+
+
+                    <div name="monitorInfoForm" class="form-horizontal">
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="monitor_info.name">Name</label>
+                                <div class="controls col-md-3">
+                                    <input id="monitor_info.name" name="monitor_info.name" type="text" ng-model="monitor_info.name" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="monitor_info.minInterval">Min Interval <help help-id="minIntervalHelp"></help></label>
+                                <div class="controls col-md-3">
+                                    <input id="monitor_info.minInterval" name="monitor_info.minInterval" type="text" ng-model="monitor_info.minInterval" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="monitor_info.credentials">Credentials <help help-id="credentialsHelp"></help></label>
+                                <div class="controls col-md-3">
+                                    <input id="monitor_info.credentials" name="monitor_info.credentials" ng-model="monitor_info.credentials" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox col-lg-offset-3">
+                                    <label>
+                                        <input type="checkbox"  ng-model="monitor_info.notification_enabled"> Notification Enabled
+                                        <help help-id="notificationsEnabledHelp"></help>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="monitor_info.script" class="col-md-3 control-label">Script <help help-id="monitorScriptHelp"></help></label>
+                                <div class="col-md-9">
+                                    <textarea ng-model="monitor_info.script_content" rows="3" class="form-control" name="monitor_info.script" id="monitor_info.script" placeholder="Script"></textarea>
+                                </div>
+                            </div>
+
+                    </div>
+
+
                 </accordion-group>
             </accordion>
         <div class="row">
@@ -180,6 +220,178 @@
                         <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
                         <button title="Remove Command" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
                     </accordion-heading>
+
+
+                    <div name="commandInfoForm" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="command_info.name">Name</label>
+                            <div class="controls col-md-3">
+                                <input id="command_info.name" name="command_info.name" type="text" ng-model="command_info.name" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="command_info.credentials">Credentials <help help-id="credentialsHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <input id="command_info.credentials" name="command_info.credentials" ng-model="command_info.credentials" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox col-lg-offset-3">
+                                <label>
+                                    <input type="checkbox"  ng-model="command_info.prevent_override"> Prevent override of default configuration
+                                    <help help-id="preventOverrideHelp"></help>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="command_info.command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <select  class="form-control select2" name="command_info.command_strategy" id="command_info.command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy">
+                                    <option value="Immediately">Immediately</option>
+                                    <option value="Progressive">Progressive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="command_info.command_strategy == 'Immediately'">
+                            <label class="col-md-3 control-label" for="command_info.concurrency">Concurrency <help help-id="concurrencyHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <input id="command_info.concurrency" name="command_info.concurrency" ng-model="command_info.concurrency" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="command_info.command_strategy == 'Progressive'">
+                            <label class="col-md-3 control-label" for="command_info.duration">Duration <help help-id="durationHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <input id="command_info.duration" name="command_info.duration" ng-model="command_info.duration" type="text" class="form-control">
+                            </div>
+                            <div class="controls col-md-3">
+                                <select  class="form-control select2" name="command_info.duration_units" id="command_info.duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units">
+                                    <option value="Minutes">Minutes</option>
+                                    <option value="Hours">Hours</option>
+                                    <option value="Days">Days</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="command_info.command_strategy == 'Progressive'">
+                            <label class="col-md-3 control-label" for="command_info.ratio">Ratio <help help-id="ratioHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <select  class="form-control select2" name="command_info.ratio" id="command_info.ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio">
+                                    <option value="Linear">Linear</option>
+                                    <option value="Exponential">Exponential</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="command_info.command_strategy == 'Progressive'">
+                            <div class="checkbox col-lg-offset-3">
+                                <label>
+                                    <input type="checkbox"  ng-model="command_info.stop_on_error"> Stop on error
+                                    <help help-id="stopOnErrorHelp"></help>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="command_info.stop_on_error">
+                            <label class="col-md-3 control-label" for="command_info.error_percent_val">Error percent</label>
+                            <div class="controls col-md-3">
+                                <input placeholder="%" id="command_info.error_percent_val" name="command_info.error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <!-- command parameters -->
+
+                        <accordion close-others="false">
+                            <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter_is_open">
+                                <accordion-heading>
+                                    {{command_parameter.name}}
+                                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter_is_open, 'glyphicon-chevron-right': !command_parameter_is_open}">
+                                    </i>
+                                    <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
+                                    <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
+                                    <button title="Remove" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
+                                </accordion-heading>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="command_parameter.name">Name <help help-id="command_patameter_name_Help"></help></label>
+                                    <div class="controls col-md-3">
+                                        <input id="command_parameter.name" name="command_parameter.name" type="text" ng-model="command_parameter.name" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="command_parameter.type">Type <help help-id="typeHelp"></help></label>
+                                    <div class="controls col-md-3">
+                                        <select  class="form-control select2" name="command_parameter.type" id="command_parameter.type"  ui-select2="{ allowClear: false}" ng-model="command_parameter.type">
+                                            <option value="String">String</option>
+                                            <option value="Boolean">Boolean</option>
+                                            <option value="Selection">Selection</option>
+                                            <option value="Password">Password</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="command_parameter.description">Description <help help-id="command_patameter_name_Help"></help></label>
+                                    <div class="controls col-md-3">
+                                        <input id="command_parameter.description" name="command_parameter.description" type="text" ng-model="command_parameter.description" class="form-control" >
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-show="command_parameter.type == 'Selection'">
+                                    <label class="col-md-3 control-label" for="command_parameter.validation_expression">Validation Expression <help help-id="command_patameter_validation_expression_Help"></help></label>
+                                    <div class="controls col-md-3">
+                                        <input id="command_parameter.validation_expression" name="command_parameter.validation_expression" type="text" ng-model="command_parameter.validation_expression" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="command_parameter.type == 'Selection'">
+                                    <label class="col-md-3 control-label" for="command_parameter.allowed_values">Allowed values <help help-id="command_patameter_values_Help"></help></label>
+                                    <div class="controls col-md-3">
+                                        <!--
+                                        <input type="text" id="command_parameter.allowed_values" ui-select2="select2Options" ng-model="command_parameter.allowed_values" class="form-control select2" required>
+                                        -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-show="command_parameter.type == 'String' || command_parameter.type == 'Password'">
+                                    <label class="col-md-3 control-label" for="command_parameter.default_value1">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
+                                    <div class="controls col-md-3">
+                                        <input id="command_parameter.default_value1" name="command_parameter.default_value2" type="text" ng-model="command_parameter.default_value" class="form-control" >
+                                    </div>
+                                </div>
+                                <!-- -->
+                                <div class="form-group" ng-show="command_parameter.type == 'Selection'">
+                                    <label class="col-md-3 control-label" for="command_parameter.default_value2">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
+                                    <select  class="form-control select2" name="command_parameter.default_value2" id="command_parameter.default_value2"  ui-select2="{ allowClear: false}" ng-model="command_parameter.default_value">
+                                        <option value="String">need to add</option>
+                                    </select>
+                                </div>
+                                    <div class="form-group" ng-show="command_parameter.type == 'Boolean'">
+                                        <div class="checkbox col-lg-offset-3">
+                                            <label>
+                                                <input type="checkbox"  ng-model="command_info.default_value"> Default value
+                                                <help help-id="command_patameter_default_val_Help"></help>
+                                            </label>
+                                        </div>
+                                    </div>
+                            </accordion-group>
+                        </accordion>
+
+
+
+                        <!-- add parameter -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button ng-click="adParameter()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
+                            </div>
+                            <br/><br/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="monitor_info.script" class="col-md-3 control-label">Script <help help-id="monitorScriptHelp"></help></label>
+                            <div class="col-md-9">
+                                <textarea ng-model="monitor_info.script_content" rows="3" class="form-control" name="monitor_info.script" id="monitor_info.script" placeholder="Script"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
                 </accordion-group>
             </accordion>
             <div class="row">
