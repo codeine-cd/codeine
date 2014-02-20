@@ -23,62 +23,62 @@
                 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
             </accordion-heading>
             <div name="nodesInfoForm" class="form-horizontal">
-                <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_strategy.$invalid}">
-                    <label for="node_discovery_strategy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
+                <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_startegy.$invalid}">
+                    <label for="node_discovery_startegy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
                     <div class="col-md-4">
-                        <select  class="form-control select2" name="node_discovery_strategy" id="node_discovery_strategy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_strategy">
+                        <select  class="form-control select2" name="node_discovery_startegy" id="node_discovery_startegy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_startegy">
                             <option value="Configuration">Configuration</option>
                             <option value="Reporter">Reporter</option>
                             <option value="Script">Script</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group" ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Script'" ng-class="{'has-error': projectConfigurationForEditing.nodes_discovery_script.$invalid}">
+                <div class="form-group" ng-show="projectConfigurationForEditing.node_discovery_startegy == 'Script'" ng-class="{'has-error': projectConfigurationForEditing.nodes_discovery_script.$invalid}">
                     <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
                     <div class="col-md-4">
                         <textarea class="form-control" id="nodes_discovery_script" name="nodes_discovery_script" rows="3" ng-model="projectConfigurationForEditing.nodes_discovery_script"></textarea>
                     </div>
                 </div>
-                <div class="form-group" ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Script'" ng-class="{'has-error': projectConfigurationForEditing.tags_discovery_script.$invalid}">
+                <div class="form-group" ng-show="projectConfigurationForEditing.node_discovery_startegy == 'Script'" ng-class="{'has-error': projectConfigurationForEditing.tags_discovery_script.$invalid}">
                     <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
                     <div class="col-md-4">
                         <textarea class="form-control" id="tags_discovery_script" name="tags_discovery_script" rows="3" ng-model="projectConfigurationForEditing.tags_discovery_script"></textarea>
                     </div>
                 </div>
             </div>
-                    <table ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Configuration'" class="table table-striped table-bordered table-hover table-condensed table-responsive">
-                        <thead>
-                        <tr>
-                            <th class="col-md-3" style="text-align: center;">Host : Unique Key</th>
-                            <th class="col-md-3" style="text-align: center;">Alias</th>
-                            <th class="col-md-5" style="text-align: center">Tags</th>
-                            <th class="col-md-1" style="text-align: center;"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tbody ng-repeat="node_info in projectConfigurationForEditing.nodes_info">
-                        <tr>
-                            <td class="col-md-3">
-                                <input type="text" class="form-control" ng-model="node_info.name" required>
-                            </td>
-                            <td class="col-md-3">
-                                <input type="text" class="form-control" ng-model="node_info.alias" required>
-                            </td>
-                            <td class="col-md-5">
-                                <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2" required>
-                            </td>
-                            <td class="col-md-1">
-                                <button ng-click="removeNode($index)" title="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div class="row" ng-show="projectConfigurationForEditing.node_discovery_strategy == 'Configuration'" >
-                        <div class="col-md-12">
-                            <button ng-click="addNode()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
-                        </div>
-                        <br/><br/>
-                    </div>
+            <table ng-show="projectConfigurationForEditing.node_discovery_startegy == 'Configuration'" class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                <thead>
+                <tr>
+                    <th class="col-md-3" style="text-align: center;">Host : Unique Key</th>
+                    <th class="col-md-3" style="text-align: center;">Alias</th>
+                    <th class="col-md-5" style="text-align: center">Tags</th>
+                    <th class="col-md-1" style="text-align: center;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tbody ng-repeat="node_info in projectConfigurationForEditing.nodes_info">
+                <tr>
+                    <td class="col-md-3">
+                        <input type="text" class="form-control" ng-model="node_info.name" required>
+                    </td>
+                    <td class="col-md-3">
+                        <input type="text" class="form-control" ng-model="node_info.alias" required>
+                    </td>
+                    <td class="col-md-5">
+                        <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2" required>
+                    </td>
+                    <td class="col-md-1">
+                        <button ng-click="removeNode($index)" title="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row" ng-show="projectConfigurationForEditing.node_discovery_startegy == 'Configuration'" >
+                <div class="col-md-12">
+                    <button ng-click="addNode()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
+                </div>
+                <br/><br/>
+            </div>
         </accordion-group>
         <accordion-group is-open="version_is_open">
             <accordion-heading>
@@ -94,11 +94,117 @@
                 </div>
             </div>
         </accordion-group>
+
+
+
+        <accordion-group is-open="monitors_is_open">
+            <accordion-heading>
+                Monitors <help help-id="monitorsConfigureHelp"></help>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': monitors_is_open, 'glyphicon-chevron-right': !monitors_is_open}"></i>
+            </accordion-heading>
+
+            <accordion close-others="false">
+                <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_is_open">
+                    <accordion-heading>
+                        {{monitor_info.name}}
+                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_is_open, 'glyphicon-chevron-right': !monitor_is_open}">
+                        </i>
+                        <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
+                        <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
+                        <button title="Remove Monitor" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
+                    </accordion-heading>
+                </accordion-group>
+            </accordion>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-click="addMonitor()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Monitor</button>
+            </div>
+            <br/><br/>
+        </div>
+        </accordion-group>
+
+
+        <accordion-group is-open="email_is_open">
+            <accordion-heading>
+                Email Notifications <help help-id="emailHelp"></help>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': email_is_open, 'glyphicon-chevron-right': !email_is_open}"></i>
+            </accordion-heading>
+            <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                <thead>
+                <tr>
+                    <th class="col-md-3" style="text-align: center;">Email</th>
+                    <th class="col-md-3" style="text-align: center;">Intensity</th>
+                    <th class="col-md-1" style="text-align: center;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tbody ng-repeat="mail_info in projectConfigurationForEditing.mail">
+                <tr>
+                    <td class="col-md-3">
+                        <input type="text" class="form-control" ng-model="mail_info.user" required>
+                    </td>
+                    <td class="col-md-3">
+                        <select  class="form-control select2" name="intensity" id="intensity"  ui-select2="{ allowClear: false}" ng-model="mail_info.intensity">
+                            <option value="Immediately">Immediately</option>
+                            <option value="Hourly">Hourly</option>
+                            <option value="Daily">Daily</option>
+                        </select>
+                    </td>
+                    <td class="col-md-1">
+                        <button ng-click="removeNotifications($index)" title="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <button ng-click="addNotification()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Notification</button>
+                </div>
+                <br/><br/>
+            </div>
+        </accordion-group>
+
+        <accordion-group is-open="commands_is_open">
+            <accordion-heading>
+                Commands <help help-id="commandsConfigureHelp"></help>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': commands_is_open, 'glyphicon-chevron-right': !commands_is_open}"></i>
+            </accordion-heading>
+
+            <accordion close-others="false">
+                <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_is_open">
+                    <accordion-heading>
+                        {{command_info.name}}
+                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_is_open, 'glyphicon-chevron-right': !command_is_open}">
+                        </i>
+                        <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
+                        <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
+                        <button title="Remove Command" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
+                    </accordion-heading>
+                </accordion-group>
+            </accordion>
+            <div class="row">
+                <div class="col-md-12">
+                    <button ng-click="adCommand()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Command</button>
+                </div>
+                <br/><br/>
+            </div>
+        </accordion-group>
+
+
+
+
     </accordion>
+
+
+
+
+
+
+
     <div class="row">
         <div class="col-md-12">
-            <button ng-disabled="codeinePermissionsForm.$invalid" type="submit" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
-            <button ng-disabled="codeinePermissionsForm.$invalid" type="submit" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
+            <button ng-disabled="codeinePermissionsForm.$invalid" ng-click="applyConfiguration()" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
+            <button ng-disabled="codeinePermissionsForm.$invalid" ng-click="applyConfiguration()" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
         </div>
         <br/><br/>
     </div>

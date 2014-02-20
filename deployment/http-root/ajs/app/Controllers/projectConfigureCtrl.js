@@ -7,9 +7,17 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
     $scope.addNode = function() {
         $scope.projectConfigurationForEditing.nodes_info.push({});
     };
-
     $scope.removeNode = function(index) {
         $scope.projectConfigurationForEditing.nodes_info.splice(index,1);
+    };
+    $scope.addNotification = function() {
+        $scope.projectConfigurationForEditing.mail.push({});
+    };
+    $scope.removeNotification = function(index) {
+        $scope.projectConfigurationForEditing.mail.splice(index,1);
+    };
+    $scope.applyConfiguration = function() {
+        $log.debug('applyConfiguration: ' + angular.toJson($scope.projectConfigurationForEditing));
     };
 
     $scope.select2Options = {
