@@ -7,7 +7,7 @@ angular.module('codeine').filter('nodesFilter', [ '$log', function($log) {
                 res.push(nodes[i]);
         }
         var endtime = new Date();
-        $log.debug("nodesFilter: took " + startTime.getTime() - endtime.getTime() + " ms");
+        $log.debug("nodesFilter: took " + (endtime.getTime() - startTime.getTime()) + " ms");
         return res;
     };
 }]);
