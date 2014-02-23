@@ -7,6 +7,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
+    $scope.filteredNodes = [];
 
     $scope.showAllTags = function() {
         $scope.maxTags = 99999;

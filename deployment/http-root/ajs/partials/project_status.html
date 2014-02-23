@@ -81,46 +81,48 @@
     <div class="row">
         <div class="col-md-12">
             <accordion close-others="false">
-                <accordion-group is-open="false" ng-repeat="versionItem in projectStatus.nodes_for_version">
-                    <accordion-heading>
-                        <div class="row">
-                            <div class="col-md-12">
+                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="filteredNodes[$index].length > 0">
+                    <accordion-group is-open="false">
+                        <accordion-heading>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-inline" role="form">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" ng-checked="isVersionChecked(versionItem)" ng-click="checkboxClick(versionItem,$event)" > {{versionItem.version}}
+                                            </label>
+                                        </div>
+                                        <div class="progress pull-right col-md-1 project-status-progress">
+                                            <div class="progress-bar progress-bar-success" ng-style="{width: versionItem.not_failing_nodes_precent + '%'}">
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" ng-style="{width: versionItem.failing_nodes_precent + '%'}">
+                                            </div>
+                                        </div>
+                                        <i class="pull-right fa fa-exclamation" ng-show="versionItem.failing_nodes_count > 0" style="color: red;"></i>
+                                        <small class="pull-right">
+                                            <span>{{filteredNodes[$index].length}}</span> nodes(<span>{{versionItem.nodes.length - filteredNodes[$index].length}}</span> hidden)
+                                        </small>
+                                    </form>
+                                </div>
+                            </div>
+                        </accordion-heading>
+                        <div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | nodesFilter:nodesFilter:selectedMonitor:projectStatus.tag_info) )">
+                            <div class="col-md-3">
                                 <form class="form-inline" role="form">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" ng-checked="isVersionChecked(versionItem)" ng-click="checkboxClick(versionItem,$event)" > {{versionItem.version}}
+                                            <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}"> {{node.node_alias}}</a>
                                         </label>
                                     </div>
-                                    <div class="progress pull-right col-md-1 project-status-progress">
-                                        <div class="progress-bar progress-bar-success" ng-style="{width: versionItem.not_failing_nodes_precent + '%'}">
-                                        </div>
-                                        <div class="progress-bar progress-bar-danger" ng-style="{width: versionItem.failing_nodes_precent + '%'}">
-                                        </div>
-                                    </div>
-                                    <i class="pull-right fa fa-exclamation" ng-show="versionItem.failing_nodes_count > 0" style="color: red;"></i>
-                                    <small class="pull-right">
-                                        <span>{{filteredNodes.length}}</span> nodes(<span>{{versionItem.nodes.length - filteredNodes.length}}</span> hidden)
-                                    </small>
                                 </form>
                             </div>
+                            <div class="col-md-9">
+                                <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
+                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
+                            </div>
                         </div>
-                    </accordion-heading>
-                    <div class="row" ng-repeat="node in ( filteredNodes = ( versionItem.nodes | nodesFilter:nodesFilter:selectedMonitor:projectStatus.tag_info) )">
-                        <div class="col-md-3">
-                            <form class="form-inline" role="form">
-                                <div class="checkbox">
-                                    <label>
-                                        <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}"> {{node.node_alias}}</a>
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-9">
-                            <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
-                            <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
-                        </div>
-                    </div>
-                </accordion-group>
+                    </accordion-group>
+                </div>
             </accordion>
         </div>
     </div>
