@@ -9,6 +9,11 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
     $scope.filteredNodes = [];
 
+    $scope.allNodesCount = 0;
+    for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+        $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i].nodes.length;
+    }
+
     $scope.showAllTags = function() {
         $scope.maxTags = 99999;
     }
@@ -43,6 +48,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     };
 
     $scope.doSelectAllNodes = function(event) {
+        event.stopPropagation();
         angular.forEach(projectStatus.nodes_for_version, function(versionItem) {
             angular.forEach(versionItem.nodes, function(node) {
                 node.checked = event.target.checked;
