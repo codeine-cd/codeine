@@ -3,6 +3,7 @@ package codeine.servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.exceptions.UnAuthorizedException;
 
 import com.google.common.collect.Maps;
+import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
@@ -185,6 +187,24 @@ public abstract class AbstractServlet extends HttpServlet{
 		getWriter(response).write(gson().toJson(json));
 	}
 
+	protected final void writeResponseGzipJson(HttpServletResponse response, Object json) {
+		try {
+			try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(getGzipStream(response),
+					response.getCharacterEncoding()))) {
+				writer.write(gson().toJson(json));
+			}
+		} catch (IOException e) {
+			throw ExceptionUtils.asUnchecked(e);
+		}
+	}
+
+	private ServletResponseGZIPOutputStream getGzipStream(HttpServletResponse response) throws IOException {
+		response.addHeader(HttpHeaders.CONTENT_ENCODING, "gzip");
+		return new ServletResponseGZIPOutputStream(response.getOutputStream());
+	}
+
+	
+	
 	protected String readBody(HttpServletRequest request) {
 		String post = null;
 		try {

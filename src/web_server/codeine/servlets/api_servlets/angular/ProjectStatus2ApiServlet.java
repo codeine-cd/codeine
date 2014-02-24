@@ -38,7 +38,7 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 		List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName,Constants.ALL_VERSION);
 		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
 		ProjectStatusInfo theNewObject = create(projectJson, nodes);
-		writeResponseJson(response, theNewObject);
+		writeResponseGzipJson(response, theNewObject);
 	}
 	
 	private ProjectStatusInfo create(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
