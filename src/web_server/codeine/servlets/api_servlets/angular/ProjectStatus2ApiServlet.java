@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.IConfigurationManager;
-import codeine.jsons.peer_status.PeerStatusString;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
@@ -150,30 +149,10 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 
 		public void add(NodeStatusInfo nodeStatusInfo) {
 			nodes.add(nodeStatusInfo);
-			if (!nodeStatusInfo.failed_monitors.isEmpty()) {
+			if (!nodeStatusInfo.failed_monitors().isEmpty()) {
 				failing_nodes_count++;
 			}
 		}
-	}
-	@SuppressWarnings("unused")
-	public static class NodeStatusInfo {
-		private String node_alias;
-		private String node_name;
-		private List<String> failed_monitors;
-		private List<String> tags;
-		private String peer_key;
-		private PeerStatusString peer_status;
-
-		public NodeStatusInfo(NodeWithMonitorsInfo nodeWithMonitorsInfo) {
-			super();
-			this.node_alias = nodeWithMonitorsInfo.node_alias();
-			this.node_name = nodeWithMonitorsInfo.name();
-			this.failed_monitors = nodeWithMonitorsInfo.failed_monitors();
-			this.tags = nodeWithMonitorsInfo.tags();
-			this.peer_key = nodeWithMonitorsInfo.peer_key();
-			this.peer_status = nodeWithMonitorsInfo.peer().status();
-		}
-		
 	}
 	@SuppressWarnings("unused")
 	public static class CountInfo {

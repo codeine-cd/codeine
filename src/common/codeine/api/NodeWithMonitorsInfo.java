@@ -86,5 +86,14 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		}
 		return $;
 	}
+	public List<String> ok_monitors() {
+		List<String> $ = Lists.newArrayList();
+		for (MonitorStatusInfo m : monitors.values()) {
+			if (!m.fail()){
+				$.add(m.name());
+			}
+		}
+		return $;
+	}
 
 }

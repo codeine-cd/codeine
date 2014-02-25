@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -167,13 +167,13 @@ public class RunMonitors implements Task {
 	}
 
 	private void runMonitor(NodeMonitor monitor) {
-		boolean hasCredentials = hasCredentials(monitor);
-		List<String> cmd = buildCmd(monitor, hasCredentials);
-		log.info("will execute " + cmd);
-		log.info("will execute encoded " + cmd);
-		Stopwatch stopwatch = new Stopwatch().start();
 		Result res = null;
+		Stopwatch stopwatch = new Stopwatch().start();
 		try {
+			boolean hasCredentials = hasCredentials(monitor);
+			List<String> cmd = buildCmd(monitor, hasCredentials);
+			log.info("will execute " + cmd);
+			log.info("will execute encoded " + cmd);
 			Map<String, String> map = Maps.newHashMap();
 			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
 			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);

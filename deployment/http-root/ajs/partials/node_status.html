@@ -38,11 +38,11 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="co-md-2"><strong>Alias:</strong></div><div class="co-md-6"> {{nodeStatus.alias}}</div>
+                        <div class="co-md-2"><strong>Alias:</strong></div><div class="co-md-6"> {{nodeStatus.node_alias}}</div>
                     </div>
                     <br/>
                     <div class="row">
-                        <div class="co-md-2"><strong>Name:</strong></div><div class="co-md-6"> {{nodeStatus.name}}</div>
+                        <div class="co-md-2"><strong>Name:</strong></div><div class="co-md-6"> {{nodeStatus.node_name}}</div>
                     </div>
                     <br/>
                     <div class="row">
@@ -69,13 +69,14 @@
                     <strong>Node Monitors</strong>
                 </div>
                 <div class="panel-body">
-                    <div class="row" ng-repeat="monitor_info in nodeStatus.monitors">
+                    <div class="row" ng-repeat="monitor_info in nodeStatus.ok_monitors">
                         <div class="co-md-8">
-                            <a href="{{monitor_info.link}}"><i class="{{monitor_info.class_name}} fa fa-desktop lg"></i>  {{monitor_info.label}}</a>
+                            <a href="{{monitor_info}}"><i style="color: blue;" class="fa fa-desktop lg"></i>  {{monitor_info}}</a>
                         </div>
-
-                        <div class="co-md-2">
-                            <a href="{{monitor_info.link}}"><i class="{{monitor_info.class_name}} fa fa-desktop lg"></i></a>
+                    </div>
+                    <div class="row" ng-repeat="monitor_info in nodeStatus.failed_monitors">
+                        <div class="co-md-8">
+                            <a href="{{monitor_info}}"><i style="color: red;" class="fa fa-desktop lg"></i>  {{monitor_info}}</a>
                         </div>
                     </div>
                     <br/>
