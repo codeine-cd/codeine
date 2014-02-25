@@ -35,6 +35,7 @@ public class Constants
 	public static final String PROJECT_NODES_CONTEXT = "/project-nodes";
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
 	public static final String NODE_STATUS_CONTEXT = "/node-status";
+	public static final String MONITOR_STATUS_CONTEXT = "/monitor-status";
 	public static final String REPORTER_CONTEXT = "/reporter";
 	public static final String UPGRADE_SERVER_CONTEXT = "/upgrade-server";
 	public static final String COMMANDS_LOG_CONTEXT = "/commands-log";
@@ -182,6 +183,7 @@ public class Constants
 		public static final String VERSION_NAME = "version";
 		public static final String NODE_NAME = "node-name";
 		public static final String NODE = "node";
+		public static final String MONITOR = "monitor";
 		public static final String COMMAND_NAME = "command";
 		public static final String PATH_NAME = "path";
 		public static final String RESOURCE_NAME = "resource";

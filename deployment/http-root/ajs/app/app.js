@@ -113,6 +113,20 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
                         }
                     }
                 }).
+                when('/codeine/project/:project_name/node/:node_name/monitor/:monitor_name/status', {
+                    templateUrl: '/ajs/partials/monitor_status.html',
+                    controller: 'monitorStatusCtrl',
+                    resolve: {
+                        monitorStatus :  function($q,$log,$route,CodeineService) {
+                            var deferred = $q.defer();
+                            CodeineService.getMonitorStatus($route.current.params.project_name, $route.current.params.node_name, $route.current.params.monitor_name).success(function(data) {
+                                $log.debug("Resolved monitorStatus: " + angular.toJson(data));
+                                deferred.resolve(data);
+                            });
+                            return deferred.promise;
+                        }
+                    }
+                }).
                 when('/codeine/project/:project_name/configure', {
                     templateUrl: '/ajs/partials/project_configure.html',
                     controller: 'projectConfigureCtrl',

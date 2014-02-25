@@ -71,12 +71,12 @@
                 <div class="panel-body">
                     <div class="row" ng-repeat="monitor_info in nodeStatus.ok_monitors">
                         <div class="co-md-8">
-                            <a href="{{monitor_info}}"><i style="color: blue;" class="fa fa-desktop lg"></i>  {{monitor_info}}</a>
+                            <a ng-href="/codeine/project/{{projectName}}/node/{{nodeStatus.node_name}}/monitor/{{monitor_info}}/status"><i style="color: blue;" class="fa fa-desktop lg"></i>  {{monitor_info}}</a>
                         </div>
                     </div>
                     <div class="row" ng-repeat="monitor_info in nodeStatus.failed_monitors">
                         <div class="co-md-8">
-                            <a href="{{monitor_info}}"><i style="color: red;" class="fa fa-desktop lg"></i>  {{monitor_info}}</a>
+                            <a ng-href="/codeine/project/{{projectName}}/node/{{nodeStatus.node_name}}/monitor/{{monitor_info}}/status"><i style="color: red;" class="fa fa-desktop lg"></i>  {{monitor_info}}</a>
                         </div>
                     </div>
                     <br/>
