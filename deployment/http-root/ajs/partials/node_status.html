@@ -1,0 +1,86 @@
+<div class="col-md-3">
+    <div ng-include="'/ajs/partials/menus/projectMenu.html'"></div>
+    <div ng-include="'/ajs/partials/menus/commandHistory.html'"></div>
+</div>
+
+<!--
+<div class="navbar" id="node_info_navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav pull-right">
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown" id="commandsDropdown">
+                        <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {{#commands}}
+                            <li class="codeine_command" data-command-name="{{name}}" ><a href="javascript: void(0);">{{alias}}</a></li>
+                            {{/commands}}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+        -->
+<div class="col-md-9">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Node Info</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="co-md-2"><strong>Alias:</strong></div><div class="co-md-6"> {{nodeStatus.alias}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="co-md-2"><strong>Name:</strong></div><div class="co-md-6"> {{nodeStatus.name}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="co-md-2"><strong>Version:</strong></div><div class="co-md-6"> {{nodeStatus.version}}</div>
+                    </div>
+                    <br/>
+                    <!--
+                    <div class="row">
+                        <div class="co-md-2"><strong>Tags:</strong></div><div class="co-md-6">
+                        {{#tags}}
+                        <span class="badge badge-info">{{this}}</span>
+                        {{/tags}}
+                    </div>
+                    </div>
+                    -->
+                    <br/>
+                    <div class="row">
+                        <div class="co-md-2"><strong>Peer Status:</strong></div><div class="co-md-6"><i data-peer-status="{{nodeStatus.peer_status}}" class="peerStatus"></i> {{nodeStatus.peer_status}}</div>
+                    </div>
+                    <br/>
+                </div>
+
+                <div class="panel-heading">
+                    <strong>Node Monitors</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row" ng-repeat="monitor_info in nodeStatus.monitors">
+                        <div class="co-md-8">
+                            <a href="{{monitor_info.link}}"><i class="{{monitor_info.class_name}} fa fa-desktop lg"></i>  {{monitor_info.label}}</a>
+                        </div>
+
+                        <div class="co-md-2">
+                            <a href="{{monitor_info.link}}"><i class="{{monitor_info.class_name}} fa fa-desktop lg"></i></a>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

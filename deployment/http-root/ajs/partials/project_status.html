@@ -121,14 +121,14 @@
                                 <form class="form-inline" role="form">
                                     <div class="checkbox">
                                         <label>
-                                            <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}"> {{node.node_alias}}</a>
+                                            <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/status"> {{node.node_alias}}</a>
                                         </label>
                                     </div>
                                 </form>
                             </div>
                             <div class="col-md-9">
                                 <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
-                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
+                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
                             </div>
                         </div>
                     </accordion-group>

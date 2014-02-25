@@ -106,7 +106,7 @@
             <accordion close-others="false">
                 <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_is_open">
                     <accordion-heading>
-                        {{monitor_info.name}}
+                        Monitor: {{monitor_info.name}}
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_is_open, 'glyphicon-chevron-right': !monitor_is_open}">
                         </i>
                         <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
@@ -213,7 +213,7 @@
             <accordion close-others="false">
                 <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_is_open">
                     <accordion-heading>
-                        {{command_info.name}}
+                        Command: {{command_info.name}}
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_is_open, 'glyphicon-chevron-right': !command_is_open}">
                         </i>
                         <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
@@ -300,7 +300,7 @@
                         <accordion close-others="false">
                             <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter_is_open">
                                 <accordion-heading>
-                                    {{command_parameter.name}}
+                                    Parameter: {{command_parameter.name}}
                                     <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter_is_open, 'glyphicon-chevron-right': !command_parameter_is_open}">
                                     </i>
                                     <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
@@ -376,7 +376,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <button ng-click="adParameter()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
+                                <button ng-click="addParameter($parent.$index)" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
                             </div>
                             <br/><br/>
                         </div>
@@ -396,7 +396,7 @@
             </accordion>
             <div class="row">
                 <div class="col-md-12">
-                    <button ng-click="adCommand()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Command</button>
+                    <button ng-click="addCommand()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Command</button>
                 </div>
                 <br/><br/>
             </div>
