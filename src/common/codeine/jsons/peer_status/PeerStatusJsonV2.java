@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 @SuppressWarnings("unused")
 public class PeerStatusJsonV2 {
 	private String peer_key;
+	//TODO remove after cf-engine in build > 1.1.309
 	private String peer_old_key;
 	private String peer_host_port;
 	private Map<String, ProjectStatus> project_name_to_status = Maps.newHashMap();//Lists.newArrayList();
