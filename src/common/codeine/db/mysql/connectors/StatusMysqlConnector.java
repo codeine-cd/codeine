@@ -44,6 +44,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	public void putReplaceStatus(PeerStatusJsonV2 p) {
 		String json = gson.toJson(p);
 		log.info("will update status:\n"+json);
+		dbUtils.executeUpdate("DELETE FROM "+tableName+" WHERE peer_key = '" + p.peer_old_key() + "'");
 		dbUtils.executeUpdate("REPLACE INTO "+tableName+" (peer_key, data, update_time ) VALUES (?, ?, CURRENT_TIMESTAMP())", p.peer_key(), json);
 	}
 	
