@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -24,6 +25,7 @@ public class HttpUtils
 {
 	private static final Logger log = Logger.getLogger(HttpUtils.class);
 	private final static String USER_AGENT = "Mozilla/5.0";
+	private static final int READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
 	
 	public static String doGET(String url,Map<String,String> headers)
 	{
@@ -38,6 +40,7 @@ public class HttpUtils
 		{
 			URL u = new URL(url);
 			URLConnection c = u.openConnection();
+			c.setReadTimeout(READ_TIMEOUT_MILLI);
 			addHeaders(headers, c);
 			BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
 			String inputLine;
@@ -58,7 +61,7 @@ public class HttpUtils
 		try {
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
- 
+			con.setReadTimeout(READ_TIMEOUT_MILLI);
 			//add reuqest header
 			con.setRequestMethod("POST");
 			con.setRequestProperty("User-Agent", USER_AGENT);
