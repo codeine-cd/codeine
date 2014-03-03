@@ -6,7 +6,7 @@
         </div>
         <div class="list-group">
             <a three-state-list-group-item state='tag.state' href="#" style="padding-top: 3px; padding-bottom: 3px;" ng-repeat="tag in  projectStatus.tag_info | limitTo:maxTags ">{{tag.name}} <span class="badge pull-right">{{tag.count}}</span></a>
-            <span class="list-group-item" ng-show="maxTags == 10 && projectStatus.tag_info.length > 10"><button ng-click="showAllTags()" class="btn btn-default btn-sm">More...</button></span>
+            <list-group-more-item items="projectStatus.tag_info" max-items="maxTags"></list-group-more-item>
         </div>
     </div>
     <div ng-include="'/ajs/partials/menus/commandHistory.html'"></div>
@@ -116,19 +116,21 @@
                                 </div>
                             </div>
                         </accordion-heading>
-                        <div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | nodesFilter:nodesFilter:selectedMonitor:projectStatus.tag_info) )">
-                            <div class="col-md-3">
-                                <form class="form-inline" role="form">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/status"> {{node.node_alias}}</a>
-                                        </label>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-9">
-                                <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
-                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
+                        <div infinite-scroll='loadMoreNodes($index)' infinite-scroll-distance='2'>
+                            <div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | nodesFilter:nodesFilter:selectedMonitor:projectStatus.tag_info) | limitTo:nodesLimit[$index] )">
+                                <div class="col-md-3">
+                                    <form class="form-inline" role="form">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/status"> {{node.node_alias}}</a>
+                                            </label>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-9">
+                                    <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
+                                    <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
+                                </div>
                             </div>
                         </div>
                     </accordion-group>

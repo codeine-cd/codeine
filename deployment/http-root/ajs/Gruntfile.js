@@ -40,6 +40,7 @@ module.exports = function(grunt) {
       files: ['<%= jshint.files %>'],
       tasks: ['jshint', 'qunit']
     },
+      // Automatically inject Bower components into the app
 	'bower-install': {
 		target: {
 		// Point to the files that should be updated when
@@ -51,7 +52,14 @@ module.exports = function(grunt) {
 		cwd: '',
 		ignorePath: '',
 		exclude: [],
-		fileTypes: {}
+		fileTypes: {
+            html: {
+                replace: {
+                    js: '<script src="/{{filePath}}"></script>',
+                    css: '<link rel="stylesheet" href="/{{filePath}}" />'
+                }
+            }
+        }
 		}
 	}
   });

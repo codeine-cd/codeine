@@ -1,4 +1,4 @@
-angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2'])
+angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','infinite-scroll'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);

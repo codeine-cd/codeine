@@ -9,18 +9,29 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
     $scope.filteredNodes = [];
 
+
     $scope.allNodesCount = 0;
+
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
         $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i].nodes.length;
-    }
+    };
 
-    $scope.showAllTags = function() {
-        $scope.maxTags = 99999;
-    }
+    var initNodesLimit = function() {
+        $scope.nodesLimit = [];
+        for (var i=0; i < $scope.projectStatus.nodes_for_version.length ; i++) {
+            $scope.nodesLimit[i] = 10;
+        }
+    };
+
+    initNodesLimit();
+
+    $scope.loadMoreNodes = function(index) {
+        $scope.nodesLimit[index] += 10;
+    };
 
     $scope.selectMonitor = function(monitor) {
         $scope.selectedMonitor = monitor;
-    }
+    };
 
     $scope.checkboxClick = function(versionItem, event) {
         event.stopPropagation();
@@ -37,7 +48,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             }
         }
         return true;
-    }
+    };
 
     $scope.isVersionChecked = function(versionItem) {
         for (var i=0 ; i < versionItem.nodes.length; i++) {

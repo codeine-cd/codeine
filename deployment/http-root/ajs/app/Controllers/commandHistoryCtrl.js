@@ -4,7 +4,9 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
     $scope.limit = 1;
     var getHistory = function() {
         CodeineService.getProjectCommandHistory($scope.projectName).success(function(data) {
-            $scope.history = data;
+            if (!$scope.history || $scope.history.length !== data.length) {
+                $scope.history = data;
+            }
         });
     }
 

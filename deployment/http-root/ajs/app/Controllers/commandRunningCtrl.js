@@ -4,7 +4,9 @@ angular.module('codeine').controller('commandRunningCtrl',['$scope', '$rootScope
     $scope.limit = 1;
     var getHistory = function() {
         CodeineService.getRunningCommands().success(function(data) {
-            $scope.history = data;
+            if (!$scope.history || $scope.history.length !== data.length) {
+                $scope.history = data;
+            }
         });
     }
 

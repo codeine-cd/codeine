@@ -3,7 +3,7 @@
         <span class="panel-title">Command History <i data-help-message="commandExecutorHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help" data-original-title="" title=""></i></span>
     </div>
     <div class="list-group">
-        <a href="/" class="list-group-item" ng-hide="history.length"><div class="text-center">No commands</div></a>
+        <a href="/" class="list-group-item" ng-hide="history.length" ng-cloak><div class="text-center">No commands</div></a>
         <a href="/" command-item command-data="item" ng-repeat="item in history | limitTo:limit " class="list-group-item" style="padding-top: 2px;padding-bottom: 4px"></a>
         <list-group-more-item items="history" max-items="limit"></list-group-more-item>
     </div>
