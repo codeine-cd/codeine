@@ -15,7 +15,7 @@ import codeine.utils.JsonUtils;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-public class CommandLogApiServlet extends AbstractServlet {
+public class CommandHistoryApiServlet extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject	private NodesCommandExecuterProvider nodesCommandExecuterProvider;
@@ -30,7 +30,7 @@ public class CommandLogApiServlet extends AbstractServlet {
 		for (CommandStatusJson commandStatusJson : allCommands) {
 			if (permissionsManager.canRead(commandStatusJson.project(), request)){
 				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-				c.can_cancel(permissionsManager.canCommand(c.project(), request));
+				c.can_cancel(permissionsManager.canCommand(c.project(), request) && !c.finished());
 				allCommandsWithPermissions.add(c);
 			}
 		}

@@ -6,7 +6,7 @@ import codeine.servlet.CodeineServletModule;
 import codeine.servlets.FileGetterServlet;
 import codeine.servlets.api_servlets.CancelShutdownApiServlet;
 import codeine.servlets.api_servlets.CommandExecutorApiServlet;
-import codeine.servlets.api_servlets.CommandLogApiServlet;
+import codeine.servlets.api_servlets.CommandHistoryApiServlet;
 import codeine.servlets.api_servlets.DeleteProjectServlet;
 import codeine.servlets.api_servlets.MonitorsStatisticsApiServlet;
 import codeine.servlets.api_servlets.NodesCommandApiServlet;
@@ -54,7 +54,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(ProjectStatusApiServlet.class, apiContext(Constants.PROJECT_STATUS_CONTEXT));
 		serveMe(ReporterServlet.class, apiContext(Constants.REPORTER_CONTEXT));
 		serveMe(UpgradeApiServlet.class, Constants.UPGRADE_SERVER_CONTEXT);
-		serveMe(CommandLogApiServlet.class, apiContext(Constants.COMMANDS_LOG_CONTEXT));
+		serveMe(CommandHistoryApiServlet.class, apiContext(Constants.COMMANDS_LOG_CONTEXT));
 		serveMe(MonitorsStatisticsApiServlet.class, apiContext(Constants.MONITORS_STATISTICS_CONTEXT));
 		serveMe(CommandExecutorApiServlet.class, apiContext(Constants.COMMANDS_EXECUTER_STATUS));
 		serveMe(ProjectNodesServlet.class, Constants.PROJECT_NODES_CONTEXT);

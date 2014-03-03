@@ -56,6 +56,12 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         },
         getProjectStatus : function(project) {
             return $http.get("/project-status2_json", {params: { project: project }},  { cache: false });
+        },
+        getProjectCommandHistory: function(project) {
+            return $http.get("/commands-log_json", {params: { project: project }},  { cache: false });
+        },
+        getRunningCommands: function() {
+            return $http.get("/commands-status_json", { cache: false });
         }
     };
     return Api;

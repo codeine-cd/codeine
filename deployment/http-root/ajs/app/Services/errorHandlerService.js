@@ -9,7 +9,12 @@ angular.module('codeine')
             $log.info('ErrorHandler: Ignoring error');
             return;
         }
-
+        if(!data) {
+            data = {
+                title : 'General Error',
+                message : 'There was an error while connecting to the server, it might be down or unreachable'
+            };
+        }
         $log.error(angular.toJson(data));
         var message = [];
         if (data.title) {

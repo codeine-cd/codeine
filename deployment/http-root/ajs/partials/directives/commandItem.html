@@ -1,0 +1,21 @@
+<div  tooltip="{{commandData.nodes}} nodes @ {{commandData.date}}" tooltip-placement="right">
+    <div class="row">
+        <div class="col-md-12" style="font-size: 11px;">
+            <span  class="pull-left">
+                <i class="fa fa-lg" ng-class="{'fa-info-circle' : !commandData.can_cancel, 'fa-times-circle' : commandData.can_cancel , 'error' : commandData.can_cancel}"></i> {{commandData.name}}
+            </span>
+            <span class="pull-right">
+                {{commandData.date}}
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="progress" ng-class="{'progress-striped' : !commandData.finished , 'active' : !commandData.finished }" style="margin-bottom: 0px;">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: commandData.successPercent + '%'}"></div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: commandData.failPercent + '%'}"></div>
+                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: commandData.skipPercent + '%'}"></div>
+            </div>
+        </div>
+    </div>
+</div>

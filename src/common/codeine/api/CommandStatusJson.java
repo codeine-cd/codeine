@@ -11,6 +11,7 @@ public class CommandStatusJson {
 	public int nodes;
 	public int successPercent;
 	public int failPercent;
+	public int skipPercent;
 	private String date;
 	private long date_long;
 	private long id;
@@ -29,6 +30,7 @@ public class CommandStatusJson {
 		this.finished = finished;
 		this.date_long = date;
 		this.date = StringUtils.formatDate(date);
+		this.skipPercent = finished ?  100 - successPercent - failPercent : 0;
 	}
 
 	public long id() {
@@ -53,6 +55,10 @@ public class CommandStatusJson {
 
 	public void can_cancel(boolean can_cancel) {
 		this.can_cancel = can_cancel;
+	}
+	
+	public boolean finished() {
+		return finished;
 	}
 
 	@Override
