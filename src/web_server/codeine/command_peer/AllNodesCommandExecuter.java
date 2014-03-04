@@ -54,7 +54,7 @@ public class AllNodesCommandExecuter {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
 			dirName = getNewDirName();
-			dirNameFull = pathHelper.getPluginsOutputDir(commandData.command_info().project_name()) + "/" + dirName;
+			dirNameFull = pathHelper.getCommandOutputDir(commandData.command_info().project_name(), String.valueOf(dirName));
 			FilesUtils.mkdirs(dirNameFull);
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);

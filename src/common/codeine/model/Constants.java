@@ -36,6 +36,7 @@ public class Constants
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
 	public static final String NODE_STATUS_CONTEXT = "/node-status";
 	public static final String MONITOR_STATUS_CONTEXT = "/monitor-status";
+	public static final String COMMAND_STATUS_CONTEXT = "/command-status";
 	public static final String REPORTER_CONTEXT = "/reporter";
 	public static final String UPGRADE_SERVER_CONTEXT = "/upgrade-server";
 	public static final String COMMANDS_LOG_CONTEXT = "/commands-log";

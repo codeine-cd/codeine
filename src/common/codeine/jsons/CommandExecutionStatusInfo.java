@@ -17,9 +17,10 @@ public class CommandExecutionStatusInfo {
 	private List<NodeWithPeerInfo> fail_list = Lists.newArrayList();
 	private List<NodeWithPeerInfo> success_list = Lists.newArrayList();
 	private long start_time;
-	private String user = "Anonymous";
+	private String user = "Guest";
 	private long id;
 	private boolean finished;
+	private String output;
 	
 	public CommandExecutionStatusInfo() {
 		super();
@@ -33,7 +34,7 @@ public class CommandExecutionStatusInfo {
 		this.nodes_list = nodes_list;
 		this.id = id;
 		this.start_time = System.currentTimeMillis();
-		this.user = StringUtils.isEmpty(user) ? "Anonymous" : user; 
+		this.user = StringUtils.isEmpty(user) ? "Guest" : user; 
 	}
 
 
@@ -93,6 +94,12 @@ public class CommandExecutionStatusInfo {
 
 	public String project_name() {
 		return project_name;
+	}
+
+
+	public void output(String output) {
+		this.output = output;
+		
 	}
 
 	

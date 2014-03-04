@@ -25,6 +25,10 @@ public class PathHelper {
 		return getProjectsDir() + "/" + projectName + Constants.PLUGINS_OUTPUT_DIR;
 	}
 
+	public String getCommandOutputDir(String projectName, String command) {
+		return getPluginsOutputDir(projectName) + "/" + command;
+	}
+	
 	public String getMonitorOutputDir(String projectName) {
 		return getMonitorOutputDirAllProjects() + "/" + projectName + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
 	}
@@ -97,5 +101,15 @@ public class PathHelper {
 	public String getProjectDir(String projectName) {
 		return getProjectsDir() + "/" + projectName;
 	}
+
+	public String getCommandOutputInfoFile(String projectName, String command) {
+		return getCommandOutputDir(projectName, command) + "/" + Constants.JSON_COMMAND_FILE_NAME;
+	}
+
+	public String getCommandOutputFile(String projectName, String command) {
+		return getCommandOutputDir(projectName, command) + "/" + Constants.COMMAND_LOG_FILE;
+	}
+
+	
 
 }
