@@ -17,6 +17,7 @@ import codeine.credentials.CredentialsHelper;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.command.CommandParameterInfo;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.servlet.AbstractServlet;
@@ -36,10 +37,28 @@ public class CommandNodeServlet extends AbstractServlet
 	private static final long serialVersionUID = 1L;
 	@Inject private PathHelper pathHelper;
 	@Inject private IConfigurationManager configurationManager;
+	@Inject private ExperimentalConfJsonStore experimentalConfJsonStore;
 	
 	@Override
 	public void myPost(HttpServletRequest request, HttpServletResponse res)	{
 		log.info("myPost");
+		if (Boolean.parseBoolean(request.getParameter(Constants.UrlParameters.FORCE)) || experimentalConfJsonStore.get().allow_concurrent_commands_in_peer()) {
+			executeCommandNotSync(request, res);
+		}
+		else {
+			executeCommandSync(request, res);
+		}
+	}
+	/**
+	 * this prevents multiple commands on the same peer, so preventing upgrade the peer during command for example
+	 */
+	private void executeCommandNotSync(HttpServletRequest request, HttpServletResponse res) {
+		executeInternal(request, res);
+	}
+	private synchronized void executeCommandSync(HttpServletRequest request, HttpServletResponse res) {
+		executeInternal(request, res);
+	}
+	private void executeInternal(HttpServletRequest request, HttpServletResponse res) {
 		final PrintWriter writer = getWriter(res);
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
