@@ -91,7 +91,7 @@
     <div class="row">
         <div class="col-md-12">
             <accordion close-others="false">
-                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="filteredNodes[$index].length > 0">
+                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="isVersionVisible(filteredNodes[$index])">
                     <accordion-group is-open="versionIsOpen[$index]">
                         <accordion-heading>
                             <div class="row">
@@ -116,8 +116,8 @@
                                 </div>
                             </div>
                         </accordion-heading>
-                        <div infinite-scroll='loadMoreNodes($index)' infinite-scroll-distance='2' infinite-scroll-disabled="!versionIsOpen[$index]">
-                            <div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | nodesFilter:nodesFilter:selectedMonitor:projectStatus.tag_info) | limitTo:nodesLimit[$index] )">
+                        <div infinite-scroll='loadMoreNodes($index)' infinite-scroll-distance='2' infinite-scroll-disabled="!versionIsOpen[$index]" style="max-height: 200px; overflow-y: scroll;">
+                            <div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | limitTo:nodesLimit[$index] ))" ng-controller="nodeCtrl" ng-hide="isExcludedByFilter">
                                 <div class="col-md-3">
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">

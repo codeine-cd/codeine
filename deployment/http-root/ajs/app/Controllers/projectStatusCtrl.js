@@ -9,8 +9,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
     $scope.filteredNodes = [];
     $scope.versionIsOpen = [];
-
-
     $scope.allNodesCount = 0;
 
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
@@ -25,6 +23,18 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     };
 
     initNodesLimit();
+
+    $scope.isVersionVisible = function(nodes) {
+        if (!nodes) {
+            return true;
+        }
+        for (var i=0; i < nodes.length ; i++) {
+            if((nodes[i].visible === undefined) || (nodes[i].visible)) {
+                return true;
+            }
+        }
+        return false;
+    };
 
     $scope.loadMoreNodes = function(index) {
         $scope.nodesLimit[index] += 10;

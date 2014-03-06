@@ -1,10 +1,10 @@
-angular.module('codeine').directive('threeStateListGroupItem', ['$log', function ($log) {
+angular.module('codeine').directive('threeStateListGroupItem', function () {
     return {
         restrict: 'A',
         scope: {
             state : '='
         },
-        link: function (scope, element, attrs) {
+        link: function (scope, element) {
             scope.click = function() {
                 if (!scope.state)
                     scope.state = 0;
@@ -23,4 +23,4 @@ angular.module('codeine').directive('threeStateListGroupItem', ['$log', function
 
     };
 
-}]);
+});
