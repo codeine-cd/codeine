@@ -25,7 +25,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
 
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
         $scope.projectStatus.nodes_for_version[i].filteredNodes = $scope.projectStatus.nodes_for_version[i].nodes.slice();
-        moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[0]);
+        for (var j=0; j < 10 && j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+            moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[j]);
+        }
     }
 
     $scope.$watch("nodesFilter",function( newName, oldName ) {
@@ -43,7 +45,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
                     }
                 }
                 if ($scope.projectStatus.nodes_for_version[i].filteredNodes.length > 0) {
-                    moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[0]);
+                    for (var k=0; k < 10 && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
+                        moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[k]);
+                    }
                 }
             }
         }

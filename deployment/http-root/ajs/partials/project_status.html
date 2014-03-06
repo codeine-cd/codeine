@@ -116,7 +116,6 @@
                                 </div>
                             </div>
                         </accordion-heading>
-                        <div infinite-scroll='loadMoreNodes($index)' infinite-scroll-distance='2' infinite-scroll-disabled="!versionIsOpen[$index]" style="max-height: 200px; overflow-y: scroll;">
                             <div class="row" ng-repeat="node in versionItem.visibleNodes">
                                 <div class="col-md-3">
                                     <form class="form-inline" role="form">
@@ -132,7 +131,7 @@
                                     <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}</a>
                                 </div>
                             </div>
-                        </div>
+                        <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>
                     </accordion-group>
                 </div>
             </accordion>
