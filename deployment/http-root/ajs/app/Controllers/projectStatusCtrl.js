@@ -8,6 +8,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
     $scope.filteredNodes = [];
+    $scope.versionIsOpen = [];
 
 
     $scope.allNodesCount = 0;

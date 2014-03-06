@@ -6,7 +6,7 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
         $scope.history = data;
     });
 
-    setInterval(function() {
+    var interval = setInterval(function() {
         $.ajax( {
             type: 'GET',
             url: '/commands-log_json?project=' + $scope.projectName  ,
@@ -23,4 +23,8 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
             dataType: 'json'
         });
     },5000);
+
+    $scope.$on('$destroy', function() {
+        clearInterval(interval)
+    });
 }]);

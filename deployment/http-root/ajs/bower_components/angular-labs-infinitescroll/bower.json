@@ -1,0 +1,25 @@
+{
+  "name": "angular-labs-infiniteScroll",
+  "main": "ng-labs-infiniteScroll.js",
+  "version": "0.0.0",
+  "authors": [
+    "Andy Warner <awarner@bertramcapital.com>"
+  ],
+  "description": "A simple directive to create the infinite scroll effect for the given element",
+  "keywords": [
+    "angular",
+    "ng",
+    "infinite",
+    "scroll",
+    "labs",
+    "bertram"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
