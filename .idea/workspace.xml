@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aaa2d366-d520-4e7f-b7f7-3f17cdf57674" name="Default" comment="" />
+    <list default="true" id="aaa2d366-d520-4e7f-b7f7-3f17cdf57674" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/deployment/http-root/ajs/app/app.js" afterPath="$PROJECT_DIR$/deployment/http-root/ajs/app/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/deployment/http-root/ajs/app/Services/codeineService.js" afterPath="$PROJECT_DIR$/deployment/http-root/ajs/app/Services/codeineService.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/deployment/http-root/ajs/partials/menus/commandHistory.html" afterPath="$PROJECT_DIR$/deployment/http-root/ajs/partials/menus/commandHistory.html" />
+    </list>
     <ignored path="codeine-github.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -76,17 +80,55 @@
       <file leaf-file-name="codeine.conf.json" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/deployment/conf/codeine.conf.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="24" selection-start="324" selection-end="324" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+            <state line="16" column="33" selection-start="434" selection-end="434" vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="476">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NearestHostSelector.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CommandStatusApiServlet.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/web_server/codeine/servlets/api_servlets/angular/CommandStatusApiServlet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="79" selection-start="853" selection-end="853" vertical-scroll-proportion="0.38734177" vertical-offset="102" max-vertical-offset="595">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Constants.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/common/codeine/model/Constants.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="187" column="35" selection-start="8215" selection-end="8215" vertical-scroll-proportion="0.0" vertical-offset="3009" max-vertical-offset="3927">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommandExecutionStatusInfo.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/common/codeine/jsons/CommandExecutionStatusInfo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="13" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1802">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatusMysqlConnector.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/common/codeine/db/mysql/connectors/StatusMysqlConnector.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="70" column="0" selection-start="2491" selection-end="2491" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="1870">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NearestHostSelector.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/common/codeine/db/mysql/NearestHostSelector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="26" selection-start="847" selection-end="847" vertical-scroll-proportion="1.3535032" vertical-offset="0" max-vertical-offset="714">
-              <folding />
+            <state line="30" column="26" selection-start="847" selection-end="847" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -217,7 +259,7 @@
     <property name="dynamic.classpath" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
   </component>
-  <component name="RunManager" selected="Application.CodeineWebServerBootstrap">
+  <component name="RunManager" selected="Application.CodeinePeerBootstrap">
     <configuration default="false" name="CodeineWebServerBootstrap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="codeine.CodeineWebServerBootstrap" />
       <option name="VM_PARAMETERS" value="-Dlog.to.stdout=true -DinstallDir=C:\Users\oshai\Documents\GitHub\codeine\deployment" />
@@ -365,8 +407,50 @@
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
-    <list size="1">
-      <item index="0" class="java.lang.String" itemvalue="Application.CodeineWebServerBootstrap" />
+    <configuration default="false" name="CodeineServerBootstrap" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="codeine.CodeineServerBootstrap" />
+      <option name="VM_PARAMETERS" value="-Dlog.to.stdout=true -DinstallDir=C:\Users\oshai\Documents\GitHub\codeine\deployment" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="codeine-github" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method />
+    </configuration>
+    <configuration default="false" name="CodeinePeerBootstrap" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="codeine.CodeinePeerBootstrap" />
+      <option name="VM_PARAMETERS" value="-Dlog.to.stdout=true -DinstallDir=C:\Users\oshai\Documents\GitHub\codeine\deployment" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="codeine-github" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method />
+    </configuration>
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Application.CodeineServerBootstrap" />
+      <item index="1" class="java.lang.String" itemvalue="Application.CodeinePeerBootstrap" />
+      <item index="2" class="java.lang.String" itemvalue="Application.CodeineWebServerBootstrap" />
     </list>
     <recent_temporary>
       <list size="1">
@@ -389,7 +473,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -398,7 +482,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46624804" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2857143" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -458,13 +542,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/deployment/conf/codeine.conf.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="24" selection-start="324" selection-end="324" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/web_server/codeine/CodeineWebServerBootstrap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="68" column="0" selection-start="2653" selection-end="2653" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="2074">
@@ -474,7 +551,44 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/common/codeine/db/mysql/NearestHostSelector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="26" selection-start="847" selection-end="847" vertical-scroll-proportion="1.3535032" vertical-offset="0" max-vertical-offset="714">
+        <state line="30" column="26" selection-start="847" selection-end="847" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/codeine/db/mysql/connectors/StatusMysqlConnector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="0" selection-start="2491" selection-end="2491" vertical-scroll-proportion="0.0" vertical-offset="53" max-vertical-offset="1870">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/deployment/conf/codeine.conf.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="33" selection-start="434" selection-end="434" vertical-scroll-proportion="0.0" vertical-offset="18" max-vertical-offset="476">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/codeine/jsons/CommandExecutionStatusInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="13" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1802">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/common/codeine/model/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="187" column="35" selection-start="8215" selection-end="8215" vertical-scroll-proportion="0.0" vertical-offset="3009" max-vertical-offset="3927">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/web_server/codeine/servlets/api_servlets/angular/CommandStatusApiServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="79" selection-start="853" selection-end="853" vertical-scroll-proportion="0.38734177" vertical-offset="102" max-vertical-offset="595">
           <folding />
         </state>
       </provider>
