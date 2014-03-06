@@ -117,7 +117,8 @@
                             </div>
                         </accordion-heading>
                         <div infinite-scroll='loadMoreNodes($index)' infinite-scroll-distance='2' infinite-scroll-disabled="!versionIsOpen[$index]" style="max-height: 200px; overflow-y: scroll;">
-                            <div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | limitTo:nodesLimit[$index] ))" ng-controller="nodeCtrl" ng-hide="isExcludedByFilter">
+                            <div class="row" ng-repeat="node in (filteredNodes[$index] = versionItem.nodes)" ng-controller="nodeCtrl" ng-hide="isExcludedByFilter || isExcludedByLimit">
+                            <!--<div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | limitTo:nodesLimit[$index] ))" ng-controller="nodeCtrl" ng-hide="isExcludedByFilter">-->
                                 <div class="col-md-3">
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">

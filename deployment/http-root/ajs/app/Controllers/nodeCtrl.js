@@ -18,6 +18,18 @@ angular.module('codeine').controller('nodeCtrl',['$scope', '$log', function($sco
         else {
             $scope.isExcludedByFilter = ! ($scope.node.node_name.indexOf(filter) !== -1);
         }
+
+        if ($scope.isExcludedByFilter) {
+            $scope.isExcludedByLimit = false;
+        }
+        else {
+            if ($scope.nodesLimit[$scope.$parent.$index] > $scope.nodesVisible[$scope.$parent.$index]) {
+                $scope.isExcludedByLimit = false;
+                $scope.nodesVisible[$scope.$parent.$index]++;
+            } else {
+                $scope.isExcludedByLimit = true;
+            }
+        }
         $scope.node.visible = ! $scope.isExcludedByFilter;
     }
 }]);

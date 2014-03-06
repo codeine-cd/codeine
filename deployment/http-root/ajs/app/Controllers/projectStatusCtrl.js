@@ -4,12 +4,12 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $scope.projectStatus = projectStatus;
     $scope.selectedMonitor = 'All Nodes';
     $scope.maxTags = 10;
-    $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
-    $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
-    $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
     $scope.filteredNodes = [];
     $scope.versionIsOpen = [];
     $scope.allNodesCount = 0;
+    $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
+    $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
+    $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
 
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
         $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i].nodes.length;
@@ -17,12 +17,25 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
 
     var initNodesLimit = function() {
         $scope.nodesLimit = [];
+        $scope.nodesVisible = [];
         for (var i=0; i < $scope.projectStatus.nodes_for_version.length ; i++) {
             $scope.nodesLimit[i] = 10;
+            $scope.nodesVisible[i] = 0;
         }
     };
 
     initNodesLimit();
+
+    $scope.$watch("nodesFilter",function(newName, oldName) {
+            if ( newName === oldName ) {
+                return;
+            }
+            $log.debug('projectStatusCtrl: nodesFilter was changed');
+            for (var i=0; i < $scope.projectStatus.nodes_for_version.length ; i++)  {
+                $scope.nodesVisible[i] = 0;
+            }
+        }
+    );
 
     $scope.isVersionVisible = function(nodes) {
         if (!nodes) {
