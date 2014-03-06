@@ -91,7 +91,7 @@
     <div class="row">
         <div class="col-md-12">
             <accordion close-others="false">
-                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="isVersionVisible(filteredNodes[$index])">
+                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="versionItem.visibleNodes.length > 0">
                     <accordion-group is-open="versionIsOpen[$index]">
                         <accordion-heading>
                             <div class="row">
@@ -110,15 +110,14 @@
                                         </div>
                                         <i class="pull-right fa fa-exclamation" ng-show="versionItem.failing_nodes_count > 0" style="color: red;"></i>
                                         <small class="pull-right">
-                                            <span>{{filteredNodes[$index].length}}</span> nodes(<span>{{versionItem.nodes.length - filteredNodes[$index].length}}</span> hidden)
+                                            <span>{{versionItem.filteredNodes.length}}</span> nodes
                                         </small>
                                     </form>
                                 </div>
                             </div>
                         </accordion-heading>
                         <div infinite-scroll='loadMoreNodes($index)' infinite-scroll-distance='2' infinite-scroll-disabled="!versionIsOpen[$index]" style="max-height: 200px; overflow-y: scroll;">
-                            <div class="row" ng-repeat="node in (filteredNodes[$index] = versionItem.nodes)" ng-controller="nodeCtrl" ng-hide="isExcludedByFilter || isExcludedByLimit">
-                            <!--<div class="row" ng-repeat="node in ( filteredNodes[$index] = ( versionItem.nodes | limitTo:nodesLimit[$index] ))" ng-controller="nodeCtrl" ng-hide="isExcludedByFilter">-->
+                            <div class="row" ng-repeat="node in versionItem.visibleNodes">
                                 <div class="col-md-3">
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">
