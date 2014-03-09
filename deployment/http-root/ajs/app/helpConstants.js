@@ -38,7 +38,7 @@ angular.module('codeine')
             + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
         "commandScriptHelp" : "Type a shell script to execute on nodes.<br/><br/>"
             + "Parameters will be provided to the script as <strong>Environment Variables</strong>.<br/>"
-            + "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
+            + "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>, <strong>CODEINE_NODE_ALIAS</strong>",
         "monitorsConfigureHelp" : "Monitors used to detect malfunctions and errors on the running nodes.<br/><br/>"
             + "Codeine runs the monitors periodically on all nodes, and notifies when a node fails.",
         "versionHelp" : "A version will be reported by each node.",

@@ -112,6 +112,7 @@ public class CommandNodeServlet extends AbstractServlet
 			Map<String, String> env = getEnvParams(commandInfo);
 			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, commandInfo.project_name());
 			env.put(Constants.EXECUTION_ENV_NODE_NAME, commandInfo2.node_name());
+			env.put(Constants.EXECUTION_ENV_NODE_ALIAS, commandInfo2.node_alias());
 			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(10).function(function).env(env).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
 //		res.setStatus(result.success() ? HttpStatus.OK_200 : HttpStatus.INTERNAL_SERVER_ERROR_500);

@@ -97,6 +97,7 @@ public class Constants
 	public static final String EXECUTION_ENV_PROJECT_NAME = "CODEINE_PROJECT_NAME";
 	public static final String EXECUTION_ENV_OUTPUT_FILE = "CODEINE_OUTPUT_FILE";
 	public static final String EXECUTION_ENV_NODE_NAME = "CODEINE_NODE_NAME";
+	public static final String EXECUTION_ENV_NODE_ALIAS = "CODEINE_NODE_ALIAS";
 	public static final String ENV_CODEINE_WORKAREA = "CODEINE_WORKAREA";
 	public static final String ENV_CODEINE_HOST_WORKAREA = "CODEINE_HOST_WORKAREA";
 	
