@@ -18,8 +18,8 @@ import com.google.common.base.Stopwatch;
 
 public class PeerStatusChangedUpdater implements Runnable{
 
-	private long MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.MINUTES.toMillis(55);
-	private long MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(55);
+	private long MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(10);
+	private long MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(1);
 	
 	private static final Logger log = Logger.getLogger(PeerStatusChangedUpdater.class);
 	private PeerStatus peerStatus;
