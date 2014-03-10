@@ -6,6 +6,62 @@
 <div class="col-md-9">
     <div class="row">
         <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Command Info</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2"><strong>Name:</strong></div><div class="col-md-6"> {{commandStatus.command}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Start Time:</strong></div><div class="col-md-6"> {{commandStatus.start_time}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>User:</strong></div><div class="col-md-6"> {{commandStatus.user}}</div>
+                    </div>
+                    <br/>
+                    <div class="row" ng-show="commandStatus.params.length > 0">
+                        <div class="col-md-2"><strong>Parameters:</strong></div>
+                    </div>
+                    <div ng-repeat="param in commandStatus.params">
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-1"><strong>{{param.name}}:</strong></div><div class="col-md-5"> {{param.value}}</div>
+                        </div>
+                    </div>
+                    <br/>
+                    <accordion close-others="false">
+                    <accordion-group is-open="all_nodes_is_open">
+                        <accordion-heading>
+                            All Nodes <span class="badge">{{commandStatus.nodes_list.length}}</span>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': all_nodes_is_open, 'glyphicon-chevron-right': !all_nodes_is_open}"></i>
+                        </accordion-heading>
+                        <div ng-repeat="node in commandStatus.nodes_list" class="row">
+                            <div class="col-md-8">
+                                {{node.alias}}
+                            </div>
+                        </div>
+                    </accordion-group>
+                    </accordion>
+                    <accordion close-others="false">
+                    <accordion-group is-open="fail_nodes_is_open">
+                        <accordion-heading>
+                            Failed Nodes <span class="badge">{{commandStatus.fail_list.length}}</span>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': fail_nodes_is_open, 'glyphicon-chevron-right': !fail_nodes_is_open}"></i>
+                        </accordion-heading>
+                        <div ng-repeat="node in commandStatus.fail_list" class="row">
+                            <div class="col-md-8">
+                                {{node.alias}}
+                            </div>
+                        </div>
+                    </accordion-group>
+                    </accordion>
+                </div>
+            </div>
+            <h4>Command Log</h4>
             <pre>{{commandStatus.output}}</pre>
         </div>
     </div>
