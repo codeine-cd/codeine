@@ -1,6 +1,5 @@
 package codeine;
 
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -20,13 +19,12 @@ public class PeerStatusChangedUpdater implements Runnable{
 
 	private long MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(10);
 	private long MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(1);
+	private long INITIAL_SLEEP = TimeUnit.SECONDS.toMillis(10);
 	
 	private static final Logger log = Logger.getLogger(PeerStatusChangedUpdater.class);
 	private PeerStatus peerStatus;
 	private IStatusDatabaseConnector databaseConnector;
 	private BlockingQueue<Object> blockingQueue = new LinkedBlockingQueue<>();
-	private Random random = new Random();
-	private GlobalConfigurationJsonStore globalConfigurationJson;
 			
 	
 	@Inject
@@ -34,7 +32,6 @@ public class PeerStatusChangedUpdater implements Runnable{
 		super();
 		this.peerStatus = peerStatus;
 		this.databaseConnector = databaseConnector;
-		this.globalConfigurationJson = globalConfigurationJson;
 		if (!globalConfigurationJson.get().large_deployment()) {
 			MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(5);
 			MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(10);
@@ -49,11 +46,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 	@Override
 	public void run() {
 		log.info("start updating");
-		long initialSleep = TimeUnit.SECONDS.toMillis(31 + random.nextInt(30));
-		if (!globalConfigurationJson.get().large_deployment()) {
-			initialSleep = TimeUnit.SECONDS.toMillis(10);
-		}
-		ThreadUtils.sleep(initialSleep);
+		ThreadUtils.sleep(INITIAL_SLEEP);
 		while (true){
 			try {
 				pushUpdateNow();
