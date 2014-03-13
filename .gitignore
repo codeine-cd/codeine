@@ -2,4 +2,4 @@
 *.gz
 /junit_output
 /compiled_classes
-.idea/workspace.xml
+/.idea
