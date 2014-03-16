@@ -49,8 +49,10 @@ public class NodesRunner implements Task{
 	public synchronized void run() {
 		List<String> removedProjects = Lists.newArrayList(executers.keySet());
 		for (ProjectJson project : getProjects()) {
-			removedProjects.remove(project.name());
-			startExecutorsForProject(project);
+			boolean hasExecuters = startExecutorsForProject(project);
+			if (hasExecuters) {
+				removedProjects.remove(project.name());
+			}
 		}
 		for (String project : removedProjects) {
 			Map<String, PeriodicExecuter> map = executers.get(project);
@@ -60,7 +62,7 @@ public class NodesRunner implements Task{
 		}
 	}
 
-	private void startExecutorsForProject(ProjectJson project) {
+	private boolean startExecutorsForProject(ProjectJson project) {
 		Map<String, PeriodicExecuter> newProjectExecutors = Maps.newHashMap();
 		Map<String, PeriodicExecuter> oldProjectExecutors = executers.put(project.name(), newProjectExecutors);
 		if (null == oldProjectExecutors){
@@ -70,7 +72,7 @@ public class NodesRunner implements Task{
 			List<NodeInfo> nodes = getNodes(project);
 			if (nodes.isEmpty()) {
 				log.info("ignoring project " + project.name() + ". not configured to run on host " + hostname);
-				return;
+				return false;
 			}
 			for (NodeInfo nodeJson : nodes) {
 				// if (node.disabled())
@@ -91,6 +93,7 @@ public class NodesRunner implements Task{
 			log.info("stop monitoring node " + e.getKey() + " in project " + project.name());
 			e.getValue().stopWhenPossible();
 		}
+		return !newProjectExecutors.isEmpty();
 	}
 
 	private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
