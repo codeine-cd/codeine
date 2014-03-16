@@ -1,16 +1,8 @@
-angular.module('codeine').filter('nodesFilter', [ '$log', function($log) {
-    return function(nodes, query, monitor, tags) {
-        var startTime = new Date();
-        var res = [];
-        for (var i=0; i < nodes.length ; i++) {
-            if (showByName(query, nodes[i].node_alias) && showByMonitor(monitor, nodes[i].failed_monitors) && showByTags(tags,nodes[i].tags))
-                res.push(nodes[i]);
-        }
-        var endtime = new Date();
-        $log.debug("nodesFilter: took " + (endtime.getTime() - startTime.getTime()) + " ms");
-        return res;
+angular.module('codeine').filter('nodeFilter', function() {
+    return function(node, query, monitor, tags) {
+        return (showByName(query, node.node_alias) && showByMonitor(monitor, node.failed_monitors) && showByTags(tags,node.tags));
     };
-}]);
+});
 
 var showByName = function(query,node_name) {
     if (!query)

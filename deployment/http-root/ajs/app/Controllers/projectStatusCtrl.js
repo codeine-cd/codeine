@@ -1,4 +1,4 @@
-angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', function($scope, $log,$routeParams, projectConfiguration, projectStatus ) {
+angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', '$filter', function($scope, $log,$routeParams, projectConfiguration, projectStatus, $filter) {
     $scope.projectName = $routeParams.project_name;
     $scope.projectConfiguration= projectConfiguration;
     $scope.projectStatus = projectStatus;
@@ -7,6 +7,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $scope.filteredNodes = [];
     $scope.versionIsOpen = [];
     $scope.allNodesCount = 0;
+    $scope.nodesFilter = '';
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
@@ -30,35 +31,46 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         }
     }
 
+    $scope.$watch("selectedMonitor",function( newName, oldName ) {
+            if ( newName === oldName ) {
+                return;
+            }
+            $log.debug('projectStatusCtrl: selectedMonitor was changed')
+            $scope.refreshFilters();
+        }
+    );
+
     $scope.$watch("nodesFilter",function( newName, oldName ) {
             if ( newName === oldName ) {
                 return;
             }
             $log.debug('projectStatusCtrl: nodesFilter was changed')
-            for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
-                $scope.projectStatus.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatus.nodes_for_version[i].filteredNodes.length);
-                $scope.projectStatus.nodes_for_version[i].visibleNodes.splice(0,$scope.projectStatus.nodes_for_version[i].visibleNodes.length);
-                for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].nodes.length; j++) {
-                    $scope.projectStatus.nodes_for_version[i].nodes[j].visible = false;
-                    if (isNodeFiltered($scope.projectStatus.nodes_for_version[i].nodes[j])) {
-                        $scope.projectStatus.nodes_for_version[i].filteredNodes.push($scope.projectStatus.nodes_for_version[i].nodes[j]);
-                    }
-                }
-                if ($scope.projectStatus.nodes_for_version[i].filteredNodes.length > 0) {
-                    for (var k=0; k < 10 && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
-                        moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[k]);
-                    }
-                }
-            }
+            $scope.refreshFilters();
         }
     );
 
-    // Returns true if the node should be in the filtered array (Displayed)
-    var isNodeFiltered = function(node) {
-        return ((!$scope.nodesFilter) || (node.node_name.indexOf($scope.nodesFilter) !== -1));
+    $scope.refreshFilters = function() {
+        for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+            $scope.projectStatus.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatus.nodes_for_version[i].filteredNodes.length);
+            $scope.projectStatus.nodes_for_version[i].visibleNodes.splice(0,$scope.projectStatus.nodes_for_version[i].visibleNodes.length);
+            for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].nodes.length; j++) {
+                $scope.projectStatus.nodes_for_version[i].nodes[j].visible = false;
+                if (isNodeFiltered($scope.projectStatus.nodes_for_version[i].nodes[j])) {
+                    $scope.projectStatus.nodes_for_version[i].filteredNodes.push($scope.projectStatus.nodes_for_version[i].nodes[j]);
+                }
+            }
+            if ($scope.projectStatus.nodes_for_version[i].filteredNodes.length > 0) {
+                for (var k=0; k < 10 && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
+                    moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[k]);
+                }
+            }
+        }
     };
 
-
+    // Returns true if the node should be in the filtered array (Displayed)
+    var isNodeFiltered = function(node) {
+        return $filter('nodeFilter')(node,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
+    };
 
     $scope.loadMoreNodes = function(index) {
         var j = 0;

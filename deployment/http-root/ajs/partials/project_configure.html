@@ -88,7 +88,7 @@
             <div name="versionInfoForm" class="form-horizontal">
                 <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.version_detection_script.$invalid}">
                     <label for="version_detection_script" class="col-md-4 control-label">Script <help help-id="versionScriptHelp"></help></label>
-                    <div class="col-md-4">
+                    <div class="col-md-7">
                         <textarea ng-model="projectConfigurationForEditing.version_detection_script" class="form-control" name="version_detection_script" id="version_detection_script"></textarea>
                     </div>
                 </div>
@@ -109,12 +109,12 @@
                         Monitor: {{monitor_info.name}}
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_is_open, 'glyphicon-chevron-right': !monitor_is_open}">
                         </i>
-                        <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
-                        <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
-                        <button title="Remove Monitor" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
+                        <div class="btn-group btn-group-xs pull-right">
+                            <button title="Move up" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                            <button title="Move down" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                            <button title="Remove Monitor" class="btn btn-default"><i class="fa fa-times"></i></button>
+                        </div>
                     </accordion-heading>
-
-
                     <div name="monitorInfoForm" class="form-horizontal">
 
                             <div class="form-group">
@@ -213,12 +213,16 @@
             <accordion close-others="false">
                 <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_is_open">
                     <accordion-heading>
-                        Command: {{command_info.name}}
-                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_is_open, 'glyphicon-chevron-right': !command_is_open}">
-                        </i>
-                        <button title="Move up" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
-                        <button title="Move down" class="btn btn-mini btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
-                        <button title="Remove Command" class="btn btn-mini btn-default pull-right"><i class="fa fa-times"></i></button>
+                        <div>
+                            Command: {{command_info.name}}
+                            <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_is_open, 'glyphicon-chevron-right': !command_is_open}">
+                            </i>
+                            <div class="btn-group btn-group-xs pull-right">
+                                <button title="Move up" class="btn btn-default pull-right"><i class="fa fa-arrow-up"></i></button>
+                                <button title="Move down" class="btn btn-default pull-right"><i class="fa fa-arrow-down"></i></button>
+                                <button title="Remove Command" class="btn btn-default pull-right"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
                     </accordion-heading>
 
 
