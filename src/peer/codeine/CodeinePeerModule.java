@@ -16,6 +16,7 @@ public class CodeinePeerModule extends AbstractModule {
 		bind(IConfigurationManager.class).to(ConfigurationManagerPeer.class).in(Scopes.SINGLETON);
 		bind(PeerStatus.class).in(Scopes.SINGLETON);
 		bind(NodesRunner.class).in(Scopes.SINGLETON);
+		bind(ConfigurationGetter.class).in(Scopes.SINGLETON);
 		bind(PeerStatusChangedUpdater.class).in(Scopes.SINGLETON);
 		bind(NodesManager.class).to(NodesManagerPeer.class).in(Scopes.SINGLETON);
 		bind(SnoozeKeeper.class).in(Scopes.SINGLETON);

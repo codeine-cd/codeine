@@ -11,7 +11,6 @@ import codeine.db.mysql.MysqlHostSelector;
 import codeine.executer.PeriodicExecuter;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.model.Constants;
-import codeine.nodes.NodesRunner;
 import codeine.servlets.CodeinePeerServletModule;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
@@ -47,16 +46,11 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 		TextFileUtils.setContents(pathHelper.getPortFile(), String.valueOf(port));
 		log.info("Hostname " + hostname);
 		injector().getInstance(SnoozeKeeper.class).snoozeAll();
-		startNodeMonitoringThreads();
-		new PeriodicExecuter(ConfigurationGetter.INTERVAL, injector().getInstance(NodesRunner.class)).runInThread();
+		new PeriodicExecuter(ConfigurationGetter.INTERVAL, injector().getInstance(ConfigurationGetter.class)).runInThread();
 		log.info("starting PeerStatusChangedUpdater");
 		ThreadUtils.createThread(injector().getInstance(PeerStatusChangedUpdater.class)).start();
 	}
 
-	private void startNodeMonitoringThreads() {
-		new PeriodicExecuter(NodesRunner.NODE_RUNNER_INTERVAL, injector().getInstance(NodesRunner.class)).runInThread();
-	}
-	
 	private void startMysqlSelectorThread() {
 		new PeriodicExecuter(MysqlHostSelector.INTERVAL, injector().getInstance(MysqlHostSelector.class)).runInThread();
 	}

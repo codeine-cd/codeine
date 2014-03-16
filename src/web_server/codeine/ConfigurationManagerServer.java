@@ -59,15 +59,20 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		newList.putAll(projects());
 		newList.put(updatedProject.name(), updatedProject);
 		projects(newList);
-		updateDb();
+		updateProjectInDb(updatedProject);
+		projectsUpdater.updateAllPeers();
 	}
 	
 	public synchronized void updateDb() {
 		for (ProjectJson project : projects().values()) {
 			//TODO update in all mysql instances
-			projectsConfigurationConnector.updateProject(project);
+			updateProjectInDb(project);
 		}
 		projectsUpdater.updateAllPeers();
+	}
+
+	private void updateProjectInDb(ProjectJson project) {
+		projectsConfigurationConnector.updateProject(project);
 	}
 
 	public void createNewProject(ProjectJson project) {

@@ -10,7 +10,7 @@ import codeine.nodes.NodesRunner;
 
 public class ConfigurationGetter implements Task {
 
-	public static final long INTERVAL = TimeUnit.MINUTES.toMillis(55);
+	public static final long INTERVAL = TimeUnit.MINUTES.toMillis(25);
 	@Inject
 	private IConfigurationManager configurationManager;
 	@Inject
