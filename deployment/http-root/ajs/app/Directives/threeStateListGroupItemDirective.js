@@ -20,6 +20,7 @@ angular.module('codeine').directive('threeStateListGroupItem', [ '$animate', fun
                 if (scope.state == 2) {
                     $animate.addClass(element,'list-group-item-danger');
                 }
+                scope.$digest();
                 scope.onChange();
             };
             element.addClass('list-group-item');
