@@ -161,6 +161,7 @@ function setNewProjectCommands(newProjectConf) {
 		command["stop_on_error"] = $(this).find('[id^="command_stop_on_error_index_"]').is(':checked');
 		
 		setJsonDataInput($(this), "credentials", command);
+        setJsonDataInput($(this), "command_strategy", command);
 		setJsonDataInput($(this), "duration", command);
 		setJsonDataInput($(this), "concurrency", command);
 		setJsonDataInput($(this), "error_percent_val", command);

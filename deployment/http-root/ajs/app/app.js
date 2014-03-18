@@ -1,4 +1,4 @@
-angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','labs.infiniteScroll'])
+angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
@@ -31,7 +31,23 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 }).
                 when('/codeine/project/:project_name/command/:command_name/setup', {
                     templateUrl: '/ajs/partials/command_setup.html',
-                    controller: 'commandSetupCtrl'
+                    controller: 'commandSetupCtrl',
+                    resolve : {
+                        command : function($q,$log,CodeineService,$route) {
+                            $log.debug("resolving command");
+                            var deferred = $q.defer();
+                            CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
+                                $log.debug("Resolved command: " + angular.toJson(data));
+                                for (var i=0; i < data.commands.length; i++) {
+                                    if (data.commands[i].name === $route.current.params.command_name) {
+                                        deferred.resolve(data.commands[i]);
+                                    }
+                                }
+                                deferred.reject('No such command in project ' + $route.current.params.command_name);
+                            });
+                            return deferred.promise;
+                        }
+                    }
                 }).
                 when('/codeine/manage-codeine', {
                     templateUrl: '/ajs/partials/manage_codeine.html',

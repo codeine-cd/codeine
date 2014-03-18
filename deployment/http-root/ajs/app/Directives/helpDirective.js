@@ -2,11 +2,20 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
     return {
         restrict: 'E',
         transclude: false,
+        scope : {
+            helpId : '@',
+            helpTxt: '='
+        },
         template: '<i class="fa fa-question-circle codeine_help"></i>',
-        link: function ($scope, element, attrs) {
-            var text = HelpConstants[attrs.helpId] ? HelpConstants[attrs.helpId] : "No help yet for id '" + attrs.helpId +
-            "' <a href='mailto:ohad.shai@intel.com?Subject=Please%20provide%20help%20for%20" + attrs.helpId
-            + "' target='_top'>Suggest a message</a>";
+        link: function ($scope, element) {
+            var text = '';
+            if ($scope.helpTxt) {
+                text = $scope.helpTxt;
+            } else {
+                text = HelpConstants[$scope.helpId] ? HelpConstants[$scope.helpId] : "No help yet for id '" + $scope.helpId +
+                "' <a href='mailto:ohad.shai@intel.com?Subject=Please%20provide%20help%20for%20" + $scope.helpId
+                + "' target='_top'>Suggest a message</a>";
+            }
             element.popover(
                 {
                     content : '<span class="codeine_help_content">' + text + '</span>',

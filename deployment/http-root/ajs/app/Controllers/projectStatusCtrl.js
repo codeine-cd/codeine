@@ -1,4 +1,4 @@
-angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', '$filter','$location', function($scope, $log,$routeParams, projectConfiguration, projectStatus, $filter, $location) {
+angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', '$filter','$location','SelectedNodesService', function($scope, $log,$routeParams, projectConfiguration, projectStatus, $filter, $location, SelectedNodesService) {
     $scope.projectName = $routeParams.project_name;
     $scope.projectConfiguration= projectConfiguration;
     $scope.projectStatus = projectStatus;
@@ -91,7 +91,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
 
     $scope.runCommand = function(command) {
         $log.debug('projectStatusCtrl: will run command ' + command);
-        $location.path('/codeine/project/' + $scope.projectName + '/command/' + command + '/setup'); //?nodes=' + encodeURIComponent($scope.getAllSelectedNodes().join(',')));
+        var url = '/codeine/project/' + $scope.projectName + '/command/' + command + '/setup';
+        SelectedNodesService.setSelectedNodes($scope.getAllSelectedNodes(),url);
+        $location.path(url);
     };
 
     $scope.checkboxClick = function(versionItem, event) {
@@ -116,8 +118,8 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         var res = [];
         for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
             for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
-                if (!projectStatus.nodes_for_version[i].nodes[j].checked) {
-                    res.push(projectStatus.nodes_for_version[i].nodes[j].node_name);
+                if (projectStatus.nodes_for_version[i].nodes[j].checked) {
+                    res.push(projectStatus.nodes_for_version[i].nodes[j]);
                 }
             }
         }
