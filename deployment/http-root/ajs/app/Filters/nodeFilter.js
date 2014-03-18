@@ -22,20 +22,15 @@ var showByMonitor = function(selectedMonitor,monitors) {
 
 var showByTags = function(tags,nodeTags) {
     for (var i=0; i < tags.length ; i++) {
-        if (tags[i].state === undefined) {
+        if (!tags[i].state) {
             continue;
         }
         if (tags[i].state === 1) {
-            if (nodeTags.indexOf(tags[i].name) === -1) {
-                continue;
-            }
-            else {
+            if (nodeTags.indexOf(tags[i].name) === -1)
                 return false;
-            }
-        } else if (tags[i].state === 2){
-            if (nodeTags.indexOf(tags[i].name) !== -1) {
+        } else {
+            if (nodeTags.indexOf(tags[i].name) !== -1)
                 return false;
-            }
         }
     }
     return true;

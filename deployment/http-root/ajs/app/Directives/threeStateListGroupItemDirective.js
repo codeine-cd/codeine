@@ -7,7 +7,7 @@ angular.module('codeine').directive('threeStateListGroupItem', [ '$animate', fun
         },
         link: function (scope, element) {
             scope.click = function() {
-                if (scope.state === undefined) {
+                if (!scope.state) {
                     scope.state = 0;
                 }
                 scope.state++;
