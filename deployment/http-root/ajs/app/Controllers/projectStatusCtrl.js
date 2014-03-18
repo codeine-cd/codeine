@@ -1,4 +1,4 @@
-angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', '$filter', function($scope, $log,$routeParams, projectConfiguration, projectStatus, $filter) {
+angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', '$filter','$location', function($scope, $log,$routeParams, projectConfiguration, projectStatus, $filter, $location) {
     $scope.projectName = $routeParams.project_name;
     $scope.projectConfiguration= projectConfiguration;
     $scope.projectStatus = projectStatus;
@@ -89,6 +89,11 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         $scope.selectedMonitor = monitor;
     };
 
+    $scope.runCommand = function(command) {
+        $log.debug('projectStatusCtrl: will run command ' + command);
+        $location.path('/codeine/project/' + $scope.projectName + '/command/' + command + '/setup'); //?nodes=' + encodeURIComponent($scope.getAllSelectedNodes().join(',')));
+    };
+
     $scope.checkboxClick = function(versionItem, event) {
         event.stopPropagation();
         angular.forEach(versionItem.nodes, function(item) {
@@ -96,11 +101,35 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         });
     };
 
+    $scope.isAnyNodeChecked = function() {
+        for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
+            for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
+                if (projectStatus.nodes_for_version[i].nodes[j].checked) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    $scope.getAllSelectedNodes = function() {
+        var res = [];
+        for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
+            for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
+                if (!projectStatus.nodes_for_version[i].nodes[j].checked) {
+                    res.push(projectStatus.nodes_for_version[i].nodes[j].node_name);
+                }
+            }
+        }
+        return res;
+    }
+
     $scope.isAllNodesChecked = function() {
         for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
             for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
-                if (!projectStatus.nodes_for_version[i].nodes[j].checked)
+                if (!projectStatus.nodes_for_version[i].nodes[j].checked) {
                     return false;
+                }
             }
         }
         return true;

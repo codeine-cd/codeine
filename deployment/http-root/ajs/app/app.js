@@ -29,6 +29,10 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         }
                     }
                 }).
+                when('/codeine/project/:project_name/command/:command_name/setup', {
+                    templateUrl: '/ajs/partials/command_setup.html',
+                    controller: 'commandSetupCtrl'
+                }).
                 when('/codeine/manage-codeine', {
                     templateUrl: '/ajs/partials/manage_codeine.html',
                     controller: 'manageCodeineCtrl',
