@@ -17,6 +17,7 @@ import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.utils.ExceptionUtils;
+import codeine.utils.StringUtils;
 
 import com.google.inject.Inject;
 
@@ -39,18 +40,27 @@ public class NodesCommandApiServlet extends AbstractServlet {
 	}
 	
 	private String getProjectName(HttpServletRequest request) {
-		if (request.getMethod().equals("DELETE")) {
-			return request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		if (!StringUtils.isEmpty(projectName)) {
+			return projectName;
 		}
-		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		String data = getData(request);
 		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
 		return commandData.command_info().project_name(); 
+	}
+
+	private String getData(HttpServletRequest request) {
+		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		if (StringUtils.isEmpty(data)) {
+			data = readBody(request);
+		}
+		return data;
 	}
 	
 	@Override
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("NodesCommandServlet request");
-		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		String data = getData(request);
 		boolean redirect = Boolean.valueOf(request.getParameter(Constants.UrlParameters.REDIRECT));
 		try {
 			ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);

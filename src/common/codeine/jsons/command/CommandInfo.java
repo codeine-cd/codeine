@@ -101,5 +101,9 @@ public class CommandInfo
 		return ratio;
 	}
 
+	public void project_name(String projectName) {
+		this.project_name = projectName;
+	}
+
 	
 }

@@ -22,7 +22,7 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
             return $http.post("/projects_json", project,  { cache: false });
         },
         getProjectConfiguration: function(project) {
-            return $http.get("/project-configuration_json", {params: { project: project }},  { cache: false });
+            return $http.get("/project-configuration_json", { params: { project: project } , cache: false });
         },
         prepareForShutdown: function() {
         	return $http.get("/prepare-for-shutdown", { cache: false });
@@ -49,22 +49,25 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
             return $http.post('/register',{username : user, password:  password });
         },
         getNodeStatus : function(project, node) {
-            return $http.get("/node-status_json", {params: { project: project, node: node }},  { cache: false });
+            return $http.get("/node-status_json", {params: { project: project, node: node }, cache: false });
         },
         getMonitorStatus : function(project, node, monitor) {
-            return $http.get("/monitor-status_json", {params: { project: project, node: node, monitor: monitor }},  { cache: false });
+            return $http.get("/monitor-status_json", {params: { project: project, node: node, monitor: monitor }, cache: false });
         },
         getCommandStatus : function(project, command_id) {
-            return $http.get("/command-status_json", {params: { project: project, command: command_id }},  { cache: false });
+            return $http.get("/command-status_json", {params: { project: project, command: command_id } ,cache: false });
         },
         getProjectStatus : function(project) {
-            return $http.get("/project-status2_json", {params: { project: project }},  { cache: false });
+            return $http.get("/project-status2_json", {params: { project: project } ,cache: false });
         },
         getProjectCommandHistory: function(project) {
-            return $http.get("/commands-log_json", {params: { project: project }},  { cache: false });
+            return $http.get("/commands-log_json", {params: { project: project } ,cache: false });
         },
         getRunningCommands: function() {
             return $http.get("/commands-status_json", { cache: false });
+        },
+        runCommand : function(command,nodes) {
+            return $http.post('/command-nodes_json', { nodes : nodes, command_info : command },{params: { project: command.project_name, redirect :false }});
         }
     };
     return Api;

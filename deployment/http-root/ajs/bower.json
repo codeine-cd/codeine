@@ -15,13 +15,17 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "~1.2.11",
-    "angular-route": "~1.2.11",
+    "angular": "1.2.14",
+    "angular-animate": "1.2.14",
+    "angular-route": "1.2.14",
     "angular-ui-utils": "0.1.1",
     "angular-ui-select2": "~0.0.5",
     "angular-ui-bootstrap-bower": "~0.10.0",
     "bootstrap": "~3.1.0",
     "components-font-awesome": "~4.0.3",
     "ngstorage": "~0.3.0"
+  },
+  "resolutions": {
+    "angular": "1.2.14"
   }
 }

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
@@ -80,6 +81,9 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 		List<ProjectJson> configuredProjects = getConfiguredProjects();
 		for (ProjectJson projectJson : configuredProjects) {
 			if (projectName.equals(projectJson.name())){
+				for (CommandInfo c : projectJson.commands()) {
+					c.project_name(projectName);
+				} 
 				return projectJson;
 			}
 		}
