@@ -89,6 +89,7 @@ public class NodesCommandApiServlet extends AbstractServlet {
 	
 	private void overrideCommandInfoByConfiguration(CommandInfo command_info, CommandInfo configuredCommand) {
 		command_info.credentials(configuredCommand.credentials());
+		command_info.script_content(configuredCommand.script_content());
 	}
 
 	@Override

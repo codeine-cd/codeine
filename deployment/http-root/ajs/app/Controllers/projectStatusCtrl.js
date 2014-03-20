@@ -12,6 +12,37 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
 
+    $scope.initFromQueryString = function(queryStringObject) {
+        if (angular.isDefined(queryStringObject.monitorFilter)) {
+            $log.debug('projectStatusCtrl: Monitor filter init from query string - ' + queryStringObject.monitorFilter);
+            $scope.selectedMonitor = queryStringObject.monitorFilter;
+        }
+        if (angular.isDefined(queryStringObject.tagsOn)) {
+            $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
+            var array = queryStringObject.tagsOn.split(',');
+            for (var i=0; i < array.length; i++) {
+                for (var j=0; i < $scope.projectStatus.tag_info.length ; j++) {
+                    if ($scope.projectStatus.tag_info[j].name === array[i]) {
+                        $scope.projectStatus.tag_info[j].state = 1;
+                    }
+                }
+            }
+        }
+        if (angular.isDefined(queryStringObject.tagsOff)) {
+            $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
+            var array = queryStringObject.tagsOff.split(',');
+            for (var i=0; i < array.length; i++) {
+                for (var j=0; i < $scope.projectStatus.tag_info.length ; j++) {
+                    if ($scope.projectStatus.tag_info[j].name === array[i]) {
+                        $scope.projectStatus.tag_info[j].state = 2;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.initFromQueryString($location.search());
+
     var moveNodeToVisible = function(versionItem,node) {
         node.visible = true;
         if (!versionItem.visibleNodes) {
@@ -36,6 +67,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
                 return;
             }
             $log.debug('projectStatusCtrl: selectedMonitor was changed')
+            $location.search('monitorFilter',newName);
             $scope.refreshFilters();
         }
     );
@@ -48,6 +80,21 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             $scope.refreshFilters();
         }
     );
+
+    $scope.updateTags = function() {
+        $log.debug('projectStatusCtrl: tags were changed')
+        for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
+            var on = [], off = [];
+            if ($scope.projectStatus.tag_info[i].state === 0) {
+                on.push($scope.projectStatus.tag_info[i].name);
+            } else if ($scope.projectStatus.tag_info[i].state === 0) {
+                off.push($scope.projectStatus.tag_info[i].name);
+            }
+        }
+        $location.search('tagsOn',on);
+        $location.search('tagsOff',off);
+        $scope.refreshFilters();
+    };
 
     $scope.refreshFilters = function() {
         for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {

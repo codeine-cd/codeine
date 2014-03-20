@@ -100,6 +100,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/status', {
                     templateUrl: '/ajs/partials/project_status.html',
                     controller: 'projectStatusCtrl',
+                    reloadOnSearch: false,
                     resolve: {
                         projectConfiguration : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
