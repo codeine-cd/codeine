@@ -46,10 +46,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         return shouldRefresh;
     };
 
-    if ($scope.initFromQueryString($location.search())) {
-        $scope.refreshFilters();
-    }
-
     var moveNodeToVisible = function(versionItem,node) {
         node.visible = true;
         if (!versionItem.visibleNodes) {
@@ -122,6 +118,10 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             }
         }
     };
+
+    if ($scope.initFromQueryString($location.search())) {
+        $scope.refreshFilters();
+    }
 
     // Returns true if the node should be in the filtered array (Displayed)
     var isNodeFiltered = function(node) {
