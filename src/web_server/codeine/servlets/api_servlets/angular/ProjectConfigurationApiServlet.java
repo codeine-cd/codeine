@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import codeine.configuration.IConfigurationManager;
+import codeine.ConfigurationManagerServer;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
 
@@ -18,7 +19,7 @@ public class ProjectConfigurationApiServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject private IConfigurationManager configurationManager;
+	@Inject private ConfigurationManagerServer configurationManager;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -30,12 +31,14 @@ public class ProjectConfigurationApiServlet extends AbstractServlet {
 		writeResponseJson(response, configurationManager.getProjectForName(request.getParameter(Constants.UrlParameters.PROJECT_NAME)));
 	}
 	
-//	@Override
-//	protected void myPut(HttpServletRequest req, HttpServletResponse resp) {
-//		GlobalConfigurationJson config = readBodyJson(req, GlobalConfigurationJson.class);
-//		log.info("Will update codeine configuration. New Config is: " + config);
-//		configurationJsonStore.store(config);
-//		writeResponseJson(resp, configurationJsonStore.get());
-//	}
+	
+	
+	@Override
+	protected void myPut(HttpServletRequest request, HttpServletResponse resp) {
+		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
+		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
+		configurationManager.updateProject(projectJson);
+		writeResponseJson(resp,projectJson);
+	}
 
 }

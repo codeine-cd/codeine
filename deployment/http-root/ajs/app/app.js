@@ -148,7 +148,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         }
                     }
                 }).
-                when('/codeine/project/:project_name/command/:command_id/status', {
+                when('/codeine/project/:project_name/command/:command_name/:command_id/status', {
                     templateUrl: '/ajs/partials/command_status.html',
                     controller: 'commandStatusCtrl',
                     resolve: {
@@ -210,6 +210,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
             $log.debug('$routeChangeStart');
             $rootScope.app.contentLoading = true;
         });
+
         $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
             $log.debug('$routeChangeSuccess');
             $rootScope.app.contentLoading = false;
