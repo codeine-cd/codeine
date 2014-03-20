@@ -92,10 +92,12 @@
             </div>
         </div>
         <div ng-show="!app.contentLoading" ng-cloak>
-            <div class="row">
+            <div class="row" ng-controller="breadCrumbCtrl">
                 <div class="col-md-12">
                     <ol class="breadcrumb">
-                        <li><a href='/'>Codeine</a> <span class='divider'>/</span></li>
+                        <li><a href='/'>Codeine</a></li>
+                        <li ng-repeat="item in items"><a href="{{item.url}}">{{item.name}}</a></li>
+                        <li>{{lastItem}}</li>
                     </ol>
                 </div>
             </div>
@@ -135,6 +137,7 @@
 <script src="/ajs/app/Controllers/manageCodeineCtrl.js"></script>
 <script src="/ajs/app/Controllers/projectStatusCtrl.js"></script>
 <script src="/ajs/app/Controllers/nodeStatusCtrl.js"></script>
+<script src="/ajs/app/Controllers/breadCrumbCtrl.js"></script>
 <script src="/ajs/app/Controllers/monitorStatusCtrl.js"></script>
 <script src="/ajs/app/Controllers/commandStatusCtrl.js"></script>
 <script src="/ajs/app/Controllers/projectConfigureCtrl.js"></script>

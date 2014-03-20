@@ -13,15 +13,18 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
 
     $scope.initFromQueryString = function(queryStringObject) {
+        var shouldRefresh = false;
         if (angular.isDefined(queryStringObject.monitorFilter)) {
+            shouldRefresh = true;
             $log.debug('projectStatusCtrl: Monitor filter init from query string - ' + queryStringObject.monitorFilter);
             $scope.selectedMonitor = queryStringObject.monitorFilter;
         }
         if (angular.isDefined(queryStringObject.tagsOn)) {
+            shouldRefresh = true;
             $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
             var array = queryStringObject.tagsOn.split(',');
             for (var i=0; i < array.length; i++) {
-                for (var j=0; i < $scope.projectStatus.tag_info.length ; j++) {
+                for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
                     if ($scope.projectStatus.tag_info[j].name === array[i]) {
                         $scope.projectStatus.tag_info[j].state = 1;
                     }
@@ -29,19 +32,24 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             }
         }
         if (angular.isDefined(queryStringObject.tagsOff)) {
+            shouldRefresh = true;
             $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
             var array = queryStringObject.tagsOff.split(',');
             for (var i=0; i < array.length; i++) {
-                for (var j=0; i < $scope.projectStatus.tag_info.length ; j++) {
+                for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
                     if ($scope.projectStatus.tag_info[j].name === array[i]) {
                         $scope.projectStatus.tag_info[j].state = 2;
                     }
                 }
             }
         }
+        return shouldRefresh;
     };
 
-    $scope.initFromQueryString($location.search());
+    // Returns true if the node should be in the filtered array (Displayed)
+    var isNodeFiltered = function(node) {
+        return $filter('nodeFilter')(node,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
+    };
 
     var moveNodeToVisible = function(versionItem,node) {
         node.visible = true;
@@ -76,23 +84,25 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             if ( newName === oldName ) {
                 return;
             }
-            $log.debug('projectStatusCtrl: nodesFilter was changed')
+            $log.debug('projectStatusCtrl: nodesFilter was changed');
             $scope.refreshFilters();
         }
     );
 
     $scope.updateTags = function() {
-        $log.debug('projectStatusCtrl: tags were changed')
+        $log.debug('projectStatusCtrl: tags were changed');
+        var on = [], off = [];
         for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
-            var on = [], off = [];
-            if ($scope.projectStatus.tag_info[i].state === 0) {
+            if ($scope.projectStatus.tag_info[i].state === 1) {
                 on.push($scope.projectStatus.tag_info[i].name);
-            } else if ($scope.projectStatus.tag_info[i].state === 0) {
+            } else if ($scope.projectStatus.tag_info[i].state === 2) {
                 off.push($scope.projectStatus.tag_info[i].name);
             }
         }
-        $location.search('tagsOn',on);
-        $location.search('tagsOff',off);
+        $scope.$apply(function() {
+            $location.search('tagsOn',on.join(','));
+            $location.search('tagsOff',off.join(','));
+        });
         $scope.refreshFilters();
     };
 
@@ -114,10 +124,11 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         }
     };
 
-    // Returns true if the node should be in the filtered array (Displayed)
-    var isNodeFiltered = function(node) {
-        return $filter('nodeFilter')(node,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
-    };
+    if ($scope.initFromQueryString($location.search())) {
+        $scope.refreshFilters();
+    }
+
+
 
     $scope.loadMoreNodes = function(index) {
         var j = 0;
