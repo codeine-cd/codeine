@@ -24,7 +24,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
             var array = queryStringObject.tagsOn.split(',');
             for (var i=0; i < array.length; i++) {
-                for (var j=0; i < $scope.projectStatus.tag_info.length ; j++) {
+                for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
                     if ($scope.projectStatus.tag_info[j].name === array[i]) {
                         $scope.projectStatus.tag_info[j].state = 1;
                     }
@@ -36,7 +36,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
             var array = queryStringObject.tagsOff.split(',');
             for (var i=0; i < array.length; i++) {
-                for (var j=0; i < $scope.projectStatus.tag_info.length ; j++) {
+                for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
                     if ($scope.projectStatus.tag_info[j].name === array[i]) {
                         $scope.projectStatus.tag_info[j].state = 2;
                     }
