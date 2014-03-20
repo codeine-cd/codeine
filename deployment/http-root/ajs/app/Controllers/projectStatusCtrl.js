@@ -99,8 +99,8 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             }
         }
         $scope.$apply(function() {
-            $location.search('tagsOn',on);
-            $location.search('tagsOff',off);
+            $location.search('tagsOn',on.join(','));
+            $location.search('tagsOff',off.join(','));
         });
         $scope.refreshFilters();
     };
