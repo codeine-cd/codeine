@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
+import codeine.SnoozeKeeper;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredentialsHelper;
@@ -38,6 +39,7 @@ public class CommandNodeServlet extends AbstractServlet
 	@Inject private PathHelper pathHelper;
 	@Inject private IConfigurationManager configurationManager;
 	@Inject private ExperimentalConfJsonStore experimentalConfJsonStore;
+	@Inject private SnoozeKeeper snoozeKeeper;
 	
 	@Override
 	public void myPost(HttpServletRequest request, HttpServletResponse res)	{
@@ -59,6 +61,7 @@ public class CommandNodeServlet extends AbstractServlet
 		executeInternal(request, res);
 	}
 	private void executeInternal(HttpServletRequest request, HttpServletResponse res) {
+		snoozeKeeper.snoozeAll();
 		final PrintWriter writer = getWriter(res);
 		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
 		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
