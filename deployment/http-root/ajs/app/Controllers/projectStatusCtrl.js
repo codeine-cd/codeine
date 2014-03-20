@@ -76,18 +76,18 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             if ( newName === oldName ) {
                 return;
             }
-            $log.debug('projectStatusCtrl: nodesFilter was changed')
+            $log.debug('projectStatusCtrl: nodesFilter was changed');
             $scope.refreshFilters();
         }
     );
 
     $scope.updateTags = function() {
-        $log.debug('projectStatusCtrl: tags were changed')
+        $log.debug('projectStatusCtrl: tags were changed');
+        var on = [], off = [];
         for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
-            var on = [], off = [];
-            if ($scope.projectStatus.tag_info[i].state === 0) {
+            if ($scope.projectStatus.tag_info[i].state === 1) {
                 on.push($scope.projectStatus.tag_info[i].name);
-            } else if ($scope.projectStatus.tag_info[i].state === 0) {
+            } else if ($scope.projectStatus.tag_info[i].state === 2) {
                 off.push($scope.projectStatus.tag_info[i].name);
             }
         }
