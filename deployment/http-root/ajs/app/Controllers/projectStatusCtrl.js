@@ -46,6 +46,11 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         return shouldRefresh;
     };
 
+    // Returns true if the node should be in the filtered array (Displayed)
+    var isNodeFiltered = function(node) {
+        return $filter('nodeFilter')(node,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
+    };
+
     var moveNodeToVisible = function(versionItem,node) {
         node.visible = true;
         if (!versionItem.visibleNodes) {
@@ -123,10 +128,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
         $scope.refreshFilters();
     }
 
-    // Returns true if the node should be in the filtered array (Displayed)
-    var isNodeFiltered = function(node) {
-        return $filter('nodeFilter')(node,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
-    };
+
 
     $scope.loadMoreNodes = function(index) {
         var j = 0;
