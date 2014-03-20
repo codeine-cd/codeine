@@ -13,11 +13,14 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
 
     $scope.initFromQueryString = function(queryStringObject) {
+        var shouldRefresh = false;
         if (angular.isDefined(queryStringObject.monitorFilter)) {
+            shouldRefresh = true;
             $log.debug('projectStatusCtrl: Monitor filter init from query string - ' + queryStringObject.monitorFilter);
             $scope.selectedMonitor = queryStringObject.monitorFilter;
         }
         if (angular.isDefined(queryStringObject.tagsOn)) {
+            shouldRefresh = true;
             $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
             var array = queryStringObject.tagsOn.split(',');
             for (var i=0; i < array.length; i++) {
@@ -29,6 +32,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
             }
         }
         if (angular.isDefined(queryStringObject.tagsOff)) {
+            shouldRefresh = true;
             $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
             var array = queryStringObject.tagsOff.split(',');
             for (var i=0; i < array.length; i++) {
@@ -39,9 +43,12 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
                 }
             }
         }
+        return shouldRefresh;
     };
 
-    $scope.initFromQueryString($location.search());
+    if ($scope.initFromQueryString($location.search())) {
+        $scope.refreshFilters();
+    }
 
     var moveNodeToVisible = function(versionItem,node) {
         node.visible = true;
@@ -91,8 +98,10 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
                 off.push($scope.projectStatus.tag_info[i].name);
             }
         }
-        $location.search('tagsOn',on);
-        $location.search('tagsOff',off);
+        $scope.$apply(function() {
+            $location.search('tagsOn',on);
+            $location.search('tagsOff',off);
+        });
         $scope.refreshFilters();
     };
 
