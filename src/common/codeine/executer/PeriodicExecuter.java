@@ -74,4 +74,8 @@ public class PeriodicExecuter implements Runnable
 		this.sleepFirst = true;
 		ThreadUtils.createThread(this, taskName).start();
 	}
+
+	public String name() {
+		return taskName;
+	}
 }

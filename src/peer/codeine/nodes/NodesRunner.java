@@ -57,9 +57,14 @@ public class NodesRunner implements Task{
 		for (String project : removedProjects) {
 			Map<String, PeriodicExecuter> map = executers.get(project);
 			for (PeriodicExecuter e : map.values()) {
-				e.stopWhenPossible();
+				stop(e);
 			}
 		}
+	}
+
+	private void stop(PeriodicExecuter e) {
+		log.info("stopping 1executor" + e.name());
+		e.stopWhenPossible();
 	}
 
 	private boolean startExecutorsForProject(ProjectJson project) {
@@ -91,7 +96,7 @@ public class NodesRunner implements Task{
 		}
 		for (Entry<String, PeriodicExecuter> e : oldProjectExecutors.entrySet()) {
 			log.info("stop monitoring node " + e.getKey() + " in project " + project.name());
-			e.getValue().stopWhenPossible();
+			stop(e.getValue());
 		}
 		return !newProjectExecutors.isEmpty();
 	}
@@ -101,6 +106,7 @@ public class NodesRunner implements Task{
 		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, 
 				new RunMonitors(configurationManager, project.name(), projectStatusUpdater, mailSender, pathHelper,
 				nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper), "RunMonitors_" + project.name() + "_" + nodeJson.name());
+		log.info("starting 1executor" + periodicExecuter.name());
 		periodicExecuter.runInThread();
 		return periodicExecuter;
 	}
