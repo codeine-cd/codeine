@@ -4,7 +4,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $scope.projectStatus = projectStatus;
     $scope.selectedMonitor = 'All Nodes';
     $scope.maxTags = 10;
-    $scope.filteredNodes = [];
     $scope.versionIsOpen = [];
     $scope.allNodesCount = 0;
     $scope.nodesFilter = '';
@@ -156,15 +155,15 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
 
     $scope.checkboxClick = function(versionItem, event) {
         event.stopPropagation();
-        angular.forEach(versionItem.nodes, function(item) {
+        angular.forEach(versionItem.filteredNodes, function(item) {
            item.checked = event.target.checked;
         });
     };
 
     $scope.isAnyNodeChecked = function() {
         for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
-            for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
-                if (projectStatus.nodes_for_version[i].nodes[j].checked) {
+            for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if (projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
                     return true;
                 }
             }
@@ -175,9 +174,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $scope.getAllSelectedNodes = function() {
         var res = [];
         for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
-            for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
-                if (projectStatus.nodes_for_version[i].nodes[j].checked) {
-                    res.push(projectStatus.nodes_for_version[i].nodes[j]);
+            for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if (projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
+                    res.push(projectStatus.nodes_for_version[i].filteredNodes[j]);
                 }
             }
         }
@@ -186,8 +185,8 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
 
     $scope.isAllNodesChecked = function() {
         for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
-            for (var j=0 ; j < projectStatus.nodes_for_version[i].nodes.length; j++) {
-                if (!projectStatus.nodes_for_version[i].nodes[j].checked) {
+            for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if (!projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
                     return false;
                 }
             }
@@ -196,8 +195,8 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     };
 
     $scope.isVersionChecked = function(versionItem) {
-        for (var i=0 ; i < versionItem.nodes.length; i++) {
-            if (!versionItem.nodes[i].checked)
+        for (var i=0 ; i < versionItem.filteredNodes.length; i++) {
+            if (!versionItem.filteredNodes[i].checked)
             return false;
         }
         return true;
@@ -206,7 +205,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     $scope.doSelectAllNodes = function(event) {
         event.stopPropagation();
         angular.forEach(projectStatus.nodes_for_version, function(versionItem) {
-            angular.forEach(versionItem.nodes, function(node) {
+            angular.forEach(versionItem.filteredNodes, function(node) {
                 node.checked = event.target.checked;
             });
         });
