@@ -4,6 +4,7 @@ package codeine;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.peer_status.PeersProjectsStatus;
+import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
 import codeine.servlet.PrepareForShutdown;
 import codeine.servlet.UsersManager;
 import codeine.statistics.IMonitorStatistics;
@@ -18,7 +19,7 @@ public class WebServerModule extends AbstractModule
 	@Override
 	protected void configure()
 	{
-		bind(PeersProjectsStatus.class).in(Scopes.SINGLETON);
+		bind(PeersProjectsStatus.class).to(PeersProjectsStatusInWebServer.class).in(Scopes.SINGLETON);
 		bind(ConfigurationManagerServer.class).in(Scopes.SINGLETON);
 		bind(IConfigurationManager.class).to(ConfigurationManagerServer.class);
 		bind(ProjectConfigurationInPeerUpdater.class).in(Scopes.SINGLETON);

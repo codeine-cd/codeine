@@ -26,7 +26,21 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
 
 	private String tableName = "ProjectsConfiguration";
+
 	
+	public ProjectsConfigurationMysqlConnector() {
+		super();
+	}
+
+	
+	public ProjectsConfigurationMysqlConnector(DbUtils dbUtils, Gson gson, ExperimentalConfJsonStore webConfJsonStore) {
+		super();
+		this.dbUtils = dbUtils;
+		this.gson = gson;
+		this.webConfJsonStore = webConfJsonStore;
+	}
+
+
 	public void createTables() {
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");

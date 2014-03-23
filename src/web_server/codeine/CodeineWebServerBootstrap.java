@@ -18,6 +18,7 @@ import codeine.executer.PeriodicExecuter;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
+import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
 import codeine.model.Constants;
 import codeine.servlet.UsersManager;
 import codeine.statistics.IMonitorStatistics;
@@ -46,7 +47,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 	@Override
 	protected void execute() {
 		log.info("executing web server bootstrap");
-		new PeriodicExecuter(PeersProjectsStatus.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
+		new PeriodicExecuter(PeersProjectsStatusInWebServer.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
 		try {
 			injector().getInstance(ConfigurationManagerServer.class).updateDb();
 		} catch (Exception e) {

@@ -24,6 +24,21 @@ public class DbUtils
 	@Inject
 	private MysqlHostSelector hostSelector;
 	
+	
+	
+	public DbUtils() {
+		super();
+	}
+	
+	
+
+	public DbUtils(MysqlHostSelector hostSelector) {
+		super();
+		this.hostSelector = hostSelector;
+	}
+
+
+
 	public static void closeStatement(Statement stmt)
 	{
 		if(stmt != null)

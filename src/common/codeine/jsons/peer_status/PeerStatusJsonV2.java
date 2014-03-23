@@ -25,6 +25,7 @@ public class PeerStatusJsonV2 {
 	private String tar;
 	private long start_time;
 	private long update_time;//updated in directory server when first seen
+	private long update_time_from_peer;
 	private String install_dir;
 	private PeerType peer_type;
 	private transient PeerStatusString status;
@@ -44,6 +45,7 @@ public class PeerStatusJsonV2 {
 		this.peer_type = PeerType.Daemon;
 		this.project_name_to_status.put(Constants.CODEINE_NODES_PROJECT_NAME, createInternalProject());
 		this.update_time = System.currentTimeMillis();
+		this.update_time_from_peer = System.currentTimeMillis();
 	}
 	private ProjectStatus createInternalProject() {
 		NodeWithMonitorsInfo node_info = new NodeWithMonitorsInfo(this, this.peer_key, this.host, Constants.CODEINE_NODES_PROJECT_NAME, Maps.<String, MonitorStatusInfo>newHashMap());
@@ -57,6 +59,7 @@ public class PeerStatusJsonV2 {
 		this.project_name_to_status = Maps.newHashMap();
 		this.project_name_to_status.put(projectStatus.project_name(), projectStatus);
 		this.update_time = System.currentTimeMillis();
+		this.update_time_from_peer = System.currentTimeMillis();
 		this.peer_key = peer_key;
 		this.peer_type = PeerType.Reporter;
 	}	
@@ -81,6 +84,9 @@ public class PeerStatusJsonV2 {
 
 	public long update_time() {
 		return update_time;
+	}
+	public long update_time_from_peer() {
+		return update_time_from_peer;
 	}
 
 	public String key() {

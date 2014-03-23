@@ -1,5 +1,6 @@
 package codeine;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,32 +11,34 @@ import org.apache.log4j.Logger;
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.PathHelper;
 import codeine.db.ProjectsConfigurationConnector;
+import codeine.db.mysql.connectors.ProjectConfigurationDatabaseConnectorListProvider;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 {
 	private static final Logger log = Logger.getLogger(ConfigurationManagerServer.class);
 
-	private ProjectsConfigurationConnector projectsConfigurationConnector;
 	private ProjectConfigurationInPeerUpdater projectsUpdater;
 
 	private PathHelper pathHelper;
 
 	private JsonFileUtils jsonFileUtils;
+	private List<ProjectsConfigurationConnector> statusDatabaseConnectorList = Lists.newArrayList();
 	
 	@Inject
-	public ConfigurationManagerServer(JsonFileUtils jsonFileUtils, PathHelper pathHelper, ProjectsConfigurationConnector projectsConfigurationConnector, ProjectConfigurationInPeerUpdater projectsUpdater)
+	public ConfigurationManagerServer(JsonFileUtils jsonFileUtils, PathHelper pathHelper, ProjectConfigurationInPeerUpdater projectsUpdater, ProjectConfigurationDatabaseConnectorListProvider statusDatabaseConnectorListProvider)
 	{
 		super(jsonFileUtils, pathHelper);
 		this.jsonFileUtils = jsonFileUtils;
-		this.projectsConfigurationConnector = projectsConfigurationConnector;
 		this.pathHelper = pathHelper;
 		this.projectsUpdater = projectsUpdater; 
+		statusDatabaseConnectorList = statusDatabaseConnectorListProvider.get();
 	}
 
 	public synchronized void deleteProject(ProjectJson projectToDelete) {
@@ -47,7 +50,9 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 				newList.put(entry.getKey(), entry.getValue());
 		}
 		projects(newList);
-		projectsConfigurationConnector.deleteProject(projectToDelete);
+		for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorList) {
+			projectsConfigurationConnector.deleteProject(projectToDelete);
+		}
 	}
 	
 	
@@ -65,14 +70,15 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 	
 	public synchronized void updateDb() {
 		for (ProjectJson project : projects().values()) {
-			//TODO update in all mysql instances
 			updateProjectInDb(project);
 		}
 		projectsUpdater.updateAllPeers();
 	}
 
 	private void updateProjectInDb(ProjectJson project) {
-		projectsConfigurationConnector.updateProject(project);
+		for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorList) {
+			projectsConfigurationConnector.updateProject(project);
+		}
 	}
 
 	public void createNewProject(ProjectJson project) {

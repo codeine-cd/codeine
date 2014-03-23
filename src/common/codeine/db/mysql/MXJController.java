@@ -173,7 +173,7 @@ public class MXJController
 	}
 
 	/**
-	 * TODO - nambar : Auto restart of mysql database causing issues
+	 * TO DO - nambar : Auto restart of mysql database causing issues
 	 * it looks like the feeder starts the mysql database when not needed
 	 * Auto restart was originally made since mysqld does not know to recover from NFS issues 
 	 */

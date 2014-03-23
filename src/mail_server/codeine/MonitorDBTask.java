@@ -8,30 +8,41 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import codeine.configuration.IConfigurationManager;
-import codeine.db.IAlertsDatabaseConnector;
+import codeine.db.mysql.connectors.AlertsMysqlConnector;
+import codeine.db.mysql.connectors.AlertsMysqlConnectorDatabaseConnectorListProvider;
 import codeine.executer.Task;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.mail.Mail;
 import codeine.mail.MailStrategy;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public class MonitorDBTask implements Task {
 
 	private static final Logger log = Logger.getLogger(MonitorDBTask.class);
-	@Inject
+
 	private IConfigurationManager configurationManager;
-	@Inject 
 	private AggregateNotification mailCreator;
-	@Inject 
 	private AggregateMailPrepare mailPrepare;
-	@Inject 
 	private MailStrategy mailsStrategy;
-	@Inject 
 	private CollectionTypeGetter collectionTypeGetter;
+	private List<AlertsMysqlConnector> alertsConnectors;
+
+	
 	@Inject 
-	private IAlertsDatabaseConnector mongoConnector;
+	public MonitorDBTask(IConfigurationManager configurationManager, AggregateNotification mailCreator,
+			AggregateMailPrepare mailPrepare, MailStrategy mailsStrategy, CollectionTypeGetter collectionTypeGetter,
+			AlertsMysqlConnectorDatabaseConnectorListProvider alertsMysqlConnectorDatabaseConnectorListProvider) {
+		super();
+		this.configurationManager = configurationManager;
+		this.mailCreator = mailCreator;
+		this.mailPrepare = mailPrepare;
+		this.mailsStrategy = mailsStrategy;
+		this.collectionTypeGetter = collectionTypeGetter;
+		this.alertsConnectors = alertsMysqlConnectorDatabaseConnectorListProvider.get();
+	}
 
 	@Override
 	public void run() {
@@ -41,12 +52,17 @@ public class MonitorDBTask implements Task {
 			workOnCollectionType(alertsCollectionType);
 		}
 		if (collType.contains(AlertsCollectionType.Daily)){
-			mongoConnector.removeOldAlerts();
+			for (AlertsMysqlConnector c : alertsConnectors) {
+				c.removeOldAlerts();
+			}
 		}
 	}
 
 	private void workOnCollectionType(AlertsCollectionType alertsCollectionType) {
-		Multimap<String, CollectorNotificationJson> allItems = mongoConnector.getAlertsAndUpdate(alertsCollectionType);
+		Multimap<String, CollectorNotificationJson> allItems = HashMultimap.create();
+		for (AlertsMysqlConnector c : alertsConnectors) {
+			allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
+		}
 		List<NotificationContent> notificationContent = mailCreator.prepareMailsToUsers(alertsCollectionType, allItems, configurationManager.getConfiguredProjects());
 		List<Mail> mails = mailPrepare.prepare(notificationContent, alertsCollectionType);
 		for (Mail mail : mails) {

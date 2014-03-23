@@ -82,7 +82,7 @@ public class Files {
         return file.delete();
     }
 
-    /* TODO - ygez  make this more platform independant */
+    /* TO DO - ygez  make this more platform independant */
     /**
      * On UNIX systems, in order for a file to be executable, it needs to have
      * the execute bit set. This method executes a "chmod +x filename"

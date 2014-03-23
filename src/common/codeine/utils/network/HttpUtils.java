@@ -44,7 +44,6 @@ public class HttpUtils
 			addHeaders(headers, c);
 			BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
 			String inputLine;
-			//TODO should have some kind of timeout mechanism
 			while ((inputLine = in.readLine()) != null)
 			{
 				function.apply(inputLine);

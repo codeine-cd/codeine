@@ -23,13 +23,22 @@ import com.google.gson.Gson;
 
 public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 	private static final Logger log = Logger.getLogger(AlertsMysqlConnector.class);
-	@Inject
 	private DbUtils dbUtils;
-	@Inject
 	private Gson gson;
-	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
+	private ExperimentalConfJsonStore webConfJsonStore;
 	private String tableName = "Alerts";
 	
+	
+	
+	@Inject
+	public AlertsMysqlConnector(DbUtils dbUtils, Gson gson, ExperimentalConfJsonStore webConfJsonStore) {
+		super();
+		this.dbUtils = dbUtils;
+		this.gson = gson;
+		this.webConfJsonStore = webConfJsonStore;
+	}
+
+
 	public void createTables() {
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");

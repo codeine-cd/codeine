@@ -11,6 +11,7 @@ import codeine.executer.PeriodicExecuter;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.jsons.peer_status.PeersProjectsStatus;
+import codeine.jsons.peer_status.PeersProjectsStatusInDirectory;
 import codeine.peers_status.OldPeersRemove;
 import codeine.servlets.CodeineDirectoryServletModule;
 
@@ -43,13 +44,13 @@ public class CodeineDirectoryBootstrap extends AbstractCodeineBootstrap
 	@Override
 	protected void execute() throws Exception {
 		log.info("starting mysql");
-		MysqlConfigurationJson conf = injector().getInstance(MysqlHostSelector.class).getLocalConf();
+		MysqlConfigurationJson conf = injector().getInstance(MysqlHostSelector.class).mysql();
 		if (conf.managed_by_codeine()) {
 			injector().getInstance(MysqlProcessControlService.class).execute();
 		}
 		injector().getInstance(MysqlDatabaseSchemaManagement.class).initDatabase();
 		new PeriodicExecuter(OldPeersRemove.INTERVAL ,injector().getInstance(OldPeersRemove.class)).runInThread();
-		new PeriodicExecuter(PeersProjectsStatus.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
+		new PeriodicExecuter(PeersProjectsStatusInDirectory.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
 	}
 
 	@Override

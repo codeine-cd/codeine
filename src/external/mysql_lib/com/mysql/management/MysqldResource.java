@@ -457,7 +457,7 @@ public class MysqldResource implements MysqldResourceI {
     /* called from constructor, over-ride with care */
     final void setOsAndArch(String osName, boolean defaultArch, String osArch) {
         /*
-         * FIXME: Remove use of defaultArch and "Win" shortcuts.
+         * to do: Remove use of defaultArch and "Win" shortcuts.
          * 
          * PROBLEM: If on Linux-ppc, we shouldn't even try Linux-i386.
          * 

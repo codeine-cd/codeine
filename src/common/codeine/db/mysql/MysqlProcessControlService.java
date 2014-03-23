@@ -55,7 +55,7 @@ public class MysqlProcessControlService {
 	}
 
 	public void config() {
-		MysqlConfigurationJson mysqlConf = mysqlHostSelector.getLocalConf();
+		MysqlConfigurationJson mysqlConf = mysqlHostSelector.mysql();
 		String dir = mysqlConf.dir();
 		log.info("config() - path for persistency " + dir);
 		if (new File(dir).mkdirs()) {
@@ -120,7 +120,7 @@ public class MysqlProcessControlService {
 	}
 
 	private boolean initDatabase(){
-		MysqlConfigurationJson mysqlConf = mysqlHostSelector.getLocalConf();
+		MysqlConfigurationJson mysqlConf = mysqlHostSelector.mysql();
 		String sql = "SELECT user FROM mysql.user WHERE user='" + mysqlConf.user() + "'";
 		final List<String> result = Lists.newArrayList();
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {

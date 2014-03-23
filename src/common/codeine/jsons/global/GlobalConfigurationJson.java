@@ -18,7 +18,6 @@ public class GlobalConfigurationJson
 	private String server_name;
 	private EmailConfiguration email_configuration;
 	private String web_server_host;
-	private List<String> db_host = Lists.newArrayList();  //TODO should be removed, only for mongo
 	private AuthenticationMethod authentication_method = AuthenticationMethod.Disabled;
 	private List<MysqlConfigurationJson> mysql = Lists.newArrayList();
 	private String[] roles = {};
@@ -38,10 +37,6 @@ public class GlobalConfigurationJson
 
 	public String admin_mail() {
 		return admin_mail;
-	}
-
-	public List<String> db_host() {
-		return db_host;
 	}
 
 	public String directory_host() {
