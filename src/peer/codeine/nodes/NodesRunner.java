@@ -63,7 +63,7 @@ public class NodesRunner implements Task{
 	}
 
 	private void stop(PeriodicExecuter e) {
-		log.info("stopping 1executor" + e.name());
+		log.info("stopping 1executor " + e.name());
 		e.stopWhenPossible();
 	}
 
@@ -106,7 +106,7 @@ public class NodesRunner implements Task{
 		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, 
 				new RunMonitors(configurationManager, project.name(), projectStatusUpdater, mailSender, pathHelper,
 				nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper), "RunMonitors_" + project.name() + "_" + nodeJson.name());
-		log.info("starting 1executor" + periodicExecuter.name());
+		log.info("starting 1executor " + periodicExecuter.name());
 		periodicExecuter.runInThread();
 		return periodicExecuter;
 	}
