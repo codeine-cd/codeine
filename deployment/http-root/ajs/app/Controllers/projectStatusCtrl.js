@@ -59,15 +59,15 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     }
 
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
-        $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i].nodes.length;
-    };
-
-    for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
         $scope.projectStatus.nodes_for_version[i].filteredNodes = $scope.projectStatus.nodes_for_version[i].nodes.slice();
         for (var j=0; j < 10 && j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
             moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[j]);
         }
     }
+
+    for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+        $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i].filteredNodes.length;
+    };
 
     $scope.$watch("selectedMonitor",function( newName, oldName ) {
             if ( newName === oldName ) {
@@ -106,6 +106,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     };
 
     $scope.refreshFilters = function() {
+        var count = 0;
         for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
             $scope.projectStatus.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatus.nodes_for_version[i].filteredNodes.length);
             $scope.projectStatus.nodes_for_version[i].visibleNodes.splice(0,$scope.projectStatus.nodes_for_version[i].visibleNodes.length);
@@ -113,6 +114,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
                 $scope.projectStatus.nodes_for_version[i].nodes[j].visible = false;
                 if (isNodeFiltered($scope.projectStatus.nodes_for_version[i].nodes[j])) {
                     $scope.projectStatus.nodes_for_version[i].filteredNodes.push($scope.projectStatus.nodes_for_version[i].nodes[j]);
+                    count++;
                 }
             }
             if ($scope.projectStatus.nodes_for_version[i].filteredNodes.length > 0) {
@@ -121,6 +123,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
                 }
             }
         }
+        $scope.allNodesCount = count;
     };
 
     if ($scope.initFromQueryString($location.search())) {
@@ -184,6 +187,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$ro
     }
 
     $scope.isAllNodesChecked = function() {
+        if ($scope.allNodesCount === 0) return false;
         for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
             for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
                 if (!projectStatus.nodes_for_version[i].filteredNodes[j].checked) {

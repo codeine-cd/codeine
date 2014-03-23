@@ -2,8 +2,7 @@ angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','Selec
     function($scope, $log, SelectedNodesService, $location, $routeParams,command,$animate,CodeineService) {
         $scope.command = command;
         $scope.nodes = SelectedNodesService.getSelectedNodes($location.path());
-        $log.debug('commandSetupCtrl: created for command ' + angular.toJson(command));
-        $log.debug('commandSetupCtrl: nodes are :' + $scope.nodes);
+        $log.debug('commandSetupCtrl: created for command ' + angular.toJson(command) + ' on ' + $scope.nodes.length + ' nodes');
 
         for (var i=0; i <$scope.command.parameters.length; i++) {
             $scope.command.parameters[i].value = $scope.command.parameters[i].default_value;
