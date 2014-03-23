@@ -15,7 +15,7 @@ angular.module('codeine')
                 message : 'There was an error while connecting to the server, it might be down or unreachable'
             };
         }
-        $log.error(angular.toJson(data));
+        $log.error('ErrorHandler: ' + angular.toJson(data));
         var message = [];
         if (data.title) {
             message.push("<strong>" + data.title + "</strong>");
