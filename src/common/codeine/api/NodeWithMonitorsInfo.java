@@ -68,6 +68,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return prevVersion;
 	}
 
+	
 	public List<String> failedMonitors() {
 		List<String> $ = Lists.newArrayList();
 		for (Entry<String, MonitorStatusInfo> monitor : monitors.entrySet()) {
@@ -77,15 +78,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return $;
 	}
 
-	public List<String> failed_monitors() {
-		List<String> $ = Lists.newArrayList();
-		for (MonitorStatusInfo m : monitors.values()) {
-			if (m.fail()){
-				$.add(m.name());
-			}
-		}
-		return $;
-	}
+	
 	public List<String> ok_monitors() {
 		List<String> $ = Lists.newArrayList();
 		for (MonitorStatusInfo m : monitors.values()) {

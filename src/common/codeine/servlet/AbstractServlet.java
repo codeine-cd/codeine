@@ -102,22 +102,24 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	protected void handleError(Exception e, HttpServletResponse response) {
 		log.warn("Error in servlet", e);
-		
+		ApiError error;
 		if (e instanceof UnAuthorizedException) {
 			response.setStatus(HttpStatus.UNAUTHORIZED_401);
-			getWriter(response).write("UNAUTHORIZED Request, please provide API Token");
+			error = new ApiError("UNAUTHORIZED Request","Please provide API Token",e.getMessage());
+			//getWriter(response).write("UNAUTHORIZED Request, please provide API Token");
 		} else if (e instanceof IllegalArgumentException){
-			getWriter(response).write("Bad request - please check api help\n");
+			error = new ApiError("Bad request","Please check api help",e.getMessage());
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		} else if (e instanceof InShutdownException){
-			getWriter(response).write("Cannot execute - preparing for shutdown\n");
+			error = new ApiError("Cannot execute","Preparing for shutdown",e.getMessage());
 			response.setStatus(HttpStatus.FORBIDDEN_403);
 		} else {
-			getWriter(response).write("Internal Server Error: \n");
-			e.printStackTrace(getWriter(response));
+			error = new ApiError("Internal Server Error",e.getMessage() ,e.getMessage());
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
 		}
+		getWriter(response).write(gson().toJson(error));
 	}
+	
 	protected void handleErrorRequestFromBrowser(Exception e, HttpServletResponse response) {
 		log.warn("Error in servlet", e);
 		HashMap<String, String> dic = Maps.newHashMap();

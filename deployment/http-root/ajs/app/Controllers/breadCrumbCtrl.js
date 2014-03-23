@@ -4,7 +4,7 @@ angular.module('codeine').controller('breadCrumbCtrl',['$scope','$rootScope', '$
     $rootScope.$on("$routeChangeSuccess", function (event, current) {
         $log.debug('breadCrumbCtrl: $routeChangeSuccess');
         $log.debug('breadCrumbCtrl: current =' + angular.toJson(current));
-        $log.debug('breadCrumbCtrl: $location.path() =' + $location.path());
+        $log.debug('breadCrumbCtrl: $location.path() = ' + $location.path());
         $scope.items = [];
         $scope.lastItem = '';
 
@@ -13,6 +13,13 @@ angular.module('codeine').controller('breadCrumbCtrl',['$scope','$rootScope', '$
         };
 
         var path = $location.path().split('/');
+
+        if ($location.path() === '/codeine/nodes/status') {
+            $scope.items.push( { name : 'Manage Codeine', url : '/codeine/manage-codeine'});
+            $scope.lastItem = 'Codeine Nodes Status';
+            return;
+        }
+
         if (path[path.length -1] === 'new_project') {
             $scope.lastItem = 'New Project';
             return;
@@ -23,6 +30,10 @@ angular.module('codeine').controller('breadCrumbCtrl',['$scope','$rootScope', '$
             return;
         }
 
+        if (angular.isDefined(current.params.user_name)) {
+            $scope.lastItem = current.params.user_name;
+            return;
+        }
         if (angular.isDefined(current.params.project_name)) {
             $scope.items.push( { name : current.params.project_name, url : '/codeine/project/' + current.params.project_name + '/status' });
         }

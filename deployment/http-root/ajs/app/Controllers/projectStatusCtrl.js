@@ -1,6 +1,6 @@
-angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', '$routeParams', 'projectConfiguration', 'projectStatus', '$filter','$location','SelectedNodesService', function($scope, $log,$routeParams, projectConfiguration, projectStatus, $filter, $location, SelectedNodesService) {
-    $scope.projectName = $routeParams.project_name;
+angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'projectConfiguration', 'projectStatus', '$filter','$location','SelectedNodesService', function($scope, $log,projectConfiguration, projectStatus, $filter, $location, SelectedNodesService) {
     $scope.projectConfiguration= projectConfiguration;
+    $scope.projectName = projectConfiguration.project_name;
     $scope.projectStatus = projectStatus;
     $scope.selectedMonitor = 'All Nodes';
     $scope.maxTags = 10;

@@ -20,7 +20,7 @@ public class NodeStatusInfo {
 		super();
 		this.node_alias = nodeWithMonitorsInfo.node_alias();
 		this.node_name = nodeWithMonitorsInfo.name();
-		this.failed_monitors = nodeWithMonitorsInfo.failed_monitors();
+		this.failed_monitors = nodeWithMonitorsInfo.failedMonitors();
 		this.ok_monitors = nodeWithMonitorsInfo.ok_monitors();
 		this.tags = nodeWithMonitorsInfo.tags();
 		this.peer_key = nodeWithMonitorsInfo.peer_key();

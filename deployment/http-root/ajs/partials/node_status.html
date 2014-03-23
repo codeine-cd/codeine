@@ -2,34 +2,34 @@
     <div ng-include="'/ajs/partials/menus/projectMenu.html'"></div>
     <div ng-include="'/ajs/partials/menus/commandHistory.html'"></div>
 </div>
-
-<!--
-<div class="navbar" id="node_info_navbar">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <div class="nav-collapse collapse navbar-responsive-collapse">
-                <ul class="nav pull-right">
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown" id="commandsDropdown">
-                        <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-play"></i> Run Command... <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            {{#commands}}
-                            <li class="codeine_command" data-command-name="{{name}}" ><a href="javascript: void(0);">{{alias}}</a></li>
-                            {{/commands}}
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-        -->
 <div class="col-md-9">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="command in projectConfiguration.commands">
+                                    <a ng-click="runCommand(command.name)">{{command.name}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -49,15 +49,12 @@
                         <div class="col-md-2"><strong>Version:</strong></div><div class="col-md-6"> {{nodeStatus.version}}</div>
                     </div>
                     <br/>
-                    <!--
                     <div class="row">
-                        <div class="col-md-2"><strong>Tags:</strong></div><div class="col-md-6">
-                        {{#tags}}
-                        <span class="badge badge-info">{{this}}</span>
-                        {{/tags}}
+                        <div class="col-md-2"><strong>Tags:</strong></div>
+                        <div class="col-md-6">
+                            <span ng-repeat="tag in nodeStatus.tags"><span class="badge badge-info">{{tag}}</span> </span>
+                        </div>
                     </div>
-                    </div>
-                    -->
                     <br/>
                     <div class="row">
                         <div class="col-md-2"><strong>Peer Status:</strong></div><div class="col-md-6"><i data-peer-status="{{nodeStatus.peer_status}}" class="peerStatus"></i> {{nodeStatus.peer_status}}</div>

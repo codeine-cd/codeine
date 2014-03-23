@@ -15,6 +15,8 @@ import codeine.servlet.AbstractServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
+
+// TODO - Remove after angular
 public class DeleteProjectServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = 1L;

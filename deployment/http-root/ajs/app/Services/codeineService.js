@@ -24,6 +24,9 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         getProjectConfiguration: function(project) {
             return $http.get("/project-configuration_json", { params: { project: project } , cache: false });
         },
+        deleteProject : function(project) {
+            return $http.delete("/project-configuration_json", { params: { project: project } });
+        },
         saveProjectConfiguration : function(configuration) {
             return $http.put("/project-configuration_json", configuration, {  params: { project: configuration.project_name } });
         },
@@ -71,7 +74,11 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         },
         runCommand : function(command,nodes) {
             return $http.post('/command-nodes_json', { nodes : nodes, command_info : command },{params: { project: command.project_name, redirect :false }});
+        },
+        getUserInfo : function() {
+            return $http.get("/user-info_json", { cache: false });
         }
+
     };
     return Api;
 }]);

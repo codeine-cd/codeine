@@ -44,6 +44,7 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 		Map<String, Integer> tagCount = Maps.newHashMap();
 		Map<String, Integer> monitorCount = Maps.newHashMap();
 		Map<String, NodesForVersion> nodesByVersion = Maps.newHashMap();
+		int totalNumberOfNodesWithAlerts = 0;
 		for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
 			for (String tag : nodeWithMonitorsInfo.tags()) {
 				Integer count = tagCount.get(tag);
@@ -59,6 +60,9 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 				}
 				monitorCount.put(monitor, count + 1);
 			}
+			if (!nodeWithMonitorsInfo.status()) {
+				totalNumberOfNodesWithAlerts++;
+			}
 			NodesForVersion nodeStatusInfoList = nodesByVersion.get(nodeWithMonitorsInfo.version());
 			if (nodeStatusInfoList == null) {
 				nodeStatusInfoList = new NodesForVersion(nodeWithMonitorsInfo.version());
@@ -71,7 +75,8 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 		calculatePrecent(totalNumberOfNodes, nodes_for_version);
 		List<CountInfo> tag_info = createSortedList(tagCount);
 		List<CountInfo> monitor_info = createSortedList(monitorCount);
-		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info);
+		
+		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts);
 	}
 
 	private void calculatePrecent(int totalNumberOfNodes, List<NodesForVersion> nodes_for_version) {
@@ -114,15 +119,16 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 
 	@SuppressWarnings("unused")
 	public static class ProjectStatusInfo {
+		private int any_alert_count;
 		private List<NodesForVersion> nodes_for_version;
 		private List<CountInfo> tag_info;
 		private List<CountInfo> monitor_info;
-		public ProjectStatusInfo(List<NodesForVersion> nodes_for_version, List<CountInfo> tag_info,
-				List<CountInfo> monitor_info) {
+		public ProjectStatusInfo(List<NodesForVersion> nodes_for_version, List<CountInfo> tag_info,List<CountInfo> monitor_info,int any_alert_count) {
 			super();
 			this.nodes_for_version = nodes_for_version;
 			this.tag_info = tag_info;
 			this.monitor_info = monitor_info;
+			this.any_alert_count = any_alert_count;
 		}
 		
 	}

@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.ConfigurationManagerServer;
+import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
+import codeine.servlet.PermissionsManager;
+import codeine.utils.JsonUtils;
 
 public class ProjectConfigurationApiServlet extends AbstractServlet {
 
@@ -20,9 +23,13 @@ public class ProjectConfigurationApiServlet extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private ConfigurationManagerServer configurationManager;
+	@Inject private PermissionsManager permissionsManager;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
+		if (request.getMethod().equals("DELETE")) {
+			return permissionsManager.isAdministrator(request);	
+		}
 		return canConfigureProject(request);
 	}
 	
@@ -32,13 +39,22 @@ public class ProjectConfigurationApiServlet extends AbstractServlet {
 	}
 	
 	
-	
 	@Override
 	protected void myPut(HttpServletRequest request, HttpServletResponse resp) {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
 		configurationManager.updateProject(projectJson);
 		writeResponseJson(resp,projectJson);
+	}
+	
+	@Override
+	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
+		UserPermissions user = permissionsManager.user(request);
+		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		ProjectJson projectToDelete = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
+		configurationManager.deleteProject(projectToDelete);
+		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);
+		getWriter(response).write("{}");
 	}
 
 }

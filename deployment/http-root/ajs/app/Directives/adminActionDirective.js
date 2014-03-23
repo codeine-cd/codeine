@@ -1,8 +1,8 @@
-angular.module('codeine').directive('adminAction', ['$log','HelpConstants', function ($log, HelpConstants) {
+angular.module('codeine').directive('adminAction', ['$log', function ($log) {
     return {
         restrict: 'A',
         scope: true,
-        link: function ($scope, element, attrs) {
+        link: function ($scope, element) {
             if (!$scope.app.sessionInfo.permissions.administer) {
                 $log.debug('adminAction: User it not admin, will hide element');
                 element.hide();
