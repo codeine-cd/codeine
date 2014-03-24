@@ -7,7 +7,7 @@ angular.module('codeine').directive('adminAction', ['$log', function ($log) {
                 $log.debug('adminAction: User it not admin, will hide element');
                 element.hide();
             } else {
-                $log.debug('adminAction: User it admin!');
+                $log.debug('adminAction: User it admin');
                 element.show();
             }
         }

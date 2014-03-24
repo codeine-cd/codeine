@@ -12,7 +12,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projects : function($q,$log,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getProjects().success(function(data) {
-                                $log.debug("Resolved projects: " + angular.toJson(data));
+                                $log.debug("Resolved projects");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get projects');
@@ -22,7 +22,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         tabs: function($q,$log,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getViewTabs().success(function(data) {
-                                $log.debug("Resolved tabs: " + angular.toJson(data));
+                                $log.debug("Resolved tabs");
                                 deferred.resolve(data);
                             }).error(function() {
                                 deferred.reject('Error - failed to get project tabs');
@@ -38,7 +38,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         command : function($q,$log,CodeineService,$route) {
                             var deferred = $q.defer();
                             CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                                $log.debug("Resolved command: " + angular.toJson(data));
+                                $log.debug("Resolved command");
                                 for (var i=0; i < data.commands.length; i++) {
                                     if (data.commands[i].name === $route.current.params.command_name) {
                                         deferred.resolve(data.commands[i]);
@@ -59,7 +59,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         tabs: function($q,$log,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getViewTabs().success(function(data) {
-                                $log.debug("Resolved tabs: " + angular.toJson(data));
+                                $log.debug("Resolved tabs");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get tabs');
@@ -79,7 +79,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projects: function($q,$log,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getProjects().success(function(data) {
-                                $log.debug("Resolved projects: " + angular.toJson(data));
+                                $log.debug("Resolved projects");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get projects');
@@ -95,7 +95,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projects : function($q,$log,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getProjects().success(function(data) {
-                                $log.debug("Resolved projects: " + angular.toJson(data));
+                                $log.debug("Resolved projects");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get projects');
@@ -112,7 +112,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projectConfiguration : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                                $log.debug("Resolved project configuration: " + angular.toJson(data));
+                                $log.debug("Resolved project configuration");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get project configuration');
@@ -139,7 +139,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projectConfiguration : function($q,$log,$route,CodeineService,Constants) {
                             var deferred = $q.defer();
                             CodeineService.getProjectConfiguration(Constants.CODEINE_NODES_PROJECT_NAME).success(function(data) {
-                                $log.debug("Resolved project configuration: " + angular.toJson(data));
+                                $log.debug("Resolved project configuration");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get project configuration');
@@ -165,7 +165,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projectConfiguration : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                                $log.debug("Resolved project configuration: " + angular.toJson(data));
+                                $log.debug("Resolved project configuration");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get project configuration');
@@ -175,7 +175,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         nodeStatus :  function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getNodeStatus($route.current.params.project_name, $route.current.params.node_name).success(function(data) {
-                                $log.debug("Resolved nodeStatus: " + angular.toJson(data));
+                                $log.debug("Resolved nodeStatus");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get node status');
@@ -191,7 +191,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         monitorStatus :  function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getMonitorStatus($route.current.params.project_name, $route.current.params.node_name, $route.current.params.monitor_name).success(function(data) {
-                                $log.debug("Resolved monitorStatus: " + angular.toJson(data));
+                                $log.debug("Resolved monitorStatus");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get monitor status');
@@ -207,7 +207,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         commandStatus :  function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getCommandStatus($route.current.params.project_name, $route.current.params.command_id).success(function(data) {
-                                $log.debug("Resolved commandStatus: " + angular.toJson(data));
+                                $log.debug("Resolved commandStatus");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get command status');
@@ -223,7 +223,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         projectConfigurationForEditing : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                                $log.debug("Resolved project configuration: " + angular.toJson(data));
+                                $log.debug("Resolved project configuration");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get project configuration');
@@ -241,7 +241,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         userInfo : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
                             CodeineService.getUserInfo().success(function(data) {
-                                $log.debug("Resolved userInfo: " + angular.toJson(data));
+                                $log.debug("Resolved userInfo");
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get user info');
@@ -272,7 +272,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
         });
 
         CodeineService.getGlobalConfiguration().success(function(data) {
-            $log.debug('run: got configuration ' + angular.toJson(data));
+            $log.debug('run: got global configuration ' + angular.toJson(data));
             $rootScope.app.globalConfiguration = data;
         });
 
