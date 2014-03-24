@@ -47,28 +47,18 @@
     </nav>
     <div class="row">
         <div class="col-md-12">
-            <accordion close-others="false" style="margin-bottom: 5px;">
-                <div>
-                    <accordion-group is-open="false">
-                        <accordion-heading>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form class="form-inline" role="form">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" ng-checked="isAllNodesChecked()" ng-click="doSelectAllNodes($event)"> Select All
-                                            </label>
-                                        </div>
-                                        <small class="pull-right">
-                                            <span>Total {{allNodesCount}} nodes</span>
-                                        </small>
-                                    </form>
-                                </div>
-                            </div>
-                        </accordion-heading>
-                    </accordion-group>
-                </div>
-            </accordion>
+            <div class="well well-sm">
+                <form class="form-inline" role="form">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-checked="isAllNodesChecked()" ng-click="doSelectAllNodes($event)"> Select All
+                        </label>
+                    </div>
+                    <small class="pull-right">
+                        <span>Total {{allNodesCount}} nodes</span>
+                    </small>
+                </form>
+            </div>
         </div>
     </div>
     <div class="row">
