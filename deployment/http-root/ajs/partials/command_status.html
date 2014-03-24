@@ -41,7 +41,7 @@
                         </accordion-heading>
                         <div ng-repeat="node in commandStatus.nodes_list" class="row">
                             <div class="col-md-8">
-                                {{node.alias}}
+                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
                             </div>
                         </div>
                     </accordion-group>
@@ -54,7 +54,7 @@
                         </accordion-heading>
                         <div ng-repeat="node in commandStatus.fail_list" class="row">
                             <div class="col-md-8">
-                                {{node.alias}}
+                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
                             </div>
                         </div>
                     </accordion-group>

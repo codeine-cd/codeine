@@ -1,5 +1,5 @@
-angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','SelectedNodesService','$location','$routeParams','command','$animate','CodeineService',
-    function($scope, $log, SelectedNodesService, $location, $routeParams,command,$animate,CodeineService) {
+angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','SelectedNodesService','$location','$routeParams','command','CodeineService',
+    function($scope, $log, SelectedNodesService, $location, $routeParams,command,CodeineService) {
         $scope.command = command;
         $scope.nodes = SelectedNodesService.getSelectedNodes($location.path());
         $log.debug('commandSetupCtrl: created for command ' + angular.toJson(command) + ' on ' + $scope.nodes.length + ' nodes');
@@ -15,7 +15,7 @@ angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','Selec
             $log.debug('commandSetupCtrl: will run the command - ' + angular.toJson($scope.command) + ' on ' + $scope.nodes.length + ' nodes');
             CodeineService.runCommand($scope.command,$scope.nodes).success(function(data) {
                 $log.debug('commandSetupCtrl: Command executed, result is ' + angular.toJson(data));
-                $location.path('/codeine/project/' + $scope.projectName + '/command/' + data + '/status');
+                $location.path('/codeine/project/' + $scope.projectName + '/command/' + $scope.commandName + '/' + data + '/status');
             });
         };
 
@@ -25,13 +25,7 @@ angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','Selec
             }
             $log.debug('commandSetupCtrl: ' + value + ' - ' + $scope.command.parameters[index].validation_expression);
             var regexp = new RegExp($scope.command.parameters[index].validation_expression);
-            var res = regexp.test(value);
-            if (res) {
-                $animate.removeClass($('#' + $scope.command.parameters[index].name),'has-error');
-            } else {
-                $animate.addClass($('#' + $scope.command.parameters[index].name),'has-error');
-            }
-            return res;
+            return regexp.test(value);
         };
 
     }]);

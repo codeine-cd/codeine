@@ -91,11 +91,12 @@
                     <div class="panel-heading">Command Parameters</div>
                     <div class="panel-body">
                         <form class="form-horizontal" name="params" novalidate>
-                            <div class="form-group" ng-repeat="parameter in command.parameters">
+                            <ng-form name="paramsInnerForm">
+                                <div class="form-group" ng-repeat="parameter in command.parameters">
                                 <div ng-if="parameter.type === 'String' || parameter.type === 'Password'">
                                     <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
-                                    <div class="col-md-4" id="{{parameter.name}}">
-                                        <input id="param_{{$index}}" name="param_{{$index}}" type="{{parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="parameter.value" ui-validate="{parameterValidator : 'validateParameter($value,$index)'}">
+                                    <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid || paramsInnerForm.param_value.$error.parameterValidator}" id="{{parameter.name}}">
+                                        <input id="param_{{$index}}" name="param_value" type="{{parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="parameter.value" ui-validate="{parameterValidator : 'validateParameter($value,$index)'}">
                                     </div>
                                 </div>
                                 <div ng-if="parameter.type === 'Boolean'">
@@ -109,14 +110,15 @@
                                     </div>
                                 </div>
                                 <div ng-if="parameter.type === 'Selection'">
-                                    <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
-                                    <div class="col-md-4">
-                                        <select class="form-control select2" name="param_{{$index}}" id="param_{{$index}}"  ui-select2="{ allowClear: false}" ng-model="parameter.value">
+                                    <label for="param_selection_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
+                                    <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid">
+                                        <select class="form-control select2" name="param_value" id="param_selection_{{$index}}"  ui-select2="{ allowClear: false}" ng-model="parameter.value">
                                             <option ng-repeat="opt in parameter.allowed_values" value="{{opt}}">{{opt}}</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
+                            </ng-form>
                         </form>
                     </div>
                 </div>
@@ -132,7 +134,7 @@
                         <div ng-if="isOpen">
                             <div class="row" ng-repeat="node in nodes">
                                 <div class="col-md-12">
-                                    <a ng-href="/codeine/project/{{projectName}}/node/{{node.node_name}}/status">{{node.node_alias}}</a>
+                                    <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
                                 </div>
                             </div>
                         </div>

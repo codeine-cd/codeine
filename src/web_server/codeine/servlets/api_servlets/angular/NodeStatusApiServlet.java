@@ -25,7 +25,7 @@ public class NodeStatusApiServlet extends AbstractServlet {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String nodeName = request.getParameter(Constants.UrlParameters.NODE);
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByName(projectName, nodeName);
-		writeResponseGzipJson(response, new NodeStatusInfo(node));
+		writeResponseGzipJson(response, node);
 	}
 	
 	

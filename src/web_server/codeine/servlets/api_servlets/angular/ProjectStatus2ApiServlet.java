@@ -68,7 +68,7 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 				nodeStatusInfoList = new NodesForVersion(nodeWithMonitorsInfo.version());
 				nodesByVersion.put(nodeWithMonitorsInfo.version(), nodeStatusInfoList);
 			}
-			nodeStatusInfoList.add(new NodeStatusInfo(nodeWithMonitorsInfo));
+			nodeStatusInfoList.add(nodeWithMonitorsInfo);
 		}
 		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion);
 		int totalNumberOfNodes = nodes_for_version.isEmpty() ? 0 : nodes_for_version.get(0).nodes.size();
@@ -136,7 +136,7 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 	@SuppressWarnings("unused")
 	public static class NodesForVersion {
 		private String version;
-		private List<NodeStatusInfo> nodes = Lists.newArrayList();
+		private List<NodeWithMonitorsInfo> nodes = Lists.newArrayList();
 		private int failing_nodes_count;
 		private int failing_nodes_precent;
 		private int not_failing_nodes_precent;
@@ -153,9 +153,9 @@ public class ProjectStatus2ApiServlet extends AbstractServlet {
 			not_failing_nodes_precent = (nodes.size() - failing_nodes_count)  * 100 / totalNumberOfNodes;
 		}
 
-		public void add(NodeStatusInfo nodeStatusInfo) {
+		public void add(NodeWithMonitorsInfo nodeStatusInfo) {
 			nodes.add(nodeStatusInfo);
-			if (!nodeStatusInfo.failed_monitors().isEmpty()) {
+			if (!nodeStatusInfo.failedMonitors().isEmpty()) {
 				failing_nodes_count++;
 			}
 		}

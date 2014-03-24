@@ -70,6 +70,7 @@ public class NodeGetter {
 					if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration && !projectName.equals(Constants.CODEINE_NODES_PROJECT_NAME)) {
 						node.tags(findTags(projectJson, node));
 					}
+					node.peer(peerStatusJsonV2);
 					$.add(node);
 				} 
 			}

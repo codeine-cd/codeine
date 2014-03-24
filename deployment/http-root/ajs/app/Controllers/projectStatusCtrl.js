@@ -64,7 +64,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
         $scope.projectStatus.nodes_for_version[i].filteredNodes = $scope.projectStatus.nodes_for_version[i].nodes.slice();
-        for (var j=0; j < 10 && j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+        for (var j=0; j < 5 && j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
             moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[j]);
         }
     }
@@ -105,7 +105,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
                 }
             }
             if ($scope.projectStatus.nodes_for_version[i].filteredNodes.length > 0) {
-                for (var k=0; k < 10 && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
+                for (var k=0; k < 5 && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
                     moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[k]);
                 }
             }

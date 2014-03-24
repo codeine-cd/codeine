@@ -1,7 +1,8 @@
 package codeine.servlets.api_servlets.angular;
 
+@SuppressWarnings("unused")
 public class UserInfo {
-
+	
 	private String username;
 	private String api_token;
 	public UserInfo(String username, String api_token) {
