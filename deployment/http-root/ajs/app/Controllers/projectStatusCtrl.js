@@ -1,15 +1,13 @@
-angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'projectConfiguration', 'projectStatus', '$filter','$location','SelectedNodesService', function($scope, $log,projectConfiguration, projectStatus, $filter, $location, SelectedNodesService) {
-    $scope.projectConfiguration= projectConfiguration;
-    $scope.projectName = projectConfiguration.project_name;
-    $scope.projectStatus = projectStatus;
+angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope','$log','$filter','$location','SelectedNodesService','Constants', function($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants) {
+    $scope.projectName = $scope.projectConfiguration.name;
     $scope.selectedMonitor = 'All Nodes';
-    $scope.maxTags = 10;
+
     $scope.versionIsOpen = [];
     $scope.allNodesCount = 0;
     $scope.nodesFilter = '';
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
-    $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson(projectConfiguration));
-    $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson(projectStatus));
+    $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
+    $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
     $scope.initFromQueryString = function(queryStringObject) {
         var shouldRefresh = false;
@@ -44,6 +42,12 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
         }
         return shouldRefresh;
     };
+
+
+    var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
+        $log.debug('projectStatusCtrl: Tags changed');
+        $scope.refreshFilters();
+    });
 
     // Returns true if the node should be in the filtered array (Displayed)
     var isNodeFiltered = function(node) {
@@ -88,23 +92,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
         }
     );
 
-    $scope.updateTags = function() {
-        $log.debug('projectStatusCtrl: tags were changed');
-        var on = [], off = [];
-        for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
-            if ($scope.projectStatus.tag_info[i].state === 1) {
-                on.push($scope.projectStatus.tag_info[i].name);
-            } else if ($scope.projectStatus.tag_info[i].state === 2) {
-                off.push($scope.projectStatus.tag_info[i].name);
-            }
-        }
-        $scope.$apply(function() {
-            $location.search('tagsOn',on.join(','));
-            $location.search('tagsOff',off.join(','));
-        });
-        $scope.refreshFilters();
-    };
-
     $scope.refreshFilters = function() {
         var count = 0;
         for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
@@ -129,8 +116,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
     if ($scope.initFromQueryString($location.search())) {
         $scope.refreshFilters();
     }
-
-
 
     $scope.loadMoreNodes = function(index) {
         var j = 0;
@@ -164,9 +149,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
     };
 
     $scope.isAnyNodeChecked = function() {
-        for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
-            for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
-                if (projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
+        for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+            for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if ($scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
                     return true;
                 }
             }
@@ -176,10 +161,10 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
 
     $scope.getAllSelectedNodes = function() {
         var res = [];
-        for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
-            for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
-                if (projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
-                    res.push(projectStatus.nodes_for_version[i].filteredNodes[j]);
+        for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+            for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if ($scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
+                    res.push($scope.projectStatus.nodes_for_version[i].filteredNodes[j]);
                 }
             }
         }
@@ -188,9 +173,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
 
     $scope.isAllNodesChecked = function() {
         if ($scope.allNodesCount === 0) return false;
-        for (var i=0 ; i < projectStatus.nodes_for_version.length; i++) {
-            for (var j=0 ; j < projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
-                if (!projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
+        for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+            for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if (!$scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
                     return false;
                 }
             }
@@ -208,10 +193,12 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope', '$log', 'pro
 
     $scope.doSelectAllNodes = function(event) {
         event.stopPropagation();
-        angular.forEach(projectStatus.nodes_for_version, function(versionItem) {
+        angular.forEach($scope.projectStatus.nodes_for_version, function(versionItem) {
             angular.forEach(versionItem.filteredNodes, function(node) {
                 node.checked = event.target.checked;
             });
         });
     };
+
+    $scope.$on('$destroy', tagsChangedHandler);
 }]);

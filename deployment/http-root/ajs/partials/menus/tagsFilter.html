@@ -1,0 +1,9 @@
+<div class="panel panel-default" ng-controller="tagsFilterCtrl">
+    <div class="panel-heading">
+        <span class="panel-title"><i class="fa fa-tags"></i> Tags <help help-id="nodeTagsHelp"></help></span>
+    </div>
+    <div class="list-group">
+        <a three-state-list-group-item state='tag.state' on-change="updateTags()" href="#" style="padding-top: 3px; padding-bottom: 3px;" ng-repeat="tag in  projectStatus.tag_info | limitTo:maxTags ">{{tag.name}} <span class="badge pull-right">{{tag.count}}</span></a>
+        <list-group-more-item items="projectStatus.tag_info" max-items="maxTags"></list-group-more-item>
+    </div>
+</div>

@@ -106,7 +106,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 }).
                 when('/codeine/project/:project_name/status', {
                     templateUrl: '/ajs/partials/project_status.html',
-                    controller: 'projectStatusCtrl',
+                    controller: 'projectStatusWithMenuCtrl',
                     reloadOnSearch: false,
                     resolve: {
                         projectConfiguration : function($q,$log,$route,CodeineService) {
@@ -133,7 +133,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 }).
                 when('/codeine/nodes/status', {
                     templateUrl: '/ajs/partials/internal_nodes_status.html',
-                    controller: 'projectStatusCtrl',
+                    controller: 'projectStatusWithMenuCtrl',
                     reloadOnSearch: false,
                     resolve: {
                         projectConfiguration : function($q,$log,$route,CodeineService,Constants) {

@@ -1,14 +1,6 @@
 <div class="col-md-3">
     <div ng-include="'/ajs/partials/menus/projectMenu.html'"></div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="panel-title"><i class="fa fa-tags"></i> Tags <help help-id="nodeTagsHelp"></help></span>
-        </div>
-        <div class="list-group">
-            <a three-state-list-group-item state='tag.state' on-change="updateTags()" href="#" style="padding-top: 3px; padding-bottom: 3px;" ng-repeat="tag in  projectStatus.tag_info | limitTo:maxTags ">{{tag.name}} <span class="badge pull-right">{{tag.count}}</span></a>
-            <list-group-more-item items="projectStatus.tag_info" max-items="maxTags"></list-group-more-item>
-        </div>
-    </div>
+    <div ng-include="'/ajs/partials/menus/tagsFilter.html'"></div>
     <div ng-include="'/ajs/partials/menus/commandHistory.html'"></div>
 </div>
 <div ng-include="'/ajs/partials/project_status_without_menu.html'"></div>
