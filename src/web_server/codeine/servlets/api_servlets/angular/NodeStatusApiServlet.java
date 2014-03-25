@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.api.NodeGetter;
-import codeine.api.NodeWithMonitorsInfo;
 import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
 
@@ -24,7 +23,7 @@ public class NodeStatusApiServlet extends AbstractServlet {
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		String nodeName = request.getParameter(Constants.UrlParameters.NODE);
-		NodeWithMonitorsInfo node = nodesGetter.getNodeByName(projectName, nodeName);
+		NodeWithMonitorsInfoApi node = new NodeWithMonitorsInfoApi(nodesGetter.getNodeByName(projectName, nodeName));
 		writeResponseGzipJson(response, node);
 	}
 	

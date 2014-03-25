@@ -251,14 +251,11 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                     }
 
                 }).
-                when('/codeine/404', {
-                    templateUrl: '/ajs/partials/404.html'
-                }).
                 when('/', {
                     redirectTo: '/codeine'
                 }).
                 otherwise({
-                    redirectTo: '/codeine/404'
+                    templateUrl: '/ajs/partials/404.html'
                 });
         }])
     .run(['$rootScope', '$log','CodeineService',  function($rootScope, $log, CodeineService) {

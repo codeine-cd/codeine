@@ -1,6 +1,6 @@
 angular.module('codeine').filter('nodeFilter', function() {
     return function(node, query, monitor, tags) {
-        return (showByName(query, node.node_alias) && showByMonitor(monitor, node.failed_monitors) && showByTags(tags,node.tags));
+        return (showByName(query, node.alias) && showByMonitor(monitor, node.failed_monitors) && showByTags(tags,node.tags));
     };
 });
 
