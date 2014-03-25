@@ -30,7 +30,10 @@ public class ProjectConfigurationApiServlet extends AbstractServlet {
 		if (request.getMethod().equals("DELETE")) {
 			return permissionsManager.isAdministrator(request);	
 		}
-		return canConfigureProject(request);
+		if (request.getMethod().equals("PUT")) {
+			return canConfigureProject(request);	
+		}
+		return canReadProject(request);
 	}
 	
 	@Override
