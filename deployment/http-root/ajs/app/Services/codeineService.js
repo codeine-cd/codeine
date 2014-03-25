@@ -31,7 +31,7 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
             return $http.delete("/project-configuration_json", { params: { project: project } });
         },
         saveProjectConfiguration : function(configuration) {
-            return $http.put("/project-configuration_json", configuration, {  params: { project: configuration.project_name } });
+            return $http.put("/project-configuration_json", configuration, {  params: { project: configuration.name } });
         },
         prepareForShutdown: function() {
         	return $http.get("/prepare-for-shutdown", { cache: false });
