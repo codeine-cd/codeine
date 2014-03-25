@@ -113,7 +113,7 @@ public class RunMonitors implements Task {
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
 		env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
-		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(node.tags(), ";"));
+		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project().name());
 		ShellScriptWithOutput script = new ShellScriptWithOutput(
 				"tags_" + projectName + "_" + node.name(), project().tags_discovery_script(), pathHelper.getProjectDir(projectName), env);
@@ -136,7 +136,7 @@ public class RunMonitors implements Task {
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
 		env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
-		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(node.tags(), ";"));
+		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project().name());
 		ShellScriptWithOutput script = new ShellScriptWithOutput(
 				"version_" + projectName + "_" + node.name(), project().version_detection_script(), pathHelper.getProjectDir(projectName), env);
@@ -183,7 +183,7 @@ public class RunMonitors implements Task {
 			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
 			map.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
 			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
-			map.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(node.tags(), ";"));
+			map.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
 			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).env(map).build().execute();
 		} catch (Exception e) {
 			res = new Result(Constants.ERROR_MONITOR, e.getMessage());
