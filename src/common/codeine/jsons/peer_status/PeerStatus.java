@@ -1,5 +1,6 @@
 package codeine.jsons.peer_status;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -103,6 +104,10 @@ public class PeerStatus {
 
 	public NodeWithMonitorsInfo nodeInfo(ProjectJson project, String node, String alias) {
 		return initStatus(project, node, alias);
+	}
+
+	public Collection<?> getTags(String project_name, String node_name) {
+		return project_name_to_status().get(project_name).nodeInfoOrNull(node_name).tags();
 	}
 
 }

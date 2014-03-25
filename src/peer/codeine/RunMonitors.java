@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -176,7 +176,9 @@ public class RunMonitors implements Task {
 			log.info("will execute encoded " + cmd);
 			Map<String, String> map = Maps.newHashMap();
 			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+			map.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
 			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
+			map.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(node.tags(), ";"));
 			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).env(map).build().execute();
 		} catch (Exception e) {
 			res = new Result(Constants.ERROR_MONITOR, e.getMessage());

@@ -45,7 +45,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				throw new UnAuthorizedException();
+				throw newUnauthrizedException(request);
 			}
 			myGet(request, response);
 		} catch (Exception e) {
@@ -53,11 +53,15 @@ public abstract class AbstractServlet extends HttpServlet{
 		}
 	}
 
+	private UnAuthorizedException newUnauthrizedException(HttpServletRequest request) {
+		return new UnAuthorizedException(permissionsManager.user(request) + " not authorized for url " + request.getRequestURI());
+	}
+
 	@Override
 	protected final void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				throw new UnAuthorizedException();
+				throw newUnauthrizedException(request);
 			}
 			myPut(request, response);
 		} catch (Exception e) {
@@ -70,7 +74,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected final void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				throw new UnAuthorizedException();
+				throw newUnauthrizedException(request);
 			}
 			myPost(request, response);
 		} catch (Exception e) {
@@ -82,7 +86,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	protected final void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (!checkPermissions(request)) {
-				throw new UnAuthorizedException();
+				throw newUnauthrizedException(request);
 			}
 			myDelete(request, response);
 		} catch (Exception e) {

@@ -78,17 +78,25 @@ public class StringUtils {
 		return obj.toString();
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String collectionToString(Collection<?> c){
+		return collectionToString(c, " ");
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static String collectionToString(Collection<?> c, String delimiter) {
 		Function predicate = new Function<Object, String>() {
 			@Override
 			public String apply(Object input) {
 				return input.toString();
 			}
 		};
-		return collectionToString(c, predicate);
+		return collectionToString(c, predicate, delimiter);
 	}
 	public static <T> String collectionToString(Collection<T> c, Function<T, String> function){
+		return collectionToString(c, function, " ");
+	}
+
+	private static <T> String collectionToString(Collection<T> c, Function<T, String> function, String delimiter) {
 		String $ = "";
 		boolean first = true;
 		for (T object : c) {
@@ -96,7 +104,7 @@ public class StringUtils {
 				first = false;
 			}
 			else {
-				$ += " ";
+				$ += delimiter;
 			}
 			$ += function.apply(object);
 		}
