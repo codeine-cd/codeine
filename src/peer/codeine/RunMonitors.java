@@ -94,7 +94,16 @@ public class RunMonitors implements Task {
 			}
 		}
 		updateVersion();
-		updateTags();
+		if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Script) {
+			updateTagsByScript();
+		}
+		else if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Configuration){
+			updateTagsByConfiguration();
+		}
+	}
+
+	private void updateTagsByConfiguration() {
+		projectStatusUpdater.updateTags(project(), node.name(), node.alias(), node.tags());
 	}
 
 	private void removeNonExistMonitors() {
@@ -105,7 +114,7 @@ public class RunMonitors implements Task {
 	}
 
 	@SuppressWarnings("serial")
-	private void updateTags() {
+	private void updateTagsByScript() {
 		if (project().node_discovery_startegy() != NodeDiscoveryStrategy.Script || StringUtils.isEmpty(project().tags_discovery_script())) {
 			log.info("tags discovery is not configured for project " + projectName);
 			return;
