@@ -32,6 +32,16 @@
                             <div class="col-md-2 col-md-offset-1"><strong>{{param.name}}:</strong></div><div class="col-md-5"> {{param.value}}</div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Status:</strong></div>
+                        <div ng-show="!commandStatus.finished">
+                            <div class="col-md-6"><i class="fa fa-spinner fa-spin"></i> Running</div>
+                        </div>
+                        <div ng-show="commandStatus.finished">
+                            <div class="col-md-6"> Finished</div>
+                        </div>
+
+                    </div>
                     <br/>
                     <accordion close-others="false">
                     <accordion-group is-open="all_nodes_is_open">
@@ -63,6 +73,9 @@
             </div>
             <h4>Command Log</h4>
             <pre>{{commandStatus.output}}</pre>
+            <div ng-show="!commandStatus.finished">
+                <i class="fa fa-spinner fa-spin fa-2x"></i>
+            </div>
         </div>
     </div>
 </div>

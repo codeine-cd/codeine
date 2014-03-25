@@ -76,7 +76,7 @@ public class CommandNodeServlet extends AbstractServlet
 		try {
 			if (null != script_content){
 				//new
-				cmdScript = new ShellScript(file, script_content);
+				cmdScript = new ShellScript(file, script_content, experimentalConfJsonStore.get().windows_peer());
 				file = cmdScript.create();
 			}
 			else if (FilesUtils.exists(file)) { //TODO remove after build 1100
@@ -97,11 +97,25 @@ public class CommandNodeServlet extends AbstractServlet
 				cmd.add(PathHelper.getReadLogs());
 				cmd.add(encodeIfNeeded(credentials, credentials));
 			}
-			cmd.add(encodeIfNeeded("/bin/sh", credentials));
-			cmd.add(encodeIfNeeded("-xe", credentials));
+			if (experimentalConfJsonStore.get().windows_peer()) {
+				//cmd.add(encodeIfNeeded("cmd", credentials));
+				//cmd.add(encodeIfNeeded("/c", credentials));
+				//cmd.add(encodeIfNeeded("start", credentials));
+			}
+			else {
+				cmd.add(encodeIfNeeded("/bin/sh", credentials));
+				cmd.add(encodeIfNeeded("-xe", credentials));
+			}
 			cmd.add(encodeIfNeeded(file, credentials));
-			cmdForOutput.add("/bin/sh");
-			cmdForOutput.add("-xe");
+			if (experimentalConfJsonStore.get().windows_peer()) {
+				//cmdForOutput.add("cmd");
+				//cmdForOutput.add("/c");
+				//cmdForOutput.add("start");
+			}
+			else {
+				cmdForOutput.add("/bin/sh");
+				cmdForOutput.add("-xe");
+			}
 			cmdForOutput.add(file);
 			writer.println("$ " + StringUtils.collectionToString(cmdForOutput));
 			Function<String, Void> function = new Function<String, Void>(){

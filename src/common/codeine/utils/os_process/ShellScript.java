@@ -10,20 +10,28 @@ public class ShellScript {
 	private String content;
 	private String fileName;
 	private String key;
+	private boolean windows;
 
 	public ShellScript(String key, String content) {
+		this(key, content, false);
+	}
+	public ShellScript(String key, String content, boolean windows) {
 		this.key = key;
 		this.content = content;
-		this.fileName = "/tmp/codeine" + key.hashCode();
+		this.windows = windows;
+		this.fileName = (windows ? System.getProperty("java.io.tmpdir") : "/tmp" ) + "/codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");
 	}
 
 	public String create() {
+		content = content.replace("\n", System.lineSeparator());
 		TextFileUtils.setContents(fileName, content);
-		FilesUtils.setPermissions(fileName, 
-				PosixFilePermission.OWNER_EXECUTE, PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE,
-				PosixFilePermission.GROUP_EXECUTE, PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_WRITE,
-				PosixFilePermission.OTHERS_EXECUTE, PosixFilePermission.OTHERS_READ
-				);
+		if (!windows) {
+			FilesUtils.setPermissions(fileName, 
+					PosixFilePermission.OWNER_EXECUTE, PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE,
+					PosixFilePermission.GROUP_EXECUTE, PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_WRITE,
+					PosixFilePermission.OTHERS_EXECUTE, PosixFilePermission.OTHERS_READ
+					);
+		} 
 		return fileName;
 	}
 

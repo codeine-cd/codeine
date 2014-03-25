@@ -2,7 +2,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
     $scope.projectName = $scope.projectConfiguration.name;
     $scope.selectedMonitor = 'All Nodes';
 
-    $scope.versionIsOpen = [];
     $scope.allNodesCount = 0;
     $scope.nodesFilter = '';
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
