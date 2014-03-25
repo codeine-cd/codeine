@@ -18,6 +18,7 @@ import codeine.servlets.api_servlets.ProjectsListApiServlet;
 import codeine.servlets.api_servlets.ReporterServlet;
 import codeine.servlets.api_servlets.UpgradeApiServlet;
 import codeine.servlets.api_servlets.angular.CodeineConfigurationApiServlet;
+import codeine.servlets.api_servlets.angular.CodeineExperimentalConfigurationApiServlet;
 import codeine.servlets.api_servlets.angular.CodeinePermissionsApiServlet;
 import codeine.servlets.api_servlets.angular.CommandStatusApiServlet;
 import codeine.servlets.api_servlets.angular.MonitorStatusApiServlet;
@@ -86,6 +87,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(PrepareForShutdownApiServlet.class, Constants.PREPARE_FOR_SHUTDOWN_CONTEXT);
 		serveMe(CancelShutdownApiServlet.class, Constants.CANCEL_SHUTDOWN_CONTEXT);
 		serveMe(CodeineConfigurationApiServlet.class, apiContext(Constants.GLOBAL_CONFIGURATION_CONTEXT));
+		serveMe(CodeineExperimentalConfigurationApiServlet.class, apiContext(Constants.EXPERIMENTAL_CONFIGURATION_CONTEXT));
 		serveMe(ProjectConfigurationApiServlet.class, apiContext(Constants.PROJECT_CONFIGURATION_CONTEXT));
 		serveMe(UserInfoApiServlet.class, apiContext(Constants.USER_INFO_CONTEXT));
 		serveMe(ProjectStatus2ApiServlet.class, apiContext(Constants.PROJECT_STATUS_CONTEXT + "2"));

@@ -7,18 +7,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.GlobalConfigurationJson;
-import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.jsons.global.ExperimentalConfJson;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.servlet.AbstractServlet;
 
-public class CodeineConfigurationApiServlet extends AbstractServlet {
+public class CodeineExperimentalConfigurationApiServlet extends AbstractServlet {
 
 	
-	private static final Logger log = Logger.getLogger(CodeineConfigurationApiServlet.class);
+	private static final Logger log = Logger.getLogger(CodeineExperimentalConfigurationApiServlet.class);
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject private GlobalConfigurationJsonStore configurationJsonStore;
+	@Inject private ExperimentalConfJsonStore configurationJsonStore;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -39,8 +39,8 @@ public class CodeineConfigurationApiServlet extends AbstractServlet {
 	
 	@Override
 	protected void myPut(HttpServletRequest req, HttpServletResponse resp) {
-		GlobalConfigurationJson config = readBodyJson(req, GlobalConfigurationJson.class);
-		log.info("Will update codeine configuration. New Config is: " + config);
+		ExperimentalConfJson config = readBodyJson(req, ExperimentalConfJson.class);
+		log.info("Will update codeine Experimenta configuration. New Config is: " + config);
 		configurationJsonStore.store(config);
 		writeResponseJson(resp, configurationJsonStore.get());
 	}

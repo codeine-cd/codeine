@@ -26,7 +26,5 @@ public class NodeStatusApiServlet extends AbstractServlet {
 		NodeWithMonitorsInfoApi node = new NodeWithMonitorsInfoApi(nodesGetter.getNodeByName(projectName, nodeName));
 		writeResponseGzipJson(response, node);
 	}
-	
-	
 
 }

@@ -6,6 +6,9 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         getGlobalConfiguration: function () {
             return $http.get("/global-configuration_json", { cache: false });
         },
+        getExperimentalConfiguration: function () {
+            return $http.get("/experimental-configuration_json", { cache: false });
+        },
         getSessionInfo: function () {
             return $http.get("/session-info_json", { cache: false });
         },

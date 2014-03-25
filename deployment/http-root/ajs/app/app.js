@@ -273,6 +273,11 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
             $rootScope.app.globalConfiguration = data;
         });
 
+        CodeineService.getExperimentalConfiguration().success(function(data) {
+            $log.debug('run: got experimental configuration ' + angular.toJson(data));
+            $rootScope.app.experimentalConfiguration = data;
+        });
+
         $rootScope.$on('$locationChangeStart', function () {
             $log.debug('$locationChangeStart');
             $rootScope.app.loading = true;
