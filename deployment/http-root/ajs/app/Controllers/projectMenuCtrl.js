@@ -3,7 +3,6 @@ angular.module('codeine').controller('projectMenuCtrl',['$scope', '$log', '$rout
         $scope.projectName = $routeParams.project_name;
         $log.debug('projectMenuCtrl: current project is ' + $scope.projectName);
 
-
         $scope.deleteProject = function() {
             if ($window.confirm('Are you sure you would like to delete project ' + $scope.projectName + ' ? THIS IS NOT REVERSIBLE!!!')) {
                 $log.debug('projectMenuCtrl: will delete project');

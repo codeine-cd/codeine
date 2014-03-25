@@ -4,9 +4,8 @@ angular.module('codeine').directive('commandAction', ['$log', function ($log) {
         scope : {
             project : '='
         },
-        scope: true,
         link: function ($scope, element) {
-            if (!$scope.app.sessionInfo.permissions.command_project.indexOf($scope.project) === -1) {
+            if ($scope.app.sessionInfo.permissions.command_project.indexOf($scope.project) === -1) {
                 $log.debug('commandAction: User do not have command permissions, will hide element');
                 element.hide();
             } else {
