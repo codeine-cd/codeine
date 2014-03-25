@@ -28,6 +28,12 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		this.version = version;
 	}
 	
+	public NodeWithMonitorsInfo(NodeWithMonitorsInfo node) {
+		this(node.peer(),node.name(), node.alias(), node.projectName(), node.monitors());
+		this.version = node.version();
+		this.tags(node.tags());
+	}
+	
 	public String projectName() {
 		return projectName;
 	}

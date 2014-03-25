@@ -12,7 +12,7 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 	
 	public NodeWithMonitorsInfoApi(NodeWithMonitorsInfo info) 
 	{
-		super(info.peer(), info.name(), info.alias(), info.projectName(),info.monitors());
+		super(info);
 		this.failed_monitors = info.failedMonitors();
 		this.ok_monitors = info.ok_monitors();
 	}
