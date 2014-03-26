@@ -5,6 +5,20 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
+    $scope.versionIsOpen = [];
+    for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+        $scope.versionIsOpen[i] = true;
+    }
+    $scope.collapseAll = function() {
+        for (var i=0 ; i < $scope.versionIsOpen.length; i++) {
+            $scope.versionIsOpen[i] = false;
+        }
+    }
+    $scope.expandAll = function() {
+        for (var i=0 ; i < $scope.versionIsOpen.length; i++) {
+            $scope.versionIsOpen[i] = true;
+        }
+    }
     $scope.shouldShowClearFilters = function() {
         var search = $location.search();
         var noTagsOn = ((!angular.isDefined(search.tagsOn) || search.tagsOn.length === 0));
