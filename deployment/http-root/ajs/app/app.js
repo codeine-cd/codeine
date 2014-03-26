@@ -1,4 +1,4 @@
-angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate'])
+angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
@@ -299,7 +299,6 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
         });
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
             $log.debug('$routeChangeError - rejection = ' + rejection);
-
             $rootScope.app.contentLoading = false;
             $rootScope.app.serverDown = true;
         });

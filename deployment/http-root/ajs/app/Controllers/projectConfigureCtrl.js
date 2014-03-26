@@ -4,6 +4,12 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
     $log.debug('projectConfigureCtrl: current project is ' + $scope.projectName);
     $scope.projectConfigurationForEditing = projectConfigurationForEditing;
     $scope.tags = [];
+    $scope.model = {
+        commandAndMonitorAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_NODE_TAGS'],
+        versionAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_NODE_TAGS','CODEINE_OUTPUT_FILE'],
+        nodesDiscoveryAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_OUTPUT_FILE'],
+        tagsAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_OUTPUT_FILE']
+    };
 
     function swapItems(index,array) {
         var temp = array[index];

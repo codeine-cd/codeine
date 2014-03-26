@@ -34,18 +34,22 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
-            <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
-            <div class="col-md-7" ng-class="{'has-error': nodesInfoForm.nodes_discovery_script.$invalid}">
-                <textarea class="form-control" id="nodes_discovery_script" name="nodes_discovery_script" rows="3" ng-model="projectConfigurationForEditing.nodes_discovery_script" required></textarea>
+        <ng-form name="scriptDiscoveryStartegyInnerForm">
+            <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
+                <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
+                <div class="col-md-7" ng-class="{'has-error': scriptDiscoveryStartegyInnerForm.script_content.$invalid}">
+                    <textcomplete members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
+                </div>
             </div>
-        </div>
-        <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
-            <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
-            <div class="col-md-7">
-                <textarea class="form-control" id="tags_discovery_script" name="tags_discovery_script" rows="3" ng-model="projectConfigurationForEditing.tags_discovery_script"></textarea>
+        </ng-form>
+        <ng-form name="tagsDiscoveryInnerForm">
+            <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
+                <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
+                <div class="col-md-7">
+                    <textcomplete members='model.tagsAutoComplete' message='projectConfigurationForEditing.tags_discovery_script' rows="3" element-class="form-control" element-id="tags_discovery_script" is-required="false"></textcomplete>
+                </div>
             </div>
-        </div>
+        </ng-form>
         <div ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Configuration'">
             <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
                 <thead>
@@ -92,7 +96,7 @@
         <div class="form-group">
             <label for="version_detection_script" class="col-md-4 control-label">Script <help help-id="versionScriptHelp"></help></label>
             <div class="col-md-7">
-                <textarea ng-model="projectConfigurationForEditing.version_detection_script" class="form-control" name="version_detection_script" id="version_detection_script"></textarea>
+                <textcomplete members='model.versionAutoComplete' message='projectConfigurationForEditing.version_detection_script' rows="3" element-class="form-control" element-id="version_detection_script" is-required="false"></textcomplete>
             </div>
         </div>
     </div>
@@ -144,8 +148,8 @@
                     </div>
                     <div class="form-group">
                         <label for="monitor_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="monitorScriptHelp"></help></label>
-                        <div class="col-md-7" ng-class="{'has-error': monitorsInnerForm.script.$invalid}">
-                            <textarea ng-model="monitor_info.script_content" rows="3" class="form-control" name="script" id="monitor_info{{$index}}.script" placeholder="Script" required></textarea>
+                        <div class="col-md-7" ng-class="{'has-error': monitorsInnerForm.script_content.$invalid}">
+                            <textcomplete members='model.commandAndMonitorAutoComplete' message='monitor_info.script_content' rows="3" element-class="form-control" element-id="monitor_info{{$index}}.script" is-required="true"></textcomplete>
                         </div>
                     </div>
                 </div>
@@ -367,7 +371,7 @@
                     <div class="form-group">
                         <label for="command_info{{$index}}.script_content" class="col-md-3 control-label">Script <help help-id="commandScriptHelp"></help></label>
                         <div class="col-md-7" ng-class="{'has-error': commandsInnerForm.script_content.$invalid}">
-                            <textarea ng-model="command_info.script_content" rows="3" class="form-control" name="script_content" id="command_info{{$index}}.script_content" placeholder="Script" required></textarea>
+                            <textcomplete members='model.commandAndMonitorAutoComplete' message='command_info.script_content' rows="3" element-class="form-control" element-id="command_info{{$index}}.script_content" is-required="true"></textcomplete>
                         </div>
                     </div>
                 </div>
