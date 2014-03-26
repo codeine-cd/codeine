@@ -1,12 +1,33 @@
 angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope','$log','$filter','$location','SelectedNodesService','Constants', function($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants) {
     $scope.projectName = $scope.projectConfiguration.name;
-    $scope.selectedMonitor = 'All Nodes';
-
     $scope.allNodesCount = 0;
-    $scope.nodesFilter = '';
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
     $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
+
+    $scope.shouldShowClearFilters = function() {
+        var search = $location.search();
+        var noTagsOn = ((!angular.isDefined(search.tagsOn) || search.tagsOn.length === 0));
+        var noTagsOff = ((!angular.isDefined(search.tagsOff) || search.tagsOff.length === 0));
+        var noTags = noTagsOn && noTagsOff;
+        return !(($scope.selectedMonitor === 'All Nodes') && ($scope.nodesFilter === '') && (noTags));
+    };
+
+    $scope.initValues = function() {
+        $scope.selectedMonitor = 'All Nodes';
+        $scope.nodesFilter = '';
+    };
+
+    $scope.clearFilters = function() {
+        $location.search({});
+        $scope.initValues();
+        for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
+            $scope.projectStatus.tag_info[j].state = 0;
+        }
+        $scope.refreshFilters();
+    };
+
+    $scope.initValues();
 
     $scope.initFromQueryString = function(queryStringObject) {
         var shouldRefresh = false;
@@ -17,34 +38,15 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         }
         if (angular.isDefined(queryStringObject.tagsOn)) {
             shouldRefresh = true;
-            $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
-            var array = queryStringObject.tagsOn.split(',');
-            for (var i=0; i < array.length; i++) {
-                for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
-                    if ($scope.projectStatus.tag_info[j].name === array[i]) {
-                        $scope.projectStatus.tag_info[j].state = 1;
-                    }
-                }
-            }
         }
         if (angular.isDefined(queryStringObject.tagsOff)) {
             shouldRefresh = true;
-            $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
-            var array = queryStringObject.tagsOff.split(',');
-            for (var i=0; i < array.length; i++) {
-                for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
-                    if ($scope.projectStatus.tag_info[j].name === array[i]) {
-                        $scope.projectStatus.tag_info[j].state = 2;
-                    }
-                }
-            }
         }
         return shouldRefresh;
     };
 
 
     var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
-        $log.debug('projectStatusCtrl: Tags changed');
         $scope.refreshFilters();
     });
 

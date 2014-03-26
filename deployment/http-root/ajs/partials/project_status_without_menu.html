@@ -1,4 +1,9 @@
 <div class="col-md-9" ng-controller="projectStatusCtrl">
+    <div class="row" style="margin-bottom: 10px;" ng-show="shouldShowClearFilters()">
+        <div class="col-md-12">
+            <span class="label label-default" style="cursor: pointer;" ng-click="clearFilters()"><i class="fa fa-times"></i> Clear all filters</span>
+        </div>
+    </div>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
