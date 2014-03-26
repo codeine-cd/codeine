@@ -106,7 +106,7 @@
                             </div>
                             <div class="col-md-9">
                                 <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
-                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" ng-repeat="failing_monitor in node.failed_monitors" >{{failing_monitor}}&nbsp;</a>
+                                <span ng-repeat="failing_monitor in node.failed_monitors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
                             </div>
                         </div>
                         <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>
