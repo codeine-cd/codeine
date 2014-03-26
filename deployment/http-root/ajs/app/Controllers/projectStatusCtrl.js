@@ -156,6 +156,17 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         $location.path(url);
     };
 
+    $scope.selectedCount = function(){
+        var count = 0;
+        for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+            for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
+                if ($scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
     $scope.checkboxClick = function(versionItem, event) {
         event.stopPropagation();
         angular.forEach(versionItem.filteredNodes, function(item) {
