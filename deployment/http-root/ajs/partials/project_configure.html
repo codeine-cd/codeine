@@ -69,7 +69,7 @@
                         <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2">
                     </td>
                     <td class="col-md-1">
-                        <button ng-click="removeNode($index)" title="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                        <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index)" title="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                     </td>
                 </tr>
                 </tbody>
@@ -186,7 +186,7 @@
                 </select>
             </td>
             <td class="col-md-1">
-                <button ng-click="removeNotification($index)" title="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                <button ng-click="removeItem(projectConfigurationForEditing.mail,$index)" title="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
             </td>
         </tr>
         </tbody>
