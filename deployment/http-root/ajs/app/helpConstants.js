@@ -20,9 +20,10 @@ angular.module('codeine')
         "stopOnErrorHelp" : "Check for errors during command execution, and stop commanding more nodes if the percent of nodes with failing monitors is greater than the configured value.",
         "durationHelp" : "The time period for the command execution. Codeine will spread execution on nodes across that time based on the ratio.",
         "preventOverrideHelp" : "If checked, when executing the command, the user will not be able to change the configuration below.",
+        "commandsConfigureHelp" : "Configure commands to execute on node. Such command can upgrade to new version or restart the process.",
         "commandHistoryHelp" : "All the currently running and finished commands of the selected project.",
         "commandExecutorHelp" : "All the currently running commands on the Codeine server from all projects.",
-        "nodeTagsHelp" : "Tags on nodes. Press a tag to filter only nodes with that tag.",
+        "nodeTagsHelp" : "Tags on nodes.<br/>Press a tag to filter only nodes with that tag (blue). Press again to filter-out nodes with that tag (red).",
         "emailHelp" : "Codeine will notify on failing monitors to configured users. "
             + "<br/><br/><strong>'Immediately'</strong> - send mail immediately after a monitor has failed."
             + "<br/><br/><strong>'Hourly'/'Daily'</strong> - send mail after a monitor has failed, Codeine will aggregate the notifications to send them at the specified frequency.",
@@ -35,10 +36,10 @@ angular.module('codeine')
             + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>",
         "tagsdiscoveryScriptHelp" : "Type a shell script to discover tags for the project's nodes. The script runs on each individual Codeine peer.<br/><br/>"
             + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[\"&lt;tag-string&gt;\", ...]</pre> <br/>"
-            + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>",
+            + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS</strong>",
         "commandScriptHelp" : "Type a shell script to execute on nodes.<br/><br/>"
             + "Parameters will be provided to the script as <strong>Environment Variables</strong>.<br/>"
-            + "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>, <strong>CODEINE_NODE_ALIAS</strong>,<strong>CODEINE_NODE_TAGS</strong>",
+            + "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>",
         "monitorsConfigureHelp" : "Monitors used to detect malfunctions and errors on the running nodes.<br/><br/>"
             + "Codeine runs the monitors periodically on all nodes, and notifies when a node fails.",
         "versionHelp" : "A version will be reported by each node.",
@@ -48,10 +49,10 @@ angular.module('codeine')
         "credentialsHelp" : "The user that will be used to execute the configured script.<br/><br/> This feature does not work for most cases right now.",
         "notificationsEnabledHelp" : "If not checked, emails will not be sent to the configured users, even if this monitor fails.",
         "monitorScriptHelp" : "Type a shell script to monitor the desired functionality of the node.<br/><br/>By convention, monitors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>"
-            + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>,<strong>CODEINE_NODE_TAGS</strong>.",
-        "riptHelp" : "Type a shell script to specify the node's version.<br/><br/>"
+            + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
+        "versionScriptHelp" : "Type a shell script to specify the node's version.<br/><br/>"
             + "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> and should contain the version number (e.g.: 1.0.3).<br/><br/>"
-            + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>, <strong>CODEINE_NODE_NAME</strong>,<strong>CODEINE_NODE_ALIAS</strong>,<strong>CODEINE_NODE_TAGS</strong>.",
+            + "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
         "tabsConfigureHelp" : "Enables a separate view for a group of projects in the main page of Codeine.",
         "serverNameHelp" : "A name to be displayed when accessing UI or in mail messages",
         "webServerHostHelp" : "Full host name of the web server",
