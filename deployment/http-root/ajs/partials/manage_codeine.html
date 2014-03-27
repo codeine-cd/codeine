@@ -1,6 +1,15 @@
 <div class="col-md-3">
     <div ng-include="'/ajs/partials/menus/manageMenu.html'"></div>
     <div ng-include="'/ajs/partials/menus/commandRunning.html'"></div>
+    <div class="input-group">
+        <input type="text" ng-model="newViewAs" class="form-control" placeholder="User">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-click="setViewAs()">View As</button>
+          </span>
+    </div><!-- /input-group -->
+    <div class="form-group" admin-action>
+
+    </div>
 </div>
 <div class="col-md-9">
 <accordion close-others="true">

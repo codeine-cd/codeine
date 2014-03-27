@@ -117,7 +117,7 @@ public class PermissionsManager {
 			username = username.substring(0, username.indexOf("@"));
 		}
 		
-		String viewas = request.getParameter(Constants.UrlParameters.VIEW_AS);
+		String viewas = request.getHeader(Constants.UrlParameters.VIEW_AS);
 		if (!StringUtils.isEmpty(viewas) && getUser(username).isAdministrator()) {
 			CodeineUser user = usersManager.user(viewas);
 			log.debug("Using VIEW_AS Mode - " + user.username());

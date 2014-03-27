@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title ng-bind-html="app.globalConfiguration.server_name"></title>
+    <title ng-bind-html="(app.viewAs ? app.viewAs + ' @ ' : '' ) + app.globalConfiguration.server_name"></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- bower:css -->
@@ -178,6 +178,7 @@
 <script src="/ajs/app/Services/alertService.js"></script>
 <script src="/ajs/app/Services/errorHandlerService.js"></script>
 <script src="/ajs/app/Services/selectedNodesService.js"></script>
+<script src="/ajs/app/Services/viewAsRequestInterceptor.js"></script>
 <script src="/ajs/app/Filters/projectsFilter.js"></script>
 <script src="/ajs/app/Filters/nodeFilter.js"></script>
 

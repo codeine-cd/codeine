@@ -3,6 +3,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
             $httpProvider.interceptors.push('myHttpInterceptor');
+            $httpProvider.interceptors.push('viewAsInterceptor');
             $sceProvider.enabled(false);
             $routeProvider.
                 when('/codeine', {
@@ -270,7 +271,8 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
         }])
     .run(['$rootScope', '$log','CodeineService',  function($rootScope, $log, CodeineService) {
         $rootScope.app = {
-            loading: null
+            loading: null,
+            viewAs : null
         };
 
         CodeineService.getSessionInfo().success(function(data) {

@@ -1,4 +1,4 @@
-angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tabs','permissions', 'projects','CodeineService','AlertService', function($scope, $log, tabs, permissions, projects, CodeineService, AlertService) {
+angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tabs','permissions', 'projects','CodeineService','AlertService','$location', function($scope, $log, tabs, permissions, projects, CodeineService, AlertService, $location) {
     $scope.projects  = [];
     angular.forEach(projects, function(key,value) {
         $scope.projects.push(key['name']);
@@ -6,6 +6,17 @@ angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tab
     $scope.tabsForEditing = angular.copy(tabs);
     $scope.permissionsForEditing = angular.copy(permissions);
     $scope.globalConfigurationForEditing = angular.copy($scope.app.globalConfiguration);
+
+    $scope.setViewAs = function() {
+        $scope.app.viewAs = $scope.newViewAs;
+        CodeineService.getSessionInfo().success(function(data) {
+            $log.debug('run: got session info ' + angular.toJson(data));
+            $scope.app.sessionInfo = data;
+            $location.path('/codeine');
+        }).error(function() {
+            $scope.app.viewAs = null;
+        });
+    };
 
     $scope.saveConfiguration = function() {
         $log.debug('manageCodeineCtrl: saveConfiguration');
