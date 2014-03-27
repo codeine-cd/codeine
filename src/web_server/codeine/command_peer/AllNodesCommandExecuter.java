@@ -58,8 +58,9 @@ public class AllNodesCommandExecuter {
 	private CommandExecutionStrategy strategy;
 
 
-	public long executeOnAllNodes(String user, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
+	public long executeOnAllNodes(String user, ScehudleCommandExecutionInfo commandData, ProjectJson project, HttpServletRequest request) {
 		this.project = project;
+		this.request = request;
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();

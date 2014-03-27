@@ -44,6 +44,8 @@ public class PeerCommandWorker implements Runnable {
 		this.shouldOutputImmediatly = shouldOutputImmediatly;
 		this.links = links;
 		this.project = project;
+		this.request = request;
+		this.permissionsManager = permissionsManager;
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public class PeerCommandWorker implements Runnable {
 
 	private void execute() {
 		if (noPermissions()) {
-			announce("no permissions for user " + user + " on node " + node.alias());
+			announce("no permissions for user " + permissionsManager.user(request) + " on node " + node.alias());
 			allNodesCommandExecuter.fail(node);
 		}
 		String url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;

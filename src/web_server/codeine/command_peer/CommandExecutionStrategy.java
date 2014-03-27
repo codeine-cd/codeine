@@ -22,8 +22,6 @@ public abstract class CommandExecutionStrategy {
 	private HttpServletRequest request;
 	private PermissionsManager permissionsManager;
 	
-	
-	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
 			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, HttpServletRequest request,
 			PermissionsManager permissionsManager) {
