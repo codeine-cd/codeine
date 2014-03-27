@@ -4,7 +4,7 @@ import java.util.List;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.NodeMonitor;
-import codeine.jsons.auth.ProjectPermissions;
+import codeine.jsons.auth.UserProjectPermissions;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 
@@ -17,7 +17,7 @@ public class ProjectJson
 	private List<MailPolicyJson> mail = Lists.newArrayList();
 	private NodeDiscoveryStrategy node_discovery_startegy = NodeDiscoveryStrategy.Configuration;
 	private List<CommandInfo> commands = Lists.newArrayList();
-	private List<ProjectPermissions> permissions = Lists.newArrayList();
+	private List<UserProjectPermissions> permissions = Lists.newArrayList();
 	private String nodes_discovery_script;
 	private String tags_discovery_script;
 	private String version_detection_script;
@@ -122,6 +122,10 @@ public class ProjectJson
 	
 	public String tags_discovery_script() {
 		return tags_discovery_script;
+	}
+
+	public List<UserProjectPermissions> permissions() {
+		return permissions;
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.info.SessionInfo;
@@ -32,7 +33,7 @@ public class RuntimeInfoApiServlet extends AbstractServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		UserPermissions user = permissionsManager.user(request);
+		IUserPermissions user = permissionsManager.user(request);
 		Set<String> canCommand = Sets.newHashSet();
 		Set<String> canConfigure = Sets.newHashSet();
 		Set<String> canRead = Sets.newHashSet();

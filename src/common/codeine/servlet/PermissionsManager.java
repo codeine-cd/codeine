@@ -1,39 +1,48 @@
 package codeine.servlet;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import codeine.configuration.IConfigurationManager;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.CodeineUser;
+import codeine.jsons.auth.CompoundUserPermissions;
+import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.auth.UserPermissions;
+import codeine.jsons.auth.UserProjectPermissions;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.UserPermissionsJsonStore;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.StringUtils;
+
+import com.google.common.collect.Maps;
 
 public class PermissionsManager {
 
 	private static final Logger log = Logger.getLogger(PermissionsManager.class);
 	
 	private UserPermissionsJsonStore permissionsConfigurationJsonStore;
+	private IConfigurationManager configurationManager;
 	private GlobalConfigurationJsonStore globalConfigurationJson;
-	private UserPermissionsJsonStore permissionConfJson;
 	private UsersManager usersManager;
 	private final UserPermissions ADMIN_GUEST = new UserPermissions("Guest", true);
-		
+	
 	@Inject
-	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore,
-			GlobalConfigurationJsonStore globalConfigurationJson, UserPermissionsJsonStore permissionConfJson, UsersManager usersManager) {
+	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore, 
+			GlobalConfigurationJsonStore globalConfigurationJson, UsersManager usersManager, IConfigurationManager configurationManager) {
 		super();
 		this.permissionsConfigurationJsonStore = permissionsConfigurationJsonStore;
 		this.globalConfigurationJson = globalConfigurationJson;
-		this.permissionConfJson = permissionConfJson;
 		this.usersManager = usersManager;
+		this.configurationManager = configurationManager;
 	}
 	
 	public boolean canRead(String projectName, HttpServletRequest request){
@@ -51,14 +60,31 @@ public class PermissionsManager {
 	public boolean isAdministrator(HttpServletRequest request){
 		return user(request).isAdministrator();
 	}
-	public UserPermissions user(HttpServletRequest request){
+	public IUserPermissions user(HttpServletRequest request){
 		if (ignoreSecurity()) {
 			return ADMIN_GUEST;
 		}
 		String user = userInternal(request);
-		UserPermissions userPermissions = permissionConfJson.get().getOrNull(user);
+		IUserPermissions userPermissions = getUser(user);
 		return null == userPermissions ? guest(user) : userPermissions; 
 		
+	}
+
+	private IUserPermissions getUser(String user) {
+		UserPermissions userPermissions = permissionsConfigurationJsonStore.get().getOrNull(user);
+		if (null == userPermissions) {
+			return null;
+		}
+		List<ProjectJson> configuredProjects = configurationManager.getConfiguredProjects();
+		Map<String, UserProjectPermissions> p = Maps.newHashMap();
+		for (ProjectJson projectJson : configuredProjects) {
+			for (UserProjectPermissions u : projectJson.permissions()) {
+				if (u.username().equals(user)){
+					p.put(projectJson.name(), u);
+				}
+			}
+		}
+		return new CompoundUserPermissions(userPermissions, p);
 	}
 	
 	private final UserPermissions guest(String user) {
@@ -88,7 +114,7 @@ public class PermissionsManager {
 		}
 		
 		String viewas = request.getParameter(Constants.UrlParameters.VIEW_AS);
-		if (!StringUtils.isEmpty(viewas) && permissionConfJson.get().get(username).isAdministrator()) {
+		if (!StringUtils.isEmpty(viewas) && getUser(username).isAdministrator()) {
 			CodeineUser user = usersManager.user(viewas);
 			log.debug("Using VIEW_AS Mode - " + user.username());
 			return user.username();
@@ -100,7 +126,7 @@ public class PermissionsManager {
 		return user(request).canConfigure(projectName);
 	}
 	public void makeAdmin(String user) {
-		PermissionsConfJson permissionsConfJson = permissionConfJson.get();
+		PermissionsConfJson permissionsConfJson = permissionsConfigurationJsonStore.get();
 		permissionsConfJson.makeAdmin(user);
 		permissionsConfigurationJsonStore.store(permissionsConfJson);
 	}

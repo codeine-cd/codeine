@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 
-public class UserPermissions {
+public class UserPermissions implements IUserPermissions{
 
 	
 	private String username;
@@ -14,7 +14,7 @@ public class UserPermissions {
 	private Set<String> configure_project = Sets.newHashSet();
 	private Set<String> command_project = Sets.newHashSet();
 	
-	protected UserPermissions() {
+	public UserPermissions() {
 		super();
 	}
 
@@ -31,21 +31,25 @@ public class UserPermissions {
 		this.configure_project = canConfigure;
 	}
 
+	@Override
 	public String username()
 	{
 		return username;
 	}
 	
+	@Override
 	public boolean canRead(String projectName) {
 		return isSetMatch(read_project, projectName) || canCommand(projectName);
 	}
 
 
+	@Override
 	public boolean canCommand(String projectName) {
 		return isSetMatch(command_project, projectName) || canConfigure(projectName);
 	}
 
 
+	@Override
 	public boolean isAdministrator() {
 		return administer;
 	}
@@ -64,6 +68,7 @@ public class UserPermissions {
 	}
 
 
+	@Override
 	public boolean canConfigure(String projectName) {
 		return isSetMatch(configure_project, projectName) || isAdministrator();
 	}
