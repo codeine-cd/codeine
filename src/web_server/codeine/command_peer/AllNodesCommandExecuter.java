@@ -15,6 +15,7 @@ import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
@@ -44,12 +45,15 @@ public class AllNodesCommandExecuter {
 	private String dirNameFull;
 	private ScehudleCommandExecutionInfo commandData;
 	private CommandExecutionStatusInfo commandDataJson;
+	private ProjectJson project;
 
 	private Object fileWriteSync = new Object();
 
 	private CommandExecutionStrategy strategy;
 
-	public long executeOnAllNodes(String user, ScehudleCommandExecutionInfo commandData) {
+
+	public long executeOnAllNodes(String user, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
+		this.project = project;
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
@@ -117,10 +121,10 @@ public class AllNodesCommandExecuter {
 	private void execute() {
 		try {
 			if (commandData.command_info().command_strategy() == CommandExcutionType.Immediately){
-				strategy = new ImmediatlyCommandStrategy(this, commandData, links);
+				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project);
 			}
 			else { 
-				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter);
+				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project);
 			}
 			strategy.execute();
 			if (strategy.isCancel()) {

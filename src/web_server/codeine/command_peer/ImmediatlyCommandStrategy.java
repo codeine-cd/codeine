@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
+import codeine.jsons.project.ProjectJson;
 
 public class ImmediatlyCommandStrategy extends CommandExecutionStrategy {
 
@@ -14,8 +15,8 @@ public class ImmediatlyCommandStrategy extends CommandExecutionStrategy {
 	private static final Logger log = Logger.getLogger(ImmediatlyCommandStrategy.class);
 	
 
-	public ImmediatlyCommandStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links) {
-		super(allNodesCommandExecuter, commandData, links);
+	public ImmediatlyCommandStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, ProjectJson project) {
+		super(allNodesCommandExecuter, commandData, links, project);
 	}
 
 	@Override

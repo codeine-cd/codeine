@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
+import codeine.jsons.project.ProjectJson;
 
 public abstract class CommandExecutionStrategy {
 
@@ -14,11 +15,13 @@ public abstract class CommandExecutionStrategy {
 	private AllNodesCommandExecuter allNodesCommandExecuter;
 	private Links links;
 	private boolean cancel;
+	private ProjectJson project;
 	
-	public CommandExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links) {
+	public CommandExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, ProjectJson project) {
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.commandData = commandData;
 		this.links = links;
+		this.project = project;
 	}
 	
 	public abstract void execute();

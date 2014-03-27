@@ -9,6 +9,7 @@ import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.Links;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
 import codeine.utils.ExceptionUtils;
@@ -27,13 +28,15 @@ public class PeerCommandWorker implements Runnable {
 	private Links links;
 	private boolean success = false;
 	private boolean POST = true;
+	private ProjectJson project;
 
-	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links) {
+	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.command_info = command_info;
 		this.shouldOutputImmediatly = shouldOutputImmediatly;
 		this.links = links;
+		this.project = project;
 	}
 
 	@Override

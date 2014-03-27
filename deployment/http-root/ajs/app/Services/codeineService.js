@@ -80,6 +80,9 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         },
         getUserInfo : function() {
             return $http.get("/user-info_json", { cache: false });
+        },
+        getProjectNodes : function(project) {
+            return $http.get("/project-nodes2_json", {params: { project: project } ,cache: false });
         }
 
     };

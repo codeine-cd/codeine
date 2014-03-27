@@ -229,6 +229,16 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                                     deferred.reject('Error - failed to get project configuration');
                             });
                             return deferred.promise;
+                        },
+                        nodes :  function($q,$log,$route,CodeineService) {
+                            var deferred = $q.defer();
+                            CodeineService.getProjectNodes($route.current.params.project_name).success(function(data) {
+                                $log.debug("Resolved project nodes");
+                                deferred.resolve(data);
+                            }).error(function() {
+                                deferred.reject('Error - failed to get project nodes');
+                            });
+                            return deferred.promise;
                         }
                     }
                 }).

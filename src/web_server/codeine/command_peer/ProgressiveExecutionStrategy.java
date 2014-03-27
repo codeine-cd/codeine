@@ -8,6 +8,7 @@ import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
+import codeine.jsons.project.ProjectJson;
 import codeine.utils.StringUtils;
 import codeine.utils.ThreadUtils;
 
@@ -18,8 +19,8 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 	private NodeGetter nodesGetter;
 	private Object cancelObject = new Object();
 
-	public ProgressiveExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, NodeGetter nodesGetter) {
-		super(allNodesCommandExecuter, commandData, links);
+	public ProgressiveExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, NodeGetter nodesGetter, ProjectJson project) {
+		super(allNodesCommandExecuter, commandData, links, project);
 		this.nodesGetter = nodesGetter;
 	}
 

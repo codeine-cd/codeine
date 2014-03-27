@@ -5,9 +5,10 @@
 <div class="col-md-9">
 <form novalidate name="configForm">
 <accordion close-others="false">
-<accordion-group is-open="true">
+<accordion-group is-open="project_is_open">
     <accordion-heading>
         Project Info
+        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_is_open, 'glyphicon-chevron-right': !project_is_open}"></i>
     </accordion-heading>
     <div class="form-horizontal">
         <div class="form-group">
@@ -383,6 +384,59 @@
             <button ng-click="addCommand()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Command</button>
         </div>
         <br/><br/>
+    </div>
+</accordion-group>
+<accordion-group is-open="is_open">
+    <accordion-heading>
+        Permissions
+        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i>
+    </accordion-heading>
+    <div class="form-horizontal">
+        <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
+            <thead>
+            <tr>
+                <th class="col-md-3">Username
+                </th>
+                <th class="col-md-2">View
+                    <help help-id="11"></help>
+                </th>
+                <th class="col-md-4">Command
+                    <help help-id="11"></help>
+                </th>
+                <th class="col-md-2">Config
+                    <help help-id="11"></help>
+                </th>
+                <th class="col-md-1"></th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="permissionObject in projectConfigurationForEditing.permissions">
+            <tr>
+                <ng-form name="permissionsForm">
+                    <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
+                        <input type="text" class="form-control" name="username" id="username" ng-model="permissionObject.username" required>
+                    </td>
+                    <td class="col-md-2">
+                        <input type="checkbox" checked disabled class="readonly_item">
+                    </td>
+                    <td class="col-md-4">
+                        <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
+                    </td>
+                    <td class="col-md-2">
+                        <input type="checkbox" ng-model="permissionObject.can_config">
+                    </td>
+                    <td class="col-md-1">
+                        <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                    </td>
+                </ng-form>
+            </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" ng-click="addUser()" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add User</button>
+            </div>
+            <br/><br/>
+        </div>
     </div>
 </accordion-group>
 </accordion>
