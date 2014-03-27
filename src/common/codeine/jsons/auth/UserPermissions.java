@@ -1,11 +1,10 @@
 package codeine.jsons.auth;
 
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 
-public class UserPermissions implements IUserPermissions{
+public class UserPermissions extends AbstractUserPermissions implements IUserPermissions{
 
 	
 	private String username;
@@ -54,20 +53,6 @@ public class UserPermissions implements IUserPermissions{
 		return administer;
 	}
 	
-	private boolean isSetMatch(Set<String> set, String projectName){
-		if (set.contains("all") || set.contains(projectName)){
-			return true;
-		}
-		for (String key : set) {
-			Pattern pattern = Pattern.compile(key);
-			if (pattern.matcher(projectName).matches()){
-				return true;
-			}
-		}
-		return false;
-	}
-
-
 	@Override
 	public boolean canConfigure(String projectName) {
 		return isSetMatch(configure_project, projectName) || isAdministrator();
@@ -78,6 +63,11 @@ public class UserPermissions implements IUserPermissions{
 		return "UserPermissions [username=" + username + ", administer=" + administer + ", read_project="
 				+ read_project + ", configure_project=" + configure_project + ", command_project=" + command_project
 				+ "]";
+	}
+
+	@Override
+	public boolean canCommand(String projectName, String nodeAlias) {
+		return canCommand(projectName);
 	}
 
 	

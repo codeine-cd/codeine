@@ -3,12 +3,15 @@ package codeine.command_peer;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletRequest;
+
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.jsons.project.ProjectJson;
+import codeine.servlet.PermissionsManager;
 import codeine.utils.StringUtils;
 import codeine.utils.ThreadUtils;
 
@@ -19,8 +22,8 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 	private NodeGetter nodesGetter;
 	private Object cancelObject = new Object();
 
-	public ProgressiveExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, NodeGetter nodesGetter, ProjectJson project) {
-		super(allNodesCommandExecuter, commandData, links, project);
+	public ProgressiveExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, NodeGetter nodesGetter, ProjectJson project, HttpServletRequest request, PermissionsManager permissionsManager) {
+		super(commandData, allNodesCommandExecuter, links, project, request, permissionsManager);
 		this.nodesGetter = nodesGetter;
 	}
 

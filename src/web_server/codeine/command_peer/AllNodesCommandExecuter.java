@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 
 import codeine.api.CommandExcutionType;
@@ -17,6 +19,7 @@ import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.servlet.PermissionsManager;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
@@ -35,6 +38,9 @@ public class AllNodesCommandExecuter {
 	@Inject	private PathHelper pathHelper;
 	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
+	@Inject	private PermissionsManager permissionsManager;
+	private HttpServletRequest request;
+	
 	
 	private int total;
 	private int count;
@@ -121,10 +127,10 @@ public class AllNodesCommandExecuter {
 	private void execute() {
 		try {
 			if (commandData.command_info().command_strategy() == CommandExcutionType.Immediately){
-				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project);
+				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, request, permissionsManager);
 			}
 			else { 
-				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project);
+				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, request, permissionsManager);
 			}
 			strategy.execute();
 			if (strategy.isCancel()) {

@@ -1,16 +1,16 @@
 package codeine.jsons.auth;
 
-import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
-public class UserProjectPermissions {
+public class UserProjectPermissions extends AbstractUserPermissions{
 
 	private String username;
 	private boolean can_config;
-	private List<String> can_command = Lists.newArrayList();
+	private Set<String> can_command = Sets.newHashSet();
 	
-	public UserProjectPermissions(String username, boolean can_config, List<String> can_command) {
+	public UserProjectPermissions(String username, boolean can_config, Set<String> can_command) {
 		super();
 		this.username = username;
 		this.can_config = can_config;
@@ -34,6 +34,10 @@ public class UserProjectPermissions {
 
 	public String username() {
 		return username;
+	}
+
+	public boolean canCommand(String nodeAlias) {
+		return isSetMatch(can_command, nodeAlias);
 	}
 	
 	

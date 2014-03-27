@@ -57,6 +57,10 @@ public class PermissionsManager {
 		return user(request).canCommand(projectName);
 	}
 	
+	public boolean canCommand(String projectName, String nodeAlias, HttpServletRequest request) {
+		return user(request).canCommand(projectName, nodeAlias);
+	}
+	
 	public boolean isAdministrator(HttpServletRequest request){
 		return user(request).isAdministrator();
 	}

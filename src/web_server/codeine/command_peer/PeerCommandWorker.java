@@ -3,6 +3,8 @@ package codeine.command_peer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 
 import codeine.api.NodeWithPeerInfo;
@@ -12,6 +14,7 @@ import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
+import codeine.servlet.PermissionsManager;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 import codeine.utils.network.HttpUtils;
@@ -29,8 +32,12 @@ public class PeerCommandWorker implements Runnable {
 	private boolean success = false;
 	private boolean POST = true;
 	private ProjectJson project;
-
-	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project) {
+	private Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
+	private String user;
+	private PermissionsManager permissionsManager;
+	private HttpServletRequest request;
+	
+	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, HttpServletRequest request, PermissionsManager permissionsManager) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.command_info = command_info;
@@ -50,11 +57,12 @@ public class PeerCommandWorker implements Runnable {
 	private long getSleepTime() {
 		return 100;
 	}
-	
-	private Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
-	
 
 	private void execute() {
+		if (noPermissions()) {
+			announce("no permissions for user " + user + " on node " + node.alias());
+			allNodesCommandExecuter.fail(node);
+		}
 		String url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;
 		log.info("commandNode url is " + url);
 		try {
@@ -113,6 +121,10 @@ public class PeerCommandWorker implements Runnable {
 			allNodesCommandExecuter.fail(node);
 		}
 		allNodesCommandExecuter.workerFinished();
+	}
+
+	private boolean noPermissions() {
+		return !permissionsManager.canCommand(project.name(), node.alias(), request);
 	}
 
 	private void writeNodeHeader() {

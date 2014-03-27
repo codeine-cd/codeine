@@ -2,7 +2,7 @@ package codeine.jsons.auth;
 
 import java.util.Map;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class CompoundUserPermissions implements IUserPermissions{
 
@@ -26,11 +26,15 @@ public class CompoundUserPermissions implements IUserPermissions{
 		return createUnauthorizedUser();
 	}
 	private UserProjectPermissions createUnauthorizedUser() {
-		return new UserProjectPermissions("unauthorized", false, Lists.<String>newArrayList());
+		return new UserProjectPermissions("unauthorized", false, Sets.<String>newHashSet());
 	}
 	@Override
 	public boolean canCommand(String projectName) {
 		return userPermissions.canCommand(projectName) || getForProject(projectName).canCommand();
+	}
+	@Override
+	public boolean canCommand(String projectName, String nodeAlias) {
+		return userPermissions.canCommand(projectName) || getForProject(projectName).canCommand(nodeAlias);
 	}
 	@Override
 	public boolean canConfigure(String projectName) {
@@ -44,4 +48,5 @@ public class CompoundUserPermissions implements IUserPermissions{
 	public String username() {
 		return userPermissions.username();
 	}
+	
 }

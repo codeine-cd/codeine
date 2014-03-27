@@ -7,4 +7,5 @@ public interface IUserPermissions {
 	public boolean canConfigure(String projectName);
 	public boolean isAdministrator();
 	public String username();
+	public boolean canCommand(String projectName, String nodeAlias);
 }
