@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
+import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.project.ProjectJson;
-import codeine.servlet.PermissionsManager;
 
 public abstract class CommandExecutionStrategy {
 
@@ -19,19 +17,16 @@ public abstract class CommandExecutionStrategy {
 	private Links links;
 	private boolean cancel;
 	private ProjectJson project;
-	private HttpServletRequest request;
-	private PermissionsManager permissionsManager;
+	private IUserPermissions userObject;
 	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
-			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, HttpServletRequest request,
-			PermissionsManager permissionsManager) {
+			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserPermissions userObject) {
 		super();
 		this.commandData = commandData;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.links = links;
 		this.project = project;
-		this.permissionsManager = permissionsManager;
-		this.request = request;
+		this.userObject = userObject;
 	}
 
 	public abstract void execute();
@@ -41,7 +36,7 @@ public abstract class CommandExecutionStrategy {
 	}
 	
 	private void commandNode(ExecutorService executor, NodeWithPeerInfo node, boolean shouldOutputImmediatly) {
-		PeerCommandWorker worker = new PeerCommandWorker(node, allNodesCommandExecuter, commandData.command_info(), shouldOutputImmediatly, links, project, request, permissionsManager);
+		PeerCommandWorker worker = new PeerCommandWorker(node, allNodesCommandExecuter, commandData.command_info(), shouldOutputImmediatly, links, project, userObject);
 		executor.execute(worker);
 	}
 	

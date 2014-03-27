@@ -16,14 +16,17 @@ angular.module('codeine')
         $('#' + index).remove();
     };
 
-    var createAlert = function(type, message, time) {
+    var createAlert = function(type, message) {
         var alert = { type: type, msg: message, close: Alert.close, remove: Alert.remove };
 
         return alert;
     }
 
     Alert.addAlert = function (type, message, time) {
-        var alert = createAlert(type, message, time);
+        var alert = createAlert(type, message);
+        if ((time === undefined) || (time === null)) {
+            time = 3000;
+        }
         if (time != null) {
             alert.timer = $timeout(function () {
                 alerts.splice(alerts.indexOf(alert), 1);

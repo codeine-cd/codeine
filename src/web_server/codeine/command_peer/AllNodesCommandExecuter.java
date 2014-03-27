@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 
 import codeine.api.CommandExcutionType;
@@ -16,10 +14,10 @@ import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
+import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.servlet.PermissionsManager;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
@@ -38,8 +36,6 @@ public class AllNodesCommandExecuter {
 	@Inject	private PathHelper pathHelper;
 	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
-	@Inject	private PermissionsManager permissionsManager;
-	private HttpServletRequest request;
 	
 	
 	private int total;
@@ -52,15 +48,15 @@ public class AllNodesCommandExecuter {
 	private ScehudleCommandExecutionInfo commandData;
 	private CommandExecutionStatusInfo commandDataJson;
 	private ProjectJson project;
-
+	private IUserPermissions userObject;
 	private Object fileWriteSync = new Object();
 
 	private CommandExecutionStrategy strategy;
 
 
-	public long executeOnAllNodes(String user, ScehudleCommandExecutionInfo commandData, ProjectJson project, HttpServletRequest request) {
+	public long executeOnAllNodes(IUserPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
 		this.project = project;
-		this.request = request;
+		this.userObject = userObject;
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
@@ -70,10 +66,10 @@ public class AllNodesCommandExecuter {
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);
 			FilesUtils.createNewFile(file);
-			createCommandDataFile(user);
+			createCommandDataFile(userObject.username());
 			writer = TextFileUtils.getWriter(file, false);
-			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + user);
-			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + user);
+			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + userObject.username());
+			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.username());
 			writeNodesList(commandData);
 			updatePeersAddresses();
 			ThreadUtils.createThread(new Runnable() {
@@ -128,10 +124,10 @@ public class AllNodesCommandExecuter {
 	private void execute() {
 		try {
 			if (commandData.command_info().command_strategy() == CommandExcutionType.Immediately){
-				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, request, permissionsManager);
+				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, userObject);
 			}
 			else { 
-				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, request, permissionsManager);
+				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, userObject);
 			}
 			strategy.execute();
 			if (strategy.isCancel()) {

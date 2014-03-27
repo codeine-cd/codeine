@@ -83,6 +83,9 @@ angular.module('codeine').factory('CodeineService', ['$rootScope', '$http', func
         },
         getProjectNodes : function(project) {
             return $http.get("/project-nodes2_json", {params: { project: project } ,cache: false });
+        },
+        cancelCommand : function(project,commandId) {
+            return $http.delete("/command-nodes_json", { params: { 'project': project, 'command-id': commandId } });
         }
 
     };
