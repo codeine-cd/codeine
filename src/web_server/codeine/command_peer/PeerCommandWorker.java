@@ -59,8 +59,15 @@ public class PeerCommandWorker implements Runnable {
 	private void execute() {
 		if (noPermissions()) {
 			announce("no permissions for user " + userObject.username() + " on node " + node.alias());
-			allNodesCommandExecuter.fail(node);
 		}
+		else {
+			executeInternal();
+		}
+		allNodesCommandExecuter.workerFinished();
+	}
+
+
+	private void executeInternal() {
 		String url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;
 		log.info("commandNode url is " + url);
 		try {
@@ -118,7 +125,6 @@ public class PeerCommandWorker implements Runnable {
 			log.debug("error details", ex);
 			allNodesCommandExecuter.fail(node);
 		}
-		allNodesCommandExecuter.workerFinished();
 	}
 
 	private boolean noPermissions() {
