@@ -200,6 +200,9 @@ public class RunMonitors implements Task {
 		}
 		stopwatch.stop();
 		// long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+		if (null == res.output) {
+			res.output = "No Output\n";
+		}
 		writeResult(res, monitor, stopwatch);
 		String result = String.valueOf(res.success());
 		MonitorStatusInfo monitorInfo = new MonitorStatusInfo(monitor.name(), result);
