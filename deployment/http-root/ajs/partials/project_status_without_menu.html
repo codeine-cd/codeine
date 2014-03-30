@@ -106,7 +106,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-9" style="word-break: break-all;">
                                 <i class="fa fa-check-circle fa-lg" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
                                 <span ng-repeat="failing_monitor in node.failed_monitors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
                             </div>
