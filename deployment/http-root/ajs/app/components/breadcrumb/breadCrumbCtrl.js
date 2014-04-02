@@ -4,8 +4,6 @@ angular.module('codeine').controller('breadCrumbCtrl',['$scope','$rootScope', '$
 
     $rootScope.$on("$routeChangeSuccess", function (event, current) {
         $log.debug('breadCrumbCtrl: $routeChangeSuccess');
-        $log.debug('breadCrumbCtrl: current =' + angular.toJson(current));
-        $log.debug('breadCrumbCtrl: $location.path() = ' + $location.path());
         $scope.items = [];
         $scope.lastItem = '';
 
