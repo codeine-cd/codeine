@@ -2,6 +2,7 @@ package codeine.model;
 
 import java.io.File;
 
+import codeine.utils.StringUtils;
 import codeine.utils.network.InetUtils;
 
 public class Constants
@@ -135,7 +136,11 @@ public class Constants
 		return Constants.getInstallDir() + HTTP_ROOT_CONTEXT;
 	}
 	public static String getAngularDir() {
-		return Constants.getResourcesDir() + "/ajs";
+		String appDir = System.getProperty("angularAppDir");
+		if (StringUtils.isEmpty(appDir)) {
+			appDir = "/dist";
+		}
+		return Constants.getResourcesDir() + "/ajs" + appDir;
 	}
 	public static String getAngularMainHtml() {
 		return Constants.getAngularDir() + "/index.html";

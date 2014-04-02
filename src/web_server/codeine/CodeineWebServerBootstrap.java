@@ -94,6 +94,13 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		PathHelper pathHelper = injector().getInstance(PathHelper.class);
 		addHandler(Constants.PROJECT_FILES_CONTEXT, pathHelper.getProjectsDir() , contexts);
 		addHandler(Constants.ANGULAR_RESOURCES_CONTEXT_PATH, Constants.getAngularDir(), contexts);
+		addHandler("/components", Constants.getAngularDir() + "/components", contexts);
+		addHandler("/styles", Constants.getAngularDir() + "/styles", contexts);
+		addHandler("/scripts", Constants.getAngularDir() + "/scripts", contexts);
+		addHandler("/fonts", Constants.getAngularDir() + "/fonts", contexts);
+		addHandler("/bower_components", Constants.getAngularDir() + "/bower_components", contexts);
+		addHandler("/images", Constants.getAngularDir() + "/images", contexts);
+		addHandler("/views", Constants.getAngularDir() + "/views", contexts);
 	}
 	
 	private ServletContextHandler createServletContextHandlerBasic(){
