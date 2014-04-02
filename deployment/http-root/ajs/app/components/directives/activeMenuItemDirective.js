@@ -5,9 +5,13 @@ angular.module('codeine').directive('activeMenuItem', ['$location', function ($l
         link: function (scope, element) {
             scope.location = $location;
             scope.$watch('location.absUrl()', function (newPath) {
+                if (newPath.indexOf('?') !== -1 ) {
+                    newPath = newPath.substring(0,newPath.indexOf('?'));
+                }
                 var nestedA = (element.is("a")) ? element[0] :  element.find('a')[0];
                 var path = nestedA.href;
-                if (newPath.indexOf(path) !== -1) {
+                if (newPath === path) {
+                //if (newPath.indexOf(path) !== -1) {
                     element.addClass('active');
                 } else {
                     element.removeClass('active');
