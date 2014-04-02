@@ -6,6 +6,9 @@ angular.module('codeine').controller('commandStatusCtrl',['$scope', '$log', '$ro
     $scope.commandStatus = commandStatus;
 
     var interval = $interval(function() {
+        if (!$scope.app.isInFocus) {
+            return;
+        }
         CodeineService.getCommandStatus($scope.projectName, $routeParams.command_id).success(function(data) {
             var scrolledToBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
             $scope.commandStatus = data;

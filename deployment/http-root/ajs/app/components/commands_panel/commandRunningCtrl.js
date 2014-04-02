@@ -8,6 +8,9 @@ angular.module('codeine').controller('commandRunningCtrl',['$scope', '$rootScope
     });
 
     var interval = setInterval(function() {
+        if (!$scope.app.isInFocus) {
+            return;
+        }
         $.ajax( {
             type: 'GET',
             url: '/commands-status_json',

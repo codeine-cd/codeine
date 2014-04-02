@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine').directive('configureAction', ['$log', function ($log) {
+angular.module('codeine').directive('configureAction', [ function () {
     return {
         restrict: 'A',
         scope : {
@@ -8,10 +8,8 @@ angular.module('codeine').directive('configureAction', ['$log', function ($log) 
         },
         link: function ($scope, element) {
             if ($scope.permissions.configure_project.indexOf($scope.project) === -1) {
-                $log.debug('configureAction: User do not have configure permissions, will hide element');
                 element.hide();
             } else {
-                $log.debug('configureAction: User has configure permissions');
                 element.show();
             }
         }

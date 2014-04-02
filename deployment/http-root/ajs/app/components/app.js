@@ -270,26 +270,46 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                     templateUrl: '/views/404.html'
                 });
         }])
-    .run(['$rootScope', '$log','CodeineService',  function($rootScope, $log, CodeineService) {
+    .run(['$rootScope','$log','CodeineService','$interval',  function($rootScope, $log, CodeineService, $interval) {
         $rootScope.app = {
             loading: null,
-            viewAs : null
+            viewAs : null,
+            isInFocus: false
         };
+
+        $(window).focus(function() {
+            $log.debug('run: got focus');
+            $rootScope.app.isInFocus = true;
+        });
+
+        $(window).blur(function() {
+            $log.debug('run: no focus');
+            $rootScope.app.isInFocus = false;
+        });
 
         CodeineService.getSessionInfo().success(function(data) {
             $log.debug('run: got session info ' + angular.toJson(data));
             $rootScope.app.sessionInfo = data;
         });
 
-        CodeineService.getGlobalConfiguration().success(function(data) {
-            $log.debug('run: got global configuration ' + angular.toJson(data));
-            $rootScope.app.globalConfiguration = data;
-        });
+        var loadConfiguration = function() {
+            if ((!$rootScope.app.isInFocus) && (angular.isDefined($rootScope.app.globalConfiguration))) {
+                $log.debug('run: will skip config refresh as app not in focus');
+                return;
+            }
+            CodeineService.getGlobalConfiguration().success(function(data) {
+                $log.debug('run: got global configuration ' + angular.toJson(data));
+                $rootScope.app.globalConfiguration = data;
+            });
 
-        CodeineService.getExperimentalConfiguration().success(function(data) {
-            $log.debug('run: got experimental configuration ' + angular.toJson(data));
-            $rootScope.app.experimentalConfiguration = data;
-        });
+            CodeineService.getExperimentalConfiguration().success(function(data) {
+                $log.debug('run: got experimental configuration ' + angular.toJson(data));
+                $rootScope.app.experimentalConfiguration = data;
+            });
+        };
+
+        loadConfiguration();
+        $interval(loadConfiguration,300000);
 
         $rootScope.$on('$locationChangeStart', function () {
             $log.debug('$locationChangeStart');
