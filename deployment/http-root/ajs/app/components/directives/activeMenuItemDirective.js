@@ -11,8 +11,10 @@ angular.module('codeine').directive('activeMenuItem', ['$location', function ($l
                 var nestedA = (element.is("a")) ? element[0] :  element.find('a')[0];
                 var path = nestedA.href;
                 if (newPath === path) {
-                //if (newPath.indexOf(path) !== -1) {
                     element.addClass('active');
+                    element.bind('click',function(e) {
+                        e.preventDefault();
+                    });
                 } else {
                     element.removeClass('active');
                 }

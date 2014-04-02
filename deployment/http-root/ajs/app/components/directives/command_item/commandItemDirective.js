@@ -8,7 +8,8 @@ angular.module('codeine').directive('commandItem',['CodeineService','AlertServic
         templateUrl: '/components/directives/command_item/commandItem.html',
         link: function ($scope) {
 
-            $scope.cancelCommand =function() {
+            $scope.cancelCommand =function($event) {
+                $event.stopPropagation();
                 if ($window.confirm('Are you sure you would like to cancel the command?')) {
                     CodeineService.cancelCommand($scope.commandData.project, $scope.commandData.id).success(function () {
                         AlertService.addAlert('success', 'Command was canceled successfully');

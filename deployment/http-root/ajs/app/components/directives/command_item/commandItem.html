@@ -3,7 +3,7 @@
         <div class="col-md-12" style="font-size: 11px;">
             <span  class="pull-left">
                 <span ng-if="!commandData.can_cancel"><i class="fa fa-lg fa-info-circle"></i> {{commandData.name}}</span>
-                <span ng-if="commandData.can_cancel"><i ng-click="cancelCommand()" class="fa fa-lg fa-times-circle error"></i> {{commandData.name}}</span>
+                <span ng-if="commandData.can_cancel"><i ng-click="cancelCommand($event)" class="fa fa-lg fa-times-circle error"></i> {{commandData.name}}</span>
             </span>
             <span class="pull-right">
                 {{commandData.date}}

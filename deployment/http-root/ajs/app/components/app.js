@@ -300,7 +300,6 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
             $rootScope.app.loading = false;
         });
 
-
         $rootScope.$on("$routeChangeStart", function () {
             $log.debug('$routeChangeStart');
             $rootScope.app.contentLoading = true;
