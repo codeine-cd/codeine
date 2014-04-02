@@ -1,38 +1,39 @@
 {
-    "name": "codeine",
-    "version": "1.1.197",
-    "homepage": "https://github.com/Intel-IT/codeine",
-    "authors": [
-        "ezraroi <ezraroi@gmail.com>"
-    ],
-    "main": "index.html",
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "json3": "~3.2.6",
-        "es5-shim": "~2.1.0",
-        "angular": "1.2.14",
-        "angular-animate": "1.2.14",
-        "angular-route": "1.2.14",
-        "angular-ui-utils": "0.1.1",
-        "angular-ui-select2": "~0.0.5",
-        "angular-ui-bootstrap-bower": "~0.10.0",
-        "bootstrap": "~3.1.0",
-        "components-font-awesome": "~4.0.3",
-        "ngstorage": "~0.3.0",
-        "ng-textcomplete": "~0.4.0"
-    },
-    "devDependencies": {
-        "angular-mocks": "1.2.13",
-        "angular-scenario": "1.2.13"
-    },
-    "resolutions": {
-        "angular": "1.2.14"
-    }
+  "name": "codeine",
+  "version": "1.1.197",
+  "homepage": "https://github.com/Intel-IT/codeine",
+  "authors": [
+    "ezraroi <ezraroi@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "json3": "~3.2.6",
+    "es5-shim": "~2.1.0",
+    "angular": "1.2.14",
+    "angular-animate": "1.2.14",
+    "angular-route": "1.2.14",
+    "angular-ui-utils": "0.1.1",
+    "angular-ui-select2": "~0.0.5",
+    "angular-ui-bootstrap-bower": "~0.10.0",
+    "bootstrap": "~3.1.0",
+    "components-font-awesome": "~4.0.3",
+    "ngstorage": "~0.3.0",
+    "ng-textcomplete": "~0.4.0",
+    "ngDistinctValues": "~1.0.2"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.2.13",
+    "angular-scenario": "1.2.13"
+  },
+  "resolutions": {
+    "angular": "1.2.14"
+  }
 }

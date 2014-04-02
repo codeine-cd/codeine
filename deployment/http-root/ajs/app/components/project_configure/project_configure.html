@@ -413,7 +413,7 @@
                 <ng-form name="permissionsForm">
                     <tr>
                         <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
-                            <input type="text" class="form-control" name="username" id="username" ng-model="permissionObject.username" required>
+                            <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
                         </td>
                         <td class="col-md-2">
                             <input type="checkbox" checked disabled class="readonly_item">

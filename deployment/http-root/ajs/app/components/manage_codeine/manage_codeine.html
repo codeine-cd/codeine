@@ -203,7 +203,7 @@
                 <tbody ng-repeat="permissionObject in permissionsForEditing">
                 <tr>
                     <td class="col-md-2">
-                        <input type="text" class="form-control" ng-model="permissionObject.username" required>
+                        <input type="text" class="form-control" ng-distinct-values="permissionsForEditing" ng-model="permissionsForEditing[$index].username" required>
                     </td>
                     <td class="col-md-1">
                         <input style="margin: 0px;" type="checkbox" ng-model="permissionObject.administer">

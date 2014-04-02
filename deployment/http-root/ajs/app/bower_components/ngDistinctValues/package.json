@@ -1,0 +1,19 @@
+{
+  "name": "ngDistinctValues",
+  "version": "1.0.2",
+  "description": "AngularJS Directive to validate a collection dosen't have 2 same items",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "main": "ng-distinct-values.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ezraroi/ngDistinctValues"
+  },
+  "author": "Roi Ezra <ezraroi@gmail.com>",
+  "license": "SWISS",
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-bump": "0.0.13"
+  }
+}
