@@ -10,10 +10,10 @@ import org.apache.log4j.Logger;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
 import codeine.model.Result;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.utils.os_process.ProcessExecuter;
 
-public class UpgradeApiServlet extends AbstractServlet {
+public class UpgradeApiServlet extends AbstractApiServlet {
 	
 	private static final Logger log = Logger.getLogger(UpgradeApiServlet.class);
 	private static final long serialVersionUID = 1L;

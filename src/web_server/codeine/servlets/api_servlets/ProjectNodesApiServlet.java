@@ -9,14 +9,14 @@ import codeine.api.NodeGetter;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.Links;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.NodeTemplate;
 import codeine.servlets.front_end.ProjectsStatusUtils;
 import codeine.utils.StringUtils;
 
 import com.google.inject.Inject;
 
-public class ProjectNodesApiServlet extends AbstractServlet {
+public class ProjectNodesApiServlet extends AbstractApiServlet {
 	
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private Links links;

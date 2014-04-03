@@ -5,11 +5,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import codeine.api.NodeAggregator;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.inject.Inject;
 
-public class ProjectStatusApiServlet extends AbstractServlet {
+public class ProjectStatusApiServlet extends AbstractApiServlet {
 	
 	@Inject	private NodeAggregator aggregator;
 	

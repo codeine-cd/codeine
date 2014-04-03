@@ -12,13 +12,13 @@ import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.info.SessionInfo;
 import codeine.jsons.project.ProjectJson;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.servlet.PrepareForShutdown;
 
 import com.google.common.collect.Sets;
 
-public class RuntimeInfoApiServlet extends AbstractServlet {
+public class RuntimeInfoApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject private CodeineRuntimeInfo runtimeInfo;

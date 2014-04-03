@@ -14,13 +14,13 @@ import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
-public class ProjectStatus2ApiServlet extends AbstractServlet {
+public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;

@@ -9,7 +9,7 @@ import codeine.jsons.info.CodeineRuntimeInfo;
 
 import com.google.inject.Inject;
 
-public class CodeineVersionInfoServlet extends AbstractServlet {
+public class CodeineVersionInfoServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	

@@ -11,13 +11,13 @@ import org.apache.log4j.Logger;
 import codeine.jsons.auth.PermissionsConfJson;
 import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.global.UserPermissionsJsonStore;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 
 @SuppressWarnings("serial")
-public class CodeinePermissionsApiServlet extends AbstractServlet {
+public class CodeinePermissionsApiServlet extends AbstractApiServlet {
 
 	private static final Logger log = Logger.getLogger(CodeinePermissionsApiServlet.class);
 	private static final long serialVersionUID = 1L;

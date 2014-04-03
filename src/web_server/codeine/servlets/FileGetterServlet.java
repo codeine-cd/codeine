@@ -10,13 +10,13 @@ import org.apache.log4j.Logger;
 
 import codeine.configuration.PathHelper;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
 
 import com.google.inject.Inject;
 
-public class FileGetterServlet extends AbstractServlet {
+public class FileGetterServlet extends AbstractApiServlet {
 	private static final Logger log = Logger.getLogger(FileGetterServlet.class);
 	private static final long serialVersionUID = 1L;
 

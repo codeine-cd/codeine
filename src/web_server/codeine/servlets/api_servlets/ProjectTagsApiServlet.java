@@ -18,13 +18,13 @@ import codeine.configuration.IConfigurationManager;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
-public class ProjectTagsApiServlet extends AbstractServlet {
+public class ProjectTagsApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(ProjectTagsApiServlet.class);

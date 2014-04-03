@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.TextFileUtils;
 
-public class CommandStatusApiServlet extends AbstractServlet {
+public class CommandStatusApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject private PathHelper pathHelper;

@@ -14,14 +14,14 @@ import codeine.configuration.Links;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 
 import com.google.inject.Inject;
 
-public class NodesCommandApiServlet extends AbstractServlet {
+public class NodesCommandApiServlet extends AbstractApiServlet {
 	private static final Logger log = Logger.getLogger(NodesCommandApiServlet.class);
 	private static final long serialVersionUID = 1L;
 

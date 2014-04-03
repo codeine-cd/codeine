@@ -11,11 +11,11 @@ import codeine.ConfigurationManagerServer;
 import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
-public class ProjectConfigurationApiServlet extends AbstractServlet {
+public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 
 	
 	private static final Logger log = Logger.getLogger(ProjectConfigurationApiServlet.class);

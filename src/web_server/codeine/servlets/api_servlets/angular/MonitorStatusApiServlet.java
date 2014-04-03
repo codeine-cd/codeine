@@ -7,12 +7,12 @@ import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.Links;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.utils.network.HttpUtils;
 
 import com.google.inject.Inject;
 
-public class MonitorStatusApiServlet extends AbstractServlet {
+public class MonitorStatusApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;

@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 
-public class CodeineInfoServlet extends AbstractServlet {
+public class CodeineInfoServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	

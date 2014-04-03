@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlets.front_end.ProjectsTab;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 
 @SuppressWarnings("serial")
-public class ProjectsTabsApiServlet extends AbstractServlet {
+public class ProjectsTabsApiServlet extends AbstractApiServlet {
 
 	private static final Logger log = Logger.getLogger(ProjectsTabsApiServlet.class);
 	private static final long serialVersionUID = 1L;

@@ -5,11 +5,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import codeine.api.NodeGetter;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.inject.Inject;
 
-public class NodeStatusApiServlet extends AbstractServlet {
+public class NodeStatusApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;

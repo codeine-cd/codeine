@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-public class ProjectNodesApiServlet extends AbstractServlet {
+public class ProjectNodesApiServlet extends AbstractApiServlet {
 
+	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;
 	
 	@Override

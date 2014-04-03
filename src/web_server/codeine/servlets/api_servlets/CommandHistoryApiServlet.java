@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.api.CommandStatusJson;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-public class CommandHistoryApiServlet extends AbstractServlet {
+public class CommandHistoryApiServlet extends AbstractApiServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject	private NodesCommandExecuterProvider nodesCommandExecuterProvider;

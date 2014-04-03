@@ -15,7 +15,7 @@ import codeine.api.VersionItemInfo;
 import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.servlets.front_end.NewProjectServlet.CreateNewProjectJson;
 import codeine.servlets.front_end.NewProjectServlet.NewProjectType;
@@ -26,7 +26,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-public class ProjectsListApiServlet extends AbstractServlet
+public class ProjectsListApiServlet extends AbstractApiServlet
 {
 	private static final Logger log = Logger.getLogger(ProjectsListApiServlet.class);
 	private static final long serialVersionUID = 1L;

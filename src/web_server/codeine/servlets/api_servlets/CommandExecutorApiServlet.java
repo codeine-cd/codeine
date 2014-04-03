@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import codeine.api.CommandStatusJson;
 import codeine.command_peer.NodesCommandExecuterProvider;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
 import com.google.common.collect.Lists;
 
-public class CommandExecutorApiServlet extends AbstractServlet {
+public class CommandExecutorApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 

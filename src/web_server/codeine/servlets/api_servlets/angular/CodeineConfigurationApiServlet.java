@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
-public class CodeineConfigurationApiServlet extends AbstractServlet {
+public class CodeineConfigurationApiServlet extends AbstractApiServlet {
 
 	
 	private static final Logger log = Logger.getLogger(CodeineConfigurationApiServlet.class);
