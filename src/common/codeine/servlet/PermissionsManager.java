@@ -81,7 +81,7 @@ public class PermissionsManager {
 	private IUserPermissions getUser(String user) {
 		UserPermissions userPermissions = permissionsConfigurationJsonStore.get().getOrNull(user);
 		if (null == userPermissions) {
-			return null;
+			userPermissions = ADMIN_GUEST;
 		}
 		Map<String, UserProjectPermissions> p = getProjectPermissions(user);
 		Map<String, UserPermissions> groupPermissions = getGroupsPermissions(user); //group -> permissions
