@@ -160,3 +160,6 @@ div.sidebar-nav i.codeine_help {
 .nav, .pagination, .carousel, .panel-title a { 
 	cursor: pointer; 
 }
+.cursor_pointer {
+    cursor: pointer;
+}

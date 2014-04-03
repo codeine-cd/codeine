@@ -55,4 +55,14 @@ angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
 
+        var unregisterFunction = $rootScope.$on('$locationChangeSuccess', function () {
+            $log.debug('$locationChangeSuccess - tags');
+            $scope.initTagsFromQueryString();
+        });
+
+        $scope.$on('$destroy', function() {
+            $log.debug("In destroy of tagsFilterCtrl");
+            unregisterFunction();
+        });
+
     }]);
