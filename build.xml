@@ -12,7 +12,7 @@
 		<pathelement location="compiled_classes_ant" />
 		<pathelement location="libs/jetty/jetty-all-8.1.7.v20120910.jar" />
 		<pathelement location="libs/javax.servlet-3.0.0.v201112011016.jar" />
-		<pathelement location="libs/guava/guava-14.0.1.jar" />
+		<pathelement location="libs/guava/guava-16.0.1.jar" />
 		<pathelement location="libs/gson/gson-2.2.4.jar" />
 		<pathelement location="libs/mongo/mongo-java-driver-2.11.2.jar" />
 		<pathelement location="libs/javax.inject.jar" />
@@ -139,7 +139,7 @@
 			<fileset dir="compiled_classes_ant" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/javax.servlet-3.0.0.v201112011016.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/jetty/jetty-all-8.1.7.v20120910.jar" />
-			<zipfileset excludes="META-INF/*.SF" src="libs/guava/guava-14.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/guava/guava-16.0.1.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/gson/gson-2.2.4.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/mongo/mongo-java-driver-2.11.2.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/javax.inject.jar" />
@@ -162,7 +162,7 @@
 			<fileset dir="compiled_classes_ant" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/javax.servlet-3.0.0.v201112011016.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/jetty/jetty-all-8.1.7.v20120910.jar" />
-			<zipfileset excludes="META-INF/*.SF" src="libs/guava/guava-14.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/guava/guava-16.0.1.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/gson/gson-2.2.4.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/mongo/mongo-java-driver-2.11.2.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/javax.inject.jar" />
@@ -185,7 +185,7 @@
 			<fileset dir="compiled_classes_ant" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/javax.servlet-3.0.0.v201112011016.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/jetty/jetty-all-8.1.7.v20120910.jar" />
-			<zipfileset excludes="META-INF/*.SF" src="libs/guava/guava-14.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="libs/guava/guava-16.0.1.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/gson/gson-2.2.4.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/mongo/mongo-java-driver-2.11.2.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="libs/javax.inject.jar" />
