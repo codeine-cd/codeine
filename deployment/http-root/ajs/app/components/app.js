@@ -287,10 +287,16 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
             $rootScope.app.isInFocus = false;
         });
 
-        CodeineService.getSessionInfo().success(function(data) {
-            $log.debug('run: got session info ' + angular.toJson(data));
-            $rootScope.app.sessionInfo = data;
-        });
+        var loadSessionInfo = function() {
+            if ((!$rootScope.app.isInFocus) && (angular.isDefined($rootScope.app.sessionInfo))) {
+                $log.debug('run: will skip sessionInfo refresh as app not in focus');
+                return;
+            }
+            CodeineService.getSessionInfo().success(function (data) {
+                $log.debug('run: got session info ' + angular.toJson(data));
+                $rootScope.app.sessionInfo = data;
+            });
+        }
 
         var loadConfiguration = function() {
             if ((!$rootScope.app.isInFocus) && (angular.isDefined($rootScope.app.globalConfiguration))) {
@@ -310,6 +316,8 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
 
         loadConfiguration();
         $interval(loadConfiguration,300000);
+        loadSessionInfo();
+        $interval(loadSessionInfo,300000);
 
         $rootScope.$on('$locationChangeStart', function () {
             $log.debug('$locationChangeStart');
