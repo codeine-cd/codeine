@@ -138,9 +138,9 @@ public class Constants
 	public static String getAngularDir() {
 		String appDir = System.getProperty("angularAppDir");
 		if (StringUtils.isEmpty(appDir)) {
-			appDir = "/dist";
+			appDir = "dist";
 		}
-		return Constants.getResourcesDir() + "/ajs" + appDir;
+		return Constants.getResourcesDir() + "/ajs/" + appDir;
 	}
 	public static String getAngularMainHtml() {
 		return Constants.getAngularDir() + "/index.html";
