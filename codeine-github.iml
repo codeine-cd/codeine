@@ -31,7 +31,7 @@
       <src_folder value="file://$MODULE_DIR$/src/server" expected_position="10" />
     </src_description>
   </component>
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/common" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/api_client" isTestSource="false" />
@@ -51,6 +51,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/javax.servlet-3.0.0.v201112011016.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -59,6 +60,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/jetty/jetty-all-8.1.7.v20120910.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/libs/jetty/jetty-all-8.1.7.v20120910-sources.jar!/" />
         </SOURCES>
@@ -69,6 +71,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/log4j-1.2.17.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -77,6 +80,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/mailapi.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -85,6 +89,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/smtp.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -93,6 +98,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/guice-3.0.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -101,6 +107,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/aopalliance.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -109,6 +116,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/mockito-all-1.9.0.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/libs/mockito-all-1.9.0.jar!/" />
         </SOURCES>
@@ -119,6 +127,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/guice-servlet-3.0.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -127,6 +136,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/javax.inject.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -135,6 +145,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/gson/gson-2.2.4.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/libs/gson/gson-2.2.4-sources.jar!/" />
         </SOURCES>
@@ -145,6 +156,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/guava/guava-14.0.1.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/libs/guava/guava-14.0.1-sources.jar!/" />
         </SOURCES>
@@ -155,6 +167,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/joda-time/joda-time-2.2.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/libs/joda-time/joda-time-2.2-sources.jar!/" />
         </SOURCES>
@@ -165,6 +178,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/mysql/mysql-connector-java-5.1.15-bin.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -173,6 +187,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/jmustache-1.8.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -181,6 +196,7 @@
         <CLASSES>
           <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.10.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
@@ -190,6 +206,7 @@
         <CLASSES>
           <root url="jar://$MODULE_DIR$/libs/mongo/mongo-java-driver-2.11.2.jar!/" />
         </CLASSES>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/libs/mongo/mongo-java-driver-2.11.2-sources.jar!/" />
         </SOURCES>

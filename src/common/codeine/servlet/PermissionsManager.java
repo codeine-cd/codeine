@@ -1,6 +1,7 @@
 package codeine.servlet;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.GroupsManager;
 import codeine.utils.StringUtils;
 
 import com.google.common.collect.Maps;
@@ -32,17 +34,19 @@ public class PermissionsManager {
 	private UserPermissionsJsonStore permissionsConfigurationJsonStore;
 	private IConfigurationManager configurationManager;
 	private GlobalConfigurationJsonStore globalConfigurationJson;
+	private GroupsManager groupsManager;
 	private UsersManager usersManager;
 	private final UserPermissions ADMIN_GUEST = new UserPermissions("Guest", true);
 	
 	@Inject
 	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore, 
-			GlobalConfigurationJsonStore globalConfigurationJson, UsersManager usersManager, IConfigurationManager configurationManager) {
+			GlobalConfigurationJsonStore globalConfigurationJson, UsersManager usersManager, IConfigurationManager configurationManager, GroupsManager groupsManager) {
 		super();
 		this.permissionsConfigurationJsonStore = permissionsConfigurationJsonStore;
 		this.globalConfigurationJson = globalConfigurationJson;
 		this.usersManager = usersManager;
 		this.configurationManager = configurationManager;
+		this.groupsManager = groupsManager;
 	}
 	
 	public boolean canRead(String projectName, HttpServletRequest request){
@@ -79,16 +83,47 @@ public class PermissionsManager {
 		if (null == userPermissions) {
 			return null;
 		}
+		Map<String, UserProjectPermissions> p = getProjectPermissions(user);
+		Map<String, UserPermissions> groupPermissions = getGroupsPermissions(user); //group -> permissions
+		Map<String, Map<String, UserProjectPermissions>> groupProjectsPermissions = getGroupsProjectsPermissions(user); //group -> project -> permissions
+		return new CompoundUserPermissions(userPermissions, p, groupPermissions, groupProjectsPermissions);
+	}
+
+	private HashMap<String, Map<String, UserProjectPermissions>> getGroupsProjectsPermissions(String user) {
+		HashMap<String, Map<String, UserProjectPermissions>> $ = Maps.newHashMap();
+		List<String> groups = groupsManager.groups(user);
+		for (String group : groups) {
+			Map<String, UserProjectPermissions> projectPermissions = getProjectPermissions(group);
+			if (!projectPermissions.isEmpty()) {
+				$.put(group, projectPermissions);
+			}
+		}
+		return $;
+	}
+
+	private HashMap<String, UserPermissions> getGroupsPermissions(String user) {
+		HashMap<String, UserPermissions> $ = Maps.newHashMap();
+		List<String> groups = groupsManager.groups(user);
+		for (String group : groups) {
+			UserPermissions userPermissions = permissionsConfigurationJsonStore.get().getOrNull(group);
+			if (null != userPermissions) {
+				$.put(group, userPermissions);
+			}
+		}
+		return $;
+	}
+
+	private Map<String, UserProjectPermissions> getProjectPermissions(String theUser) {
 		List<ProjectJson> configuredProjects = configurationManager.getConfiguredProjects();
 		Map<String, UserProjectPermissions> p = Maps.newHashMap();
 		for (ProjectJson projectJson : configuredProjects) {
 			for (UserProjectPermissions u : projectJson.permissions()) {
-				if (u.username().equals(user)){
+				if (u.username().equals(theUser)){
 					p.put(projectJson.name(), u);
 				}
 			}
 		}
-		return new CompoundUserPermissions(userPermissions, p);
+		return p;
 	}
 	
 	private final UserPermissions guest(String user) {

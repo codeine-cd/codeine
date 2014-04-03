@@ -26,7 +26,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/guice-servlet-3.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.inject.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson/gson-2.2.4.jar" sourcepath="libs/gson/gson-2.2.4-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/guava/guava-14.0.1.jar" sourcepath="libs/guava/guava-14.0.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/guava/guava-16.0.1.jar" sourcepath="libs/guava/guava-16.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="libs/joda-time/joda-time-2.2.jar" sourcepath="libs/joda-time/joda-time-2.2-sources.jar"/>
 	<classpathentry kind="lib" path="libs/mysql/mysql-connector-java-5.1.15-bin.jar"/>
 	<classpathentry kind="lib" path="libs/jmustache-1.8.jar"/>

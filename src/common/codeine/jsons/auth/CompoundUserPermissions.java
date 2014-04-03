@@ -1,27 +1,57 @@
 package codeine.jsons.auth;
 
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class CompoundUserPermissions implements IUserPermissions{
 
 	private UserPermissions userPermissions;
 	private Map<String, UserProjectPermissions> specificProjectConfiguration;
+	private Map<String, UserPermissions> groupsPermissions;
+	private Map<String, Map<String, UserProjectPermissions>> groupsProjectsPermissions;
 	
 	public CompoundUserPermissions(UserPermissions userPermissions,
-			Map<String, UserProjectPermissions> specificProjectConfiguration) {
+			Map<String, UserProjectPermissions> specificProjectConfiguration, Map<String, UserPermissions> groupsPermissions, Map<String, Map<String, UserProjectPermissions>> groupsProjectsPermissions) {
 		super();
 		this.userPermissions = userPermissions;
 		this.specificProjectConfiguration = specificProjectConfiguration;
+		this.groupsPermissions = groupsPermissions;
+		this.groupsProjectsPermissions = groupsProjectsPermissions;
 	}
+	
 	@Override
 	public boolean canRead(String projectName) {
-		return userPermissions.canRead(projectName) || getForProject(projectName).canRead();
+		for (UserPermissions userPermissions2 : getUserPermissions()) {
+			if (userPermissions2.canRead(projectName)) {
+				return true;
+			}
+		}
+		for (Map<String, UserProjectPermissions> userProjectPermissions : getUserProjectPermissions()) {
+			if (getForProject(userProjectPermissions, projectName).canRead()) {
+				return true;
+			}
+		}
+		return false;
 	}
-	private UserProjectPermissions getForProject(String projectName) {
-		if (specificProjectConfiguration.containsKey(projectName)) {
-			return specificProjectConfiguration.get(projectName);
+	private List<Map<String, UserProjectPermissions>> getUserProjectPermissions() {
+		List<Map<String, UserProjectPermissions>> $ = Lists.newArrayList();
+		$.add(specificProjectConfiguration);
+		$.addAll(groupsProjectsPermissions.values());
+		return $;
+	}
+
+	private List<UserPermissions> getUserPermissions() {
+		List<UserPermissions> $ = Lists.newArrayList(userPermissions);
+		$.addAll(groupsPermissions.values());
+		return $;
+	}
+
+	private UserProjectPermissions getForProject(Map<String, UserProjectPermissions> userProjectPermissions, String projectName) {
+		if (userProjectPermissions.containsKey(projectName)) {
+			return userProjectPermissions.get(projectName);
 		}
 		return createUnauthorizedUser();
 	}
@@ -30,19 +60,54 @@ public class CompoundUserPermissions implements IUserPermissions{
 	}
 	@Override
 	public boolean canCommand(String projectName) {
-		return userPermissions.canCommand(projectName) || getForProject(projectName).canCommand();
+		for (UserPermissions userPermissions2 : getUserPermissions()) {
+			if (userPermissions2.canCommand(projectName)) {
+				return true;
+			}
+		}
+		for (Map<String, UserProjectPermissions> userProjectPermissions : getUserProjectPermissions()) {
+			if (getForProject(userProjectPermissions, projectName).canCommand()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	@Override
 	public boolean canCommand(String projectName, String nodeAlias) {
-		return userPermissions.canCommand(projectName) || getForProject(projectName).canCommand(nodeAlias);
+		for (UserPermissions userPermissions2 : getUserPermissions()) {
+			if (userPermissions2.canCommand(projectName)) {
+				return true;
+			}
+		}
+		for (Map<String, UserProjectPermissions> userProjectPermissions : getUserProjectPermissions()) {
+			if (getForProject(userProjectPermissions, projectName).canCommand(nodeAlias)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	@Override
 	public boolean canConfigure(String projectName) {
-		return userPermissions.canConfigure(projectName) || getForProject(projectName).canConfigure();
+		for (UserPermissions userPermissions2 : getUserPermissions()) {
+			if (userPermissions2.canConfigure(projectName)) {
+				return true;
+			}
+		}
+		for (Map<String, UserProjectPermissions> userProjectPermissions : getUserProjectPermissions()) {
+			if (getForProject(userProjectPermissions, projectName).canConfigure()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	@Override
 	public boolean isAdministrator() {
-		return userPermissions.isAdministrator();
+		for (UserPermissions userPermissions2 : getUserPermissions()) {
+			if (userPermissions2.isAdministrator()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	@Override
 	public String username() {
