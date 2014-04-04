@@ -3,6 +3,7 @@ package codeine.nodes;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -22,10 +23,10 @@ import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
 import codeine.mail.NotificationDeliverToMongo;
-import codeine.utils.network.InetUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 public class NodesRunner implements Task{
 
@@ -34,7 +35,6 @@ public class NodesRunner implements Task{
 	private static final long NODE_MONITOR_INTERVAL = TimeUnit.SECONDS.toMillis(29);
 	public static final long NODE_RUNNER_INTERVAL = TimeUnit.HOURS.toMillis(1);
 	
-	private String hostname = InetUtils.getLocalHost().getHostName();
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private PathHelper pathHelper;
 	@Inject	private PeerStatus projectStatusUpdater;
@@ -47,17 +47,22 @@ public class NodesRunner implements Task{
 	
 	@Override
 	public synchronized void run() {
-		List<String> removedProjects = Lists.newArrayList(executers.keySet());
+		Set<String> removedProjects = Sets.newHashSet(executers.keySet());
 		for (ProjectJson project : getProjects()) {
-			boolean hasExecuters = startExecutorsForProject(project);
-			if (hasExecuters) {
-				removedProjects.remove(project.name());
+			removedProjects.remove(project.name());
+			try {
+				startStopExecutorsForProject(project);
+			} catch (Exception e) {
+				log.error("failed startStopExecutorsForProject for project " + project.name(), e);
 			}
 		}
 		for (String project : removedProjects) {
-			Map<String, PeriodicExecuter> map = executers.get(project);
-			for (PeriodicExecuter e : map.values()) {
-				stop(e);
+			try {
+				stopNodes(project, executers.get(project));
+				executers.remove(project);
+				log.info("removed project " + project);
+			} catch (Exception e) {
+				log.error("failed to stop nodes for project " + project, e);
 			}
 		}
 	}
@@ -67,38 +72,46 @@ public class NodesRunner implements Task{
 		e.stopWhenPossible();
 	}
 
-	private boolean startExecutorsForProject(ProjectJson project) {
-		Map<String, PeriodicExecuter> newProjectExecutors = Maps.newHashMap();
-		Map<String, PeriodicExecuter> oldProjectExecutors = executers.put(project.name(), newProjectExecutors);
-		if (null == oldProjectExecutors){
-			oldProjectExecutors = Maps.newHashMap();
-		}
+	private boolean startStopExecutorsForProject(ProjectJson project) {
+		Map<String, PeriodicExecuter> currentNodes = getCurrentNodes(project);
+		log.info("project: " + project.name() + " currentProjectExecutors: " + currentNodes.keySet());
+		SelectedNodes selectedNodes;
 		try {
-			List<NodeInfo> nodes = getNodes(project);
-			if (nodes.isEmpty()) {
-				log.info("ignoring project " + project.name() + ". not configured to run on host " + hostname);
-				return false;
-			}
-			for (NodeInfo nodeJson : nodes) {
-				// if (node.disabled())
-				// {
-				// log.info("node is disabled " + node.name);
-				// continue;
-				// }
-				PeriodicExecuter e = oldProjectExecutors.remove(nodeJson.name());
-				if (e == null){
-					e = startExecuter(project, nodeJson);
-				}
-				newProjectExecutors.put(nodeJson.name(), e);
-			}
+			selectedNodes = new NodesSelector(currentNodes, getNodes(project)).selectStartStop();
 		} catch (Exception e) {
-			log.error("failed to configure project " + project.name() + " ,will ignore project", e);
+			log.error("failed to select nodes for project " + project.name() + " will leave old nodes " + currentNodes, e);
+			return !currentNodes.isEmpty();
 		}
-		for (Entry<String, PeriodicExecuter> e : oldProjectExecutors.entrySet()) {
-			log.info("stop monitoring node " + e.getKey() + " in project " + project.name());
+		stopNodes(project.name(), selectedNodes.nodesToStop());
+		Map<String, PeriodicExecuter> newProjectExecutors = selectedNodes.existingProjectExecutors();
+		for (NodeInfo nodeJson : selectedNodes.nodesToStart()) {
+			log.info("start exec1 monitoring node " + nodeJson + " in project " + project.name());
+			try {
+				PeriodicExecuter e = startExecuter(project, nodeJson);
+				newProjectExecutors.put(nodeJson.name(), e);
+			} catch (Exception e1) {
+				log.error("failed to start executor for node " + nodeJson + " in project " + project.name(), e1);
+			}
+		}
+		executers.put(project.name(), newProjectExecutors);
+		log.info("project: " + project.name() + " newProjectExecutors: " + newProjectExecutors.keySet());
+		return !executers.get(project.name()).isEmpty();
+	}
+
+	private void stopNodes(String project, Map<String, PeriodicExecuter> map) {
+		for (Entry<String, PeriodicExecuter> e : map.entrySet()) {
+			log.info("stop exec1 monitoring node " + e.getKey() + " in project " + project);
 			stop(e.getValue());
 		}
-		return !newProjectExecutors.isEmpty();
+	}
+
+	private Map<String, PeriodicExecuter> getCurrentNodes(ProjectJson project) {
+		Map<String, PeriodicExecuter> currentNodes = executers.get(project.name());
+		if (null == currentNodes) {
+			currentNodes = Maps.newHashMap();
+			executers.put(project.name(), currentNodes);
+		}
+		return currentNodes;
 	}
 
 	private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
