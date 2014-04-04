@@ -8,6 +8,7 @@ import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
 
+@SuppressWarnings("unused")
 public class CommandExecutionStatusInfo {
 
 	private String command;

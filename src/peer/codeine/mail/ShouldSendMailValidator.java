@@ -1,14 +1,12 @@
 package codeine.mail;
 
-import java.util.List;
-
 import codeine.api.NodeInfo;
 import codeine.configuration.ConfiguredProjectUtils;
 import codeine.configuration.NodeMonitor;
-import codeine.configuration.MailPolicy;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 
+@SuppressWarnings("unused")
 public class ShouldSendMailValidator {
 	private NodeMonitor collector;
 	private ConfiguredProjectUtils configuredProjectUtils;
@@ -28,25 +26,25 @@ public class ShouldSendMailValidator {
 		this.peerStatus = peerStatus;
 	}
 
-	private boolean shouldMailByPolicies(List<MailPolicy> policies) {
-		for (MailPolicy p : policies) {
-			if (p.isActive(previousResult, result)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean shouldMailByDependencies() {
-		throw new UnsupportedOperationException();
-//		for (HttpCollector master : configuredProjectUtils.dependsOn(collector, project)) {
-//			String resultOfMaster = peerStatus.project_name_to_status().get(project.name()).monitor_to_status().get(node.name()).get(master.name());
-//			if ("false".equals(resultOfMaster)) {
-//				return false;
+//	private boolean shouldMailByPolicies(List<MailPolicy> policies) {
+//		for (MailPolicy p : policies) {
+//			if (p.isActive(previousResult, result)) {
+//				return true;
 //			}
 //		}
-//		return true;
-	}
+//		return false;
+//	}
+//
+//	private boolean shouldMailByDependencies() {
+//		throw new UnsupportedOperationException();
+////		for (HttpCollector master : configuredProjectUtils.dependsOn(collector, project)) {
+////			String resultOfMaster = peerStatus.project_name_to_status().get(project.name()).monitor_to_status().get(node.name()).get(master.name());
+////			if ("false".equals(resultOfMaster)) {
+////				return false;
+////			}
+////		}
+////		return true;
+//	}
 
 	public boolean shouldMail() {
 		throw new UnsupportedOperationException();

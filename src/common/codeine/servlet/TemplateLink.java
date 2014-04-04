@@ -1,6 +1,5 @@
 package codeine.servlet;
 
-@SuppressWarnings("unused")
 public class TemplateLink {
 
 	private String label;

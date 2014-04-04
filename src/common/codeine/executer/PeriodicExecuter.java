@@ -37,7 +37,7 @@ public class PeriodicExecuter implements Runnable
 			ThreadUtils.wait(getSleepObject(), sleepTimeMilli);
 		}
 		while (!shouldStop) {
-			Stopwatch s = new Stopwatch().start();
+			Stopwatch s = Stopwatch.createStarted();
 			try {
 				exec();
 			} catch (Exception e1) {

@@ -10,6 +10,7 @@ import codeine.utils.ExceptionUtils;
 
 import com.google.common.base.Function;
 
+@SuppressWarnings("unused")
 class ProcessExecuterWorker extends Thread {
 	private final Process process;
 	Integer exit;

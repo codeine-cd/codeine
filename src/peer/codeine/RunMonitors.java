@@ -182,7 +182,7 @@ public class RunMonitors implements Task {
 
 	private void runMonitor(NodeMonitor monitor) {
 		Result res = null;
-		Stopwatch stopwatch = new Stopwatch().start();
+		Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
 			boolean hasCredentials = hasCredentials(monitor);
 			List<String> cmd = buildCmd(monitor, hasCredentials);

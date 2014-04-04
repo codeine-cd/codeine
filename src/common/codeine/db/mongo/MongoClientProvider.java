@@ -14,6 +14,7 @@ import com.google.inject.Provider;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
+@SuppressWarnings("unused")
 public class MongoClientProvider implements Provider<MongoClient>{
 
 	private static final Logger log = Logger.getLogger(MongoClientProvider.class);

@@ -76,12 +76,12 @@ public class TestsSuite {
 		return injector;
 	}
 
-	private void openTar() {
-//		String version = VERSION;
-//		String dir = DIR;
-//		String tar = dir + "/codeine_" + version + ".tar.gz";
-//		String r = ProcessExecuter.executeSuccess("tar -xzf " + tar + " --directory=" + dir + "/integration_test/out");
-	}
+//	private void openTar() {
+////		String version = VERSION;
+////		String dir = DIR;
+////		String tar = dir + "/codeine_" + version + ".tar.gz";
+////		String r = ProcessExecuter.executeSuccess("tar -xzf " + tar + " --directory=" + dir + "/integration_test/out");
+//	}
 
 	@After
 	public void after() {

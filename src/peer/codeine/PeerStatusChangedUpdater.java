@@ -60,7 +60,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 
 	private void waitForNextUpdate() {
 		try {
-			Stopwatch s = new Stopwatch().start();
+			Stopwatch s = Stopwatch.createStarted();
 			log.debug("going to wait at most " + MAX_TIME_BETWEEN_UPDATES_MILLIS + "milli");
 			blockingQueue.poll(MAX_TIME_BETWEEN_UPDATES_MILLIS, TimeUnit.MILLISECONDS);
 			log.debug("waited " + s);

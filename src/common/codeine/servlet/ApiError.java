@@ -1,5 +1,6 @@
 package codeine.servlet;
 
+@SuppressWarnings("unused")
 public class ApiError {
 
 	private String title;

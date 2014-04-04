@@ -13,7 +13,6 @@ import codeine.jsons.nodes.NodeListJson;
 import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.FilesUtils;
-import codeine.utils.JsonFileUtils;
 import codeine.utils.network.InetUtils;
 
 import com.google.common.collect.Maps;
@@ -26,8 +25,6 @@ public class NodesManagerPeer implements NodesManager {
 	private NodeScriptDiscovery nodeScriptDiscovery;
 
 	private Map<String, NodeListJson> projectToNode = Maps.newConcurrentMap();
-	@Inject
-	private JsonFileUtils jsonFileUtils;
 	@Inject
 	private PathHelper pathHelper;
 	

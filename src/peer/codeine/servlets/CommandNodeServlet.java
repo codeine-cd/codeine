@@ -149,15 +149,6 @@ public class CommandNodeServlet extends AbstractServlet
 		}
 		return $;
 	}
-	private String parameters(CommandInfo commandInfo) {
-		Function<CommandParameterInfo, String> function = new Function<CommandParameterInfo, String>() {
-			@Override
-			public String apply(CommandParameterInfo input) {
-				return input.name() + "=" + input.value();
-			}
-		};
-		return StringUtils.collectionToString(commandInfo.parameters(), function);
-	}
 	//TODO should be removed after build 1000
 	@Override
 	public void myGet(HttpServletRequest req, HttpServletResponse res)

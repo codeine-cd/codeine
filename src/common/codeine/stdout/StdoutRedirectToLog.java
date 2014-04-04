@@ -6,7 +6,9 @@ import codeine.stdout.StdOutErrLogging.LogLevel;
 
 public class StdoutRedirectToLog {
 
+	@SuppressWarnings("unused")
 	private static PrintStream stdout;
+	@SuppressWarnings("unused")
 	private static PrintStream stderr;
 
 	public static void redirect() {

@@ -9,14 +9,14 @@ public class ShellScript {
 
 	private String content;
 	private String fileName;
-	private String key;
+//	private String key;
 	private boolean windows;
 
 	public ShellScript(String key, String content) {
 		this(key, content, false);
 	}
 	public ShellScript(String key, String content, boolean windows) {
-		this.key = key;
+//		this.key = key;
 		this.content = content;
 		this.windows = windows;
 		this.fileName = (windows ? System.getProperty("java.io.tmpdir") : "/tmp" ) + "/codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");

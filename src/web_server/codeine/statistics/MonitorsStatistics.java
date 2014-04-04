@@ -23,7 +23,6 @@ import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 
 public class MonitorsStatistics implements IMonitorStatistics{
 
@@ -32,7 +31,6 @@ public class MonitorsStatistics implements IMonitorStatistics{
 	private static final int MAX_SIZE =(int) (TimeUnit.DAYS.toMinutes(30) / SAMPLE_TIME_MINUTES);
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private NodeGetter nodesGetter;
-	@Inject private Gson gson;
 	@Inject private PathHelper pathHelper;
 	
 	private Map<String, LimitedQueue<MonitorStatusItem>> data = Maps.newConcurrentMap();
