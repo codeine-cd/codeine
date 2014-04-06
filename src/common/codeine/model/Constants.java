@@ -45,6 +45,8 @@ public class Constants
 	public static final String COMMANDS_EXECUTER_STATUS = "/commands-status";
 	public static final String RESTART_ALL_PEERS_CONTEXT = "/restart-all";
 	public static final String PROJECTS_LIST_CONTEXT = "/projects";
+	public static final String ROOT_CONTEXT = "/";
+	public static final String ANGULAR_CONTEXT = "/codeine";
 	public static final String PROJECT_PATH = "/project";
 	public static final String NODE_PATH = "/node";
 	public static final String COMMAND_NODE_CONTEXT = "/command-node";

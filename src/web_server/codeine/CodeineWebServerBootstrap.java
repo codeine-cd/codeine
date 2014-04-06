@@ -65,8 +65,6 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	protected void createAdditionalServlets(ServletContextHandler handler) {
-		handler.addServlet(AngularServlet.class, Constants.ANGULAR_WEB_URLS_PATH_SPEC);
-		log.info("context " + Constants.ANGULAR_WEB_URLS_PATH_SPEC + " is serving " + Constants.getAngularMainHtml());
 	}
 	
 	@Override
