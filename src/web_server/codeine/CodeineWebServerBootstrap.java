@@ -1,6 +1,11 @@
 package codeine;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -8,6 +13,7 @@ import org.eclipse.jetty.security.DefaultIdentityService;
 import org.eclipse.jetty.security.SpnegoLoginService;
 import org.eclipse.jetty.security.authentication.FormAuthenticator;
 import org.eclipse.jetty.security.authentication.SpnegoAuthenticator;
+import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -134,7 +140,19 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		constraintMapping.setConstraint(constraint);
 		constraintMapping.setPathSpec("/*");
 
-		ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
+		ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler(){
+			@Override
+			public void handle(String pathInContext, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+		    {
+				response.addHeader("Access-Control-Allow-Origin", "*");
+				if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
+					response.addHeader("Access-Control-Allow-Methods","GET, POST, PUT, DELETE");
+					response.addHeader("Access-Control-Allow-Headers",
+					"X-Requested-With,Origin,Content-Type, Accept");
+				}
+				super.handle(pathInContext, baseRequest, request, response);
+		    }
+		};
 		securityHandler.addConstraintMapping(constraintMapping);
 		SpnegoLoginService loginService = new SpnegoLoginService(null, Constants.getSpnegoPropertiesPath());
 		securityHandler.setLoginService(loginService);
