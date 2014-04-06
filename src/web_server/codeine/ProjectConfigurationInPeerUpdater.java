@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import codeine.configuration.Links;
 import codeine.executer.NotifiableTask;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
+import codeine.jsons.peer_status.PeerType;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
@@ -44,6 +45,10 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 			log.info("sending refresh request to " + allPeers.size() + " peers");
 			for (PeerStatusJsonV2 e : allPeers) {
 				try {
+					if (e.peer_type() == PeerType.Reporter) {
+						log.debug("reporter peer, will not push configuration " + e);
+						continue;
+					}
 					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null);
 					log.debug("updated " + e.host_port() + " result " + result);
 				} catch (Exception e1) {
