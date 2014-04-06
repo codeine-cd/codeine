@@ -4,4 +4,4 @@
 /.tmp
 /dist
 /coverage
-
+/app/bower_components
