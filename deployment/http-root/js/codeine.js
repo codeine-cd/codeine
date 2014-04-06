@@ -228,7 +228,7 @@ function renderTemplate(tmplName, targetSelector, data, callback) {
 //		placeholder: "Enter a project name",
 //		minimumInputLength: 1,
 //		ajax: { 
-//	        url: "/projects_json",
+//	        url: "/api/projects",
 //	        dataType: 'json',
 //	        data: function(term,page) {
 //	        	return {

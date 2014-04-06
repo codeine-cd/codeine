@@ -23,7 +23,7 @@ function renderHistory(historyArray){
         		return;
     		$.ajax( {
     		    type: 'DELETE',
-    		    url: '/command-nodes_json?project=' + $(this).data('project') + '&command-id=' + $(this).data('id')  ,
+    		    url: '/api/command-nodes?project=' + $(this).data('project') + '&command-id=' + $(this).data('id')  ,
     		    success: function(resposne) {
     		    	console.log("success");
     		    	displayAlert('Command was canceled','success');
@@ -40,7 +40,7 @@ function renderHistory(historyArray){
 function getCommandsHistory() {
   $.ajax( {
     type: 'GET',
-    url: '/commands-log_json?project=' + getProjetcName()  ,
+    url: '/api/commands-log?project=' + getProjetcName()  ,
     success: function(response) {
       if (commandsHistoryJson === undefined) {
     	  commandsHistoryJson = response;

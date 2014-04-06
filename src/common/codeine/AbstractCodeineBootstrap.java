@@ -14,6 +14,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.model.Constants;
@@ -66,6 +67,10 @@ public abstract class AbstractCodeineBootstrap {
 		ServletContextHandler handler = createServletContextHandler();
 		handler.setContextPath("/");
 		handler.addServlet(InvalidRequestServlet.class, "/*");
+		FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
+		crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
+		crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Origin,Content-Type, Accept");
+		handler.addFilter(crossHolder, "/api/*", EnumSet.allOf(DispatcherType.class));
 		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
 		createAdditionalServlets(handler);
 		ContextHandlerCollection contexts = createFileServerContexts();

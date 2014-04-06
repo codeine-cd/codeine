@@ -48,7 +48,7 @@ function setTagsFromQueryString() {
 function getTags() {
 	$.ajax( {
 	    type: 'GET',
-	    url: '/project-tags_json?project=' + encodeURIComponent(getProjetcName()),
+	    url: '/api/project-tags?project=' + encodeURIComponent(getProjetcName()),
 	    success: function(response) {
 	    	console.dir(response);
 	    	$('#tags_list').append($('#nodes_tags').render(response));
@@ -115,7 +115,7 @@ function setupFilters() {
 function getNodes() {
 	$.ajax( {
 	    type: 'GET',
-	    url: '/project-nodes_json?project=' + encodeURIComponent(getProjetcName())  +'&version=' + encodeURIComponent(getVersion()),
+	    url: '/api/project-nodes?project=' + encodeURIComponent(getProjetcName())  +'&version=' + encodeURIComponent(getVersion()),
 	    success: function(response) {
 	    	nodesJson = response;
 	    	buildNodesByVersion();

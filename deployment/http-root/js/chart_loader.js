@@ -10,7 +10,7 @@ $(document).ready( function () {
 function loadChart() {
 	$.ajax( {
 	    type: 'GET',
-	    url: '/monitors-statistics_json?project=' + getProjetcName(),
+	    url: '/api/monitors-statistics?project=' + getProjetcName(),
 	    dataType: 'json',
 	    beforeSend: function() {
 	    	console.log("Sending chart data request...");

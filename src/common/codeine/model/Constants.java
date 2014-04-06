@@ -230,7 +230,7 @@ public class Constants
 	}
 
 	public static String apiContext(String projectNodesContext) {
-		return projectNodesContext + "_json";
+		return "/api" + projectNodesContext;
 	}
 	
 }

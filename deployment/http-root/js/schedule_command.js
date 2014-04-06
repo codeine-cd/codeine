@@ -77,7 +77,7 @@ $('#commandForm').submit(function() {
 	parameters["command_info"]["script_content"] = command["script_content"];
 	console.log('will submit command:');
 	console.dir(parameters);
-	postToUrl('/command-nodes_json?redirect=true',parameters);
+	postToUrl('/api/command-nodes?redirect=true',parameters);
 });
 
 $('#stop_on_error').change(function() {

@@ -13,7 +13,7 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
         }
         $.ajax( {
             type: 'GET',
-            url: '/commands-log_json?project=' + $scope.projectName  ,
+            url: '/api/commands-log?project=' + $scope.projectName  ,
             success: function(response) {
                 if  (($scope.history.length !== response.length) || (angular.toJson($scope.history) !== angular.toJson(response))) {
                     $scope.$apply(function() {

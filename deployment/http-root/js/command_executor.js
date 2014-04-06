@@ -6,7 +6,7 @@ $(document).ready( function () {
 function getCommandsStatus() {
   $.ajax( {
     type: 'GET',
-    url: '/commands-status_json',
+    url: '/api/commands-status',
     success: function(response) {
     	if (response.length === 0) {
       	  $('#command_executer_list').html("<li class='text-center'>No running commands</li>");
@@ -19,7 +19,7 @@ function getCommandsStatus() {
 	        		return;
 	    		$.ajax( {
 	    		    type: 'DELETE',
-	    		    url: '/command-nodes_json?project=' + encodeURIComponent($(this).data('project')) + '&command-id=' + $(this).data('id')  ,
+	    		    url: '/api/command-nodes?project=' + encodeURIComponent($(this).data('project')) + '&command-id=' + $(this).data('id')  ,
 	    		    success: function(resposne) {
 	    		    	console.log("success");
 	    		    	displayAlert('Command was canceled','success');
