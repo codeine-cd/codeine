@@ -13,7 +13,13 @@ public abstract class AbstractApiServlet extends AbstractServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setNoCache(response);
+		init(response);
 		super.doGet(request, response);
+	}
+
+	private void init(HttpServletResponse response) {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 	}
 
 }
