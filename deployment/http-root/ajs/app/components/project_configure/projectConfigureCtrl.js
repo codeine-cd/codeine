@@ -24,7 +24,7 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
             array[index+1] = temp;
         }
 
-        for (var i1=0; i < projectConfigurationForEditing.nodes_info.length ; i1++) {
+        for (var i1=0; i1 < projectConfigurationForEditing.nodes_info.length ; i1++) {
             for (var j=0; j < projectConfigurationForEditing.nodes_info[i1].tags.length ; j++) {
                 if ($scope.tags.indexOf(projectConfigurationForEditing.nodes_info[i1].tags[j]) === -1) {
                     $scope.tags.push(projectConfigurationForEditing.nodes_info[i1].tags[j]);

@@ -44,7 +44,8 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     $scope.initValues();
 
-    $scope.initFromQueryString = function(queryStringObject) {
+    $scope.initFromQueryString = function() {
+        var queryStringObject = $location.search();
         var shouldRefresh = false;
         if (angular.isDefined(queryStringObject.monitorFilter)) {
             shouldRefresh = true;
@@ -59,7 +60,6 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         }
         return shouldRefresh;
     };
-
 
     var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
         $scope.refreshFilters();
@@ -129,7 +129,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         $scope.allNodesCount = count;
     };
 
-    if ($scope.initFromQueryString($location.search())) {
+    if ($scope.initFromQueryString()) {
         $scope.refreshFilters();
     }
 
@@ -230,6 +230,12 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
             });
         });
     };
+
+    var unRegisterFunction = $rootScope.$on(Constants.EVENTS.BREADCRUMB_CLICKED, function () {
+        $scope.clearFilters();
+    });
+
+    $scope.$on('$destroy',unRegisterFunction);
 
     $scope.$on('$destroy', tagsChangedHandler);
 }]);

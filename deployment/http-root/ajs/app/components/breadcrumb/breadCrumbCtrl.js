@@ -1,6 +1,11 @@
 'use strict';
 
-angular.module('codeine').controller('breadCrumbCtrl',['$scope','$rootScope', '$log','$location', function($scope,$rootScope,$log,$location) {
+angular.module('codeine').controller('breadCrumbCtrl',['$scope','$rootScope', '$log','$location','Constants', function($scope,$rootScope,$log,$location,Constants) {
+
+    $scope.gotoUrl = function(url) {
+        $location.url(url);
+        $rootScope.$emit(Constants.EVENTS.BREADCRUMB_CLICKED,url);
+    };
 
     $rootScope.$on("$routeChangeSuccess", function (event, current) {
         $log.debug('breadCrumbCtrl: $routeChangeSuccess');

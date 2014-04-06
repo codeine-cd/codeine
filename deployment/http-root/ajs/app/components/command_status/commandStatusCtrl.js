@@ -24,10 +24,6 @@ angular.module('codeine').controller('commandStatusCtrl',['$scope', '$log', '$ro
         });
     },5000);
 
-    $scope.getDateForView = function(milli){
-        return new Date(milli).toLocaleString();
-    }
-
     $scope.$on('$destroy', function() {
         if (interval) {
             $interval.cancel(interval);

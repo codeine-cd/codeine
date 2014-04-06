@@ -113,7 +113,7 @@
                 <div class="col-md-12">
                     <ol class="breadcrumb">
                         <li><a href='/'>Codeine</a></li>
-                        <li ng-repeat="item in items"><a href="{{item.url}}">{{item.name}}</a></li>
+                        <li ng-repeat="item in items"><a class="cursor_pointer" ng-click="gotoUrl(item.url)">{{item.name}}</a></li>
                         <li>{{lastItem}}</li>
                     </ol>
                 </div>

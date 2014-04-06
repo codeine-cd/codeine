@@ -296,7 +296,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 $log.debug('run: got session info ' + angular.toJson(data));
                 $rootScope.app.sessionInfo = data;
             });
-        }
+        };
 
         var loadConfiguration = function() {
             if ((!$rootScope.app.isInFocus) && (angular.isDefined($rootScope.app.globalConfiguration))) {

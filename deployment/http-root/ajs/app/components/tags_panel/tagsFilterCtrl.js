@@ -15,7 +15,7 @@ angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$
                 $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
                 var array = queryStringObject.tagsOn.split(',');
                 for (var i=0; i < array.length; i++) {
-                    for (var k=0; j < $scope.projectStatus.tag_info.length ; k++) {
+                    for (var k=0; k < $scope.projectStatus.tag_info.length ; k++) {
                         if ($scope.projectStatus.tag_info[k].name === array[i]) {
                             $scope.projectStatus.tag_info[k].state = 1;
                         }
@@ -27,7 +27,7 @@ angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$
                 $log.debug('tagsFilterCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
                 var array2 = queryStringObject.tagsOff.split(',');
                 for (var i1=0; i1 < array2.length; i1++) {
-                    for (var f=0; j < $scope.projectStatus.tag_info.length ; f++) {
+                    for (var f=0; f < $scope.projectStatus.tag_info.length ; f++) {
                         if ($scope.projectStatus.tag_info[f].name === array2[i1]) {
                             $scope.projectStatus.tag_info[f].state = 2;
                         }
@@ -54,15 +54,4 @@ angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$
             });
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
-
-//        var unregisterFunction = $rootScope.$on('$locationChangeSuccess', function () {
-//            $log.debug('$locationChangeSuccess - tags');
-//            $scope.initTagsFromQueryString();
-//        });
-//
-//        $scope.$on('$destroy', function() {
-//            $log.debug("In destroy of tagsFilterCtrl");
-//            unregisterFunction();
-//        });
-
     }]);

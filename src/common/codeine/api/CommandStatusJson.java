@@ -1,6 +1,5 @@
 package codeine.api;
 
-import codeine.utils.StringUtils;
 
 
 public class CommandStatusJson {
@@ -12,7 +11,6 @@ public class CommandStatusJson {
 	public int successPercent;
 	public int failPercent;
 	public int skipPercent;
-	private String date;
 	private long date_long;
 	private long id;
 	private boolean finished;
@@ -29,7 +27,6 @@ public class CommandStatusJson {
 		this.id = id;
 		this.finished = finished;
 		this.date_long = date;
-		this.date = StringUtils.formatDate(date);
 		this.skipPercent = finished ?  100 - successPercent - failPercent : 0;
 	}
 
@@ -39,10 +36,6 @@ public class CommandStatusJson {
 	
 	public long long_date() {
 		return date_long;
-	}
-	
-	public String date() {
-		return date;
 	}
 
 	public String project() {
@@ -64,7 +57,7 @@ public class CommandStatusJson {
 	@Override
 	public String toString() {
 		return "CommandStatusJson [name=" + name + ", link=" + link + ", project=" + project + ", nodes=" + nodes
-				+ ", successPercent=" + successPercent + ", failPercent=" + failPercent + ", date=" + date
+				+ ", successPercent=" + successPercent + ", failPercent=" + failPercent 
 				+ ", date_long=" + date_long + ", id=" + id + ", finished=" + finished + ", can_cancel=" + can_cancel
 				+ "]";
 	}

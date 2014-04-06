@@ -4,6 +4,7 @@ angular.module('codeine').constant('Constants', {
     //CODEINE_WEB_SERVER : location.hostname.indexOf('127.0.0.1') === -1  ? '' : 'http://codeine.intel.com:12377',
     CODEINE_WEB_SERVER : location.hostname.indexOf('127.0.0.1') === -1  ? '' : '',
     EVENTS : {
-        TAGS_CHANGED : 'tagsChanged'
+        TAGS_CHANGED : 'tagsChanged',
+        BREADCRUMB_CLICKED : 'breadcrumbClicked'
     }
 });
