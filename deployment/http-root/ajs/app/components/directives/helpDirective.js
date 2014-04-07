@@ -19,7 +19,7 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
             }
             element.popover(
                 {
-                    content : '<span class="codeine_help_content">' + text + '</span>',
+                    content : '&nbsp;<span class="codeine_help_content">' + text + '</span>',
                     html : true,
                     placement : "bottom",
                     trigger : "hover",
