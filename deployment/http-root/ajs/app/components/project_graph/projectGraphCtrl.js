@@ -1,25 +1,27 @@
 'use strict';
-angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log', '$routeParams', 'graphData',
-    function($scope, $log,$routeParams,graphData) {
+angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log','$filter','$routeParams', 'graphData',
+    function($scope, $log, $filter,$routeParams,graphData) {
         $scope.projectName = $routeParams.project_name;
-        $log.debug('projectGraphCtrl: current project is ' + $scope.projectName);
-        $log.debug('projectGraphCtrl: graph data is  ' + angular.toJson(graphData));
         $scope.options = {
             axes: {
-                x: {key: 'x', type: 'date'},
-                y: {type: 'linear'}
+                x: {key: 'x', type: 'date', tooltipFormatter: function(x) { return ' ' + $filter('date')(x,'short') + ' ';}},
+                y: {type: 'linear'},
+                y2: {type: 'linear'}
             },
             series: [
-                {y: 'fail', color: 'steelblue'},
-                {y: 'total', color: 'green'},
-            ]
+                {y: 'total', color: 'green',thickness : '3px', label: 'Total'},
+                {y: 'fail', color: 'red',thickness : '3px', label: 'Fail'},
+                {y: 'command', axis: 'y2', color: 'steelblue',thickness : '10px', label: 'Commands', type: 'column'},
+            ],
+            lineMode: "cardinal"
         };
         $scope.data = [];
         for (var i=0 ;i < graphData.length; i++) {
             $scope.data.push({
-                x : new Date(graphData[i].date_long),
+                x : new Date(graphData.date_long),
                 fail : parseInt(graphData[i].fail),
-                total : parseInt(graphData[i].total)
+                total : parseInt(graphData[i].total),
+                command : graphData[i].nodes
             });
         }
     }]);

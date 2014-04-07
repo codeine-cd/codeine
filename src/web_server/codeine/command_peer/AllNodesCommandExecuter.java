@@ -18,6 +18,7 @@ import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.statistics.IMonitorStatistics;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
@@ -36,7 +37,7 @@ public class AllNodesCommandExecuter {
 	@Inject	private PathHelper pathHelper;
 	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
-	
+	@Inject private IMonitorStatistics monitorsStatistics;
 	
 	private int total;
 	private int count;
@@ -111,6 +112,7 @@ public class AllNodesCommandExecuter {
 	private void finish() {
 		if (null != commandDataJson) {
 			commandDataJson.finish();
+			monitorsStatistics.updateCommand(commandDataJson);
 		}
 		try {
 			updateJson();

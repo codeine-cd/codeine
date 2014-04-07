@@ -10,6 +10,8 @@ import com.google.common.base.Function;
 
 public class StringUtils {
 
+	public static String EMPTY = "";
+	
 	public static String formatTimePeriod(long millis) {
 		long seconds = (millis / 1000) % 60;
 		long minutes = (millis / (1000 * 60)) % 60;
@@ -110,4 +112,5 @@ public class StringUtils {
 		}
 		return $;
 	}
+	
 }
