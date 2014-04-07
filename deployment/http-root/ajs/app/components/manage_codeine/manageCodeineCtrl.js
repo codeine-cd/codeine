@@ -8,6 +8,14 @@ angular.module('codeine').controller('manageCodeineCtrl',['$scope', '$log', 'tab
     $scope.permissionsForEditing = angular.copy(permissions);
     $scope.globalConfigurationForEditing = angular.copy($scope.app.globalConfiguration);
 
+    $scope.addMysql = function() {
+        $scope.globalConfigurationForEditing.mysql.push({});
+    };
+
+    $scope.removeMysql = function(index) {
+        $scope.globalConfigurationForEditing.mysql.splice(index,1);
+    };
+
     $scope.setViewAs = function() {
         $scope.app.viewAs = $scope.newViewAs;
         CodeineService.getSessionInfo().success(function(data) {
