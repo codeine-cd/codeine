@@ -5,13 +5,13 @@ angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log','$filt
         $scope.options = {
             axes: {
                 x: {key: 'x', type: 'date', tooltipFormatter: function(x) { return ' ' + $filter('date')(x,'short') + ' ';}},
-                y: {type: 'linear'},
-                y2: {type: 'linear'}
+                y: {type: 'linear'}
+                //y2: {type: 'linear'}
             },
             series: [
                 {y: 'total', color: 'green',thickness : '3px', label: 'Total'},
                 {y: 'fail', color: 'red',thickness : '3px', label: 'Fail'},
-                {y: 'command', axis: 'y2', color: 'steelblue',thickness : '10px', label: 'Commands', type: 'column'},
+                {y: 'command', color: 'steelblue',thickness : '10px', label: 'Commands', type: 'column'},
             ],
             lineMode: "cardinal"
         };
