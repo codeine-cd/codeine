@@ -61,10 +61,18 @@ public class CollectorNotificationJson {
 		return peer;
 	}
 
+	
 	@Override
 	public String toString() {
 		return "CollectorNotificationJson [collector_name=" + collector_name + ", project_name=" + project_name
 				+ ", node=" + node + ", output=" + output + ", time=" + time + ", collection_type=" + collection_type
+				+ ", collection_type_update_time=" + collection_type_update_time + ", version=" + version + ", peer="
+				+ peer + "]";
+	}
+
+	public String toStringNoOutput() {
+		return "CollectorNotificationJson [collector_name=" + collector_name + ", project_name=" + project_name
+				+ ", node=" + node + ", time=" + time + ", collection_type=" + collection_type
 				+ ", collection_type_update_time=" + collection_type_update_time + ", version=" + version + ", peer="
 				+ peer + "]";
 	}
