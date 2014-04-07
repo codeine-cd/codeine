@@ -17,11 +17,13 @@ angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log','$filt
         };
         $scope.data = [];
         for (var i=0 ;i < graphData.length; i++) {
-            $scope.data.push({
-                x : new Date(graphData.date_long),
-                fail : parseInt(graphData[i].fail),
-                total : parseInt(graphData[i].total),
-                command : graphData[i].nodes
-            });
+            if (graphData[i].date_long !== 0) {
+                $scope.data.push({
+                    x: new Date(graphData[i].date_long),
+                    fail: parseInt(graphData[i].fail),
+                    total: parseInt(graphData[i].total),
+                    command: graphData[i].nodes
+                });
+            }
         }
     }]);
