@@ -192,7 +192,9 @@ angular.module('n3charts.utils', [])
 
             drawColumns: function(svg, axes, data, columnWidth) {
                 data = data.filter(function(s) {return s.type === 'column';});
-
+                for (var i=0; i < data.length; i++ ) {
+                    data[i].values = data[i].values.filter(function(s) {return s.value !== 0;});
+                }
                 var x1 = d3.scale.ordinal()
                     .domain(data.map(function(s) {return s.name;}))
                     .rangeRoundBands([0, data.length * columnWidth], 0.05);
@@ -228,7 +230,7 @@ angular.module('n3charts.utils', [])
                     });
 
                 colGroup.selectAll("rect")
-                    .data(function(d) {return d.values;})
+                    .data(function(d) {return d.values.filter(function(s) {return s.value !== 0;});})
                     .enter().append("rect")
                     .style("fill-opacity", function(d) {return d.value == 0 ? 0 : 1;})
 
