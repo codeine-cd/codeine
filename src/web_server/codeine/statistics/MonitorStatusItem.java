@@ -10,15 +10,13 @@ public class MonitorStatusItem implements Serializable{
 	private String date;
 	private int total;
 	private int fail;
+	private long date_long;
 	
-	public MonitorStatusItem(String date, int success, int fail) {
-		this.date = date.toString();
+	public MonitorStatusItem(String date,long date_long, int success, int fail) {
+		this.date = date;
+		this.date_long = date_long;
 		this.total = success + fail;
 		this.fail = fail;
-	}
-	
-	public String date() {
-		return date;
 	}
 	
 

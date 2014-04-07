@@ -15,6 +15,9 @@ angular.module('codeine').factory('CodeineService', ['Constants', '$http', funct
         getProjects: function () {
             return $http.get(Constants.CODEINE_WEB_SERVER + "/api/projects", { cache: false });
         },
+        getProjectMonitorStatistics: function(project) {
+            return $http.get(Constants.CODEINE_WEB_SERVER + "/api/monitors-statistics", { params: { project: project }, cache: false });
+        },
         getViewTabs: function() {
             return $http.get(Constants.CODEINE_WEB_SERVER + "/api/projects-tabs", { cache: false });
         },

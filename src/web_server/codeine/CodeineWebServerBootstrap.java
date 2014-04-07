@@ -105,6 +105,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		addHandler("/bower_components", Constants.getAngularDir() + "/bower_components", contexts);
 		addHandler("/images", Constants.getAngularDir() + "/images", contexts);
 		addHandler("/views", Constants.getAngularDir() + "/views", contexts);
+		addHandler("/lib", Constants.getAngularDir() + "/lib", contexts);
 	}
 	
 	private ServletContextHandler createServletContextHandlerBasic(){

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope', '$log', '$interval','$routeParams','CodeineService', function($scope,$rootScope,$log,$interval,$routeParams,CodeineService) {
+angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope', '$log', '$interval','$routeParams','CodeineService','Constants', function($scope,$rootScope,$log,$interval,$routeParams,CodeineService,Constants) {
     $scope.projectName = $routeParams.project_name;
     $scope.limit = 10;
 
@@ -13,7 +13,7 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
         }
         $.ajax( {
             type: 'GET',
-            url: '/api/commands-log?project=' + $scope.projectName  ,
+            url: Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + $scope.projectName  ,
             success: function(response) {
                 if  (($scope.history.length !== response.length) || (angular.toJson($scope.history) !== angular.toJson(response))) {
                     $scope.$apply(function() {

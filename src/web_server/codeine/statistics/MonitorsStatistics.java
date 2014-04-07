@@ -101,7 +101,7 @@ public class MonitorsStatistics implements IMonitorStatistics{
 				log.info("ignoring empty statistics on project " + projectJson.name());
 				continue;
 			}
-			MonitorStatusItem item = new MonitorStatusItem(StringUtils.formatDate(currentTime), success, fail);
+			MonitorStatusItem item = new MonitorStatusItem(StringUtils.formatDate(currentTime),currentTime, success, fail);
 			synchronized (projectData) {
 				projectData.addFirst(item);
 			}

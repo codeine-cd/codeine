@@ -410,25 +410,25 @@
             </tr>
             </thead>
             <tbody ng-repeat="permissionObject in projectConfigurationForEditing.permissions">
-                <ng-form name="permissionsForm">
-                    <tr>
-                        <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
-                            <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
-                        </td>
-                        <td class="col-md-2">
-                            <input type="checkbox" checked disabled class="readonly_item">
-                        </td>
-                        <td class="col-md-4">
-                            <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
-                        </td>
-                        <td class="col-md-2">
-                            <input type="checkbox" ng-model="permissionObject.can_config">
-                        </td>
-                        <td class="col-md-1">
-                            <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
-                        </td>
-                    </tr>
-                </ng-form>
+            <ng-form name="permissionsForm">
+                <tr>
+                    <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
+                        <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
+                    </td>
+                    <td class="col-md-2">
+                        <input type="checkbox" checked disabled class="readonly_item">
+                    </td>
+                    <td class="col-md-4">
+                        <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
+                    </td>
+                    <td class="col-md-2">
+                        <input type="checkbox" ng-model="permissionObject.can_config">
+                    </td>
+                    <td class="col-md-1">
+                        <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+            </ng-form>
             </tbody>
         </table>
         <div class="row">

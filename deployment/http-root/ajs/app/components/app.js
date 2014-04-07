@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues'])
+angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues','n3-charts.linechart'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
@@ -128,6 +128,22 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                                 deferred.resolve(data);
                             }).error(function() {
                                     deferred.reject('Error - failed to get project status');
+                            });
+                            return deferred.promise;
+                        }
+                    }
+                }).
+                when('/codeine/project/:project_name/graph', {
+                    templateUrl: '/components/project_graph/project_graph.html',
+                    controller: 'projectGraphCtrl',
+                    resolve: {
+                        graphData : function($q,$log,$route,CodeineService) {
+                            var deferred = $q.defer();
+                            CodeineService.getProjectMonitorStatistics($route.current.params.project_name).success(function(data) {
+                                $log.debug("Resolved project graph data");
+                                deferred.resolve(data);
+                            }).error(function() {
+                                deferred.reject('Error - failed to get project graph data');
                             });
                             return deferred.promise;
                         }
