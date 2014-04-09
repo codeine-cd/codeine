@@ -245,9 +245,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
+                        <label class="col-md-3 control-label" for="command_info_{{$index}}command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
                         <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.command_strategy.$invalid}">
-                            <select  class="form-control select2" name="command_strategy" id="command_info{{$index}}.command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
+                            <select class="form-control select2" name="command_strategy" id="command_info_{{$index}}command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
                                 <option value="Immediately">Immediately</option>
                                 <option value="Progressive">Progressive</option>
                             </select>
@@ -266,7 +266,7 @@
                                 <input id="command_info{{$index}}.duration" name="duration" ng-model="command_info.duration" type="text" class="form-control" required>
                             </div>
                             <div class="controls col-md-3">
-                                <select class="form-control select2" name="command_info{{$index}}.duration_units" id="command_info{{$index}}.duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units" required>
+                                <select class="form-control select2" name="command_info{{$index}}.duration_units" id="command_info_{{$index}}_duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units" required>
                                     <option value="Minutes">Minutes</option>
                                     <option value="Hours">Hours</option>
                                     <option value="Days">Days</option>
@@ -274,9 +274,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="command_info{{$index}}.ratio">Ratio <help help-id="ratioHelp"></help></label>
+                            <label class="col-md-3 control-label" for="command_info_{{$index}}_ratio">Ratio <help help-id="ratioHelp"></help></label>
                             <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.ratio.$invalid}">
-                                <select  class="form-control select2" name="ratio" id="command_info{{$index}}.ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio" required>
+                                <select  class="form-control select2" name="ratio" id="command_info_{{$index}}_ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio" required>
                                     <option value="Linear">Linear</option>
                                     <option value="Exponential">Exponential</option>
                                 </select>
@@ -318,9 +318,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label" for="command_parameter{{$index}}.type">Type <help help-id="typeHelp"></help></label>
+                                    <label class="col-md-3 control-label" for="command_parameter_{{$index}}_type">Type <help help-id="typeHelp"></help></label>
                                     <div class="controls col-md-3">
-                                        <select  class="form-control select2" name="type" id="command_parameter{{$index}}.type"  ui-select2="{ allowClear: false}" ng-model="command_parameter.type" required>
+                                        <select  class="form-control select2" name="type" id="command_parameter_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="command_parameter.type" required>
                                             <option value="String">String</option>
                                             <option value="Boolean">Boolean</option>
                                             <option value="Selection">Selection</option>
