@@ -133,7 +133,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         }
                     }
                 }).
-                when('/codeine/project/:project_name/graph', {
+                when('/codeine/project/:project_name/timeline', {
                     templateUrl: '/components/project_graph/project_graph.html',
                     controller: 'projectGraphCtrl',
                     resolve: {
