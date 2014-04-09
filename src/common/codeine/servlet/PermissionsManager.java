@@ -37,7 +37,6 @@ public class PermissionsManager {
 	private GroupsManager groupsManager;
 	private UsersManager usersManager;
 	private final UserPermissions ADMIN_GUEST = new UserPermissions("Guest", true);
-	private final UserPermissions GUEST = new UserPermissions("Guest", false);
 	
 	@Inject
 	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore, 
@@ -75,14 +74,14 @@ public class PermissionsManager {
 		}
 		String user = userInternal(request);
 		IUserPermissions userPermissions = getUser(user);
-		return null == userPermissions ? guest(user) : userPermissions; 
+		return userPermissions; 
 		
 	}
 
 	private IUserPermissions getUser(String user) {
 		UserPermissions userPermissions = permissionsConfigurationJsonStore.get().getOrNull(user);
 		if (null == userPermissions) {
-			userPermissions = GUEST;
+			userPermissions = guest(user);
 		}
 		Map<String, UserProjectPermissions> p = getProjectPermissions(user);
 		Map<String, UserPermissions> groupPermissions = getGroupsPermissions(user); //group -> permissions
