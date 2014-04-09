@@ -37,7 +37,7 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
         };
 
         $scope.addUser = function() {
-            $scope.projectConfigurationForEditing.permissions.push({});
+            $scope.projectConfigurationForEditing.permissions.push({can_read:true});
         };
 
         $scope.addMonitor = function() {
