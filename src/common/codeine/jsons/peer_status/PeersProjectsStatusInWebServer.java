@@ -1,6 +1,5 @@
 package codeine.jsons.peer_status;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -12,27 +11,26 @@ import org.apache.log4j.Logger;
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 
 	private static final Logger log = Logger.getLogger(PeersProjectsStatusInDirectory.class);
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(5);
-	private List<IStatusDatabaseConnector> statusDatabaseConnectorList = Lists.newArrayList();
+	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
 	private Map<String, PeerStatusJsonV2> peer_to_projects = Maps.newHashMap();
 
 	@Inject
 	public PeersProjectsStatusInWebServer(StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider) {
 		super();
-		statusDatabaseConnectorList = statusDatabaseConnectorListProvider.get();
+		this.statusDatabaseConnectorListProvider = statusDatabaseConnectorListProvider;
 	}
 
 	@Override
 	public void run() {
 		log.debug("getting data from directory");
 		Map<String, PeerStatusJsonV2> res = Maps.newHashMap();
-		for (IStatusDatabaseConnector c : statusDatabaseConnectorList) {
+		for (IStatusDatabaseConnector c : statusDatabaseConnectorListProvider.get()) {
 			Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
 			for (Entry<String, PeerStatusJsonV2> e : peersStatus.entrySet()) {
 				if (!res.containsKey(e.getKey()) || isNewer(e.getValue(), res.get(e.getKey()))) {
