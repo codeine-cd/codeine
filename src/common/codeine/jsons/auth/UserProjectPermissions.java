@@ -9,16 +9,18 @@ public class UserProjectPermissions extends AbstractUserPermissions{
 	private String username;
 	private boolean can_config;
 	private Set<String> can_command = Sets.newHashSet();
+	private boolean can_read;
 	
-	public UserProjectPermissions(String username, boolean can_config, Set<String> can_command) {
+	public UserProjectPermissions(String username, boolean can_config, Set<String> can_command, boolean can_read) {
 		super();
 		this.username = username;
 		this.can_config = can_config;
 		this.can_command = can_command;
+		this.can_read = can_read;
 	}
 
 	public boolean canRead() {
-		return true;
+		return can_read;
 	}
 	
 	/**

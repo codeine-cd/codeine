@@ -56,7 +56,7 @@ public class CompoundUserPermissions implements IUserPermissions{
 		return createUnauthorizedUser();
 	}
 	private UserProjectPermissions createUnauthorizedUser() {
-		return new UserProjectPermissions("unauthorized", false, Sets.<String>newHashSet());
+		return new UserProjectPermissions("unauthorized", false, Sets.<String>newHashSet(), false);
 	}
 	@Override
 	public boolean canCommand(String projectName) {
