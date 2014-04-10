@@ -19,7 +19,6 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.model.Constants;
 import codeine.servlet.GeneralServletModule;
-import codeine.servlets.AngularServlet;
 import codeine.stdout.StdoutRedirectToLog;
 
 import com.google.common.collect.Lists;
@@ -67,7 +66,6 @@ public abstract class AbstractCodeineBootstrap {
 		FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
 		ServletContextHandler handler = createServletContextHandler();
 		handler.setContextPath("/");
-		handler.addServlet(AngularServlet.class, "/*");
 		FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
 		crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
 		crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Origin,Content-Type, Accept");

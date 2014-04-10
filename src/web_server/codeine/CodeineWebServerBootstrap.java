@@ -27,6 +27,7 @@ import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
 import codeine.model.Constants;
 import codeine.servlet.UsersManager;
+import codeine.servlets.AngularServlet;
 import codeine.statistics.IMonitorStatistics;
 import codeine.statistics.MonitorsStatistics;
 import codeine.users.LogoutServlet;
@@ -65,6 +66,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	protected void createAdditionalServlets(ServletContextHandler handler) {
+		handler.addServlet(AngularServlet.class, "/*");
 	}
 	
 	@Override
