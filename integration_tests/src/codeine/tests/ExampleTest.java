@@ -28,6 +28,7 @@ public class ExampleTest extends TestsSuite{
 //		ThreadUtils.sleep(3000);
 //		List<CommandStatusJson> commandHistory = client.commandHistory("test_project");
 //		System.out.println(commandHistory);
+		
 	}
 
 }
