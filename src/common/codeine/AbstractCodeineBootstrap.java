@@ -84,6 +84,7 @@ public abstract class AbstractCodeineBootstrap {
 		execute();
 	}
 	protected void createAdditionalServlets(ServletContextHandler handler) {
+		handler.addServlet(InvalidRequestServlet.class, "/*");
 	}
 
 	protected ServletContextHandler createServletContextHandler() {
