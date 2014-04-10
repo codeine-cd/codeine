@@ -22,6 +22,7 @@ public class ExampleTest extends TestsSuite{
 //		CommandInfo commandJson = projectJson.commandForName("short-command");
 //		ScehudleCommandExecutionInfo data = ScehudleCommandExecutionInfo.createImmediate(commandJson, nodes.subList(0, 10));
 		
+		
 //		System.out.println(data);
 //		String runCommand = client.runCommand(data);
 //		System.out.println(runCommand);
