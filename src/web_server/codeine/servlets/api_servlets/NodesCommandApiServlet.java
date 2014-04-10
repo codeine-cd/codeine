@@ -1,7 +1,5 @@
 package codeine.servlets.api_servlets;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,13 +8,11 @@ import org.apache.log4j.Logger;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
-import codeine.configuration.Links;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
-import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 
 import com.google.inject.Inject;
@@ -25,7 +21,6 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	private static final Logger log = Logger.getLogger(NodesCommandApiServlet.class);
 	private static final long serialVersionUID = 1L;
 
-	@Inject private Links links;
 	@Inject private NodesCommandExecuterProvider allNodesCommandExecuterProvider;
 	@Inject private IConfigurationManager configurationManager;
 	@Inject private PermissionsManager permissionsManager;
@@ -61,30 +56,14 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
 		log.debug("NodesCommandServlet request");
 		String data = getData(request);
-		boolean redirect = Boolean.valueOf(request.getParameter(Constants.UrlParameters.REDIRECT));
-		try {
-			ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
-			String projectName = commandData.command_info().project_name();
-			
-			ProjectJson project = configurationManager.getProjectForName(projectName);
-			CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
-			overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
-			long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData, project);
-			if (redirect){
-				try {
-					response.sendRedirect(links.getCommandOutputGui(projectName, commandData.command_info().command_name(), String.valueOf(dir)));
-				} catch (IOException e) {
-					throw ExceptionUtils.asUnchecked(e);
-				}
-			}
-			else {
-				writeResponseJson(response, dir);
-			}
-		} catch (RuntimeException e) {
-			if (redirect) {
-				handleErrorRequestFromBrowser(e, response);
-			}
-		}
+		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
+		String projectName = commandData.command_info().project_name();
+
+		ProjectJson project = configurationManager.getProjectForName(projectName);
+		CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
+		overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
+		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData, project);
+		writeResponseJson(response, dir);
 	}
 	
 	private void overrideCommandInfoByConfiguration(CommandInfo command_info, CommandInfo configuredCommand) {

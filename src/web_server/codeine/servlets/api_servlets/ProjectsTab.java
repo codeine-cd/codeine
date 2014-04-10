@@ -1,4 +1,4 @@
-package codeine.servlets.front_end;
+package codeine.servlets.api_servlets;
 
 import java.util.Collection;
 import java.util.Collections;

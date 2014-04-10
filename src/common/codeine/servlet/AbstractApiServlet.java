@@ -11,7 +11,7 @@ public abstract class AbstractApiServlet extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		setNoCache(response);
 		init(response);
 		super.doGet(request, response);

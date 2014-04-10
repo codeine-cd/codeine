@@ -1,4 +1,4 @@
-package codeine.servlets.api_servlets;
+package codeine.servlets.api_servlets.projects;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,8 +17,6 @@ import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
-import codeine.servlets.front_end.NewProjectServlet.CreateNewProjectJson;
-import codeine.servlets.front_end.NewProjectServlet.NewProjectType;
 import codeine.utils.JsonUtils;
 
 import com.google.common.base.Predicate;

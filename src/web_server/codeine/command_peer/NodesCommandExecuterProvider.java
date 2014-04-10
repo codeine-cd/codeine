@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.api.CommandStatusJson;
-import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
@@ -31,7 +30,6 @@ public class NodesCommandExecuterProvider {
 	@Inject private Provider<AllNodesCommandExecuter> allNodesCommandExecuterProvider;
 	@Inject private PrepareForShutdown prepareForShutdown;
 	@Inject private Gson gson;
-	@Inject	private Links links;
 	@Inject private PathHelper pathHelper;
 	private List<AllNodesCommandExecuter> executers = Lists.newArrayList();
 	
@@ -58,14 +56,13 @@ public class NodesCommandExecuterProvider {
 			String file = parentDir + "/" + dir + Constants.JSON_COMMAND_FILE_NAME;
 			try {
 				CommandExecutionStatusInfo j = gson.fromJson(TextFileUtils.getContents(file), CommandExecutionStatusInfo.class); 
-				String link = links.getCommandOutputGuiLink(j);
 				int size = j.nodes_list().size();
 				int successSize = j.success_list().size();
 				int failSize = j.fail_list().size();
 				int sizeNotZero = size != 0 ? size :  successSize + failSize != 0 ? successSize + failSize : 1;
 				int successPercent = successSize * 100 / sizeNotZero;
 				int failPercent = failSize * 100 / sizeNotZero;
-				$.add(new CommandStatusJson(j.command(), link, projectName, size, successPercent, failPercent, j.start_time() ,j.id(), j.finished()));
+				$.add(new CommandStatusJson(j.command(), projectName, size, successPercent, failPercent, j.start_time(), j.id() ,j.finished()));
 			} catch (Exception e) {
 				log.warn("failed in command " +  dir + " for project " + projectName + " file is '" + file + "' and error is " + e.getMessage());
 			}
@@ -106,7 +103,7 @@ public class NodesCommandExecuterProvider {
 	private List<CommandStatusJson> getActiveStatusFromList(List<AllNodesCommandExecuter> list) {
 		List<CommandStatusJson> $ = Lists.newArrayList();
 		for (AllNodesCommandExecuter e : list) {
-			$.add(new CommandStatusJson(e.name(), links.getCommandOutputGuiLink(e.commandData()), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(),  e.commandData().id(),!e.isActive()));
+			$.add(new CommandStatusJson(e.name(), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(), e.commandData().id(),  !e.isActive()));
 		}
 		return $;
 	}

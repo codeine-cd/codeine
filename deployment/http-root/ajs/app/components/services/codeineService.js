@@ -85,7 +85,7 @@ angular.module('codeine').factory('CodeineService', ['Constants', '$http', funct
             return $http.get(Constants.CODEINE_WEB_SERVER + "/api/user-info", { cache: false });
         },
         getProjectNodes : function(project) {
-            return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-nodes2", {params: { project: project } ,cache: false });
+            return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-nodes", {params: { project: project } ,cache: false });
         },
         cancelCommand : function(project,commandId) {
             return $http.delete(Constants.CODEINE_WEB_SERVER + "/api/command-nodes", { params: { 'project': project, 'command-id': commandId } });

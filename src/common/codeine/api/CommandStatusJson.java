@@ -5,7 +5,6 @@ package codeine.api;
 public class CommandStatusJson {
 
 	public String name;
-	public String link;
 	public String project;
 	public int nodes;
 	public int successPercent;
@@ -16,10 +15,9 @@ public class CommandStatusJson {
 	private boolean finished;
 	private boolean can_cancel;
 	
-	public CommandStatusJson(String name, String link, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished) {
+	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished) {
 		super();
 		this.name = name;
-		this.link = link;
 		this.project = project;
 		this.nodes = nodes;
 		this.successPercent = successPercent;
@@ -56,7 +54,7 @@ public class CommandStatusJson {
 
 	@Override
 	public String toString() {
-		return "CommandStatusJson [name=" + name + ", link=" + link + ", project=" + project + ", nodes=" + nodes
+		return "CommandStatusJson [name=" + name + ", project=" + project + ", nodes=" + nodes
 				+ ", successPercent=" + successPercent + ", failPercent=" + failPercent 
 				+ ", date_long=" + date_long + ", id=" + id + ", finished=" + finished + ", can_cancel=" + can_cancel
 				+ "]";

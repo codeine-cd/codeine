@@ -10,6 +10,10 @@ import codeine.model.Constants;
 import codeine.servlet.AbstractServlet;
 import codeine.version.RsyncSourceGetter;
 
+//TODO remove after build codeine 460 in cfengine
+/**
+ *	peers get the version reported by jenkins from directory
+ */
 public class RsyncSourceForVersionServlet extends AbstractServlet{
 
 	private static final Logger log = Logger.getLogger(RsyncSourceForVersionServlet.class);

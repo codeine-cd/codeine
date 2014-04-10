@@ -2,7 +2,6 @@ package codeine.configuration;
 
 import javax.inject.Inject;
 
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
@@ -39,11 +38,6 @@ public class Links {
 		return getPeerLink(hostport) + nodeContextPath + "/" + HttpUtils.specialEncode(nodeName) + "/" + HttpUtils.specialEncode(collectorName) + ".txt";
 	}
 
-	public String getWebServerProjectAlerts(ProjectJson project)
-	{
-		return getWebServerLink() + Constants.PROJECT_NODES_CONTEXT + "?alerts=true&project=" + HttpUtils.encodeURL(project.name());
-	}
-
 	public String getWebServerLink() {
 		return "http://" + globalConfiguration.get().web_server_host() + ":" + globalConfiguration.get().web_server_port();
 	}
@@ -63,21 +57,8 @@ public class Links {
 		return Constants.PROJECT_FILES_CONTEXT + "/" + HttpUtils.encodeURL(projectName) + Constants.PLUGINS_OUTPUT_DIR + "/" + file;
 	}
 
-	public String getCommandOutputGuiLink(CommandExecutionStatusInfo j) {
-		String project_name = j.project_name();
-		String command = j.command();
-		String path = String.valueOf(j.id());
-		return j.finished() ? 
-				Constants.COMMAND_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encodeURL(project_name) + "&resource=" + HttpUtils.encodeURL(command) + "&link=" + HttpUtils.encodeURL(getPluginOutLink(project_name, path))) : 
-			getCommandOutputGui(project_name, command, path);
+	public String getWebServerProjectAlerts(ProjectJson project) {
+		return getWebServerLink() + "/codeine/project/" + HttpUtils.encodeURL(project.name()) + "/status";
 	}
 
-	public String getCommandOutputGui(String project_name, String command, String path) {
-		return Constants.PROGRESSIVE_RAW_OUTPUT_CONTEXT + "?project=" + HttpUtils.encodeURL(project_name) + "&command=" + HttpUtils.encodeURL(command) + "&path=" + HttpUtils.encodeURL(String.valueOf(path));
-	}
-	
-	public String getMonitorOutputGuiLink(String projectName, String peerName, String nodeName, String monitorName) {
-		return Constants.RAW_OUTPUT_CONTEXT + ("?project=" + HttpUtils.encodeURL(projectName) + "&link=" + HttpUtils.encodeURL(getPeerMonitorResultLink(peerName, projectName, monitorName, nodeName)) + "&resource=" + HttpUtils.encodeURL(monitorName));
-	}
-	
 }

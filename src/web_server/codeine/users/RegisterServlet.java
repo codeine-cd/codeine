@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 import codeine.servlet.PermissionsManager;
 import codeine.servlet.UsersManager;
 
@@ -14,7 +14,7 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import com.google.inject.Inject;
 
-public class RegisterServlet extends AbstractServlet {
+public class RegisterServlet extends AbstractApiServlet {
 
 	private static final Logger log = Logger.getLogger(RegisterServlet.class);
 

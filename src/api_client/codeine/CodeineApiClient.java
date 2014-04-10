@@ -75,12 +75,12 @@ public class CodeineApiClient {
 	}
 
 
-
-	public List<NodeWithMonitorsInfo> projectNodes(String projectName, String version) {
-		return apiCall(
-				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
-				new TypeToken<List<NodeWithMonitorsInfo>>(){}.getType());
-	}
+//TODO
+//	public List<NodeWithMonitorsInfo> projectNodes(String projectName, String version) {
+//		return apiCall(
+//				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
+//				new TypeToken<List<NodeWithMonitorsInfo>>(){}.getType());
+//	}
 
 
 

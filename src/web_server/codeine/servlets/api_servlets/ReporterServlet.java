@@ -10,11 +10,11 @@ import codeine.db.IStatusDatabaseConnector;
 import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.peer_status.ProjectStatus;
-import codeine.servlet.AbstractServlet;
+import codeine.servlet.AbstractApiServlet;
 
 import com.google.inject.Inject;
 
-public class ReporterServlet extends AbstractServlet {
+public class ReporterServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(ReporterServlet.class);

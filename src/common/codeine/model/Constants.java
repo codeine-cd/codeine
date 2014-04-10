@@ -17,24 +17,21 @@ public class Constants
 	public static final String PEER_LOG = "codeine_peer.log";
 	public static final String DIRECTORY_LOG = "codeine_directory.log";
 	public static final String SERVER_LOG = "codeine_server.log";
-	
+	public static final String PROJECT_CONF_FILE = "project.conf.json";
 	public static final String INSTALLATION = ".";
 	public static final String MONITORS_DIR = "/monitors";
 	public static final String CONF_DIR = "/conf";
 	public static final String PLUGINS_DIR = "/plugins";
 	public static final String PLUGINS_OUTPUT_DIR = "/plugins_output";
+	public static final String ROOT_CONTEXT = "/";
+	public static final String ANGULAR_CONTEXT = "/codeine";
+	
+	
+	
 	public static final String MONITOR_OUTPUT_CONTEXT = "/monitor-output";
-	public static final String RAW_OUTPUT_CONTEXT = "/raw-output";
-	public static final String COMMAND_OUTPUT_CONTEXT = "/command-output";
-	public static final String PROGRESSIVE_RAW_OUTPUT_CONTEXT = "/progressive-raw-output";
-	public static final String FILE_GETTER_CONTEXT = "/file-getter";
 	public static final String PROJECT_FILES_CONTEXT = "/projects-files";
 	
-	public static final String NEW_PROJECT_CONTEXT = "/new-project";
-	public static final String CONFIGURE_PROJECT_CONTEXT = "/configure-project";
-	public static final String DELETE_PROJECT_CONTEXT = "/delete-project";
-	public static final String PROJECT_NODES_CONTEXT = "/project-nodes";
-	public static final String PROJECT_NODES_CONTEXT2 = "/project-nodes2";
+	public static final String PROJECT_NODES_CONTEXT2 = "/project-nodes";
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
 	public static final String NODE_STATUS_CONTEXT = "/node-status";
 	public static final String MONITOR_STATUS_CONTEXT = "/monitor-status";
@@ -45,8 +42,6 @@ public class Constants
 	public static final String COMMANDS_EXECUTER_STATUS = "/commands-status";
 	public static final String RESTART_ALL_PEERS_CONTEXT = "/restart-all";
 	public static final String PROJECTS_LIST_CONTEXT = "/projects";
-	public static final String ROOT_CONTEXT = "/";
-	public static final String ANGULAR_CONTEXT = "/codeine";
 	public static final String PROJECT_PATH = "/project";
 	public static final String NODE_PATH = "/node";
 	public static final String COMMAND_NODE_CONTEXT = "/command-node";
@@ -54,20 +49,15 @@ public class Constants
 	public static final String REGISTER_PEER_IN_DIRECTORY_CONTEXT = "/register-in-directory";
 	public static final String COMMAND_NODE_ALL_CONTEXT = "/command-node-all";
 	public static final String COMMAND_NODES_CONTEXT = "/command-nodes";
-	public static final String SCHEDULE_COMMAND_CONTEXT = "/schedule-command";
-	public static final String LABELS_CONTEXT = "/labels";
-	public static final String LABEL_CONTEXT = "/label-version";
 	public static final String RESOURCESS_CONTEXT = "/resources";
-	public static final String CONFIGURE_CONTEXT = "/configure";
 	public static final String CONFIG_SUBMIT_CONTEXT = "/config-submit";
 	public static final String PEER_STATUS_CONTEXT = "/peer/status";
 	public static final String PEER_PROJECT_STATUS_CONTEXT = "/project/status";
-	public static final String PROJECT_CONF_FILE = "project.conf.json";
-	public static final String NODE_INFO_CONTEXT = "/node-info";
-	public static final String USER_INFO_CONTEXT = "/user-info";
+	
 	public static final String MONITORS_STATISTICS_CONTEXT = "/monitors-statistics";
 	
 	public static final String INFO_CONTEXT = "/info";
+	public static final String USER_INFO_CONTEXT = "/user-info";
 	public static final String VERSION_INFO_CONTEXT = INFO_CONTEXT + "/version";
 	public static final String VERSIONS_MAPPING_CONTEXT = "/versions-mapping";
 	public static final String PEER_REPORT_CONTEXT = "/peer-report";
@@ -174,11 +164,6 @@ public class Constants
 	public static final String DISCOVERY_PLUGIN = "discovery";
 
 	public static final String API_TOKEN = "api_token";
-
-	public static final String CODEINE_STATUS_CONTEXT = "/codeine-status";
-	public static final String INTERNAL_NODE_INFO_CONTEXT = "/codeine-node-info";
-
-	public static final String CODEINE_NODES_CONTEXT = "/codeine-nodes";
 
 	public static final String PROJECT_TAGS_CONTEXT = "/project-tags";
 

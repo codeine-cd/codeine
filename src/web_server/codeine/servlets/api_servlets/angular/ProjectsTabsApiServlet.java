@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlets.front_end.ProjectsTab;
+import codeine.servlets.api_servlets.ProjectsTab;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;
 

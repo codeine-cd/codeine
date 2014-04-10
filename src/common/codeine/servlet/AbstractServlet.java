@@ -40,7 +40,6 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Inject private Gson gson;
 	private @Inject PermissionsManager permissionsManager;
 	
-	// TODO - Add final after removing front end servlets
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {

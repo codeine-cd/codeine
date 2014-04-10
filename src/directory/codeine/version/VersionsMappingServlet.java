@@ -11,6 +11,10 @@ import org.apache.log4j.Logger;
 import codeine.jsons.info.VersionInfo;
 import codeine.servlet.AbstractServlet;
 
+//TODO remove after build codeine 460 in cfengine
+/**
+ * jenkisn report version to directory
+ */
 public class VersionsMappingServlet extends AbstractServlet {
 
 	private static final Logger log = Logger.getLogger(VersionsMappingServlet.class);
