@@ -92,4 +92,11 @@ public class CodeineUser {
 	    	throw ExceptionUtils.asUnchecked(e);
 	    }
 	  }
+
+	@Override
+	public String toString() {
+		return "CodeineUser [username=" + username + "]";
+	}
+	
+	
 }
