@@ -233,7 +233,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     $scope.isNodeDisabled = function(node){
         return !node.user_can_command;
-    }
+    };
     var unRegisterFunction = $rootScope.$on(Constants.EVENTS.BREADCRUMB_CLICKED, function () {
         $scope.clearFilters();
     });

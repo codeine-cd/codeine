@@ -4,10 +4,11 @@ angular.module('codeine').directive('commandAction', [ function () {
         restrict: 'A',
         scope : {
             project : '=',
-            permissions : '='
+            permissions : '=',
+            allowed : '='
         },
         link: function ($scope, element) {
-            if ($scope.permissions) {
+            if ($scope.permissions.command_project.indexOf($scope.project) !== -1 && $scope.allowed) {
                 element.show();
             } else {
                 element.hide();
