@@ -219,5 +219,7 @@ public class Constants
 	public static String apiContext(String projectNodesContext) {
 		return "/api" + projectNodesContext;
 	}
+
+	public static final String OFFLINE_NODES = "Codeine not running on node";
 	
 }

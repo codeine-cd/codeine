@@ -9,9 +9,14 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
+import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeGetter;
+import codeine.api.NodeInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
@@ -22,6 +27,8 @@ import com.google.inject.Inject;
 
 public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 
+	private static final Logger log = Logger
+			.getLogger(ProjectStatus2ApiServlet.class);
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private IConfigurationManager configurationManager;
@@ -70,7 +77,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 			}
 			nodeStatusInfoList.add(new NodeWithMonitorsInfoApi(nodeWithMonitorsInfo));
 		}
-		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion);
+		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion, nodes, projectJson);
 		int totalNumberOfNodes = nodes_for_version.isEmpty() ? 0 : nodes_for_version.get(0).nodes.size();
 		calculatePrecent(totalNumberOfNodes, nodes_for_version);
 		List<CountInfo> tag_info = createSortedList(tagCount);
@@ -85,7 +92,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		}
 	}
 
-	private List<NodesForVersion> createNodesList(Map<String, NodesForVersion> nodesByVersion) {
+	private List<NodesForVersion> createNodesList(Map<String, NodesForVersion> nodesByVersion, List<NodeWithMonitorsInfo> nodes, ProjectJson projectJson) {
 		List<NodesForVersion> $ = Lists.newArrayList();
 		for (Entry<String, NodesForVersion> e : nodesByVersion.entrySet()) {
 			$.add(e.getValue());
@@ -98,7 +105,38 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 			}
 		};
 		Collections.sort($, c);
+		NodesForVersion offlineNodes = createOfflineNodes(projectJson, nodes);
+		if (offlineNodes.nodes.size() > 0) {
+			$.add(0, offlineNodes);
+		}
 		return $;
+	}
+
+	private NodesForVersion createOfflineNodes(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
+		if (projectJson.node_discovery_startegy() != NodeDiscoveryStrategy.Configuration) {
+			return new NodesForVersion(Constants.OFFLINE_NODES);
+		}
+		NodesForVersion offlineNodes = new NodesForVersion(Constants.OFFLINE_NODES);
+		for (NodeInfo nodeInfo : projectJson.nodes_info()) {
+			if (notOffline(nodeInfo, nodes)) {
+				continue;
+			}
+			Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
+			NodeWithMonitorsInfo nodeStatusInfo = new NodeWithMonitorsInfo(
+					nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors, Constants.OFFLINE_NODES);
+			log.info("adding offline node " + nodeStatusInfo);
+			offlineNodes.add(nodeStatusInfo);
+		}
+		return offlineNodes;
+	}
+
+	private boolean notOffline(NodeInfo nodeInfo, List<NodeWithMonitorsInfo> nodes) {
+		for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
+			if (nodeWithMonitorsInfo.name().equals(nodeInfo.name())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private List<CountInfo> createSortedList(Map<String, Integer> map) {

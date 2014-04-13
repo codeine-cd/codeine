@@ -25,14 +25,22 @@ public class NodeGetter {
 	@Inject	private LabelJsonProvider versionLabelJsonProvider;
 	
 	
-	public NodeWithMonitorsInfo getNodeByName(String projectName, String nodeName){
+	public NodeWithMonitorsInfo getNodeByNameOrNull(String projectName, String nodeName){
 		List<NodeWithMonitorsInfo> nodes = getNodes(projectName);
 		for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) 
 		{
 			if (nodeWithMonitorsInfo.name().equals(nodeName)) 
 				return nodeWithMonitorsInfo;
 		}
-		throw new IllegalArgumentException("Node " + nodeName + " not found in project " + projectName);
+		return null;
+	}
+
+	public NodeWithMonitorsInfo getNodeByName(String projectName, String nodeName) {
+		NodeWithMonitorsInfo $ = getNodeByNameOrNull(projectName, nodeName);
+		if ($ == null) {
+			throw new IllegalArgumentException("Node " + nodeName + " not found in project " + projectName);
+		}
+		return $;
 	}
 
 	public PeerStatusJsonV2 peer(String peer_key) {
