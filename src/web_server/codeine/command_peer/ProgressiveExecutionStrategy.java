@@ -8,8 +8,8 @@ import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
-import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.project.ProjectJson;
+import codeine.permissions.IUserPermissions;
 import codeine.utils.StringUtils;
 import codeine.utils.ThreadUtils;
 

@@ -1,4 +1,4 @@
-package codeine.jsons.auth;
+package codeine.permissions;
 
 public interface IUserPermissions {
 

@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.configuration.IConfigurationManager;
-import codeine.jsons.auth.IUserPermissions;
-import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.info.SessionInfo;
 import codeine.jsons.project.ProjectJson;
+import codeine.permissions.IUserPermissions;
+import codeine.permissions.UserPermissionsGetter;
+import codeine.permissions.UserPermissions;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.servlet.PrepareForShutdown;
 
 import com.google.common.collect.Sets;
@@ -22,7 +22,7 @@ public class RuntimeInfoApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
 	@Inject private CodeineRuntimeInfo runtimeInfo;
-	@Inject private PermissionsManager permissionsManager;
+	@Inject private UserPermissionsGetter permissionsManager;
 	@Inject private IConfigurationManager configurationManager;
 	@Inject private PrepareForShutdown prepareForShutdown;
 

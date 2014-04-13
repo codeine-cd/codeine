@@ -1,8 +1,8 @@
 package codeine.jsons.global;
 
 import codeine.jsons.JsonStore;
-import codeine.jsons.auth.PermissionsConfJson;
 import codeine.model.Constants;
+import codeine.permissions.PermissionsConfJson;
 
 public class UserPermissionsJsonStore extends JsonStore<PermissionsConfJson>{
 

@@ -1,4 +1,4 @@
-package codeine.servlet;
+package codeine.permissions;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -13,23 +13,20 @@ import org.apache.log4j.Logger;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.CodeineUser;
-import codeine.jsons.auth.CompoundUserPermissions;
-import codeine.jsons.auth.IUserPermissions;
-import codeine.jsons.auth.PermissionsConfJson;
-import codeine.jsons.auth.UserPermissions;
-import codeine.jsons.auth.UserProjectPermissions;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.permissions.GroupsManager;
+import codeine.servlet.UsersManager;
 import codeine.utils.StringUtils;
 
 import com.google.common.collect.Maps;
 
-public class PermissionsManager {
+public class UserPermissionsGetter {
 
-	private static final Logger log = Logger.getLogger(PermissionsManager.class);
+
+	private static final Logger log = Logger.getLogger(UserPermissionsGetter.class);
+	public static final String IGNORE_SECURITY = "ignoreSecurity";
 	
 	private UserPermissionsJsonStore permissionsConfigurationJsonStore;
 	private IConfigurationManager configurationManager;
@@ -39,7 +36,7 @@ public class PermissionsManager {
 	private final UserPermissions ADMIN_GUEST = new UserPermissions("Guest", true);
 	
 	@Inject
-	public PermissionsManager(UserPermissionsJsonStore permissionsConfigurationJsonStore, 
+	public UserPermissionsGetter(UserPermissionsJsonStore permissionsConfigurationJsonStore, 
 			GlobalConfigurationJsonStore globalConfigurationJson, UsersManager usersManager, IConfigurationManager configurationManager, GroupsManager groupsManager) {
 		super();
 		this.permissionsConfigurationJsonStore = permissionsConfigurationJsonStore;
@@ -49,36 +46,21 @@ public class PermissionsManager {
 		this.groupsManager = groupsManager;
 	}
 	
-	public boolean canRead(String projectName, HttpServletRequest request){
-		return user(request).canRead(projectName);
-	}
-	
 	private boolean ignoreSecurity() {
-		return Boolean.getBoolean("ignoreSecurity") || globalConfigurationJson.get().authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
+		return Boolean.getBoolean(IGNORE_SECURITY) || globalConfigurationJson.get().authentication_method() == AuthenticationMethod.Disabled || !Constants.SECURITY_ENABLED;
 	}
 	
-	public boolean canCommand(String projectName, HttpServletRequest request){
-		return user(request).canCommand(projectName);
-	}
-	
-	public boolean canCommand(String projectName, String nodeAlias, HttpServletRequest request) {
-		return user(request).canCommand(projectName, nodeAlias);
-	}
-	
-	public boolean isAdministrator(HttpServletRequest request){
-		return user(request).isAdministrator();
-	}
 	public IUserPermissions user(HttpServletRequest request){
 		if (ignoreSecurity()) {
 			return ADMIN_GUEST;
 		}
-		String user = userInternal(request);
-		IUserPermissions userPermissions = getUser(user);
+		String user = getUser(request);
+		IUserPermissions userPermissions = getUserPermissions(user);
 		return userPermissions; 
 		
 	}
 
-	private IUserPermissions getUser(String user) {
+	private IUserPermissions getUserPermissions(String user) {
 		UserPermissions userPermissions = permissionsConfigurationJsonStore.get().getOrNull(user);
 		if (null == userPermissions) {
 			userPermissions = guest(user);
@@ -126,16 +108,11 @@ public class PermissionsManager {
 		return p;
 	}
 	
-	private final UserPermissions guest(String user) {
+	private UserPermissions guest(String user) {
 		return new UserPermissions(user, false);
 	}
 	
-	private String userInternal(HttpServletRequest request) {
-		String userFromCommandLine = System.getProperty("codeineUser");
-		if (null != userFromCommandLine){
-			return userFromCommandLine;
-		}
-		
+	private String getUser(HttpServletRequest request) {
 		String api_token = request.getHeader(Constants.API_TOKEN);
 		if (!StringUtils.isEmpty(api_token)) { 
 			return usersManager.userByApiToken(api_token).username();
@@ -153,7 +130,7 @@ public class PermissionsManager {
 		}
 		
 		String viewas = request.getHeader(Constants.UrlParameters.VIEW_AS);
-		if (!StringUtils.isEmpty(viewas) && getUser(username).isAdministrator()) {
+		if (!StringUtils.isEmpty(viewas) && getUserPermissions(username).isAdministrator()) {
 			CodeineUser user = usersManager.user(viewas);
 			log.debug("Using VIEW_AS Mode - " + user.username());
 			return user.username();
@@ -161,13 +138,5 @@ public class PermissionsManager {
 		
 		return username;
 	}
-	public boolean canConfigure(String projectName, HttpServletRequest request) {
-		return user(request).canConfigure(projectName);
-	}
-	public void makeAdmin(String user) {
-		PermissionsConfJson permissionsConfJson = permissionsConfigurationJsonStore.get();
-		permissionsConfJson.makeAdmin(user);
-		permissionsConfigurationJsonStore.store(permissionsConfJson);
-	}
-
+	
 }

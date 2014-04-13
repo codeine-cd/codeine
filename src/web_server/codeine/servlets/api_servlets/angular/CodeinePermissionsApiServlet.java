@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.auth.PermissionsConfJson;
-import codeine.jsons.auth.UserPermissions;
 import codeine.jsons.global.UserPermissionsJsonStore;
+import codeine.permissions.PermissionsConfJson;
+import codeine.permissions.UserPermissions;
 import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.reflect.TypeToken;

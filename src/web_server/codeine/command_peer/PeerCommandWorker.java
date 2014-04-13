@@ -7,12 +7,12 @@ import org.apache.log4j.Logger;
 
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.Links;
-import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
+import codeine.permissions.IUserPermissions;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 import codeine.utils.network.HttpUtils;

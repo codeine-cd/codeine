@@ -1,4 +1,4 @@
-package codeine.jsons.auth;
+package codeine.permissions;
 
 import java.util.Set;
 import java.util.regex.Pattern;

@@ -11,8 +11,8 @@ import codeine.configuration.IConfigurationManager;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.utils.StringUtils;
 
 import com.google.inject.Inject;
@@ -23,12 +23,12 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 
 	@Inject private NodesCommandExecuterProvider allNodesCommandExecuterProvider;
 	@Inject private IConfigurationManager configurationManager;
-	@Inject private PermissionsManager permissionsManager;
+	@Inject private UserPermissionsGetter permissionsManager;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
 		String projectName = getProjectName(request);
-		if (!permissionsManager.canCommand(projectName, request)){
+		if (!permissionsManager.user(request).canCommand(projectName)){
 			return false;
 		}
 		return true;

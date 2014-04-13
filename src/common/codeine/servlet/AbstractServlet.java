@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.model.Constants;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ServletUtils;
 import codeine.utils.exceptions.InShutdownException;
@@ -31,7 +32,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Inject private Gson gson;
-	private @Inject PermissionsManager permissionsManager;
+	private @Inject UserPermissionsGetter permissionsManager;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -190,18 +191,18 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	protected final boolean canReadProject(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return permissionsManager.canRead(projectName, request);
+		return permissionsManager.user(request).canRead(projectName);
 	}
 	protected final boolean canCommandProject(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return permissionsManager.canCommand(projectName, request);
+		return permissionsManager.user(request).canCommand(projectName);
 	}
 	protected final boolean canConfigureProject(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return permissionsManager.canConfigure(projectName, request);
+		return permissionsManager.user(request).canConfigure(projectName);
 	}
 	protected final boolean isAdministrator(HttpServletRequest request) {
-		return permissionsManager.isAdministrator(request);
+		return permissionsManager.user(request).isAdministrator();
 	}
 	
 	protected final String projectName(HttpServletRequest request) {

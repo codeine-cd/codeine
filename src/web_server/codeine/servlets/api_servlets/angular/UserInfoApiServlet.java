@@ -5,13 +5,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.jsons.auth.CodeineUser;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.servlet.UsersManager;
 
 public class UserInfoApiServlet extends AbstractApiServlet {
 
-	private @Inject PermissionsManager permissionsManager;
+	private @Inject UserPermissionsGetter permissionsManager;
 	private @Inject UsersManager usersManager;
 	private static final long serialVersionUID = 1L;
 	

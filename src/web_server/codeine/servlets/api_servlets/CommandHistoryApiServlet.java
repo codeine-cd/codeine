@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.api.CommandStatusJson;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.model.Constants;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
 import com.google.common.collect.Lists;
@@ -19,7 +19,7 @@ public class CommandHistoryApiServlet extends AbstractApiServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject	private NodesCommandExecuterProvider nodesCommandExecuterProvider;
-	@Inject private PermissionsManager permissionsManager;
+	@Inject private UserPermissionsGetter permissionsManager;
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
@@ -28,9 +28,9 @@ public class CommandHistoryApiServlet extends AbstractApiServlet {
 		List<CommandStatusJson> allCommands = nodesCommandExecuterProvider.getAllCommands(projectName);
 		List<CommandStatusJson> allCommandsWithPermissions = Lists.newArrayList();
 		for (CommandStatusJson commandStatusJson : allCommands) {
-			if (permissionsManager.canRead(commandStatusJson.project(), request)){
+			if (permissionsManager.user(request).canRead(commandStatusJson.project())){
 				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-				c.can_cancel(permissionsManager.canCommand(c.project(), request) && !c.finished());
+				c.can_cancel(permissionsManager.user(request).canCommand(c.project()) && !c.finished());
 				allCommandsWithPermissions.add(c);
 			}
 		}

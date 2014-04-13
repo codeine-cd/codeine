@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.ConfigurationManagerServer;
-import codeine.jsons.auth.IUserPermissions;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.IUserPermissions;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
 public class ProjectConfigurationApiServlet extends AbstractApiServlet {
@@ -23,12 +23,12 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private ConfigurationManagerServer configurationManager;
-	@Inject private PermissionsManager permissionsManager;
+	@Inject private UserPermissionsGetter permissionsManager;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
 		if (request.getMethod().equals("DELETE")) {
-			return permissionsManager.isAdministrator(request);	
+			return permissionsManager.user(request).isAdministrator();	
 		}
 		if (request.getMethod().equals("PUT")) {
 			return canConfigureProject(request);	

@@ -15,8 +15,8 @@ import codeine.api.VersionItemInfo;
 import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.utils.JsonUtils;
 
 import com.google.common.base.Predicate;
@@ -29,7 +29,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 	private static final Logger log = Logger.getLogger(ProjectsListApiServlet.class);
 	private static final long serialVersionUID = 1L;
 	@Inject private ConfigurationManagerServer configurationManager;
-	@Inject private PermissionsManager permissionsManager;
+	@Inject private UserPermissionsGetter permissionsManager;
 	@Inject	private NodeAggregator aggregator;
 	
 	@Override
@@ -47,7 +47,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 		
 		List<CodeineProject> projects = Lists.newArrayList();
 		for (ProjectJson projectJson : configuredProjects) {
-			if (permissionsManager.canRead(projectJson.name(), request)){
+			if (permissionsManager.user(request).canRead(projectJson.name())){
 				VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
 				projects.add(new CodeineProject(projectJson.name(), versionItem.count()));
 			}

@@ -4,9 +4,9 @@ import java.util.List;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.NodeMonitor;
-import codeine.jsons.auth.UserProjectPermissions;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
+import codeine.permissions.UserProjectPermissions;
 
 import com.google.common.collect.Lists;
 

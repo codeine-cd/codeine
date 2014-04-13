@@ -1,6 +1,6 @@
 package codeine.jsons.info;
 
-import codeine.jsons.auth.UserPermissions;
+import codeine.permissions.UserPermissions;
 
 @SuppressWarnings("unused")
 public class SessionInfo {

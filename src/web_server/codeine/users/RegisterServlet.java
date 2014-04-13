@@ -6,8 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
+import codeine.jsons.global.UserPermissionsJsonStore;
+import codeine.permissions.PermissionsConfJson;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.PermissionsManager;
 import codeine.servlet.UsersManager;
 
 import com.google.common.base.Charsets;
@@ -23,7 +24,7 @@ public class RegisterServlet extends AbstractApiServlet {
 	@Inject
 	private UsersManager usersManager;
 	@Inject
-	private PermissionsManager permissionsManager;
+	private UserPermissionsJsonStore permissionsConfigurationJsonStore;
 	
 	public static class RegisterJson{
 		private String username;
@@ -42,11 +43,17 @@ public class RegisterServlet extends AbstractApiServlet {
         usersManager.addUser(r.username, md5);
         if (firstUser) {
         	log.info(r.username + " is the first user, making it admin");
-        	permissionsManager.makeAdmin(r.username);
+        	makeAdmin(r.username);
         }
         getWriter(response).write("{}");
 	}
 
+	private void makeAdmin(String user) {
+		PermissionsConfJson permissionsConfJson = permissionsConfigurationJsonStore.get();
+		permissionsConfJson.makeAdmin(user);
+		permissionsConfigurationJsonStore.store(permissionsConfJson);
+	}
+	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
 		return true;
