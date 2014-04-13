@@ -82,7 +82,10 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		calculatePrecent(totalNumberOfNodes, nodes_for_version);
 		List<CountInfo> tag_info = createSortedList(tagCount);
 		List<CountInfo> monitor_info = createSortedList(monitorCount);
-		
+		NodesForVersion offlineNodes = createOfflineNodes(projectJson, nodes);
+		if (offlineNodes.nodes.size() > 0) {
+			nodes_for_version.add(0, offlineNodes);
+		}
 		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts);
 	}
 
@@ -105,10 +108,6 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 			}
 		};
 		Collections.sort($, c);
-		NodesForVersion offlineNodes = createOfflineNodes(projectJson, nodes);
-		if (offlineNodes.nodes.size() > 0) {
-			$.add(0, offlineNodes);
-		}
 		return $;
 	}
 

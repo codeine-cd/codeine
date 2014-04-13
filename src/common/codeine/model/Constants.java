@@ -220,6 +220,6 @@ public class Constants
 		return "/api" + projectNodesContext;
 	}
 
-	public static final String OFFLINE_NODES = "Codeine not running on node";
+	public static final String OFFLINE_NODES = "Codeine daemon not running";
 	
 }

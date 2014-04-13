@@ -58,7 +58,7 @@
                         <label tooltip="Select All">
                             <input type="checkbox" ng-checked="isAllNodesChecked()" ng-click="doSelectAllNodes($event)">
                         </label>
-                    </div>
+                    </div>&nbsp;
                     <button type="button" ng-click="expandAll()" class="btn btn-xs" tooltip="Expand All"><i class="fa fa-plus"></i></button>
                     <button type="button" ng-click="collapseAll()" class="btn btn-xs" tooltip="Collapse All"><i class="fa fa-minus"></i></button>
                     <small class="pull-right">
@@ -79,7 +79,7 @@
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" ng-checked="isVersionChecked(versionItem)" ng-click="checkboxClick(versionItem,$event)" > {{versionItem.version}}
+                                                <input type="checkbox" ng-checked="isVersionChecked(versionItem)" ng-click="checkboxClick(versionItem,$event)" >&nbsp;{{versionItem.version}}
                                             </label>
                                         </div>
                                         <div class="progress pull-right col-md-1 project-status-progress">
@@ -101,7 +101,7 @@
                                 <form class="form-inline" role="form">
                                     <div class="checkbox">
                                         <label>
-                                            <input ng-model="node.checked" type="checkbox"> <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status"> {{node.alias}}</a>
+                                            <input ng-model="node.checked" type="checkbox">&nbsp;<a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status"> {{node.alias}}</a>
                                         </label>
                                     </div>
                                 </form>
