@@ -3,6 +3,7 @@ package codeine.utils.os_process;
 import java.nio.file.attribute.PosixFilePermission;
 
 import codeine.utils.FilesUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 
 public class ShellScript {
@@ -13,15 +14,19 @@ public class ShellScript {
 	private boolean windows;
 
 	public ShellScript(String key, String content) {
-		this(key, content, false);
+		this(key, content, false, "/tmp");
 	}
-	public ShellScript(String key, String content, boolean windows) {
+	public ShellScript(String key, String content, boolean windows, String tmp_dir) {
 //		this.key = key;
 		this.content = content;
 		this.windows = windows;
-		this.fileName = (windows ? System.getProperty("java.io.tmpdir") : "/tmp" ) + "/codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");
+		String tmpDir = StringUtils.isEmpty(tmp_dir) ? System.getProperty("java.io.tmpdir") : tmp_dir;
+		this.fileName = tmpDir + "/codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");
 	}
 
+	public static void main(String[] args) {
+		System.out.println();
+	}
 	public String create() {
 		content = content.replace("\n", System.lineSeparator());
 		TextFileUtils.setContents(fileName, content);
