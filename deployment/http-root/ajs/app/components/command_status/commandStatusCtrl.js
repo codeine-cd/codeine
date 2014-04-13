@@ -14,7 +14,9 @@ angular.module('codeine').controller('commandStatusCtrl',['$scope', '$log', '$ro
             $scope.commandStatus = data;
             if ($scope.commandStatus.finished) {
                 $log.debug('commandStatusCtrl: command is finished');
-                $interval.cancel(interval);
+                $timeout(function() {
+                    $interval.cancel(interval);
+                });
             }
             if (scrolledToBottom) {
                 $timeout(function() {
