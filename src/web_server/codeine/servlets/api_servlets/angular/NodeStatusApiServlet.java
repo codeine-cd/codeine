@@ -17,6 +17,7 @@ import codeine.jsons.peer_status.PeerStatusString;
 import codeine.jsons.peer_status.ProjectStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.collect.Maps;
@@ -29,6 +30,7 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private IConfigurationManager configurationManager;
+	@Inject	private UserPermissionsGetter userPermissionsGetter;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -42,7 +44,8 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 		NodeWithMonitorsInfo nodeByNameOrNull = nodesGetter.getNodeByNameOrNull(projectName, nodeName);
 		NodeWithMonitorsInfoApi node = null;
 		if (nodeByNameOrNull != null) {
-			node = new NodeWithMonitorsInfoApi(nodeByNameOrNull);
+			boolean can_command = (userPermissionsGetter.user(request).canCommand(projectName, nodeByNameOrNull.alias()));
+			node = new NodeWithMonitorsInfoApi(nodeByNameOrNull, can_command);
 		}
 		else {
 			ProjectJson projectJson = configurationManager.getProjectForName(projectName);
@@ -52,7 +55,7 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 				PeerStatusJsonV2 peer = new PeerStatusJsonV2("", projectStatus);
 				peer.status(PeerStatusString.Offline);
 				NodeWithMonitorsInfoApi nodeStatusInfo = new NodeWithMonitorsInfoApi(new NodeWithMonitorsInfo(
-						peer, nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors));
+						peer, nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors), false);
 				log.info("offline node " + nodeStatusInfo);
 				node = nodeStatusInfo;
 				break;

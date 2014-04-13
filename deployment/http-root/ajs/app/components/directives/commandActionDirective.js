@@ -7,10 +7,10 @@ angular.module('codeine').directive('commandAction', [ function () {
             permissions : '='
         },
         link: function ($scope, element) {
-            if ($scope.permissions.command_project.indexOf($scope.project) === -1) {
-                element.hide();
-            } else {
+            if ($scope.permissions) {
                 element.show();
+            } else {
+                element.hide();
             }
         }
     };

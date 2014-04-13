@@ -19,6 +19,7 @@ import codeine.configuration.IConfigurationManager;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 
 import com.google.common.collect.Lists;
@@ -32,6 +33,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private IConfigurationManager configurationManager;
+	@Inject	private UserPermissionsGetter userPermissionsGetter;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -43,11 +45,11 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName,Constants.ALL_VERSION);
 		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
-		ProjectStatusInfo theNewObject = create(projectJson, nodes);
+		ProjectStatusInfo theNewObject = create(projectJson, nodes, request);
 		writeResponseGzipJson(response, theNewObject);
 	}
 	
-	private ProjectStatusInfo create(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
+	private ProjectStatusInfo create(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes, HttpServletRequest request) {
 		Map<String, Integer> tagCount = Maps.newHashMap();
 		Map<String, Integer> monitorCount = Maps.newHashMap();
 		Map<String, NodesForVersion> nodesByVersion = Maps.newHashMap();
@@ -75,7 +77,8 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 				nodeStatusInfoList = new NodesForVersion(nodeWithMonitorsInfo.version());
 				nodesByVersion.put(nodeWithMonitorsInfo.version(), nodeStatusInfoList);
 			}
-			nodeStatusInfoList.add(new NodeWithMonitorsInfoApi(nodeWithMonitorsInfo));
+			boolean can_command = (userPermissionsGetter.user(request).canCommand(projectJson.name(), nodeWithMonitorsInfo.alias()));
+			nodeStatusInfoList.add(new NodeWithMonitorsInfoApi(nodeWithMonitorsInfo, can_command));
 		}
 		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion, nodes, projectJson);
 		int totalNumberOfNodes = nodes_for_version.isEmpty() ? 0 : nodes_for_version.get(0).nodes.size();

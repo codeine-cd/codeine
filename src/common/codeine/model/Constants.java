@@ -31,7 +31,7 @@ public class Constants
 	public static final String MONITOR_OUTPUT_CONTEXT = "/monitor-output";
 	public static final String PROJECT_FILES_CONTEXT = "/projects-files";
 	
-	public static final String PROJECT_NODES_CONTEXT2 = "/project-nodes";
+	public static final String PROJECT_NODES_CONTEXT = "/project-nodes";
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
 	public static final String NODE_STATUS_CONTEXT = "/node-status";
 	public static final String MONITOR_STATUS_CONTEXT = "/monitor-status";

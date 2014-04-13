@@ -1,6 +1,6 @@
 package codeine;
 
-import static codeine.model.Constants.apiContext;
+import static codeine.model.Constants.*;
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
 import codeine.servlets.AngularServlet;
@@ -53,7 +53,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveMe(ProjectConfigurationApiServlet.class, apiContext(Constants.PROJECT_CONFIGURATION_CONTEXT));
 		serveMe(UserInfoApiServlet.class, apiContext(Constants.USER_INFO_CONTEXT));
 		serveMe(ProjectStatus2ApiServlet.class, apiContext(Constants.PROJECT_STATUS_CONTEXT + "2"));
-		serveMe(codeine.servlets.api_servlets.angular.ProjectNodesApiServlet.class, apiContext(Constants.PROJECT_NODES_CONTEXT2));
+		serveMe(codeine.servlets.api_servlets.angular.ProjectNodesApiServlet.class, apiContext(Constants.PROJECT_NODES_CONTEXT));
 		serveMe(NodeStatusApiServlet.class, apiContext(Constants.NODE_STATUS_CONTEXT));
 		serveMe(MonitorStatusApiServlet.class, apiContext(Constants.MONITOR_STATUS_CONTEXT));
 		serveMe(CommandStatusApiServlet.class, apiContext(Constants.COMMAND_STATUS_CONTEXT));

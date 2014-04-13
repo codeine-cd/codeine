@@ -16,6 +16,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	private Map<String, MonitorStatusInfo> monitors;
 	private String version = Constants.NO_VERSION;
 	
+	
 
 	public NodeWithMonitorsInfo(PeerStatusJsonV2 peer, String name, String alias, String projectName, Map<String,MonitorStatusInfo> monitors) {
 		super(name, alias, peer);

@@ -171,7 +171,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
     $scope.checkboxClick = function(versionItem, event) {
         event.stopPropagation();
         angular.forEach(versionItem.filteredNodes, function(item) {
-           item.checked = event.target.checked;
+           item.checked = event.target.checked && item.user_can_command;
         });
     };
 
@@ -226,11 +226,14 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         event.stopPropagation();
         angular.forEach($scope.projectStatus.nodes_for_version, function(versionItem) {
             angular.forEach(versionItem.filteredNodes, function(node) {
-                node.checked = event.target.checked;
+                node.checked = event.target.checked && node.user_can_command;
             });
         });
     };
 
+    $scope.isNodeDisabled = function(node){
+        return !node.user_can_command;
+    }
     var unRegisterFunction = $rootScope.$on(Constants.EVENTS.BREADCRUMB_CLICKED, function () {
         $scope.clearFilters();
     });
