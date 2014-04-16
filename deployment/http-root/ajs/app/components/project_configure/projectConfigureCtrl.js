@@ -41,7 +41,7 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
         };
 
         $scope.addMonitor = function() {
-            $scope.projectConfigurationForEditing.monitors.push({name: "new_monitor_" + $scope.projectConfigurationForEditing.monitors.length});
+            $scope.projectConfigurationForEditing.monitors.push({is_open: true, name: "new_monitor_" + $scope.projectConfigurationForEditing.monitors.length});
         };
 
         $scope.removeItem = function(array,index) {
@@ -61,11 +61,11 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
         };
 
         $scope.addCommand = function() {
-            $scope.projectConfigurationForEditing.commands.push({name: "new_command_" + $scope.projectConfigurationForEditing.commands.length, parameters: [], concurrency : 1, command_strategy : 'Immediately', duration_units : 'Minutes', ratio : 'Linear'});
+            $scope.projectConfigurationForEditing.commands.push({is_open: true, name: "new_command_" + $scope.projectConfigurationForEditing.commands.length, parameters: [], concurrency : 1, command_strategy : 'Immediately', duration_units : 'Minutes', ratio : 'Linear'});
         };
 
         $scope.addParameter = function(index) {
-            $scope.projectConfigurationForEditing.commands[index].parameters.push({name: "NEW_PARAMETER", type : 'String'});
+            $scope.projectConfigurationForEditing.commands[index].parameters.push({is_open: true, name: "NEW_PARAMETER", type : 'String'});
         };
 
         $scope.addNotification = function() {

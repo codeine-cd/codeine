@@ -108,10 +108,10 @@
         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': monitors_is_open, 'glyphicon-chevron-right': !monitors_is_open}"></i>
     </accordion-heading>
     <accordion close-others="false">
-        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_is_open">
+        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_info.is_open">
             <accordion-heading>
                 Monitor: {{monitor_info.name}}
-                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_is_open, 'glyphicon-chevron-right': !monitor_is_open}">
+                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_info.is_open, 'glyphicon-chevron-right': !monitor_info.is_open}">
                 </i>
                 <div class="btn-group btn-group-xs pull-right">
                     <button title="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
@@ -209,11 +209,11 @@
         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': commands_is_open, 'glyphicon-chevron-right': !commands_is_open}"></i>
     </accordion-heading>
     <accordion close-others="false">
-        <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_is_open">
+        <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_info.is_open">
             <accordion-heading>
                 <div>
                     Command: {{command_info.name}}
-                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_is_open, 'glyphicon-chevron-right': !command_is_open}">
+                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.is_open, 'glyphicon-chevron-right': !command_info.is_open}">
                     </i>
                     <div class="btn-group btn-group-xs pull-right">
                         <button title="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
@@ -299,10 +299,10 @@
                     </div>
                     <!-- command parameters -->
                     <accordion close-others="false">
-                        <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter_is_open">
+                        <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter.is_open">
                             <accordion-heading>
                                 Parameter: {{command_parameter.name}}
-                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter_is_open, 'glyphicon-chevron-right': !command_parameter_is_open}">
+                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter.is_open, 'glyphicon-chevron-right': !command_parameter.is_open}">
                                 </i>
                                 <div class="btn-group btn-group-xs pull-right">
                                     <button title="Move up" ng-disabled="$index === 0" ng-click="moveUp(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
@@ -388,7 +388,7 @@
 </accordion-group>
 <accordion-group is-open="is_open">
     <accordion-heading>
-        Permissions <help help-id="11"></help>
+        Permissions <help help-id="ProjectPermissionsConfigureSection"></help>
         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i>
     </accordion-heading>
     <div class="form-horizontal">
@@ -398,13 +398,13 @@
                 <th class="col-md-3">Username
                 </th>
                 <th class="col-md-2">View
-                    <help help-id="11"></help>
+                    <help help-id="ProjectPermissionsConfigureSection_read"></help>
                 </th>
                 <th class="col-md-4">Command
-                    <help help-id="11"></help>
+                    <help help-id="ProjectPermissionsConfigureSection_command"></help>
                 </th>
-                <th class="col-md-2">Config
-                    <help help-id="11"></help>
+                <th class="col-md-2">Configure
+                    <help help-id="ProjectPermissionsConfigureSection_configure"></help>
                 </th>
                 <th class="col-md-1"></th>
             </tr>
