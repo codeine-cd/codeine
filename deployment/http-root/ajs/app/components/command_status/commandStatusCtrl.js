@@ -6,6 +6,7 @@ angular.module('codeine').controller('commandStatusCtrl',['$scope', '$log', '$ro
     $scope.commandStatus = commandStatus;
 
     var interval = $interval(function() {
+        $log.debug('checking commandStatus ' + $scope.app.isInFocus);
         if (!$scope.app.isInFocus) {
             return;
         }

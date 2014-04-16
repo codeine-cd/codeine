@@ -8,6 +8,7 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
     });
 
     var interval = setInterval(function() {
+        $log.debug('checking commandHistoryCtrl ' + $scope.app.isInFocus);
         if (!$scope.app.isInFocus) {
             return;
         }
