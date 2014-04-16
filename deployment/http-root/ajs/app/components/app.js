@@ -338,6 +338,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
         $rootScope.$on('$locationChangeStart', function () {
             $log.debug('$locationChangeStart');
             $rootScope.app.loading = true;
+            $rootScope.app.serverDown = false;
         });
         $rootScope.$on('$locationChangeSuccess', function () {
             $log.debug('$locationChangeSuccess');
