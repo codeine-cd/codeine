@@ -25,14 +25,14 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{selectedMonitor}} <b class="caret"></b> <help help-id="monitorHelp"></help></a>
                         <ul class="dropdown-menu">
                             <li ng-repeat="monitor in projectStatus.monitor_info">
-                                <a ng-click="selectMonitor(monitor.name)">{{monitor.name}}  <span class="badge">{{monitor.count}}</span></a>
+                                <a ng-click="selectMonitor(monitor.name)">{{monitor.name}}  <span class="badge pull-right">{{monitor.count}}</span></a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a ng-click="selectMonitor('Any Alert')">Any Alert <span class="badge">{{projectStatus.any_alert_count}}</span></a>
+                                <a ng-click="selectMonitor('Any Alert')">Any Alert <span class="badge pull-right">{{projectStatus.any_alert_count}}</span></a>
                             </li>
                             <li>
-                                <a ng-click="selectMonitor('All Nodes')">All Nodes <span class="badge">{{allNodesCount}}</span></a>
+                                <a ng-click="selectMonitor('All Nodes')">All Nodes <span class="badge pull-right">{{allNodesCount}}</span></a>
                             </li>
                         </ul>
                     </li>
