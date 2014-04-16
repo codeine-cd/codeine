@@ -5,11 +5,14 @@ angular.module('codeine').controller('commandStatusCtrl',['$scope', '$log', '$ro
     $log.debug('commandStatusCtrl: command status is ' + angular.toJson(commandStatus));
     $scope.commandStatus = commandStatus;
 
+        var maxUpdatesNotInFocus = 100;
+        var intervalTriggered = 0;
     var interval = $interval(function() {
         $log.debug('checking commandStatus ' + $scope.app.isInFocus);
-        if (!$scope.app.isInFocus) {
+        if (!$scope.app.isInFocus && intervalTriggered < maxUpdatesNotInFocus) {
             return;
         }
+        intervalTriggered++;
         CodeineService.getCommandStatus($scope.projectName, $routeParams.command_id).success(function(data) {
             var scrolledToBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
             $scope.commandStatus = data;

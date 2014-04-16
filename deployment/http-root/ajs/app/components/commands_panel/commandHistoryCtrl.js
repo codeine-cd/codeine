@@ -6,12 +6,14 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
     CodeineService.getProjectCommandHistory($scope.projectName).success(function(data) {
         $scope.history = data;
     });
-
+    var maxUpdatesNotInFocus = 100;
+    var intervalTriggered = 0;
     var interval = setInterval(function() {
         $log.debug('checking commandHistoryCtrl ' + $scope.app.isInFocus);
-        if (!$scope.app.isInFocus) {
+        if (!$scope.app.isInFocus && intervalTriggered < maxUpdatesNotInFocus) {
             return;
         }
+        intervalTriggered++;
         $.ajax( {
             type: 'GET',
             url: Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + $scope.projectName  ,
