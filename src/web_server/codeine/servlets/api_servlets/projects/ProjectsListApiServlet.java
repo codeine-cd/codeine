@@ -48,8 +48,12 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 		List<CodeineProject> projects = Lists.newArrayList();
 		for (ProjectJson projectJson : configuredProjects) {
 			if (permissionsManager.user(request).canRead(projectJson.name())){
-				VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
-				projects.add(new CodeineProject(projectJson.name(), versionItem.count()));
+				try {
+					VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
+					projects.add(new CodeineProject(projectJson.name(), versionItem.count()));
+				} catch (Exception e) {
+					log.error("failed to add project " + projectJson.name(), e);
+				}
 			}
 		}
 		writeResponseJson(response, projects);
