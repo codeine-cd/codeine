@@ -80,5 +80,6 @@ angular.module('codeine')
         "MysqlUserConfigureHelp" : "Username for MySQL connections",
         "MysqlPasswordConfigureHelp" : "Password for MySQL connections",
         "MysqlManagedByCodeineConfigureHelp" : "Codeine is responsible to start/stop MySQL server instance.",
-        "codeineConfigureHelp" : "Here the admin can configure all the Codeine global settings.<br/>Some changes might require a restart."
+        "codeineConfigureHelp" : "Here the admin can configure all the Codeine global settings.<br/>Some changes might require a restart.",
+        "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)"
     });

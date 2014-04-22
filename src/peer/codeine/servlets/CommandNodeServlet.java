@@ -20,6 +20,8 @@ import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.peer_status.PeerStatus;
+import codeine.jsons.project.OperatingSystem;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.servlet.AbstractServlet;
@@ -76,9 +78,11 @@ public class CommandNodeServlet extends AbstractServlet
 		String file = dir + "/" + commandInfo.command_name();
 		ShellScript cmdScript = null;
 		try {
+			ProjectJson project = getProject(commandInfo.project_name());
+			boolean windows_peer = project.operating_system() == OperatingSystem.Windows;
 			if (null != script_content){
 				//new
-				cmdScript = new ShellScript(file, script_content, experimentalConfJsonStore.get().windows_peer(), commandInfo2.tmp_dir());
+				cmdScript = new ShellScript(file, script_content, windows_peer, commandInfo2.tmp_dir());
 				file = cmdScript.create();
 			}
 			else if (FilesUtils.exists(file)) { //TODO remove after build 1100
@@ -99,7 +103,7 @@ public class CommandNodeServlet extends AbstractServlet
 				cmd.add(PathHelper.getReadLogs());
 				cmd.add(encodeIfNeeded(credentials, credentials));
 			}
-			if (experimentalConfJsonStore.get().windows_peer()) {
+			if (windows_peer) {
 				//cmd.add(encodeIfNeeded("cmd", credentials));
 				//cmd.add(encodeIfNeeded("/c", credentials));
 				//cmd.add(encodeIfNeeded("start", credentials));
@@ -109,7 +113,7 @@ public class CommandNodeServlet extends AbstractServlet
 				cmd.add(encodeIfNeeded("-xe", credentials));
 			}
 			cmd.add(encodeIfNeeded(file, credentials));
-			if (experimentalConfJsonStore.get().windows_peer()) {
+			if (windows_peer) {
 				//cmdForOutput.add("cmd");
 				//cmdForOutput.add("/c");
 				//cmdForOutput.add("start");
@@ -216,7 +220,10 @@ public class CommandNodeServlet extends AbstractServlet
 	}
 
 	private CommandInfo getCommand(String command, String projectName) {
-		return configurationManager.getProjectForName(projectName).getCommand(command);
+		return getProject(projectName).getCommand(command);
+	}
+	private ProjectJson getProject(String projectName) {
+		return configurationManager.getProjectForName(projectName);
 	}
 	
 	@Override

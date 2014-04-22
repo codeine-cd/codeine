@@ -22,6 +22,7 @@ public class ProjectJson
 	private String tags_discovery_script;
 	private String version_detection_script;
 	private List<NodeInfo> nodes_info = Lists.newArrayList();
+	private OperatingSystem operating_system;
 	
 	public ProjectJson(String name) {
 		this.name = name;
@@ -126,6 +127,9 @@ public class ProjectJson
 
 	public List<UserProjectPermissions> permissions() {
 		return permissions;
+	}
+	public OperatingSystem operating_system() {
+		return operating_system == null ? OperatingSystem.Linux : operating_system;
 	}
 
 }

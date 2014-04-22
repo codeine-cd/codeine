@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,6 +22,7 @@ import codeine.credentials.CredentialsHelper;
 import codeine.executer.Task;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatus;
+import codeine.jsons.project.OperatingSystem;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
 import codeine.mail.NotificationDeliverToMongo;
@@ -260,7 +261,7 @@ public class RunMonitors implements Task {
 				log.warn("'shellScript' should be null but not", new RuntimeException());
 			}
 			fileName += node.name();
-			shellScript = new ShellScript(fileName, c.script_content());
+			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system() == OperatingSystem.Windows, null);
 			fileName = shellScript.create();
 			log.info("file is " + fileName);
 		}
@@ -271,7 +272,10 @@ public class RunMonitors implements Task {
 			throw new RuntimeException("monitor is missing " + fileName);
 		}
 		List<String> cmd = new ArrayList<String>();
-		if (hasCredentials) {
+		if (project().operating_system() == OperatingSystem.Windows){
+			cmd.add(fileName);
+		}
+		else if (hasCredentials) {
 			cmd.add(PathHelper.getReadLogs());
 			cmd.add(encode(c.credentials()));
 			cmd.add(encode("/bin/sh"));
