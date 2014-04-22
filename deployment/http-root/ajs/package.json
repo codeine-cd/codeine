@@ -48,7 +48,7 @@
         "requirejs": "~2.1.11",
         "karma-requirejs": "~0.2.1",
         "karma-phantomjs-launcher": "~0.1.2",
-        "karma": "~0.10.9",
+        "karma": "~0.12.9",
         "karma-ng-html2js-preprocessor": "^0.1.0",
         "connect-modrewrite": "^0.5.11",
         "karma-junit-reporter": "^0.2.1",
