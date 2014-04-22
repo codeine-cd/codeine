@@ -22,7 +22,7 @@ public class ProjectJson
 	private String tags_discovery_script;
 	private String version_detection_script;
 	private List<NodeInfo> nodes_info = Lists.newArrayList();
-	private OperatingSystem operating_system;
+	private OperatingSystem operating_system = OperatingSystem.Linux;
 	
 	public ProjectJson(String name) {
 		this.name = name;
