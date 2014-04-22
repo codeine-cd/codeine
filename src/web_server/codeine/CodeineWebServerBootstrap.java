@@ -154,6 +154,15 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 				super.handle(pathInContext, baseRequest, request, response);
 		    }
 		};
+		Constraint constraint2 = new Constraint();
+		constraint2.setAuthenticate(false);
+		constraint.setName("internal");
+		constraint.setRoles(config.get().roles());
+		ConstraintMapping constraintMapping2 = new ConstraintMapping();
+		constraintMapping2.setConstraint(constraint2);
+		constraintMapping2.setPathSpec("/api/reporter");
+		
+		securityHandler.addConstraintMapping(constraintMapping2);
 		securityHandler.addConstraintMapping(constraintMapping);
 		SpnegoLoginService loginService = new SpnegoLoginService(null, Constants.getSpnegoPropertiesPath());
 		securityHandler.setLoginService(loginService);
