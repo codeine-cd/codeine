@@ -160,7 +160,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		constraint.setRoles(config.get().roles());
 		ConstraintMapping constraintMapping2 = new ConstraintMapping();
 		constraintMapping2.setConstraint(constraint2);
-		constraintMapping2.setPathSpec("/api/reporter");
+		constraintMapping2.setPathSpec(Constants.apiContext(Constants.REPORTER_CONTEXT));
 		
 		securityHandler.addConstraintMapping(constraintMapping2);
 		securityHandler.addConstraintMapping(constraintMapping);
