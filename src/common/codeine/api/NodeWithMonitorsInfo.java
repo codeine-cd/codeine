@@ -53,16 +53,20 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	}
 	
 	public String version() {
-		if (Constants.NO_VERSION != versionOld() && !StringUtils.isEmpty(versionOld()) ) {
+		if (!Constants.NO_VERSION.equals(versionOld()) && !StringUtils.isEmpty(versionOld()) ) {
 			return versionOld();
 		}
-		if (Constants.NO_VERSION != version && !StringUtils.isEmpty(version)) {
+		if (!Constants.NO_VERSION.equals(version) && !StringUtils.isEmpty(version)) {
 			return version;
 		}
 		return Constants.NO_VERSION;
 	}
+	
 	//TODO remove after build 1100
 	private String versionOld() {
+		if (monitors == null) {
+			return Constants.NO_VERSION;
+		}
 		MonitorStatusInfo version = monitors.get("version");
 		if (version == null){
 			return Constants.NO_VERSION;
