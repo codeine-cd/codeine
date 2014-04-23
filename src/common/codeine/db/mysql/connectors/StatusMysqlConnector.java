@@ -66,6 +66,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	
 	@Override
 	public Map<String, PeerStatusJsonV2> getPeersStatus() {
+		log.info("getPeersStatus " + dbUtils.server());
 		final Map<String, PeerStatusJsonV2> $ = Maps.newHashMap();
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
