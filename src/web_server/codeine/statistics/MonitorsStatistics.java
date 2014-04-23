@@ -89,6 +89,18 @@ public class MonitorsStatistics implements IMonitorStatistics{
 		List<ProjectJson> projects = configurationManager.getConfiguredProjects();
 		projects.add(ConfigurationReadManagerServer.NODES_INTERNAL_PROJECT);
 		for (ProjectJson projectJson : projects) {
+			try {
+				collectForProject(currentTime, projectJson);
+			} catch (Exception e) {
+				log.warn("error collecting for project " + projectJson.name(), e);
+			}
+		}
+		log.info("saving statistics data to file");
+		SerializationUtils.toFile(pathHelper.getStatisticsFile(), data);
+	}
+
+	private void collectForProject(long currentTime, ProjectJson projectJson) {
+		{
 			int fail = 0, success = 0;
 			List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectJson.name());
 			for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
@@ -105,7 +117,7 @@ public class MonitorsStatistics implements IMonitorStatistics{
 			}
 			if (success + fail == 0 && projectData.isEmpty()){
 				log.info("ignoring empty statistics on project " + projectJson.name());
-				continue;
+				return;
 			}
 			int total_nodes = 0;
 			String commands_name = StringUtils.EMPTY;
@@ -126,8 +138,6 @@ public class MonitorsStatistics implements IMonitorStatistics{
 			}
 			log.info("Project: " + projectJson.name() + " , Total Success: " + success + " , Total Fail: " + fail);
 		}
-		log.info("saving statistics data to file");
-		SerializationUtils.toFile(pathHelper.getStatisticsFile(), data);
 	}
 
 	@Override
