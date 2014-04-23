@@ -5,11 +5,12 @@ angular.module('codeine').controller('commandStatusCtrl',['$scope', '$log', '$ro
     $log.debug('commandStatusCtrl: command status is ' + angular.toJson(commandStatus));
     $scope.commandStatus = commandStatus;
 
-        var maxUpdatesNotInFocus = 100;
-        var intervalTriggered = 0;
+    var maxUpdatesNotInFocus = 100;
+    var intervalTriggered = 0;
     var interval = $interval(function() {
-        $log.debug('checking commandStatus ' + $scope.app.isInFocus);
+        $log.debug('checking commandStatus ' + $scope.app.isInFocus + ' ' + intervalTriggered);
         if (!$scope.app.isInFocus && intervalTriggered < maxUpdatesNotInFocus) {
+            $log.debug('commandStatus will not update');
             return;
         }
         intervalTriggered++;
