@@ -24,7 +24,7 @@ es("rsync -ur deployment/bin dist/");
 es("rsync -ur deployment/conf dist/");
 es("rsync -ur deployment/project dist/");
 es("mkdir -p dist/http-root/ajs");
-es("cp -r deployment/http-root/ajs/dist dist/http-root/ajs/app");
+es("cp -r deployment/http-root/ajs/dist dist/http-root/ajs/dist");
 es("echo '".getVersionNoDate()."' > dist/build_number.txt");
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
 es("cd dist; tar -czf ../$tar ./*");
