@@ -20,14 +20,14 @@ public class UserProjectPermissions extends AbstractUserPermissions{
 	}
 
 	public boolean canRead() {
-		return can_read;
+		return can_read || canCommand();
 	}
 	
 	/**
 	 * @return true if can command any node
 	 */
 	public boolean canCommand() {
-		return !can_command.isEmpty();
+		return !can_command.isEmpty() || canConfigure();
 	}
 
 	public boolean canConfigure() {
@@ -39,7 +39,7 @@ public class UserProjectPermissions extends AbstractUserPermissions{
 	}
 
 	public boolean canCommand(String nodeAlias) {
-		return isSetMatch(can_command, nodeAlias);
+		return isSetMatch(can_command, nodeAlias) || canConfigure();
 	}
 	
 	

@@ -77,7 +77,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 				nodeStatusInfoList = new NodesForVersion(nodeWithMonitorsInfo.version());
 				nodesByVersion.put(nodeWithMonitorsInfo.version(), nodeStatusInfoList);
 			}
-			boolean can_command = (userPermissionsGetter.user(request).canCommand(projectJson.name(), nodeWithMonitorsInfo.alias()));
+			boolean can_command = userPermissionsGetter.user(request).canCommand(projectJson.name(), nodeWithMonitorsInfo.alias());
 			nodeStatusInfoList.add(new NodeWithMonitorsInfoApi(nodeWithMonitorsInfo, can_command));
 		}
 		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion, nodes, projectJson);
