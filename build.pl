@@ -44,7 +44,7 @@ if (defined($ENV{RELEASE_AREA}))
 {
 	my $link = $ENV{RELEASE_AREA}."/codeine.latest.tar";
 	es("cp $tar $ENV{RELEASE_AREA}/");
-	es("rm $link");
+	system("rm $link");
 	es("ln -s $tar $link");
 }
 unless ($ENV{'release-to-github'} eq "true") 
