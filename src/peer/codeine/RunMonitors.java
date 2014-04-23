@@ -3,6 +3,7 @@ package codeine;
 import static com.google.common.collect.Maps.*;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -255,7 +256,7 @@ public class RunMonitors implements Task {
 	}
 
 	private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
-		String fileName = pathHelper.getMonitorsDir(project().name()) + "/" + c.name();
+		String fileName = pathHelper.getMonitorsDir(project().name()) + File.pathSeparator + c.name();
 		if (c.script_content() != null) {
 			if (null != shellScript){
 				log.warn("'shellScript' should be null but not", new RuntimeException());

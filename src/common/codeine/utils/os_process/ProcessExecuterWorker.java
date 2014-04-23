@@ -27,11 +27,13 @@ class ProcessExecuterWorker extends Thread {
 	@Override
 	public void run() {
 		try {
+			//TODO read error
 			InputStream is = process.getInputStream();
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
 			String line;
 			try {
+				process.getOutputStream().close();
 				while ((line = br.readLine()) != null) {
 					output += line + "\n";
 					function.apply(line);
