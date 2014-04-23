@@ -46,7 +46,7 @@ public class NodesManagerPeer implements NodesManager {
 			List<NodeInfo> nodes = projectJson.nodes_info();
 			NodeListJson nodes2 = new NodeListJson();
 			for (NodeInfo nodeJson : nodes) {
-				if (InetUtils.nameWithoutPort(nodeJson.name()).equals(InetUtils.getLocalHost().getHostName())){
+				if (InetUtils.nameWithoutPort(nodeJson.name()).equalsIgnoreCase(InetUtils.getLocalHost().getHostName())){
 					nodes2.add(nodeJson);
 				}
 			}
