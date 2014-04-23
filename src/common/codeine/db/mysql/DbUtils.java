@@ -188,4 +188,9 @@ public class DbUtils
 		
 	}
 
+
+	public String server() {
+		return hostSelector.mysql().host() + ":" + hostSelector.mysql().port();
+	}
+
 }
