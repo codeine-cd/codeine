@@ -51,8 +51,8 @@ public class ProcessExecuter {
 			worker.start();
 			long timeout = TimeUnit.MINUTES.toMillis(timeoutInMinutes);
 			worker.join(timeout);
-			if (worker.exit != null) {
-				return new Result(worker.exit, worker.output);
+			if (worker.exitStatus() != null) {
+				return new Result(worker.exitStatus(), worker.output());
 			} else {
 				throw new RuntimeException("command exited with timeout " + cmdForOutput);
 			}

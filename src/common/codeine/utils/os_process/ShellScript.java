@@ -22,7 +22,7 @@ public class ShellScript {
 		this.content = content;
 		this.windows = windows;
 		String tmpDir = StringUtils.isEmpty(tmp_dir) ? System.getProperty("java.io.tmpdir") : tmp_dir;
-		this.fileName = tmpDir + File.pathSeparator + "codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");
+		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");
 	}
 
 	public static void main(String[] args) {

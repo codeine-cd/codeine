@@ -256,7 +256,7 @@ public class RunMonitors implements Task {
 	}
 
 	private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
-		String fileName = pathHelper.getMonitorsDir(project().name()) + File.pathSeparator + c.name();
+		String fileName = pathHelper.getMonitorsDir(project().name()) + File.separator + c.name();
 		if (c.script_content() != null) {
 			if (null != shellScript){
 				log.warn("'shellScript' should be null but not", new RuntimeException());

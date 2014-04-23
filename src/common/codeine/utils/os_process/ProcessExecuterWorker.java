@@ -7,14 +7,16 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import codeine.utils.ExceptionUtils;
+import codeine.utils.StringUtils;
 
 import com.google.common.base.Function;
 
 @SuppressWarnings("unused")
 class ProcessExecuterWorker extends Thread {
 	private final Process process;
-	Integer exit;
-	String output = "";
+	private Integer exit;
+	private String output = "";
+	private String error = "";
 	private Function<String, Void> function;
 	private List<String> cmd;
 
@@ -27,25 +29,40 @@ class ProcessExecuterWorker extends Thread {
 	@Override
 	public void run() {
 		try {
-			//TODO read error
-			InputStream is = process.getInputStream();
-			InputStreamReader isr = new InputStreamReader(is);
-			BufferedReader br = new BufferedReader(isr);
-			String line;
 			try {
+				//TODO read error
 				process.getOutputStream().close();
-				while ((line = br.readLine()) != null) {
+				InputStream is1 = process.getInputStream();
+				InputStreamReader isr1 = new InputStreamReader(is1);
+				BufferedReader br1 = new BufferedReader(isr1);
+				String line;
+				while ((line = br1.readLine()) != null) {
 					output += line + "\n";
 					function.apply(line);
 				}
+				InputStream is = process.getErrorStream();
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(isr);
+				while ((line = br.readLine()) != null) {
+					error += line + "\n";
+					function.apply(line);
+				}
+				exit = process.waitFor();
 			} catch (IOException ex) {
-				output += ExceptionUtils.getStackTrace(ex);
+				error += ExceptionUtils.getStackTrace(ex);
 				function.apply(ExceptionUtils.getStackTrace(ex));
 			}
-			exit = process.waitFor();
 		} catch (InterruptedException ignore) {
 			ProcessExecuter.log.info("thread was interuppted");
 			return;
 		}
+	}
+
+	public Integer exitStatus() {
+		return exit;
+	}
+
+	public String output() {
+		return StringUtils.isEmpty(error) ? output : output + "\nerror:\n" + error;
 	}
 }
