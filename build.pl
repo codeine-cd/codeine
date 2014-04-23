@@ -15,7 +15,7 @@ print "codeineDir is $codeineDir\n";
 print "prepare codeine...\n";
 my $propertiesFile = "$codeineDir/src/common/codeine/version.properties";
 updateVersionFile();
-es("rm -rf dist");
+#es("rm -rf dist");
 es("mkdir -p dist");
 #es("bounce_minor_version.pl");
 
