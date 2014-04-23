@@ -10,6 +10,9 @@ public class CodeineVersion
 	
 	public static String get()
 	{
+		if ("!CodeineVersion.date!".equals(date)) {
+			return getNoDate();
+		}
 		return major + "." + minor + "." + build + "." + date; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
