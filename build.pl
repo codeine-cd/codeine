@@ -4,16 +4,9 @@ use warnings;
 use strict;
 use File::Basename;
 
-my $script = __FILE__;
-my $dir = dirname($script);
-chdir $dir || die "cant cd to $dir";
-$dir = `pwd`;
-chomp($dir);
-print "dir is $dir\n";
-my $codeineDir = "$dir";
-print "codeineDir is $codeineDir\n";
+
 print "prepare codeine...\n";
-my $propertiesFile = "$codeineDir/src/common/codeine/version.properties";
+my $propertiesFile = "src/common/codeine/version.properties";
 updateVersionFile();
 #es("rm -rf dist");
 es("mkdir -p dist");
@@ -23,15 +16,15 @@ my $version = getVersionFull();
 my $versionNoDate = getVersionNoDate();
 print "java is $ENV{JAVA_HOME}\n";#1.7
 print "ant is ant\n";#1.8?
-es("cd $codeineDir ; ant", 1);
-es("rsync -ur $codeineDir/deployment/* dist/");
-es("cd dist/http-root/ajs ; npm install");
-es("cd dist/http-root/ajs ; bower install");
-es("cd dist/http-root/ajs ; grunt");
-#es("rsync -ur deployment/bin/* dist/bin/");
-#es("cp $codeineDir/dist/bin/codeine.jar dist/bin/codeine.jar");
-#es("rsync -ur deployment/project dist/");
-#es("rsync -ur deployment/conf dist/");
+es("ant", 1);
+es("cd deployment/http-root/ajs ; npm install");
+es("cd deployment/http-root/ajs ; bower install");
+es("cd deployment/http-root/ajs ; grunt");
+es("rsync -ur deployment/bin dist/");
+es("rsync -ur deployment/conf dist/");
+es("rsync -ur deployment/project dist/");
+es("mkdir -p dist/http-root/ajs");
+es("cp -r deployment/http-root/ajs/dist dist/http-root/ajs/app");
 es("echo '".getVersionNoDate()."' > dist/build_number.txt");
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
 es("cd dist; tar -czf ../$tar ./*");
