@@ -6,9 +6,10 @@ angular.module('codeine').controller('commandRunningCtrl',['$scope', '$rootScope
     CodeineService.getRunningCommands().success(function(data) {
         $scope.history = data;
     });
-
+    var maxUpdatesNotInFocus = 100;
+    var intervalTriggered = 0;
     var interval = setInterval(function() {
-        if (!$scope.app.isInFocus) {
+        if (!$scope.app.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
             return;
         }
         $.ajax( {

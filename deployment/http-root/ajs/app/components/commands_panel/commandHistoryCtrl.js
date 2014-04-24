@@ -9,9 +9,9 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
     var maxUpdatesNotInFocus = 100;
     var intervalTriggered = 0;
     var interval = setInterval(function() {
-        $log.debug('checking commandHistoryCtrl ' + $scope.app.isInFocus + ' ' + intervalTriggered);
+        //$log.debug('checking commandHistoryCtrl ' + $scope.app.isInFocus + ' ' + intervalTriggered);
         if (!$scope.app.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
-            $log.debug('commandHistoryCtrl will not update');
+            //$log.debug('commandHistoryCtrl will not update');
             return;
         }
         intervalTriggered++;

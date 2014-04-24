@@ -48,7 +48,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		ProjectStatusInfo theNewObject = create(projectJson, nodes, request);
 		writeResponseGzipJson(response, theNewObject);
 	}
-	
+	//TODO handle duplicate node and and refactor to other class
 	private ProjectStatusInfo create(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes, HttpServletRequest request) {
 		Map<String, Integer> tagCount = Maps.newHashMap();
 		Map<String, Integer> monitorCount = Maps.newHashMap();
