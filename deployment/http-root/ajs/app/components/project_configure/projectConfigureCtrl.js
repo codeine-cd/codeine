@@ -41,7 +41,7 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
         };
 
         $scope.addMonitor = function() {
-            $scope.projectConfigurationForEditing.monitors.push({is_open: true, name: "new_monitor_" + $scope.projectConfigurationForEditing.monitors.length});
+            $scope.projectConfigurationForEditing.monitors.push({is_open: true, name: "new_monitor_" + $scope.projectConfigurationForEditing.monitors.length, notification_enabled: true});
         };
 
         $scope.removeItem = function(array,index) {
