@@ -50,6 +50,10 @@ public class PeerStatusChangedUpdater implements Runnable{
 		while (true){
 			try {
 				pushUpdateNow();
+			} catch (Exception e) {
+				log.warn("got exception", e);
+			}
+			try {
 				ThreadUtils.sleep(MIN_TIME_BETWEEN_UPDATES_MILLIS);
 				waitForNextUpdate();
 			} catch (Exception e) {
