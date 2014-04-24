@@ -14,30 +14,30 @@ public class PathHelper {
 	private static final Logger log = Logger.getLogger(PathHelper.class);
 
 	public String getMonitorsDir(String projectName) {
-		return getProjectsDir() + "/" + projectName + Constants.MONITORS_DIR;
+		return getProjectsDir() + File.separator + projectName + Constants.MONITORS_DIR;
 	}
 
 	public String getPluginsDir(String projectName) {
-		return getProjectsDir() + "/" + projectName + Constants.PLUGINS_DIR;
+		return getProjectsDir() + File.separator + projectName + Constants.PLUGINS_DIR;
 	}
 	
 	public String getPluginsOutputDir(String projectName) {
-		return getProjectsDir() + "/" + projectName + Constants.PLUGINS_OUTPUT_DIR;
+		return getProjectsDir() + File.separator + projectName + Constants.PLUGINS_OUTPUT_DIR;
 	}
 
 	public String getCommandOutputDir(String projectName, String command) {
-		return getPluginsOutputDir(projectName) + "/" + command;
+		return getPluginsOutputDir(projectName) + File.separator + command;
 	}
 	
 	public String getMonitorOutputDir(String projectName) {
-		return getMonitorOutputDirAllProjects() + "/" + projectName + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
+		return getMonitorOutputDirAllProjects() + File.separator + projectName + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
 	}
 	public String getMonitorOutputDirAllProjects() {
 		return getProjectsDir();
 	}
 
 	public String getMonitorOutputDirWithNode(String projectName, String nodeName) {
-		return getMonitorOutputDir(projectName) + "/" + HttpUtils.specialEncode(nodeName);
+		return getMonitorOutputDir(projectName) + File.separator + HttpUtils.specialEncode(nodeName);
 	}
 
 	public String getProjectsDir() {
@@ -57,26 +57,26 @@ public class PathHelper {
 	}
 
 	public String getVersionMappingFile() {
-		return getPersistentDir() + "/VersionsMapping.json";
+		return getPersistentDir() + File.separator + "VersionsMapping.json";
 	}
 	public String getStatisticsFile() {
-		return getPersistentDir() + "/statistics.data";
+		return getPersistentDir() + File.separator + "statistics.data";
 	}
 
 	public String getPidFile() {
-		return Constants.getHostWorkareaDir() + "/codeine.peer.pid";
+		return Constants.getHostWorkareaDir() + File.separator + "codeine.peer.pid";
 	}
 
 	public String getPortFile() {
-		return Constants.getHostWorkareaDir() + "/codeine.peer.port";
+		return Constants.getHostWorkareaDir() + File.separator + "codeine.peer.port";
 	}
 
 	public String getVersionLabelFile(String projectName) {
-		return getConfDir(projectName) + "/VersionLabel.json";
+		return getConfDir(projectName) + File.separator + "VersionLabel.json";
 	}
 
 	public String getConfDir(String projectName) {
-		return getProjectsDir() + "/" + projectName;
+		return getProjectsDir() + File.separator + projectName;
 	}
 
 	public List<File> getMonitors(String project) {
@@ -99,15 +99,15 @@ public class PathHelper {
 	}
 
 	public String getProjectDir(String projectName) {
-		return getProjectsDir() + "/" + projectName;
+		return getProjectsDir() + File.separator + projectName;
 	}
 
 	public String getCommandOutputInfoFile(String projectName, String command) {
-		return getCommandOutputDir(projectName, command) + "/" + Constants.JSON_COMMAND_FILE_NAME;
+		return getCommandOutputDir(projectName, command) + File.separator + Constants.JSON_COMMAND_FILE_NAME;
 	}
 
 	public String getCommandOutputFile(String projectName, String command) {
-		return getCommandOutputDir(projectName, command) + "/" + Constants.COMMAND_LOG_FILE;
+		return getCommandOutputDir(projectName, command) + File.separator + Constants.COMMAND_LOG_FILE;
 	}
 
 	

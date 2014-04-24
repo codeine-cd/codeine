@@ -31,7 +31,7 @@ public class NodeScriptDiscovery {
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
 		ShellScriptWithOutput shellScript = 
-				new ShellScriptWithOutput("discovery_" + projectJson.name(), nodes_discovery_script, dir, env);
+				new ShellScriptWithOutput("discovery_" + projectJson.name(), nodes_discovery_script, dir, env, projectJson.operating_system());
 		String result = shellScript.execute();
 		if (result.trim().isEmpty()){
 			return new NodeListJson();

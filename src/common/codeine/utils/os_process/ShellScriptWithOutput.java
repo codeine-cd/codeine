@@ -1,13 +1,17 @@
 package codeine.utils.os_process;
 
+import java.io.File;
 import java.nio.file.attribute.PosixFilePermission;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import codeine.jsons.project.OperatingSystem;
 import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.utils.FilesUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 
@@ -21,13 +25,16 @@ public class ShellScriptWithOutput {
 	private String key;
 	private String runFromDir;
 	private Map<String, String> env;
+	private OperatingSystem operatingSystem;
 
-	public ShellScriptWithOutput(String key, String content, String runFromDir, Map<String, String> env) {
+	public ShellScriptWithOutput(String key, String content, String runFromDir, Map<String, String> env, OperatingSystem operatingSystem) {
 		this.key = key;
 		this.content = content;
 		this.runFromDir = runFromDir;
 		this.env = env;
-		this.fileName = "/tmp/codeine" + key.hashCode();
+		this.operatingSystem = operatingSystem;
+		String tmpDir = StringUtils.isEmpty(System.getProperty("java.io.tmpdir")) ? "/tmp" : System.getProperty("java.io.tmpdir");
+		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode();
 	}
 
 	public String create() {
@@ -64,7 +71,18 @@ public class ShellScriptWithOutput {
 
 	private Result executeInternal() {
 		env.put(Constants.EXECUTION_ENV_OUTPUT_FILE, getOutputFile());
-		return new ProcessExecuterBuilder(Lists.newArrayList("/bin/sh", "-xe", fileName), runFromDir).env(env).build().execute();
+		List<String> cmd = null;
+		switch (operatingSystem) {
+		case Linux:
+			cmd = Lists.newArrayList("/bin/sh", "-xe", fileName);
+			break;
+		case Windows:
+			cmd = Lists.newArrayList(fileName);
+			break;
+		default:
+			throw new RuntimeException("missing implementation for " + operatingSystem);
+		}
+		return new ProcessExecuterBuilder(cmd, runFromDir).env(env).build().execute();
 	}
 
 	private String getOutputFile() {

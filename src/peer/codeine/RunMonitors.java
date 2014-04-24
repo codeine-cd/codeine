@@ -127,7 +127,7 @@ public class RunMonitors implements Task {
 		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project().name());
 		ShellScriptWithOutput script = new ShellScriptWithOutput(
-				"tags_" + projectName + "_" + node.name(), project().tags_discovery_script(), pathHelper.getProjectDir(projectName), env);
+				"tags_" + projectName + "_" + node.name(), project().tags_discovery_script(), pathHelper.getProjectDir(projectName), env, project().operating_system());
 		String tags = script.execute();
 		if (tags.isEmpty()){
 			tags = "[]";
@@ -150,7 +150,7 @@ public class RunMonitors implements Task {
 		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project().name());
 		ShellScriptWithOutput script = new ShellScriptWithOutput(
-				"version_" + projectName + "_" + node.name(), project().version_detection_script(), pathHelper.getProjectDir(projectName), env);
+				"version_" + projectName + "_" + node.name(), project().version_detection_script(), pathHelper.getProjectDir(projectName), env, project().operating_system());
 		String version = script.execute();
 		if (version.isEmpty()){
 			version = Constants.NO_VERSION;

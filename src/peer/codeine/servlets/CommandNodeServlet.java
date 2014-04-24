@@ -1,5 +1,6 @@
 package codeine.servlets;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class CommandNodeServlet extends AbstractServlet
 		
 		String dir = pathHelper.getPluginsDir(commandInfo.project_name());
 		String script_content = commandInfo.script_content();
-		String file = dir + "/" + commandInfo.command_name();
+		String file = dir + File.separator + commandInfo.command_name();
 		ShellScript cmdScript = null;
 		try {
 			ProjectJson project = getProject(commandInfo.project_name());
