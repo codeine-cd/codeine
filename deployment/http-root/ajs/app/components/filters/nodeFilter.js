@@ -4,7 +4,7 @@ var showByName = function(query,node_name) {
     if (!query) {
         return true;
     }
-    return node_name.indexOf(query) !== -1;
+    return node_name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
 };
 
 var showByMonitor = function(selectedMonitor,monitors) {
