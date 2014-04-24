@@ -26,8 +26,8 @@ public class HttpUtils
 	private static final Logger log = Logger.getLogger(HttpUtils.class);
 	private final static String USER_AGENT = "Mozilla/5.0";
 	public static final int READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
-	public static final int SHORT_READ_TIMEOUT_MILLI = (int) TimeUnit.SECONDS.toMillis(2);
-	public static final int MEDIUM_READ_TIMEOUT_MILLI = (int) TimeUnit.SECONDS.toMillis(10);
+	public static final int SHORT_READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
+	public static final int MEDIUM_READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
 	
 	public static String doGET(String url,Map<String,String> headers, int timeoutMilli)
 	{
