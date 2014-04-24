@@ -77,6 +77,12 @@ public class NearestMysqlHostSelector implements Task, MysqlHostSelector{
 		return localConf;
 	}
 
+	
+	@Override
+	public String toString() {
+		return "NearestMysqlHostSelector [mysqlConf=" + mysqlConf + "]";
+	}
+
 	@Override
 	public void run() {
 		log.info("Checking for nearest mysql db");

@@ -33,8 +33,13 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		for (IStatusDatabaseConnector c : statusDatabaseConnectorListProvider.get()) {
 			Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
 			for (Entry<String, PeerStatusJsonV2> e : peersStatus.entrySet()) {
-				if (!res.containsKey(e.getKey()) || isNewer(e.getValue(), res.get(e.getKey()))) {
+				if (!res.containsKey(e.getKey())) {
 					res.put(e.getKey(), e.getValue());
+				} else { // more than one
+					log.info("peer appears in more than one Database " + e.getKey() + " new db: " + c.server());
+					if (isNewer(e.getValue(), res.get(e.getKey()))) {
+
+					}
 				}
 			}
 		}

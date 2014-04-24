@@ -145,6 +145,12 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			dbUtils.executeUpdate("UPDATE " + tableName + " SET status = 'Disc' WHERE peer_key = ?", key);
 		}
 	}
+
+
+	@Override
+	public String server() {
+		return dbUtils.toString();
+	}
 	
 	
 }

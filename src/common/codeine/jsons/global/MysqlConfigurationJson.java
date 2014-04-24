@@ -60,8 +60,7 @@ public class MysqlConfigurationJson {
 
 	@Override
 	public String toString() {
-		return "MysqlConfigurationJson [host=" + host + ", port=" + port + ", user=" + user + ", managed_by_codeine="
-				+ managed_by_codeine + ", dir=" + dir + ", bin_dir=" + bin_dir + "]";
+		return "MysqlConfigurationJson [host=" + host + ", port=" + port + "]";
 	}
 
 	

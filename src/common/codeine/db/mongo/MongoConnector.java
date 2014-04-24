@@ -306,4 +306,10 @@ public class MongoConnector implements IAlertsDatabaseConnector, LabelJsonProvid
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public String server() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

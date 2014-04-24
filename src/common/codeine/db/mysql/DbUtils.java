@@ -188,9 +188,17 @@ public class DbUtils
 		
 	}
 
+	
+
+	@Override
+	public String toString() {
+		return "DbUtils [hostSelector=" + hostSelector + "]";
+	}
+
+
 
 	public String server() {
-		return hostSelector.mysql().host() + ":" + hostSelector.mysql().port();
+		return toString();
 	}
 
 }

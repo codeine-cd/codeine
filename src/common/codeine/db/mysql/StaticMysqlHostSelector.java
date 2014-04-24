@@ -6,12 +6,15 @@ public class StaticMysqlHostSelector implements MysqlHostSelector {
 
 	private MysqlConfigurationJson mysql;
 
-	
 	public StaticMysqlHostSelector(MysqlConfigurationJson mysql) {
 		super();
 		this.mysql = mysql;
 	}
 
+	@Override
+	public String toString() {
+		return "StaticMysqlHostSelector [mysql=" + mysql + "]";
+	}
 
 	@Override
 	public MysqlConfigurationJson mysql() {
