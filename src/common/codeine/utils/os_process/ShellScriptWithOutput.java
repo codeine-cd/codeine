@@ -7,12 +7,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.project.OperatingSystem;
 import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
+import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 
 import com.google.common.collect.Lists;

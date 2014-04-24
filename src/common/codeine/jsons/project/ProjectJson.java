@@ -7,6 +7,7 @@ import codeine.configuration.NodeMonitor;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.permissions.UserProjectPermissions;
+import codeine.utils.os.OperatingSystem;
 
 import com.google.common.collect.Lists;
 

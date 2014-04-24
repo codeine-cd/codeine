@@ -12,6 +12,7 @@ import codeine.configuration.PathHelper;
 import codeine.jsons.nodes.NodeListJson;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.utils.os.OsUtils;
 import codeine.utils.os_process.ShellScriptWithOutput;
 
 import com.google.common.collect.Maps;
@@ -26,6 +27,10 @@ public class NodeScriptDiscovery {
 	@Inject private PathHelper pathHelper;
 	
 	public NodeListJson get(ProjectJson projectJson) {
+		if (projectJson.operating_system() != OsUtils.getHostOs()) {
+			log.info("project " + projectJson.name() + " os is " + projectJson.operating_system() + " and host is " + OsUtils.getHostOs() + " so will not run it");
+			return new NodeListJson();
+		}
 		String nodes_discovery_script = projectJson.nodes_discovery_script();
 		String dir = pathHelper.getProjectDir(projectJson.name());
 		Map<String, String> env = Maps.newHashMap();

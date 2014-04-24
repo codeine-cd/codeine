@@ -21,7 +21,6 @@ import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.peer_status.PeerStatus;
-import codeine.jsons.project.OperatingSystem;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Result;
@@ -29,6 +28,7 @@ import codeine.servlet.AbstractServlet;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.network.InetUtils;
+import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 import codeine.utils.os_process.ShellScript;
 

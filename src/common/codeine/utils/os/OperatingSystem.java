@@ -1,4 +1,4 @@
-package codeine.jsons.project;
+package codeine.utils.os;
 
 public enum OperatingSystem {
 	Linux,
