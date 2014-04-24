@@ -2,11 +2,13 @@ package codeine.permissions;
 
 import java.util.Set;
 
+import codeine.jsons.auth.CodeineUser;
+
 import com.google.common.collect.Sets;
 
 public class UserPermissions extends AbstractUserPermissions implements IUserPermissions{
 
-	
+	private transient CodeineUser user;
 	private String username;
 	private boolean administer;
 	private Set<String> read_project = Sets.newHashSet();
@@ -17,23 +19,23 @@ public class UserPermissions extends AbstractUserPermissions implements IUserPer
 		super();
 	}
 
-	public UserPermissions(String username, boolean administer) {
-		this.username = username;
+	public UserPermissions(CodeineUser user, boolean administer) {
+		this.user = user;
+		this.username = user.username();
 		this.administer = administer;
 	}
 
-	public UserPermissions(String username, boolean administrator, Set<String> canRead, Set<String> canCommand,
+	public UserPermissions(CodeineUser user, boolean administrator, Set<String> canRead, Set<String> canCommand,
 			Set<String> canConfigure) {
-		this(username, administrator);
+		this(user, administrator);
 		this.read_project = canRead;
 		this.command_project = canCommand;
 		this.configure_project = canConfigure;
 	}
 
 	@Override
-	public String username()
-	{
-		return username;
+	public CodeineUser username() {
+		return user;
 	}
 	
 	@Override

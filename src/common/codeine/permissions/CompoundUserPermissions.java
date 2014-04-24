@@ -3,6 +3,8 @@ package codeine.permissions;
 import java.util.List;
 import java.util.Map;
 
+import codeine.jsons.auth.CodeineUser;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -110,7 +112,7 @@ public class CompoundUserPermissions implements IUserPermissions{
 		return false;
 	}
 	@Override
-	public String username() {
+	public CodeineUser username() {
 		return userPermissions.username();
 	}
 	

@@ -51,9 +51,7 @@ public class AllNodesCommandExecuter {
 	private ProjectJson project;
 	private IUserPermissions userObject;
 	private Object fileWriteSync = new Object();
-
 	private CommandExecutionStrategy strategy;
-
 
 	public long executeOnAllNodes(IUserPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
 		this.project = project;
@@ -67,7 +65,7 @@ public class AllNodesCommandExecuter {
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);
 			FilesUtils.createNewFile(file);
-			createCommandDataFile(userObject.username());
+			createCommandDataFile(userObject.username().username());
 			writer = TextFileUtils.getWriter(file, false);
 			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + userObject.username());
 			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.username());

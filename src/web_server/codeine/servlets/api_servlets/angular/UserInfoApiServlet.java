@@ -18,7 +18,7 @@ public class UserInfoApiServlet extends AbstractApiServlet {
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String user = permissionsManager.user(request).username();
-		CodeineUser codeineUser = usersManager.user(user);
+		CodeineUser codeineUser = usersManager.userOrGuest(user);
 		writeResponseJson(response, new UserInfo(codeineUser.username(), codeineUser.api_token()));
 	}
 	

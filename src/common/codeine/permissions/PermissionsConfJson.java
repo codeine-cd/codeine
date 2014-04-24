@@ -2,13 +2,17 @@ package codeine.permissions;
 
 import java.util.List;
 
+import codeine.jsons.auth.CodeineUser;
+
 import com.google.common.collect.Lists;
 
 public class PermissionsConfJson {
 
 	private List<UserPermissions> permissions = Lists.newArrayList();
 
-	public PermissionsConfJson() {}
+	public PermissionsConfJson() {
+		
+	}
 	
 	public PermissionsConfJson(List<UserPermissions> permissions) {
 		this.permissions = permissions;
@@ -33,7 +37,7 @@ public class PermissionsConfJson {
 	public List<UserPermissions> permissions() {
 		return permissions;
 	}
-	public void makeAdmin(String user) {
+	public void makeAdmin(CodeineUser user) {
 		UserPermissions p = new UserPermissions(user,true);
 		permissions.add(p);
 	}

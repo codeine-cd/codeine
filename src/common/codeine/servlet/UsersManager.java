@@ -57,7 +57,7 @@ public class UsersManager {
 		throw ExceptionUtils.asUnchecked(new IllegalArgumentException("No such user with api token " + api_token));
 	}
 	
-	public CodeineUser user(String name) {
+	public CodeineUser userOrGuest(String name) {
 		for (CodeineUser user : identityConfJson.entries()) {
 			if (user.username().equals(name)) return user;
 		}
@@ -65,7 +65,7 @@ public class UsersManager {
 			log.info("creating automaticly user " + name);
 			return addUser(name, "NONE");
 		}
-		throw ExceptionUtils.asUnchecked(new IllegalArgumentException("No such user " + name));
+		return CodeineUser.createGuest(name);
 	}
 	
 	public boolean isUserExists(String username) {

@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
+import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 
@@ -30,6 +31,14 @@ public class CodeineUser {
 	
 	public static CodeineUser createNewUser(String username, String credentials) {
 		return new  CodeineUser(username, credentials);
+	}
+	
+	public static CodeineUser createGuestUser() {
+		return new  CodeineUser(Constants.GUEST_USER, Constants.GUEST_USER);
+	}
+	
+	public static CodeineUser createGuest(String name) {
+		return new  CodeineUser(name, name);
 	}
 	
 	private static String encryptToken(String token)
