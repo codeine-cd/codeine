@@ -73,6 +73,7 @@ public class CreateDirs {
 		return s.toString();
 	}
 
+	@SuppressWarnings("unused")
 	private static String rmdirs(int files) {
 		Stopwatch s = Stopwatch.createStarted();
 		for (int i = 0; i < files; i++) {
