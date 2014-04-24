@@ -25,16 +25,18 @@ public class HttpUtils
 {
 	private static final Logger log = Logger.getLogger(HttpUtils.class);
 	private final static String USER_AGENT = "Mozilla/5.0";
-	private static final int READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
+	public static final int READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
+	public static final int SHORT_READ_TIMEOUT_MILLI = (int) TimeUnit.SECONDS.toMillis(2);
+	public static final int MEDIUM_READ_TIMEOUT_MILLI = (int) TimeUnit.SECONDS.toMillis(10);
 	
-	public static String doGET(String url,Map<String,String> headers)
+	public static String doGET(String url,Map<String,String> headers, int timeoutMilli)
 	{
 		final StringBuilder $ = new StringBuilder();
-		doGET(url, new OutputToStringFunction($), headers);
+		doGET(url, new OutputToStringFunction($), headers, timeoutMilli);
 		return $.toString();
 	}
 	
-	public static void doGET(String url, Function<String, Void> function, Map<String,String> headers)
+	public static void doGET(String url, Function<String, Void> function, Map<String,String> headers, int timeoutMilli)
 	{
 		try
 		{
@@ -155,6 +157,6 @@ public class HttpUtils
 	}
 
 	public static String doGET(String url) {
-		return doGET(url, Maps.<String, String>newHashMap());
+		return doGET(url, Maps.<String, String>newHashMap(), HttpUtils.READ_TIMEOUT_MILLI);
 	}
 }

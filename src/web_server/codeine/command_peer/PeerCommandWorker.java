@@ -106,7 +106,7 @@ public class PeerCommandWorker implements Runnable {
 			}
 			else {
 				String link = links.getPeerCommandLink(node.peer_address(), "codeine", "switch-version", "beta");
-				HttpUtils.doGET(link, function,null);
+				HttpUtils.doGET(link, function,null, HttpUtils.READ_TIMEOUT_MILLI);
 			}
 			if (result.length() > 0) {
 				if (!shouldOutputImmediatly){

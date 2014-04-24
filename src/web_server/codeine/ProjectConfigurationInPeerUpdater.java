@@ -39,9 +39,10 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 		restart = true;
 		int numTry = 1;
 		Collection<PeerStatusJsonV2> allPeers = peersProjectsStatus.peer_to_projects().values();
+		List<PeerStatusJsonV2> failedPeers = Lists.newArrayList();
 		while (restart) {
 			restart = false;
-			List<PeerStatusJsonV2> failedPeers = Lists.newArrayList();
+			failedPeers = Lists.newArrayList();
 			log.info("sending refresh request to " + allPeers.size() + " peers");
 			for (PeerStatusJsonV2 e : allPeers) {
 				try {
@@ -49,7 +50,7 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 						log.debug("reporter peer, will not push configuration " + e);
 						continue;
 					}
-					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null);
+					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null, HttpUtils.SHORT_READ_TIMEOUT_MILLI);
 					log.debug("updated " + e.host_port() + " result " + result);
 				} catch (Exception e1) {
 					failedPeers.add(e);
@@ -66,6 +67,7 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 				failedPeers.clear();
 			}
 		}
+		log.info("finished to send refresh request to " + allPeers.size() + " peers, failed to send to " + failedPeers.size());
 	}
 
 	@Override

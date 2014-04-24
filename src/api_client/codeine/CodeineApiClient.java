@@ -49,7 +49,7 @@ public class CodeineApiClient {
 
 
 	private <T> T apiCall(String path, String params, Type type) {
-		String json = HttpUtils.doGET(getServerPath(path) + params,headers);
+		String json = HttpUtils.doGET(getServerPath(path) + params,headers, HttpUtils.SHORT_READ_TIMEOUT_MILLI);
 		return gson.fromJson(json, type);
 	}
 	

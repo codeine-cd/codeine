@@ -30,7 +30,7 @@ public class MonitorStatusApiServlet extends AbstractApiServlet {
 		String monitorName = request.getParameter(Constants.UrlParameters.MONITOR);
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByNameOrNull(projectName, nodeName);
 		String peerMonitorResultLink = links.getPeerMonitorResultLink(node.peer_address(), projectName, monitorName, nodeName);
-		String encodeOutput = HttpUtils.encodeHTML(HttpUtils.doGET(peerMonitorResultLink,null));
+		String encodeOutput = HttpUtils.encodeHTML(HttpUtils.doGET(peerMonitorResultLink,null, HttpUtils.MEDIUM_READ_TIMEOUT_MILLI));
 		writeResponseGzipJson(response, new MonitorExecutionResult(encodeOutput));
 	}
 	
