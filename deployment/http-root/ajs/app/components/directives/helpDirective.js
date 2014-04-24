@@ -7,7 +7,7 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
             helpId : '@',
             helpTxt: '='
         },
-        template: '<i class="fa fa-question-circle codeine_help"></i>',
+        template: '&nbsp;<i class="fa fa-question-circle codeine_help"></i>',
         link: function ($scope, element) {
             var text = '';
             if ($scope.helpTxt) {
@@ -19,7 +19,7 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
             }
             element.popover(
                 {
-                    content : '&nbsp;<span class="codeine_help_content">' + text + '</span>',
+                    content : '<span class="codeine_help_content">' + text + '</span>',
                     html : true,
                     placement : "bottom",
                     trigger : "hover",
