@@ -38,7 +38,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 				} else { // more than one
 					log.info("peer appears in more than one Database " + e.getKey() + " new db: " + c.server());
 					if (isNewer(e.getValue(), res.get(e.getKey()))) {
-
+						res.put(e.getKey(), e.getValue());
 					}
 				}
 			}
