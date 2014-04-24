@@ -9,15 +9,14 @@ import codeine.model.Constants;
 import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 
 	private String projectName;
-	private Map<String, MonitorStatusInfo> monitors;
+	private Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
 	private String version = Constants.NO_VERSION;
 	
-	
-
 	public NodeWithMonitorsInfo(PeerStatusJsonV2 peer, String name, String alias, String projectName, Map<String,MonitorStatusInfo> monitors) {
 		super(name, alias, peer);
 		this.projectName = projectName;
@@ -40,11 +39,14 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	}
 	
 	public Map<String, MonitorStatusInfo> monitors() {
+		if (null == monitors) {
+			return Maps.newHashMap();
+		}
 		return monitors;
 	}
 
 	public boolean status() {
-		for (MonitorStatusInfo m : monitors.values()) {
+		for (MonitorStatusInfo m : monitors().values()) {
 			if (m.fail()){
 				return false;
 			}
@@ -64,10 +66,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	
 	//TODO remove after build 1100
 	private String versionOld() {
-		if (monitors == null) {
-			return Constants.NO_VERSION;
-		}
-		MonitorStatusInfo version = monitors.get("version");
+		MonitorStatusInfo version = monitors().get("version");
 		if (version == null){
 			return Constants.NO_VERSION;
 		}
@@ -82,7 +81,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	
 	public List<String> failedMonitors() {
 		List<String> $ = Lists.newArrayList();
-		for (Entry<String, MonitorStatusInfo> monitor : monitors.entrySet()) {
+		for (Entry<String, MonitorStatusInfo> monitor : monitors().entrySet()) {
 			if (monitor.getValue().fail())
 				$.add(monitor.getKey());
 		}
@@ -92,7 +91,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 	
 	public List<String> ok_monitors() {
 		List<String> $ = Lists.newArrayList();
-		for (MonitorStatusInfo m : monitors.values()) {
+		for (MonitorStatusInfo m : monitors().values()) {
 			if (!m.fail()){
 				$.add(m.name());
 			}
