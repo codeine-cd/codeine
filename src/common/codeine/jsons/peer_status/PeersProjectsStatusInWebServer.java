@@ -15,7 +15,7 @@ import com.google.common.collect.Maps;
 
 public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 
-	private static final Logger log = Logger.getLogger(PeersProjectsStatusInDirectory.class);
+	private static final Logger log = Logger.getLogger(PeersProjectsStatusInWebServer.class);
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(5);
 	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
 	private Map<String, PeerStatusJsonV2> peer_to_projects = Maps.newHashMap();
@@ -29,6 +29,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	@Override
 	public void run() {
 		log.debug("getting data from directory");
+		int duplicatePeers = 0;
 		Map<String, PeerStatusJsonV2> res = Maps.newHashMap();
 		for (IStatusDatabaseConnector c : statusDatabaseConnectorListProvider.get()) {
 			Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
@@ -36,13 +37,15 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 				if (!res.containsKey(e.getKey())) {
 					res.put(e.getKey(), e.getValue());
 				} else { // more than one
-					log.info("peer appears in more than one Database " + e.getKey() + " new db: " + c.server());
+					log.debug("peer appears in more than one Database " + e.getKey() + " new db: " + c.server());
+					duplicatePeers++;
 					if (isNewer(e.getValue(), res.get(e.getKey()))) {
 						res.put(e.getKey(), e.getValue());
 					}
 				}
 			}
 		}
+		log.info("total duplicate peers " + duplicatePeers);
 		peer_to_projects = res;
 	}
 
