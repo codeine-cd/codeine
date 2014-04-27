@@ -77,7 +77,7 @@ public class CommandNodeServlet extends AbstractServlet
 		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
 		String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
 		CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
-		if (null == commandInfo2.key()) {
+		if (null != commandInfo2.key()) {
 			String decrypt = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_SECRET_KEY, commandInfo2.key());
 			validateKey(decrypt);
 		}
