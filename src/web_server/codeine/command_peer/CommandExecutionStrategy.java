@@ -8,7 +8,7 @@ import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.jsons.project.ProjectJson;
-import codeine.permissions.IUserPermissions;
+import codeine.permissions.IUserWithPermissions;
 
 public abstract class CommandExecutionStrategy {
 
@@ -17,10 +17,10 @@ public abstract class CommandExecutionStrategy {
 	private Links links;
 	private boolean cancel;
 	private ProjectJson project;
-	private IUserPermissions userObject;
+	private IUserWithPermissions userObject;
 	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
-			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserPermissions userObject) {
+			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserWithPermissions userObject) {
 		super();
 		this.commandData = commandData;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;

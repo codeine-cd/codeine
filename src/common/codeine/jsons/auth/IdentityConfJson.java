@@ -20,4 +20,13 @@ public class IdentityConfJson {
 		return user;
 	}
 
+	public CodeineUser getOrNull(String username) {
+		for (CodeineUser user : users) {
+			if (user.username().equals(username)) {
+				return user;
+			}
+		}
+		return null;
+	}
+
 }

@@ -2,12 +2,16 @@ package codeine.permissions;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import codeine.jsons.auth.CodeineUser;
 
 import com.google.common.collect.Lists;
 
 public class PermissionsConfJson {
 
+	private static final Logger log = Logger
+			.getLogger(PermissionsConfJson.class);
 	private List<UserPermissions> permissions = Lists.newArrayList();
 
 	public PermissionsConfJson() {
@@ -27,7 +31,11 @@ public class PermissionsConfJson {
 	}
 	public UserPermissions getOrNull(String user) {
 		for (UserPermissions u : permissions) {
-			if (user.equals(u.username())) {
+			if (u.user() == null) {
+				log.warn("permissions contains non existing user " + u.usernameString(), new AssertionError());
+				continue;
+			}
+			if (user.equals(u.user().username())) {
 				return u;
 			}
 		}

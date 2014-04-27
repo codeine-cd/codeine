@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ import codeine.SnoozeKeeper;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredentialsHelper;
+import codeine.jsons.auth.EncryptionUtils;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.command.CommandParameterInfo;
@@ -33,6 +36,7 @@ import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 import codeine.utils.os_process.ShellScript;
 
 import com.google.common.base.Function;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -45,6 +49,7 @@ public class CommandNodeServlet extends AbstractServlet
 	@Inject private ExperimentalConfJsonStore experimentalConfJsonStore;
 	@Inject private SnoozeKeeper snoozeKeeper;
 	@Inject private PeerStatus projectStatusUpdater;
+	
 	
 	@Override
 	public void myPost(HttpServletRequest request, HttpServletResponse res)	{
@@ -72,6 +77,13 @@ public class CommandNodeServlet extends AbstractServlet
 		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
 		String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
 		CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
+		if (null == commandInfo2.key()) {
+			String decrypt = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_SECRET_KEY, commandInfo2.key());
+			validateKey(decrypt);
+		}
+		else {
+			log.warn("key is null", new RuntimeException());
+		}
 //		writer.println("INFO: Executing on node " + commandInfo2.node_alias());
 		
 		String dir = pathHelper.getPluginsDir(commandInfo.project_name());
@@ -145,6 +157,27 @@ public class CommandNodeServlet extends AbstractServlet
 			if (null != cmdScript){
 				cmdScript.delete();
 			}
+		}
+	}
+	private void validateKey(String decrypt) {
+		List<String> l = Splitter.on("#").splitToList(decrypt);
+		if (l.size() != 2){
+			log.warn("format error");
+			return;
+		}
+		try {
+			UUID.fromString(l.get(0));
+		} catch (Exception e) {
+			log.warn("format error bad parameter(0) " + l.get(0), e);
+		}
+		try {
+			long currentTimeMillis = System.currentTimeMillis();
+			long serverTime = Long.valueOf(l.get(1));
+			if (Math.abs(currentTimeMillis - serverTime) > TimeUnit.MINUTES.toMillis(1)) {
+				log.warn("time from server does not match");
+			}
+		} catch (NumberFormatException e) {
+			log.warn("format error bad parameter(1) " + l.get(1), e);
 		}
 	}
 	private Map<String, String> getEnvParams(CommandInfo commandJson) {

@@ -6,7 +6,7 @@ import codeine.jsons.auth.CodeineUser;
 
 import com.google.common.collect.Sets;
 
-public class UserPermissions extends AbstractUserPermissions implements IUserPermissions{
+public class UserPermissions extends AbstractUserPermissions implements IUserWithPermissions{
 
 	private transient CodeineUser user;
 	private String username;
@@ -34,8 +34,11 @@ public class UserPermissions extends AbstractUserPermissions implements IUserPer
 	}
 
 	@Override
-	public CodeineUser username() {
+	public CodeineUser user() {
 		return user;
+	}
+	public String usernameString() {
+		return username;
 	}
 	
 	@Override
@@ -70,6 +73,10 @@ public class UserPermissions extends AbstractUserPermissions implements IUserPer
 	@Override
 	public boolean canCommand(String projectName, String nodeAlias) {
 		return canCommand(projectName);
+	}
+
+	public void initUser(CodeineUser codeineUser) {
+		this.user = codeineUser;
 	}
 
 	

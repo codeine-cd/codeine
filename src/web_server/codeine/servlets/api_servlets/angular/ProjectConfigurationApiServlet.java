@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import codeine.ConfigurationManagerServer;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.permissions.IUserPermissions;
+import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
@@ -52,7 +52,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
-		IUserPermissions user = permissionsManager.user(request);
+		IUserWithPermissions user = permissionsManager.user(request);
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
 		ProjectJson projectToDelete = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
 		configurationManager.deleteProject(projectToDelete);

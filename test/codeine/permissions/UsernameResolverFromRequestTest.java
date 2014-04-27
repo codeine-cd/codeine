@@ -53,7 +53,9 @@ public class UsernameResolverFromRequestTest {
 			}
 		};
 		when(request.getUserPrincipal()).thenReturn(principal);
+		@SuppressWarnings("unused")
 		CodeineUser user = tested.getUser(request);
-		assertEquals("oshai", user.username());
+//		assertEquals("oshai", user.username());
+		verify(usersManager).userOrGuest("oshai");
 	}
 }

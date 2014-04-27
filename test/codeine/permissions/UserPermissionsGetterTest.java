@@ -44,9 +44,9 @@ public class UserPermissionsGetterTest {
 	@Test
 	public void testIgnoreSecurity() {
 		System.setProperty(UserPermissionsGetter.IGNORE_SECURITY, "true");
-		IUserPermissions user = tested.user(request);
+		IUserWithPermissions user = tested.user(request);
 		assertTrue(user.isAdministrator());
-		assertEquals("Guest", user.username());
+		assertEquals("Guest", user.user().username());
 	}
 	
 	@After
@@ -56,26 +56,34 @@ public class UserPermissionsGetterTest {
 
 	@Test
 	public void testGuestUserForNonExitUserOrEmpty() {
-		when(usernameResolverFromRequest.getUser(request)).thenReturn(CodeineUser.createNewUser("Guest", "whatever"));
+		CodeineUser guestUser = CodeineUser.createNewUser("Guest", "whatever");
+		when(usernameResolverFromRequest.getUser(request)).thenReturn(guestUser);
 		tested.user(request);
-		verify(userPermissionsBuilder).getUserPermissions("Guest");
+		verify(userPermissionsBuilder).getUserPermissions(guestUser);
 	}
+	private CodeineUser createUser(String username) {
+		return CodeineUser.createGuest(username);
+	}
+	private CodeineUser adminUser = createUser("Admin");
+	private CodeineUser notAdmin = createUser("NotAdmin");
+	private CodeineUser viewAs = createUser("viewas");
+	
 	@Test
 	public void testViewAsUser() {
-		when(usernameResolverFromRequest.getUser(request)).thenReturn(CodeineUser.createNewUser("Admin", "whatever"));
-		when(userPermissionsBuilder.getUserPermissions("Admin")).thenReturn(new UserPermissions("Admin", true));
-		when(usernameResolverFromRequest.getViewAsUser(request)).thenReturn(CodeineUser.createNewUser("viewas", "whatever"));
-		when(userPermissionsBuilder.getUserPermissions("viewas")).thenReturn(new UserPermissions("viewas", false));
-		IUserPermissions user = tested.user(request);
+		when(usernameResolverFromRequest.getUser(request)).thenReturn(adminUser);
+		when(userPermissionsBuilder.getUserPermissions(adminUser)).thenReturn(new UserPermissions(adminUser, true));
+		when(usernameResolverFromRequest.getViewAsUser(request)).thenReturn(viewAs);
+		when(userPermissionsBuilder.getUserPermissions(viewAs)).thenReturn(new UserPermissions(viewAs, false));
+		IUserWithPermissions user = tested.user(request);
 		assertFalse(user.isAdministrator());
-		assertEquals("viewas", user.username());
+		assertEquals("viewas", user.user().username());
 	}
 	@Test(expected=UnAuthorizedException.class)
 	public void testViewAsUserNoAdmin() {
-		when(usernameResolverFromRequest.getUser(request)).thenReturn(CodeineUser.createNewUser("NotAdmin", "whatever"));
-		when(userPermissionsBuilder.getUserPermissions("NotAdmin")).thenReturn(new UserPermissions("NotAdmin", false));
-		when(usernameResolverFromRequest.getViewAsUser(request)).thenReturn(CodeineUser.createNewUser("viewas", "whatever"));
-		when(userPermissionsBuilder.getUserPermissions("viewas")).thenReturn(new UserPermissions("viewas", false));
+		when(usernameResolverFromRequest.getUser(request)).thenReturn(notAdmin);
+		when(userPermissionsBuilder.getUserPermissions(notAdmin)).thenReturn(new UserPermissions(notAdmin, false));
+		when(usernameResolverFromRequest.getViewAsUser(request)).thenReturn(viewAs);
+		when(userPermissionsBuilder.getUserPermissions(viewAs)).thenReturn(new UserPermissions(viewAs, false));
 		tested.user(request);
 	}
 	

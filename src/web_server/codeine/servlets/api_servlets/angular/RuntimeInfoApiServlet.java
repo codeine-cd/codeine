@@ -10,7 +10,7 @@ import codeine.configuration.IConfigurationManager;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.info.SessionInfo;
 import codeine.jsons.project.ProjectJson;
-import codeine.permissions.IUserPermissions;
+import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.permissions.UserPermissions;
 import codeine.servlet.AbstractApiServlet;
@@ -33,7 +33,7 @@ public class RuntimeInfoApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		IUserPermissions user = permissionsManager.user(request);
+		IUserWithPermissions user = permissionsManager.user(request);
 		Set<String> canCommand = Sets.newHashSet();
 		Set<String> canConfigure = Sets.newHashSet();
 		Set<String> canRead = Sets.newHashSet();
@@ -48,7 +48,7 @@ public class RuntimeInfoApiServlet extends AbstractApiServlet {
 				canRead.add(p.name());
 			}
 		}
-		UserPermissions userPermissions = new UserPermissions(user.username(), user.isAdministrator(), canRead, canCommand, canConfigure);
+		UserPermissions userPermissions = new UserPermissions(user.user(), user.isAdministrator(), canRead, canCommand, canConfigure);
 		writeResponseJson(response, new SessionInfo(runtimeInfo.version(), userPermissions, prepareForShutdown.isSequnceActivated()));
 	}
 

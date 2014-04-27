@@ -17,7 +17,7 @@ import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
-import codeine.permissions.IUserPermissions;
+import codeine.permissions.IUserWithPermissions;
 import codeine.statistics.IMonitorStatistics;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
@@ -49,11 +49,11 @@ public class AllNodesCommandExecuter {
 	private ScehudleCommandExecutionInfo commandData;
 	private CommandExecutionStatusInfo commandDataJson;
 	private ProjectJson project;
-	private IUserPermissions userObject;
+	private IUserWithPermissions userObject;
 	private Object fileWriteSync = new Object();
 	private CommandExecutionStrategy strategy;
 
-	public long executeOnAllNodes(IUserPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
+	public long executeOnAllNodes(IUserWithPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
 		this.project = project;
 		this.userObject = userObject;
 		try {
@@ -65,10 +65,10 @@ public class AllNodesCommandExecuter {
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);
 			FilesUtils.createNewFile(file);
-			createCommandDataFile(userObject.username().username());
+			createCommandDataFile(userObject.user().username());
 			writer = TextFileUtils.getWriter(file, false);
-			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + userObject.username());
-			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.username());
+			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + userObject.user());
+			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.user());
 			writeNodesList(commandData);
 			updatePeersAddresses();
 			ThreadUtils.createThread(new Runnable() {

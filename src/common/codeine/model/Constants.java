@@ -222,5 +222,7 @@ public class Constants
 	}
 
 	public static final String OFFLINE_NODES = "Codeine daemon not running";
+
+	public static final String CODEINE_API_TOKEN_SECRET_KEY = "CodeineSecretKey";
 	
 }
