@@ -7,18 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.jsons.auth.CodeineUser;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.UsersManager;
 
 public class UserInfoApiServlet extends AbstractApiServlet {
 
 	private @Inject UserPermissionsGetter permissionsManager;
-	private @Inject UsersManager usersManager;
 	private static final long serialVersionUID = 1L;
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String user = permissionsManager.user(request).username();
-		CodeineUser codeineUser = usersManager.user(user);
+		CodeineUser codeineUser = permissionsManager.user(request).user();
 		writeResponseJson(response, new UserInfo(codeineUser.username(), codeineUser.api_token()));
 	}
 	

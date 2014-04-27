@@ -12,7 +12,7 @@ import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
-import codeine.permissions.IUserPermissions;
+import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 import codeine.utils.network.HttpUtils;
@@ -31,9 +31,9 @@ public class PeerCommandWorker implements Runnable {
 	private boolean POST = true;
 	private ProjectJson project;
 	private Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
-	private IUserPermissions userObject;
+	private IUserWithPermissions userObject;
 	
-	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserPermissions userObject) {
+	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.command_info = command_info;
@@ -58,7 +58,7 @@ public class PeerCommandWorker implements Runnable {
 
 	private void execute() {
 		if (noPermissions()) {
-			announce("no permissions for user " + userObject.username() + " on node " + node.alias());
+			announce("no permissions for user " + userObject.user() + " on node " + node.alias());
 		}
 		else {
 			executeInternal();
@@ -99,7 +99,8 @@ public class PeerCommandWorker implements Runnable {
 				writeNodeHeader();
 			}
 			if (POST && !command_info.name().equals("upgrade_old_peers")) {
-				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias(), null);
+				String key = userObject.user().encodedApiTokenWithTime();
+				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias(), null, key);
 				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info))
 						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info2));
 				HttpUtils.doPOST(url, postData, function,null);

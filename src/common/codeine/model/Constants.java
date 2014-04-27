@@ -11,6 +11,7 @@ public class Constants
 	public static final boolean SECURITY_ENABLED = true;
 
 	public static final String HTTP_ROOT_CONTEXT = "/http-root";
+	public static final String GUEST_USER = "Guest";
 	
 	public static final String CODEINE_NODES_PROJECT_NAME = "Codeine_Internal_Nodes_Project";
 	
@@ -221,5 +222,7 @@ public class Constants
 	}
 
 	public static final String OFFLINE_NODES = "Codeine daemon not running";
+
+	public static final String CODEINE_API_TOKEN_SECRET_KEY = "CodeineSecretKey";
 	
 }

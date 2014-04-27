@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.global.UserPermissionsJsonStore;
 
 public class UserPermissionsBuilderTest {
@@ -31,23 +32,27 @@ public class UserPermissionsBuilderTest {
 	
 	@Test
 	public void testNonExistUser() {
-		IUserPermissions userPermissions = tested.getUserPermissions("not_exist");
-		assertEquals("not_exist", userPermissions.username());
+		IUserWithPermissions userPermissions = tested.getUserPermissions(createUser("not_exist"));
+		assertEquals("not_exist", userPermissions.user().username());
 		assertFalse(userPermissions.isAdministrator());
 	}
+	private CodeineUser createUser(String username) {
+		return CodeineUser.createGuest(username);
+	}
+
 	@Test
 	public void testExistUser() {
-		UserPermissions newUserPermissions = new UserPermissions("user", false);
+		UserPermissions newUserPermissions = new UserPermissions(createUser("user"), false);
 		userPermissionsJson.permissions().add(newUserPermissions);
-		IUserPermissions userPermissions = tested.getUserPermissions("user");
-		assertEquals("user", userPermissions.username());
+		IUserWithPermissions userPermissions = tested.getUserPermissions(createUser("user"));
+		assertEquals("user", userPermissions.user().username());
 		assertFalse(userPermissions.isAdministrator());
 	}
 	@Test
 	public void testAdminUser() {
-		UserPermissions newUserPermissions = new UserPermissions("user", true);
+		UserPermissions newUserPermissions = new UserPermissions(createUser("user"), true);
 		userPermissionsJson.permissions().add(newUserPermissions);
-		IUserPermissions userPermissions = tested.getUserPermissions("user");
+		IUserWithPermissions userPermissions = tested.getUserPermissions(createUser("user"));
 		assertTrue(userPermissions.isAdministrator());
 	}
 

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
+import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.permissions.PermissionsConfJson;
 import codeine.servlet.AbstractApiServlet;
@@ -40,15 +41,15 @@ public class RegisterServlet extends AbstractApiServlet {
 		boolean firstUser = !usersManager.hasUsers();
         String p = Hashing.md5().hashString(r.password, Charsets.UTF_8).toString();
         String md5 = "MD5:" + p;
-        usersManager.addUser(r.username, md5);
+        CodeineUser user = usersManager.addUser(r.username, md5);
         if (firstUser) {
         	log.info(r.username + " is the first user, making it admin");
-        	makeAdmin(r.username);
+        	makeAdmin(user);
         }
         getWriter(response).write("{}");
 	}
 
-	private void makeAdmin(String user) {
+	private void makeAdmin(CodeineUser user) {
 		PermissionsConfJson permissionsConfJson = permissionsConfigurationJsonStore.get();
 		permissionsConfJson.makeAdmin(user);
 		permissionsConfigurationJsonStore.store(permissionsConfJson);

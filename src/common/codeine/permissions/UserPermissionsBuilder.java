@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.global.UserPermissionsJsonStore;
 import codeine.jsons.project.ProjectJson;
 
@@ -27,14 +28,14 @@ public class UserPermissionsBuilder {
 		this.groupsManager = groupsManager;
 	}
 	
-	public IUserPermissions getUserPermissions(String user) {
-		UserPermissions userPermissions = userPermissionsJsonStore.get().getOrNull(user);
+	public IUserWithPermissions getUserPermissions(CodeineUser user) {
+		UserPermissions userPermissions = userPermissionsJsonStore.get().getOrNull(user.username());
 		if (null == userPermissions) {
-			userPermissions = guest(user);
+			userPermissions = new UserPermissions(user, false);
 		}
-		Map<String, UserProjectPermissions> p = getProjectPermissions(user);
-		Map<String, UserPermissions> groupPermissions = getGroupsPermissions(user); //group -> permissions
-		Map<String, Map<String, UserProjectPermissions>> groupProjectsPermissions = getGroupsProjectsPermissions(user); //group -> project -> permissions
+		Map<String, UserProjectPermissions> p = getProjectPermissions(user.username());
+		Map<String, UserPermissions> groupPermissions = getGroupsPermissions(user.username()); //group -> permissions
+		Map<String, Map<String, UserProjectPermissions>> groupProjectsPermissions = getGroupsProjectsPermissions(user.username()); //group -> project -> permissions
 		return new CompoundUserPermissions(userPermissions, p, groupPermissions, groupProjectsPermissions);
 	}
 
@@ -73,9 +74,5 @@ public class UserPermissionsBuilder {
 			}
 		}
 		return p;
-	}
-	
-	private UserPermissions guest(String user) {
-		return new UserPermissions(user, false);
 	}
 }

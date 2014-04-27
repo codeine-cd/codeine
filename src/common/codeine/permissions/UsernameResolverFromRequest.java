@@ -30,14 +30,14 @@ public class UsernameResolverFromRequest {
 		}
 		Principal userPrincipal = request.getUserPrincipal();
 		if (null == userPrincipal){
-			return CodeineUser.createNewUser("Guest", "blabla");
+			return CodeineUser.createGuestUser();
 		}
 		String username = userPrincipal.getName();
 		log.debug("handling request from user " + username);
 		if (username.contains("@")){
 			username = username.substring(0, username.indexOf("@"));
 		}
-		return CodeineUser.createNewUser(username, "blabla");
+		return usersManager.userOrGuest(username);
 	}
 	
 	public CodeineUser getViewAsUser(HttpServletRequest request) {

@@ -1,11 +1,13 @@
 package codeine.permissions;
 
-public interface IUserPermissions {
+import codeine.jsons.auth.CodeineUser;
+
+public interface IUserWithPermissions {
 
 	public boolean canRead(String projectName);
 	public boolean canCommand(String projectName);
 	public boolean canConfigure(String projectName);
 	public boolean isAdministrator();
-	public String username();
+	public CodeineUser user();
 	public boolean canCommand(String projectName, String nodeAlias);
 }

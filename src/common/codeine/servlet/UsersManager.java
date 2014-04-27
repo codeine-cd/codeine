@@ -10,21 +10,19 @@ import org.eclipse.jetty.util.security.Credential;
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.auth.IdentityConfJson;
+import codeine.jsons.auth.IdentityConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
-import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
-import codeine.utils.JsonFileUtils;
 
 public class UsersManager {
 
 	private static final Logger log = Logger.getLogger(UsersManager.class);
-	private @Inject IdentityConfJson identityConfJson;
+	private @Inject IdentityConfJsonStore identityConfJsonStore;
 	private @Inject HashLoginService hashLoginService;
-	private @Inject JsonFileUtils jsonFileUtils;
 	private @Inject GlobalConfigurationJsonStore globalConfigurationJsonStore;
 	
-	private void store() {
-		jsonFileUtils.setContent(Constants.getIdentityConfPath(), identityConfJson);
+	private void store(IdentityConfJson json) {
+		identityConfJsonStore.store(json);
 	}
 	
 	public LoginService loginService() {
@@ -32,7 +30,7 @@ public class UsersManager {
 	}
 
 	public void initUsers() {
-		for (CodeineUser user : identityConfJson.entries()) {
+		for (CodeineUser user : identityConfJsonStore.get().entries()) {
 			user.api_token();
 			putUser(user.username(), user.credentials());
 		}
@@ -43,29 +41,29 @@ public class UsersManager {
 	}
 
 	public CodeineUser addUser(String name, String credentials) {
-		CodeineUser user = identityConfJson.add(name, credentials);
-		store();
+		CodeineUser user = identityConfJsonStore.get().add(name, credentials);
+		store(identityConfJsonStore.get());
 		putUser(name, credentials);
 		return user;
 	}
 	
 	public CodeineUser userByApiToken(String api_token) {
-		for (CodeineUser user : identityConfJson.entries()) {
+		for (CodeineUser user : identityConfJsonStore.get().entries()) {
 			if (user.api_token().equals(api_token))
 				return user;
 		}
 		throw ExceptionUtils.asUnchecked(new IllegalArgumentException("No such user with api token " + api_token));
 	}
 	
-	public CodeineUser user(String name) {
-		for (CodeineUser user : identityConfJson.entries()) {
+	public CodeineUser userOrGuest(String name) {
+		for (CodeineUser user : identityConfJsonStore.get().entries()) {
 			if (user.username().equals(name)) return user;
 		}
 		if (globalConfigurationJsonStore.get().authentication_method() == AuthenticationMethod.WindowsCredentials) {
 			log.info("creating automaticly user " + name);
 			return addUser(name, "NONE");
 		}
-		throw ExceptionUtils.asUnchecked(new IllegalArgumentException("No such user " + name));
+		return CodeineUser.createGuest(name);
 	}
 	
 	public boolean isUserExists(String username) {

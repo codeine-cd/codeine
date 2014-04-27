@@ -16,7 +16,7 @@ public class UserPermissionsGetter {
 
 	private static final Logger log = Logger.getLogger(UserPermissionsGetter.class);
 	public static final String IGNORE_SECURITY = "ignoreSecurity";
-	private final UserPermissions ADMIN_GUEST = new UserPermissions("Guest", true);
+	private final UserPermissions ADMIN_GUEST = new UserPermissions(CodeineUser.createGuestUser(), true);
 
 	private UserPermissionsBuilder userPermissionsBuilder;
 	private GlobalConfigurationJsonStore globalConfigurationJson;
@@ -38,19 +38,19 @@ public class UserPermissionsGetter {
 				|| !Constants.SECURITY_ENABLED;
 	}
 
-	public IUserPermissions user(HttpServletRequest request) {
+	public IUserWithPermissions user(HttpServletRequest request) {
 		if (ignoreSecurity()) {
 			return ADMIN_GUEST;
 		}
 		CodeineUser user = usernameResolverFromRequest.getUser(request);
-		IUserPermissions userPermissions = userPermissionsBuilder.getUserPermissions(user.username());
+		IUserWithPermissions userPermissions = userPermissionsBuilder.getUserPermissions(user);
 		CodeineUser viewas = usernameResolverFromRequest.getViewAsUser(request);
 		if (!StringUtils.isEmpty(viewas.username())) {
 			if (!userPermissions.isAdministrator()) {
 				throw new UnAuthorizedException("user " + user.username() + " is not admin!");
 			}
 			log.debug("Using VIEW_AS Mode - " + viewas);
-			return userPermissionsBuilder.getUserPermissions(viewas.username());
+			return userPermissionsBuilder.getUserPermissions(viewas);
 		} else {
 			return userPermissions;
 		}

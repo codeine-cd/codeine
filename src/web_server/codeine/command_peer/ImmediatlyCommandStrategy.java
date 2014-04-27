@@ -8,7 +8,7 @@ import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.jsons.project.ProjectJson;
-import codeine.permissions.IUserPermissions;
+import codeine.permissions.IUserWithPermissions;
 
 public class ImmediatlyCommandStrategy extends CommandExecutionStrategy {
 
@@ -17,7 +17,7 @@ public class ImmediatlyCommandStrategy extends CommandExecutionStrategy {
 	
 
 	public ImmediatlyCommandStrategy(AllNodesCommandExecuter allNodesCommandExecuter,
-			ScehudleCommandExecutionInfo commandData, Links links, ProjectJson project, IUserPermissions userObject) {
+			ScehudleCommandExecutionInfo commandData, Links links, ProjectJson project, IUserWithPermissions userObject) {
 		super(commandData, allNodesCommandExecuter, links, project, userObject);
 	}
 
