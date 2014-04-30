@@ -111,7 +111,7 @@ public class CommandNodeServlet extends AbstractServlet
 			List<String> cmdForOutput = Lists.newArrayList();
 			String credentials = commandInfo.credentials();
 			log.info("credentials: " + credentials);
-			if (credentials != null){
+			if (!StringUtils.isEmpty(credentials) && !windows_peer){
 				writer.println("credentials = " + credentials);
 				cmd.add(PathHelper.getReadLogs());
 				cmd.add(encodeIfNeeded(credentials, credentials));
