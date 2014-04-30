@@ -3,6 +3,7 @@ package codeine.statistics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -123,14 +124,17 @@ public class MonitorsStatistics implements IMonitorStatistics{
 			String commands_name = StringUtils.EMPTY;
 			Collection<CommandExecutionStatusInfo> projectCommands = commands.get(projectJson.name());
 			boolean firstCommand = true;
-			for (CommandExecutionStatusInfo command : projectCommands) {
-				total_nodes += command.nodes_list().size();
-				if (!firstCommand) {
-					commands_name += ",";
-					firstCommand = false;
+			synchronized (projectCommands) {
+				for (Iterator<CommandExecutionStatusInfo> iterator = projectCommands.iterator(); iterator.hasNext();) {
+					CommandExecutionStatusInfo command = (CommandExecutionStatusInfo) iterator.next();
+					total_nodes += command.nodes_list().size();
+					if (!firstCommand) {
+						commands_name += ",";
+						firstCommand = false;
+					}
+					commands_name += command.command();
+					iterator.remove();
 				}
-				commands_name += command.command();
-				commands.remove(projectJson.name(), command);
 			}
 			MonitorStatusItem item = new MonitorStatusItem(StringUtils.formatDate(currentTime),currentTime, success, fail, total_nodes, commands_name);
 			synchronized (projectData) {
