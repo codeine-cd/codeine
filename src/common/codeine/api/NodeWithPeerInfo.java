@@ -2,7 +2,6 @@ package codeine.api;
 
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.peer_status.PeerStatusString;
-import codeine.utils.StringUtils;
 
 public class NodeWithPeerInfo extends NodeInfo{
 
@@ -15,7 +14,8 @@ public class NodeWithPeerInfo extends NodeInfo{
 		super(name, alias);
 		this.peer = peer;
 		if (null != peer) {
-			peer_address = StringUtils.isEmpty(peer.ip_port()) ? peer.host_port() : peer.ip_port();
+			peer_address = peer.host_port();
+//			peer_address = StringUtils.isEmpty(peer.ip_port()) ? peer.host_port() : peer.ip_port();
 			peer_key = peer.key();
 			peer_status = peer.status();
 		}
