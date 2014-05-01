@@ -71,7 +71,7 @@ public class PeerStatus {
 	}
 	
 	public PeerStatusJsonV2 createJson() {
-		return new PeerStatusJsonV2(InetUtils.getLocalHost().getHostName(), codeineRuntimeInfo.port(), codeineRuntimeInfo.version(), codeineRuntimeInfo.startTime(), Constants.getInstallDir(), PathHelper.getTarFile(),project_name_to_status);
+		return new PeerStatusJsonV2(InetUtils.getLocalHost().getHostName(), codeineRuntimeInfo.port(), codeineRuntimeInfo.version(), codeineRuntimeInfo.startTime(), Constants.getInstallDir(), PathHelper.getTarFile(),project_name_to_status, InetUtils.getLocalHost().getHostAddress());
 	}
 
 	public String updateVersion(ProjectJson project, String node, String alias, String version) {

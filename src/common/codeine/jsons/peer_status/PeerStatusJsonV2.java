@@ -18,6 +18,7 @@ public class PeerStatusJsonV2 {
 	//TODO remove after cf-engine in build > 1.1.309
 	private String peer_old_key;
 	private String peer_host_port;
+	private String peer_ip;
 	private Map<String, ProjectStatus> project_name_to_status = Maps.newHashMap();//Lists.newArrayList();
 	private String host;
 	private int port;
@@ -30,10 +31,11 @@ public class PeerStatusJsonV2 {
 	private PeerType peer_type;
 	private transient PeerStatusString status;
 	
-	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status) {
+	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip) {
 		super();
 		this.host = host;
 		this.port = port;
+		this.peer_ip = peer_ip;
 		this.version = version;
 		this.start_time = start_time;
 		this.install_dir = install_dir;
@@ -80,6 +82,9 @@ public class PeerStatusJsonV2 {
 	
 	public String host_port() {
 		return host + ":" + port;
+	}
+	public String ip_port() {
+		return peer_ip + ":" + port;
 	}
 
 	public long update_time() {
