@@ -34,12 +34,16 @@ public class ShellScriptWithOutput {
 		this.env = env;
 		this.operatingSystem = operatingSystem;
 		String tmpDir = StringUtils.isEmpty(System.getProperty("java.io.tmpdir")) ? "/tmp" : System.getProperty("java.io.tmpdir");
-		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode();
+		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode() + (windows() ? ".bat" : ".sh");
+	}
+
+	private boolean windows() {
+		return operatingSystem == OperatingSystem.Windows;
 	}
 
 	public String create() {
 		TextFileUtils.setContents(fileName, content);
-		if (operatingSystem == OperatingSystem.Linux) {
+		if (!windows()) {
 			FilesUtils.setPermissions(fileName, 
 					PosixFilePermission.OWNER_EXECUTE, PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE,
 					PosixFilePermission.GROUP_EXECUTE, PosixFilePermission.GROUP_READ, PosixFilePermission.GROUP_WRITE,
