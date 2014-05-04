@@ -3,6 +3,7 @@ package codeine.jsons.peer_status;
 import java.util.List;
 
 import codeine.api.NodeWithMonitorsInfo;
+import codeine.utils.MiscUtils;
 
 import com.google.common.collect.Lists;
 
@@ -40,7 +41,7 @@ public class ProjectStatus {
 	public String getVersionOrNull(String nodeName) {
 		List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(nodes_info());
 		for (NodeWithMonitorsInfo nodeInfo : nodes) {
-			if (nodeInfo.name().equals(nodeName)){
+			if (MiscUtils.equals(nodeInfo.name(), nodeName)){
 				return nodeInfo.version();
 			}
 		}
@@ -49,7 +50,7 @@ public class ProjectStatus {
 
 	public NodeWithMonitorsInfo nodeInfoOrNull(String nodeName) {
 		for (NodeWithMonitorsInfo n : nodes_info()) {
-			if (n.name().equals(nodeName)){
+			if (MiscUtils.equals(n.name(), nodeName)){
 				return n;
 			}
 		}
