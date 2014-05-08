@@ -37,7 +37,7 @@ public class NodesRunner implements Task{
 	
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private PathHelper pathHelper;
-	@Inject	private PeerStatus projectStatusUpdater;
+	@Inject	private PeerStatus peerStatus;
 	@Inject	private MailSender mailSender;
 	@Inject	private NotificationDeliverToMongo notificationDeliverToMongo;
 	@Inject	private NodesManager nodesManager;
@@ -51,7 +51,10 @@ public class NodesRunner implements Task{
 		for (ProjectJson project : getProjects()) {
 			removedProjects.remove(project.name());
 			try {
-				startStopExecutorsForProject(project);
+				boolean hasNodes = startStopExecutorsForProject(project);
+				if (!hasNodes) {
+					cleanupProject(project.name());
+				}
 			} catch (Exception e) {
 				log.error("failed startStopExecutorsForProject for project " + project.name(), e);
 			}
@@ -59,12 +62,21 @@ public class NodesRunner implements Task{
 		for (String project : removedProjects) {
 			try {
 				stopNodes(project, executers.get(project));
-				executers.remove(project);
+				cleanupProject(project);
 				log.info("removed project " + project);
 			} catch (Exception e) {
 				log.error("failed to stop nodes for project " + project, e);
 			}
 		}
+	}
+
+	/**
+	 * assuming nodes already stopped
+	 */
+	private void cleanupProject(String project) {
+		log.info("cleanupProject " + project);
+		executers.remove(project);
+		peerStatus.removeProject(project);
 	}
 
 	private void stop(PeriodicExecuter e) {
@@ -101,6 +113,7 @@ public class NodesRunner implements Task{
 	private void stopNodes(String project, Map<String, PeriodicExecuter> map) {
 		for (Entry<String, PeriodicExecuter> e : map.entrySet()) {
 			log.info("stop exec1 monitoring node " + e.getKey() + " in project " + project);
+			peerStatus.removeNode(project, e.getKey());
 			stop(e.getValue());
 		}
 	}
@@ -117,7 +130,7 @@ public class NodesRunner implements Task{
 	private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
 		log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
 		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, 
-				new RunMonitors(configurationManager, project.name(), projectStatusUpdater, mailSender, pathHelper,
+				new RunMonitors(configurationManager, project.name(), peerStatus, mailSender, pathHelper,
 				nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper), "RunMonitors_" + project.name() + "_" + nodeJson.name());
 		log.info("starting 1executor " + periodicExecuter.name());
 		periodicExecuter.runInThread();
