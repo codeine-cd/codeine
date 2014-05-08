@@ -38,7 +38,7 @@ public class NodesManagerPeer implements NodesManager {
 	}
 	@Override
 	public void init(ProjectJson projectJson){
-		log.info("init NodesManagerPeer nodes in peer for project " + projectJson.name());
+		log.info("init nodes in peer for project " + projectJson.name());
 		String dir = pathHelper.getProjectDir(projectJson.name());
 		FilesUtils.mkdirs(dir);
 		switch (projectJson.node_discovery_startegy()) {
@@ -51,14 +51,17 @@ public class NodesManagerPeer implements NodesManager {
 				}
 			}
 			projectToNode.put(projectJson.name(), nodes2);
+			log.info("Configuration nodes are " + nodes2);
 			break;
 		}
 		case Script: {
-			projectToNode.put(projectJson.name(), nodeScriptDiscovery.get(projectJson));
+			NodeListJson nodes = nodeScriptDiscovery.get(projectJson);
+			projectToNode.put(projectJson.name(), nodes);
+			log.info("Script nodes are " + nodes);
 			break;
 		}
 		case Reporter: {
-			//this is ok
+			log.info("project configured as reporter, no nodes");
 			break;
 		}
 		default:

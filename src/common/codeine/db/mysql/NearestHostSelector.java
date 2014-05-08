@@ -26,6 +26,7 @@ public class NearestHostSelector {
 				continue;
 			}
 			long total = System.currentTimeMillis() - start;
+			log.info("ping host " + mysql + " time is " + StringUtils.formatTimePeriod(total));
 			if (total < minTime){
 				minTime = total;
 				$ = mysql;
