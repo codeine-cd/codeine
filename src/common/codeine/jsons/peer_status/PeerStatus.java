@@ -42,7 +42,7 @@ public class PeerStatus {
 		return prevMonitorInfo.status();
 	}
 
-	private NodeWithMonitorsInfo initStatus(ProjectJson project, String nodeName, String alias) {
+	private synchronized NodeWithMonitorsInfo initStatus(ProjectJson project, String nodeName, String alias) {
 		ProjectStatus projectStatus = project_name_to_status().get(project.name());
 		if (null == projectStatus){
 			List<NodeWithMonitorsInfo> nodesInfo = Lists.newArrayList();
