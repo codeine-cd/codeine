@@ -14,6 +14,7 @@ angular.module('codeine').directive('textcomplete', ['Textcomplete','$compile', 
             ta.attr('id',attrs.elementId);
             ta.attr('rows',attrs.rows);
             ta.attr('class',attrs.elementClass);
+            ta.attr('placeholder',attrs.elementPlaceholder);
             new Textcomplete(ta, [
                 {
                     match: /(^|\s)\$(\w*)$/,

@@ -52,7 +52,7 @@
             <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
                 <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
                 <div class="col-md-7" ng-class="{'has-error': scriptDiscoveryStartegyInnerForm.script_content.$invalid}">
-                    <textcomplete members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
+                    <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
                 </div>
             </div>
         </ng-form>
@@ -60,7 +60,7 @@
             <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
                 <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
                 <div class="col-md-7">
-                    <textcomplete members='model.tagsAutoComplete' message='projectConfigurationForEditing.tags_discovery_script' rows="3" element-class="form-control" element-id="tags_discovery_script" is-required="false"></textcomplete>
+                    <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.tagsAutoComplete' message='projectConfigurationForEditing.tags_discovery_script' rows="3" element-class="form-control" element-id="tags_discovery_script" is-required="false"></textcomplete>
                 </div>
             </div>
         </ng-form>
@@ -112,7 +112,7 @@
         <div class="form-group">
             <label for="version_detection_script" class="col-md-4 control-label">Script <help help-id="versionScriptHelp"></help></label>
             <div class="col-md-7">
-                <textcomplete members='model.versionAutoComplete' message='projectConfigurationForEditing.version_detection_script' rows="3" element-class="form-control" element-id="version_detection_script" is-required="false"></textcomplete>
+                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.versionAutoComplete' message='projectConfigurationForEditing.version_detection_script' rows="3" element-class="form-control" element-id="version_detection_script" is-required="false"></textcomplete>
             </div>
         </div>
     </div>
@@ -169,7 +169,7 @@
                     <div class="form-group">
                         <label for="monitor_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="monitorScriptHelp"></help></label>
                         <div class="col-md-7" ng-class="{'has-error': monitorsInnerForm.script_content.$invalid}">
-                            <textcomplete members='model.commandAndMonitorAutoComplete' message='monitor_info.script_content' rows="3" element-class="form-control" element-id="monitor_info{{$index}}.script" is-required="true"></textcomplete>
+                            <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='monitor_info.script_content' rows="3" element-class="form-control" element-id="monitor_info{{$index}}.script" is-required="true"></textcomplete>
                         </div>
                     </div>
                 </div>
@@ -194,7 +194,7 @@
         <thead>
         <tr>
             <th class="col-md-3" style="text-align: center;">Email</th>
-            <th class="col-md-3" style="text-align: center;">Intensity</th>
+            <th class="col-md-3" style="text-align: center;">Frequency</th>
             <th class="col-md-1" style="text-align: center;"></th>
         </tr>
         </thead>
@@ -316,7 +316,7 @@
                         <div class="form-group" ng-if="command_info.stop_on_error">
                             <label class="col-md-3 control-label" for="command_info{{$index}}.error_percent_val">Error percent</label>
                             <div class="controls col-md-3">
-                                <input placeholder="%" id="command_info{{$index}}.error_percent_val" name="error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
+                                <input element-placeholder="%" id="command_info{{$index}}.error_percent_val" name="error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -397,7 +397,7 @@
                     <div class="form-group">
                         <label for="command_info{{$index}}.script_content" class="col-md-3 control-label">Script <help help-id="commandScriptHelp"></help></label>
                         <div class="col-md-7" ng-class="{'has-error': commandsInnerForm.script_content.$invalid}">
-                            <textcomplete members='model.commandAndMonitorAutoComplete' message='command_info.script_content' rows="3" element-class="form-control" element-id="command_info{{$index}}.script_content" is-required="true"></textcomplete>
+                            <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='command_info.script_content' rows="3" element-class="form-control" element-id="command_info{{$index}}.script_content" is-required="true"></textcomplete>
                         </div>
                     </div>
                 </div>
@@ -422,7 +422,7 @@
         <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
             <thead>
             <tr>
-                <th class="col-md-3">Username
+                <th class="col-md-3">User / Group
                 </th>
                 <th class="col-md-2">View
                     <help help-id="ProjectPermissionsConfigureSection_read"></help>
