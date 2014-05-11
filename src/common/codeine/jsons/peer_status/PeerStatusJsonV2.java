@@ -88,7 +88,7 @@ public class PeerStatusJsonV2 {
 		return peer_ip + ":" + port;
 	}
 	public String address_port() {
-		return StringUtils.isEmpty(peer_ip) ? host_port() : address_port();
+		return StringUtils.isEmpty(peer_ip) ? host_port() : ip_port();
 	}
 
 	public long update_time() {
