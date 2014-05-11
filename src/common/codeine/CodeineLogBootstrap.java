@@ -16,9 +16,9 @@ public class CodeineLogBootstrap {
 	public void init(String componentName, String logFileName) {
 		String logfile = Constants.getLogDir() + "/" + logFileName;
 		setLogger(logfile);
-		String startupMessage = "\n\n========================>>>   Starting codeine " + componentName + " at version " + CodeineVersion.get() + "    <<<========================\n\n";
+		String startupMessage = "========================>>>   Starting codeine " + componentName + " at version " + CodeineVersion.get() + "    <<<========================";
 		System.out.println(startupMessage);
-		Logger.getRootLogger().info(startupMessage);
+		Logger.getRootLogger().info("\n\n\n\n\n\n\n" + startupMessage + "\n\n\n\n\n\n");
 	}
 
 	private void setLogger(String logfile) {
