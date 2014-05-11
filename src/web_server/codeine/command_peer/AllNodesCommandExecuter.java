@@ -91,7 +91,7 @@ public class AllNodesCommandExecuter {
 				writeLine("Warning: ignoring node '" + n.alias() + "' since peer not found");
 				continue;
 			}
-			n.peer_address(p.host_port());
+			n.peer_address(p.address_port());
 		}
 	}
 

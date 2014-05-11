@@ -50,11 +50,11 @@ public class ProjectConfigurationInPeerUpdater  implements NotifiableTask{
 						log.debug("reporter peer, will not push configuration " + e);
 						continue;
 					}
-					String result = HttpUtils.doGET(links.getPeerLink(e.host_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null, HttpUtils.SHORT_READ_TIMEOUT_MILLI);
-					log.debug("updated " + e.host_port() + " result " + result);
+					String result = HttpUtils.doGET(links.getPeerLink(e.address_port() + Constants.RELOAD_CONFIGURATION_CONTEXT),null, HttpUtils.SHORT_READ_TIMEOUT_MILLI);
+					log.debug("updated " + e.address_port() + " result " + result);
 				} catch (Exception e1) {
 					failedPeers.add(e);
-					log.warn("fail to push conf " + e.host_port() + "  " + ExceptionUtils.getRootCauseMessage(e1));
+					log.warn("fail to push conf " + e.address_port() + "  " + ExceptionUtils.getRootCauseMessage(e1));
 				}
 				if (restart) {
 					break;

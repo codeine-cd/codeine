@@ -7,6 +7,7 @@ import java.util.Map;
 import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.model.Constants;
+import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
 import com.google.common.collect.Lists;
@@ -85,6 +86,9 @@ public class PeerStatusJsonV2 {
 	}
 	public String ip_port() {
 		return peer_ip + ":" + port;
+	}
+	public String address_port() {
+		return StringUtils.isEmpty(peer_ip) ? host_port() : address_port();
 	}
 
 	public long update_time() {
