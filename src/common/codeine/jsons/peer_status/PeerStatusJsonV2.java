@@ -20,6 +20,7 @@ public class PeerStatusJsonV2 {
 	private String peer_old_key;
 	private String peer_host_port;
 	private String peer_ip;
+	private String user_dns_domain;
 	private Map<String, ProjectStatus> project_name_to_status = Maps.newHashMap();//Lists.newArrayList();
 	private String host;
 	private int port;
@@ -32,7 +33,7 @@ public class PeerStatusJsonV2 {
 	private PeerType peer_type;
 	private transient PeerStatusString status;
 	
-	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip) {
+	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip, String user_dns_domain) {
 		super();
 		this.host = host;
 		this.port = port;
@@ -45,6 +46,7 @@ public class PeerStatusJsonV2 {
 		this.peer_old_key = host + ":" + install_dir;
 		this.peer_key = host + ":" + HttpUtils.specialEncode(install_dir);
 		this.peer_host_port = host + ":" + port;
+		this.user_dns_domain = user_dns_domain;
 		this.peer_type = PeerType.Daemon;
 		this.project_name_to_status.put(Constants.CODEINE_NODES_PROJECT_NAME, createInternalProject());
 		this.update_time = System.currentTimeMillis();
@@ -88,7 +90,7 @@ public class PeerStatusJsonV2 {
 		return peer_ip + ":" + port;
 	}
 	public String address_port() {
-		return StringUtils.isEmpty(peer_ip) ? host_port() : ip_port();
+		return StringUtils.isEmpty(user_dns_domain) ? host_port() : host + "." + user_dns_domain + ":" + port;
 	}
 
 	public long update_time() {
