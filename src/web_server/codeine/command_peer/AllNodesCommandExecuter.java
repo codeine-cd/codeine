@@ -68,7 +68,7 @@ public class AllNodesCommandExecuter {
 			createCommandDataFile(userObject.user().username());
 			writer = TextFileUtils.getWriter(file, false);
 			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + userObject.user());
-			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.user());
+			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.user().username());
 			writeNodesList(commandData);
 			updatePeersAddresses();
 			ThreadUtils.createThread(new Runnable() {
