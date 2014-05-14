@@ -38,21 +38,34 @@ function Expand-ZipFile()
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
         [string]$File,
         [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
-        [string]$Destination
+        [string]$Destination,
+		[Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]$ZipExec
     )
 	
-    $shell = new-object -com shell.application
-    $zip = $shell.NameSpace($File)
-
-	if (-Not (Test-Path $Destination))
-    {
-        mkdir $Destination
-    }
+	#if (-Not (Test-Path $Destination))
+	#{
+	#	mkdir $Destination
+	#}
 	
-    foreach($item in $zip.items())
-    {
-        $shell.Namespace($Destination).copyhere($item, 1556)
-    }
+	Write-Log "Extracting..."
+	
+	$cmd = ($ZipExec + " x " + $File + " -o" + $Destination + " -y")
+	
+	Write-Host ("Exec " + $cmd)
+	
+	Invoke-Expression ("& " + $cmd)
+	
+	#$shell = new-object -com shell.application
+	#$zip = $shell.NameSpace($File)
+	
+	#foreach($item in $zip.items())
+	#{
+	#	Write-Log ("Extracting..." + $item)
+	#	$shell.Namespace($Destination).copyhere($item, 1556)
+	#}
+		
+	Write-Log "Extracting Done"
 }
 
 function Start-MyService()
@@ -134,15 +147,15 @@ function Upgrade()
 	Write-Log "Downloading.."	
 	Download-File -Source "http://www.iil.intel.com/swiss/netbatch/dist/codeine/beta/dist/codeine.zip" -Destination "c:\temp\codeine.zip"
 	
-	Write-Log "Unzipping.."
-    Expand-ZipFile -File "c:\temp\codeine.zip" -Destination "c:\temp\codeine"
+	Write-Output "Unzipping.."
+    Expand-ZipFile -File "c:\temp\codeine.zip" -Destination "c:\temp\codeine\" -ZipExec ($info.Path + "\7za.exe")
     
 	Write-Log "Stopping service.."
     Stop-MyService -ServiceName "Codeine"
 
 	Write-Log "Backing up files.."
 	
-	$baseDir = $info.Path + "\.."
+	$baseDir = ($info.Path + "\..")
 	
 	# /XF "upgrade.ps1" "run.bat" "run_debug.bat" "wrapper_run.bat" "install.bat" "wrapper.exe" 
 	#Move-Item -Path ($baseDir + '\*') -Exclude "*.exe,*.bat" -Destination ($baseDir + '\.old\') -Force		
