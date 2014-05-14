@@ -11,6 +11,8 @@ public class ThreadPoolUtils {
 
 	public static ThreadPoolExecutor newThreadPool(int maximumNumOfThreads){
 		BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(CAPACITY);
-		return new ThreadPoolExecutor(0, maximumNumOfThreads, 1, TimeUnit.SECONDS , workQueue);
+		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(maximumNumOfThreads, maximumNumOfThreads, 1, TimeUnit.SECONDS , workQueue);
+		threadPoolExecutor.allowCoreThreadTimeOut(true);
+		return threadPoolExecutor;
 	}
 }
