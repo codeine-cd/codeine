@@ -1,0 +1,1 @@
+wrapper.exe --name="Codeine" --mode=Main --install javaw -Xmx100M -cp bin\codeine.jar codeine.CodeinePeerBootstrap
