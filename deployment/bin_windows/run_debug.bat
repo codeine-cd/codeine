@@ -1,0 +1,1 @@
+start javaw -Xmx100M -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n -cp bin\codeine.jar codeine.CodeinePeerBootstrap
