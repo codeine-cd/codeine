@@ -62,10 +62,10 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		jsonFileUtils.setContent(file, updatedProject);
 		Map<String, ProjectJson> newList = Maps.newHashMap();
 		newList.putAll(projects());
-		newList.put(updatedProject.name(), updatedProject);
+		ProjectJson previousProject = newList.put(updatedProject.name(), updatedProject);
 		projects(newList);
 		updateProjectInDb(updatedProject);
-		projectsUpdater.updateAllPeers();
+		projectsUpdater.updatePeers(updatedProject, previousProject);
 	}
 	
 	public synchronized void updateDb() {

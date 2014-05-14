@@ -60,7 +60,6 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		} catch (Exception e) {
 			log.error("fail to update projects in db", e);
 		}
-		new PeriodicExecuter(ProjectConfigurationInPeerUpdater.MAX_SLEEP_TIME_MILLI ,injector().getInstance(ProjectConfigurationInPeerUpdater.class)).runInThread();
 		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(IMonitorStatistics.class)).runInThreadSleepFirst();
 	}
 
