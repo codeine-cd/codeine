@@ -10,7 +10,7 @@ function Write-Log()
 
 function Clean-Log()
 {
-	Remote-Item "c:\temp\codeine_upgrade.txt"
+	Remove-Item "c:\temp\codeine_upgrade.txt"
 }
 
 function Download-File()
