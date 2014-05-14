@@ -1,4 +1,19 @@
-﻿function Download-File()
+function Write-Log()
+{
+	[CmdletBinding()]
+    param (        
+        [string]$Message
+    )
+	
+	Add-Content "c:\temp\codeine_upgrade.txt" $Message 
+}
+
+function Clean-Log()
+{
+	Remote-Item "c:\temp\codeine_upgrade.txt"
+}
+
+function Download-File()
 {
 	[CmdletBinding()]
     param (
@@ -54,11 +69,11 @@ function Start-MyService()
 
 		Start-Sleep -Seconds $WaitForSeconds
 		
-        Write-Host "The service '$ServiceName' is started!"
+        Write-Log "The service '$ServiceName' is started!"
 	}
 	else
 	{	
-		Write-Host "The service '$ServiceName' is already started"
+		Write-Log "The service '$ServiceName' is already started"
 	}
 }
 
@@ -78,11 +93,11 @@ function Stop-MyService()
 
         Start-Sleep -Seconds $WaitForSeconds
 
-        Write-Host "The service '$ServiceName' is stopped!"
+        Write-Log "The service '$ServiceName' is stopped!"
 	}
 	else
 	{	
-		Write-Host "The service '$ServiceName' is already stopped"
+		Write-Log "The service '$ServiceName' is already stopped"
 	}
 }
 
@@ -107,19 +122,21 @@ function Upgrade()
 	[CmdletBinding()]
 	param ()
 	
-	Write-Host "Getting service info.."	
+	Clean-Log
+	
+	Write-Log "Getting service info.."	
     $info = Get-ServiceInfo -ServiceName "Codeine"
 	
-	Write-Host "Downloading.."	
+	Write-Log "Downloading.."	
 	Download-File -Source "http://www.iil.intel.com/swiss/netbatch/dist/codeine/beta/dist/codeine.zip" -Destination "c:\temp\codeine.zip"
 	
-	Write-Host "Unzipping.."
+	Write-Log "Unzipping.."
     Expand-ZipFile -File "c:\temp\codeine.zip" -Destination "c:\temp\codeine"
     
-	Write-Host "Stopping service.."
+	Write-Log "Stopping service.."
     Stop-MyService -ServiceName "Codeine"
 
-	Write-Host "Backing up files.."
+	Write-Log "Backing up files.."
 	
 	$baseDir = $info.Path + "\.."
 	
@@ -127,7 +144,7 @@ function Upgrade()
 	#Move-Item -Path ($baseDir + '\*') -Exclude "*.exe,*.bat" -Destination ($baseDir + '\.old\') -Force		
 	robocopy ($baseDir + "\") ($baseDir + "\_old\") /XD "_old" /MOVE /E /IS /NJH /NJS /NDL /NS /NC
 	
-	Write-Host "Deploying new files.."
+	Write-Log "Deploying new files.."
 	
     #Move-Item ("c:\temp\codeine_setup\dist\*") -Destination ($baseDir) -Force
 	robocopy "c:\temp\codeine\dist\" ($baseDir + "\") /MOVE /E /IS /NJH /NJS /NDL /NS /NC
@@ -135,7 +152,7 @@ function Upgrade()
 	Remove-Item "c:\temp\codeine" -Recurse -Force
 	Remove-Item "c:\temp\codeine.zip" -Force
 	
-	Write-Host "Starting service.."
+	Write-Log "Starting service.."
     Start-MyService -ServiceName "Codeine"
 }
 
