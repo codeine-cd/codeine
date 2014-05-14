@@ -75,7 +75,7 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 	
 	@Override
 	public void updateProject(ProjectJson project){
-		log.info("updating project in database " + project.name());
+		log.info("updating project in database " + project.name() +  " " + dbUtils);
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 			return;
