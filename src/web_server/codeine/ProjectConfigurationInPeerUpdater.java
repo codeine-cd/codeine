@@ -23,6 +23,7 @@ import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -38,6 +39,7 @@ public class ProjectConfigurationInPeerUpdater{
 	
 	
 	private void sendUpdateToPeers(Collection<PeerStatusJsonV2> allPeers) {
+		Stopwatch s = Stopwatch.createStarted();
 		List<PeerStatusJsonV2> failedPeers = Lists.newArrayList();
 		log.info("sending refresh request to " + allPeers.size() + " peers");
 		for (PeerStatusJsonV2 e : allPeers) {
@@ -53,7 +55,7 @@ public class ProjectConfigurationInPeerUpdater{
 				log.warn("fail to push conf " + e.address_port() + "  " + ExceptionUtils.getRootCauseMessage(e1));
 			}
 		}
-		log.info("finished to send refresh request to " + allPeers.size() + " peers, failed to send to " + failedPeers.size());
+		log.info("finished to send refresh request to " + allPeers.size() + " peers, failed to send to " + failedPeers.size() + " ; took " + s);
 	}
 
 
