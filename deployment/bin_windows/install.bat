@@ -1,1 +1,1 @@
-wrapper.exe --name="Codeine" --mode=Main --install javaw -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n -Xmx100M -cp bin\codeine.jar codeine.CodeinePeerBootstrap
+wrapper.exe --name="Codeine" --mode=Main --install javaw -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n -Xmx100M -cp ..\bin\codeine.jar codeine.CodeinePeerBootstrap
