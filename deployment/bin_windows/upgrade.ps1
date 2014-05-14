@@ -1,3 +1,5 @@
+$LOG_FILE = "c:\temp\codeine_upgrade.txt"
+
 function Write-Log()
 {
 	[CmdletBinding()]
@@ -5,12 +7,14 @@ function Write-Log()
         [string]$Message
     )
 	
-	Add-Content "c:\temp\codeine_upgrade.txt" $Message 
+	Add-Content $LOG_FILE $Message 
 }
 
 function Clean-Log()
 {
-	Remove-Item "c:\temp\codeine_upgrade.txt"
+	if (Test-Path $LOG_FILE) {
+		Remove-Item $LOG_FILE 
+	}
 }
 
 function Download-File()
