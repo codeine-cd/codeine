@@ -1,11 +1,27 @@
-ï»¿function Download-File($Source, $Destination)
+ï»¿function Download-File()
 {
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]$Source,
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]$Destination
+    )
+	
 	$wc = New-Object System.Net.WebClient
 	$wc.DownloadFile($Source, $destination)
 }
 
-function Expand-ZipFile($File, $Destination)
+function Expand-ZipFile()
 {
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]$File,
+        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [string]$Destination
+    )
+	
     $shell = new-object -com shell.application
     $zip = $shell.NameSpace($File)
 
@@ -72,6 +88,7 @@ function Stop-MyService()
 
 function Get-ServiceInfo()
 {
+	[CmdletBinding()]
     param (
         [Parameter(Mandatory=$true)]
         [string]$ServiceName
@@ -87,6 +104,9 @@ function Get-ServiceInfo()
 
 function Upgrade()
 {
+	[CmdletBinding()]
+	param ()
+	
 	Write-Host "Getting service info.."	
     $info = Get-ServiceInfo -ServiceName "Codeine"
 	
@@ -94,7 +114,7 @@ function Upgrade()
 	Download-File -Source "http://www.iil.intel.com/swiss/netbatch/dist/codeine/beta/dist/codeine.zip" -Destination "c:\temp\codeine.zip"
 	
 	Write-Host "Unzipping.."
-    Expand-ZipFile “File "c:\temp\codeine.zip" “Destination "c:\temp\codeine"
+    Expand-ZipFile -File "c:\temp\codeine.zip" -Destination "c:\temp\codeine"
     
 	Write-Host "Stopping service.."
     Stop-MyService -ServiceName "Codeine"
@@ -119,4 +139,4 @@ function Upgrade()
     Start-MyService -ServiceName "Codeine"
 }
 
-Upgrade
+Upgrade -ErrorAction Stop
