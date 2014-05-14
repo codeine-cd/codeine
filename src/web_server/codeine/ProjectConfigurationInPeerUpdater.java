@@ -20,6 +20,7 @@ import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
 import com.google.common.collect.Lists;
@@ -97,8 +98,10 @@ public class ProjectConfigurationInPeerUpdater{
 			nodes.add(name.toLowerCase());
 		}
 		for (PeerStatusJsonV2 peer : peersProjectsStatus.peer_to_projects().values()) {
-			if (nodes.contains(peer.host().toLowerCase())) {
-				peers.add(peer);
+			if (null != peer.host()) {
+				if (nodes.contains(StringUtils.toLowerCase(peer.host()))) {
+					peers.add(peer);
+				}
 			}
 		}
 		return peers;

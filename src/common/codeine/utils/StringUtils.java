@@ -112,5 +112,12 @@ public class StringUtils {
 		}
 		return $;
 	}
+
+	public static String toLowerCase(String string) {
+		if (null == string) {
+			return null;
+		}
+		return string.toLowerCase();
+	}
 	
 }
