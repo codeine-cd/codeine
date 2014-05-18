@@ -7,6 +7,6 @@ angular.module('codeine').controller('projectsListCtrl',['$scope', '$log', 'proj
     $scope.shouldShowTab = function(){
         return function(tab){
             return $filter('projectsFilter')($scope.projects, tab).length > 0;
-        }
-    }
+        };
+    };
 }]);
