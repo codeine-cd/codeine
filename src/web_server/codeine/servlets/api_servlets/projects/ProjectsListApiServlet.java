@@ -72,7 +72,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 			newProject.name(newProjectParamsJson.project_name);
 			configurationManager.createNewProject(newProject);
 		} catch (Exception e) {
-			throw new IllegalArgumentException();  
+			throw new IllegalArgumentException(e);  
 		}	
 	}
 	

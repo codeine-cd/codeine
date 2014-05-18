@@ -27,14 +27,12 @@ public class UserPermissionsJsonStore extends JsonStore<PermissionsConfJson>{
 		for (UserPermissions p : super.get().permissions()) {
 			if (p.user() == null) {
 				CodeineUser codeineUser = identityConfJsonStore.get().getOrNull(p.usernameString());
-				if (null != codeineUser) {
-					p.initUser(codeineUser);
-					permissions.add(p);
+				if (null == codeineUser) {
+					codeineUser = CodeineUser.createNewUser(p.usernameString(), "non-exist-user");
 				}
+				p.initUser(codeineUser);
 			}
-			else {
-				permissions.add(p);
-			}
+			permissions.add(p);
 		}
 		return new PermissionsConfJson(permissions);
 	}

@@ -31,7 +31,7 @@ public class PermissionsConfJson {
 	}
 	public UserPermissions getOrNull(String user) {
 		for (UserPermissions u : permissions) {
-			if (u.user() == null) {
+			if (u.user() == null || u.user().username() == null) {
 				log.warn("permissions contains non existing user " + u.usernameString(), new AssertionError());
 				continue;
 			}
