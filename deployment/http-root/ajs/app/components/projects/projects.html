@@ -3,7 +3,7 @@
 </div>
 <div class="col-md-9">
     <tabset ng-show="tabs.length > 0">
-        <tab ng-repeat="tab in tabs" heading="{{tab.name}}" active="tab.active" disabled="tab.disabled">
+        <tab ng-repeat="tab in tabs | filter:shouldShowTab()" heading="{{tab.name}}" active="tab.active" disabled="tab.disabled">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
