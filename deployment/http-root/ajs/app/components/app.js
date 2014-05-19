@@ -36,6 +36,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/command/:command_name/setup', {
                     templateUrl: '/components/command_setup/command_setup.html',
                     controller: 'commandSetupCtrl',
+                    pageTitle: 'Command setup',
                     resolve : {
                         command : function($q,$log,CodeineService,$route) {
                             var deferred = $q.defer();
@@ -57,6 +58,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/manage-codeine', {
                     templateUrl: '/components/manage_codeine/manage_codeine.html',
                     controller: 'manageCodeineCtrl',
+                    pageTitle: 'Manage',
                     resolve: {
                         tabs: function($q,$log,CodeineService) {
                             var deferred = $q.defer();
@@ -93,6 +95,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/new_project', {
                     templateUrl: '/components/new_project/new_project.html',
                     controller: 'newProjectCtrl',
+                    pageTitle: 'New Project',
                     resolve: {
                         projects : function($q,$log,CodeineService) {
                             var deferred = $q.defer();
@@ -110,6 +113,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                     templateUrl: '/components/project_status/project_status.html',
                     controller: 'projectStatusWithMenuCtrl',
                     reloadOnSearch: false,
+                    pageTitle: 'Project Status',
                     resolve: {
                         projectConfiguration : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
@@ -136,6 +140,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/timeline', {
                     templateUrl: '/components/project_graph/project_graph.html',
                     controller: 'projectGraphCtrl',
+                    pageTitle: 'Project Timeline',
                     resolve: {
                         graphData : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
@@ -153,6 +158,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                     templateUrl: '/components/project_status/internal_nodes_status.html',
                     controller: 'projectStatusWithMenuCtrl',
                     reloadOnSearch: false,
+                    pageTitle: 'Nodes Status',
                     resolve: {
                         projectConfiguration : function($q,$log,$route,CodeineService,Constants) {
                             var deferred = $q.defer();
@@ -179,6 +185,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/node/:node_name/status', {
                     templateUrl: '/components/node_status/node_status.html',
                     controller: 'nodeStatusCtrl',
+                    pageTitle: 'Node Status',
                     resolve: {
                         projectConfiguration : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
@@ -205,6 +212,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/node/:node_name/monitor/:monitor_name/status', {
                     templateUrl: '/components/monitor_status/monitor_status.html',
                     controller: 'monitorStatusCtrl',
+                    pageTitle: 'Monitor Status',
                     resolve: {
                         monitorStatus :  function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
@@ -221,6 +229,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/command/:command_name/:command_id/status', {
                     templateUrl: '/components/command_status/command_status.html',
                     controller: 'commandStatusCtrl',
+                    pageTitle: 'Command Status',
                     resolve: {
                         commandStatus :  function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
@@ -237,6 +246,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 when('/codeine/project/:project_name/configure', {
                     templateUrl: '/components/project_configure/project_configure.html',
                     controller: 'projectConfigureCtrl',
+                    pageTitle: 'Project Configure',
                     resolve: {
                         projectConfigurationForEditing : function($q,$log,$route,CodeineService) {
                             var deferred = $q.defer();
@@ -262,6 +272,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 }).
                 when('/codeine/user/:user_name', {
                     templateUrl: '/components/user_info/user_info.html',
+                    pageTitle: 'User Info',
                     controller: function($scope,userInfo) {
                         $scope.userInfo = userInfo;
                     },
@@ -350,9 +361,23 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
             $rootScope.app.contentLoading = true;
         });
 
-        $rootScope.$on("$routeChangeSuccess", function () {
+        $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
             $log.debug('$routeChangeSuccess');
             $rootScope.app.contentLoading = false;
+            var title = ($rootScope.app.viewAs ? $rootScope.app.viewAs + ' @' : '' );
+            if (current.$$route.pageTitle) {
+                if (title) {
+                    title += ' ';
+                }
+                title += current.$$route.pageTitle;
+            }
+            if ($rootScope.app.globalConfiguration.server_name){
+                if (title) {
+                    title +=  ' - ';
+                }
+                title += $rootScope.app.globalConfiguration.server_name;
+            }
+            $rootScope.pageTitle = title;
         });
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
             $log.debug('$routeChangeError - rejection = ' + rejection);
