@@ -362,7 +362,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
         });
 
         $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
-            $log.debug('$routeChangeSuccess');
+            $log.debug('$routeChangeSuccess ' + event + current + previous);
             $rootScope.app.contentLoading = false;
             var title = ($rootScope.app.viewAs ? $rootScope.app.viewAs + ' @' : '' );
             if (current.$$route.pageTitle) {

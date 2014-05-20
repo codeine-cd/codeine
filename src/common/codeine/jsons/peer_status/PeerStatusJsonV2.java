@@ -33,6 +33,9 @@ public class PeerStatusJsonV2 {
 	private PeerType peer_type;
 	private transient PeerStatusString status;
 	
+	public static void main(String[] args) {
+		System.out.println(System.getenv().toString().replace(",", "\n"));
+	}
 	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip, String user_dns_domain) {
 		super();
 		this.host = host;
