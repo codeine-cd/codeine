@@ -95,7 +95,7 @@ public class PeerStatus {
 	public PeerStatusJsonV2 createJson() {
 		return new PeerStatusJsonV2(InetUtils.getLocalHost().getHostName(), codeineRuntimeInfo.port(),
 				codeineRuntimeInfo.version(), codeineRuntimeInfo.startTime(), Constants.getInstallDir(),
-				PathHelper.getTarFile(), project_name_to_status, InetUtils.getLocalHost().getHostAddress(), System.getenv("USERDNSDOMAIN"));
+				PathHelper.getTarFile(), project_name_to_status, InetUtils.getLocalHost().getHostAddress(), System.getProperty("DNS_DOMAIN_NAME"));
 	}
 
 	public String updateVersion(ProjectJson project, String node, String alias, String version) {
