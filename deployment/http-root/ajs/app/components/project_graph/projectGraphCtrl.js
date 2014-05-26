@@ -14,7 +14,7 @@ angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log','$filt
                 y: {type: 'linear'}
             },
             series: [
-                {y: 'total', color: 'green',thickness : '6px', label: 'Total'},
+                {y: 'total', color: 'black',thickness : '6px', label: 'Total'},
                 {y: 'fail', color: 'red',thickness : '6px', label: 'Fail'},
                 {y: 'command', color: 'steelblue',thickness : '6px', label: 'Commands', type: 'column'},
             ],
