@@ -33,6 +33,7 @@ public class NodeScriptDiscovery {
 		}
 		String nodes_discovery_script = projectJson.nodes_discovery_script();
 		String dir = pathHelper.getProjectDir(projectJson.name());
+		log.info("running discovery from dir " + dir);
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
 		ShellScriptWithOutput shellScript = 
