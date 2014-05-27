@@ -72,7 +72,9 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 
 	@Override
 	public int getHttpPort() {
-		return 0;
+		String portString = System.getProperty("codeinePeerPort");
+		int port = null == portString ? 0 : Integer.valueOf(portString);
+		return port;
 	}
 	
 }
