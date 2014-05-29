@@ -89,7 +89,15 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		if (offlineNodes.nodes.size() > 0) {
 			nodes_for_version.add(0, offlineNodes);
 		}
-		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts, nodes.size() > 100);
+		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts, isMoreEnabled(projectJson, nodes));
+	}
+
+	private boolean isMoreEnabled(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
+		int nodesCountForMore = 100;
+		if (projectJson.node_discovery_startegy() ==  NodeDiscoveryStrategy.Configuration) {
+			return projectJson.nodes_info().size() > nodesCountForMore;
+		}
+		return nodes.size() > nodesCountForMore;
 	}
 
 	private void calculatePrecent(int totalNumberOfNodes, List<NodesForVersion> nodes_for_version) {
