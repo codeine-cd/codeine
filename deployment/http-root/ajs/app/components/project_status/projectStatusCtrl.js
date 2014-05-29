@@ -80,7 +80,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     for (var i1=0 ; i1 < $scope.projectStatus.nodes_for_version.length; i1++) {
         $scope.projectStatus.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
-        var maxNodesToShow = 1;
+        var maxNodesToShow = 2;
         if (maxNodesToShow > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length
             || !$scope.projectStatus.more_nodes_enabled) {
             maxNodesToShow = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
