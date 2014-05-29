@@ -89,7 +89,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		if (offlineNodes.nodes.size() > 0) {
 			nodes_for_version.add(0, offlineNodes);
 		}
-		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts);
+		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts, nodes.size() > 100);
 	}
 
 	private void calculatePrecent(int totalNumberOfNodes, List<NodesForVersion> nodes_for_version) {
@@ -163,12 +163,14 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		private List<NodesForVersion> nodes_for_version;
 		private List<CountInfo> tag_info;
 		private List<CountInfo> monitor_info;
-		public ProjectStatusInfo(List<NodesForVersion> nodes_for_version, List<CountInfo> tag_info,List<CountInfo> monitor_info,int any_alert_count) {
+		private boolean more_nodes_enabled;
+		public ProjectStatusInfo(List<NodesForVersion> nodes_for_version, List<CountInfo> tag_info,List<CountInfo> monitor_info,int any_alert_count, boolean more_nodes_enabled) {
 			super();
 			this.nodes_for_version = nodes_for_version;
 			this.tag_info = tag_info;
 			this.monitor_info = monitor_info;
 			this.any_alert_count = any_alert_count;
+			this.more_nodes_enabled = more_nodes_enabled;
 		}
 		
 	}
