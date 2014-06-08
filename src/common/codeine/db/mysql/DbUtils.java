@@ -89,18 +89,18 @@ public class DbUtils
 				function.apply(rs);
 			}
 		} catch (SQLException e) {
-			throw prepareException(sql, connection, e);
+			throw prepareException(sql, connection, e, null);
 		} finally {
 			closeResultSet(rs);
 			closeConnection(connection);
 		}
 	}
 
-	private DatabaseException prepareException(String sql, Connection connection, SQLException e) {
+	private DatabaseException prepareException(String sql, Connection connection, SQLException e, String[] args) {
 		try {
-			return new DatabaseException(sql, connection.getMetaData().getURL(), e);
+			return new DatabaseException(sql, connection.getMetaData().getURL(), e, args);
 		} catch (SQLException e1) {
-			return new DatabaseException(sql, "url could not be resolved", e);
+			return new DatabaseException(sql, "url could not be resolved", e, args);
 		}
 	}
 	public void executeUpdateableQuery(String sql, Function<ResultSet, Void> function)
@@ -114,7 +114,7 @@ public class DbUtils
 				function.apply(rs);
 			}
 		} catch (SQLException e) {
-			throw prepareException(sql, connection, e);
+			throw prepareException(sql, connection, e, null);
 		} finally {
 			closeResultSet(rs);
 			closeConnection(connection);
@@ -134,7 +134,7 @@ public class DbUtils
 			}
 			return preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			throw prepareException(sql, connection, e);
+			throw prepareException(sql, connection, e, args);
 		} finally {
 			closeStatement(preparedStatement);
 			closeConnection(connection);
