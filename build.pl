@@ -19,6 +19,7 @@ print "ant is ant\n";#1.8?
 es("ant", 1);
 es("cd deployment/http-root/ajs ; npm install");
 es("cd deployment/http-root/ajs ; bower install");
+es("cd deployment/http-root/ajs ; bower update");
 es("cd deployment/http-root/ajs ; grunt");
 es("rsync -ur deployment/bin dist/");
 es("rsync -ur deployment/bin_windows dist/");

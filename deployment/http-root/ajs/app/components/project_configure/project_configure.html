@@ -366,9 +366,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group" ng-if="command_parameter.type == 'Selection'">
-                                    <label class="col-md-3 control-label" for="command_parameter{{$index}}.allowed_values">Allowed values <help help-id="command_patameter_values_Help"></help></label>
+                                    <label class="col-md-3 control-label" for="command_parameter{{$index}}_allowed_values">Allowed values <help help-id="command_patameter_values_Help"></help></label>
                                     <div class="controls col-md-3" ng-class="{'has-error': paramsInnerForm.command_parameter.allowed_values.$invalid}">
-                                        <input type="text" id="command_parameter{{$index}}.allowed_values" name="allowed_values" ui-select2="select2OptionsAllowedValues" ng-model="command_parameter.allowed_values" class="form-control select2" required>
+                                        <input type="text" id="command_parameter{{$index}}_allowed_values" name="allowed_values" ui-select2="select2OptionsAllowedValues" ng-model="command_parameter.allowed_values" class="form-control select2">
                                     </div>
                                 </div>
                                 <div class="form-group" ng-if="command_parameter.type == 'String' || command_parameter.type == 'Password'">
