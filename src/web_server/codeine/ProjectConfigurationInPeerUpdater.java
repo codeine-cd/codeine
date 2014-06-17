@@ -89,7 +89,7 @@ public class ProjectConfigurationInPeerUpdater{
 
 	private Collection<? extends PeerStatusJsonV2> getPeersFromProject(ProjectJson project) {
 		Collection<PeerStatusJsonV2> peers = Sets.newHashSet();
-		if (project.node_discovery_startegy() != NodeDiscoveryStrategy.Configuration) {
+		if (null == project || project.node_discovery_startegy() != NodeDiscoveryStrategy.Configuration) {
 			return peers;
 		}
 		Set<String> nodes = Sets.newHashSet();
