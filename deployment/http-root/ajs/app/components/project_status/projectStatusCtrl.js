@@ -7,6 +7,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
     $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
     $scope.versionIsOpen = [];
+    $scope.maxNodesToShow = 2;
     for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
         $scope.versionIsOpen[i] = true;
     }
@@ -80,11 +81,10 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     for (var i1=0 ; i1 < $scope.projectStatus.nodes_for_version.length; i1++) {
         $scope.projectStatus.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
-        var maxNodesToShow = 2;
-        if (maxNodesToShow > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatus.more_nodes_enabled) {
-            maxNodesToShow = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
+        if ($scope.maxNodesToShow > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatus.more_nodes_enabled) {
+            $scope.maxNodesToShow = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
         }
-        for (var j=0; j < maxNodesToShow; j++) {
+        for (var j=0; j < $scope.maxNodesToShow; j++) {
             moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatus.nodes_for_version[i1].filteredNodes[j]);
         }
     }
@@ -112,6 +112,14 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         }
     );
 
+    $scope.showMore = function(count) {
+        if ($scope.projectStatus.more_nodes_enabled) {
+            count < $scope.maxNodesToShow;
+        }
+        else {
+            return true;
+        }
+    }
     $scope.refreshFilters = function() {
         var count = 0;
         for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
@@ -125,7 +133,7 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
                 }
             }
             if ($scope.projectStatus.nodes_for_version[i].filteredNodes.length > 0) {
-                for (var k=0; k < 5 && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
+                for (var k=0; $scope.showMore(k) && k < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; k++) {
                     moveNodeToVisible($scope.projectStatus.nodes_for_version[i],$scope.projectStatus.nodes_for_version[i].filteredNodes[k]);
                 }
             }
