@@ -114,12 +114,12 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     $scope.showMore = function(count) {
         if ($scope.projectStatus.more_nodes_enabled) {
-            count < $scope.maxNodesToShow;
+            return count < $scope.maxNodesToShow;
         }
         else {
             return true;
         }
-    }
+    };
     $scope.refreshFilters = function() {
         var count = 0;
         for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
