@@ -81,10 +81,11 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     for (var i1=0 ; i1 < $scope.projectStatus.nodes_for_version.length; i1++) {
         $scope.projectStatus.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
-        if ($scope.maxNodesToShow > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatus.more_nodes_enabled) {
-            $scope.maxNodesToShow = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
+        var maxNodesToShowHere = $scope.maxNodesToShow;
+        if (maxNodesToShowHere > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatus.more_nodes_enabled) {
+            maxNodesToShowHere = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
         }
-        for (var j=0; j < $scope.maxNodesToShow; j++) {
+        for (var j=0; j < maxNodesToShowHere; j++) {
             moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatus.nodes_for_version[i1].filteredNodes[j]);
         }
     }
