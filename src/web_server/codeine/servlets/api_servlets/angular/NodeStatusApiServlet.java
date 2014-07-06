@@ -50,9 +50,6 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 		else {
 			node = getNodeFromConfiguration(projectName, nodeName);
 		}
-		if (null == node){
-			
-		}
 		writeResponseGzipJson(response, node);
 	}
 
