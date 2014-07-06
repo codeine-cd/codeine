@@ -48,8 +48,18 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 			node = new NodeWithMonitorsInfoApi(nodeByNameOrNull, can_command);
 		}
 		else {
-			ProjectJson projectJson = configurationManager.getProjectForName(projectName);
-			for (NodeInfo nodeInfo : projectJson.nodes_info()) {
+			node = getNodeFromConfiguration(projectName, nodeName);
+		}
+		if (null == node){
+			
+		}
+		writeResponseGzipJson(response, node);
+	}
+
+	private NodeWithMonitorsInfoApi getNodeFromConfiguration(String projectName, String nodeName) {
+		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
+		for (NodeInfo nodeInfo : projectJson.nodes_info()) {
+			if (nodeName.equals(nodeInfo.name())) {
 				Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
 				ProjectStatus projectStatus = new ProjectStatus();
 				PeerStatusJsonV2 peer = new PeerStatusJsonV2("", projectStatus);
@@ -57,14 +67,10 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 				NodeWithMonitorsInfoApi nodeStatusInfo = new NodeWithMonitorsInfoApi(new NodeWithMonitorsInfo(
 						peer, nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors), false);
 				log.info("offline node " + nodeStatusInfo);
-				node = nodeStatusInfo;
-				break;
+				return nodeStatusInfo;
 			}
 		}
-		if (null == node){
-			throw new IllegalArgumentException("node not found " + nodeName);
-		}
-		writeResponseGzipJson(response, node);
+		throw new IllegalArgumentException("node not found " + nodeName);
 	}
 
 }
