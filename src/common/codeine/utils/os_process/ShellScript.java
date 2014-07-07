@@ -25,9 +25,6 @@ public class ShellScript {
 		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode() +  (windows ? ".bat" : ".sh");
 	}
 
-	public static void main(String[] args) {
-		System.out.println();
-	}
 	public String create() {
 		content = content.replace("\n", System.lineSeparator());
 		TextFileUtils.setContents(fileName, content);

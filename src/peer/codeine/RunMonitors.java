@@ -85,6 +85,7 @@ public class RunMonitors implements Task {
 	public void run() {
 		List<NodeMonitor> monitors = Lists.newArrayList(project().monitors());
 		removeNonExistMonitors();
+		validateDiskSpaceForMonitorRun();
 		for (NodeMonitor monitor : monitors) {
 			try {
 				shellScript = null;
@@ -101,6 +102,14 @@ public class RunMonitors implements Task {
 		}
 		else if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Configuration){
 			updateTagsByConfiguration();
+		}
+	}
+
+	private void validateDiskSpaceForMonitorRun() {
+		File tempDir = new File(System.getProperty("java.io.tmpdir"));
+		if (tempDir.getUsableSpace() < 100){
+			log.warn("not enough space to run monitors " + tempDir + " " + tempDir.getUsableSpace());
+			snoozeKeeper.snoozeAll();
 		}
 	}
 
