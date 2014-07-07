@@ -71,4 +71,10 @@ public class NodesSelector {
 		return $;
 	}
 
+	@Override
+	public String toString() {
+		return "NodesSelector [runningNodes=" + runningNodes + ", newNodes=" + newNodes + "]";
+	}
+
+	
 }

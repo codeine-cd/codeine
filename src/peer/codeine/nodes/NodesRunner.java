@@ -47,6 +47,7 @@ public class NodesRunner implements Task{
 	
 	@Override
 	public synchronized void run() {
+		log.info("NodeRunner is starting " + this + " with executers " + executers);
 		Set<String> removedProjects = Sets.newHashSet(executers.keySet());
 		for (ProjectJson project : getProjects()) {
 			removedProjects.remove(project.name());
@@ -94,6 +95,7 @@ public class NodesRunner implements Task{
 			log.error("failed to select nodes for project " + project.name() + " will leave old nodes " + currentNodes, e);
 			return !currentNodes.isEmpty();
 		}
+		log.info("selectedNodes: " + selectedNodes);
 		stopNodes(project.name(), selectedNodes.nodesToStop());
 		Map<String, PeriodicExecuter> newProjectExecutors = selectedNodes.existingProjectExecutors();
 		for (NodeInfo nodeJson : selectedNodes.nodesToStart()) {
