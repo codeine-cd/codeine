@@ -31,4 +31,11 @@ public class SelectedNodes {
 		return nodesToStop;
 	}
 
+	@Override
+	public String toString() {
+		return "SelectedNodes [nodesToStop=" + nodesToStop + ", nodesToStart=" + nodesToStart
+				+ ", existingProjectExecutors=" + existingProjectExecutors + "]";
+	}
+
+	
 }

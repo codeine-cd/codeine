@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import codeine.api.NodeInfo;
 import codeine.executer.PeriodicExecuter;
 
@@ -13,6 +15,7 @@ import com.google.common.collect.Sets;
 
 public class NodesSelector {
 
+	private static final Logger log = Logger.getLogger(NodesSelector.class);
 	private Map<String, PeriodicExecuter> runningNodes;
 	private List<NodeInfo> newNodes;
 
@@ -22,11 +25,13 @@ public class NodesSelector {
 	}
 
 	public SelectedNodes selectStartStop() {
+		log.info("runningNodes " + runningNodes);
 		Map<String, PeriodicExecuter> existingProjectExecutors = Maps.newHashMap();
 		List<NodeInfo> nodesToStart = Lists.newArrayList();
 		Map<String, PeriodicExecuter> nodesToStop = Maps.newHashMap();
 		
 		Set<String> newAndCuerrentNodes = getNewAndCuerrentNodes();
+		log.info("newAndCuerrentNodes " + newAndCuerrentNodes);
 		for (String nodeName : newAndCuerrentNodes) {
 			if (shouldContinueRun(nodeName)) {
 				if (!runningNodes.containsKey(nodeName)) {
@@ -41,8 +46,9 @@ public class NodesSelector {
 				nodesToStop.put(nodeName, runningNodes.get(nodeName));
 			}
 		}
-		
-		return new SelectedNodes(nodesToStop, nodesToStart, existingProjectExecutors);
+		SelectedNodes $ = new SelectedNodes(nodesToStop, nodesToStart, existingProjectExecutors);
+		log.info("returning " + $);
+		return $;
 	}
 
 	private boolean shouldContinueRun(String nodeName) {
