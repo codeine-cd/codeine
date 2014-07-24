@@ -20,6 +20,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 	private long MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.MINUTES.toMillis(5);
 	private long MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(31);
 	private long INITIAL_SLEEP = TimeUnit.SECONDS.toMillis(10);
+	private long SLEEP_TIME_AFTER_FAILURE_MILLIS = TimeUnit.MINUTES.toMillis(3);
 	
 	private static final Logger log = Logger.getLogger(PeerStatusChangedUpdater.class);
 	private PeerStatus peerStatus;
@@ -35,6 +36,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 		if (!globalConfigurationJson.get().large_deployment()) {
 			MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(5);
 			MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(10);
+			SLEEP_TIME_AFTER_FAILURE_MILLIS = MAX_TIME_BETWEEN_UPDATES_MILLIS;
 		}
 	}
 
@@ -51,7 +53,8 @@ public class PeerStatusChangedUpdater implements Runnable{
 			try {
 				pushUpdateNow();
 			} catch (Exception e) {
-				log.warn("got exception", e);
+				log.warn("got exception, will sleep before trying more updates", e);
+				ThreadUtils.sleep(SLEEP_TIME_AFTER_FAILURE_MILLIS);
 			}
 			try {
 				ThreadUtils.sleep(MIN_TIME_BETWEEN_UPDATES_MILLIS);
