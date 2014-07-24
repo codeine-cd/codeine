@@ -2,7 +2,10 @@ package codeine;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+
+import codeine.utils.ExceptionUtils;
 
 public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler {
 	
@@ -25,6 +28,12 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 			errorSent = true;
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		BasicConfigurator.configure();
+		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
+		throw ExceptionUtils.asUnchecked(new Exception());
 	}
 
 }
