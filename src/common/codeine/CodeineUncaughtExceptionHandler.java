@@ -8,6 +8,8 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 	
 	private Logger log = Logger.getLogger(CodeineUncaughtExceptionHandler.class);
 
+	private boolean errorSent = false;
+	
 	public CodeineUncaughtExceptionHandler() {
 	}
 
@@ -17,6 +19,11 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 			log.error("Uncaught exception in thread " + t.getName(), e);
 		} catch (Throwable tr) {
 			tr.printStackTrace();
+			e.printStackTrace();
+		}
+		if (!errorSent) {
+			errorSent = true;
+			e.printStackTrace();
 		}
 	}
 
