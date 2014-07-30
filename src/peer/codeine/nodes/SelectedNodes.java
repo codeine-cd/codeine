@@ -8,26 +8,26 @@ import codeine.executer.PeriodicExecuter;
 
 public class SelectedNodes {
 
-	private Map<String, PeriodicExecuter> nodesToStop;
+	private Map<NodeInfo, PeriodicExecuter> nodesToStop;
 	private List<NodeInfo> nodesToStart;
-	private Map<String, PeriodicExecuter> existingProjectExecutors;
+	private Map<NodeInfo, PeriodicExecuter> existingProjectExecutors;
 	
-	public SelectedNodes(Map<String, PeriodicExecuter> nodesToStop, List<NodeInfo> nodesToStart,
-			Map<String, PeriodicExecuter> existingProjectExecutors) {
+	public SelectedNodes(Map<NodeInfo, PeriodicExecuter> nodesToStop, List<NodeInfo> nodesToStart,
+			Map<NodeInfo, PeriodicExecuter> existingProjectExecutors) {
 		super();
 		this.nodesToStop = nodesToStop;
 		this.nodesToStart = nodesToStart;
 		this.existingProjectExecutors = existingProjectExecutors;
 	}
 
-	public Map<String, PeriodicExecuter> existingProjectExecutors() {
+	public Map<NodeInfo, PeriodicExecuter> existingProjectExecutors() {
 		return existingProjectExecutors;
 	}
 
 	public List<NodeInfo> nodesToStart() {
 		return nodesToStart;
 	}
-	public Map<String, PeriodicExecuter> nodesToStop() {
+	public Map<NodeInfo, PeriodicExecuter> nodesToStop() {
 		return nodesToStop;
 	}
 

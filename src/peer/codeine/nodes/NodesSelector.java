@@ -16,34 +16,34 @@ import com.google.common.collect.Sets;
 public class NodesSelector {
 
 	private static final Logger log = Logger.getLogger(NodesSelector.class);
-	private Map<String, PeriodicExecuter> runningNodes;
+	private Map<NodeInfo, PeriodicExecuter> runningNodes;
 	private List<NodeInfo> newNodes;
 
-	public NodesSelector(Map<String, PeriodicExecuter> runningNodes, List<NodeInfo> newNodes) {
+	public NodesSelector(Map<NodeInfo, PeriodicExecuter> runningNodes, List<NodeInfo> newNodes) {
 		this.runningNodes = runningNodes;
 		this.newNodes = newNodes;
 	}
 
 	public SelectedNodes selectStartStop() {
 		log.info("runningNodes " + runningNodes);
-		Map<String, PeriodicExecuter> existingProjectExecutors = Maps.newHashMap();
+		Map<NodeInfo, PeriodicExecuter> existingProjectExecutors = Maps.newHashMap();
 		List<NodeInfo> nodesToStart = Lists.newArrayList();
-		Map<String, PeriodicExecuter> nodesToStop = Maps.newHashMap();
+		Map<NodeInfo, PeriodicExecuter> nodesToStop = Maps.newHashMap();
 		
-		Set<String> newAndCuerrentNodes = getNewAndCuerrentNodes();
+		Set<NodeInfo> newAndCuerrentNodes = getNewAndCuerrentNodes();
 		log.info("newAndCuerrentNodes " + newAndCuerrentNodes);
-		for (String nodeName : newAndCuerrentNodes) {
-			if (shouldContinueRun(nodeName)) {
-				if (!runningNodes.containsKey(nodeName)) {
-					nodesToStart.add(getNode(nodeName));
+		for (NodeInfo node : newAndCuerrentNodes) {
+			if (shouldContinueRun(node)) {
+				if (!runningNodes.containsKey(node)) {
+					nodesToStart.add(getNode(node));
 				}
 				else {
-					existingProjectExecutors.put(nodeName, runningNodes.get(nodeName));
+					existingProjectExecutors.put(node, runningNodes.get(node));
 				}
 				
 			}
 			else { //should not run
-				nodesToStop.put(nodeName, runningNodes.get(nodeName));
+				nodesToStop.put(node, runningNodes.get(node));
 			}
 		}
 		SelectedNodes $ = new SelectedNodes(nodesToStop, nodesToStart, existingProjectExecutors);
@@ -51,28 +51,28 @@ public class NodesSelector {
 		return $;
 	}
 
-	private boolean shouldContinueRun(String nodeName) {
+	private boolean shouldContinueRun(NodeInfo node) {
 		for (NodeInfo n : newNodes) {
-			if (n.name().equals(nodeName)) {
+			if (n.equals(node)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private NodeInfo getNode(String nodeName) {
+	private NodeInfo getNode(NodeInfo node) {
 		for (NodeInfo n : newNodes) {
-			if (n.name().equals(nodeName)) {
+			if (n.equals(node)) {
 				return n;
 			}
 		}
-		throw new RuntimeException("error getting node name " + nodeName);
+		throw new RuntimeException("error getting node name " + node);
 	}
 
-	private Set<String> getNewAndCuerrentNodes() {
-		Set<String> $ = Sets.newHashSet(runningNodes.keySet());
+	private Set<NodeInfo> getNewAndCuerrentNodes() {
+		Set<NodeInfo> $ = Sets.newHashSet(runningNodes.keySet());
 		for (NodeInfo n : newNodes) {
-			$.add(n.name());
+			$.add(n);
 		}
 		return $;
 	}

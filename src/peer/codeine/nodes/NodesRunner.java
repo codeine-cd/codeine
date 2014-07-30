@@ -42,7 +42,7 @@ public class NodesRunner implements Task{
 	@Inject	private NotificationDeliverToMongo notificationDeliverToMongo;
 	@Inject	private NodesManager nodesManager;
 	@Inject	private SnoozeKeeper snoozeKeeper;
-	private Map<String, Map<String, PeriodicExecuter>> executers = Maps.newHashMap();
+	private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();
 	@Inject	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
 	
 	@Override
@@ -86,7 +86,7 @@ public class NodesRunner implements Task{
 	}
 
 	private boolean startStopExecutorsForProject(ProjectJson project) {
-		Map<String, PeriodicExecuter> currentNodes = getCurrentNodes(project);
+		Map<NodeInfo, PeriodicExecuter> currentNodes = getCurrentNodes(project);
 		log.info("project: " + project.name() + " currentProjectExecutors: " + currentNodes.keySet());
 		SelectedNodes selectedNodes;
 		try {
@@ -97,12 +97,12 @@ public class NodesRunner implements Task{
 		}
 		log.info("selectedNodes: " + selectedNodes);
 		stopNodes(project.name(), selectedNodes.nodesToStop());
-		Map<String, PeriodicExecuter> newProjectExecutors = selectedNodes.existingProjectExecutors();
+		Map<NodeInfo, PeriodicExecuter> newProjectExecutors = selectedNodes.existingProjectExecutors();
 		for (NodeInfo nodeJson : selectedNodes.nodesToStart()) {
 			log.info("start exec1 monitoring node " + nodeJson + " in project " + project.name());
 			try {
 				PeriodicExecuter e = startExecuter(project, nodeJson);
-				newProjectExecutors.put(nodeJson.name(), e);
+				newProjectExecutors.put(nodeJson, e);
 			} catch (Exception e1) {
 				log.error("failed to start executor for node " + nodeJson + " in project " + project.name(), e1);
 			}
@@ -112,16 +112,16 @@ public class NodesRunner implements Task{
 		return !executers.get(project.name()).isEmpty();
 	}
 
-	private void stopNodes(String project, Map<String, PeriodicExecuter> map) {
-		for (Entry<String, PeriodicExecuter> e : map.entrySet()) {
+	private void stopNodes(String project, Map<NodeInfo, PeriodicExecuter> map) {
+		for (Entry<NodeInfo, PeriodicExecuter> e : map.entrySet()) {
 			log.info("stop exec1 monitoring node " + e.getKey() + " in project " + project);
-			peerStatus.removeNode(project, e.getKey());
+			peerStatus.removeNode(project, e.getKey().name());
 			stop(e.getValue());
 		}
 	}
 
-	private Map<String, PeriodicExecuter> getCurrentNodes(ProjectJson project) {
-		Map<String, PeriodicExecuter> currentNodes = executers.get(project.name());
+	private Map<NodeInfo, PeriodicExecuter> getCurrentNodes(ProjectJson project) {
+		Map<NodeInfo, PeriodicExecuter> currentNodes = executers.get(project.name());
 		if (null == currentNodes) {
 			currentNodes = Maps.newHashMap();
 			executers.put(project.name(), currentNodes);
