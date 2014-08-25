@@ -150,7 +150,7 @@ public class AllNodesCommandExecuter {
 		if (!commandDataJson.fail_list().isEmpty()) {
 			writeLine("failed nodes: " + StringUtils.collectionToString(commandDataJson.fail_list(), f));
 		}
-		writeLine("=========> aggregate-command-statistics (fail/total): " + fail + "/" + total + "\n");
+		writeLine("=========> aggregate-command-statistics (success/total): " + (total - fail) + "/" + total + "\n");
 	}
 
 	private void createCommandDataFile(String user) {
