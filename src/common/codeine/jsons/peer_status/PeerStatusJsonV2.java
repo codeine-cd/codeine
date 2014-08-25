@@ -1,6 +1,7 @@
 package codeine.jsons.peer_status;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,9 +34,6 @@ public class PeerStatusJsonV2 {
 	private PeerType peer_type;
 	private transient PeerStatusString status;
 	
-	public static void main(String[] args) {
-		System.out.println(System.getenv().toString().replace(",", "\n"));
-	}
 	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip, String user_dns_domain) {
 		super();
 		this.host = host;
@@ -135,6 +133,10 @@ public class PeerStatusJsonV2 {
 	public String peer_old_key() {
 		return peer_old_key;
 	}
-	
+	@Override
+	public String toString() {
+		return "PeerStatusJsonV2 [host_port()=" + host_port() + ", update_time()=" + new Date(update_time())
+				+ ", update_time_from_peer()=" + new Date(update_time_from_peer()) + ", peer_type()=" + peer_type() + "]";
+	}
 	
 }

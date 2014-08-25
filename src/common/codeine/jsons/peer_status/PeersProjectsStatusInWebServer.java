@@ -50,6 +50,12 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	}
 
 	private boolean isNewer(PeerStatusJsonV2 newOne, PeerStatusJsonV2 oldOne) {
+		if (newOne.update_time_from_peer() == 0){
+			log.warn("peer new do not have update time " + newOne);
+		}
+		if (oldOne.update_time_from_peer() == 0){
+			log.warn("peer old do not have update time " + oldOne);
+		}
 		if (newOne.update_time_from_peer() > 0 || oldOne.update_time_from_peer() > 0) {
 			return newOne.update_time_from_peer() > oldOne.update_time_from_peer();
 		}
