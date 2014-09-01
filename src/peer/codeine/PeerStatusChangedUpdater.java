@@ -34,6 +34,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 		this.peerStatus = peerStatus;
 		this.databaseConnector = databaseConnector;
 		if (!globalConfigurationJson.get().large_deployment()) {
+			log.info("configuring small deployment updates");
 			MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(5);
 			MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(10);
 			SLEEP_TIME_AFTER_FAILURE_MILLIS = MAX_TIME_BETWEEN_UPDATES_MILLIS;
