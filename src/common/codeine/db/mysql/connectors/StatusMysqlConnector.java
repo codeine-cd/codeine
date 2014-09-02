@@ -151,6 +151,13 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	public String server() {
 		return dbUtils.toString();
 	}
+
+
+	@Override
+	public String toString() {
+		return "StatusMysqlConnector [dbUtils=" + dbUtils + "]";
+	}
+
 	
 	
 }
