@@ -32,17 +32,21 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		int duplicatePeers = 0;
 		Map<String, PeerStatusJsonV2> res = Maps.newHashMap();
 		for (IStatusDatabaseConnector c : statusDatabaseConnectorListProvider.get()) {
-			Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
-			for (Entry<String, PeerStatusJsonV2> e : peersStatus.entrySet()) {
-				if (!res.containsKey(e.getKey())) {
-					res.put(e.getKey(), e.getValue());
-				} else { // more than one
-					log.debug("peer appears in more than one Database " + e.getKey() + " new db: " + c.server());
-					duplicatePeers++;
-					if (isNewer(e.getValue(), res.get(e.getKey()))) {
+			try {
+				Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
+				for (Entry<String, PeerStatusJsonV2> e : peersStatus.entrySet()) {
+					if (!res.containsKey(e.getKey())) {
 						res.put(e.getKey(), e.getValue());
+					} else { // more than one
+						log.debug("peer appears in more than one Database " + e.getKey() + " new db: " + c.server());
+						duplicatePeers++;
+						if (isNewer(e.getValue(), res.get(e.getKey()))) {
+							res.put(e.getKey(), e.getValue());
+						}
 					}
 				}
+			} catch (Exception e) {
+				log.warn("failed to get peers from database " + c, e);
 			}
 		}
 		log.info("total duplicate peers " + duplicatePeers);
