@@ -77,7 +77,11 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 
 	private void updateProjectInDb(ProjectJson project) {
 		for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorList) {
-			projectsConfigurationConnector.updateProject(project);
+			try {
+				projectsConfigurationConnector.updateProject(project);
+			} catch (Exception e) {
+				log.warn("cannot update project in database " + project.name(), e);
+			}
 		}
 	}
 
