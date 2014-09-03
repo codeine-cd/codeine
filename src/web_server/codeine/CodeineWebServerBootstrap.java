@@ -55,11 +55,17 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 	protected void execute() {
 		log.info("executing web server bootstrap");
 		new PeriodicExecuter(PeersProjectsStatusInWebServer.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
-		try {
-			injector().getInstance(ConfigurationManagerServer.class).updateDb();
-		} catch (Exception e) {
-			log.error("fail to update projects in db", e);
-		}
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					log.info("updating projects in db from thread");
+					injector().getInstance(ConfigurationManagerServer.class).updateDb();
+				} catch (Exception e) {
+					log.error("fail to update projects in db", e);
+				}
+				
+			}}).start();
 		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(IMonitorStatistics.class)).runInThreadSleepFirst();
 	}
 
