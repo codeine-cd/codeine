@@ -59,6 +59,7 @@ public class Constants
 	
 	public static final String INFO_CONTEXT = "/info";
 	public static final String USER_INFO_CONTEXT = "/user-info";
+	public static final String MANAGE_STATISTICS_INFO_CONTEXT = "/manage-statistics";
 	public static final String VERSION_INFO_CONTEXT = INFO_CONTEXT + "/version";
 	public static final String VERSIONS_MAPPING_CONTEXT = "/versions-mapping";
 	public static final String PEER_REPORT_CONTEXT = "/peer-report";

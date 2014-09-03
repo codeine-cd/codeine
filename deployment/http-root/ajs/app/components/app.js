@@ -92,6 +92,23 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                         }
                     }
                 }).
+                when('/codeine/manage/statistics', {
+                    templateUrl: '/components/manage_statistics/statistics.html',
+                    controller: 'statisticsCtrl',
+                    pageTitle: 'Statistics',
+                    resolve: {
+                        statistics: function($q,$log,CodeineService) {
+                            var deferred = $q.defer();
+                            CodeineService.getManageStatistics().success(function(data) {
+                                $log.debug("Resolved tabs");
+                                deferred.resolve(data);
+                            }).error(function() {
+                                deferred.reject('Error - failed to get statistics');
+                            });
+                            return deferred.promise;
+                        }
+                    }
+                }).
                 when('/codeine/new_project', {
                     templateUrl: '/components/new_project/new_project.html',
                     controller: 'newProjectCtrl',

@@ -7,6 +7,7 @@ import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
 import codeine.permissions.GroupsManager;
 import codeine.permissions.PluginGroupsManager;
+import codeine.servlet.ManageStatisticsCollector;
 import codeine.servlet.PrepareForShutdown;
 import codeine.servlet.UsersManager;
 import codeine.statistics.IMonitorStatistics;
@@ -29,6 +30,7 @@ public class WebServerModule extends AbstractModule
 		bind(NodesCommandExecuterProvider.class).in(Scopes.SINGLETON);
 		bind(IMonitorStatistics.class).toProvider(MonitorsStatisticsProvider.class).in(Scopes.SINGLETON);
 		bind(PrepareForShutdown.class).in(Scopes.SINGLETON);
+		bind(ManageStatisticsCollector.class).in(Scopes.SINGLETON);
 		bind(GroupsManager.class).to(PluginGroupsManager.class).in(Scopes.SINGLETON);
 	}
 	

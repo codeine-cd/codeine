@@ -33,10 +33,12 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	@Inject private Gson gson;
 	private @Inject UserPermissionsGetter permissionsManager;
+	private @Inject ManageStatisticsCollector manageStatisticsCollector;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			beforeRequest(request, response);
 			if (!checkPermissions(request)) {
 				throw newUnauthrizedException(request);
 			}
@@ -46,6 +48,10 @@ public abstract class AbstractServlet extends HttpServlet{
 		}
 	}
 
+	private void beforeRequest(HttpServletRequest request, HttpServletResponse response) {
+		manageStatisticsCollector.userAccess(permissionsManager.user(request), request.getPathInfo());
+	}
+
 	private UnAuthorizedException newUnauthrizedException(HttpServletRequest request) {
 		return new UnAuthorizedException(permissionsManager.user(request) + " not authorized for url " + request.getRequestURI());
 	}
@@ -53,6 +59,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Override
 	protected final void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			beforeRequest(request, response);
 			if (!checkPermissions(request)) {
 				throw newUnauthrizedException(request);
 			}
@@ -66,6 +73,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Override
 	protected final void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			beforeRequest(request, response);
 			if (!checkPermissions(request)) {
 				throw newUnauthrizedException(request);
 			}
@@ -78,6 +86,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	@Override
 	protected final void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			beforeRequest(request, response);
 			if (!checkPermissions(request)) {
 				throw newUnauthrizedException(request);
 			}
