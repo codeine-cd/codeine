@@ -314,7 +314,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                     templateUrl: '/views/404.html'
                 });
         }])
-    .run(['$rootScope','$log','CodeineService','$interval',  function($rootScope, $log, CodeineService, $interval) {
+    .run(['$rootScope','$log','CodeineService','$interval','$window','$location',  function($rootScope, $log, CodeineService, $interval, $window, $location) {
         $rootScope.app = {
             loading: null,
             viewAs : null,
@@ -395,6 +395,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 title += $rootScope.app.globalConfiguration.server_name;
             }
             $rootScope.pageTitle = title;
+            $window.ga('send', 'pageview', { page: $location.path() });
         });
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
             $log.debug('$routeChangeError - rejection = ' + rejection);
