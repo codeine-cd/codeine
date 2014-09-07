@@ -22,7 +22,7 @@ my $httpRoot = "$deployment/http-root";
 
 #print "grep after kill:\n";
 #system($grepCmd);
-
+$ENV{'JAVA_HOME'} = "/usr/intel/pkgs/java/1.7.0.25";
 e("rm -rf $httpRoot/*.log");
 e("rm -rf $mysql_dir");
 e("mkdir -p $mysql_dir");

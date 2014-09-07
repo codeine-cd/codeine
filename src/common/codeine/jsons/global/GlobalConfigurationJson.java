@@ -78,4 +78,8 @@ public class GlobalConfigurationJson
 	public String server_name() {
 		return server_name;
 	}
+	public void web_server_port(int web_server_port) {
+		this.web_server_port = web_server_port;
+		
+	}
 }

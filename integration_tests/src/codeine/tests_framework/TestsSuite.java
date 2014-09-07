@@ -7,6 +7,7 @@ import org.junit.Before;
 
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.MysqlConfigurationJson;
+import codeine.jsons.project.ProjectJson;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.network.InetUtils;
 import codeine.utils.os_process.ProcessExecuter;
@@ -29,21 +30,25 @@ public class TestsSuite {
 	
 	@Before
 	public void init() {
-		injector = Guice.createInjector();
+		injector = Guice.createInjector(new CodeineIntegrationTestModule());
 		String confFile = System.getenv("CODEINE_INTEGRATION_CONF_JSON");
 		log.info("cheking work dir ");
 		executeAndPrint("pwd");
+		if (null == confFile) {
+			confFile = "codeine.integration.conf.json";
+		}
 		log.info("confFile is " + confFile);
 		conf = getJsonFileUtils().getConfFromFile(confFile, TestSuiteConfiguration.class);
 //		openTar();
 		configure();
+		configureProjects();
 		startProcessess();
 	}
 	
 	private void startProcessess() {
 //		kill mysql
 //		change it to use the new server
-		executeAndPrint(testsConf().scripts_dir() + "/start_processes.pl " + testsConf().dist_dir() + " " + testsConf().mysql_dir());
+		executeAndPrint(testsConf().scripts_dir() + "/start_processes.pl " + testsConf().dist_dir() + " " + testsConf().mysql_work_dir());
 	}
 
 	private void executeAndPrint(String cmd) {
@@ -53,11 +58,15 @@ public class TestsSuite {
 	private void configure() {
 		codeineConf = new GlobalConfigurationJson(InetUtils.getLocalHost().getHostName());
 		MysqlConfigurationJson mysql = new MysqlConfigurationJson(
-				InetUtils.getLocalHost().getHostName(), 17171, conf.mysql_dir(), 
+				InetUtils.getLocalHost().getHostName(), 17171, conf.mysql_work_dir(), 
 				conf.mysql_lib());
 		codeineConf.mysql().add(mysql);
-		JsonFileUtils jsonFileUtils = getJsonFileUtils();
-		jsonFileUtils.setContent(testsConf().conf_file(), codeineConf);
+		codeineConf.web_server_port(19191);
+		getJsonFileUtils().setContent(testsConf().conf_file(), codeineConf);
+	}
+	private void configureProjects() {
+		ProjectJson project = new ProjectJson("integration_test_project");
+		getJsonFileUtils().setContent(testsConf().projects_dir() + "/integration_test_project/project.conf.json", project);
 	}
 
 	private JsonFileUtils getJsonFileUtils() {

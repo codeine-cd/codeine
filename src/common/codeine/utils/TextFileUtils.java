@@ -78,6 +78,7 @@ public class TextFileUtils {
 	public static void setContents(File aFile, String aContents, boolean append) {
 		try {
 			if (!aFile.exists()) {
+				aFile.getParentFile().mkdirs();
 				aFile.createNewFile();
 			}
 			// use buffering
