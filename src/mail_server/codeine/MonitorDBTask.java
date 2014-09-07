@@ -61,7 +61,11 @@ public class MonitorDBTask implements Task {
 	private void workOnCollectionType(AlertsCollectionType alertsCollectionType) {
 		Multimap<String, CollectorNotificationJson> allItems = HashMultimap.create();
 		for (AlertsMysqlConnector c : alertsConnectors) {
-			allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
+			try {
+				allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
+			} catch (Exception e) {
+				log.info("error fetching alerts from db " + c);
+			}
 		}
 		List<NotificationContent> notificationContent = mailCreator.prepareMailsToUsers(alertsCollectionType, allItems, configurationManager.getConfiguredProjects());
 		List<Mail> mails = mailPrepare.prepare(notificationContent, alertsCollectionType);
