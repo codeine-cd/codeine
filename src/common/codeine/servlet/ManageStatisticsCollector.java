@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
@@ -16,6 +17,7 @@ import com.google.common.collect.Lists;
 public class ManageStatisticsCollector {
 
 	Cache<String, String> usersInfo = CacheBuilder.newBuilder().maximumSize(20).build();
+	Cache<String, String> activeUsersInfo = CacheBuilder.newBuilder().maximumSize(200).expireAfterWrite(20, TimeUnit.MINUTES).build();
 	Cache<String, UrlInfo> urlsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
 	
 	public synchronized ManageStatisticsInfo getCollected() {
@@ -23,14 +25,15 @@ public class ManageStatisticsCollector {
 		Comparator<UrlInfo> c = new Comparator<ManageStatisticsCollector.UrlInfo>() {
 			@Override
 			public int compare(UrlInfo o1, UrlInfo o2) {
-				return o1.hitCount == o2.hitCount ? o1.path.compareTo(o2.path) : Integer.compare(o1.hitCount, o2.hitCount);
+				return o1.hitCount == o2.hitCount ? o1.path.compareTo(o2.path) : Integer.compare(o2.hitCount, o1.hitCount);
 			}
 		};
 		Collections.sort(urls, c);
-		return new ManageStatisticsInfo(usersInfo.asMap().keySet(), urls);
+		return new ManageStatisticsInfo(usersInfo.asMap().keySet(), urls, activeUsersInfo.asMap().keySet());
 	}
 	public synchronized void userAccess(IUserWithPermissions user, final String pathInfo) {
 		usersInfo.put(user.user().username(), user.user().username());
+		activeUsersInfo.put(user.user().username(), user.user().username());
 		Callable<UrlInfo> callable = new Callable<ManageStatisticsCollector.UrlInfo>() {
 			@Override
 			public UrlInfo call() throws Exception {
