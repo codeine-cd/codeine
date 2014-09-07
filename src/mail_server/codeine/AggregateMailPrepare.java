@@ -20,7 +20,7 @@ public class AggregateMailPrepare {
 
 	private static final Logger log = Logger
 			.getLogger(AggregateMailPrepare.class);
-	private static final int MAX_MAIL_SIZE = 10000;
+	private static final int MAX_MAIL_SIZE = 100000;
 	@Inject private Links links;
 	@Inject	private LabelJsonProvider labelJsonProvider;
 	
@@ -50,7 +50,7 @@ public class AggregateMailPrepare {
 			String stringContent = "";
 			if (content.length() > MAX_MAIL_SIZE){
 				log.warn("mail was too big to user " + item.user());
-				stringContent = content.substring(0, MAX_MAIL_SIZE) + "...";
+				stringContent = content.substring(0, MAX_MAIL_SIZE) + "\n...Mail was too long...";
 			}
 			else {
 				stringContent = content.toString();
