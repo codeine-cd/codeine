@@ -101,4 +101,11 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		dbUtils.executeUpdate(deleteSql);
 	}
 
+
+	@Override
+	public String toString() {
+		return "AlertsMysqlConnector [dbUtils=" + dbUtils + "]";
+	}
+
+	
 }
