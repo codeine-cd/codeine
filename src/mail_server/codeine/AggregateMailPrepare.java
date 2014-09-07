@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import codeine.configuration.Links;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.jsons.mails.AlertsCollectionType;
@@ -16,6 +18,9 @@ import com.google.inject.Inject;
 
 public class AggregateMailPrepare {
 
+	private static final Logger log = Logger
+			.getLogger(AggregateMailPrepare.class);
+	private static final int MAX_MAIL_SIZE = 10000;
 	@Inject private Links links;
 	@Inject	private LabelJsonProvider labelJsonProvider;
 	
@@ -42,7 +47,15 @@ public class AggregateMailPrepare {
 				content.append("Output\n" + notification.output() + "\n");
 				content.append("========================================================================\n");
 			}
-			$.add(new Mail(Lists.newArrayList(item.user()), "Aggregated alerts from codeine for policy " + alertsCollectionType, content.toString()));
+			String stringContent = "";
+			if (content.length() > MAX_MAIL_SIZE){
+				log.warn("mail was too big to user " + item.user());
+				stringContent = content.substring(0, MAX_MAIL_SIZE) + "...";
+			}
+			else {
+				stringContent = content.toString();
+			}
+			$.add(new Mail(Lists.newArrayList(item.user()), "Aggregated alerts from codeine for policy " + alertsCollectionType, stringContent));
 		}
 		return $;
 	}
