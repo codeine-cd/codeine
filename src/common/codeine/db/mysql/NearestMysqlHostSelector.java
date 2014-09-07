@@ -13,9 +13,6 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.network.InetUtils;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 public class NearestMysqlHostSelector implements Task, MysqlHostSelector{
 
 	public static final long INTERVAL = TimeUnit.HOURS.toMillis(1);
@@ -43,14 +40,10 @@ public class NearestMysqlHostSelector implements Task, MysqlHostSelector{
 	}
 
 	private MysqlConfigurationJson selectNearestConf() {
-		final MysqlConfigurationJson mysql = new NearestHostSelector(conf.get().mysql()).select();
-		Predicate<MysqlConfigurationJson> predicate = new Predicate<MysqlConfigurationJson>(){
-			@Override
-			public boolean apply(MysqlConfigurationJson m){
-				return m.host().equals(mysql.host()) && m.port().equals(mysql.port());
-			}
-		};
-		return Iterables.find(conf.get().mysql(), predicate);
+		log.info("selectNearestConf - starting");
+		MysqlConfigurationJson selectedMysql = new NearestHostSelector(conf.get().mysql()).select();
+		log.info("selectNearestConf - selected mysql " + selectedMysql);
+		return selectedMysql;
 	}
 
 	public MysqlConfigurationJson getLocalConfOrNull() {
@@ -58,9 +51,11 @@ public class NearestMysqlHostSelector implements Task, MysqlHostSelector{
 	}
 
 	public static MysqlConfigurationJson getLocalConfOrNull(GlobalConfigurationJsonStore conf2) {
+		log.info("getLocalConfOrNull - checking host");
 		for (MysqlConfigurationJson mysqlConfigurationJson : conf2.get().mysql()) {
 			try {
 				if (InetAddress.getByName(mysqlConfigurationJson.host()).equals(InetUtils.getLocalHost())){
+					log.info("returning localhost " + mysqlConfigurationJson.host());
 					return mysqlConfigurationJson;
 				}
 			} catch (UnknownHostException e) {
