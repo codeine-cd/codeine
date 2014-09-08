@@ -16,43 +16,47 @@ import com.google.common.collect.Lists;
 
 public class ManageStatisticsCollector {
 
-	Cache<String, String> usersInfo = CacheBuilder.newBuilder().maximumSize(20).build();
+	Cache<String, StringWithCount> usersInfo = CacheBuilder.newBuilder().maximumSize(200).build();
 	Cache<String, String> activeUsersInfo = CacheBuilder.newBuilder().maximumSize(200).expireAfterWrite(20, TimeUnit.MINUTES).build();
-	Cache<String, UrlInfo> urlsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
+	Cache<String, StringWithCount> urlsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
 	
 	public synchronized ManageStatisticsInfo getCollected() {
-		List<UrlInfo> urls = Lists.newArrayList(urlsInfo.asMap().values());
-		Comparator<UrlInfo> c = new Comparator<ManageStatisticsCollector.UrlInfo>() {
+		List<StringWithCount> urls = Lists.newArrayList(urlsInfo.asMap().values());
+		List<StringWithCount> users = Lists.newArrayList(usersInfo.asMap().values());
+		Comparator<StringWithCount> c = new Comparator<ManageStatisticsCollector.StringWithCount>() {
 			@Override
-			public int compare(UrlInfo o1, UrlInfo o2) {
-				return o1.hitCount == o2.hitCount ? o1.path.compareTo(o2.path) : Integer.compare(o2.hitCount, o1.hitCount);
+			public int compare(StringWithCount o1, StringWithCount o2) {
+				return o1.hitCount == o2.hitCount ? o1.value.compareTo(o2.value) : Integer.compare(o2.hitCount, o1.hitCount);
 			}
 		};
 		Collections.sort(urls, c);
-		return new ManageStatisticsInfo(usersInfo.asMap().keySet(), urls, activeUsersInfo.asMap().keySet());
+		Collections.sort(users, c);
+		return new ManageStatisticsInfo(users, urls, activeUsersInfo.asMap().keySet());
 	}
 	public synchronized void userAccess(IUserWithPermissions user, final String pathInfo) {
-		usersInfo.put(user.user().username(), user.user().username());
 		activeUsersInfo.put(user.user().username(), user.user().username());
-		Callable<UrlInfo> callable = new Callable<ManageStatisticsCollector.UrlInfo>() {
-			@Override
-			public UrlInfo call() throws Exception {
-				return new UrlInfo(pathInfo);
-			}
-		};
 		try {
-			UrlInfo urlInfo = urlsInfo.get(pathInfo, callable);
-			urlInfo.hitCount++;
+			urlsInfo.get(pathInfo, getCallable(pathInfo)).hitCount++;
+			usersInfo.get(user.user().username(), getCallable(pathInfo)).hitCount++;
 		} catch (ExecutionException e) {
 			throw ExceptionUtils.asUnchecked(e);
 		}
 	}
+	private Callable<StringWithCount> getCallable(final String pathInfo) {
+		Callable<StringWithCount> callable = new Callable<ManageStatisticsCollector.StringWithCount>() {
+			@Override
+			public StringWithCount call() throws Exception {
+				return new StringWithCount(pathInfo);
+			}
+		};
+		return callable;
+	}
 	
-	public static class UrlInfo {
-		public UrlInfo(String pathInfo) {
-			path = pathInfo;
+	public static class StringWithCount {
+		public StringWithCount(String pathInfo) {
+			value = pathInfo;
 		}
-		private String path;
+		private String value;
 		private int hitCount;
 	}
 

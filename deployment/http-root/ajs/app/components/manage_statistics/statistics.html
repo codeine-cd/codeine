@@ -22,27 +22,31 @@
             </ul>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Last Users</h3>
-        </div>
-        <div class="panel-body">
+    <accordion close-others="true">
+        <accordion-group is-open="users_is_open">
+            <accordion-heading>
+                Last Users <span class="badge">{{statsitics.users.length}}</span>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': users_is_open, 'glyphicon-chevron-right': !users_is_open}"></i>
+            </accordion-heading>
             <ul class="list-group">
-                <li ng-repeat="user in statsitics.users" class="list-group-item">{{user}}</li>
+                <li ng-repeat="user in statsitics.users" class="list-group-item">
+                    <span class="badge">{{user.hitCount}}</span>
+                    {{user.value}}
+                </li>
             </ul>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Urls count</h3>
-        </div>
-        <div class="panel-body">
+        </accordion-group>
+    </accordion>
+    <accordion close-others="true">
+        <accordion-group is-open="users_is_open">
+            <accordion-heading>
+                Urls count
+            </accordion-heading>
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="url in statsitics.urls">
                     <span class="badge">{{url.hitCount}}</span>
-                    {{url.path}}
+                    {{url.value}}
                 </li>
             </ul>
-        </div>
-    </div>
+        </accordion-group>
+    </accordion>
 </div>
