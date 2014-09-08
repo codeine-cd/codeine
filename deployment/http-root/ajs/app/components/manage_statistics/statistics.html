@@ -18,7 +18,7 @@
         </div>
         <div class="panel-body">
             <ul class="list-group">
-                <li ng-repeat="user in statsitics.activeUsers" class="list-group-item">{{user}}</li>
+                <li ng-repeat="activeUser in statsitics.activeUsers" class="list-group-item">{{activeUser}}</li>
             </ul>
         </div>
     </div>
@@ -37,9 +37,10 @@
         </accordion-group>
     </accordion>
     <accordion close-others="true">
-        <accordion-group is-open="users_is_open">
+        <accordion-group is-open="urls_is_open">
             <accordion-heading>
                 Urls count
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': urls_is_open, 'glyphicon-chevron-right': !urls_is_open}"></i>
             </accordion-heading>
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="url in statsitics.urls">

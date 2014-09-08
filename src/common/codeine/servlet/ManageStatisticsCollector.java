@@ -37,7 +37,7 @@ public class ManageStatisticsCollector {
 		activeUsersInfo.put(user.user().username(), user.user().username());
 		try {
 			urlsInfo.get(pathInfo, getCallable(pathInfo)).hitCount++;
-			usersInfo.get(user.user().username(), getCallable(pathInfo)).hitCount++;
+			usersInfo.get(user.user().username(), getCallable(user.user().username())).hitCount++;
 		} catch (ExecutionException e) {
 			throw ExceptionUtils.asUnchecked(e);
 		}
