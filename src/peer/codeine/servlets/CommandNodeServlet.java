@@ -71,26 +71,26 @@ public class CommandNodeServlet extends AbstractServlet
 		executeInternal(request, res);
 	}
 	private void executeInternal(HttpServletRequest request, HttpServletResponse res) {
+		ShellScript cmdScript = null;
 		snoozeKeeper.snoozeAll();
 		final PrintWriter writer = getWriter(res);
-		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
-		CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
-		String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
-		CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
-		if (null != commandInfo2.key()) {
-			String decrypt = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_SECRET_KEY, commandInfo2.key());
-			validateKey(decrypt);
-		}
-		else {
-			log.warn("key is null", new RuntimeException());
-		}
-//		writer.println("INFO: Executing on node " + commandInfo2.node_alias());
-		
-		String dir = pathHelper.getPluginsDir(commandInfo.project_name());
-		String script_content = commandInfo.script_content();
-		String file = dir + File.separator + commandInfo.command_name();
-		ShellScript cmdScript = null;
 		try {
+			String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+			CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
+			String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
+			CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
+			if (null != commandInfo2.key()) {
+				String decrypt = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_SECRET_KEY, commandInfo2.key());
+				validateKey(decrypt);
+			}
+			else {
+				log.warn("key is null", new RuntimeException());
+			}
+			//		writer.println("INFO: Executing on node " + commandInfo2.node_alias());
+
+			String dir = pathHelper.getPluginsDir(commandInfo.project_name());
+			String script_content = commandInfo.script_content();
+			String file = dir + File.separator + commandInfo.command_name();
 			ProjectJson project = getProject(commandInfo.project_name());
 			boolean windows_peer = project.operating_system() == OperatingSystem.Windows;
 			if (null != script_content){
@@ -153,7 +153,14 @@ public class CommandNodeServlet extends AbstractServlet
 			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(10).function(function).env(env).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
 //		res.setStatus(result.success() ? HttpStatus.OK_200 : HttpStatus.INTERNAL_SERVER_ERROR_500);
-		} finally {
+		} catch (Exception ex) {
+			try {
+				writer.println(Constants.COMMAND_RESULT + "-1");
+			} catch (Exception e) {
+				log.warn("failed on command execution", ex);
+			}
+		}
+		finally {
 			if (null != cmdScript){
 				cmdScript.delete();
 			}

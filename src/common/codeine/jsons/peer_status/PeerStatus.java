@@ -132,9 +132,6 @@ public class PeerStatus {
 
 	public List<String> getTags(String project_name, String node_name) {
 		NodeWithMonitorsInfo nodeInfoOrNull = project_name_to_status().get(project_name).nodeInfoOrNull(node_name);
-		if (null == nodeInfoOrNull) {
-			return Lists.newArrayList();
-		}
 		return nodeInfoOrNull.tags();
 	}
 
