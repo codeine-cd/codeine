@@ -132,8 +132,8 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 				continue;
 			}
 			Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
-			NodeWithMonitorsInfo nodeStatusInfo = new NodeWithMonitorsInfo(
-					nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors, Constants.OFFLINE_NODES);
+			NodeWithMonitorsInfoApi nodeStatusInfo = new NodeWithMonitorsInfoApi(new NodeWithMonitorsInfo(
+					nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors, Constants.OFFLINE_NODES), false);
 			log.info("adding offline node " + nodeStatusInfo);
 			offlineNodes.add(nodeStatusInfo);
 		}
