@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import codeine.model.Constants;
+import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ServletUtils;
@@ -49,11 +50,11 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 
 	private void beforeRequest(HttpServletRequest request, HttpServletResponse response) {
-		manageStatisticsCollector.userAccess(permissionsManager.user(request), request.getPathInfo());
+		manageStatisticsCollector.userAccess(getUser(request), request.getPathInfo());
 	}
 
 	private UnAuthorizedException newUnauthrizedException(HttpServletRequest request) {
-		return new UnAuthorizedException(permissionsManager.user(request) + " not authorized for url " + request.getRequestURI());
+		return new UnAuthorizedException(getUser(request) + " not authorized for url " + request.getRequestURI());
 	}
 
 	@Override
@@ -200,18 +201,22 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	protected final boolean canReadProject(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return permissionsManager.user(request).canRead(projectName);
+		return getUser(request).canRead(projectName);
+	}
+
+	protected IUserWithPermissions getUser(HttpServletRequest request) {
+		return permissionsManager.user(request);
 	}
 	protected final boolean canCommandProject(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return permissionsManager.user(request).canCommand(projectName);
+		return getUser(request).canCommand(projectName);
 	}
 	protected final boolean canConfigureProject(HttpServletRequest request) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		return permissionsManager.user(request).canConfigure(projectName);
+		return getUser(request).canConfigure(projectName);
 	}
 	protected final boolean isAdministrator(HttpServletRequest request) {
-		return permissionsManager.user(request).isAdministrator();
+		return getUser(request).isAdministrator();
 	}
 	
 	protected final String projectName(HttpServletRequest request) {

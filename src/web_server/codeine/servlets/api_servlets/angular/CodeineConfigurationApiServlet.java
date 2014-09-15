@@ -24,7 +24,7 @@ public class CodeineConfigurationApiServlet extends AbstractApiServlet {
 	protected boolean checkPermissions(HttpServletRequest request) {
 		if (request.getMethod().equals("PUT")) {
 			if (!isAdministrator(request)) {
-				log.info("User can not update configuration");
+				log.info("User can not update configuration " + getUser(request));
 				return false;
 			}
 			return true;
