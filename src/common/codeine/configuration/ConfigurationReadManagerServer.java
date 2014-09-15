@@ -24,7 +24,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	public static final ProjectJson NODES_INTERNAL_PROJECT = new ProjectJson(Constants.CODEINE_NODES_PROJECT_NAME);
 	
 	
-	private Map<String, ProjectJson> projects = Maps.newHashMap();
+	private Map<String, ProjectJson> projects = Maps.newConcurrentMap();
 	private JsonFileUtils jsonFileUtils;
 	private PathHelper pathHelper;
 	
