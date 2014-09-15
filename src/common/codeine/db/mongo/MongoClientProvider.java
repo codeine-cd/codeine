@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.jsons.global.GlobalConfigurationJsonStore;
-import codeine.utils.Asserter;
+import codeine.utils.logging.Asserter;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Provider;

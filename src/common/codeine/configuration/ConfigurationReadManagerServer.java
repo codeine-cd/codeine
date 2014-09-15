@@ -2,6 +2,7 @@ package codeine.configuration;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 
@@ -13,6 +14,7 @@ import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.exceptions.ProjectNotFoundException;
+import codeine.utils.logging.LogUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -38,7 +40,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 
 	@Override
 	public void refresh() {
-		Map<String, ProjectJson> projects1 = Maps.newHashMap();
+		Map<String, ProjectJson> projects1 = Maps.newConcurrentMap();
 		try {
 			String projectsDir = pathHelper.getProjectsDir();
 			log.info("loading configuration, projects from " + projectsDir);
@@ -65,7 +67,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 			log.error("error", e);
 			throw e;
 		}
-		projects = projects1;
+		projects(projects1);
 	}
 
 	@Override
@@ -95,6 +97,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	}
 
 	public void projects(Map<String, ProjectJson> projects) {
+		LogUtils.assertTrue(log, projects instanceof ConcurrentHashMap, "created a map that is not concurrent");
 		this.projects = projects;
 	}
 
