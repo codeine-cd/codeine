@@ -12,6 +12,8 @@ import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.jsons.project.MailPolicyJson;
 import codeine.jsons.project.ProjectJson;
+import codeine.mail.AggregateNotification;
+import codeine.mail.NotificationContent;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;

@@ -10,6 +10,7 @@ import org.joda.time.tz.FixedDateTimeZone;
 import org.junit.Test;
 
 import codeine.jsons.mails.AlertsCollectionType;
+import codeine.mail.CollectionTypeGetter;
 
 import com.google.common.collect.Lists;
 
