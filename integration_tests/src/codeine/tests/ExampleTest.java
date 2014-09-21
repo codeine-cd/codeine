@@ -1,6 +1,6 @@
 package codeine.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import codeine.CodeineApiClient;
 import codeine.api.VersionItemInfo;
 import codeine.jsons.project.ProjectJson;
-import codeine.servlets.api_servlets.angular.NodeWithMonitorsInfoApi;
 import codeine.tests_framework.TestsSuite;
 
 import com.google.common.collect.Lists;
@@ -24,7 +23,7 @@ public class ExampleTest extends TestsSuite{
 		System.out.println(projects);
 		ProjectJson projectJson = client.project("integration_test_project");
 		Map<String, VersionItemInfo> projectStatus = client.projectStatus("integration_test_project");
-		List<NodeWithMonitorsInfoApi> nodes = Lists.<NodeWithMonitorsInfoApi>newArrayList(client.projectNodes(projectJson.name(), projectStatus.entrySet().iterator().next().getKey()));
+		List<?> nodes = Lists.newArrayList(client.projectNodes(projectJson.name(), projectStatus.entrySet().iterator().next().getKey()));
 		assertEquals(1, nodes.size());
 //		CommandInfo commandJson = projectJson.commandForName("short-command");
 //		ScehudleCommandExecutionInfo data = ScehudleCommandExecutionInfo.createImmediate(commandJson, nodes.subList(0, 10));

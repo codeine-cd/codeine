@@ -11,7 +11,6 @@ import codeine.api.VersionItemInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
-import codeine.servlets.api_servlets.angular.NodeWithMonitorsInfoApi;
 import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
@@ -74,7 +73,8 @@ public class CodeineApiClient {
 		return Constants.UrlParameters.PROJECT_NAME + "=" + HttpUtils.encodeURL(projectName);
 	}
 
-	public List<NodeWithMonitorsInfoApi> projectNodes(String projectName, String version) {
+	public List<?> projectNodes(String projectName, String version) {
+//		public List<NodeWithMonitorsInfoApi> projectNodes(String projectName, String version) {
 		//TODO
 		return Lists.newArrayList();
 //		return apiGzipCall(
