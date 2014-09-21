@@ -60,11 +60,13 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		final Multimap<String, CollectorNotificationJson> $ = HashMultimap.create();
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
-			return $;
 		}
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
 			public Void apply(ResultSet rs){
+				if (webConfJsonStore.get().readonly_web_server()) {
+					return null;
+				}
 				try {
 					String data = rs.getString("data");
 //					Long type = rs.getLong("collection_type");

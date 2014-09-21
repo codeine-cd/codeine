@@ -11,6 +11,7 @@ import codeine.configuration.IConfigurationManager;
 import codeine.db.mysql.connectors.AlertsMysqlConnector;
 import codeine.db.mysql.connectors.AlertsMysqlConnectorDatabaseConnectorListProvider;
 import codeine.executer.Task;
+import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.mail.Mail;
@@ -29,12 +30,13 @@ public class MonitorDBTask implements Task {
 	private MailStrategy mailsStrategy;
 	private CollectionTypeGetter collectionTypeGetter;
 	private List<AlertsMysqlConnector> alertsConnectors;
+	private ExperimentalConfJsonStore webConfJsonStore;
 
 	
 	@Inject 
 	public MonitorDBTask(IConfigurationManager configurationManager, AggregateNotification mailCreator,
 			AggregateMailPrepare mailPrepare, MailStrategy mailsStrategy, CollectionTypeGetter collectionTypeGetter,
-			AlertsMysqlConnectorDatabaseConnectorListProvider alertsMysqlConnectorDatabaseConnectorListProvider) {
+			AlertsMysqlConnectorDatabaseConnectorListProvider alertsMysqlConnectorDatabaseConnectorListProvider, ExperimentalConfJsonStore webConfJsonStore) {
 		super();
 		this.configurationManager = configurationManager;
 		this.mailCreator = mailCreator;
@@ -42,6 +44,7 @@ public class MonitorDBTask implements Task {
 		this.mailsStrategy = mailsStrategy;
 		this.collectionTypeGetter = collectionTypeGetter;
 		this.alertsConnectors = alertsMysqlConnectorDatabaseConnectorListProvider.get();
+		this.webConfJsonStore = webConfJsonStore;
 	}
 
 	@Override
@@ -72,6 +75,10 @@ public class MonitorDBTask implements Task {
 		List<Mail> mails = mailPrepare.prepare(notificationContent, alertsCollectionType);
 		for (Mail mail : mails) {
 			log.info("sending mail to " + mail.recipients() + " with subject " + mail.subject());
+			if (webConfJsonStore.get().readonly_web_server()) {
+				log.info("read only mode");
+				continue;
+			}
 			mailsStrategy.sendMail(mail);
 		}
 	}

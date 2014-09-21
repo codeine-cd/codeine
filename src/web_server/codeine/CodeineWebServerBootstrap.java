@@ -2,6 +2,7 @@ package codeine;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +68,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 				
 			}}).start();
 		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(IMonitorStatistics.class)).runInThreadSleepFirst();
+		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(5), injector().getInstance(MonitorDBTask.class)).runInThreadSleepFirst();
 	}
 
 	@Override
