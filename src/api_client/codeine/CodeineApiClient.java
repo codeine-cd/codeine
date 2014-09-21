@@ -11,9 +11,11 @@ import codeine.api.VersionItemInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
+import codeine.servlets.api_servlets.angular.NodeWithMonitorsInfoApi;
 import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -68,12 +70,17 @@ public class CodeineApiClient {
 				new TypeToken<Map<String, VersionItemInfo>>(){}.getType());
 	}
 
-
-
 	private String projectNameParam(String projectName) {
 		return Constants.UrlParameters.PROJECT_NAME + "=" + HttpUtils.encodeURL(projectName);
 	}
 
+	public List<NodeWithMonitorsInfoApi> projectNodes(String projectName, String version) {
+		//TODO
+		return Lists.newArrayList();
+//		return apiGzipCall(
+//				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
+//				new TypeToken<List<NodeWithMonitorsInfoApi>>(){}.getType());
+	}
 
 //TODO
 //	public List<NodeWithMonitorsInfo> projectNodes(String projectName, String version) {
