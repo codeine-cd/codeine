@@ -21,7 +21,7 @@ public class CommandInfo
 	private boolean stop_on_error;
 	private DurationUnits duration_units;
 	private RatioType ratio;
-	private boolean prevent_override;
+	private boolean prevent_override = true;
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
 

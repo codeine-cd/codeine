@@ -253,79 +253,101 @@
                             <input id="command_info{{$index}}.name" name="name" type="text" ng-model="command_info.name" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.timeoutInMinutes">Timeout <help help-id="commandTimeoutHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.timeoutInMinutes.$invalid}">
-                            <input id="command_info{{$index}}.timeoutInMinutes" name="concurrency" ng-model="command_info.timeoutInMinutes" type="number" min="1" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
-                        <div class="controls col-md-3">
-                            <input id="command_info{{$index}}.credentials" name="credentials" ng-model="command_info.credentials" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox col-lg-offset-3">
-                            <label>
-                                <input type="checkbox" name="prevent_override" id="command_info{{$index}}.prevent_override" ng-model="command_info.prevent_override"> Prevent override of default configuration
-                                <help help-id="preventOverrideHelp"></help>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info_{{$index}}command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.command_strategy.$invalid}">
-                            <select class="form-control select2" name="command_strategy" id="command_info_{{$index}}command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
-                                <option value="Immediately">Immediately</option>
-                                <option value="Progressive">Progressive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-show="command_info.command_strategy == 'Immediately'">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.concurrency">Concurrency <help help-id="concurrencyHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.concurrency.$invalid}">
-                            <input id="command_info{{$index}}.concurrency" name="concurrency" ng-model="command_info.concurrency" type="number" min="1" class="form-control" required>
-                        </div>
-                    </div>
-                    <div ng-if="command_info.command_strategy == 'Progressive'">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="command_info{{$index}}.duration">Duration <help help-id="durationHelp"></help></label>
-                            <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.duration.$invalid}">
-                                <input id="command_info{{$index}}.duration" name="duration" ng-model="command_info.duration" type="text" class="form-control" required>
+                    <accordion close-others="false">
+                        <accordion-group is-open="command_info.schedule_is_open">
+                            <accordion-heading>
+                                <div>
+                                    Schedule
+                                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.schedule_is_open, 'glyphicon-chevron-right': !command_info.schedule_is_open}">
+                                    </i>
+                                </div>
+                            </accordion-heading>
+                            <div class="form-group">
+                                <div class="checkbox col-lg-offset-3">
+                                    <label>
+                                        <input type="checkbox" name="prevent_override" id="command_info{{$index}}.prevent_override" ng-model="command_info.prevent_override"> Prevent override of default configuration
+                                        <help help-id="preventOverrideHelp"></help>
+                                    </label>
+                                </div>
                             </div>
-                            <div class="controls col-md-3">
-                                <select class="form-control select2" name="command_info{{$index}}.duration_units" id="command_info_{{$index}}_duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units" required>
-                                    <option value="Minutes">Minutes</option>
-                                    <option value="Hours">Hours</option>
-                                    <option value="Days">Days</option>
-                                </select>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="command_info_{{$index}}command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
+                                <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.command_strategy.$invalid}">
+                                    <select class="form-control select2" name="command_strategy" id="command_info_{{$index}}command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
+                                        <option value="Immediately">Immediately</option>
+                                        <option value="Progressive">Progressive</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="command_info_{{$index}}_ratio">Ratio <help help-id="ratioHelp"></help></label>
-                            <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.ratio.$invalid}">
-                                <select  class="form-control select2" name="ratio" id="command_info_{{$index}}_ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio" required>
-                                    <option value="Linear">Linear</option>
-                                    <option value="Exponential">Exponential</option>
-                                </select>
+                            <div class="form-group" ng-show="command_info.command_strategy == 'Immediately'">
+                                <label class="col-md-3 control-label" for="command_info{{$index}}.concurrency">Concurrency <help help-id="concurrencyHelp"></help></label>
+                                <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.concurrency.$invalid}">
+                                    <input id="command_info{{$index}}.concurrency" name="concurrency" ng-model="command_info.concurrency" type="number" min="1" class="form-control" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox col-lg-offset-3">
-                                <label>
-                                    <input type="checkbox" name="stop_on_error" id="command_info{{$index}}.stop_on_error" ng-model="command_info.stop_on_error"> Stop on error
-                                    <help help-id="stopOnErrorHelp"></help>
-                                </label>
+                            <div ng-if="command_info.command_strategy == 'Progressive'">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="command_info{{$index}}.duration">Duration <help help-id="durationHelp"></help></label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.duration.$invalid}">
+                                        <input id="command_info{{$index}}.duration" name="duration" ng-model="command_info.duration" type="text" class="form-control" required>
+                                    </div>
+                                    <div class="controls col-md-3">
+                                        <select class="form-control select2" name="command_info{{$index}}.duration_units" id="command_info_{{$index}}_duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units" required>
+                                            <option value="Minutes">Minutes</option>
+                                            <option value="Hours">Hours</option>
+                                            <option value="Days">Days</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="command_info_{{$index}}_ratio">Ratio <help help-id="ratioHelp"></help></label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.ratio.$invalid}">
+                                        <select  class="form-control select2" name="ratio" id="command_info_{{$index}}_ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio" required>
+                                            <option value="Linear">Linear</option>
+                                            <option value="Exponential">Exponential</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox col-lg-offset-3">
+                                        <label>
+                                            <input type="checkbox" name="stop_on_error" id="command_info{{$index}}.stop_on_error" ng-model="command_info.stop_on_error"> Stop on error
+                                            <help help-id="stopOnErrorHelp"></help>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-if="command_info.stop_on_error">
+                                    <label class="col-md-3 control-label" for="command_info{{$index}}.error_percent_val">Error percent</label>
+                                    <div class="controls col-md-3">
+                                        <input element-placeholder="%" id="command_info{{$index}}.error_percent_val" name="error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group" ng-if="command_info.stop_on_error">
-                            <label class="col-md-3 control-label" for="command_info{{$index}}.error_percent_val">Error percent</label>
-                            <div class="controls col-md-3">
-                                <input element-placeholder="%" id="command_info{{$index}}.error_percent_val" name="error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
+                        </accordion-group>
+                    </accordion>
+                    <accordion close-others="false">
+                        <accordion-group is-open="command_info.advanced_is_open">
+                            <accordion-heading>
+                                <div>
+                                    Advanced
+                                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.advanced_is_open, 'glyphicon-chevron-right': !command_info.advanced_is_open}">
+                                    </i>
+                                </div>
+                            </accordion-heading>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="command_info{{$index}}.timeoutInMinutes">Timeout <help help-id="commandTimeoutHelp"></help></label>
+                                <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.timeoutInMinutes.$invalid}">
+                                    <input id="command_info{{$index}}.timeoutInMinutes" name="concurrency" ng-model="command_info.timeoutInMinutes" type="number" min="1" class="form-control" required>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="command_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
+                                <div class="controls col-md-3">
+                                    <input id="command_info{{$index}}.credentials" name="credentials" ng-model="command_info.credentials" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </accordion-group>
+                    </accordion>
                     <!-- command parameters -->
                     <accordion close-others="false">
                         <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter.is_open">
