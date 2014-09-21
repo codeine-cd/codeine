@@ -105,5 +105,9 @@ public class CommandInfo
 		this.project_name = projectName;
 	}
 
+	public void timeoutInMinutes(int timeoutInMinutes) {
+		this.timeoutInMinutes = timeoutInMinutes;
+	}
+
 	
 }

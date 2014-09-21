@@ -252,7 +252,7 @@ public class CommandNodeServlet extends AbstractServlet
 				return null;
 			}
 		};
-		Result result = new ProcessExecuterBuilder(cmd, dir).cmdForOutput(cmdForOutput).timeoutInMinutes(10).function(function).build().execute();
+		Result result = new ProcessExecuterBuilder(cmd, dir).cmdForOutput(cmdForOutput).timeoutInMinutes(commandJson.timeoutInMinutes()).function(function).build().execute();
 		writer.println(Constants.COMMAND_RESULT + result.exit());
 	}
 
