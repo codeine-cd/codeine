@@ -37,7 +37,6 @@ public class CodeineServerBootstrap extends CodeineWebServerBootstrap {
 		log.info("execute()");
 		List<AbstractCodeineBootstrap> bootstraps = Lists.newArrayList(
 				new CodeineDirectoryBootstrap(injector()),
-				new CodeineMailServerBootstrap(injector()),
 				new CodeineWebServerBootstrap(injector())
 				);
 		for (AbstractCodeineBootstrap b : bootstraps) {
