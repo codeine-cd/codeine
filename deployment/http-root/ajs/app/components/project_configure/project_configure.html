@@ -254,6 +254,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-md-3 control-label" for="command_info{{$index}}.timeoutInMinutes">Timeout <help help-id="commandTimeoutHelp"></help></label>
+                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.timeoutInMinutes.$invalid}">
+                            <input id="command_info{{$index}}.timeoutInMinutes" name="concurrency" ng-model="command_info.timeoutInMinutes" type="number" min="1" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-md-3 control-label" for="command_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
                         <div class="controls col-md-3">
                             <input id="command_info{{$index}}.credentials" name="credentials" ng-model="command_info.credentials" type="text" class="form-control">

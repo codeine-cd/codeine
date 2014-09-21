@@ -15,6 +15,7 @@ public class CommandInfo
     private String name, title;
     private String project_name;
     private String credentials;
+    private int timeoutInMinutes = 10;
     private Integer duration, concurrency, error_percent_val;
 	private CommandExcutionType command_strategy;
 	private boolean stop_on_error;
@@ -34,6 +35,9 @@ public class CommandInfo
 
 	public String credentials() {
 		return credentials;
+	}
+	public int timeoutInMinutes() {
+		return timeoutInMinutes;
 	}
 
 	public Integer concurrency() {
@@ -86,11 +90,7 @@ public class CommandInfo
 
 	@Override
 	public String toString() {
-		return "CommandInfo [name=" + name + ", title=" + title + ", project_name=" + project_name + ", credentials="
-				+ credentials + ", duration=" + duration + ", concurrency=" + concurrency + ", error_percent_val="
-				+ error_percent_val + ", command_strategy=" + command_strategy + ", stop_on_error=" + stop_on_error
-				+ ", duration_units=" + duration_units + ", ratio=" + ratio + ", prevent_override=" + prevent_override
-				+ ", parameters=" + parameters + "]";
+		return "CommandInfo [name=" + name + "]";
 	}
 
 	public void credentials(String credentials) {

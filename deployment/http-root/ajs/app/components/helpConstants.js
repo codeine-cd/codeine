@@ -47,6 +47,7 @@ angular.module('codeine')
         "minIntervalHelp" : "The minimal interval that Codeine will run the monitor.<br/><br/>" +
             "This option is good when the monitor execution itself is time consuming or may cause load on the node itself and hence should not executed at high frequency.<br/><br/>" +
             "Specify an <strong>integer in minutes</strong>. Default is less than a minute.",
+        "commandTimeoutHelp" : "The maximum time in <strong>minutes</strong> command will be allowed to run on node, before termination",
         "credentialsHelp" : "The user that will be used to execute the configured script.<br/><br/> This feature does not work for most cases right now.",
         "notificationsEnabledHelp" : "If not checked, emails will not be sent to the configured users, even if this monitor fails.",
         "monitorScriptHelp" : "Type a shell script to monitor the desired functionality of the node.<br/><br/>By convention, monitors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +

@@ -61,7 +61,7 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
         };
 
         $scope.addCommand = function() {
-            $scope.projectConfigurationForEditing.commands.push({is_open: true, name: "new_command_" + $scope.projectConfigurationForEditing.commands.length, parameters: [], concurrency : 1, command_strategy : 'Immediately', duration_units : 'Minutes', ratio : 'Linear'});
+            $scope.projectConfigurationForEditing.commands.push({is_open: true, name: "new_command_" + $scope.projectConfigurationForEditing.commands.length, parameters: [], concurrency : 1, command_strategy : 'Immediately', duration_units : 'Minutes', ratio : 'Linear', timeoutInMinutes: 10});
         };
 
         $scope.addParameter = function(index) {
