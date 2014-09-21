@@ -66,11 +66,6 @@
 			</fileset>
 		</copy>
 		<copy includeemptydirs="false" todir="compiled_classes_ant">
-			<fileset dir="src/mail_server">
-				<exclude name="**/*.java" />
-			</fileset>
-		</copy>
-		<copy includeemptydirs="false" todir="compiled_classes_ant">
 			<fileset dir="src/server">
 				<exclude name="**/*.java" />
 			</fileset>
@@ -111,10 +106,6 @@
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="compiled_classes_ant" source="${source}" target="${target}">
 			<src path="src/directory" />
-			<classpath refid="codeine.classpath" />
-		</javac>
-		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="compiled_classes_ant" source="${source}" target="${target}">
-			<src path="src/mail_server" />
 			<classpath refid="codeine.classpath" />
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="compiled_classes_ant" source="${source}" target="${target}">
