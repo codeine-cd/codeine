@@ -14,7 +14,6 @@ import codeine.model.Constants.UrlParameters;
 import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,7 +24,7 @@ public class CodeineApiClient {
 	private String host;
 	private int port;
 	private Gson gson = new Gson();
-	private Map<String,String> headers;
+	private Map<String,String> headers = Maps.newHashMap();
 
 	public CodeineApiClient(String host, int port) {
 		this(host,port,null);
@@ -35,9 +34,9 @@ public class CodeineApiClient {
 		this.host = host;
 		this.port = port;
 		if (!StringUtils.isEmpty(api_token)) {
-			headers = Maps.newHashMap();
 			headers.put(Constants.API_TOKEN, api_token);
 		}
+		headers.put(Constants.RequestHeaders.NO_ZIP, Constants.RequestHeaders.NO_ZIP);
 	}
 
 	public List<ProjectJson> projects() {
@@ -73,21 +72,11 @@ public class CodeineApiClient {
 		return Constants.UrlParameters.PROJECT_NAME + "=" + HttpUtils.encodeURL(projectName);
 	}
 
-	public List<?> projectNodes(String projectName, String version) {
-//		public List<NodeWithMonitorsInfoApi> projectNodes(String projectName, String version) {
-		//TODO
-		return Lists.newArrayList();
-//		return apiGzipCall(
-//				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
-//				new TypeToken<List<NodeWithMonitorsInfoApi>>(){}.getType());
+	public List<NodeWithMonitorsInfo> projectNodes(String projectName, String version) {
+		return apiCall(
+				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
+				new TypeToken<List<NodeWithMonitorsInfo>>(){}.getType());
 	}
-
-//TODO
-//	public List<NodeWithMonitorsInfo> projectNodes(String projectName, String version) {
-//		return apiCall(
-//				Constants.PROJECT_NODES_CONTEXT,"?" + projectNameParam(projectName)  + "&" + Constants.UrlParameters.VERSION_NAME + "=" + HttpUtils.encodeURL(version),
-//				new TypeToken<List<NodeWithMonitorsInfo>>(){}.getType());
-//	}
 
 
 

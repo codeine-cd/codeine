@@ -34,7 +34,7 @@ public class ProjectNodesApiServlet extends AbstractApiServlet {
 			boolean can_command = (userPermissionsGetter.user(request).canCommand(projectName, nodeWithMonitorsInfo.alias()));
 			$.add(new NodeWithMonitorsInfoApi(nodeWithMonitorsInfo, can_command));
 		}
-		writeResponseGzipJson(response, $);
+		writeResponseGzipJson($, request, response);
 	}
 
 }

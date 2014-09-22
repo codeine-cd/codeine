@@ -18,7 +18,7 @@ public class MonitorsStatisticsApiServlet extends AbstractApiServlet {
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		writeResponseGzipJson(response, monitorsStatistics.getData(projectName));
+		writeResponseGzipJson(monitorsStatistics.getData(projectName), request, response);
 	}
 	
 	@Override

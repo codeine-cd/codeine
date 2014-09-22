@@ -163,7 +163,12 @@ public abstract class AbstractServlet extends HttpServlet{
 		getWriter(response).write(gson().toJson(json));
 	}
 
-	protected final void writeResponseGzipJson(HttpServletResponse response, Object json) {
+	protected final void writeResponseGzipJson(Object json, HttpServletRequest request, HttpServletResponse response) {
+		if (Constants.RequestHeaders.NO_ZIP.equals(request.getHeader(Constants.RequestHeaders.NO_ZIP))) {
+			log.debug("will not compress");
+			writeResponseJson(response, json);
+			return;
+		}
 		try {
 			try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(getGzipStream(response),
 					response.getCharacterEncoding()))) {

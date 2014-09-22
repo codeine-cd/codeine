@@ -27,7 +27,7 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 		String outputfile = pathHelper.getCommandOutputFile(projectName, commandName);
 		CommandExecutionStatusInfo commandInfo = new JsonFileUtils(gson()).getConfFromFile(file, CommandExecutionStatusInfo.class);
 		commandInfo.output(TextFileUtils.getContents(outputfile));
-		writeResponseGzipJson(response, commandInfo);
+		writeResponseGzipJson(commandInfo, request, response);
 	}
 	
 	@Override

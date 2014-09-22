@@ -177,6 +177,10 @@ public class Constants
 
 	
 
+	public static class RequestHeaders {
+		public static final String NO_ZIP = "NO_ZIP";
+		
+	}
 	public static class UrlParameters {
 		public static final String PROJECT_NAME = "project";
 		public static final String VERSION_NAME = "version";
