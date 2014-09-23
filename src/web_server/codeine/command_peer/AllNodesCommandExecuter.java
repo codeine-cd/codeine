@@ -258,4 +258,8 @@ public class AllNodesCommandExecuter {
 	public void cancel() {
 		strategy.setCancel();
 	}
+
+	public List<NodeWithPeerInfo> nodesList() {
+		return commandData.nodes();
+	}
 }

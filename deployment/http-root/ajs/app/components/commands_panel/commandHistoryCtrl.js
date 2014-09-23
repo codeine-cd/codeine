@@ -2,7 +2,10 @@
 angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope', '$log', '$interval','$routeParams','CodeineService','Constants', function($scope,$rootScope,$log,$interval,$routeParams,CodeineService,Constants) {
     $scope.projectName = $routeParams.project_name;
     $scope.limit = 10;
-
+    $scope.historyUrl = Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + encodeURI($scope.projectName);
+    if ($routeParams.node_name !== undefined) {
+        $scope.historyUrl += '&node=' + encodeURI($routeParams.node_name);
+    }
     CodeineService.getProjectCommandHistory($scope.projectName).success(function(data) {
         $scope.history = data;
     });
@@ -17,7 +20,7 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
         intervalTriggered++;
         $.ajax( {
             type: 'GET',
-            url: Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + $scope.projectName  ,
+            url: $scope.historyUrl ,
             success: function(response) {
                 if  (($scope.history.length !== response.length) || (angular.toJson($scope.history) !== angular.toJson(response))) {
                     $scope.$apply(function() {

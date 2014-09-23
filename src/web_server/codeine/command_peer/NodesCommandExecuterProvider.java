@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.api.CommandStatusJson;
+import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
@@ -45,8 +46,8 @@ public class NodesCommandExecuterProvider {
 		return executer;
 	}
 
-	public List<CommandStatusJson> getAllCommands(String projectName) {
-		List<CommandStatusJson> $ = getActive(projectName);
+	public List<CommandStatusJson> getAllCommands(String projectName, String nodeName) {
+		List<CommandStatusJson> $ = getActive(projectName, nodeName);
 		String parentDir = pathHelper.getPluginsOutputDir(projectName);
 		List<String> filesInDir = FilesUtils.getFilesInDir(parentDir);
 		for (String dir : filesInDir) {
@@ -86,23 +87,35 @@ public class NodesCommandExecuterProvider {
 		return false;
 	}
 
-	private List<CommandStatusJson> getActive(final String projectName) {
-		Predicate<CommandStatusJson> filter = new Predicate<CommandStatusJson>() {
+	private List<CommandStatusJson> getActive(final String projectName, final String nodeName) {
+		Predicate<AllNodesCommandExecuter> filter = new Predicate<AllNodesCommandExecuter>() {
 			@Override
-			public boolean apply(CommandStatusJson c){
-				return c.project().equals(projectName);
+			public boolean apply(AllNodesCommandExecuter c){
+				return c.project().equals(projectName) && shouldShowByNode(c, nodeName);
 			}
+
 		};
-		return Lists.newArrayList(Iterables.filter(getActive(), filter ));
+		return getActive(filter);
+	}
+	private boolean shouldShowByNode(AllNodesCommandExecuter c, String nodeName) {
+		if (nodeName == null) {
+			return true;
+		}
+		for (NodeWithPeerInfo node : c.nodesList()) {
+			if (node.name().equals(nodeName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public List<CommandStatusJson> getActive() {
-		return getActiveStatusFromList(cleanAndGet());
+	public List<CommandStatusJson> getActive(Predicate<AllNodesCommandExecuter> filter) {
+		return getActiveStatusFromList(Iterables.filter(cleanAndGet(), filter));
 	}
 	
-	private List<CommandStatusJson> getActiveStatusFromList(List<AllNodesCommandExecuter> list) {
+	private List<CommandStatusJson> getActiveStatusFromList(Iterable<AllNodesCommandExecuter> iterable) {
 		List<CommandStatusJson> $ = Lists.newArrayList();
-		for (AllNodesCommandExecuter e : list) {
+		for (AllNodesCommandExecuter e : iterable) {
 			$.add(new CommandStatusJson(e.name(), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(), e.commandData().id(),  !e.isActive()));
 		}
 		return $;
@@ -133,6 +146,10 @@ public class NodesCommandExecuterProvider {
 			}
 		}
 		throw new RuntimeException("could not cancel " + id + " " + project);
+	}
+
+	public List<CommandStatusJson> getActive() {
+		return getActiveStatusFromList(cleanAndGet());
 	}
 
 }
