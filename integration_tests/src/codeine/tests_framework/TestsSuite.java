@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 
+import codeine.api.NodeInfo;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.jsons.project.ProjectJson;
@@ -66,6 +67,7 @@ public class TestsSuite {
 	}
 	private void configureProjects() {
 		ProjectJson project = new ProjectJson("integration_test_project");
+		project.nodes_info().add(new NodeInfo(InetUtils.getLocalHost().getHostName()));
 		getJsonFileUtils().setContent(testsConf().projects_dir() + "/integration_test_project/project.conf.json", project);
 	}
 

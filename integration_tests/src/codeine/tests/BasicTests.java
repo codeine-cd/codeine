@@ -1,6 +1,6 @@
 package codeine.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +18,7 @@ import com.google.common.collect.Lists;
 public class BasicTests extends TestsSuite{
 
 	@Test
-	public void firstTest() {
+	public void sanityTest() {
 		CodeineApiClient client = new CodeineApiClient(codeineConf().web_server_host(), codeineConf().web_server_port());
 		List<ProjectJson> projects = client.projects();
 		System.out.println(projects);

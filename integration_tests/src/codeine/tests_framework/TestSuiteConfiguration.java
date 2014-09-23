@@ -21,7 +21,7 @@ public class TestSuiteConfiguration {
 		return work_dir() + "/mysql_work_dir";
 	}
 	public String mysql_lib() {
-		return sources_dir() + "libs/mysql";
+		return sources_dir() + "/libs/mysql";
 	}
 	public String conf_file() {
 		return dist_dir() + "/conf/codeine.conf.json";
