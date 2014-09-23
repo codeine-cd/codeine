@@ -6,7 +6,7 @@ angular.module('codeine').controller('commandHistoryCtrl',['$scope', '$rootScope
     if ($routeParams.node_name !== undefined) {
         $scope.historyUrl += '&node=' + encodeURI($routeParams.node_name);
     }
-    CodeineService.getProjectCommandHistory($scope.projectName).success(function(data) {
+    CodeineService.getProjectCommandHistory($scope.projectName, $routeParams.node_name).success(function(data) {
         $scope.history = data;
     });
     var maxUpdatesNotInFocus = 100;

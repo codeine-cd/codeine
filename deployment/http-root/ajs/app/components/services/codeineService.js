@@ -75,8 +75,12 @@ angular.module('codeine').factory('CodeineService', ['Constants', '$http', funct
         getProjectStatus : function(project) {
             return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-status2", {params: { project: project } ,cache: false });
         },
-        getProjectCommandHistory: function(project) {
-            return $http.get(Constants.CODEINE_WEB_SERVER + "/api/commands-log", {params: { project: project } ,cache: false });
+        getProjectCommandHistory: function(project,node) {
+            var paramsForRequest = { project: project };
+            if (node !== undefined) {
+                paramsForRequest.node = node;
+            }
+            return $http.get(Constants.CODEINE_WEB_SERVER + "/api/commands-log", {params:  paramsForRequest ,cache: false });
         },
         getRunningCommands: function() {
             return $http.get(Constants.CODEINE_WEB_SERVER + "/api/commands-status", { cache: false });
