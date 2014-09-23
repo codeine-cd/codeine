@@ -57,6 +57,9 @@ public class NodesCommandExecuterProvider {
 			String file = parentDir + "/" + dir + Constants.JSON_COMMAND_FILE_NAME;
 			try {
 				CommandExecutionStatusInfo j = gson.fromJson(TextFileUtils.getContents(file), CommandExecutionStatusInfo.class); 
+				if (!shouldShowByNode(j, nodeName)){
+					continue;
+				}
 				int size = j.nodes_list().size();
 				int successSize = j.success_list().size();
 				int failSize = j.fail_list().size();
@@ -78,6 +81,23 @@ public class NodesCommandExecuterProvider {
 		return $;
 	}
 	
+	private boolean shouldShowByNode(CommandExecutionStatusInfo j, String nodeName) {
+		List<NodeWithPeerInfo> nodes_list = j.nodes_list();
+		return shouldShowByNode(nodeName, nodes_list);
+	}
+
+	private boolean shouldShowByNode(String nodeName, List<NodeWithPeerInfo> nodes_list) {
+		if (nodeName == null) {
+			return true;
+		}
+		for (NodeWithPeerInfo node : nodes_list) {
+			if (node.name().equals(nodeName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private boolean contains(List<CommandStatusJson> $, String dir) {
 		for (CommandStatusJson commandStatusJson : $) {
 			if (String.valueOf(commandStatusJson.id()).equals(dir)){
@@ -98,15 +118,8 @@ public class NodesCommandExecuterProvider {
 		return getActive(filter);
 	}
 	private boolean shouldShowByNode(AllNodesCommandExecuter c, String nodeName) {
-		if (nodeName == null) {
-			return true;
-		}
-		for (NodeWithPeerInfo node : c.nodesList()) {
-			if (node.name().equals(nodeName)) {
-				return true;
-			}
-		}
-		return false;
+		List<NodeWithPeerInfo> nodes_list = c.nodesList();
+		return shouldShowByNode(nodeName, nodes_list);
 	}
 
 	public List<CommandStatusJson> getActive(Predicate<AllNodesCommandExecuter> filter) {
