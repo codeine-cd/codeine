@@ -1,36 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/common"/>
-	<classpathentry kind="src" path="src/api_client"/>
-	<classpathentry kind="src" path="src/peer"/>
-	<classpathentry kind="src" path="src/directory"/>
-	<classpathentry kind="src" path="src/web_server"/>
-	<classpathentry kind="src" path="src/simple_server"/>
-	<classpathentry kind="src" path="src/external/mysql_lib"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="integration_tests/src"/>
-	<classpathentry kind="src" path="src/server"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.servlet-3.0.0.v201112011016.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jetty/jetty-all-8.1.7.v20120910.jar" sourcepath="libs/jetty/jetty-all-8.1.7.v20120910-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/log4j-1.2.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/mailapi.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/smtp.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/guice-3.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/aopalliance.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/mockito-all-1.9.0.jar" sourcepath="libs/mockito-all-1.9.0.jar">
+	<classpathentry kind="src" output="target/classes" path="src/api_client">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/codeine/libs/mockito-all-1.9.0.jar!/"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="libs/guice-servlet-3.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.inject.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gson/gson-2.2.4.jar" sourcepath="libs/gson/gson-2.2.4-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/guava/guava-16.0.1.jar" sourcepath="libs/guava/guava-16.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="libs/joda-time/joda-time-2.2.jar" sourcepath="libs/joda-time/joda-time-2.2-sources.jar"/>
-	<classpathentry kind="lib" path="libs/mysql/mysql-connector-java-5.1.15-bin.jar"/>
-	<classpathentry kind="lib" path="libs/jmustache-1.8.jar"/>
+	<classpathentry kind="src" output="target/classes" path="src/peer">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/classes" path="src/directory">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/classes" path="src/web_server">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/classes" path="src/simple_server">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/classes" path="src/external/mysql_lib">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="integration_tests/src"/>
+	<classpathentry kind="src" output="target/classes" path="src/server">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="libs/mongo/mongo-java-driver-2.11.2.jar" sourcepath="libs/mongo/mongo-java-driver-2.11.2-sources.jar"/>
-	<classpathentry kind="output" path="compiled_classes"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src/common">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="test">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
