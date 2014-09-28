@@ -15,8 +15,8 @@ es("mkdir -p dist");
 my $version = getVersionFull();
 my $versionNoDate = getVersionNoDate();
 #print "java is $ENV{JAVA_HOME}\n";#1.7
-#print "ant is ant\n";#1.8?
-es("mvn clean package");
+print "mvn is $ENV{mvn}\n";#1.8?
+es("$ENV{mvn} clean package");
 es("cp target/codeine-1.0.0-jar-with-dependencies.jar dist/bin/codeine.jar");
 es("cd deployment/http-root/ajs ; npm install");
 es("cd deployment/http-root/ajs ; bower install");
