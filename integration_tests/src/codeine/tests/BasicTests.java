@@ -12,20 +12,44 @@ import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.VersionItemInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.tests_framework.TestsSuite;
+import codeine.utils.ThreadUtils;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 public class BasicTests extends TestsSuite{
 
+	private static final class NodesCountPredicate implements Predicate<Void> {
+		private final Map<String, VersionItemInfo> projectStatus;
+		private final CodeineApiClient client;
+		private final ProjectJson projectJson;
+		private int size;
+
+		private NodesCountPredicate(Map<String, VersionItemInfo> projectStatus, CodeineApiClient client,
+				ProjectJson projectJson) {
+			this.projectStatus = projectStatus;
+			this.client = client;
+			this.projectJson = projectJson;
+		}
+
+		@Override
+		public boolean apply(Void arg0) {
+			List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(client.projectNodes(projectJson.name(), projectStatus.entrySet().iterator().next().getKey()));
+			size = nodes.size();
+			return size == 1;
+		}
+	}
+
 	@Test
 	public void sanityTest() {
-		CodeineApiClient client = new CodeineApiClient(codeineConf().web_server_host(), codeineConf().web_server_port());
+		final CodeineApiClient client = new CodeineApiClient(codeineConf().web_server_host(), codeineConf().web_server_port());
 		List<ProjectJson> projects = client.projects();
 		System.out.println(projects);
-		ProjectJson projectJson = client.project("integration_test_project");
-		Map<String, VersionItemInfo> projectStatus = client.projectStatus("integration_test_project");
-		List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(client.projectNodes(projectJson.name(), projectStatus.entrySet().iterator().next().getKey()));
-		assertEquals(1, nodes.size());
+		final ProjectJson projectJson = client.project("integration_test_project");
+		final Map<String, VersionItemInfo> projectStatus = client.projectStatus("integration_test_project");
+		NodesCountPredicate predicate = new NodesCountPredicate(projectStatus, client, projectJson);
+		assertBusyWait(predicate, 60);
+		assertEquals(1, predicate.size);
 //		CommandInfo commandJson = projectJson.commandForName("short-command");
 //		ScehudleCommandExecutionInfo data = ScehudleCommandExecutionInfo.createImmediate(commandJson, nodes.subList(0, 10));
 		
@@ -39,4 +63,19 @@ public class BasicTests extends TestsSuite{
 		
 	}
 
+	public static boolean assertBusyWait(Predicate<Void> predicate, int timesToCheck)
+	{
+		if (timesToCheck <= 0) {
+			throw new IllegalArgumentException("timesToCheck less than 1 " + timesToCheck);
+		}
+		for (int counter = 0; counter < timesToCheck; ++counter)
+		{
+			if (predicate.apply(null))
+			{
+				return true;
+			}
+			ThreadUtils.sleep(1000);
+		}
+		return false;
+	}
 }
