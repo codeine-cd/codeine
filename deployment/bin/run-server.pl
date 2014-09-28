@@ -24,7 +24,7 @@ GetOptions(
 if ($kill)
 {
 	print "killing existing servers\n";
-	my $grepCmd = "ps -efww | grep codeine-server.jar | grep -v grep";
+	my $grepCmd = "ps -efww | grep codeine.CodeineServerBootstrap | grep -v grep";
 	print "grep:\n";
 	system($grepCmd);
 	system("kill `$grepCmd | awk '{print \$2}' | tr '\n' ' '`");
@@ -34,9 +34,9 @@ if ($kill)
 print "starting servers\n";
 if ($daemon)
 {
-	system("/usr/bin/nohup $ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx2g -jar $dir/codeine-server.jar > $httpRoot/codeine.server.out.log 2>&1 < /dev/null &");
+	system("/usr/bin/nohup $ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx2g -cp $dir/codeine.jar codeine.CodeineServerBootstrap > $httpRoot/codeine.server.out.log 2>&1 < /dev/null &");
 }
 else
 {
-	system("$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx2g -jar $dir/codeine-server.jar");
+	system("$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx2g -cp $dir/codeine.jar codeine.CodeineServerBootstrap");
 }

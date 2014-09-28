@@ -24,7 +24,7 @@ GetOptions(
 if ($kill)
 {
 	print "killing existing peer\n";
-	my $grepCmd = "ps -efww | grep codeine-peer.jar | grep -v grep";
+	my $grepCmd = "ps -efww | grep codeine.CodeinePeerBootstrap | grep -v grep";
 	print "grep:\n";
 	system($grepCmd);
 	system("kill `$grepCmd | awk '{print \$2}' | tr '\n' ' '`");
@@ -34,9 +34,9 @@ if ($kill)
 print "starting peer\n";
 if ($daemon)
 {
-	system("/usr/bin/nohup $ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx100m -jar $dir/codeine-peer.jar > $httpRoot/codeine.peer.out.log 2>&1 < /dev/null &");
+	system("/usr/bin/nohup $ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx100m -cp $dir/codeine.jar codeine.CodeinePeerBootstrap > $httpRoot/codeine.peer.out.log 2>&1 < /dev/null &");
 }
 else
 {
-	system("$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx100m -jar $dir/codeine-peer.jar");
+	system("$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx100m -cp $dir/codeine.jar codeine.CodeinePeerBootstrap");
 }
