@@ -36,7 +36,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="integration_tests/src"/>
 	<classpathentry kind="src" output="target/classes" path="src/server">
 		<attributes>
 			<attribute name="optional" value="true"/>
