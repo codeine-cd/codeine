@@ -12,7 +12,7 @@ public class TestSuiteConfiguration {
 		return work_dir;
 	}
 	public String scripts_dir() {
-		return sources_dir() + "/integration_tests/scripts";
+		return sources_dir() + "/test/integration_tests/scripts";
 	}
 	public String dist_dir() {
 		return work_dir() + "/deployment";

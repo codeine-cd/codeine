@@ -1,7 +1,8 @@
 package integration_tests.tests_framework;
 
-import java.util.logging.Logger;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 
@@ -12,6 +13,9 @@ import codeine.jsons.project.ProjectJson;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.network.InetUtils;
 import codeine.utils.os_process.ProcessExecuter;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class TestsSuite {
 

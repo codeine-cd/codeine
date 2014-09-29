@@ -1,5 +1,9 @@
 package integration_tests.tests_framework;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.inject.AbstractModule;
+
 
 public class CodeineIntegrationTestModule extends AbstractModule {
 

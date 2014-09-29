@@ -6,8 +6,6 @@ import integration_tests.tests_framework.TestsSuite;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.rowset.Predicate;
-
 import org.junit.Test;
 
 import codeine.CodeineApiClient;
@@ -16,28 +14,10 @@ import codeine.api.VersionItemInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.ThreadUtils;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+
 public class BasicTests extends TestsSuite{
-
-	private static final class NodesCountPredicate implements Predicate<Void> {
-		private final Map<String, VersionItemInfo> projectStatus;
-		private final CodeineApiClient client;
-		private final ProjectJson projectJson;
-		private int size;
-
-		private NodesCountPredicate(Map<String, VersionItemInfo> projectStatus, CodeineApiClient client,
-				ProjectJson projectJson) {
-			this.projectStatus = projectStatus;
-			this.client = client;
-			this.projectJson = projectJson;
-		}
-
-		@Override
-		public boolean apply(Void arg0) {
-			List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(client.projectNodes(projectJson.name(), projectStatus.entrySet().iterator().next().getKey()));
-			size = nodes.size();
-			return size == 1;
-		}
-	}
 
 	@Test
 	public void sanityTest() {
@@ -76,5 +56,26 @@ public class BasicTests extends TestsSuite{
 			ThreadUtils.sleep(1000);
 		}
 		return false;
+	}
+	
+	private static final class NodesCountPredicate implements Predicate<Void> {
+		private final Map<String, VersionItemInfo> projectStatus;
+		private final CodeineApiClient client;
+		private final ProjectJson projectJson;
+		private int size;
+
+		private NodesCountPredicate(Map<String, VersionItemInfo> projectStatus, CodeineApiClient client,
+				ProjectJson projectJson) {
+			this.projectStatus = projectStatus;
+			this.client = client;
+			this.projectJson = projectJson;
+		}
+
+		@Override
+		public boolean apply(Void arg0) {
+			List<NodeWithMonitorsInfo> nodes = Lists.newArrayList(client.projectNodes(projectJson.name(), projectStatus.entrySet().iterator().next().getKey()));
+			size = nodes.size();
+			return size == 1;
+		}
 	}
 }
