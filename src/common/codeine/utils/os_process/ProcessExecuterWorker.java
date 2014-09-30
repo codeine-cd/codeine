@@ -30,7 +30,6 @@ class ProcessExecuterWorker extends Thread {
 	public void run() {
 		try {
 			try {
-				//TODO read error
 				process.getOutputStream().close();
 				InputStream is1 = process.getInputStream();
 				InputStreamReader isr1 = new InputStreamReader(is1);
