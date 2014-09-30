@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class ShellScriptWithOutput {
 		this.env = env;
 		this.operatingSystem = operatingSystem;
 		String tmpDir = StringUtils.isEmpty(System.getProperty("java.io.tmpdir")) ? "/tmp" : System.getProperty("java.io.tmpdir");
-		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode() + (windows() ? ".bat" : ".sh");
+		this.fileName = tmpDir + File.separator + "codeine" + key.hashCode() + "_" + new Random().nextInt(9999)  + (windows() ? ".bat" : ".sh");
 	}
 
 	private boolean windows() {

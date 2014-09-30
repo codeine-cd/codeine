@@ -31,6 +31,7 @@ import codeine.model.Result;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
+import codeine.utils.logging.LogUtils;
 import codeine.utils.network.HttpUtils;
 import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
@@ -265,10 +266,11 @@ public class RunMonitors implements Task {
 	}
 
 	private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
-		String fileName = pathHelper.getMonitorsDir(project().name()) + File.separator + c.name();
+		String fileName = pathHelper.getMonitorsDir(project().name()) + File.separator + node.name() + "_" + c.name();
 		if (c.script_content() != null) {
 			if (null != shellScript){
 				log.warn("'shellScript' should be null but not", new RuntimeException());
+				LogUtils.assertFailed(log, "'shellScript' should be null but not");
 			}
 			fileName += node.name();
 			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system() == OperatingSystem.Windows, null);
