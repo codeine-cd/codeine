@@ -17,7 +17,7 @@ import codeine.utils.ThreadUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
-public class BasicTests extends TestsSuite{
+public class BasicTest extends TestsSuite{
 
 	@Test
 	public void sanityTest() {

@@ -7,39 +7,29 @@ use File::Basename;
 
 print "prepare codeine...\n";
 my $propertiesFile = "src/common/codeine/version.properties";
-updateVersionFile();
-#es("rm -rf dist");
-es("mkdir -p dist");
-#es("bounce_minor_version.pl");
 
 my $version = getVersionFull();
 my $versionNoDate = getVersionNoDate();
-print "mvn is $ENV{mvn}\n";
-es("$ENV{mvn} clean package");
+es("mkdir -p dist/bin");
+es("cp target/codeine-1.0.0-jar-with-dependencies.jar dist/bin/codeine.jar");
+es("cd deployment/http-root/ajs ; npm install");
+es("cd deployment/http-root/ajs ; bower install");
+es("cd deployment/http-root/ajs ; bower update");
+es("cd deployment/http-root/ajs ; grunt");
+es("mkdir -p dist/http-root/ajs");
+es("cp -r deployment/http-root/ajs/dist dist/http-root/ajs/dist");
+es("rsync -ur deployment/bin dist/");
+es("rsync -ur deployment/bin_windows dist/");
+es("rsync -ur deployment/conf dist/");
+es("rsync -ur deployment/project dist/");
+es("echo '".getVersionNoDate()."' > dist/build_number.txt");
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
+es("cd dist; tar -czf ../$tar ./*");
+print "tar is ready '$tar' for version $version\n";
+es("cp $tar codeine.latest.tar.gz");
 my $zip = "codeine_".getVersionNoDate().".zip";
-
-if (defined($ENV{RELEASE_AREA}))
-{
-	my $link = $ENV{RELEASE_AREA}."/codeine.latest.tar";
-	es("cp $tar $ENV{RELEASE_AREA}/");
-	system("rm $link");
-	es("ln -s $tar $link");
-}
-unless ($ENV{'release-to-github'} eq "true") 
-{
-	exit(0);
-} 
-print "Will release new version to Github: $versionNoDate\n";
-my $githubUser = $ENV{GITHUB_USER};
-my $githubPassword = $ENV{GITHUB_PASSWORD};
-my $res = r("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Release\",  \"draft\": false,  \"prerelease\": true}' https://api.github.com/repos/yami-cd/yami/releases");
-print "release returned: $res\n";
-$res =~ /\"id\":\s([^,]*)/;
-my $id = $1;
-print "release id: $id\n";
-es("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/zip\" --data-binary \"\@$zip\" \"https://uploads.github.com/repos/yami-cd/yami/releases/$id/assets?name=codeine.zip\"");
-
+es("cd dist; zip -r ../$zip ./*");
+print "zip is ready '$zip' for version $version\n";
 print "Done!";
 
 sub es

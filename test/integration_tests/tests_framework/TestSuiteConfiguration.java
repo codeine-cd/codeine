@@ -3,7 +3,7 @@ package integration_tests.tests_framework;
 
 public class TestSuiteConfiguration {
 	private String work_dir;
-	private String sources_dir;
+	private String sources_dir = System.getProperty("user.dir");
 	
 	public String sources_dir(){
 		return sources_dir;
