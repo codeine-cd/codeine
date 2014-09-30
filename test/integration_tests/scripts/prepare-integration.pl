@@ -11,6 +11,7 @@ e("echo $workdir > codeine.integration.conf");
 my $tar = "codeine.latest.tar.gz";
 my $dir = $workdir."/deployment";
 
+
 e("rm -rf $dir");
 e("mkdir -p $dir");
 e("tar -xvzf $tar --directory=$dir");
