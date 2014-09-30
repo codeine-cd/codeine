@@ -94,17 +94,17 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>prepare-integration</id>
+						<id>pre-integration-test</id>
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>test/integration_tests/scripts/prepare-integration.pl</executable>
+							<executable>test/integration_tests/scripts/pre-integration.pl</executable>
 						</configuration>
 					</execution>
 					<execution>
-						<id>post-integration</id>
+						<id>post-integration-test</id>
 						<phase>post-integration-test</phase>
 						<goals>
 							<goal>exec</goal>
