@@ -50,7 +50,7 @@ public class TestsSuite {
 	private void startProcessess() {
 //		kill mysql
 //		change it to use the new server
-		executeAndPrint(testsConf().scripts_dir() + "/start_processes.pl " + testsConf().dist_dir() + " " + testsConf().mysql_work_dir());
+		executeAndPrint(testsConf().scripts_dir() + "/start_processes_2.pl " + testsConf().dist_dir() + " " + testsConf().mysql_work_dir());
 	}
 
 	private void executeAndPrint(String cmd) {
