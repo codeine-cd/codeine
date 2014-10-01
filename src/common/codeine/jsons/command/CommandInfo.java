@@ -15,13 +15,13 @@ public class CommandInfo
     private String name, title;
     private String project_name;
     private String credentials;
-    private int timeoutInMinutes = 10;
+    private Integer timeoutInMinutes;
     private Integer duration, concurrency, error_percent_val;
 	private CommandExcutionType command_strategy;
-	private boolean stop_on_error;
+	private Boolean stop_on_error;
 	private DurationUnits duration_units;
 	private RatioType ratio;
-	private boolean prevent_override = true;
+	private Boolean prevent_override;
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
 
@@ -107,6 +107,41 @@ public class CommandInfo
 
 	public void timeoutInMinutes(int timeoutInMinutes) {
 		this.timeoutInMinutes = timeoutInMinutes;
+	}
+
+	public void overrideByConfiguration(CommandInfo configuredCommand) {
+		credentials(configuredCommand.credentials());
+		script_content(configuredCommand.script_content());
+	    if (null == title) {
+	    	title = configuredCommand.title;
+	    }
+	    if (null == timeoutInMinutes) {
+	    	timeoutInMinutes = configuredCommand.timeoutInMinutes;
+	    }
+	    if (null == duration) {
+	    	duration = configuredCommand.duration;
+	    }
+	    if (null == concurrency) {
+	    	concurrency = configuredCommand.concurrency;
+	    }
+	    if (null == error_percent_val) {
+	    	error_percent_val = configuredCommand.error_percent_val;
+	    }
+	    if (null == command_strategy) {
+	    	command_strategy = configuredCommand.command_strategy;
+	    }
+	    if (null == stop_on_error) {
+	    	stop_on_error = configuredCommand.stop_on_error;
+	    }
+	    if (null == duration_units) {
+	    	duration_units = configuredCommand.duration_units;
+	    }
+	    if (null == ratio) {
+	    	ratio = configuredCommand.ratio;
+	    }
+	    if (null == prevent_override) {
+	    	prevent_override = configuredCommand.prevent_override;
+	    }
 	}
 
 	
