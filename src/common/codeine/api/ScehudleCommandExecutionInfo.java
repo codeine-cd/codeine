@@ -4,11 +4,14 @@ import java.util.List;
 
 import codeine.jsons.command.CommandInfo;
 
+import com.google.common.collect.Lists;
+
 
 public class ScehudleCommandExecutionInfo {
 	
 	private CommandInfo command_info;
-	private List<NodeWithPeerInfo> nodes;
+	private List<NodeWithPeerInfo> nodes = Lists.newArrayList();
+	private boolean should_execute_on_all_nodes;
 	
 	
 	public ScehudleCommandExecutionInfo() {
@@ -25,6 +28,9 @@ public class ScehudleCommandExecutionInfo {
 	
 	public List<NodeWithPeerInfo> nodes() {
 		return nodes;
+	}
+	public boolean should_execute_on_all_nodes() {
+		return should_execute_on_all_nodes;
 	}
 	public CommandInfo command_info() {
 		return command_info;

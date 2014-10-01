@@ -1,10 +1,14 @@
 package codeine.servlets.api_servlets;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.NodeGetter;
+import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
@@ -24,6 +28,7 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	@Inject private NodesCommandExecuterProvider allNodesCommandExecuterProvider;
 	@Inject private IConfigurationManager configurationManager;
 	@Inject private UserPermissionsGetter permissionsManager;
+	@Inject private NodeGetter nodeGetter;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -54,20 +59,25 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
-		log.debug("NodesCommandServlet request");
+		log.info("NodesCommandServlet request");
 		String data = getData(request);
 		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
 		String projectName = commandData.command_info().project_name();
-
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
-		overrideCommandInfoByConfiguration(commandData.command_info(), configuredCommand);
+		commandData.command_info().overrideByConfiguration(configuredCommand);
+		updateNodes(commandData, projectName);
 		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData, project);
 		writeResponseJson(response, dir);
 	}
 	
-	private void overrideCommandInfoByConfiguration(CommandInfo command_info, CommandInfo configuredCommand) {
-		command_info.overrideByConfiguration(configuredCommand);
+	private void updateNodes(ScehudleCommandExecutionInfo commandData, String projectName) {
+		if (!commandData.should_execute_on_all_nodes()) {
+			return;
+		}
+		log.info("will fetch all nodes for command execution");
+		commandData.nodes().clear();
+		commandData.nodes().addAll(nodeGetter.getNodes(projectName));
 	}
 
 	@Override
