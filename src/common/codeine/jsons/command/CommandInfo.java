@@ -117,6 +117,9 @@ public class CommandInfo
 	    }
 	    if (null == timeoutInMinutes) {
 	    	timeoutInMinutes = configuredCommand.timeoutInMinutes;
+	    	if (null == timeoutInMinutes) {
+	    		timeoutInMinutes = 10;
+	    	}
 	    }
 	    if (null == duration) {
 	    	duration = configuredCommand.duration;
