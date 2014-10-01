@@ -17,13 +17,14 @@ public class ScehudleCommandExecutionInfo {
 	public ScehudleCommandExecutionInfo() {
 	}
 
-	private ScehudleCommandExecutionInfo(CommandInfo command_info, List<NodeWithPeerInfo> nodes) {
+	private ScehudleCommandExecutionInfo(CommandInfo command_info, List<NodeWithPeerInfo> nodes, boolean should_execute_on_all_nodes) {
 		this.command_info = command_info;
 		this.nodes = nodes;
+		this.should_execute_on_all_nodes = should_execute_on_all_nodes;
 	}
 
-	public static ScehudleCommandExecutionInfo createImmediate(CommandInfo commandInfo, List<NodeWithPeerInfo> nodes) {
-		return new ScehudleCommandExecutionInfo(commandInfo, nodes);
+	public static ScehudleCommandExecutionInfo createImmediate(CommandInfo commandInfo, List<NodeWithPeerInfo> nodes, boolean should_execute_on_all_nodes) {
+		return new ScehudleCommandExecutionInfo(commandInfo, nodes, should_execute_on_all_nodes);
 	}
 	
 	public List<NodeWithPeerInfo> nodes() {
