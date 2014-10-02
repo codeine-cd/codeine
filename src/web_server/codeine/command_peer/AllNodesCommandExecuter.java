@@ -21,6 +21,7 @@ import codeine.permissions.IUserWithPermissions;
 import codeine.statistics.IMonitorStatistics;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
+import codeine.utils.SocketUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 import codeine.utils.ThreadUtils;
@@ -44,7 +45,7 @@ public class AllNodesCommandExecuter {
 	private int fail;
 	private BufferedWriter writer;
 	private boolean active = true;
-	private long dirName;
+	private long commandId;
 	private String dirNameFull;
 	private ScehudleCommandExecutionInfo commandData;
 	private CommandExecutionStatusInfo commandDataJson;
@@ -59,8 +60,8 @@ public class AllNodesCommandExecuter {
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
-			dirName = getNewDirName();
-			dirNameFull = pathHelper.getCommandOutputDir(commandData.command_info().project_name(), String.valueOf(dirName));
+			commandId = getNewDirName();
+			dirNameFull = pathHelper.getCommandOutputDir(commandData.command_info().project_name(), String.valueOf(commandId));
 			FilesUtils.mkdirs(dirNameFull);
 			String pathname = dirNameFull + "/log";
 			File file = new File(pathname);
@@ -71,13 +72,14 @@ public class AllNodesCommandExecuter {
 			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " nodes by " + userObject.user().username());
 			writeNodesList(commandData);
 			updatePeersAddresses();
-			ThreadUtils.createThread(new Runnable() {
+			Thread commandThread = ThreadUtils.createThread(new Runnable() {
 				@Override
 				public void run() {
 					execute();
 				};
-			}, "AllNodesCommandExecuter_"+commandData.command_info().command_name()).start();
-			return dirName;
+			}, "AllNodesCommandExecuter_"+commandData.command_info().command_name());
+			commandThread.start();
+			return commandId;
 		} catch (Exception ex) {
 			finish();
 			throw ExceptionUtils.asUnchecked(ex);
@@ -134,6 +136,9 @@ public class AllNodesCommandExecuter {
 				writeLine("command was canceled by user");
 			}
 			writeFooter();
+			if (null != commandData.address_to_notify()) {
+				SocketUtils.sendToPort(commandData.address_to_notify(), "command finished in project '" + commandData.command_info().project_name() + "', id=" + commandId);
+			}
 		} finally {
 			finish();
 		}
@@ -155,7 +160,7 @@ public class AllNodesCommandExecuter {
 
 	private void createCommandDataFile(String user) {
 		commandDataJson = new CommandExecutionStatusInfo(user, commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
-				commandData.nodes(), dirName);
+				commandData.nodes(), commandId);
 		FilesUtils.createNewFile(commandFile());
 		updateJson();
 	}
@@ -252,7 +257,7 @@ public class AllNodesCommandExecuter {
 	}
 
 	public long id() {
-		return dirName;
+		return commandId;
 	}
 
 	public void cancel() {
