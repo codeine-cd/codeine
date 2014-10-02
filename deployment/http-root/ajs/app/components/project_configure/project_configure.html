@@ -205,10 +205,9 @@
         </tr>
         </thead>
         <tbody>
-        <tbody ng-repeat="mail_info in projectConfigurationForEditing.mail">
-        <tr>
-            <td class="col-md-3">
-                <input name="username{{$index}}" type="text" class="form-control" ng-model="mail_info.user" required>
+        <tr ng-repeat="mail_info in projectConfigurationForEditing.mail" ng-form="mailInfoRow">
+            <td class="controls col-md-3" ng-class="{'has-error': mailInfoRow.username.$invalid}">
+                <input name="username" type="text" class="form-control" ng-model="mail_info.user" required>
             </td>
             <td class="col-md-3">
                 <select class="form-control select2" name="intensity{{$index}}" id="intensity{{$index}}"  ui-select2="{ allowClear: false}" ng-model="mail_info.intensity" required>
