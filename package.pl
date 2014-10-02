@@ -17,7 +17,7 @@ es("cd deployment/http-root/ajs ; bower install");
 es("cd deployment/http-root/ajs ; bower update");
 es("cd deployment/http-root/ajs ; grunt");
 es("mkdir -p dist/http-root/ajs");
-es("cp -r deployment/http-root/ajs/dist dist/http-root/ajs/dist");
+es("rsync -ur deployment/http-root/ajs/dist dist/http-root/ajs/dist/");
 es("rsync -ur deployment/bin dist/");
 es("rsync -ur deployment/bin_windows dist/");
 es("rsync -ur deployment/conf dist/");
