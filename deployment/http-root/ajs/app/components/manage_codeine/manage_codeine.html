@@ -173,7 +173,7 @@
             <tbody>
             <tr ng-repeat="tab_view in tabsForEditing" ng-form="tabsForm">
                 <td class="col-md-4" ng-class="{'has-error' : tabsForm.tabName.$invalid }">
-                    <input type="text" name="tabName" class="form-control" ng-model="tab_view.name" required>
+                    <input type="text" name="tabName" ng-distinct-values="tabsForEditing" class="form-control" ng-model="tab_view.name" required>
                 </td>
                 <td class="col-md-7" ng-class="{'has-error' : tabsForm.tabProjects.$invalid }">
                     <input type="text" name="tabProjects" ui-select2="select2Options" ng-model="tab_view.exp" class="form-control select2" required>
