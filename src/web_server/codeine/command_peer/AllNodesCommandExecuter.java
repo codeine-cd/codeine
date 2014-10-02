@@ -138,7 +138,7 @@ public class AllNodesCommandExecuter {
 			writeFooter();
 			if (null != commandData.address_to_notify()) {
 				int status = fail > 0 ? 1 : 0;
-				String message = "command-finished,project=" + commandData.command_info().project_name() + ",id=" + commandId + "status=" + status;
+				String message = "command-finished,project=" + commandData.command_info().project_name() + ",id=" + commandId + ",status=" + status;
 				log.info("sending finished event: " + message);
 				SocketUtils.sendToPort(commandData.address_to_notify(), message);
 			}
