@@ -314,7 +314,7 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                     templateUrl: '/views/404.html'
                 });
         }])
-    .run(['$rootScope','$log','CodeineService','$interval','$window','$location',  function($rootScope, $log, CodeineService, $interval, $window, $location) {
+    .run(['$rootScope','$log','CodeineService','$interval',function($rootScope, $log, CodeineService, $interval) {
         $rootScope.app = {
             loading: null,
             viewAs : null,
