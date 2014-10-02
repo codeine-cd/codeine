@@ -163,18 +163,18 @@
                     <th class="col-md-1"></th>
                 </tr>
                 </thead>
-                <tbody ng-repeat="tab_view in tabsForEditing">
-                <tr>
-                    <td class="col-md-4">
-                        <input type="text" class="form-control" ng-model="tab_view.name" required>
-                    </td>
-                    <td class="col-md-7">
-                        <input type="text" ui-select2="select2Options" ng-model="tab_view.exp" class="form-control select2" required>
-                    </td>
-                    <td class="col-md-1">
-                        <button ng-click="removeTab($index)" title="Remove Tab" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr ng-repeat="tab_view in tabsForEditing" ng-form="tabsForm">
+                        <td class="col-md-4" ng-class="{'has-error' : tabsForm.tabName.$invalid }">
+                            <input type="text" name="tabName" class="form-control" ng-model="tab_view.name" required>
+                        </td>
+                        <td class="col-md-7" ng-class="{'has-error' : tabsForm.tabProjects.$invalid }">
+                            <input type="text" name="tabProjects" ui-select2="select2Options" ng-model="tab_view.exp" class="form-control select2" required>
+                        </td>
+                        <td class="col-md-1">
+                            <button ng-click="removeTab($index)" title="Remove Tab" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="row">
@@ -217,22 +217,22 @@
                     <th class="col-md-1"></th>
                 </tr>
                 </thead>
-                <tbody ng-repeat="permissionObject in permissionsForEditing">
-                <tr>
-                    <td class="col-md-2">
-                        <input type="text" class="form-control" ng-distinct-values="permissionsForEditing" ng-model="permissionsForEditing[$index].username" required>
+                <tbody>
+                <tr ng-repeat="permissionObject in permissionsForEditing" ng-form="permissionsForm">
+                    <td class="col-md-2" ng-class="{ 'has-error' : permissionsForm.userName.$invalid }">
+                        <input type="text" name="userName" class="form-control" ng-distinct-values="permissionsForEditing" ng-model="permissionsForEditing[$index].username" required>
                     </td>
                     <td class="col-md-1">
                         <input style="margin: 0px;" type="checkbox" ng-model="permissionObject.administer">
                     </td>
                     <td class="col-md-3">
-                        <input type="text" ui-select2="select2Options" ng-model="permissionObject.read_project" class="form-control select2" required>
+                        <input type="text" ui-select2="select2Options" ng-model="permissionObject.read_project" class="form-control select2">
                     </td>
                     <td class="col-md-3">
-                        <input type="text" ui-select2="select2Options" ng-model="permissionObject.command_project" class="form-control select2" required>
+                        <input type="text" ui-select2="select2Options" ng-model="permissionObject.command_project" class="form-control select2">
                     </td>
                     <td class="col-md-3">
-                        <input type="text" ui-select2="select2Options" ng-model="permissionObject.configure_project" class="form-control select2" required>
+                        <input type="text" ui-select2="select2Options" ng-model="permissionObject.configure_project" class="form-control select2">
                     </td>
                     <td class="col-md-1">
                         <button ng-click="removeUser($index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>

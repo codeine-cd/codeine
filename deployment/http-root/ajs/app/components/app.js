@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues','n3-charts.linechart'])
+angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues','n3-charts.linechart','angulartics', 'angulartics.google.analytics'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
@@ -395,7 +395,6 @@ angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','
                 title += $rootScope.app.globalConfiguration.server_name;
             }
             $rootScope.pageTitle = title;
-            $window.ga('send', 'pageview', { page: $location.path() });
         });
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
             $log.debug('$routeChangeError - rejection = ' + rejection);

@@ -80,6 +80,10 @@ div.appAlerts {
 	cursor: default !important;
 }
 
+.group_error {
+    background-color: rgb(245, 217, 217);
+}
+
 .command_parameter {
 	background-color: #F8FAFD;
 	padding: 5px;

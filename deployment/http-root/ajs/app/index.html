@@ -127,7 +127,7 @@
     </div> <!-- /container -->
 </div>
 <div id="toast-container" class="appAlerts ng-cloak animate">
-    <alert ng-repeat="alert in alerts" type="alert.type" close="alert.close(alert, $index)" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close(alert, $index)" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
         <span class="message" ng-bind-html="alert.msg"></span>
     </alert>
 </div>
@@ -142,7 +142,6 @@
 <script src="/bower_components/angular-ui-utils/ui-utils.js"></script>
 <script src="/bower_components/select2/select2.js"></script>
 <script src="/bower_components/angular-ui-select2/src/select2.js"></script>
-<script src="/bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
 <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="/bower_components/ngstorage/ngStorage.js"></script>
 <script src="/bower_components/ng-textcomplete/ng-textcomplete.js"></script>
@@ -150,6 +149,24 @@
 <script src="/bower_components/ngDistinctValues/ng-distinct-values.js"></script>
 <script src="/bower_components/d3/d3.js"></script>
 <script src="/bower_components/moment/moment.js"></script>
+<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="/bower_components/jquery-waypoints/waypoints.js"></script>
+<script src="/bower_components/SHA-1/sha1.js"></script>
+<script src="/bower_components/angulartics/src/angulartics.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-adobe.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-chartbeat.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-flurry.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-ga-cordova.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-ga.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-gtm.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-kissmetrics.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-mixpanel.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-piwik.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-scroll.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-segmentio.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-splunk.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-woopra.js"></script>
+<script src="/bower_components/angulartics/src/angulartics-marketo.js"></script>
 <!-- endbower -->
 <script src="/lib/line-chart.js"></script>
 <!-- endbuild -->
@@ -204,8 +221,6 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-26322608-3', 'auto');
-    ga('send', 'pageview');
-
 </script>
 </body>
 </html>
