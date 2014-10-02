@@ -5,9 +5,11 @@
 <div class="col-md-9">
 <form novalidate name="configForm">
 <accordion close-others="false">
-<accordion-group is-open="project_is_open">
+<accordion-group is-open="project_is_open"ng-form="projectInfoParentForm">
     <accordion-heading>
         <div>
+            <i class="fa fa-warning" style="color:red;" ng-show="projectInfoParentForm.$invalid"></i>
+
             Project Info
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_is_open, 'glyphicon-chevron-right': !project_is_open}"></i>
         </div>
@@ -30,9 +32,10 @@
         </div>
     </div>
 </accordion-group>
-<accordion-group is-open="nodes_is_open">
+<accordion-group is-open="nodes_is_open"ng-form="nodesInfoParentForm">
     <accordion-heading>
         <div>
+            <i class="fa fa-warning" style="color:red;" ng-show="nodesInfoParentForm.$invalid"></i>
             Nodes Info
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
         </div>
@@ -101,9 +104,10 @@
         </div>
     </div>
 </accordion-group>
-<accordion-group is-open="version_is_open">
+<accordion-group is-open="version_is_open"ng-form="versionInfoParentForm">
     <accordion-heading>
         <div>
+            <i class="fa fa-warning" style="color:red;" ng-show="versionInfoParentForm.$invalid"></i>
             Version Detection <help help-id="versionHelp"></help>
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': version_is_open, 'glyphicon-chevron-right': !version_is_open}"></i>
         </div>
@@ -117,17 +121,19 @@
         </div>
     </div>
 </accordion-group>
-<accordion-group is-open="monitors_is_open">
+<accordion-group is-open="monitors_is_open"ng-form="monitorsConfigureParentForm">
     <accordion-heading>
         <div>
+            <i class="fa fa-warning" style="color:red;" ng-show="monitorsConfigureParentForm.$invalid"></i>
             Monitors <help help-id="monitorsConfigureHelp"></help>
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': monitors_is_open, 'glyphicon-chevron-right': !monitors_is_open}"></i>
         </div>
     </accordion-heading>
     <accordion close-others="false">
-        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_info.is_open">
+        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_info.is_open"ng-form="individualMonitorParentForm">
             <accordion-heading>
                 <div>
+                    <i class="fa fa-warning" style="color:red;" ng-show="individualMonitorParentForm.$invalid"></i>
                     Monitor: {{monitor_info.name}}
                     <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_info.is_open, 'glyphicon-chevron-right': !monitor_info.is_open}">
                     </i>
@@ -183,9 +189,10 @@
         <br/><br/>
     </div>
 </accordion-group>
-<accordion-group is-open="email_is_open">
+<accordion-group is-open="email_is_open" ng-form="emailConfigureParentForm">
     <accordion-heading>
         <div>
+            <i class="fa fa-warning" style="color:red;" ng-show="emailConfigureParentForm.$invalid"></i>
             Email Notifications <help help-id="emailHelp"></help>
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': email_is_open, 'glyphicon-chevron-right': !email_is_open}"></i>
         </div>
@@ -224,17 +231,19 @@
         <br/><br/>
     </div>
 </accordion-group>
-<accordion-group is-open="commands_is_open">
+<accordion-group is-open="commands_is_open" ng-form="commandsConfigureParentForm">
 <accordion-heading>
     <div>
+        <i class="fa fa-warning" style="color:red;" ng-show="commandsConfigureParentForm.$invalid"></i>
         Commands <help help-id="commandsConfigureHelp"></help>
         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': commands_is_open, 'glyphicon-chevron-right': !commands_is_open}"></i>
     </div>
 </accordion-heading>
 <accordion close-others="false">
-<accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_info.is_open">
+<accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_info.is_open" ng-form="individualCommandParentForm">
 <accordion-heading>
     <div>
+        <i class="fa fa-warning" style="color:red;" ng-show="individualCommandParentForm.$invalid"></i>
         Command: {{command_info.name}}
         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.is_open, 'glyphicon-chevron-right': !command_info.is_open}">
         </i>
@@ -254,9 +263,10 @@
             </div>
         </div>
         <accordion close-others="false">
-            <accordion-group is-open="command_info.schedule_is_open">
+            <accordion-group is-open="command_info.schedule_is_open"ng-form="commandScheduleParentForm">
                 <accordion-heading>
                     <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="commandScheduleParentForm.$invalid"></i>
                         Schedule
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.schedule_is_open, 'glyphicon-chevron-right': !command_info.schedule_is_open}">
                         </i>
@@ -328,9 +338,10 @@
             </accordion-group>
         </accordion>
         <accordion close-others="false">
-            <accordion-group is-open="command_info.advanced_is_open">
+            <accordion-group is-open="command_info.advanced_is_open" ng-form="commandAdvancedParentForm">
                 <accordion-heading>
                     <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="commandAdvancedParentForm.$invalid"></i>
                         Advanced
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.advanced_is_open, 'glyphicon-chevron-right': !command_info.advanced_is_open}">
                         </i>
@@ -354,9 +365,10 @@
         </accordion>
         <!-- command parameters -->
         <accordion close-others="false">
-            <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter.is_open">
+            <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter.is_open" ng-form="commandParameterParentForm">
                 <accordion-heading>
                     <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="commandParameterParentForm.$invalid"></i>
                         Parameter: {{command_parameter.name}}
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter.is_open, 'glyphicon-chevron-right': !command_parameter.is_open}">
                         </i>
@@ -470,23 +482,23 @@
             </tr>
             </thead>
             <tbody >
-                <tr ng-repeat="permissionObject in projectConfigurationForEditing.permissions" ng-form="permissionsForm">
-                    <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
-                        <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
-                    </td>
-                    <td class="col-md-2">
-                        <input type="checkbox" checked disabled class="readonly_item">
-                    </td>
-                    <td class="col-md-4">
-                        <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
-                    </td>
-                    <td class="col-md-2">
-                        <input type="checkbox" ng-model="permissionObject.can_config">
-                    </td>
-                    <td class="col-md-1">
-                        <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
-                    </td>
-                </tr>
+            <tr ng-repeat="permissionObject in projectConfigurationForEditing.permissions" ng-form="permissionsForm">
+                <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
+                    <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
+                </td>
+                <td class="col-md-2">
+                    <input type="checkbox" checked disabled class="readonly_item">
+                </td>
+                <td class="col-md-4">
+                    <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
+                </td>
+                <td class="col-md-2">
+                    <input type="checkbox" ng-model="permissionObject.can_config">
+                </td>
+                <td class="col-md-1">
+                    <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                </td>
+            </tr>
             </tbody>
         </table>
         <div class="row">
