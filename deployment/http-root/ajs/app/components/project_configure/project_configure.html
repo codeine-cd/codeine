@@ -5,11 +5,10 @@
 <div class="col-md-9">
 <form novalidate name="configForm">
 <accordion close-others="false">
-<accordion-group is-open="project_is_open"ng-form="projectInfoParentForm">
+<accordion-group is-open="project_is_open" ng-form="projectInfoParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="projectInfoParentForm.$invalid"></i>
-
             Project Info
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_is_open, 'glyphicon-chevron-right': !project_is_open}"></i>
         </div>
@@ -32,7 +31,7 @@
         </div>
     </div>
 </accordion-group>
-<accordion-group is-open="nodes_is_open"ng-form="nodesInfoParentForm">
+<accordion-group is-open="nodes_is_open" ng-form="nodesInfoParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="nodesInfoParentForm.$invalid"></i>
@@ -104,7 +103,7 @@
         </div>
     </div>
 </accordion-group>
-<accordion-group is-open="version_is_open"ng-form="versionInfoParentForm">
+<accordion-group is-open="version_is_open" ng-form="versionInfoParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="versionInfoParentForm.$invalid"></i>
@@ -121,7 +120,7 @@
         </div>
     </div>
 </accordion-group>
-<accordion-group is-open="monitors_is_open"ng-form="monitorsConfigureParentForm">
+<accordion-group is-open="monitors_is_open" ng-form="monitorsConfigureParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="monitorsConfigureParentForm.$invalid"></i>
@@ -130,7 +129,7 @@
         </div>
     </accordion-heading>
     <accordion close-others="false">
-        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_info.is_open"ng-form="individualMonitorParentForm">
+        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_info.is_open" ng-form="individualMonitorParentForm">
             <accordion-heading>
                 <div>
                     <i class="fa fa-warning" style="color:red;" ng-show="individualMonitorParentForm.$invalid"></i>
@@ -263,7 +262,7 @@
             </div>
         </div>
         <accordion close-others="false">
-            <accordion-group is-open="command_info.schedule_is_open"ng-form="commandScheduleParentForm">
+            <accordion-group is-open="command_info.schedule_is_open" ng-form="commandScheduleParentForm">
                 <accordion-heading>
                     <div>
                         <i class="fa fa-warning" style="color:red;" ng-show="commandScheduleParentForm.$invalid"></i>
