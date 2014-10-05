@@ -15,6 +15,7 @@ import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeGetter;
 import codeine.api.NodeInfo;
 import codeine.api.NodeWithMonitorsInfo;
+import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.project.ProjectJson;
@@ -94,7 +95,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 
 	private boolean isMoreEnabled(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
 		int nodesCountForMore = 100;
-		if (projectJson.node_discovery_startegy() ==  NodeDiscoveryStrategy.Configuration) {
+		if (projectJson.node_discovery_startegy() ==  NodeDiscoveryStrategy.Configuration && !projectJson.equals(ConfigurationReadManagerServer.NODES_INTERNAL_PROJECT)) {
 			return projectJson.nodes_info().size() > nodesCountForMore;
 		}
 		return nodes.size() > nodesCountForMore;
