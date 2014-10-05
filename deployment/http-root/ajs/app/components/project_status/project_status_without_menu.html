@@ -108,7 +108,8 @@
                             </div>
                             <div class="col-md-9" style="word-break: break-all;">
                                 <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" tooltip="All monitors OK" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
+                                    <i class="fa fa-check-circle fa-lg success" tooltip="All monitors OK" ng-show="node.failed_monitors.length == 0 && node.peer_status == 'On'"></i>
+                                    <i class="fa fa-check-circle fa-lg default" tooltip="Node is disconnected" ng-show="node.failed_monitors.length == 0 && node.peer_status == 'Disc'"></i>
                                 </a>
                                 <span ng-repeat="failing_monitor in node.failed_monitors"><a tooltip="Monitor failed" ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
                             </div>
