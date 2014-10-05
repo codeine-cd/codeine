@@ -11,8 +11,8 @@
                             <li class="list-group-item" ng-repeat="project in projects | projectsFilter:tab">
                                 <a href="/codeine/project/{{project.name}}/status">
                                     <i class="icon-folder-close"></i> {{project.name}}
+                                    <span class="badge badge-info pull-right">{{project.nodes_count}}</span>
                                 </a>
-                                <span class="badge badge-info">{{project.nodes_count}}</span>
                             </li>
                         </ul>
                     </div>
