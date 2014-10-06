@@ -315,7 +315,7 @@ public class RunMonitors implements Task {
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
 			log.debug("writing the new format");
 			String output = res.output == null || res.output.length() <= MAX_OUTPUT_SIZE ? res.output : "\nOutput too long...\n" + res.output.substring(res.output.length() - MAX_OUTPUT_SIZE);
-			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(res.exit(), output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
+			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(collector.name(), res.exit(), output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
 			out.write(new Gson().toJson(monitorExecutionResult));
 //			out.write("+------------------------------------------------------------------+\n");
 //			out.write("| monitor:       " + collector.name() + "\n");
