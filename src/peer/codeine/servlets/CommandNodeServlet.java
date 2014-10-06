@@ -75,7 +75,8 @@ public class CommandNodeServlet extends AbstractServlet
 		snoozeKeeper.snoozeAll();
 		final PrintWriter writer = getWriter(res);
 		try {
-			String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+			String parameter = Constants.UrlParameters.DATA_NAME;
+			String data = getParameter(request, parameter);
 			CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
 			String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
 			CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
@@ -165,6 +166,15 @@ public class CommandNodeServlet extends AbstractServlet
 				cmdScript.delete();
 			}
 		}
+	}
+	private String getParameter(HttpServletRequest request, String parameter) {
+		StringBuilder $ = new StringBuilder();
+		String parameterValue = request.getParameter(parameter);
+		if (null == parameterValue || parameterValue.contains("ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
+			return null;
+		}
+		$.append(parameterValue);
+		return $.toString();
 	}
 	private void validateKey(String decrypt) {
 		List<String> l = Splitter.on("#").splitToList(decrypt);

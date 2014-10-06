@@ -1,14 +1,11 @@
 package codeine.servlets.api_servlets;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
 import codeine.api.NodeGetter;
-import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
