@@ -6,7 +6,36 @@
 <div class="col-md-9">
     <div class="row">
         <div class="col-md-12">
-            
+            <div class="panel panel-default" ng-show="monitorStatus.json_format">
+                <div class="panel-heading">
+                    <strong>Monitor Info</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2"><strong>Name:</strong></div>
+                        <div class="col-md-6"> {{monitorStatus.monitor_name}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Exit Status:</strong></div>
+                        <div class="col-md-6"> {{monitorStatus.exit_Status}}
+                            <i class="fa fa-check fa-lg success" ng-show="monitorStatus.exit_Status == 0"/>
+                            <i class="fa fa-times fa-lg error" ng-show="monitorStatus.exit_Status != 0"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Finish Time:</strong></div><div class="col-md-6"> {{monitorStatus.finish_time | date:'short'}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Total Time:</strong></div>
+                        <div class="col-md-6">
+                            total_time
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h4>Monitor Log</h4>
             <pre>{{monitorStatus.output}}</pre>
         </div>
