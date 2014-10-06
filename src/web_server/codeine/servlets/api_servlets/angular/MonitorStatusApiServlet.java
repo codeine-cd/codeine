@@ -12,6 +12,8 @@ import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.network.HttpUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.inject.Inject;
 
 public class MonitorStatusApiServlet extends AbstractApiServlet {
@@ -21,6 +23,7 @@ public class MonitorStatusApiServlet extends AbstractApiServlet {
 	private static final long serialVersionUID = 1L;
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private Links links;
+	@Inject	private Gson gson;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -35,8 +38,16 @@ public class MonitorStatusApiServlet extends AbstractApiServlet {
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByNameOrNull(projectName, nodeName);
 		String peerMonitorResultLink = links.getPeerMonitorResultLink(node.peer_address(), projectName, monitorName, nodeName);
 		log.info("accessing url " + peerMonitorResultLink);
-		String encodeOutput = HttpUtils.encodeHTML(HttpUtils.doGET(peerMonitorResultLink,null, HttpUtils.MEDIUM_READ_TIMEOUT_MILLI));
-		writeResponseGzipJson(new MonitorExecutionResult(encodeOutput), request, response);
+		String outputFromPeer = HttpUtils.doGET(peerMonitorResultLink,null, HttpUtils.MEDIUM_READ_TIMEOUT_MILLI);
+//		String encodeOutput = HttpUtils.encodeHTML(outputFromPeer);
+		MonitorExecutionResult monitorResult = null;
+		try {
+			monitorResult = gson.fromJson(outputFromPeer, MonitorExecutionResult.class);
+		} catch (JsonSyntaxException e) {
+			log.info("falling back to raw format");
+			monitorResult = new MonitorExecutionResult(outputFromPeer);
+		}
+		writeResponseGzipJson(monitorResult, request, response);
 	}
 	
 	

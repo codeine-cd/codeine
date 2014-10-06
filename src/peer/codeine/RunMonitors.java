@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +28,7 @@ import codeine.mail.MailSender;
 import codeine.mail.NotificationDeliverToMongo;
 import codeine.model.Constants;
 import codeine.model.Result;
+import codeine.servlets.api_servlets.angular.MonitorExecutionResult;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
@@ -311,20 +312,23 @@ public class RunMonitors implements Task {
 		log.debug("Output for " + collector.name() + " will be written to: " + file);
 		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
-			out.write("+------------------------------------------------------------------+\n");
-			out.write("| monitor:       " + collector.name() + "\n");
-			if (hasCredentials(collector)) {
-			out.write("| credentials:   " + collector.credentials() + "\n");
-			}
-			out.write("| exitstatus:    " + res.exit() + "\n");
-			out.write("| completed at:  " + new Date() + "\n");
-			out.write("| length:        " + stopwatch + "\n");
-			out.write("| project:       " + project().name() + "\n");
-			out.write("| node:          " + node.alias() + "\n");
-			out.write("| node-name:     " + node.name() + "\n");
-			out.write("| version:       " + nodeInfo.version() + "\n");
-			out.write("+------------------------------------------------------------------+\n");
-			out.write(res.output);
+			log.debug("writing the new format");
+			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(res.exit(), res.output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
+			out.write(new Gson().toJson(monitorExecutionResult));
+//			out.write("+------------------------------------------------------------------+\n");
+//			out.write("| monitor:       " + collector.name() + "\n");
+//			if (hasCredentials(collector)) {
+//			out.write("| credentials:   " + collector.credentials() + "\n");
+//			}
+//			out.write("| exitstatus:    " + res.exit() + "\n");
+//			out.write("| completed at:  " + new Date() + "\n");
+//			out.write("| length:        " + stopwatch + "\n");
+//			out.write("| project:       " + project().name() + "\n");
+//			out.write("| node:          " + node.alias() + "\n");
+//			out.write("| node-name:     " + node.name() + "\n");
+//			out.write("| version:       " + nodeInfo.version() + "\n");
+//			out.write("+------------------------------------------------------------------+\n");
+//			out.write(res.output);
 		} catch (IOException e) {
 			throw ExceptionUtils.asUnchecked(e);
 		}
