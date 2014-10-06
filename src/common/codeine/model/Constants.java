@@ -8,6 +8,7 @@ import codeine.utils.network.InetUtils;
 public class Constants
 {
 
+
 	public static final boolean SECURITY_ENABLED = true;
 
 	public static final String HTTP_ROOT_CONTEXT = "/http-root";
@@ -26,6 +27,8 @@ public class Constants
 	public static final String PLUGINS_OUTPUT_DIR = "/plugins_output";
 	public static final String ROOT_CONTEXT = "/";
 	public static final String ANGULAR_CONTEXT = "/codeine";
+	public static final String API_CONTEXT = "/api";
+	public static final String API_WITH_TOKEN_CONTEXT = "/api-with-token";
 	
 	
 	
@@ -223,7 +226,10 @@ public class Constants
 	}
 
 	public static String apiContext(String projectNodesContext) {
-		return "/api" + projectNodesContext;
+		return API_CONTEXT + projectNodesContext;
+	}
+	public static String apiTokenContext(String projectNodesContext) {
+		return API_WITH_TOKEN_CONTEXT + projectNodesContext;
 	}
 
 	public static final String OFFLINE_NODES = "Codeine daemon not running";

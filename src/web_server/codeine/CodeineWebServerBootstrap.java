@@ -143,7 +143,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		Constraint constraint = new Constraint();
 		constraint.setName(Constraint.__SPNEGO_AUTH);
 		constraint.setRoles(config.get().roles());
-		constraint.setAuthenticate(false);
+		constraint.setAuthenticate(true);
 
 		ConstraintMapping constraintMapping = new ConstraintMapping();
 		constraintMapping.setConstraint(constraint);
@@ -162,14 +162,24 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 				super.handle(pathInContext, baseRequest, request, response);
 		    }
 		};
+		
 		Constraint constraint2 = new Constraint();
 		constraint2.setAuthenticate(false);
-		constraint.setName("internal");
+		constraint.setName("reporter");
 		constraint.setRoles(config.get().roles());
 		ConstraintMapping constraintMapping2 = new ConstraintMapping();
 		constraintMapping2.setConstraint(constraint2);
 		constraintMapping2.setPathSpec(Constants.apiContext(Constants.REPORTER_CONTEXT));
 		
+		Constraint constraint3 = new Constraint();
+		constraint3.setAuthenticate(false);
+		constraint.setName("api_with_token");
+		constraint.setRoles(config.get().roles());
+		ConstraintMapping constraintMapping3 = new ConstraintMapping();
+		constraintMapping3.setConstraint(constraint3);
+		constraintMapping3.setPathSpec(Constants.apiTokenContext("/*"));
+
+		securityHandler.addConstraintMapping(constraintMapping3);
 		securityHandler.addConstraintMapping(constraintMapping2);
 		securityHandler.addConstraintMapping(constraintMapping);
 		SpnegoLoginService loginService = new SpnegoLoginService(null, Constants.getSpnegoPropertiesPath());
