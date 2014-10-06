@@ -49,6 +49,7 @@ public class RunMonitors implements Task {
 	private IConfigurationManager configurationManager;
 	private String projectName;
 	private static final Logger log = Logger.getLogger(RunMonitors.class);
+	private static final int MAX_OUTPUT_SIZE = 1000000;
 	private Map<String, Long> lastRun = newHashMap();
 	private PeerStatus projectStatusUpdater;
 	private final MailSender mailSender;
@@ -313,7 +314,8 @@ public class RunMonitors implements Task {
 		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
 			log.debug("writing the new format");
-			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(res.exit(), res.output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
+			String output = res.output == null || res.output.length() <= MAX_OUTPUT_SIZE ? res.output : "\nOutput too long...\n" + res.output.substring(res.output.length() - MAX_OUTPUT_SIZE);
+			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(res.exit(), output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
 			out.write(new Gson().toJson(monitorExecutionResult));
 //			out.write("+------------------------------------------------------------------+\n");
 //			out.write("| monitor:       " + collector.name() + "\n");
