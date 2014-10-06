@@ -3,11 +3,12 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
     return {
         restrict: 'E',
         transclude: false,
+        replace: true,
         scope : {
             helpId : '@',
             helpTxt: '='
         },
-        template: '&nbsp;<i class="fa fa-question-circle codeine_help"></i>',
+        template: ' <i class="fa fa-question-circle codeine_help"></i>',
         link: function ($scope, element) {
             var text = '';
             if ($scope.helpTxt) {
@@ -29,6 +30,9 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
                     container :'body'
                 }
             );
+            element.on('hide.bs.popover', function() {
+                $log.debug('hide.bs.popover');
+            });
         }
     };
 }]);

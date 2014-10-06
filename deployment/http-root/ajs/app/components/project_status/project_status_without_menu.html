@@ -22,10 +22,10 @@
                 </form>
                 <ul class="nav navbar-nav left">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{selectedMonitor}} <b class="caret"></b> <help help-id="monitorHelp"></help></a>
-                        <ul class="dropdown-menu">
+                        <a href="#" class="dropdown-toggle">{{selectedMonitor}} <b class="caret"></b> <help help-id="monitorHelp"></help></a>
+                        <ul class="dropdown-menu" role="menu" on-toggle="toggled(open)">
                             <li ng-repeat="monitor in projectStatus.monitor_info">
-                                <a ng-click="selectMonitor(monitor.name)">{{monitor.name}}  <span class="badge pull-right">{{monitor.count}}</span></a>
+                                <a ng-click="selectMonitor(monitor.name)">{{monitor.name}} <span class="badge pull-right">{{monitor.count}}</span></a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -39,8 +39,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right" ng-if="projectConfiguration.commands.length" command-action project="projectName" allowed="true" permissions="app.sessionInfo.permissions">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
+                        <a href="#" class="dropdown-toggle"><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
+                        <ul class="dropdown-menu" role="menu" on-toggle="toggled(open)">
                             <li ng-repeat="command in projectConfiguration.commands"  ng-class=" {disabled : !isAnyNodeChecked() }">
                                 <a ng-click="runCommand(command.name)">{{command.name}}</a>
                             </li>
@@ -101,16 +101,16 @@
                                 <form class="form-inline" role="form">
                                     <div class="checkbox">
                                         <label>
-                                            <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;<a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status" tooltip="Click for node info"> {{node.alias}}</a>
+                                            <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;<a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status"> {{node.alias}}</a>
                                         </label>
                                     </div>
                                 </form>
                             </div>
                             <div class="col-md-9" style="word-break: break-all;">
                                 <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" tooltip="All monitors OK" ng-class="{ default: node.peer_status == 'Disc' , success: node.peer_status == 'On' }" ng-show="node.failed_monitors.length == 0"></i>
+                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="node.failed_monitors.length == 0"></i>
                                 </a>
-                                <span ng-repeat="failing_monitor in node.failed_monitors"><a tooltip="Monitor failed" ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
+                                <span ng-repeat="failing_monitor in node.failed_monitors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
                             </div>
                         </div>
                         <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>

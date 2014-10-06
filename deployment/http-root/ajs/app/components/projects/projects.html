@@ -9,10 +9,10 @@
                     <div class="panel panel-default">
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="project in projects | projectsFilter:tab">
-                                <a href="/codeine/project/{{project.name}}/status" tooltip="Click for project info">
+                                <a href="/codeine/project/{{project.name}}/status">
                                     <i class="icon-folder-close"></i> {{project.name}}
                                 </a>
-                                <a href="/codeine/project/{{project.name}}/status" tooltip="Click for project info" class="pull-right">
+                                <a href="/codeine/project/{{project.name}}/status" class="pull-right">
                                     <span class="badge badge-info">{{project.nodes_count}}</span>
                                 </a>
                             </li>
