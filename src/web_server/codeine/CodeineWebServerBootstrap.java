@@ -143,7 +143,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		Constraint constraint = new Constraint();
 		constraint.setName(Constraint.__SPNEGO_AUTH);
 		constraint.setRoles(config.get().roles());
-		constraint.setAuthenticate(true);
+		constraint.setAuthenticate(false);
 
 		ConstraintMapping constraintMapping = new ConstraintMapping();
 		constraintMapping.setConstraint(constraint);
