@@ -24,6 +24,17 @@
                         </div>
                     </div>
                     <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Finish Time:</strong></div><div class="col-md-6"> {{monitorStatus.finish_time | date:'short'}}</div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-2"><strong>Total Time:</strong></div>
+                        <div class="col-md-6">
+                            {{ monitorStatus.total_time | duration}}
+                        </div>
+                    </div>
+                    <br/>
                 </div>
             </div>
             <h4>Monitor Log</h4>
