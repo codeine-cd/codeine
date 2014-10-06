@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues','n3-charts.linechart','angulartics', 'angulartics.google.analytics'])
+angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues','n3-charts.linechart','angulartics', 'angulartics.google.analytics','filter.duration'])
     .config(['$routeProvider','$locationProvider', '$httpProvider','$sceProvider',
         function($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
             $locationProvider.html5Mode(true);
