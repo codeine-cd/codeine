@@ -50,7 +50,7 @@ Codeine is a continuous deployment tool that makes product deployment faster and
         {
         "web_server_host": "<hostname>",
         "web_server_port": <port>,
-        "admin_mail": ג€�<email_address>",
+        "admin_mail": "<email_address>",
         "mysql":[{
                 "host": "<db_hostname>",
                 "port": <db_port>,
