@@ -31,8 +31,8 @@ unless ($ENV{'release-to-github'} eq "true")
 	exit(0);
 } 
 print "Will release new version to Github: $versionNoDate\n";
-$ENV{http_proxy} = http://proxy-chain.intel.com:911/
-$ENV{https_proxy} = http://proxy-chain.intel.com:911/
+$ENV{http_proxy} = "http://proxy-chain.intel.com:911/";
+$ENV{https_proxy} = "http://proxy-chain.intel.com:911/";
 my $githubUser = $ENV{GITHUB_USER};
 my $githubPassword = $ENV{GITHUB_PASSWORD};
 my $res = r("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Release\",  \"draft\": false,  \"prerelease\": true}' https://api.github.com/repos/codeine-cd/codeine/releases");
