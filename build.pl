@@ -14,6 +14,7 @@ es("mkdir -p dist");
 
 my $version = getVersionFull();
 my $versionNoDate = getVersionNoDate();
+$ENV{mvn} = "mvn" unless defined $ENV{mvn};
 print "mvn is $ENV{mvn}\n";
 es("$ENV{mvn} clean verify");
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
