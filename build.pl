@@ -20,7 +20,14 @@ unless (defined($ENV{INTEL_INSIDE}))
 }
 $ENV{mvn} = "mvn" unless defined $ENV{mvn};
 print "mvn is $ENV{mvn}\n";
-es("$ENV{mvn} clean verify");
+if (defined($ENV{INTEL_INSIDE}))
+{
+	es("$ENV{mvn} clean verify");
+}
+else
+{
+	es("$ENV{mvn} clean package");
+}
 my $tar = "codeine_".getVersionNoDate().".tar.gz";
 my $zip = "codeine_".getVersionNoDate().".zip";
 
