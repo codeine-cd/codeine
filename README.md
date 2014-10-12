@@ -2,13 +2,13 @@
 
 Codeine is a continuous deployment tool that makes product deployment faster and safer through automation and monitoring.
 
-[![Build Status](https://travis-ci.org/Intel-IT/codeine.png?branch=master)](https://travis-ci.org/Intel-IT/codeine)
+[![Build Status](https://travis-ci.org/codeine-cd/codeine.png?branch=master)](https://travis-ci.org/codeine-cd/codeine)
 
 ## Getting started
 
 ### Installing Codeine
 
-1. Download the latest release from [here](https://github.com/Intel-IT/codeine/releases).
+1. Download the latest release from [here](https://github.com/codeine-cd/codeine/releases).
 2. Make a directory called `codeine`:
 
         mkdir codeine
@@ -43,14 +43,14 @@ Codeine is a continuous deployment tool that makes product deployment faster and
 
     2. Grab the contents of the `libs/mysql` directory from the Codeine repository. The easiest way to do this is with svn:
 
-            svn export https://github.com/Intel-IT/codeine/trunk/libs/mysql
+            svn export https://github.com/codeine-cd/codeine/trunk/libs/mysql
 
 10. Create a file called `codeine.conf.json` that contains the following:
 
         {
         "web_server_host": "<hostname>",
         "web_server_port": <port>,
-        "admin_mail": “<email_address>",
+        "admin_mail": ג€�<email_address>",
         "mysql":[{
                 "host": "<db_hostname>",
                 "port": <db_port>,

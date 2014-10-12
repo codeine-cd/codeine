@@ -19,7 +19,7 @@ GetOptions(
 );
 
 
-system("wget -O codeine.zip --no-check-certificate -e use_proxy=yes -e https_proxy=proxy.iil.intel.com:911 https://github.com/Intel-IT/codeine/releases/download/$version/codeine.zip");
+system("wget -O codeine.zip --no-check-certificate -e use_proxy=yes -e https_proxy=proxy.iil.intel.com:911 https://github.com/codeine-cd/codeine/releases/download/$version/codeine.zip");
 system("rm -rf $baseDir/deployment_prev");
 system("mv $baseDir/deployment $baseDir/deployment_prev");
 system("mkdir $baseDir/deployment");

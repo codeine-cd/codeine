@@ -4,14 +4,14 @@
   "main": "index.html",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Intel-IT/codeine"
+    "url": "https://github.com/codeine-cd/codeine"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Intel-IT/codeine/issues"
+    "url": "https://github.com/codeine-cd/codeine/issues"
   },
-  "homepage": "https://github.com/Intel-IT/codeine",
+  "homepage": "https://github.com/codeine-cd/codeine",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-autoprefixer": "~0.4.0",
