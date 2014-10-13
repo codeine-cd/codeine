@@ -8,6 +8,7 @@ import codeine.api.CommandStatusJson;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.api.VersionItemInfo;
+import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
@@ -39,8 +40,8 @@ public class CodeineApiClient {
 		headers.put(Constants.RequestHeaders.NO_ZIP, Constants.RequestHeaders.NO_ZIP);
 	}
 
-	public List<ProjectJson> projects() {
-		return apiCall(Constants.PROJECTS_LIST_CONTEXT,"", new TypeToken<List<ProjectJson>>(){}.getType());
+	public List<CodeineProject> projects() {
+		return apiCall(Constants.PROJECTS_LIST_CONTEXT,"", new TypeToken<List<CodeineProject>>(){}.getType());
 	}
 	
 	public void report(NodeWithMonitorsInfo nodeWithMonitorsInfo) {
@@ -59,7 +60,7 @@ public class CodeineApiClient {
 
 
 	private String getServerPath(String contextPath) {
-		return "http://"+host+":"+port + Constants.apiContext(contextPath);
+		return "http://"+host+":"+port + Constants.apiTokenContext(contextPath);
 	}
 
 	public Map<String, VersionItemInfo> projectStatus(String projectName) {
@@ -80,13 +81,8 @@ public class CodeineApiClient {
 
 
 
-	public ProjectJson project(String name) {
-		for (ProjectJson p : projects()) {
-			if (p.name().equals(name)){
-				return p;
-			}
-		}
-		throw new IllegalArgumentException("no project " + name);
+	public ProjectJson project(String projectName) {
+		return apiCall(Constants.PROJECT_CONFIGURATION_CONTEXT, "?" + projectNameParam(projectName), ProjectJson.class);
 	}
 
 
@@ -103,10 +99,8 @@ public class CodeineApiClient {
 		return apiCall(Constants.COMMANDS_LOG_CONTEXT, "?" + projectNameParam(projectName) , new TypeToken<List<CommandStatusJson>>(){}.getType()); 
 	}
 	
-	public static void main(String[] args) {
-		CodeineApiClient api = new CodeineApiClient("localhost", 12347, "36b887b6-fe4e-46c9-838f-abc3feee180f");
-		
-		System.out.println(api.projects());
-		//api.report(new NodeWithMonitorsInfo("localhost", "roi", "test_project",  Maps.<String,MonitorStatusInfo>newHashMap(),"1"));
+	public String saveProject(ProjectJson project) {
+		String url = getServerPath(Constants.PROJECT_CONFIGURATION_CONTEXT);
+		return HttpUtils.doPUT(url, gson.toJson(project),headers);
 	}
 }

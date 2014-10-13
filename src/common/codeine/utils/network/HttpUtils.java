@@ -59,12 +59,17 @@ public class HttpUtils
 	}
 	
 	public static void doPOST(String url, String postData, Function<String, Void> function, Map<String,String> headers) {
+		doPostPut(url, postData, function, headers, "POST");
+	}
+
+	private static void doPostPut(String url, String postData, Function<String, Void> function,
+			Map<String, String> headers, String method) {
 		try {
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 			con.setReadTimeout(READ_TIMEOUT_MILLI);
 			//add reuqest header
-			con.setRequestMethod("POST");
+			con.setRequestMethod(method);
 			con.setRequestProperty("User-Agent", USER_AGENT);
 			con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
@@ -94,6 +99,11 @@ public class HttpUtils
 		}
 	}
 	
+	public static String doPUT(String url, String postData, Map<String, String> headers) {
+		StringBuilder stringBuilder = new StringBuilder();
+		doPostPut(url, postData, new OutputToStringFunction(stringBuilder), headers, "PUT");
+		return stringBuilder.toString();
+	}
 	
 	public static String doPOST(String url, String postData, Map<String,String> headers) {
 		StringBuilder stringBuilder = new StringBuilder();

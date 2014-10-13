@@ -1,6 +1,6 @@
 package integration_tests.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import integration_tests.tests_framework.TestsSuite;
 
 import java.util.List;
@@ -11,6 +11,7 @@ import org.junit.Test;
 import codeine.CodeineApiClient;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.VersionItemInfo;
+import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.ThreadUtils;
 
@@ -22,7 +23,7 @@ public class BasicTest extends TestsSuite{
 	@Test
 	public void sanityTest() {
 		final CodeineApiClient client = new CodeineApiClient(codeineConf().web_server_host(), codeineConf().web_server_port());
-		List<ProjectJson> projects = client.projects();
+		List<CodeineProject> projects = client.projects();
 		System.out.println(projects);
 		final ProjectJson projectJson = client.project("integration_test_project");
 		final Map<String, VersionItemInfo> projectStatus = client.projectStatus("integration_test_project");
