@@ -251,7 +251,9 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
         $scope.clearFilters();
     });
 
-    $scope.$on('$destroy',unRegisterFunction);
-
-    $scope.$on('$destroy', tagsChangedHandler);
+    $scope.$on('$destroy',function() {
+        $location.search({});
+        unRegisterFunction();
+        tagsChangedHandler();
+    });
 }]);
