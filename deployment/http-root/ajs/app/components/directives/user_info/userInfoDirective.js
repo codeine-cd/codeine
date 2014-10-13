@@ -13,11 +13,13 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window',
                 CodeineService.logout().success(function() {
                     $window.location.reload();
                 });
-            }
+            };
 
             $scope.getTemplateUrl = function() {
-                if (!$scope.app.sessionInfo || !$scope.app.globalConfiguration) return "";
-                switch ($scope.app.globalConfiguration["authentication_method"])
+                if (!$scope.app.sessionInfo || !$scope.app.globalConfiguration) {
+                    return "";
+                }
+                switch ($scope.app.globalConfiguration.authentication_method)
                 {
                     case "Disabled":
                         return "/components/directives/user_info/empty.html";
@@ -29,7 +31,7 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window',
                     case "WindowsCredentials":
                         return "/components/directives/user_info/windowsCredentials.html";
                 }
-            }
+            };
         }
     };
 }]);

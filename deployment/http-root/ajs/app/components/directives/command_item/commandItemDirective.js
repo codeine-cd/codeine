@@ -15,7 +15,7 @@ angular.module('codeine').directive('commandItem',['CodeineService','AlertServic
                         AlertService.addAlert('success', 'Command was canceled successfully');
                     });
                 }
-            }
+            };
         }
     };
 }]);
