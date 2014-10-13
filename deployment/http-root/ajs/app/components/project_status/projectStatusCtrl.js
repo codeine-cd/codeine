@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope','$log','$filter','$location','SelectedNodesService','Constants', function($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants) {
+angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope','$log','$filter','$location','SelectedNodesService','Constants', 'AlertService', function($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService) {
     $scope.projectName = $scope.projectConfiguration.name;
     $scope.allNodesCount = 0;
     $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
@@ -165,6 +165,11 @@ angular.module('codeine').controller('projectStatusCtrl',['$scope','$rootScope',
 
     $scope.runCommand = function(command) {
         $log.debug('projectStatusCtrl: will run command ' + command);
+        if (!$scope.isAnyNodeChecked()) {
+            $log.debug('projectStatusCtrl: no nodes selected, will do nothing');
+            AlertService.addAlert('danger','No nodes selected to run the command.<br/>Please select nodes first.',6000);
+            return;
+        }
         var url = '/codeine/project/' + $scope.projectName + '/command/' + command + '/setup';
         SelectedNodesService.setSelectedNodes($scope.getAllSelectedNodes(),url);
         $location.path(url);
