@@ -8,7 +8,7 @@ angular.module('codeine').directive('help', ['$log','HelpConstants', function ($
             helpId : '@',
             helpTxt: '='
         },
-        template: ' <i class="fa fa-question-circle codeine_help"></i>',
+        template: '<span>&nbsp;<i class="fa fa-question-circle codeine_help"></i></span>',
         link: function ($scope, element) {
             var text = '';
             if ($scope.helpTxt) {
