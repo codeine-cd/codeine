@@ -3,6 +3,7 @@
 Codeine is a continuous deployment tool that makes product deployment faster and safer through automation and monitoring.
 
 [![Build Status](https://travis-ci.org/codeine-cd/codeine.png?branch=master)](https://travis-ci.org/codeine-cd/codeine)
+[![Dependency Status](https://gemnasium.com/codeine-cd/codeine.svg)](https://gemnasium.com/codeine-cd/codeine)
 [![Code Climate](https://codeclimate.com/repos/543b7c1ce30ba04e0c027787/badges/5e510f98df540fd8451e/gpa.svg)](https://codeclimate.com/repos/543b7c1ce30ba04e0c027787/feed)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
