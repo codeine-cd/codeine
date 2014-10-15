@@ -6,6 +6,7 @@ Codeine is a continuous deployment tool that makes product deployment faster and
 [![Dependency Status](https://gemnasium.com/codeine-cd/codeine.svg)](https://gemnasium.com/codeine-cd/codeine)
 [![Code Climate](https://codeclimate.com/github/codeine-cd/codeine/badges/gpa.svg)](https://codeclimate.com/github/codeine-cd/codeine)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+[![Built with Maven](maven.apache.org/images/apache-maven-project.png)](http://maven.apache.org)
 
 
 ## Getting started
