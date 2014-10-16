@@ -1,0 +1,40 @@
+{
+  "name": "codeine",
+  "version": "1.1.197",
+  "homepage": "https://github.com/codeine-cd/codeine",
+  "authors": [
+    "ezraroi <ezraroi@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "json3": "~3.2.6",
+    "es5-shim": "~2.1.0",
+    "angular": "1.2.25",
+    "angular-animate": "1.2.25",
+    "angular-route": "1.2.25",
+    "angular-ui-utils": "0.1.1",
+    "angular-ui-select2": "~0.0.5",
+    "bootstrap": "~3.1.1",
+    "components-font-awesome": "~4.2.0",
+    "ngstorage": "~0.3.0",
+    "ng-textcomplete": "~0.4.0",
+    "ngDistinctValues": "~1.0.2",
+    "d3": "~3.4.4",
+    "moment": "~2.5.1",
+    "angular-bootstrap": "~0.11.2",
+    "angulartics": "~0.16.5",
+    "angular-duration-filter-formatter": "~1.0.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.2.25",
+    "angular-scenario": "1.2.25"
+  }
+}
