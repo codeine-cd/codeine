@@ -16,6 +16,7 @@ import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.UserPermissionsGetter;
+import codeine.plugins.AfterProjectModifyPlugin;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
 
@@ -31,6 +32,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 	@Inject private ConfigurationManagerServer configurationManager;
 	@Inject private UserPermissionsGetter permissionsManager;
 	@Inject	private NodeAggregator aggregator;
+	@Inject private AfterProjectModifyPlugin afterProjectModifyPlugin;
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
@@ -71,6 +73,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 			}
 			newProject.name(newProjectParamsJson.project_name);
 			configurationManager.createNewProject(newProject);
+			afterProjectModifyPlugin.call(newProject, false);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);  
 		}	

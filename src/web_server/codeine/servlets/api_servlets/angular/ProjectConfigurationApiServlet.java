@@ -1,9 +1,6 @@
 package codeine.servlets.api_servlets.angular;
 
 
-import java.util.List;
-import java.util.Map;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,28 +8,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.ConfigurationManagerServer;
-import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
+import codeine.plugins.AfterProjectModifyPlugin;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
-import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 
 	
 	private static final Logger log = Logger.getLogger(ProjectConfigurationApiServlet.class);
-
 	private static final long serialVersionUID = 1L;
 
 	@Inject private ConfigurationManagerServer configurationManager;
 	@Inject private UserPermissionsGetter permissionsManager;
-	@Inject private ExperimentalConfJsonStore experimentalConfJsonStore;
+	@Inject private AfterProjectModifyPlugin afterProjectModifyPlugin;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -55,18 +47,11 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 	protected void myPut(HttpServletRequest request, HttpServletResponse resp) {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
-		if (null != experimentalConfJsonStore.get().after_project_modify_plugin()) {
-			log.info("calling after_project_modify_plugin for project " + projectJson.name());
-			List<String> cmd = Lists.newArrayList(experimentalConfJsonStore.get().after_project_modify_plugin());
-			Map<String, String> env = Maps.newHashMap();
-			boolean exists = configurationManager.updateProject(projectJson);
-			env.put(Constants.EXECUTION_ENV_PROJECT_EXISTS, String.valueOf(exists));
-			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
-			new ProcessExecuterBuilder(cmd).timeoutInMinutes(2).env(env).build().execute();
-		}
+		boolean exists = configurationManager.updateProject(projectJson);
+		afterProjectModifyPlugin.call(projectJson, exists);
 		writeResponseJson(resp,projectJson);
 	}
-	
+
 	@Override
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
 		IUserWithPermissions user = permissionsManager.user(request);
