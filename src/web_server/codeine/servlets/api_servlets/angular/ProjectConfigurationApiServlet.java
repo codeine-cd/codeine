@@ -13,6 +13,7 @@ import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.plugins.AfterProjectModifyPlugin;
+import codeine.plugins.AfterProjectModifyPlugin.StatusChange;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
 
@@ -48,7 +49,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
 		boolean exists = configurationManager.updateProject(projectJson);
-		afterProjectModifyPlugin.call(projectJson, exists);
+		afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add);
 		writeResponseJson(resp,projectJson);
 	}
 
@@ -59,6 +60,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		ProjectJson projectToDelete = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
 		configurationManager.deleteProject(projectToDelete);
 		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);
+		afterProjectModifyPlugin.call(projectToDelete, StatusChange.remove);
 		getWriter(response).write("{}");
 	}
 

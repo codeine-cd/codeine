@@ -17,6 +17,7 @@ import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.plugins.AfterProjectModifyPlugin;
+import codeine.plugins.AfterProjectModifyPlugin.StatusChange;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
 
@@ -73,7 +74,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 			}
 			newProject.name(newProjectParamsJson.project_name);
 			configurationManager.createNewProject(newProject);
-			afterProjectModifyPlugin.call(newProject, false);
+			afterProjectModifyPlugin.call(newProject, StatusChange.add);
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);  
 		}	
