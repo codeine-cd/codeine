@@ -7,6 +7,7 @@ public class ExperimentalConfJson {
 	private boolean readonly_web_server;
 	private boolean allow_concurrent_commands_in_peer;
 	private String groups_plugin;
+	private String after_new_project_create_plugin;
 
 	public String new_issue_link() {
 		return new_issue_link;
@@ -19,6 +20,9 @@ public class ExperimentalConfJson {
 	}
 	public String groups_plugin() {
 		return groups_plugin;
+	}
+	public String after_project_modify_plugin() {
+		return after_new_project_create_plugin;
 	}
 
 }

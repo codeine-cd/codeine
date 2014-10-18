@@ -55,7 +55,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 	}
 	
 	
-	public void updateProject(final ProjectJson updatedProject) {
+	public boolean updateProject(final ProjectJson updatedProject) {
 		log.info("updating project " + updatedProject);
 		String file = pathHelper.getProjectsDir() + "/" + updatedProject.name() + "/" + Constants.PROJECT_CONF_FILE;
 		jsonFileUtils.setContent(file, updatedProject);
@@ -68,6 +68,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 				projectsUpdater.updatePeers(updatedProject, previousProject);
 			}
 		});
+		return null != previousProject;
 	}
 	
 	public void updateDb() {

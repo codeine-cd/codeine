@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeInfo;
-import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
@@ -311,7 +310,7 @@ public class RunMonitors implements Task {
 		String file = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name()) + "/" + HttpUtils.specialEncode(collector.name())
 				+ ".txt";
 		log.debug("Output for " + collector.name() + " will be written to: " + file);
-		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
+//		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
 			log.debug("writing the new format");
 			String output = res.output == null || res.output.length() <= MAX_OUTPUT_SIZE ? res.output : "\nOutput too long...\n" + res.output.substring(res.output.length() - MAX_OUTPUT_SIZE);
