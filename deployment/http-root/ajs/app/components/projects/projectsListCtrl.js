@@ -3,6 +3,7 @@
 
     //// JavaScript Code ////
     function projectsListCtrl(projects, tabs, $filter) {
+        /*jshint validthis:true */
         var vm = this;
         vm.tabs = tabs.slice(0);
         vm.tabs.unshift({name:"main", exp: [".*"]});
