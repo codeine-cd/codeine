@@ -293,6 +293,18 @@ module.exports = function (grunt) {
             ]
         },
 
+        ngAnnotate: {
+            options: {
+                singleQuotes: true
+            },
+            app : {
+                files : {
+                    '.tmp/concat/scripts/vendor.js' : ['.tmp/concat/scripts/vendor.js'],
+                    '.tmp/concat/scripts/scripts.js' : ['.tmp/concat/scripts/scripts.js']
+                }
+            }
+        },
+
         uglify: {
             options: {
                 preserveComments: false,
@@ -372,6 +384,7 @@ module.exports = function (grunt) {
         'copy:dist',
         'copy:select2imagesDIST',
         'cssmin',
+        'ngAnnotate',
         'uglify',
         'rev',
         'usemin',
