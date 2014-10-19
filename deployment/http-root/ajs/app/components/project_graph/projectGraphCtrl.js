@@ -1,6 +1,8 @@
-'use strict';
-angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log','$filter','$routeParams', 'graphData',
-    function($scope, $log, $filter,$routeParams,graphData) {
+(function (angular) {
+    'use strict';
+
+    //// JavaScript Code ////
+    function projectGraphCtrl($scope,$filter,$routeParams,graphData) {
         $scope.projectName = $routeParams.project_name;
         $scope.commandsDateToName = {};
         $scope.options = {
@@ -34,4 +36,9 @@ angular.module('codeine').controller('projectGraphCtrl',['$scope', '$log','$filt
                 });
             }
         }
-    }]);
+    }
+
+    //// Angular Code ////
+    angular.module('codeine').controller('projectGraphCtrl', projectGraphCtrl);
+
+})(angular);

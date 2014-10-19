@@ -1,43 +1,52 @@
-'use strict';
-angular.module('codeine')
-.factory('ErrorHandler', ['$rootScope', '$log' , 'AlertService', function ($rootScope, $log, AlertService) {
-    var ErrorHandler = this;
+(function (angular) {
+    'use strict';
 
-    ErrorHandler.handle = function (data, status, headers, config) {
+    //// JavaScript Code ////
+    function ErrorHandlerFactory($log, AlertService) {
+        var ErrorHandler = this;
 
-        if ((config.url === '/j_security_check') || (config.url === '/register')) {
-            $log.info('ErrorHandler: Ignoring error');
-            return;
-        }
-        if(!data) {
-            data = {
-                title : 'General Error',
-                message : 'There was an error while connecting to the server, it might be down or unreachable'
-            };
-        }
-        $log.error('ErrorHandler: ' + angular.toJson(data));
-        var message = [];
-        if (data.title) {
-            message.push("<strong>" + data.title + "</strong>");
-        }
-        if (data.message) {
-            message.push(data.message);
-        }
-        AlertService.addAlert('danger', message.join('<br/>'));
-    };
+        ErrorHandler.handle = function (data, status, headers, config) {
 
-    return ErrorHandler;
-}])
-.factory('myHttpInterceptor', ['ErrorHandler', '$q', function (ErrorHandler, $q) {
-    return {
-        response: function (response) {
-            return response;
-        },
-        responseError: function (response) {
-            ErrorHandler.handle(response.data, response.status, response.headers, response.config);
+            if ((config.url === '/j_security_check') || (config.url === '/register')) {
+                $log.info('ErrorHandler: Ignoring error');
+                return;
+            }
+            if(!data) {
+                data = {
+                    title : 'General Error',
+                    message : 'There was an error while connecting to the server, it might be down or unreachable'
+                };
+            }
+            $log.error('ErrorHandler: ' + angular.toJson(data));
+            var message = [];
+            if (data.title) {
+                message.push("<strong>" + data.title + "</strong>");
+            }
+            if (data.message) {
+                message.push(data.message);
+            }
+            AlertService.addAlert('danger', message.join('<br/>'));
+        };
 
-            // do something on error
-            return $q.reject(response);
-        }
-    };
-}]);
+        return ErrorHandler;
+    }
+
+    function myHttpInterceptorFactory(ErrorHandler, $q) {
+        return {
+            response: function (response) {
+                return response;
+            },
+            responseError: function (response) {
+                ErrorHandler.handle(response.data, response.status, response.headers, response.config);
+
+                // do something on error
+                return $q.reject(response);
+            }
+        };
+
+    }
+
+    //// Angular Code ////
+    angular.module('codeine').factory('ErrorHandler',ErrorHandlerFactory).factory('myHttpInterceptor',myHttpInterceptorFactory);
+
+})(angular);

@@ -1,6 +1,8 @@
-'use strict';
-angular.module('codeine').controller('nodeStatusCtrl',['$scope', '$log', '$routeParams', '$location', 'CodeineService', 'nodeStatus', 'projectConfiguration', 'SelectedNodesService',
-    function($scope, $log,$routeParams, $location, CodeineService, nodeStatus, projectConfiguration, SelectedNodesService ) {
+(function (angular) {
+    'use strict';
+
+    //// JavaScript Code ////
+    function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, projectConfiguration, SelectedNodesService ) {
         $scope.projectName = $routeParams.project_name;
         $scope.nodeStatus = nodeStatus;
         $scope.projectConfiguration= projectConfiguration;
@@ -17,4 +19,10 @@ angular.module('codeine').controller('nodeStatusCtrl',['$scope', '$log', '$route
             SelectedNodesService.setSelectedNodes(nodes,url);
             $location.path(url);
         };
-}]);
+    }
+
+    //// Angular Code ////
+
+    angular.module('codeine').controller('nodeStatusCtrl', nodeStatusCtrl);
+
+})(angular);

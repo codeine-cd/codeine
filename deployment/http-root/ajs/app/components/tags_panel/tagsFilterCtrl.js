@@ -1,7 +1,8 @@
-'use strict';
-angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$log','Constants','$location',
-    function($scope,$rootScope,$log,Constants,$location) {
-        $log.debug('tagsFilterCtrl: created');
+(function (angular) {
+    'use strict';
+
+    //// JavaScript Code ////
+    function tagsFilterCtrl($scope,$rootScope,$log,Constants,$location) {
         $scope.maxTags = 10;
 
         $scope.initTagsFromQueryString = function() {
@@ -12,7 +13,7 @@ angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$
             }
             if (angular.isDefined(queryStringObject.tagsOn)) {
                 shouldRefresh = true;
-                $log.debug('projectStatusCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
+                $log.debug('tagsFilterCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
                 var array = queryStringObject.tagsOn.split(',');
                 for (var i=0; i < array.length; i++) {
                     for (var k=0; k < $scope.projectStatus.tag_info.length ; k++) {
@@ -54,4 +55,10 @@ angular.module('codeine').controller('tagsFilterCtrl',['$scope','$rootScope', '$
             });
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
-    }]);
+    }
+
+
+    //// Angular Code ////
+    angular.module('codeine').controller('tagsFilterCtrl', tagsFilterCtrl);
+
+})(angular);

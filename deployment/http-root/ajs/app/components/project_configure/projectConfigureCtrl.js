@@ -1,6 +1,8 @@
-'use strict';
-angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '$routeParams', 'CodeineService', 'projectConfigurationForEditing','$location','AlertService','nodes',
-    function($scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes) {
+(function (angular) {
+    'use strict';
+
+    //// JavaScript Code ////
+    function projectConfigureCtrl($scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes) {
         $scope.projectName = $routeParams.project_name;
         $log.debug('projectConfigureCtrl: current project is ' + $scope.projectName);
         $scope.projectConfigurationForEditing = projectConfigurationForEditing;
@@ -102,4 +104,10 @@ angular.module('codeine').controller('projectConfigureCtrl',['$scope', '$log', '
             'tags': $scope.nodes,
             'tokenSeparators': [",", " "]
         };
-    }]);
+    }
+
+
+    //// Angular Code ////
+    angular.module('codeine').controller('projectConfigureCtrl', projectConfigureCtrl);
+
+})(angular);

@@ -1,6 +1,8 @@
-'use strict';
-angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','SelectedNodesService','$location','$routeParams','command','CodeineService',
-    function($scope, $log, SelectedNodesService, $location, $routeParams,command,CodeineService) {
+(function (angular) {
+    'use strict';
+
+    //// JavaScript Code ////
+    function commandSetupCtrl($scope, $log, SelectedNodesService, $location, $routeParams,command,CodeineService) {
         $scope.command = command;
         $scope.nodes = SelectedNodesService.getSelectedNodes($location.path());
         $log.debug('commandSetupCtrl: created for command ' + angular.toJson(command) + ' on ' + $scope.nodes.length + ' nodes');
@@ -29,4 +31,10 @@ angular.module('codeine').controller('commandSetupCtrl',['$scope', '$log','Selec
             return regexp.test(value);
         };
 
-    }]);
+    }
+
+
+    //// Angular Code ////
+    angular.module('codeine').controller('commandSetupCtrl',commandSetupCtrl);
+
+})(angular);

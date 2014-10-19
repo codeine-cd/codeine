@@ -1,6 +1,8 @@
-'use strict';
-angular.module('codeine').controller('projectMenuCtrl',['$scope', '$log', '$routeParams', '$window', '$location','CodeineService','AlertService',
-    function($scope, $log,$routeParams, $window, $location,CodeineService,AlertService) {
+(function (angular) {
+    'use strict';
+
+    //// JavaScript Code ////
+    function projectMenuCtrl($scope, $log,$routeParams, $window, $location,CodeineService,AlertService) {
         $scope.projectName = $routeParams.project_name;
         $log.debug('projectMenuCtrl: current project is ' + $scope.projectName);
 
@@ -13,4 +15,9 @@ angular.module('codeine').controller('projectMenuCtrl',['$scope', '$log', '$rout
                 });
             }
         };
-    }]);
+    }
+
+    //// Angular Code ////
+    angular.module('codeine').controller('projectMenuCtrl', projectMenuCtrl);
+
+})(angular);

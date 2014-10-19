@@ -1,7 +1,13 @@
-'use strict';
-angular.module('codeine').controller('statisticsCtrl',['$scope', '$log', 'statistics', function($scope, $log, statistics) {
-    $scope.statsitics  = statistics;
+(function (angular) {
+    'use strict';
 
-}]);
+    //// JavaScript Code ////
+    function statisticsCtrl($scope, statistics) {
+        $scope.statsitics  = statistics;
+    }
 
 
+    //// Angular Code ////
+    angular.module('codeine').controller('statisticsCtrl',statisticsCtrl);
+
+})(angular);

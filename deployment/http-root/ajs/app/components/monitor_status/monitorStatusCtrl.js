@@ -1,8 +1,15 @@
-'use strict';
-angular.module('codeine').controller('monitorStatusCtrl',['$scope', '$log', '$routeParams', 'CodeineService', 'monitorStatus',
-    function($scope, $log,$routeParams, CodeineService, monitorStatus ) {
-    $scope.projectName = $routeParams.project_name;
-    $log.debug('monitorStatusCtrl: current project is ' + $scope.projectName);
-    $scope.monitorStatus = monitorStatus;
+(function (angular) {
+    'use strict';
 
-}]);
+    //// JavaScript Code ////
+    function monitorStatusCtrl($scope, $log,$routeParams, monitorStatus ) {
+        $scope.projectName = $routeParams.project_name;
+        $log.debug('monitorStatusCtrl: current project is ' + $scope.projectName);
+        $scope.monitorStatus = monitorStatus;
+
+    }
+
+    //// Angular Code ////
+    angular.module('codeine').controller('monitorStatusCtrl',  monitorStatusCtrl);
+
+})(angular);
