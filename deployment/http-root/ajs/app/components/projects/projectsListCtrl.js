@@ -2,14 +2,15 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectsListCtrl($scope, projects, tabs, $filter) {
-        $scope.tabs = tabs.slice(0);
-        $scope.tabs.unshift({name:"main", exp: [".*"]});
-        $scope.projects = projects;
+    function projectsListCtrl(projects, tabs, $filter) {
+        var vm = this;
+        vm.tabs = tabs.slice(0);
+        vm.tabs.unshift({name:"main", exp: [".*"]});
+        vm.projects = projects;
 
-        $scope.shouldShowTab = function(){
+        vm.shouldShowTab = function(){
             return function(tab){
-                return $filter('projectsFilter')($scope.projects, tab).length > 0;
+                return $filter('projectsFilter')(vm.projects, tab).length > 0;
             };
         };
     }

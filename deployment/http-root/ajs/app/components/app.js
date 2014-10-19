@@ -11,6 +11,7 @@
             when('/codeine', {
                 templateUrl: '/components/projects/projects.html',
                 controller: 'projectsListCtrl',
+                controllerAs: 'vm',
                 resolve: {
                     projects : function($q,$log,CodeineService) {
                         var deferred = $q.defer();
