@@ -231,6 +231,7 @@
             when('/codeine/project/:project_name/node/:node_name/monitor/:monitor_name/status', {
                 templateUrl: '/components/monitor_status/monitor_status.html',
                 controller: 'monitorStatusCtrl',
+                controllerAs: 'vm',
                 pageTitle: 'Monitor Status',
                 resolve: {
                     monitorStatus :  function($q,$log,$route,CodeineService) {

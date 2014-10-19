@@ -2,11 +2,12 @@
     'use strict';
 
     //// JavaScript Code ////
-    function monitorStatusCtrl($scope, $log,$routeParams, monitorStatus ) {
-        $scope.projectName = $routeParams.project_name;
-        $log.debug('monitorStatusCtrl: current project is ' + $scope.projectName);
-        $scope.monitorStatus = monitorStatus;
+    function monitorStatusCtrl($routeParams, monitorStatus ) {
+        /*jshint validthis:true */
 
+        var vm = this;
+        vm.projectName = $routeParams.project_name;
+        vm.monitorStatus = monitorStatus;
     }
 
     //// Angular Code ////

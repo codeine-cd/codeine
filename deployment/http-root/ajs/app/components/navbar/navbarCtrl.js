@@ -14,12 +14,16 @@
             $scope.projects = data;
         });
 
-        $scope.$watch('model.projectSearch', function(value) {
+        var watchHandler = $scope.$watch('model.projectSearch', function(value) {
             if (value) {
                 $log.debug('navbarCtrl: selected project: ' + value);
                 $location.path('/codeine/project/' + value + '/status').replace();
             }
             $scope.model.projectSearch = '';
+        });
+
+        $scope.$on('$destroy', function() {
+            watchHandler();
         });
 
     }
