@@ -15,18 +15,17 @@
                 CodeineService.getSessionInfo().success(function (data) {
                     $log.debug('LoginService: got session info ' + angular.toJson(data));
                     sessionInfo = data;
-                    deffer.resolve(data)
+                    deffer.resolve(data);
+                    deffer = undefined;
                 }).error(function(error) {
                     deffer.reject(error);
+                    deffer = undefined;
                 });
                 return deffer.promise;
             }
         }
 
         function getSessionInfo() {
-            if (!sessionInfo) {
-                throw 'Session info is not resolved yet';
-            }
             return sessionInfo;
         }
 

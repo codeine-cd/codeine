@@ -1,13 +1,11 @@
 'use strict';
-angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window','CodeineService' , function ($rootScope, $log , $window, CodeineService) {
+angular.module('codeine').directive('userInfo', function ($rootScope, $log , $window, CodeineService, LoginService) {
     return {
         restrict: "E",
         transclude: false,
         scope: true,
         template : '<div ng-include="getTemplateUrl()"></div>',
         link: function ($scope) {
-            $log.debug("userInfo is linking...");
-
             $scope.logout = function() {
                 $log.debug('userInfo: logout');
                 CodeineService.logout().success(function() {
@@ -16,7 +14,7 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window',
             };
 
             $scope.getTemplateUrl = function() {
-                if (!$scope.app.sessionInfo || !$scope.app.globalConfiguration) {
+                if (!LoginService.getSessionInfo() || !$scope.app.globalConfiguration) {
                     return "";
                 }
                 switch ($scope.app.globalConfiguration.authentication_method)
@@ -24,7 +22,7 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window',
                     case "Disabled":
                         return "/components/directives/user_info/empty.html";
                     case "Builtin":
-                        if (($scope.app.sessionInfo.permissions.username) && ($scope.app.sessionInfo.permissions.username !== 'Guest')) {
+                        if ((LoginService.getSessionInfo().permissions.username) && (LoginService.getSessionInfo().permissions.username !== 'Guest')) {
                             return "/components/directives/user_info/builtin-logged.html";
                         }
                         return "/components/directives/user_info/builtin-not-logged.html";
@@ -34,4 +32,4 @@ angular.module('codeine').directive('userInfo', ['$rootScope','$log', '$window',
             };
         }
     };
-}]);
+});

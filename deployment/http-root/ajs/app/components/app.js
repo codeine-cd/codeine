@@ -321,11 +321,18 @@
 
     function runFunc($rootScope, $log, CodeineService, $interval, ApplicationFocusService, LoginService) {
         $rootScope.app = {
-            loading: null
+            loading: null,
+            logginIn : true
         };
 
         ApplicationFocusService.init();
         LoginService.init();
+
+        LoginService.gettingSessionInfo().then(function() {
+            $rootScope.app.logginIn = false;
+        }, function(){
+            $rootScope.app.logginIn = false;
+        });
 
         var loadConfiguration = function() {
             if ((!ApplicationFocusService.isInFocus()) && (angular.isDefined($rootScope.app.globalConfiguration))) {
