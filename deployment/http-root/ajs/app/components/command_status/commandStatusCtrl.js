@@ -2,17 +2,14 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout) {
+    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService) {
         $scope.projectName = $routeParams.project_name;
-        $log.debug('commandStatusCtrl: command status is ' + angular.toJson(commandStatus));
         $scope.commandStatus = commandStatus;
 
         var maxUpdatesNotInFocus = 100;
         var intervalTriggered = 0;
         var interval = $interval(function() {
-            //$log.debug('checking commandStatus ' + $scope.app.isInFocus + ' ' + intervalTriggered);
-            if (!$scope.app.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
-                //$log.debug('commandStatus will not update');
+            if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
                 return;
             }
             intervalTriggered++;

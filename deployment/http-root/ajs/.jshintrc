@@ -19,12 +19,6 @@
   "smarttabs": true,
   "globals": {
     "angular": false,
-    "$": true,
-    "HvpPlugin" : true,
-    "ZebuPlugin" : true,
-    "VelocePlugin" : true,
-    "Utils" : true,
-    "Class" : true,
-    "moment" : true
+    "$": true
   }
 }

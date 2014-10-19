@@ -109,12 +109,12 @@
             </div>
         </div>
         <div ng-show="!app.contentLoading && !app.serverDown" ng-cloak>
-            <div class="row" ng-controller="breadCrumbCtrl">
+            <div class="row" ng-controller="breadCrumbCtrl as vm">
                 <div class="col-md-12">
                     <ol class="breadcrumb">
                         <li><a href='/'>Codeine</a></li>
-                        <li ng-repeat="item in items"><a class="cursor_pointer" ng-click="gotoUrl(item.url)">{{item.name}}</a></li>
-                        <li>{{lastItem}}</li>
+                        <li ng-repeat="item in vm.items"><a class="cursor_pointer" ng-click="vm.gotoUrl(item.url)">{{item.name}}</a></li>
+                        <li>{{vm.lastItem}}</li>
                     </ol>
                 </div>
             </div>
@@ -212,6 +212,7 @@
 <script src="/components/services/errorHandlerService.js"></script>
 <script src="/components/services/selectedNodesService.js"></script>
 <script src="/components/services/viewAsRequestInterceptor.js"></script>
+<script src="/components/services/applicationFocusService.js"></script>
 <script src="/components/filters/projectsFilter.js"></script>
 <script src="/components/filters/nodeFilter.js"></script>
 <!-- endbuild -->

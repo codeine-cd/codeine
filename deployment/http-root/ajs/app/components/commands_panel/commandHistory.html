@@ -1,10 +1,10 @@
-<div class="panel panel-default hidden-xs" ng-controller="commandHistoryCtrl">
+<div class="panel panel-default hidden-xs" ng-controller="commandHistoryCtrl as vm">
     <div class="panel-heading">
         <span class="panel-title">Command History <i data-help-message="commandExecutorHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help" data-original-title="" title=""></i></span>
     </div>
     <div class="list-group">
-        <a class="list-group-item" ng-hide="history.length" ng-cloak><div class="text-center">No commands</div></a>
-        <a ng-href="/codeine/project/{{item.project}}/command/{{item.name}}/{{item.id}}/status" command-item command-data="item" ng-repeat="item in history | limitTo:limit " class="list-group-item" style="padding-top: 2px;padding-bottom: 4px"></a>
+        <a class="list-group-item" ng-hide="vm.history.length" ng-cloak><div class="text-center">No commands</div></a>
+        <a ng-href="/codeine/project/{{item.project}}/command/{{item.name}}/{{item.id}}/status" command-item command-data="item" ng-repeat="item in vm.history | limitTo:vm.limit " class="list-group-item" style="padding-top: 2px;padding-bottom: 4px"></a>
         <list-group-more-item items="history" max-items="limit"></list-group-more-item>
     </div>
 </div>

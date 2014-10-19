@@ -37,6 +37,7 @@
             when('/codeine/project/:project_name/command/:command_name/setup', {
                 templateUrl: '/components/command_setup/command_setup.html',
                 controller: 'commandSetupCtrl',
+                controllerAs: 'vm',
                 pageTitle: 'Command setup',
                 resolve : {
                     command : function($q,$log,CodeineService,$route) {
@@ -316,25 +317,16 @@
             });
     }
 
-    function runFunc($rootScope, $log, CodeineService, $interval) {
+    function runFunc($rootScope, $log, CodeineService, $interval, ApplicationFocusService) {
         $rootScope.app = {
             loading: null,
-            viewAs : null,
-            isInFocus: false
+            viewAs : null
         };
 
-        $(window).focus(function() {
-            $log.debug('run: got focus');
-            $rootScope.app.isInFocus = true;
-        });
-
-        $(window).blur(function() {
-            $log.debug('run: no focus');
-            $rootScope.app.isInFocus = false;
-        });
+        ApplicationFocusService.init();
 
         var loadSessionInfo = function() {
-            if ((!$rootScope.app.isInFocus) && (angular.isDefined($rootScope.app.sessionInfo))) {
+            if ((!ApplicationFocusService.isInFocus) && (angular.isDefined($rootScope.app.sessionInfo))) {
                 $log.debug('run: will skip sessionInfo refresh as app not in focus');
                 return;
             }
@@ -345,7 +337,7 @@
         };
 
         var loadConfiguration = function() {
-            if ((!$rootScope.app.isInFocus) && (angular.isDefined($rootScope.app.globalConfiguration))) {
+            if ((!ApplicationFocusService.isInFocus) && (angular.isDefined($rootScope.app.globalConfiguration))) {
                 $log.debug('run: will skip config refresh as app not in focus');
                 return;
             }

@@ -2,33 +2,35 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandHistoryCtrl($scope,$log,CodeineService,Constants,$route) {
-        $scope.projectName = $route.current.params.project_name;
-        $scope.limit = 10;
-        $scope.historyUrl = Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + encodeURI($scope.projectName);
-        $log.debug('node name is ' + $route.current.params.node_name);
+    function commandHistoryCtrl($scope,$log,$interval,$route,Constants,CodeineService,ApplicationFocusService) {
+        /*jshint validthis:true */
+        var vm = this;
+        vm.projectName = $route.current.params.project_name;
+        vm.limit = 10;
+
+        vm.historyUrl = Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + encodeURI(vm.projectName);
         if ($route.current.params.node_name !== undefined) {
-            $scope.historyUrl += '&node=' + encodeURI($route.current.params.node_name);
+            vm.historyUrl += '&node=' + encodeURI($route.current.params.node_name);
         }
-        CodeineService.getProjectCommandHistory($scope.projectName, $route.current.params.node_name).success(function(data) {
-            $scope.history = data;
+
+        CodeineService.getProjectCommandHistory(vm.projectName, $route.current.params.node_name).success(function(data) {
+            vm.history = data;
         });
         var maxUpdatesNotInFocus = 100;
         var intervalTriggered = 0;
-        var interval = setInterval(function() {
-            //$log.debug('checking commandHistoryCtrl ' + $scope.app.isInFocus + ' ' + intervalTriggered);
-            if (!$scope.app.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
-                //$log.debug('commandHistoryCtrl will not update');
+
+        var intervalHandler = $interval(function() {
+            if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
                 return;
             }
             intervalTriggered++;
             $.ajax( {
                 type: 'GET',
-                url: $scope.historyUrl ,
+                url: vm.historyUrl ,
                 success: function(response) {
-                    if  (($scope.history.length !== response.length) || (angular.toJson($scope.history) !== angular.toJson(response))) {
+                    if  ((vm.history.length !== response.length) || (angular.toJson(vm.history) !== angular.toJson(response))) {
                         $scope.$apply(function() {
-                            $scope.history = response;
+                            vm.history = response;
                         });
                     }
                 },
@@ -37,10 +39,10 @@
                 },
                 dataType: 'json'
             });
-        },5000);
+        },5000,0,false);
 
         $scope.$on('$destroy', function() {
-            clearInterval(interval);
+            intervalHandler();
         });
     }
 

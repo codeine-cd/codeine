@@ -14,44 +14,44 @@
                             <div class="form-group">
                                 <label for="project_name" class="col-md-4 control-label">Project Name</label>
                                 <div class="col-md-4">
-                                    <input type="text" ng-model="projectName" class="form-control readonly_item" name="project_name" id="project_name" readonly>
+                                    <input type="text" ng-model="vm.projectName" class="form-control readonly_item" name="project_name" id="project_name" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="command_name" class="col-md-4 control-label">Command Name</label>
                                 <div class="col-md-4">
-                                    <input type="text" ng-model="commandName" class="form-control readonly_item" name="command_name" id="command_name" readonly>
+                                    <input type="text" ng-model="vm.commandName" class="form-control readonly_item" name="command_name" id="command_name" readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default" ng-show="!command.prevent_override">
+                <div class="panel panel-default" ng-show="!vm.command.prevent_override">
                     <div class="panel-heading">Configuration</div>
                     <div class="panel-body">
                         <form class="form-horizontal" name="config" novalidate>
                             <div class="form-group">
                                 <label for="howToRun" class="col-md-4 control-label">How To Run <help help-id="howToRunHelp"></help></label>
                                 <div class="col-md-4">
-                                    <select class="form-control select2" name="howToRun" id="howToRun"  ui-select2="{ allowClear: false}" ng-model="command.command_strategy">
+                                    <select class="form-control select2" name="howToRun" id="howToRun"  ui-select2="{ allowClear: false}" ng-model="vm.command.command_strategy">
                                         <option value="Immediately">Immediately</option>
                                         <option value="Progressive">Progressive</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="command.command_strategy === 'Immediately'">
+                            <div class="form-group" ng-if="vm.command.command_strategy === 'Immediately'">
                                 <label for="concurrency" class="col-md-4 control-label">Concurrency <help help-id="concurrencyHelp"></help></label>
                                 <div class="col-md-4" ng-class="{'has-error': config.concurrency.$invalid}">
-                                    <input id="concurrency" name="concurrency" min="1" type="number" class="form-control" ng-model="command.concurrency" required>
+                                    <input id="concurrency" name="concurrency" min="1" type="number" class="form-control" ng-model="vm.command.concurrency" required>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="command.command_strategy === 'Progressive'">
+                            <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive'">
                                 <label for="duration" class="col-md-4 control-label">Duration <help help-id="durationHelp"></help></label>
                                 <div class="col-md-4" ng-class="{'has-error': config.duration.$invalid}">
-                                    <input id="duration" name="duration" min="1" type="number" class="form-control" ng-model="command.duration" required>
+                                    <input id="duration" name="duration" min="1" type="number" class="form-control" ng-model="vm.command.duration" required>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="command.command_strategy === 'Progressive'">
+                            <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive'">
                                 <label for="duration_units" class="col-md-4 control-label">Duration Units <help help-id="durationHelp"></help></label>
                                 <div class="col-md-4" ng-class="{'has-error': config.duration_units.$invalid}">
                                     <select class="form-control select2" name="duration_units" id="duration_units"  ui-select2="{ allowClear: false}" ng-model="command.duration_units" required>
@@ -61,42 +61,42 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="command.command_strategy === 'Progressive'">
+                            <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive'">
                                 <label for="ratio" class="col-md-4 control-label">Ratio <help help-id="ratioHelp"></help></label>
                                 <div class="col-md-4" ng-class="{'has-error': config.ratio.$invalid}">
-                                    <select class="form-control select2" name="ratio" id="ratio"  ui-select2="{ allowClear: false}" ng-model="command.ratio" required>
+                                    <select class="form-control select2" name="ratio" id="ratio"  ui-select2="{ allowClear: false}" ng-model="vm.command.ratio" required>
                                         <option value="Linear">Linear</option>
                                         <option value="Exponential">Exponential</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="command.command_strategy === 'Progressive'">
+                            <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive'">
                                 <div class="checkbox col-md-offset-4">
                                     <label>
-                                        <input type="checkbox"  ng-model="command.stop_on_error"> Stop on error
+                                        <input type="checkbox"  ng-model="vm.command.stop_on_error"> Stop on error
                                         <help help-id="stopOnErrorHelp"></help>
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="command.stop_on_error && command.command_strategy === 'Progressive'">
+                            <div class="form-group" ng-if="vm.command.stop_on_error && command.command_strategy === 'Progressive'">
                                 <label for="error_percent_val" class="col-md-4 control-label">Percent</label>
                                 <div class="col-md-4" ng-class="{'has-error': config.error_percent_val.$invalid}">
-                                    <input id="error_percent_val" name="error_percent_val" min="1" type="number" class="form-control" ng-model="command.error_percent_val" required>
+                                    <input id="error_percent_val" name="error_percent_val" min="1" type="number" class="form-control" ng-model="vm.command.error_percent_val" required>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="panel panel-default" ng-show="command.parameters.length > 0">
+                <div class="panel panel-default" ng-show="vm.command.parameters.length > 0">
                     <div class="panel-heading">Command Parameters</div>
                     <div class="panel-body">
                         <form class="form-horizontal" name="params" novalidate>
                             <ng-form name="paramsInnerForm">
-                                <div class="form-group" ng-repeat="parameter in command.parameters">
+                                <div class="form-group" ng-repeat="parameter in vm.command.parameters">
                                 <div ng-if="parameter.type === 'String' || parameter.type === 'Password'">
                                     <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
                                     <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid || paramsInnerForm.param_value.$error.parameterValidator}" id="{{parameter.name}}">
-                                        <input id="param_{{$index}}" name="param_value" type="{{parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="parameter.value" ui-validate="{parameterValidator : 'validateParameter($value,$index)'}">
+                                        <input id="param_{{$index}}" name="param_value" type="{{vm.parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="vm.parameter.value" ui-validate="{parameterValidator : 'validateParameter($value,$index)'}">
                                     </div>
                                 </div>
                                 <div ng-if="parameter.type === 'Boolean'">
@@ -112,7 +112,7 @@
                                 <div ng-if="parameter.type === 'Selection'">
                                     <label for="param_selection_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
                                     <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid}">
-                                        <select class="form-control select2" name="param_value" id="param_selection_{{$index}}" ui-select2="{allowClear: false}" ng-model="parameter.value" required>
+                                        <select class="form-control select2" name="param_value" id="param_selection_{{$index}}" ui-select2="{allowClear: false}" ng-model="vm.parameter.value" required>
                                             <option value=""></option>
                                             <option ng-repeat="opt in parameter.allowed_values" value="{{opt}}">{{opt}}</option>
                                         </select>
@@ -124,18 +124,18 @@
                     </div>
                 </div>
                 <accordion>
-                    <accordion-group is-open="isOpen">
+                    <accordion-group is-open="vm.isOpen">
                         <accordion-heading>
                             <div>
-                                {{nodes.length}} Nodes
-                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': isOpen, 'glyphicon-chevron-right': !isOpen}">
+                                {{vm.nodes.length}} Nodes
+                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': vm.isOpen, 'glyphicon-chevron-right': !vm.isOpen}">
                                 </i>
                             </div>
                         </accordion-heading>
-                        <div ng-if="isOpen">
-                            <div class="row" ng-repeat="node in nodes">
+                        <div ng-if="vm.isOpen">
+                            <div class="row" ng-repeat="node in vm.nodes">
                                 <div class="col-md-12">
-                                    <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
+                                    <a ng-href="/codeine/project/{{vm.projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
                                 </div>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                 </accordion>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" ng-click="runCommand()" class="btn btn-info pull-right" ng-disabled="config.$invalid || params.$invalid">
+                        <button type="button" ng-click="vm.runCommand()" class="btn btn-info pull-right" ng-disabled="config.$invalid || params.$invalid">
                             <i class="fa fa-play-circle"></i> Run</button>
                     </div>
                 </div>

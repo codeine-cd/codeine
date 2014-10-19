@@ -2,26 +2,30 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandRunningCtrl($scope,$log,$routeParams,CodeineService,Constants) {
-        $scope.projectName = $routeParams.project_name;
-        $scope.limit = 10;
+    function commandRunningCtrl($scope,$interval,$log,$routeParams,CodeineService,Constants,ApplicationFocusService) {
+        /*jshint validthis:true */
+        var vm  = this;
+        vm.projectName = $routeParams.project_name;
+        vm.limit = 10;
 
         CodeineService.getRunningCommands().success(function(data) {
-            $scope.history = data;
+            vm.history = data;
         });
         var maxUpdatesNotInFocus = 100;
         var intervalTriggered = 0;
-        var interval = setInterval(function() {
-            if (!$scope.app.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
+
+        var intervalHandler = $interval(function() {
+            if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
                 return;
             }
+            intervalTriggered++;
             $.ajax( {
                 type: 'GET',
                 url: Constants.CODEINE_WEB_SERVER + '/api/commands-status',
                 success: function(response) {
-                    if  (($scope.history.length !== response.length) || (angular.toJson($scope.history) !== angular.toJson(response))) {
+                    if  ((vm.history.length !== response.length) || (angular.toJson(vm.history) !== angular.toJson(response))) {
                         $scope.$apply(function() {
-                            $scope.history = response;
+                            vm.history = response;
                         });
                     }
                 },
@@ -30,10 +34,10 @@
                 },
                 dataType: 'json'
             });
-        },5000);
+        },5000,0,false);
 
         $scope.$on('$destroy', function() {
-            clearInterval(interval);
+            intervalHandler();
         });
     }
 
