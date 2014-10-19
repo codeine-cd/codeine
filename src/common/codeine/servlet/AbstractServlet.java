@@ -1,13 +1,12 @@
 package codeine.servlet;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +32,10 @@ public abstract class AbstractServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Inject private Gson gson;
-	private @Inject UserPermissionsGetter permissionsManager;
-	private @Inject ManageStatisticsCollector manageStatisticsCollector;
+	@Inject private UserPermissionsGetter permissionsManager;
+	@Inject private ManageStatisticsCollector manageStatisticsCollector;
+	@Inject private Provider<RequestBodyReader> requestBodyReaderProvider;
+	
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -187,21 +188,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	
 	
 	protected String readBody(HttpServletRequest request) {
-		String post = null;
-		try {
-			StringBuilder status = new StringBuilder();
-			BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));
-			String inputLine;
-	
-			while ((inputLine = in.readLine()) != null) {
-				status.append(inputLine);
-			}
-			in.close();
-			post = status.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return post;
+		return requestBodyReaderProvider.get().readBody(request);
 	}
 	
 	protected final boolean canReadProject(HttpServletRequest request) {
