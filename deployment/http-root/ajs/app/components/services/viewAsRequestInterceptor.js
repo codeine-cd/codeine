@@ -2,11 +2,12 @@
     'use strict';
 
     //// JavaScript Code ////
-    function viewAsInterceptorFactory ($rootScope) {
+    function viewAsInterceptorFactory (LoginService) {
         return {
             request: function (config) {
-                if (angular.isDefined($rootScope.app.viewAs) && $rootScope.app.viewAs !== null && $rootScope.app.viewAs !== '' ) {
-                    config.headers = {'viewas':$rootScope.app.viewAs};
+                var viewAs = LoginService.getViewAs();
+                if (viewAs && viewAs !== '' ) {
+                    config.headers = {'viewas':viewAs};
                 }
                 return config;
             }

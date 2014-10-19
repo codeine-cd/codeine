@@ -319,27 +319,16 @@
             });
     }
 
-    function runFunc($rootScope, $log, CodeineService, $interval, ApplicationFocusService) {
+    function runFunc($rootScope, $log, CodeineService, $interval, ApplicationFocusService, LoginService) {
         $rootScope.app = {
-            loading: null,
-            viewAs : null
+            loading: null
         };
 
         ApplicationFocusService.init();
-
-        var loadSessionInfo = function() {
-            if ((!ApplicationFocusService.isInFocus) && (angular.isDefined($rootScope.app.sessionInfo))) {
-                $log.debug('run: will skip sessionInfo refresh as app not in focus');
-                return;
-            }
-            CodeineService.getSessionInfo().success(function (data) {
-                $log.debug('run: got session info ' + angular.toJson(data));
-                $rootScope.app.sessionInfo = data;
-            });
-        };
+        LoginService.init();
 
         var loadConfiguration = function() {
-            if ((!ApplicationFocusService.isInFocus) && (angular.isDefined($rootScope.app.globalConfiguration))) {
+            if ((!ApplicationFocusService.isInFocus()) && (angular.isDefined($rootScope.app.globalConfiguration))) {
                 $log.debug('run: will skip config refresh as app not in focus');
                 return;
             }
@@ -356,14 +345,13 @@
 
         loadConfiguration();
         $interval(loadConfiguration,300000);
-        loadSessionInfo();
-        $interval(loadSessionInfo,300000);
 
         $rootScope.$on('$locationChangeStart', function () {
             $log.debug('$locationChangeStart');
             $rootScope.app.loading = true;
             $rootScope.app.serverDown = false;
         });
+
         $rootScope.$on('$locationChangeSuccess', function () {
             $log.debug('$locationChangeSuccess');
             $rootScope.app.loading = false;

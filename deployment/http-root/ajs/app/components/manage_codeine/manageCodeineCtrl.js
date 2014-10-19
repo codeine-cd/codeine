@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function manageCodeineCtrl($scope, $log, tabs, permissions, projects, CodeineService, AlertService, $location) {
+    function manageCodeineCtrl($scope, $log, tabs, permissions, projects, CodeineService, AlertService, LoginService) {
         $scope.projects  = [];
         angular.forEach(projects, function(key) {
             $scope.projects.push(key.name);
@@ -20,14 +20,7 @@
         };
 
         $scope.setViewAs = function() {
-            $scope.app.viewAs = $scope.newViewAs;
-            CodeineService.getSessionInfo().success(function(data) {
-                $log.debug('run: got session info ' + angular.toJson(data));
-                $scope.app.sessionInfo = data;
-                $location.path('/codeine');
-            }).error(function() {
-                $scope.app.viewAs = null;
-            });
+            LoginService.setViewAs($scope.newViewAs);
         };
 
         $scope.saveConfiguration = function() {
