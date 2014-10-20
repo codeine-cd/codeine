@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine').directive('userInfo', function ($rootScope, $log , $window, CodeineService, LoginService) {
+angular.module('codeine').directive('userInfo', function ($rootScope, $log , $window, CodeineService, LoginService, CodeineConfigurationService) {
     return {
         restrict: "E",
         transclude: false,
@@ -16,10 +16,10 @@ angular.module('codeine').directive('userInfo', function ($rootScope, $log , $wi
             $scope.getTemplateUrl = function() {
                 $scope.sessionInfo =  LoginService.getSessionInfo();
 
-                if (!$scope.sessionInfo || !$scope.app.globalConfiguration) {
+                if (!$scope.sessionInfo || !CodeineConfigurationService.getGlobalConfiguration()) {
                     return "";
                 }
-                switch ($scope.app.globalConfiguration.authentication_method)
+                switch (CodeineConfigurationService.getGlobalConfiguration().authentication_method)
                 {
                     case "Disabled":
                         return "/components/directives/user_info/empty.html";

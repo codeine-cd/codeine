@@ -3,8 +3,7 @@
 
     //// JavaScript Code ////
     function LoginServiceFactory($log, $q, $http, $interval, $location, CodeineService, ApplicationFocusService) {
-
-        var viewAs,sessionInfo, deffer;
+        var viewAs,sessionInfo, deffer, initialized = false;
 
         function gettingSessionInfo(forceRefresh) {
             if (sessionInfo && !forceRefresh) {
@@ -20,6 +19,7 @@
                     sessionInfo = data;
                     deffer.resolve(data);
                     deffer = undefined;
+                    initialized = true;
                 }).error(function(error) {
                     deffer.reject(error);
                     deffer = undefined;
@@ -51,7 +51,7 @@
         }
 
         function init() {
-            gettingSessionInfo();
+            var promise = gettingSessionInfo();
             $interval(function() {
                 if (!ApplicationFocusService.isInFocus() && (sessionInfo)) {
                     $log.debug('LoginService: Will skip sessionInfo refresh as app not in focus');
@@ -61,6 +61,11 @@
                     gettingSessionInfo(true);
                 }
             },300000,0,false);
+            return promise;
+        }
+
+        function isInitialized() {
+            return initialized;
         }
 
         return {
@@ -68,7 +73,8 @@
             getSessionInfo : getSessionInfo,
             setViewAs : setViewAs,
             getViewAs : getViewAs,
-            init : init
+            init : init,
+            isInitialized : isInitialized
         };
     }
 

@@ -2,12 +2,15 @@
     'use strict';
 
     //// JavaScript Code ////
-    function navbarCtrl($scope,$log,CodeineService,$location,LoginService) {
+    function navbarCtrl($scope,$log,CodeineService,$location,LoginService,CodeineConfigurationService) {
         $log.debug('navbarCtrl: created');
 
         $scope.model  = {
             projectSearch : ''
         };
+
+        $scope.globalConfiguration = CodeineConfigurationService.getGlobalConfiguration();
+        $scope.experimentalConfiguration = CodeineConfigurationService.getExperimentalConfiguration();
 
         LoginService.gettingSessionInfo().then(function(data) {
             $scope.sessionInfo = data;

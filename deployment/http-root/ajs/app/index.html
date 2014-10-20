@@ -3,128 +3,127 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" ng-app="codeine"> <!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title ng-bind-html="pageTitle">Codeine</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- build:css /styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="/bower_components/select2/select2.css" />
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <style>
-        body {
-            padding-top: 70px;
-            padding-bottom: 20px;
-        }
-    </style>
-    <!-- build:css({.tmp,app}) /styles/main.css -->
-    <link rel="stylesheet" href="/styles/codeine.css">
-    <link rel="stylesheet" href="/styles/select2-bootstrap.css">
-    <!-- endbuild -->
-</head>
-<body>
-<!--[if lt IE 9]>
-<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-<![endif]-->
-<div class="loading" ng-show="app.loading || app.logginIn || !app.globalConfiguration">
-    <h3><i class="fa fa-spin fa-spinner fa-lg"></i> Loading Codeine...</h3>
-</div>
-<div class="ng-cloak" ng-hide="app.loading || app.logginIn || !app.globalConfiguration">
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="navbarCtrl">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/"><img src="/images/codeine_16x16.png"/> {{app.globalConfiguration.server_name}}</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">{{sessionInfo.version}}</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a ng-href="{{app.experimentalConfiguration.new_issue_link ? app.experimentalConfiguration.new_issue_link : 'https://github.com/codeine-cd/codeine/issues/new'}}" target="_blank" tooltip="Contact Us" tooltip-placement="bottom"><i class="fa fa-envelope-o"></i></a>
-                    </li>
-                </ul>
-                <user-info></user-info>
-                <form class="navbar-form navbar-right" role="form">
-                    <div class="form-group">
-                        <select  class="form-control input-md select2" ui-select2="{ allowClear : true }" ng-model="model.projectSearch" style="width: 200px;" data-placeholder="Enter project name">
-                            <option></option>
-                            <option ng-repeat="project in projects" value="{{project.name}}">{{project.name}}</option>
-                        </select>
-                    </div>
-                </form>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-
-    <div class="container" ng-controller="mainCtrl as vm">
-        <div ng-show="vm.sessionInfo.isPrepareForShutdown" class="row">
-            <div class="col-md-12 animate">
-                <alert type='danger' class="alert-danger" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">Prepare for shutdown - No further commands will be executed</alert>
-            </div>
-        </div>
-        <div ng-animate="enter" ng-show="vm.contentLoading" ng-cloak><br><br>
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4">
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h3>Loading...</h3>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title ng-bind-html="pageTitle">Codeine</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- build:css /styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="/bower_components/select2/select2.css" />
+        <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+        <style>
+            body {
+                padding-top: 70px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <!-- build:css({.tmp,app}) /styles/main.css -->
+        <link rel="stylesheet" href="/styles/codeine.css">
+        <link rel="stylesheet" href="/styles/select2-bootstrap.css">
+        <!-- endbuild -->
+    </head>
+    <body>
+    <!--[if lt IE 9]>
+    <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="loading" ng-if="app.loading || app.initializing">
+        <h3><i class="fa fa-spin fa-spinner fa-lg"></i> Loading Codeine...</h3>
+    </div>
+    <div class="ng-cloak" ng-if="!app.loading && !app.initializing">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-controller="navbarCtrl">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/"><img src="/images/codeine_16x16.png"/> {{globalConfiguration.server_name}}</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/">{{sessionInfo.version}}</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a ng-href="{{experimentalConfiguration.new_issue_link ? experimentalConfiguration.new_issue_link : 'https://github.com/codeine-cd/codeine/issues/new'}}" target="_blank" tooltip="Contact Us" tooltip-placement="bottom"><i class="fa fa-envelope-o"></i></a>
+                        </li>
+                    </ul>
+                    <user-info></user-info>
+                    <form class="navbar-form navbar-right" role="form">
+                        <div class="form-group">
+                            <select  class="form-control input-md select2" ui-select2="{ allowClear : true }" ng-model="model.projectSearch" style="width: 200px;" data-placeholder="Enter project name">
+                                <option></option>
+                                <option ng-repeat="project in projects" value="{{project.name}}">{{project.name}}</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="progress progress-striped active">
-                                <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span class="sr-only">Loading</span>
+                    </form>
+                </div><!-- /.navbar-collapse -->
+            </div>
+        </nav>
+        <div class="container" ng-controller="mainCtrl as vm">
+            <div ng-show="vm.sessionInfo.isPrepareForShutdown" class="row">
+                <div class="col-md-12 animate">
+                    <alert type='danger' class="alert-danger" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">Prepare for shutdown - No further commands will be executed</alert>
+                </div>
+            </div>
+            <div ng-animate="enter" ng-show="vm.contentLoading" ng-cloak><br><br>
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <h3>Loading...</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                        <span class="sr-only">Loading</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div ng-animate="enter" ng-show="vm.serverDown" ng-cloak>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h2 class="text-danger">Internal Server Error</h2>
-                    Please try again
+            <div ng-animate="enter" ng-show="vm.serverDown" ng-cloak>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2 class="text-danger">Internal Server Error</h2>
+                        Please try again
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <img src="/images/server_error_2.jpg"/>
+                    </div>
                 </div>
             </div>
-            <br/>
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <img src="/images/server_error_2.jpg"/>
+            <div ng-show="!vm.contentLoading && !vm.serverDown" ng-cloak>
+                <div class="row" ng-controller="breadCrumbCtrl as vm">
+                    <div class="col-md-12">
+                        <ol class="breadcrumb">
+                            <li><a href='/'>Codeine</a></li>
+                            <li ng-repeat="item in vm.items"><a class="cursor_pointer" ng-click="vm.gotoUrl(item.url)">{{item.name}}</a></li>
+                            <li>{{vm.lastItem}}</li>
+                        </ol>
+                    </div>
                 </div>
+                <div class="row" ng-view ng-animate="enter">
+                </div><!--/row-->
             </div>
-        </div>
-        <div ng-show="!vm.contentLoading && !vm.serverDown" ng-cloak>
-            <div class="row" ng-controller="breadCrumbCtrl as vm">
-                <div class="col-md-12">
-                    <ol class="breadcrumb">
-                        <li><a href='/'>Codeine</a></li>
-                        <li ng-repeat="item in vm.items"><a class="cursor_pointer" ng-click="vm.gotoUrl(item.url)">{{item.name}}</a></li>
-                        <li>{{vm.lastItem}}</li>
-                    </ol>
-                </div>
-            </div>
-            <div class="row" ng-view ng-animate="enter">
-            </div><!--/row-->
-        </div>
-        <footer>
-            <p><a href="https://github.com/codeine-cd/codeine">&copy;  <i class="fa fa-github"></i> Codeine {{vm.sessionInfo.version}}</a></p>
-        </footer>
-    </div> <!-- /container -->
+            <footer>
+                <p><a href="https://github.com/codeine-cd/codeine">&copy;  <i class="fa fa-github"></i> Codeine {{vm.sessionInfo.version}}</a></p>
+            </footer>
+        </div> <!-- /container -->
     </div>
     <div id="toast-container" class="appAlerts ng-cloak animate">
         <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close(alert, $index)" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
@@ -212,8 +211,8 @@
 <script src="/components/services/alertService.js"></script>
 <script src="/components/services/errorHandlerService.js"></script>
 <script src="/components/services/selectedNodesService.js"></script>
-<script src="/components/services/viewAsRequestInterceptor.js"></script>
 <script src="/components/services/applicationFocusService.js"></script>
+<script src="/components/services/codeineConfigurationService.js"></script>
 <script src="/components/services/loginService.js"></script>
 <script src="/components/filters/projectsFilter.js"></script>
 <script src="/components/filters/nodeFilter.js"></script>

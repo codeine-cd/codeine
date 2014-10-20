@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function mainCtrl($rootScope,$log,LoginService) {
+    function mainCtrl($rootScope,$log,LoginService,CodeineConfigurationService) {
         /*jshint validthis:true */
         var vm = this;
 
@@ -28,11 +28,11 @@
                 }
                 title += current.$$route.pageTitle;
             }
-            if ($rootScope.app.globalConfiguration.server_name){
+            if (CodeineConfigurationService.getGlobalConfiguration().server_name){
                 if (title) {
                     title +=  ' - ';
                 }
-                title += $rootScope.app.globalConfiguration.server_name;
+                title += CodeineConfigurationService.getGlobalConfiguration().server_name;
             }
             $rootScope.pageTitle = title;
         });

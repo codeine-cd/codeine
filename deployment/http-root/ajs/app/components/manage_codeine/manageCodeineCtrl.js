@@ -2,14 +2,14 @@
     'use strict';
 
     //// JavaScript Code ////
-    function manageCodeineCtrl($scope, $log, tabs, permissions, projects, CodeineService, AlertService, LoginService) {
+    function manageCodeineCtrl($scope, $log, tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService) {
         $scope.projects  = [];
         angular.forEach(projects, function(key) {
             $scope.projects.push(key.name);
         });
         $scope.tabsForEditing = angular.copy(tabs);
         $scope.permissionsForEditing = angular.copy(permissions);
-        $scope.globalConfigurationForEditing = angular.copy($scope.app.globalConfiguration);
+        $scope.globalConfigurationForEditing = angular.copy(CodeineConfigurationService.getGlobalConfiguration());
 
         $scope.addMysql = function() {
             $scope.globalConfigurationForEditing.mysql.push({});

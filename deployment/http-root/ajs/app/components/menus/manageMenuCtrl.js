@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function manageMenuCtrl($scope,$rootScope,$log,CodeineService,LoginService) {
+    function manageMenuCtrl($scope,$log,CodeineService,LoginService) {
         $log.debug('manageMenuCtrl: created');
         $scope.isPrepareForShutdown = LoginService.getSessionInfo().isPrepareForShutdown;
         $scope.prepareForShutdown = function() {
