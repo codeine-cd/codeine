@@ -334,6 +334,16 @@
             $rootScope.app.logginIn = false;
         });
 
+        $rootScope.$on('$locationChangeStart', function () {
+            $log.debug('$locationChangeStart');
+            $rootScope.app.loading = true;
+        });
+
+        $rootScope.$on('$locationChangeSuccess', function () {
+            $log.debug('$locationChangeSuccess');
+            $rootScope.app.loading = false;
+        });
+
         var loadConfiguration = function() {
             if ((!ApplicationFocusService.isInFocus()) && (angular.isDefined($rootScope.app.globalConfiguration))) {
                 $log.debug('run: will skip config refresh as app not in focus');
@@ -352,47 +362,6 @@
 
         loadConfiguration();
         $interval(loadConfiguration,300000);
-
-        $rootScope.$on('$locationChangeStart', function () {
-            $log.debug('$locationChangeStart');
-            $rootScope.app.loading = true;
-            $rootScope.app.serverDown = false;
-        });
-
-        $rootScope.$on('$locationChangeSuccess', function () {
-            $log.debug('$locationChangeSuccess');
-            $rootScope.app.loading = false;
-        });
-
-        $rootScope.$on("$routeChangeStart", function () {
-            $log.debug('$routeChangeStart');
-            $rootScope.app.contentLoading = true;
-        });
-
-        $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
-            $log.debug('$routeChangeSuccess ' + event + current + previous);
-            $rootScope.app.contentLoading = false;
-            var title = (LoginService.getViewAs() ? LoginService.getViewAs() + ' @' : '' );
-            if (current.$$route.pageTitle) {
-                if (title) {
-                    title += ' ';
-                }
-                title += current.$$route.pageTitle;
-            }
-            if ($rootScope.app.globalConfiguration.server_name){
-                if (title) {
-                    title +=  ' - ';
-                }
-                title += $rootScope.app.globalConfiguration.server_name;
-            }
-            $rootScope.pageTitle = title;
-        });
-        $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
-            $log.debug('$routeChangeError - rejection = ' + rejection);
-            $rootScope.app.contentLoading = false;
-            $rootScope.app.serverDown = true;
-        });
-
     }
 
     //// Angular Code ////

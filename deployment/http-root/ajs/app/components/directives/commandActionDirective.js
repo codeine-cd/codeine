@@ -1,5 +1,5 @@
 'use strict';
-angular.module('codeine').directive('commandAction', [ function () {
+angular.module('codeine').directive('commandAction', function (LoginService) {
     return {
         restrict: 'A',
         scope : {
@@ -8,11 +8,11 @@ angular.module('codeine').directive('commandAction', [ function () {
             allowed : '='
         },
         link: function ($scope, element) {
-            if ($scope.permissions.command_project.indexOf($scope.project) !== -1 && $scope.allowed) {
+            if (LoginService.getSessionInfo().permissions.command_project.indexOf($scope.project) !== -1 && $scope.allowed) {
                 element.show();
             } else {
                 element.hide();
             }
         }
     };
-}]);
+});
