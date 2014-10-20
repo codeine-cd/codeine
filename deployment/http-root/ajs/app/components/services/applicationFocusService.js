@@ -20,7 +20,7 @@
         }
 
         return {
-            isInFocus : isInFocus,
+            isInFocus : function() {return isInFocus;},
             init : init
         };
     }

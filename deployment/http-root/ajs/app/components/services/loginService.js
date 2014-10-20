@@ -2,13 +2,16 @@
     'use strict';
 
     //// JavaScript Code ////
-    function LoginServiceFactory($log, $q, $interval, $location, CodeineService, ApplicationFocusService) {
+    function LoginServiceFactory($log, $q, $http, $interval, $location, CodeineService, ApplicationFocusService) {
 
         var viewAs,sessionInfo, deffer;
 
-        function gettingSessionInfo() {
+        function gettingSessionInfo(forceRefresh) {
+            if (sessionInfo && !forceRefresh) {
+                return $q.when(sessionInfo);
+            }
             if (deffer) {
-                return deffer;
+                return deffer.promise;
             }
             else {
                 deffer = $q.defer();
@@ -32,11 +35,14 @@
         function setViewAs(user) {
             viewAs = user;
             deffer = undefined;
-            return gettingSessionInfo().then(function() {
+            $http.defaults.headers.common.viewas = viewAs;
+            return gettingSessionInfo(true).then(function() {
+
                 $location.path('/codeine');
             },function(){
                 $log.error('LoginService: Failed to get session info after view as');
                 viewAs = undefined;
+                delete $http.defaults.headers.common.viewas;
             });
         }
 
@@ -52,7 +58,7 @@
                 }
                 else {
                     deffer = undefined;
-                    gettingSessionInfo();
+                    gettingSessionInfo(true);
                 }
             },300000,0,false);
         }

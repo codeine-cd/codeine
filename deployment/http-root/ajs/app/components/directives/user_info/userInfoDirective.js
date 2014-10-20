@@ -14,7 +14,9 @@ angular.module('codeine').directive('userInfo', function ($rootScope, $log , $wi
             };
 
             $scope.getTemplateUrl = function() {
-                if (!LoginService.getSessionInfo() || !$scope.app.globalConfiguration) {
+                $scope.sessionInfo =  LoginService.getSessionInfo();
+
+                if (!$scope.sessionInfo || !$scope.app.globalConfiguration) {
                     return "";
                 }
                 switch ($scope.app.globalConfiguration.authentication_method)
@@ -22,7 +24,7 @@ angular.module('codeine').directive('userInfo', function ($rootScope, $log , $wi
                     case "Disabled":
                         return "/components/directives/user_info/empty.html";
                     case "Builtin":
-                        if ((LoginService.getSessionInfo().permissions.username) && (LoginService.getSessionInfo().permissions.username !== 'Guest')) {
+                        if (($scope.sessionInfo.permissions.username) && ($scope.sessionInfo.permissions.username !== 'Guest')) {
                             return "/components/directives/user_info/builtin-logged.html";
                         }
                         return "/components/directives/user_info/builtin-not-logged.html";

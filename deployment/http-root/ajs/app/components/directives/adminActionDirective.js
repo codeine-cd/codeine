@@ -1,14 +1,14 @@
 'use strict';
-angular.module('codeine').directive('adminAction', [function () {
+angular.module('codeine').directive('adminAction', function (LoginService) {
     return {
         restrict: 'A',
         scope: true,
         link: function ($scope, element) {
-            if (!$scope.app.sessionInfo.permissions.administer) {
+            if (!LoginService.getSessionInfo().permissions.administer) {
                 element.hide();
             } else {
                 element.show();
             }
         }
     };
-}]);
+});

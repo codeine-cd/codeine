@@ -5,7 +5,7 @@
     function configFunc($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
         $locationProvider.html5Mode(true);
         $httpProvider.interceptors.push('myHttpInterceptor');
-        $httpProvider.interceptors.push('viewAsInterceptor');
+        //$httpProvider.interceptors.push('viewAsInterceptor');
         $sceProvider.enabled(false);
         $routeProvider.
             when('/codeine', {
@@ -372,7 +372,7 @@
         $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
             $log.debug('$routeChangeSuccess ' + event + current + previous);
             $rootScope.app.contentLoading = false;
-            var title = ($rootScope.app.viewAs ? $rootScope.app.viewAs + ' @' : '' );
+            var title = (LoginService.getViewAs() ? LoginService.getViewAs() + ' @' : '' );
             if (current.$$route.pageTitle) {
                 if (title) {
                     title += ' ';

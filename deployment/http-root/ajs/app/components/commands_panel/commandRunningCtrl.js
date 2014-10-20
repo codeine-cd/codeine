@@ -15,7 +15,7 @@
         var intervalTriggered = 0;
 
         var intervalHandler = $interval(function() {
-            if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
+            if (!ApplicationFocusService.isInFocus() && intervalTriggered > maxUpdatesNotInFocus) {
                 return;
             }
             intervalTriggered++;
@@ -37,7 +37,7 @@
         },5000,0,false);
 
         $scope.$on('$destroy', function() {
-            intervalHandler();
+            $interval.cancel(intervalHandler);
         });
     }
 
