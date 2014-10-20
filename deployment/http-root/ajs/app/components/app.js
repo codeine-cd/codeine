@@ -171,7 +171,6 @@
                     projectConfiguration : function($q,$route,CodeineService,Constants) {
                         var deferred = $q.defer();
                         CodeineService.getProjectConfiguration(Constants.CODEINE_NODES_PROJECT_NAME).success(function(data) {
-                            $log.debug("Resolved project configuration");
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get project configuration');
@@ -252,10 +251,9 @@
                 controller: 'projectConfigureCtrl',
                 pageTitle: 'Project Configure',
                 resolve: {
-                    projectConfigurationForEditing : function($q,$log,$route,CodeineService) {
+                    projectConfigurationForEditing : function($q,$route,CodeineService) {
                         var deferred = $q.defer();
                         CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                            $log.debug("Resolved project configuration");
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get project configuration');
