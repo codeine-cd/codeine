@@ -22,8 +22,7 @@
         };
 
         var createAlert = function(type, message) {
-            var alert = { type: type, msg: message, close: Alert.close, remove: Alert.remove };
-            return alert;
+            return { type: type, msg: message, close: Alert.close, remove: Alert.remove };
         };
 
         Alert.addAlert = function (type, message, time) {

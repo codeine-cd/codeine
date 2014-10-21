@@ -36,11 +36,14 @@
             }
             $rootScope.pageTitle = title;
         });
+
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {
             $log.debug('$routeChangeError - rejection = ' + rejection);
             vm.contentLoading = false;
             vm.serverDown = true;
         });
+
+
 
     }
 

@@ -2,78 +2,77 @@
     'use strict';
 
     //// JavaScript Code ////
-    function manageCodeineCtrl($scope, $log, tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService) {
-        $scope.projects  = [];
+    function manageCodeineCtrl(tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService) {
+        /*jshint validthis:true */
+        var vm = this;
+
+        vm.projects  = [];
+
         angular.forEach(projects, function(key) {
-            $scope.projects.push(key.name);
+            vm.projects.push(key.name);
         });
-        $scope.tabsForEditing = angular.copy(tabs);
-        $scope.permissionsForEditing = angular.copy(permissions);
-        $scope.globalConfigurationForEditing = angular.copy(CodeineConfigurationService.getGlobalConfiguration());
 
-        $scope.addMysql = function() {
-            $scope.globalConfigurationForEditing.mysql.push({});
+        vm.tabsForEditing = angular.copy(tabs);
+        vm.permissionsForEditing = angular.copy(permissions);
+        vm.globalConfigurationForEditing = angular.copy(CodeineConfigurationService.getGlobalConfiguration());
+
+        vm.addMysql = function() {
+            vm.globalConfigurationForEditing.mysql.push({});
         };
 
-        $scope.removeMysql = function(index) {
-            $scope.globalConfigurationForEditing.mysql.splice(index,1);
+        vm.removeMysql = function(index) {
+            vm.globalConfigurationForEditing.mysql.splice(index,1);
         };
 
-        $scope.setViewAs = function() {
-            LoginService.setViewAs($scope.newViewAs);
+        vm.setViewAs = function() {
+            LoginService.setViewAs(vm.newViewAs);
         };
 
-        $scope.saveConfiguration = function() {
-            $log.debug('manageCodeineCtrl: saveConfiguration');
-            CodeineService.updateGlobalConfiguration($scope.globalConfigurationForEditing).success(function(data) {
-                $log.debug('manageCodeineCtrl: update configuration -' + angular.toJson(data));
+        vm.saveConfiguration = function() {
+            CodeineConfigurationService.updateGlobalConfiguration(vm.globalConfigurationForEditing).then(function() {
                 AlertService.addAlert('success','Configuration was saved successfully');
-                $scope.app.globalConfiguration = data;
+            }, function() {
+                AlertService.addAlert('danger','Failed to save configuration');
             });
         };
 
-        $scope.saveTabs = function() {
-            $log.debug('manageCodeineCtrl: saveTabs');
-            CodeineService.updateViewTabs($scope.tabsForEditing).success(function(data) {
-                $log.debug('manageCodeineCtrl: update tabs -' + angular.toJson(data));
+        vm.saveTabs = function() {
+            CodeineService.updateViewTabs(vm.tabsForEditing).success(function() {
                 AlertService.addAlert('success','Tabs were saved successfully');
             });
 
         };
 
-        $scope.savePermissions = function() {
-            $log.debug('manageCodeineCtrl: savePermissions');
-            CodeineService.updatePermissions($scope.permissionsForEditing).success(function(data) {
-                $log.debug('manageCodeineCtrl: update permissions -' + angular.toJson(data));
+        vm.savePermissions = function() {
+            CodeineService.updatePermissions(vm.permissionsForEditing).success(function() {
                 AlertService.addAlert('success','Permissions were saved successfully');
             });
 
         };
 
-        $scope.addUser = function() {
-            $scope.permissionsForEditing.push({});
+        vm.addUser = function() {
+            vm.permissionsForEditing.push({});
         };
 
-        $scope.removeUser = function(index) {
-            $scope.permissionsForEditing.splice(index,1);
+        vm.removeUser = function(index) {
+            vm.permissionsForEditing.splice(index,1);
         };
 
-        $scope.addTab = function() {
-            $scope.tabsForEditing.push({});
+        vm.addTab = function() {
+            vm.tabsForEditing.push({});
         };
 
-        $scope.removeTab = function(index) {
-            $scope.tabsForEditing.splice(index,1);
+        vm.removeTab = function(index) {
+            vm.tabsForEditing.splice(index,1);
         };
 
-        $scope.select2Options = {
+        vm.select2Options = {
             'multiple': true,
             'simple_tags': true,
-            'tags': $scope.projects ,
+            'tags': vm.projects ,
             'tokenSeparators': [",", " "]
         };
     }
-
 
     //// Angular Code ////
     angular.module('codeine').controller('manageCodeineCtrl',manageCodeineCtrl);

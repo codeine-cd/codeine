@@ -57,6 +57,7 @@
             when('/codeine/manage-codeine', {
                 templateUrl: '/components/manage_codeine/manage_codeine.html',
                 controller: 'manageCodeineCtrl',
+                controllerAs: 'vm',
                 pageTitle: 'Manage',
                 resolve: {
                     tabs: function($q,CodeineService) {

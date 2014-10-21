@@ -44,10 +44,23 @@
             return initialized;
         }
 
+        function updateGlobalConfiguration(updatedConfiguration) {
+            var deffer = $q.defer();
+            CodeineService.updateGlobalConfiguration(updatedConfiguration).success(function(data) {
+                globalConfiguration = data;
+                deffer.resolve(data);
+            }).error(function(error) {
+                $log.error('CodeineConfigurationService: Failed to update configuration - ' + angular.toJson(error));
+                deffer.reject(error);
+            });
+            return deffer.promise;
+        }
+
         return {
             init : init,
             getGlobalConfiguration : getGlobalConfiguration,
             getExperimentalConfiguration : getExperimentalConfiguration,
+            updateGlobalConfiguration : updateGlobalConfiguration,
             isInitialized : isInitialized
         };
     }

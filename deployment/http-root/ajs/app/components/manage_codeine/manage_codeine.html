@@ -4,7 +4,7 @@
     <div class="input-group">
         <input type="text" ng-model="newViewAs" class="form-control" placeholder="User">
         <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="setViewAs()">View As</button>
+            <button class="btn btn-default" type="button" ng-click="vm.setViewAs()">View As</button>
           </span>
     </div><!-- /input-group -->
     <div class="form-group" admin-action>
@@ -13,55 +13,55 @@
 </div>
 <div class="col-md-9">
 <accordion close-others="true">
-<accordion-group is-open="config_is_open" ng-form="codeineConfigureParentForm">
+<accordion-group is-open="vm.config_is_open" ng-form="codeineConfigureParentForm">
     <accordion-heading>
         <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="codeineConfigureParentForm.$invalid"></i>
+            <i class="fa fa-warning" style="color:red;" ng-show="vm.codeineConfigureParentForm.$invalid"></i>
             Codeine Configuration <help help-id="codeineConfigureHelp"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': config_is_open, 'glyphicon-chevron-right': !config_is_open}"></i>
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': vm.config_is_open, 'glyphicon-chevron-right': !vm.config_is_open}"></i>
         </div>
     </accordion-heading>
-    <form name="codeineConfigurationForm" class="form-horizontal" novalidate ng-submit="saveConfiguration()">
+    <form name="codeineConfigurationForm" class="form-horizontal" novalidate ng-submit="vm.saveConfiguration()">
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.server_name.$invalid}">
             <label for="server_name" class="col-md-3 control-label">Server Name <help help-id="serverNameHelp"></help></label>
             <div class="col-md-4">
-                <input type="text" ng-model="globalConfigurationForEditing.server_name" class="form-control" name="server_name" id="server_name" placeholder="Server Name">
+                <input type="text" ng-model="vm.globalConfigurationForEditing.server_name" class="form-control" name="server_name" id="server_name" placeholder="Server Name">
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.admin_mail.$invalid}">
             <label for="admin_mail" class="col-md-3 control-label">Admin Mail <help help-id="AdminMailConfigureHelp"></help></label>
             <div class="col-md-4">
-                <input type="text" ng-model="globalConfigurationForEditing.admin_mail" class="form-control" name="admin_mail" id="admin_mail" placeholder="Admin Mail">
+                <input type="text" ng-model="vm.globalConfigurationForEditing.admin_mail" class="form-control" name="admin_mail" id="admin_mail" placeholder="Admin Mail">
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.web_server_host.$invalid}">
             <label for="web_server_host" class="col-md-3 control-label">Web Server Host <help help-id="webServerHostHelp"></help></label>
             <div class="col-md-4">
-                <input type="text" ng-model="globalConfigurationForEditing.web_server_host" class="form-control" name="web_server_host" id="web_server_host" placeholder="Web Server Host">
+                <input type="text" ng-model="vm.globalConfigurationForEditing.web_server_host" class="form-control" name="web_server_host" id="web_server_host" placeholder="Web Server Host">
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.web_server_port.$invalid}">
             <label for="web_server_port" class="col-md-3 control-label">Web Server Port <help help-id="webServerPortHelp"></help></label>
             <div class="col-md-4">
-                <input type="text" ng-model="globalConfigurationForEditing.web_server_port" class="form-control" name="web_server_port" id="web_server_port" placeholder="Web Server Port" required>
+                <input type="text" ng-model="vm.globalConfigurationForEditing.web_server_port" class="form-control" name="web_server_port" id="web_server_port" placeholder="Web Server Port" required>
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.directory_host.$invalid}">
             <label for="directory_host" class="col-md-3 control-label">Directory Host <help help-id="directory_hostHelp"></help></label>
             <div class="col-md-4">
-                <input type="text" ng-model="globalConfigurationForEditing.directory_host" class="form-control" name="directory_host" id="directory_host" placeholder="Directory Host">
+                <input type="text" ng-model="vm.globalConfigurationForEditing.directory_host" class="form-control" name="directory_host" id="directory_host" placeholder="Directory Host">
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.directory_port.$invalid}">
             <label for="directory_port" class="col-md-3 control-label">Directory Port <help help-id="directory_portHelp"></help></label>
             <div class="col-md-4">
-                <input type="text" ng-model="globalConfigurationForEditing.directory_port" class="form-control" name="directory_port" id="directory_port" placeholder="Directory Port">
+                <input type="text" ng-model="vm.globalConfigurationForEditing.directory_port" class="form-control" name="directory_port" id="directory_port" placeholder="Directory Port">
             </div>
         </div>
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.authentication_method.$invalid}">
             <label for="authentication_method" class="col-md-3 control-label">Authentication Method <help help-id="AuthenticationMethodConfigureHelp"></help></label>
             <div class="col-md-4">
-                <select  class="form-control select2" name="authentication_method" id="authentication_method"  ui-select2="{ allowClear: false}" ng-model="globalConfigurationForEditing.authentication_method">
+                <select  class="form-control select2" name="authentication_method" id="authentication_method"  ui-select2="{ allowClear: false}" ng-model="vm.globalConfigurationForEditing.authentication_method">
                     <option value="Disabled">Disabled</option>
                     <option value="Builtin">Built In</option>
                     <option value="WindowsCredentials">Windows Credentials</option>
@@ -72,18 +72,18 @@
         <div class="form-group" ng-class="{'has-error': codeineConfigurationForm.roles.$invalid}" ng-show="globalConfigurationForEditing.authentication_method == 'WindowsCredentials'">
             <label for="roles" class="col-md-3 control-label">Roles <help help-id="rolesConfigureHelp"></help></label>
             <div class="col-md-9">
-                <textarea ng-model="globalConfigurationForEditing.roles" rows="3" class="form-control" name="roles" id="roles" placeholder="Roles"></textarea>
+                <textarea ng-model="vm.globalConfigurationForEditing.roles" rows="3" class="form-control" name="roles" id="roles" placeholder="Roles"></textarea>
             </div>
         </div>
         <accordion close-others="false">
-            <accordion-group ng-repeat="mysql_instance in globalConfigurationForEditing.mysql" is-open="mysql_is_open" ng-form="mysqlConfigParentForm">
+            <accordion-group ng-repeat="mysql_instance in vm.globalConfigurationForEditing.mysql" is-open="mysql_is_open" ng-form="mysqlConfigParentForm">
                 <accordion-heading>
                     <i class="fa fa-warning" style="color:red;" ng-show="mysqlConfigParentForm.$invalid"></i>
                     Mysql:  {{mysql_instance.host}} : {{ mysql_instance.port}}
                     <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': mysql_is_open, 'glyphicon-chevron-right': !mysql_is_open}">
                     </i>
                     <div class="btn-group btn-group-xs pull-right">
-                        <button title="Remove MySQL" ng-click="removeMysql($index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                        <button title="Remove MySQL" ng-click="vm.removeMysql($index)" class="btn btn-default"><i class="fa fa-times"></i></button>
                     </div>
                 </accordion-heading>
                 <ng-form name="mysqlForm">
@@ -115,7 +115,7 @@
                         <div class="col-md-offset-3 col-md-9">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox"  ng-model="mysql_instance.managed_by_codeine"> Managed by Codeine <help help-id="MysqlManagedByCodeineConfigureHelp"></help>
+                                    <input type="checkbox" ng-model="mysql_instance.managed_by_codeine"> Managed by Codeine <help help-id="MysqlManagedByCodeineConfigureHelp"></help>
                                 </label>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
         </accordion>
         <div class="row">
             <div class="col-md-12">
-                <button ng-click="addMysql()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add MySQL</button>
+                <button ng-click="vm.addMysql()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add MySQL</button>
             </div>
             <br/><br/>
         </div>
@@ -149,15 +149,15 @@
         </div>
     </form>
 </accordion-group>
-<accordion-group is-open="tabs_is_open" ng-form="tabsConfigParentForm">
+<accordion-group is-open="vm.tabs_is_open" ng-form="tabsConfigParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="tabsConfigParentForm.$invalid"></i>
             Projects Tabs Configuration <help help-id="tabsConfigureHelp"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': tabs_is_open, 'glyphicon-chevron-right': !tabs_is_open}"></i>
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': vm.tabs_is_open, 'glyphicon-chevron-right': !vm.tabs_is_open}"></i>
         </div>
     </accordion-heading>
-    <form name="codeineTabsForm" novalidate ng-submit="saveTabs()">
+    <form name="codeineTabsForm" novalidate ng-submit="vm.saveTabs()">
 
         <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
             <thead>
@@ -171,22 +171,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="tab_view in tabsForEditing" ng-form="tabsForm">
+            <tr ng-repeat="tab_view in vm.tabsForEditing" ng-form="tabsForm">
                 <td class="col-md-4" ng-class="{'has-error' : tabsForm.tabName.$invalid }">
-                    <input type="text" name="tabName" ng-distinct-values="tabsForEditing" class="form-control" ng-model="tab_view.name" required>
+                    <input type="text" name="tabName" ng-distinct-values="vm.tabsForEditing" class="form-control" ng-model="tab_view.name" required>
                 </td>
                 <td class="col-md-7" ng-class="{'has-error' : tabsForm.tabProjects.$invalid }">
-                    <input type="text" name="tabProjects" ui-select2="select2Options" ng-model="tab_view.exp" class="form-control select2" required>
+                    <input type="text" name="tabProjects" ui-select2="vm.select2Options" ng-model="tab_view.exp" class="form-control select2" required>
                 </td>
                 <td class="col-md-1">
-                    <button ng-click="removeTab($index)" title="Remove Tab" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                    <button ng-click="vm.removeTab($index)" title="Remove Tab" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="row">
             <div class="col-md-12">
-                <button ng-click="addTab()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Tab</button>
+                <button ng-click="vm.addTab()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Tab</button>
             </div>
             <br/><br/>
         </div>
@@ -198,15 +198,15 @@
         </div>
     </form>
 </accordion-group>
-<accordion-group is-open="permissions_is_open" ng-form="permissionsConfigParentForm">
+<accordion-group is-open="vm.permissions_is_open" ng-form="permissionsConfigParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="permissionsConfigParentForm.$invalid"></i>
             Users Permissions <help help-id="permissionsConfigureHelp"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': permissions_is_open, 'glyphicon-chevron-right': !permissions_is_open}"></i>
+            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': vm.permissions_is_open, 'glyphicon-chevron-right': !vm.permissions_is_open}"></i>
         </div>
     </accordion-heading>
-    <form name="codeinePermissionsForm" novalidate ng-submit="savePermissions()">
+    <form name="codeinePermissionsForm" novalidate ng-submit="vm.savePermissions()">
         <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
             <thead>
             <tr>
@@ -228,31 +228,31 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="permissionObject in permissionsForEditing" ng-form="permissionsForm">
+            <tr ng-repeat="permissionObject in vm.permissionsForEditing" ng-form="permissionsForm">
                 <td class="col-md-2" ng-class="{ 'has-error' : permissionsForm.userName.$invalid }">
-                    <input type="text" name="userName" class="form-control" ng-distinct-values="permissionsForEditing" ng-model="permissionsForEditing[$index].username" required>
+                    <input type="text" name="userName" class="form-control" ng-distinct-values="vm.permissionsForEditing" ng-model="vm.permissionsForEditing[$index].username" required>
                 </td>
                 <td class="col-md-1">
                     <input style="margin: 0px;" type="checkbox" ng-model="permissionObject.administer">
                 </td>
                 <td class="col-md-3">
-                    <input type="text" ui-select2="select2Options" ng-model="permissionObject.read_project" class="form-control select2">
+                    <input type="text" ui-select2="vm.select2Options" ng-model="permissionObject.read_project" class="form-control select2">
                 </td>
                 <td class="col-md-3">
-                    <input type="text" ui-select2="select2Options" ng-model="permissionObject.command_project" class="form-control select2">
+                    <input type="text" ui-select2="vm.select2Options" ng-model="permissionObject.command_project" class="form-control select2">
                 </td>
                 <td class="col-md-3">
-                    <input type="text" ui-select2="select2Options" ng-model="permissionObject.configure_project" class="form-control select2">
+                    <input type="text" ui-select2="vm.select2Options" ng-model="permissionObject.configure_project" class="form-control select2">
                 </td>
                 <td class="col-md-1">
-                    <button ng-click="removeUser($index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                    <button ng-click="vm.removeUser($index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
                 </td>
             </tr>
             </tbody>
         </table>
         <div class="row">
             <div class="col-md-12">
-                <button type="button" ng-click="addUser()" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add User / Group</button>
+                <button type="button" ng-click="vm.addUser()" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add User / Group</button>
             </div>
             <br/><br/>
         </div>
