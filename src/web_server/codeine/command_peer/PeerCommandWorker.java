@@ -136,7 +136,7 @@ public class PeerCommandWorker implements Runnable {
 				int exitStatus = Integer.valueOf(matcher.group(1));
 				if (ExitStatus.SUCCESS != exitStatus) {
 					allNodesCommandExecuter.fail(node);
-					line = "Command failed with status " + exitStatus;
+					line = "\nCommand failed with exit status " + exitStatus;
 					switch (exitStatus)	{
 					case ExitStatus.TIMEOUT: {
 						line += " (timeout)";
@@ -147,17 +147,18 @@ public class PeerCommandWorker implements Runnable {
 						break;
 					}
 					}
+					line += "\n";
 				} else {
 					allNodesCommandExecuter.nodeSuccess(node);
 					success = true;
-					line = "Command successfuly executed";
 				}
-				line += "\n";
 			}
-			if (shouldOutputImmediatly) {
-				allNodesCommandExecuter.writeLine(line);
+			if (!success) {//failed or not finished
+				if (shouldOutputImmediatly) {
+					allNodesCommandExecuter.writeLine(line);
+				}
+				result.append(line + "\n");
 			}
-			result.append(line + "\n");
 			return null;
 		}
 	}
