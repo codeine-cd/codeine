@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.model.Result;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 
 import com.google.common.collect.Lists;
@@ -31,7 +32,8 @@ public class AfterProjectModifyPlugin {
 			Map<String, String> env = Maps.newHashMap();
 			env.put(Constants.EXECUTION_ENV_PROJECT_EXISTS, String.valueOf(newStatus));
 			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
-			new ProcessExecuterBuilder(cmd).timeoutInMinutes(2).env(env).build().execute();
+			Result result = new ProcessExecuterBuilder(cmd).timeoutInMinutes(2).env(env).build().execute();
+			log.info("calling after_project_modify_plugin for project " + projectJson.name() + " finished " + result.toStringLong());
 		}
 	}
 

@@ -24,7 +24,7 @@ public class Result
 	
 	public String toStringLong()
 	{
-		return "Result [output=" + output + ", exit=" + exit + "]";
+		return "Result [exit=" + exit + ", output=" + output + "]";
 	}
 
 	public int exit()
