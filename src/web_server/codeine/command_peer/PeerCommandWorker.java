@@ -103,7 +103,7 @@ public class PeerCommandWorker implements Runnable {
 			}
 		} catch (Exception ex) {
 			announce("error in node " + node.alias() + " message: " + ExceptionUtils.getRootCause(ex).getMessage());
-			log.warn("error in restart with link " + url + " ; message "
+			log.warn("error in node with link " + url + " ; message "
 					+ ExceptionUtils.getRootCause(ex).getMessage());
 			log.debug("error details", ex);
 			allNodesCommandExecuter.fail(node);
