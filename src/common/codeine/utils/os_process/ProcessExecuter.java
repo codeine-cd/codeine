@@ -20,10 +20,9 @@ import com.google.common.collect.Maps;
 
 public class ProcessExecuter {
 	
-	static final Logger log = Logger.getLogger(ProcessExecuter.class);
+	private static final Logger log = Logger.getLogger(ProcessExecuter.class);
 	private List<String> cmd;
 	private long timeoutInMinutes;
-	private List<String> cmdForOutput;
 	private Function<String, Void> function;
 	private String runFromDir;
 	private Map<String, String> env;
@@ -32,7 +31,6 @@ public class ProcessExecuter {
 	private ProcessExecuter(List<String> cmd, List<String> cmdForOutput, long timeoutInMinutes, Function<String, Void> function, String runFromDir, Map<String, String> env) {
 		super();
 		this.cmd = cmd;
-		this.cmdForOutput = cmdForOutput;
 		this.timeoutInMinutes = timeoutInMinutes;
 		this.function = function;
 		this.runFromDir = runFromDir;
@@ -61,7 +59,8 @@ public class ProcessExecuter {
 				return new Result(ExitStatus.TIMEOUT, worker.output());
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			String output = null == worker ? "" : worker.output();
+			return new Result(ExitStatus.IO_ERROR, output);
 		} catch (InterruptedException ex) {
 			worker.interrupt();
 			Thread.currentThread().interrupt();

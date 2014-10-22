@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import codeine.model.ExitStatus;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
@@ -13,7 +15,10 @@ import codeine.utils.StringUtils;
 import com.google.common.base.Function;
 
 @SuppressWarnings("unused")
-class ProcessExecuterWorker extends Thread {
+public class ProcessExecuterWorker extends Thread {
+	
+	private static final Logger log = Logger.getLogger(ProcessExecuterWorker.class);
+	
 	private final Process process;
 	private Integer exit;
 	private String output = "";
@@ -51,12 +56,12 @@ class ProcessExecuterWorker extends Thread {
 			} catch (IOException ex) {
 				error += ExceptionUtils.getStackTrace(ex);
 				function.apply(ExceptionUtils.getStackTrace(ex));
+				exit = ExitStatus.IO_ERROR;
 			}
 		} catch (InterruptedException interrupted) {
-			process.destroy();
 			error += "\nprocess was interrupted\n";
 			exit = ExitStatus.INTERRUPTED;
-			ProcessExecuter.log.info("thread was interuppted");
+			log.info("thread was interuppted");
 			return;
 		}
 	}

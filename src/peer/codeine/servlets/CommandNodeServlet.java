@@ -155,7 +155,8 @@ public class CommandNodeServlet extends AbstractServlet
 			env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(commandInfo.project_name(), commandInfo2.node_name()), ";"));
 			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
-//		res.setStatus(result.success() ? HttpStatus.OK_200 : HttpStatus.INTERNAL_SERVER_ERROR_500);
+			writer.flush();
+			log.info("command exit status is " + result.exit());
 		} catch (Exception ex) {
 			try {
 				log.warn("failed on command execution", ex);

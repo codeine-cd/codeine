@@ -5,4 +5,5 @@ public class ExitStatus {
 	public final static int TIMEOUT = -1;
 	public final static int INTERRUPTED = -2;
 	public final static int EXCEPTION = -3;
+	public static final int IO_ERROR = -4;
 }
