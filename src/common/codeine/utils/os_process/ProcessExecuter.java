@@ -8,7 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
+import codeine.model.ExitStatus;
 import codeine.model.Result;
+import codeine.utils.ThreadUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -54,7 +56,9 @@ public class ProcessExecuter {
 			if (worker.exitStatus() != null) {
 				return new Result(worker.exitStatus(), worker.output());
 			} else {
-				throw new RuntimeException("command exited with timeout " + cmdForOutput);
+				worker.interrupt();
+				ThreadUtils.sleep(1000);
+				return new Result(ExitStatus.TIMEOUT, worker.output());
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);

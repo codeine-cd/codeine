@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import codeine.model.ExitStatus;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 
@@ -51,7 +52,10 @@ class ProcessExecuterWorker extends Thread {
 				error += ExceptionUtils.getStackTrace(ex);
 				function.apply(ExceptionUtils.getStackTrace(ex));
 			}
-		} catch (InterruptedException ignore) {
+		} catch (InterruptedException interrupted) {
+			process.destroy();
+			error += "\nprocess was interrupted\n";
+			exit = ExitStatus.INTERRUPTED;
 			ProcessExecuter.log.info("thread was interuppted");
 			return;
 		}
@@ -62,6 +66,6 @@ class ProcessExecuterWorker extends Thread {
 	}
 
 	public String output() {
-		return StringUtils.isEmpty(error) ? output : output + "\nerror:\n" + error;
+		return StringUtils.isEmpty(error) ? output : "\noutput:\n=======\n" + output + "\nerror:\n======\n" + error;
 	}
 }

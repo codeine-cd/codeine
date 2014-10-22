@@ -12,6 +12,7 @@ import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
+import codeine.model.ExitStatus;
 import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
@@ -21,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 
 public class PeerCommandWorker implements Runnable {
+	
 	private static final Logger log = Logger.getLogger(PeerCommandWorker.class);
 	private NodeWithPeerInfo node;
 	private AllNodesCommandExecuter allNodesCommandExecuter;
@@ -74,27 +76,7 @@ public class PeerCommandWorker implements Runnable {
 			ThreadUtils.sleep(getSleepTime());
 			log.info("running worker " + node);
 			final StringBuilder result = new StringBuilder();
-			Function<String, Void> function = new Function<String, Void>(){
-				@Override
-				public Void apply(String line) {
-					Matcher matcher = pattern.matcher(line.replace("\n", ""));
-					if (matcher.matches()) {
-						if (0 != Integer.valueOf(matcher.group(1))) {
-							allNodesCommandExecuter.fail(node);
-						} else {
-							allNodesCommandExecuter.nodeSuccess(node);
-							success = true;
-						}
-					}
-					else {
-						if (shouldOutputImmediatly) {
-							allNodesCommandExecuter.writeLine(line);
-						}
-						result.append(line + "\n");
-					}
-					return null;
-				}
-			};
+			Function<String, Void> function = new ReadCommandOutputFunction(result);
 			if (shouldOutputImmediatly){
 				writeNodeHeader();
 			}
@@ -140,4 +122,43 @@ public class PeerCommandWorker implements Runnable {
 		allNodesCommandExecuter.writeLine("===> " + line + " <===");
 	}
 
+	private final class ReadCommandOutputFunction implements Function<String, Void> {
+		private final StringBuilder result;
+
+		private ReadCommandOutputFunction(StringBuilder result) {
+			this.result = result;
+		}
+
+		@Override
+		public Void apply(String line) {
+			Matcher matcher = pattern.matcher(line.replace("\n", ""));
+			if (matcher.matches()) {
+				int exitStatus = Integer.valueOf(matcher.group(1));
+				if (ExitStatus.SUCCESS != exitStatus) {
+					allNodesCommandExecuter.fail(node);
+					line = "Command failed with status " + exitStatus;
+					switch (exitStatus)	{
+					case ExitStatus.TIMEOUT: {
+						line += " (timeout)";
+						break;
+					}
+					case ExitStatus.INTERRUPTED: {
+						line += " (interrupted)";
+						break;
+					}
+					}
+				} else {
+					allNodesCommandExecuter.nodeSuccess(node);
+					success = true;
+					line = "Command successfuly executed";
+				}
+				line += "\n";
+			}
+			if (shouldOutputImmediatly) {
+				allNodesCommandExecuter.writeLine(line);
+			}
+			result.append(line + "\n");
+			return null;
+		}
+	}
 }
