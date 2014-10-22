@@ -26,6 +26,7 @@ import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.model.ExitStatus;
 import codeine.model.Result;
 import codeine.servlet.AbstractServlet;
 import codeine.utils.FilesUtils;
@@ -53,13 +54,14 @@ public class CommandNodeServlet extends AbstractServlet
 	
 	@Override
 	public void myPost(HttpServletRequest request, HttpServletResponse res)	{
-		log.info("myPost");
+		log.info("start handle command");
 		if (Boolean.parseBoolean(request.getParameter(Constants.UrlParameters.FORCE)) || experimentalConfJsonStore.get().allow_concurrent_commands_in_peer()) {
 			executeCommandNotSync(request, res);
 		}
 		else {
 			executeCommandSync(request, res);
 		}
+		log.info("finished handle command");
 	}
 	/**
 	 * this prevents multiple commands on the same peer, so preventing upgrade the peer during command for example
@@ -156,9 +158,10 @@ public class CommandNodeServlet extends AbstractServlet
 //		res.setStatus(result.success() ? HttpStatus.OK_200 : HttpStatus.INTERNAL_SERVER_ERROR_500);
 		} catch (Exception ex) {
 			try {
-				writer.println(Constants.COMMAND_RESULT + "-1");
-			} catch (Exception e) {
 				log.warn("failed on command execution", ex);
+				writer.println(Constants.COMMAND_RESULT + ExitStatus.EXCEPTION);
+			} catch (Exception e) {
+				log.warn("failed on command execution2", ex);
 			}
 		}
 		finally {
