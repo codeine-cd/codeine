@@ -54,8 +54,7 @@ public class ProcessExecuter {
 			if (worker.exitStatus() != null) {
 				return new Result(worker.exitStatus(), worker.output());
 			} else {
-				worker.interrupt();
-				ThreadUtils.sleep(1000);
+				ThreadUtils.sleep(100);
 				return new Result(ExitStatus.TIMEOUT, worker.output());
 			}
 		} catch (IOException e) {
