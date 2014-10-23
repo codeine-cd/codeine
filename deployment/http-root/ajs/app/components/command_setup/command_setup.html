@@ -96,7 +96,7 @@
                                 <div ng-if="parameter.type === 'String' || parameter.type === 'Password'">
                                     <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
                                     <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid || paramsInnerForm.param_value.$error.parameterValidator}" id="{{parameter.name}}">
-                                        <input id="param_{{$index}}" name="param_value" type="{{vm.parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="vm.parameter.value" ui-validate="{parameterValidator : 'validateParameter($value,$index)'}">
+                                        <input id="param_{{$index}}" name="param_value" type="{{parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="parameter.value" ui-validate="{parameterValidator : 'validateParameter($value,$index)'}">
                                     </div>
                                 </div>
                                 <div ng-if="parameter.type === 'Boolean'">
