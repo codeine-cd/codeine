@@ -2,10 +2,20 @@
     'use strict';
 
     //// JavaScript Code ////
-    function tagsFilterCtrl($scope,$rootScope,$log,Constants,$location) {
-        $scope.maxTags = 10;
+    function tagsFilterCtrl($scope,$rootScope,Constants,$location) {
+        /*jshint validthis:true */
+        var vm = this;
+        vm.maxTags = 10;
 
-        $scope.initTagsFromQueryString = function() {
+        function setTagState(name,stateVal) {
+            for (var f=0; f < $scope.projectStatus.tag_info.length ; f++) {
+                if ($scope.projectStatus.tag_info[f].name === name) {
+                    $scope.projectStatus.tag_info[f].state = stateVal;
+                }
+            }
+        }
+
+        vm.initTagsFromQueryString = function() {
             var queryStringObject = $location.search();
             var shouldRefresh = false;
             for (var j=0; j < $scope.projectStatus.tag_info.length ; j++) {
@@ -13,34 +23,24 @@
             }
             if (angular.isDefined(queryStringObject.tagsOn)) {
                 shouldRefresh = true;
-                $log.debug('tagsFilterCtrl: Tags on init from query string - ' + queryStringObject.tagsOn);
                 var array = queryStringObject.tagsOn.split(',');
                 for (var i=0; i < array.length; i++) {
-                    for (var k=0; k < $scope.projectStatus.tag_info.length ; k++) {
-                        if ($scope.projectStatus.tag_info[k].name === array[i]) {
-                            $scope.projectStatus.tag_info[k].state = 1;
-                        }
-                    }
+                    setTagState(array[i],1);
                 }
             }
             if (angular.isDefined(queryStringObject.tagsOff)) {
                 shouldRefresh = true;
-                $log.debug('tagsFilterCtrl: Tags on init from query string - ' + queryStringObject.tagsOff);
                 var array2 = queryStringObject.tagsOff.split(',');
                 for (var i1=0; i1 < array2.length; i1++) {
-                    for (var f=0; f < $scope.projectStatus.tag_info.length ; f++) {
-                        if ($scope.projectStatus.tag_info[f].name === array2[i1]) {
-                            $scope.projectStatus.tag_info[f].state = 2;
-                        }
-                    }
+                    setTagState(array2[i1],2);
                 }
             }
             return shouldRefresh;
         };
 
-        $scope.initTagsFromQueryString();
+        vm.initTagsFromQueryString();
 
-        $scope.updateTags = function() {
+        vm.updateTags = function() {
             var on = [], off = [];
             for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
                 if ($scope.projectStatus.tag_info[i].state === 1) {

@@ -2,13 +2,15 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectMenuCtrl($scope, $log,$routeParams, $window, $location,CodeineService,AlertService) {
-        $scope.projectName = $routeParams.project_name;
-        $log.debug('projectMenuCtrl: current project is ' + $scope.projectName);
+    function projectMenuCtrl($scope, $routeParams, $window, $location, LoginService, CodeineService,AlertService) {
+        /*jshint validthis:true */
+        var vm = this;
 
-        $scope.deleteProject = function() {
+        vm.projectName = $routeParams.project_name;
+        vm.permissions = LoginService.getSessionInfo().permissions;
+
+        vm.deleteProject = function() {
             if ($window.confirm('Are you sure you would like to delete project ' + $scope.projectName + ' ? THIS IS NOT REVERSIBLE!!!')) {
-                $log.debug('projectMenuCtrl: will delete project');
                 CodeineService.deleteProject($scope.projectName).success(function() {
                     AlertService.addAlert('success','Project ' + $scope.projectName + ' was deleted successfully',3000);
                     $location.path('/codeine');

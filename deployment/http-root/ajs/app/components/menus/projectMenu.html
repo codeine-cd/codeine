@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-controller="projectMenuCtrl">
+<div class="panel panel-default" ng-controller="projectMenuCtrl as vm">
     <div class="panel-heading">
         <span class="panel-title">Menu</span>
     </div>
     <div class="list-group">
-        <a ng-href="/codeine/project/{{projectName}}/status" class="list-group-item" active-menu-item><i class="fa fa-signal fa-fw"></i> Status</a>
-        <a ng-href="/codeine/project/{{projectName}}/timeline" class="list-group-item" active-menu-item><i class="fa fa-bar-chart-o fa-fw"></i> Timeline</a>
-        <a ng-click="deleteProject()" class="list-group-item" admin-action><i class="fa fa-times-circle fa-fw"></i> Delete</a>
-        <a ng-href="/codeine/project/{{projectName}}/configure" class="list-group-item" active-menu-item configure-action project="projectName" permissions="app.sessionInfo.permissions"><i class="fa fa-cog fa-fw"></i> Configure</a>
+        <a ng-href="/codeine/project/{{vm.projectName}}/status" class="list-group-item" active-menu-item><i class="fa fa-signal fa-fw"></i> Status</a>
+        <a ng-href="/codeine/project/{{vm.projectName}}/timeline" class="list-group-item" active-menu-item><i class="fa fa-bar-chart-o fa-fw"></i> Timeline</a>
+        <a ng-click="vm.deleteProject()" class="list-group-item" admin-action><i class="fa fa-times-circle fa-fw"></i> Delete</a>
+        <a ng-href="/codeine/project/{{vm.projectName}}/configure" class="list-group-item" active-menu-item configure-action project="vm.projectName" permissions="permissions"><i class="fa fa-cog fa-fw"></i> Configure</a>
     </div>
 </div>
 

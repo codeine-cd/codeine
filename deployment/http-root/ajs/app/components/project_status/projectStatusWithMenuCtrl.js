@@ -2,8 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectStatusWithMenuCtrl($scope,$log,projectConfiguration,projectStatus) {
-        $log.debug('projectStatusWithMenuCtrl: created');
+    function projectStatusWithMenuCtrl($scope,projectConfiguration,projectStatus) {
         $scope.projectStatus = projectStatus;
         $scope.projectConfiguration = projectConfiguration;
     }
