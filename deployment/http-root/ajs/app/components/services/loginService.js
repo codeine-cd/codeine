@@ -68,13 +68,27 @@
             return initialized;
         }
 
+        function prepareForShutdown() {
+            return CodeineService.prepareForShutdown().success(function() {
+                sessionInfo.isPrepareForShutdown = true;
+            });
+        }
+
+        function cancelShutdown() {
+            return CodeineService.cancelShutdown().success(function() {
+                sessionInfo.isPrepareForShutdown = false;
+            });
+        }
+
         return {
             gettingSessionInfo : gettingSessionInfo,
             getSessionInfo : getSessionInfo,
             setViewAs : setViewAs,
             getViewAs : getViewAs,
             init : init,
-            isInitialized : isInitialized
+            isInitialized : isInitialized,
+            prepareForShutdown : prepareForShutdown,
+            cancelShutdown : cancelShutdown
         };
     }
 

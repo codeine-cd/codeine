@@ -2,11 +2,11 @@
     <div class="panel-heading">
         <span class="panel-title">Menu</span>
     </div>
-    <div class="list-group" ng-controller="manageMenuCtrl">
+    <div class="list-group" ng-controller="manageMenuCtrl as vm">
         <a class="list-group-item" active-menu-item href="/codeine/manage-codeine"><i class="fa fa-gears fa-fw"></i> Configure Codeine</a>
         <a class="list-group-item" active-menu-item href="/codeine/nodes/status"><i class="fa fa-signal fa-fw"></i> Codeine Nodes Status</a>
-        <a ng-if="!isPrepareForShutdown" class="list-group-item" ng-click="prepareForShutdown()" href="javascript: void(0);"><i class="fa fa-bullhorn fa-fw"></i> Prepare for shutdown</a>
-        <a ng-if="isPrepareForShutdown" class="list-group-item" ng-click="cancelShutdown()" href="javascript: void(0);"><i class="fa fa-eraser fa-fw"></i> Cancel shutdown</a>
+        <a ng-if="!vm.sessionInfo.isPrepareForShutdown" class="list-group-item" ng-click="vm.prepareForShutdown()" href="javascript: void(0);"><i class="fa fa-bullhorn fa-fw"></i> Prepare for shutdown</a>
+        <a ng-if="vm.sessionInfo.isPrepareForShutdown" class="list-group-item" ng-click="vm.cancelShutdown()" href="javascript: void(0);"><i class="fa fa-eraser fa-fw"></i> Cancel shutdown</a>
         <a class="list-group-item" active-menu-item href="/codeine/manage/statistics"><i class="fa fa-tachometer fa-fw"></i> Codeine Statistics</a>
         <a class="list-group-item" target="_self" href="/resources"><i class="fa fa-suitcase fa-fw"></i> Codeine Server Logs</a>
     </div>
