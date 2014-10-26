@@ -266,6 +266,12 @@
                 <input id="command_info{{$index}}.name" name="name" type="text" ng-model="command_info.name" class="form-control" required>
             </div>
         </div>
+        <div class="form-group">
+            <label for="command_info{{$index}}.description" class="col-md-3 control-label">Description <help help-id="commandDescriptionHelp"></help></label>
+            <div class="col-md-6">
+                <textcomplete element-placeholder='Type command description' members='command_info.description' message='command_info.description' rows="3" element-class="form-control" element-id="command_description" is-required="false"></textcomplete>
+            </div>
+        </div>
         <accordion close-others="false">
             <accordion-group is-open="command_info.schedule_is_open" ng-form="commandScheduleParentForm">
                 <accordion-heading>

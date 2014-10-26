@@ -89,6 +89,7 @@
             "MysqlManagedByCodeineConfigureHelp" : "Codeine is responsible to start/stop MySQL server instance.",
             "codeineConfigureHelp" : "Here the admin can configure all the Codeine global settings.<br/>Some changes might require a restart.",
             "projectDescriptionHelp" : "Description is a convenient way to let users know what this project is about.",
+            "commandDescriptionHelp" : "Description is a convenient way to let users know what this command is doing and for what purpose it should be used.",
             "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)"
         });
 
