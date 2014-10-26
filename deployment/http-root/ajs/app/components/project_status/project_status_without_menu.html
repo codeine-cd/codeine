@@ -61,6 +61,9 @@
                     </div>&nbsp;
                     <button type="button" ng-click="expandAll()" class="btn btn-xs" tooltip="Expand All"><i class="fa fa-plus"></i></button>
                     <button type="button" ng-click="collapseAll()" class="btn btn-xs" tooltip="Collapse All"><i class="fa fa-minus"></i></button>
+                    <span>
+                        <b>Project {{projectConfiguration.name}}</b> <help help-txt="projectConfiguration.description" ng-if="projectConfiguration.description"></help>
+                    </span>
                     <small class="pull-right">
                         <span>Total Nodes: {{allNodesCount}} Selected: {{selectedCount()}}</span>
                     </small>
