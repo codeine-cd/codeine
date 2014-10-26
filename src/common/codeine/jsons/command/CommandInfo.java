@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 public class CommandInfo 
 {
     private static final int MAX_CONCURRENCY = 500;    
-    private String name, title;
+    private String name, description;
     private String project_name;
     private String credentials;
     private Integer timeoutInMinutes;
@@ -25,8 +25,8 @@ public class CommandInfo
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
 
-    public String title(){
-    	return title == null ? name : title;
+    public String description(){
+    	return description;
     }
 
 	public String name() {
@@ -112,9 +112,6 @@ public class CommandInfo
 	public void overrideByConfiguration(CommandInfo configuredCommand) {
 		credentials(configuredCommand.credentials());
 		script_content(configuredCommand.script_content());
-	    if (null == title) {
-	    	title = configuredCommand.title;
-	    }
 	    if (null == timeoutInMinutes) {
 	    	timeoutInMinutes = configuredCommand.timeoutInMinutes;
 	    	if (null == timeoutInMinutes) {
