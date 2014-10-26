@@ -39,7 +39,7 @@
             $scope.$dismiss();
         };
 
-    };
+    }
 
     function codeineLogin($modal) {
         return {

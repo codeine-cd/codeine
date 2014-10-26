@@ -6,6 +6,14 @@
         /*jshint validthis:true */
         var vm = this;
 
+        function addSuccessMessage(msg) {
+            AlertService.addAlert('success',msg);
+        }
+
+        function addFailMessage(msg) {
+            AlertService.addAlert('danger',msg);
+        }
+
         vm.projects  = [];
 
         angular.forEach(projects, function(key) {
@@ -30,26 +38,26 @@
 
         vm.saveConfiguration = function() {
             CodeineConfigurationService.updateGlobalConfiguration(vm.globalConfigurationForEditing).then(function() {
-                AlertService.addAlert('success','Configuration was saved successfully');
+                addSuccessMessage('success','Configuration was saved successfully');
             }, function() {
-                AlertService.addAlert('danger','Failed to save Configuration');
+                addFailMessage('danger','Failed to save Configuration');
             });
         };
 
         vm.saveTabs = function() {
             CodeineService.updateViewTabs(vm.tabsForEditing).success(function() {
-                AlertService.addAlert('success','Tabs were saved successfully');
+                addSuccessMessage('success','Tabs were saved successfully');
             }, function() {
-                AlertService.addAlert('danger','Failed to save Tabs');
+                addFailMessage('danger','Failed to save Tabs');
             });
 
         };
 
         vm.savePermissions = function() {
             CodeineService.updatePermissions(vm.permissionsForEditing).success(function() {
-                AlertService.addAlert('success','Permissions were saved successfully');
+                addSuccessMessage('success','Permissions were saved successfully');
             }, function() {
-                AlertService.addAlert('danger','Failed to save Permissions');
+                addFailMessage('danger','Failed to save Permissions');
             });
 
         };
