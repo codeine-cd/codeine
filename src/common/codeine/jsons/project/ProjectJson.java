@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 public class ProjectJson
 {
 	private String name;
+	private String description;
 	private List<NodeMonitor> monitors = Lists.newArrayList();
 	private List<MailPolicyJson> mail = Lists.newArrayList();
 	private NodeDiscoveryStrategy node_discovery_startegy = NodeDiscoveryStrategy.Configuration;
@@ -47,9 +48,9 @@ public class ProjectJson
 	
 	@Override
 	public String toString() {
-		return "ProjectJson [name=" + name + "]";
+		return "ProjectJson [" + (name != null ? "name=" + name + ", " : "")
+				+ (description != null ? "description=" + description : "") + "]";
 	}
-
 
 	public List<NodeMonitor> monitors() {
 		return monitors;
