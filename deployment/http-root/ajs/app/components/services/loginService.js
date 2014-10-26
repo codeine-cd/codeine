@@ -80,6 +80,18 @@
             });
         }
 
+        function login(user,password) {
+            return CodeineService.login(user,password);
+        }
+
+        function logout() {
+            return CodeineService.logout();
+        }
+
+        function register(user,password) {
+            return CodeineService.register(user,password);
+        }
+
         return {
             gettingSessionInfo : gettingSessionInfo,
             getSessionInfo : getSessionInfo,
@@ -88,7 +100,10 @@
             init : init,
             isInitialized : isInitialized,
             prepareForShutdown : prepareForShutdown,
-            cancelShutdown : cancelShutdown
+            cancelShutdown : cancelShutdown,
+            login : login,
+            logout : logout,
+            register : register
         };
     }
 

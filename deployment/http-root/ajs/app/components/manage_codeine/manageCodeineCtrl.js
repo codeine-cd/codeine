@@ -32,13 +32,15 @@
             CodeineConfigurationService.updateGlobalConfiguration(vm.globalConfigurationForEditing).then(function() {
                 AlertService.addAlert('success','Configuration was saved successfully');
             }, function() {
-                AlertService.addAlert('danger','Failed to save configuration');
+                AlertService.addAlert('danger','Failed to save Configuration');
             });
         };
 
         vm.saveTabs = function() {
             CodeineService.updateViewTabs(vm.tabsForEditing).success(function() {
                 AlertService.addAlert('success','Tabs were saved successfully');
+            }, function() {
+                AlertService.addAlert('danger','Failed to save Tabs');
             });
 
         };
@@ -46,6 +48,8 @@
         vm.savePermissions = function() {
             CodeineService.updatePermissions(vm.permissionsForEditing).success(function() {
                 AlertService.addAlert('success','Permissions were saved successfully');
+            }, function() {
+                AlertService.addAlert('danger','Failed to save Permissions');
             });
 
         };
