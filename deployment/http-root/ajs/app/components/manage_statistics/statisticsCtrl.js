@@ -2,11 +2,14 @@
     'use strict';
 
     //// JavaScript Code ////
-    function statisticsCtrl($scope, statistics, LoginService) {
-        $scope.statsitics  = statistics;
+    function statisticsCtrl(statistics, LoginService) {
+        /*jshint validthis:true */
+        var vm = this;
 
-        $scope.setViewAs = function() {
-            LoginService.setViewAs($scope.newViewAs);
+        vm.statsitics  = statistics;
+
+        vm.setViewAs = function() {
+            LoginService.setViewAs(vm.newViewAs);
         };
     }
 

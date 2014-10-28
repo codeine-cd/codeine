@@ -92,6 +92,7 @@
             when('/codeine/manage/statistics', {
                 templateUrl: '/components/manage_statistics/statistics.html',
                 controller: 'statisticsCtrl',
+                controllerAs: 'vm',
                 pageTitle: 'Statistics',
                 resolve: {
                     statistics: function($q,CodeineService) {
