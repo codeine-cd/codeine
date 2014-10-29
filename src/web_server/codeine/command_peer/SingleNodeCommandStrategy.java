@@ -25,7 +25,8 @@ public class SingleNodeCommandStrategy extends CommandExecutionStrategy {
 	public void execute() {
 		List<NodeWithPeerInfo> nodes = commandData().nodes();
 		if (nodes.size() > 1) {
-			throw new IllegalArgumentException("cannot execute on more than one node");
+			error("ERROR: cannot execute command on more than one node");
+			return;
 		}
 		executeConcurrent(nodes, 1);
 	}

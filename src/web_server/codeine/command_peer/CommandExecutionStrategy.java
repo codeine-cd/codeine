@@ -18,6 +18,7 @@ public abstract class CommandExecutionStrategy {
 	private boolean cancel;
 	private ProjectJson project;
 	private IUserWithPermissions userObject;
+	private String error;
 	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
 			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserWithPermissions userObject) {
@@ -70,5 +71,16 @@ public abstract class CommandExecutionStrategy {
 	public boolean isCancel(){
 		return cancel;
 	}
+
+	public boolean isError() {
+		return error != null;
+	}
+
+	public String error() {
+		return error;
+	}
 	
+	protected void error(String error) {
+		this.error = error;
+	}
 }

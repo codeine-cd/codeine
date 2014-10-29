@@ -124,27 +124,13 @@ public class AllNodesCommandExecuter {
 
 	private void execute() {
 		try {
-			switch (commandData.command_info().command_strategy())
-			{
-			case Single: {
-				strategy = new SingleNodeCommandStrategy(this, commandData, links,project, userObject);
-				break;
-			}
-			case Immediately: {
-				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, userObject);
-				break;
-			}
-			case Progressive: {
-				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, userObject);
-				break;
-			}
-			default:
-				throw new IllegalStateException("couldnt handle strategy " + commandData.command_info().command_strategy());
-			}
-
+			initStrategy();
 			strategy.execute();
 			if (strategy.isCancel()) {
 				writeLine("command was canceled by user");
+			}
+			if (strategy.isError()) {
+				writeLine(strategy.error());
 			}
 			writeFooter();
 			if (null != commandData.address_to_notify()) {
@@ -155,6 +141,26 @@ public class AllNodesCommandExecuter {
 			}
 		} finally {
 			finish();
+		}
+	}
+
+	private void initStrategy() {
+		switch (commandData.command_info().command_strategy())
+		{
+		case Single: {
+			strategy = new SingleNodeCommandStrategy(this, commandData, links,project, userObject);
+			break;
+		}
+		case Immediately: {
+			strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, userObject);
+			break;
+		}
+		case Progressive: {
+			strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, userObject);
+			break;
+		}
+		default:
+			throw new IllegalStateException("couldnt handle strategy " + commandData.command_info().command_strategy());
 		}
 	}
 
