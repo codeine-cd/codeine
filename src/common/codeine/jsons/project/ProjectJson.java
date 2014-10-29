@@ -25,6 +25,7 @@ public class ProjectJson
 	private String version_detection_script;
 	private List<NodeInfo> nodes_info = Lists.newArrayList();
 	private OperatingSystem operating_system = OperatingSystem.Linux;
+	private DiscardOldCommandsJson discard_old_commands = DiscardOldCommandsJson.DISABLED;
 	
 	public ProjectJson(String name) {
 		this.name = name;
