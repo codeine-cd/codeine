@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.exceptions.ConnectToDatabaseException;
 import codeine.utils.exceptions.DatabaseException;
 
@@ -192,7 +193,9 @@ public class DbUtils
 
 	@Override
 	public String toString() {
-		return "DbUtils [hostSelector=" + hostSelector + "]";
+		MysqlConfigurationJson mysql = hostSelector.mysql();
+		String hostPort = mysql == null ? "null" : mysql.hostPort();
+		return "DbUtils [" + hostPort + "]";
 	}
 
 

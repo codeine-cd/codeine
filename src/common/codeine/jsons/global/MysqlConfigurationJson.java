@@ -37,6 +37,10 @@ public class MysqlConfigurationJson {
 		return host;
 	}
 
+	public String hostPort() {
+		return host + ":" + port;
+	}
+
 	public String bin_dir() {
 		return bin_dir;
 	}
