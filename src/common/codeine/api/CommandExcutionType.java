@@ -1,3 +1,3 @@
 package codeine.api;
 
-public enum CommandExcutionType {Immediately, Progressive }
+public enum CommandExcutionType {Single, Immediately, Progressive }
