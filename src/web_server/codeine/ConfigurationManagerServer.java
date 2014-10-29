@@ -1,6 +1,5 @@
 package codeine;
 
-import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.inject.Inject;
@@ -17,8 +16,6 @@ import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
 
-import com.google.common.collect.Lists;
-
 public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 {
 	private static final Logger log = Logger.getLogger(ConfigurationManagerServer.class);
@@ -27,8 +24,8 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 	private ProjectConfigurationInPeerUpdater projectsUpdater;
 	private PathHelper pathHelper;
 	private JsonFileUtils jsonFileUtils;
-	private List<ProjectsConfigurationConnector> statusDatabaseConnectorList = Lists.newArrayList();
 	private ThreadPoolExecutor updateThreadPool = ThreadPoolUtils.newThreadPool(NUM_OF_THREADS);
+	private ProjectConfigurationDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
 	
 	@Inject
 	public ConfigurationManagerServer(JsonFileUtils jsonFileUtils, PathHelper pathHelper, ProjectConfigurationInPeerUpdater projectsUpdater, ProjectConfigurationDatabaseConnectorListProvider statusDatabaseConnectorListProvider)
@@ -36,8 +33,8 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		super(jsonFileUtils, pathHelper);
 		this.jsonFileUtils = jsonFileUtils;
 		this.pathHelper = pathHelper;
-		this.projectsUpdater = projectsUpdater; 
-		statusDatabaseConnectorList = statusDatabaseConnectorListProvider.get();
+		this.projectsUpdater = projectsUpdater;
+		this.statusDatabaseConnectorListProvider = statusDatabaseConnectorListProvider; 
 	}
 
 	public void deleteProject(final ProjectJson projectToDelete) {
@@ -47,7 +44,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		updateThreadPool.execute(new Runnable() {
 			@Override
 			public void run() {
-				for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorList) {
+				for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
 					projectsConfigurationConnector.deleteProject(projectToDelete);
 				}
 			}
@@ -79,7 +76,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 	}
 
 	private void updateProjectInDb(ProjectJson project) {
-		for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorList) {
+		for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
 			try {
 				projectsConfigurationConnector.updateProject(project);
 			} catch (Exception e) {
