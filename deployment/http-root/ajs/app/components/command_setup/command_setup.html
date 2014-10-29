@@ -60,7 +60,7 @@
                             <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive'">
                                 <label for="duration_units" class="col-md-4 control-label">Duration Units <help help-id="durationHelp"></help></label>
                                 <div class="col-md-4" ng-class="{'has-error': config.duration_units.$invalid}">
-                                    <select class="form-control select2" name="duration_units" id="duration_units"  ui-select2="{ allowClear: false}" ng-model="command.duration_units" required>
+                                    <select class="form-control select2" name="duration_units" id="duration_units"  ui-select2="{ allowClear: false}" ng-model="vm.command.duration_units" required>
                                         <option value="Minutes">Minutes</option>
                                         <option value="Hours">Hours</option>
                                         <option value="Days">Days</option>
