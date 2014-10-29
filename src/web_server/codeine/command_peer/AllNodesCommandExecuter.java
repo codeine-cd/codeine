@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import codeine.api.CommandExcutionType;
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
@@ -125,12 +124,24 @@ public class AllNodesCommandExecuter {
 
 	private void execute() {
 		try {
-			if (commandData.command_info().command_strategy() == CommandExcutionType.Immediately){
+			switch (commandData.command_info().command_strategy())
+			{
+			case Single: {
+				strategy = new SingleNodeCommandStrategy(this, commandData, links,project, userObject);
+				break;
+			}
+			case Immediately: {
 				strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, userObject);
+				break;
 			}
-			else { 
+			case Progressive: {
 				strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, userObject);
+				break;
 			}
+			default:
+				throw new IllegalStateException("couldnt handle strategy " + commandData.command_info().command_strategy());
+			}
+
 			strategy.execute();
 			if (strategy.isCancel()) {
 				writeLine("command was canceled by user");

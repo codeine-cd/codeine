@@ -7,7 +7,8 @@
     //// Angular Code ////
     angular.module('codeine')
         .constant('HelpConstants', {
-            "howToRunHelp" : "Select a command execution strategy.<br/><br/><strong>'Immediately'</strong> - run command on nodes without delay.<br/><br/>" +
+            "howToRunHelp" : "Select a command execution strategy.<br/><br/><strong>'Single'</strong> - allows command only on a single node at a time.<br/><br/>" +
+                "<strong>'Immediately'</strong> - run command on nodes without delay.<br/><br/>" +
                 "<strong>'Progressive'</strong> - run command on nodes gradually at configured rate.<br/><br/>",
             "monitorHelp" : "Select which nodes to show.<br/><br/><strong>'Any Alert'</strong> - show nodes with alerts (no matter which monitor).<br/><br/>" +
                 "<strong>'All Nodes'</strong> - also show nodes without alerts.<br/><br/>" +

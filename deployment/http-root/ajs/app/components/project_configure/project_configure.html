@@ -295,6 +295,7 @@
                         <label class="col-md-3 control-label" for="command_info_{{$index}}command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
                         <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.command_strategy.$invalid}">
                             <select class="form-control select2" name="command_strategy" id="command_info_{{$index}}command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
+                                <option value="Single">Single</option>
                                 <option value="Immediately">Immediately</option>
                                 <option value="Progressive">Progressive</option>
                             </select>
