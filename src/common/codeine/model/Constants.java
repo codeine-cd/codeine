@@ -23,8 +23,8 @@ public class Constants
 	public static final String INSTALLATION = ".";
 	public static final String MONITORS_DIR = "/monitors";
 	public static final String CONF_DIR = "/conf";
-	public static final String PLUGINS_DIR = "/plugins";
-	public static final String PLUGINS_OUTPUT_DIR = "/plugins_output";
+	public static final String COMMANDS_DIR = "/plugins";
+	public static final String COMMANDS_OUTPUT_DIR = "/plugins_output";
 	public static final String ROOT_CONTEXT = "/";
 	public static final String ANGULAR_CONTEXT = "/codeine";
 	public static final String API_CONTEXT = "/api";

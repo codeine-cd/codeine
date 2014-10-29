@@ -17,6 +17,7 @@ import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
+import codeine.plugins.DiscardOldCommandsPlugin;
 import codeine.statistics.IMonitorStatistics;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
@@ -38,6 +39,7 @@ public class AllNodesCommandExecuter {
 	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
 	@Inject private IMonitorStatistics monitorsStatistics;
+	@Inject private DiscardOldCommandsPlugin discardOldCommandsPlugin;
 	
 	private int total;
 	private int count;
@@ -56,6 +58,7 @@ public class AllNodesCommandExecuter {
 	public long executeOnAllNodes(IUserWithPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
 		this.project = project;
 		this.userObject = userObject;
+		discardOldCommandsPlugin.queueForDelete(project);
 		try {
 			this.commandData = commandData;
 			this.total = commandData.nodes().size();
@@ -191,7 +194,7 @@ public class AllNodesCommandExecuter {
 
 	private long getNewDirName() {
 		long i = 0;
-		String dir = pathHelper.getPluginsOutputDir(commandData.command_info().project_name());
+		String dir = pathHelper.getAllCommandsInProjectOutputDir(commandData.command_info().project_name());
 		List<String> filesInDir = FilesUtils.getFilesInDir(dir);
 		for (String dir1 : filesInDir) {
 			try {

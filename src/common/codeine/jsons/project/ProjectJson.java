@@ -131,6 +131,9 @@ public class ProjectJson
 	public List<UserProjectPermissions> permissions() {
 		return permissions;
 	}
+	public DiscardOldCommandsJson discard_old_commands() {
+		return discard_old_commands;
+	}
 	public OperatingSystem operating_system() {
 		return operating_system == null ? OperatingSystem.Linux : operating_system;
 	}

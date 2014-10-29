@@ -18,6 +18,9 @@
                 "<strong>'Limited Number'</strong> - the command will be executed on this number of nodes from all selected versions (total).<br/><br/>",
             "ratioHelp" : "The rate for command execution.<br/><br/><strong>'Linear'</strong> - Spread nodes evenly in the specified time period.<br/><br/>" +
                 "<strong>'Exponential'</strong> - execute on one node first, then increase number of nodes exponentially (1, 2, 4, ...).<br/><br/>",
+            "discardOldCommandsEnabledHelp" : "Controls the disk consumption of Codeine by managing how long you'd like to keep records of the commands (such as console output)",
+            "discardMaxCommandsHelp" : "You can have Codeine make sure that it only maintains up to N command records. If a new command is started, the oldest record will be simply removed.",
+            "discardMaxDaysHelp" : "You can have Codeine delete a record if it reaches a certain age (for example, 7 days old).",
             "command_patameter_description_Help" : "A description that will be displayed as a tooltip to the user executing the command.",
             "command_patameter_values_Help" : "Comma-delimited list of parameters for user selection. For example: <strong>1,2,3</strong>.",
             "command_patameter_name_Help" : "The name of the parameter, will also be used as environment variable in the executing command.",

@@ -17,16 +17,16 @@ public class PathHelper {
 		return getProjectsDir() + File.separator + projectName + Constants.MONITORS_DIR;
 	}
 
-	public String getPluginsDir(String projectName) {
-		return getProjectsDir() + File.separator + projectName + Constants.PLUGINS_DIR;
+	public String getCommandsDir(String projectName) {
+		return getProjectsDir() + File.separator + projectName + Constants.COMMANDS_DIR;
 	}
 	
-	public String getPluginsOutputDir(String projectName) {
-		return getProjectsDir() + File.separator + projectName + Constants.PLUGINS_OUTPUT_DIR;
+	public String getAllCommandsInProjectOutputDir(String projectName) {
+		return getProjectsDir() + File.separator + projectName + Constants.COMMANDS_OUTPUT_DIR;
 	}
 
 	public String getCommandOutputDir(String projectName, String command) {
-		return getPluginsOutputDir(projectName) + File.separator + command;
+		return getAllCommandsInProjectOutputDir(projectName) + File.separator + command;
 	}
 	
 	public String getMonitorOutputDir(String projectName) {
@@ -89,13 +89,13 @@ public class PathHelper {
 		if (files.isEmpty()) {
 			log.debug("No files found to execute under " + dir);
 		} else {
-			log.debug("Found monitors: " + files);
+			log.debug("Found files: " + files);
 		}
 		return files;
 	}
 
-	public List<File> getPlugins(String project) {
-		return getFilesForDir(getPluginsDir(project));
+	public List<File> getCommands(String project) {
+		return getFilesForDir(getCommandsDir(project));
 	}
 
 	public String getProjectDir(String projectName) {

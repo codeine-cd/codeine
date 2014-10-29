@@ -18,6 +18,7 @@ public class CommandExecutionStatusInfo {
 	private List<NodeWithPeerInfo> fail_list = Lists.newArrayList();
 	private List<NodeWithPeerInfo> success_list = Lists.newArrayList();
 	private long start_time;
+	private Long finish_time;
 	private String user = "Guest";
 	private long id;
 	private boolean finished;
@@ -26,7 +27,6 @@ public class CommandExecutionStatusInfo {
 	public CommandExecutionStatusInfo() {
 		super();
 	}
-
 
 	public CommandExecutionStatusInfo(String user, String command, List<CommandParameterInfo> params, String projectName, List<NodeWithPeerInfo> nodes_list, long id) {
 		this.command = command;
@@ -38,16 +38,13 @@ public class CommandExecutionStatusInfo {
 		this.user = StringUtils.isEmpty(user) ? "Guest" : user; 
 	}
 
-
 	public void addFailedNode(NodeWithPeerInfo node) {
 		fail_list.add(node);
 	}
 
-
 	public void addSuccessNode(NodeWithPeerInfo node) {
 		success_list.add(node);
 	}
-
 
 	public List<NodeWithPeerInfo> fail_list() {
 		return fail_list;
@@ -58,7 +55,6 @@ public class CommandExecutionStatusInfo {
 	public List<NodeWithPeerInfo> nodes_list() {
 		return nodes_list;
 	}
-
 
 	public String user() {
 		return user;
@@ -80,28 +76,36 @@ public class CommandExecutionStatusInfo {
 		return finished;
 	}
 	
+	public void finish_time(long finish_time) {
+		this.finish_time = finish_time;
+	}
+	
+	public void start_time(long start_time) {
+		this.start_time = start_time;
+	}
+	
+	public long finishTimeForRemoval() {
+		return finish_time == null ? start_time : finish_time;
+	}
+	
 	public void finish() {
 		finished = true;
+		finish_time = System.currentTimeMillis();
 	}
-
-
-	@Override
-	public String toString() {
-		return "CommandDataJson [command=" + command + ", params=" + params + ", project_name=" + project_name
-				+ ", nodes_list=" + nodes_list + ", fail_list=" + fail_list + ", success_list=" + success_list
-				+ ", start_time=" + start_time + ", id=" + id + ", finished=" + finished + "]";
-	}
-
 
 	public String project_name() {
 		return project_name;
 	}
-
 
 	public void output(String output) {
 		this.output = output;
 		
 	}
 
-	
+	@Override
+	public String toString() {
+		return "CommandExecutionStatusInfo [project_name=" + project_name + ", command=" + command + ", id=" + id
+				+ ", finished=" + finished + "]";
+	}
+
 }

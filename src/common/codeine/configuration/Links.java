@@ -54,7 +54,7 @@ public class Links {
 	}
 
 	public String getPluginOutLink(String projectName, String file) {
-		return Constants.PROJECT_FILES_CONTEXT + "/" + HttpUtils.encodeURL(projectName) + Constants.PLUGINS_OUTPUT_DIR + "/" + file;
+		return Constants.PROJECT_FILES_CONTEXT + "/" + HttpUtils.encodeURL(projectName) + Constants.COMMANDS_OUTPUT_DIR + "/" + file;
 	}
 
 	public String getWebServerProjectAlerts(ProjectJson project) {

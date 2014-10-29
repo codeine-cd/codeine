@@ -48,7 +48,7 @@ public class NodesCommandExecuterProvider {
 
 	public List<CommandStatusJson> getAllCommands(String projectName, String nodeName) {
 		List<CommandStatusJson> $ = getActive(projectName, nodeName);
-		String parentDir = pathHelper.getPluginsOutputDir(projectName);
+		String parentDir = pathHelper.getAllCommandsInProjectOutputDir(projectName);
 		List<String> filesInDir = FilesUtils.getFilesInDir(parentDir);
 		for (String dir : filesInDir) {
 			if (contains($, dir)){

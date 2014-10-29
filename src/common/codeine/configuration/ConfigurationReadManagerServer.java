@@ -58,7 +58,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 					}
 					ProjectJson projectJson = jsonFileUtils.getConfFromFile(file2, ProjectJson.class);
 					projects1.put(projectJson.name(), projectJson);
-					FilesUtils.mkdirs(pathHelper.getPluginsOutputDir(projectJson.name()));
+					FilesUtils.mkdirs(pathHelper.getAllCommandsInProjectOutputDir(projectJson.name()));
 				} catch (Exception e) {
 					log.error("failed to configure project " + file, e);
 				}

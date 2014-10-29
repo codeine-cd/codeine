@@ -91,7 +91,7 @@ public class CommandNodeServlet extends AbstractServlet
 			}
 			//		writer.println("INFO: Executing on node " + commandInfo2.node_alias());
 
-			String dir = pathHelper.getPluginsDir(commandInfo.project_name());
+			String dir = pathHelper.getCommandsDir(commandInfo.project_name());
 			String script_content = commandInfo.script_content();
 			String file = dir + File.separator + commandInfo.command_name();
 			ProjectJson project = getProject(commandInfo.project_name());
@@ -224,7 +224,7 @@ public class CommandNodeServlet extends AbstractServlet
 		writer.println("INFO: CommandNodeServlet - executing command " + command + " on host " + InetUtils.getLocalHost().getHostName() +" in project " + projectName + " with args " + userArgs);
 		CommandInfo commandJson = getCommand(command, projectName);
 		
-		String dir = pathHelper.getPluginsDir(projectName);
+		String dir = pathHelper.getCommandsDir(projectName);
 		String file = dir + "/" + command;
 		if (!FilesUtils.exists(file)){
 			log.info("command not found " + file);
