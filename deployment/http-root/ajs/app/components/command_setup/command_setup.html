@@ -119,7 +119,7 @@
                                 <div ng-if="parameter.type === 'Selection'">
                                     <label for="param_selection_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
                                     <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid}">
-                                        <select class="form-control select2" name="param_value" id="param_selection_{{$index}}" ui-select2="{allowClear: false}" ng-model="vm.parameter.value" required>
+                                        <select class="form-control select2" name="param_value" id="param_selection_{{$index}}" ui-select2="{allowClear: false}" ng-model="parameter.value" required>
                                             <option value=""></option>
                                             <option ng-repeat="opt in parameter.allowed_values" value="{{opt}}">{{opt}}</option>
                                         </select>
