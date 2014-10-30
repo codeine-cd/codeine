@@ -120,9 +120,9 @@ public class CommandNodeServlet extends AbstractServlet
 				cmd.add(encodeIfNeeded(credentials, credentials));
 			}
 			if (windows_peer) {
-				//cmd.add(encodeIfNeeded("cmd", credentials));
-				//cmd.add(encodeIfNeeded("/c", credentials));
-				//cmd.add(encodeIfNeeded("start", credentials));
+				cmd.add(encodeIfNeeded("cmd", credentials));
+				cmd.add(encodeIfNeeded("/c", credentials));
+				cmd.add(encodeIfNeeded("call", credentials));
 			}
 			else {
 				cmd.add(encodeIfNeeded("/bin/sh", credentials));
@@ -130,9 +130,9 @@ public class CommandNodeServlet extends AbstractServlet
 			}
 			cmd.add(encodeIfNeeded(file, credentials));
 			if (windows_peer) {
-				//cmdForOutput.add("cmd");
-				//cmdForOutput.add("/c");
-				//cmdForOutput.add("start");
+				cmdForOutput.add("cmd");
+				cmdForOutput.add("/c");
+				cmdForOutput.add("call");
 			}
 			else {
 				cmdForOutput.add("/bin/sh");

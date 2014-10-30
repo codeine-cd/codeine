@@ -83,7 +83,7 @@ public class ShellScriptWithOutput {
 			cmd = Lists.newArrayList("/bin/sh", "-xe", fileName);
 			break;
 		case Windows:
-			cmd = Lists.newArrayList(fileName);
+			cmd = Lists.newArrayList("cmd", "/c", "call", fileName);
 			break;
 		default:
 			throw new RuntimeException("missing implementation for " + operatingSystem);

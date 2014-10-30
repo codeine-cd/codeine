@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -286,6 +286,9 @@ public class RunMonitors implements Task {
 		}
 		List<String> cmd = new ArrayList<String>();
 		if (project().operating_system() == OperatingSystem.Windows){
+			cmd.add("cmd");
+			cmd.add("/c");
+			cmd.add("call");
 			cmd.add(fileName);
 		}
 		else if (hasCredentials) {
