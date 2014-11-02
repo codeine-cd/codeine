@@ -2,6 +2,7 @@ package codeine.servlets;
 
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
+import codeine.servlets.command_backup.CommandNodeServletBackup;
 
 public class CodeinePeerServletModule  extends CodeineServletModule
 {
@@ -10,7 +11,7 @@ public class CodeinePeerServletModule  extends CodeineServletModule
 	protected void configureServlets()
 	{
 		serveMe(CommandNodeServlet.class, Constants.COMMAND_NODE_CONTEXT);
-		serveMe(CommandNodeBackupServlet.class, Constants.COMMAND_NODE_CONTEXT + "-backup");
+		serveMe(CommandNodeServletBackup.class, Constants.COMMAND_NODE_CONTEXT + "-backup");
 		serveMe(ReloadConfigurationServlet.class, Constants.RELOAD_CONFIGURATION_CONTEXT);
 		serveMe(ProjectStatusServlet.class, Constants.PEER_PROJECT_STATUS_CONTEXT);
 	}

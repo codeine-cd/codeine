@@ -1,4 +1,4 @@
-package codeine.servlets;
+package codeine.servlets.command_backup;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -29,19 +29,18 @@ import codeine.model.Constants;
 import codeine.model.ExitStatus;
 import codeine.model.Result;
 import codeine.servlet.AbstractServlet;
+import codeine.servlets.command_backup.ProcessExecuterBackup.ProcessExecuterBuilderBackup;
 import codeine.utils.StringUtils;
 import codeine.utils.os.OperatingSystem;
-import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
-import codeine.utils.os_process.ShellScript;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class CommandNodeBackupServlet extends AbstractServlet
+public class CommandNodeServletBackup extends AbstractServlet
 {
-	private static final Logger log = Logger.getLogger(CommandNodeBackupServlet.class);
+	private static final Logger log = Logger.getLogger(CommandNodeServletBackup.class);
 	private static final long serialVersionUID = 1L;
 	@Inject private PathHelper pathHelper;
 	@Inject private IConfigurationManager configurationManager;
@@ -71,7 +70,7 @@ public class CommandNodeBackupServlet extends AbstractServlet
 		executeInternal(request, res);
 	}
 	private void executeInternal(HttpServletRequest request, HttpServletResponse res) {
-		ShellScript cmdScript = null;
+		ShellScriptBackup cmdScript = null;
 		snoozeKeeper.snoozeAll();
 		final PrintWriter writer = getWriter(res);
 		try {
@@ -96,7 +95,7 @@ public class CommandNodeBackupServlet extends AbstractServlet
 			boolean windows_peer = project.operating_system() == OperatingSystem.Windows;
 			if (null != script_content){
 				//new
-				cmdScript = new ShellScript(file, script_content, windows_peer, commandInfo2.tmp_dir());
+				cmdScript = new ShellScriptBackup(file, script_content, windows_peer, commandInfo2.tmp_dir());
 				file = cmdScript.create();
 			}
 			else {
@@ -148,7 +147,7 @@ public class CommandNodeBackupServlet extends AbstractServlet
 			env.put(Constants.EXECUTION_ENV_NODE_NAME, commandInfo2.node_name());
 			env.put(Constants.EXECUTION_ENV_NODE_ALIAS, commandInfo2.node_alias());
 			env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(commandInfo.project_name(), commandInfo2.node_name()), ";"));
-			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env).build().execute();
+			Result result = new ProcessExecuterBuilderBackup(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
 			writer.flush();
 			log.info("command exit status is " + result.exit());
