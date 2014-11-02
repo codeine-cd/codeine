@@ -73,21 +73,18 @@ public class DbUtils
 		return stmt;
 	}
 
-	public void executeQueryAsRoot(String sql, Function<ResultSet, Void> function, String... args) {
-		executeQuery(sql, function, true, args);
+	public void executeQueryAsRoot(String sql, Function<ResultSet, Void> function) {
+		executeQuery(sql, function, true);
 	}
-	public void executeQuery(String sql, Function<ResultSet, Void> function, String... args){
-		executeQuery(sql, function, false, args);
+	public void executeQuery(String sql, Function<ResultSet, Void> function){
+		executeQuery(sql, function, false);
 	}
-	private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root, String... args)
+	private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root)
 	{
 		ResultSet rs = null;
 		Connection connection = root ? getConnectionForRoot() : getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-			for (int i = 1; i <= args.length; i++) {
-				preparedStatement.setString(i, args[i-1]);
-			}
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				function.apply(rs);
@@ -107,15 +104,12 @@ public class DbUtils
 			return new DatabaseException(sql, "url could not be resolved", e, args);
 		}
 	}
-	public void executeUpdateableQuery(String sql, Function<ResultSet, Void> function, String... args)
+	public void executeUpdateableQuery(String sql, Function<ResultSet, Void> function)
 	{
 		ResultSet rs = null;
 		Connection connection = getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-			for (int i = 1; i <= args.length; i++) {
-				preparedStatement.setString(i, args[i-1]);
-			}
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				function.apply(rs);
