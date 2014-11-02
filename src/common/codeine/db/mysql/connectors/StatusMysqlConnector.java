@@ -53,15 +53,15 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			return;
 		}
 		String colsDefinition = "peer_key VARCHAR(150) NOT NULL PRIMARY KEY, data text, update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, status VARCHAR(50) DEFAULT 'On' NOT NULL";
-		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
+		dbUtils.executeUpdate("create table if not exists ? (" + colsDefinition + ")", tableName);
 	}
 
 	@Override
 	public void putReplaceStatus(PeerStatusJsonV2 p) {
 		String json = gson.toJson(p);
 		log.info("will update status to " + dbUtils.server() + "\n" + json);
-		dbUtils.executeUpdate("DELETE FROM "+tableName+" WHERE peer_key = '" + p.peer_old_key() + "'");
-		dbUtils.executeUpdate("REPLACE INTO "+tableName+" (peer_key, data, update_time ) VALUES (?, ?, CURRENT_TIMESTAMP())", p.peer_key(), json);
+		dbUtils.executeUpdate("DELETE FROM ? WHERE peer_key = '" + p.peer_old_key() + "'", tableName);
+		dbUtils.executeUpdate("REPLACE INTO ? (peer_key, data, update_time ) VALUES (?, ?, CURRENT_TIMESTAMP())", tableName, p.peer_key(), json);
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			}
 
 		};
-		dbUtils.executeQuery("select * from " + tableName, function);
+		dbUtils.executeQuery("select * from ?", function, tableName);
 		return $;
 	}
 	
@@ -138,11 +138,11 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 		}
 		for (String key : idToRemove) {
 			log.info("deleting " + key);
-			dbUtils.executeUpdate("DELETE from " + tableName + " WHERE peer_key = ?", key);
+			dbUtils.executeUpdate("DELETE from ? WHERE peer_key = ?", tableName, key);
 		}
 		for (String key : idToDisc) {
 			log.info("discing " + key);
-			dbUtils.executeUpdate("UPDATE " + tableName + " SET status = 'Disc' WHERE peer_key = ?", key);
+			dbUtils.executeUpdate("UPDATE ? SET status = 'Disc' WHERE peer_key = ?", tableName, key);
 		}
 	}
 

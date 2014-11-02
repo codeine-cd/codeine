@@ -47,7 +47,7 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 			return;
 		}
 		String colsDefinition = "project_name CHAR(100) NOT NULL PRIMARY KEY, data text";
-		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
+		dbUtils.executeUpdate("create table if not exists ? (" + colsDefinition + ")", tableName);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 				return null;
 			}
 		};
-		dbUtils.executeQuery("select * from " + tableName, function);
+		dbUtils.executeQuery("select * from ?", function, tableName);
 		return $;
 	}
 	
@@ -80,7 +80,7 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 			log.info("read only mode");
 			return;
 		}
-		int executeUpdate = dbUtils.executeUpdate("REPLACE INTO "+tableName+" (project_name, data) VALUES (?, ?)", project.name(), gson.toJson(project));
+		int executeUpdate = dbUtils.executeUpdate("REPLACE INTO ? (project_name, data) VALUES (?, ?)", tableName, project.name(), gson.toJson(project));
 		if (executeUpdate == 0) {
 			throw new RuntimeException("failed to update project " + project.name());
 		}
@@ -93,7 +93,7 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 			log.info("read only mode");
 			return;
 		}
-		int deleted = dbUtils.executeUpdate("DELETE FROM "+tableName+" WHERE project_name = '" + project.name() + "'");
+		int deleted = dbUtils.executeUpdate("DELETE FROM ? WHERE project_name = '" + project.name() + "'", tableName);
 		if (deleted == 0) {
 			throw new RuntimeException("failed to delete project " + project.name());
 		}
