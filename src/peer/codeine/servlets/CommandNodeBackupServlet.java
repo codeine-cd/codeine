@@ -166,15 +166,6 @@ public class CommandNodeBackupServlet extends AbstractServlet
 			}
 		}
 	}
-	private String getParameter(HttpServletRequest request, String parameter) {
-		StringBuilder $ = new StringBuilder();
-		String parameterValue = getParameter(request, parameter);
-		if (null == parameterValue || parameterValue.contains("ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
-			return null;
-		}
-		$.append(parameterValue);
-		return $.toString();
-	}
 	private void validateKey(String decrypt) {
 		List<String> l = Splitter.on("#").splitToList(decrypt);
 		if (l.size() != 2){
