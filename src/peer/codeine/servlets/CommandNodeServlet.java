@@ -204,11 +204,11 @@ public class CommandNodeServlet extends AbstractServlet
 	public void myGet(HttpServletRequest req, HttpServletResponse res)
 	{
 		log.info("CommandNodeServlet doGet");
-		String projectName = req.getParameter("project");
+		String projectName = getParameter(req, "project");
 		final PrintWriter writer = getWriter(res);
 		writer.println("CommandNodeServlet THE OLD DOGET!");
-		String command = req.getParameter("command");
-		String userArgs = req.getParameter("version");
+		String command = getParameter(req, "command");
+		String userArgs = getParameter(req, "version");
 		writer.println("projectName = " + projectName);
 		writer.println("command = " + command);
 		writer.println("user_args = " + userArgs);

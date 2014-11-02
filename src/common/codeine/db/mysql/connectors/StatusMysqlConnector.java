@@ -131,7 +131,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			}
 
 		};
-		dbUtils.executeUpdateableQuery("select *,TIMESTAMPDIFF(MINUTE,update_time,CURRENT_TIMESTAMP()) as TIME_DIFF from " + tableName, function);
+		dbUtils.executeUpdateableQuery("select *,TIMESTAMPDIFF(MINUTE,update_time,CURRENT_TIMESTAMP()) as TIME_DIFF from ?", function, tableName);
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 			return;
