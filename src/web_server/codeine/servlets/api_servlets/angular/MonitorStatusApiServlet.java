@@ -32,9 +32,9 @@ public class MonitorStatusApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String nodeName = request.getParameter(Constants.UrlParameters.NODE);
-		String monitorName = request.getParameter(Constants.UrlParameters.MONITOR);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
+		String nodeName = getParameter(request, Constants.UrlParameters.NODE);
+		String monitorName = getParameter(request, Constants.UrlParameters.MONITOR);
 		NodeWithMonitorsInfo node = nodesGetter.getNodeByNameOrNull(projectName, nodeName);
 		String peerMonitorResultLink = links.getPeerMonitorResultLink(node.peer_address(), projectName, monitorName, nodeName);
 		log.info("accessing url " + peerMonitorResultLink);

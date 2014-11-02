@@ -37,7 +37,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String query = request.getParameter("projectSearch");
+		String query = getParameter(request, "projectSearch");
 		List<ProjectJson> configuredProjects = filter(configurationManager.getConfiguredProjects(), query);
 		
 		Comparator<ProjectJson> c = new Comparator<ProjectJson>() {

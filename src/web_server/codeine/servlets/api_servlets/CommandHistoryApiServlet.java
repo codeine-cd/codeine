@@ -24,8 +24,8 @@ public class CommandHistoryApiServlet extends AbstractApiServlet {
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		setNoCache(response);
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String nodeName = request.getParameter(Constants.UrlParameters.NODE);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
+		String nodeName = getParameter(request, Constants.UrlParameters.NODE);
 		List<CommandStatusJson> allCommands = nodesCommandExecuterProvider.getAllCommands(projectName, nodeName);
 		List<CommandStatusJson> allCommandsWithPermissions = Lists.newArrayList();
 		for (CommandStatusJson commandStatusJson : allCommands) {

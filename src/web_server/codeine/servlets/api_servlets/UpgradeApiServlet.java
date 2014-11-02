@@ -35,7 +35,7 @@ public class UpgradeApiServlet extends AbstractApiServlet {
 	}
 
 	private String getVersion(HttpServletRequest request) {
-		String version = request.getParameter(UrlParameters.VERSION_NAME);
+		String version = getParameter(request, UrlParameters.VERSION_NAME);
 		if (version.contains(" ") || version.contains(";")) {
 			throw new IllegalArgumentException("bad version " + version);
 		}

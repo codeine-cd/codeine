@@ -21,8 +21,8 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String commandName = request.getParameter(Constants.UrlParameters.COMMAND_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
+		String commandName = getParameter(request, Constants.UrlParameters.COMMAND_NAME);
 		String file = pathHelper.getCommandOutputInfoFile(projectName, commandName);
 		String outputfile = pathHelper.getCommandOutputFile(projectName, commandName);
 		CommandExecutionStatusInfo commandInfo = new JsonFileUtils(gson()).getConfFromFile(file, CommandExecutionStatusInfo.class);

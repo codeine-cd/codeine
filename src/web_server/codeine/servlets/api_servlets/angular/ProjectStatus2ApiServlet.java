@@ -43,7 +43,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName,Constants.ALL_VERSION);
 		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
 		ProjectStatusInfo theNewObject = create(projectJson, nodes, request);

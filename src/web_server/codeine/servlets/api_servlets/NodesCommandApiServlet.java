@@ -37,7 +37,7 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	}
 	
 	private String getProjectName(HttpServletRequest request) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		if (!StringUtils.isEmpty(projectName)) {
 			return projectName;
 		}
@@ -47,7 +47,7 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	}
 
 	private String getData(HttpServletRequest request) {
-		String data = request.getParameter(Constants.UrlParameters.DATA_NAME);
+		String data = getParameter(request, Constants.UrlParameters.DATA_NAME);
 		if (StringUtils.isEmpty(data)) {
 			data = readBody(request);
 		}
@@ -79,8 +79,8 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 
 	@Override
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
-		String project = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
-		String id = request.getParameter(Constants.UrlParameters.COMMAND_ID);
+		String project = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
+		String id = getParameter(request, Constants.UrlParameters.COMMAND_ID);
 		allNodesCommandExecuterProvider.cancel(project, Long.valueOf(id));
 	}
 

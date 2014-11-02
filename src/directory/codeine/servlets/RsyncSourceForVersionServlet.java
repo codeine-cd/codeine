@@ -24,8 +24,8 @@ public class RsyncSourceForVersionServlet extends AbstractServlet{
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String version = request.getParameter("version");
-		String hostname = request.getParameter("peer");
+		String version = getParameter(request, "version");
+		String hostname = getParameter(request, "peer");
 		log.info("get with params version " + version + " peer " + hostname);
 		String rsyncSource = rsyncSourceGetter.getForVersion(version, hostname);
 		log.info("rsync source is " + rsyncSource);

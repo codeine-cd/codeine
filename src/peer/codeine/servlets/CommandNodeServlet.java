@@ -55,7 +55,7 @@ public class CommandNodeServlet extends AbstractServlet
 	@Override
 	public void myPost(HttpServletRequest request, HttpServletResponse res)	{
 		log.info("start handle command");
-		if (Boolean.parseBoolean(request.getParameter(Constants.UrlParameters.FORCE)) || experimentalConfJsonStore.get().allow_concurrent_commands_in_peer()) {
+		if (Boolean.parseBoolean(getParameter(request, Constants.UrlParameters.FORCE)) || experimentalConfJsonStore.get().allow_concurrent_commands_in_peer()) {
 			executeCommandNotSync(request, res);
 		}
 		else {
@@ -80,7 +80,7 @@ public class CommandNodeServlet extends AbstractServlet
 			String parameter = Constants.UrlParameters.DATA_NAME;
 			String data = getParameter(request, parameter);
 			CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
-			String data2 = request.getParameter(Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
+			String data2 = getParameter(request, Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
 			CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
 			if (null != commandInfo2.key()) {
 				String decrypt = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_SECRET_KEY, commandInfo2.key());
@@ -170,15 +170,6 @@ public class CommandNodeServlet extends AbstractServlet
 				cmdScript.delete();
 			}
 		}
-	}
-	private String getParameter(HttpServletRequest request, String parameter) {
-		StringBuilder $ = new StringBuilder();
-		String parameterValue = request.getParameter(parameter);
-		if (null == parameterValue || parameterValue.contains("ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
-			return null;
-		}
-		$.append(parameterValue);
-		return $.toString();
 	}
 	private void validateKey(String decrypt) {
 		List<String> l = Splitter.on("#").splitToList(decrypt);

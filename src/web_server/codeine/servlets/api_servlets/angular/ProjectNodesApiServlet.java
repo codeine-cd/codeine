@@ -27,7 +27,7 @@ public class ProjectNodesApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName,Constants.ALL_VERSION);
 		List<NodeWithMonitorsInfoApi> $ = Lists.newArrayList();
 		for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {

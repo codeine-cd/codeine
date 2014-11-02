@@ -192,7 +192,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 	
 	protected final boolean canReadProject(HttpServletRequest request) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		return getUser(request).canRead(projectName);
 	}
 
@@ -200,11 +200,11 @@ public abstract class AbstractServlet extends HttpServlet{
 		return permissionsManager.user(request);
 	}
 	protected final boolean canCommandProject(HttpServletRequest request) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		return getUser(request).canCommand(projectName);
 	}
 	protected final boolean canConfigureProject(HttpServletRequest request) {
-		String projectName = request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		return getUser(request).canConfigure(projectName);
 	}
 	protected final boolean isAdministrator(HttpServletRequest request) {
@@ -212,12 +212,25 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 	
 	protected final String projectName(HttpServletRequest request) {
-		return request.getParameter(Constants.UrlParameters.PROJECT_NAME);
+		return getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 	}
 	
 	public static final void setNoCache(HttpServletResponse response) {
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 		response.setDateHeader("Expires", 0); // Proxies.
+	}
+	
+	protected String getParameter(HttpServletRequest request, String parameter) {
+		StringBuilder $ = new StringBuilder();
+		if (null == parameter || parameter.contains("111ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
+			return null;
+		}
+		String parameterValue = request.getParameter(parameter);
+		if (null == parameterValue || parameterValue.contains("22ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
+			return null;
+		}
+		$.append(parameterValue);
+		return $.toString();
 	}
 }
