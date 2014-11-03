@@ -61,10 +61,12 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 		ScehudleCommandExecutionInfo commandData = gson().fromJson(data, ScehudleCommandExecutionInfo.class);
 		String projectName = commandData.command_info().project_name();
 		ProjectJson project = configurationManager.getProjectForName(projectName);
-		CommandInfo configuredCommand = project.commandForName(commandData.command_info().command_name());
+		String command_name = commandData.command_info().command_name();
+		CommandInfo configuredCommand = project.commandForName(command_name);
 		commandData.command_info().overrideByConfiguration(configuredCommand);
 		updateNodes(commandData, projectName);
 		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData, project);
+		manageStatisticsCollector().commandExecuted(projectName, command_name, String.valueOf(dir));
 		writeResponseJson(response, dir);
 	}
 	

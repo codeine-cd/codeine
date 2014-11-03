@@ -51,7 +51,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 
 	private void beforeRequest(HttpServletRequest request, HttpServletResponse response) {
-		manageStatisticsCollector.userAccess(getUser(request), request.getPathInfo());
+		manageStatisticsCollector().userAccess(getUser(request), request.getPathInfo());
 	}
 
 	private UnAuthorizedException newUnauthrizedException(HttpServletRequest request) {
@@ -232,5 +232,9 @@ public abstract class AbstractServlet extends HttpServlet{
 		}
 		$.append(parameterValue);
 		return $.toString();
+	}
+
+	public ManageStatisticsCollector manageStatisticsCollector() {
+		return manageStatisticsCollector;
 	}
 }

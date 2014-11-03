@@ -53,10 +53,6 @@ public class Links {
 		return getWebServerLink() + Constants.PROJECTS_LIST_CONTEXT;
 	}
 
-	public String getPluginOutLink(String projectName, String file) {
-		return Constants.PROJECT_FILES_CONTEXT + "/" + HttpUtils.encodeURL(projectName) + Constants.COMMANDS_OUTPUT_DIR + "/" + file;
-	}
-
 	public String getWebServerProjectAlerts(ProjectJson project) {
 		return getWebServerLink() + "/codeine/project/" + HttpUtils.encodeURL(project.name()) + "/status";
 	}

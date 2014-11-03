@@ -18,10 +18,10 @@ public class ManageStatisticsCollector {
 
 	Cache<String, StringWithCount> usersInfo = CacheBuilder.newBuilder().maximumSize(200).build();
 	Cache<String, String> activeUsersInfo = CacheBuilder.newBuilder().maximumSize(200).expireAfterWrite(20, TimeUnit.MINUTES).build();
-	Cache<String, StringWithCount> urlsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
+	Cache<String, StringsCommandPair> lastCommandsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
 	
 	public synchronized ManageStatisticsInfo getCollected() {
-		List<StringWithCount> urls = Lists.newArrayList(urlsInfo.asMap().values());
+		List<StringsCommandPair> lastCommands = Lists.newArrayList(lastCommandsInfo.asMap().values());
 		List<StringWithCount> users = Lists.newArrayList(usersInfo.asMap().values());
 		Comparator<StringWithCount> c = new Comparator<ManageStatisticsCollector.StringWithCount>() {
 			@Override
@@ -29,18 +29,19 @@ public class ManageStatisticsCollector {
 				return o1.hitCount == o2.hitCount ? o1.value.compareTo(o2.value) : Integer.compare(o2.hitCount, o1.hitCount);
 			}
 		};
-		Collections.sort(urls, c);
 		Collections.sort(users, c);
-		return new ManageStatisticsInfo(users, urls, activeUsersInfo.asMap().keySet());
+		return new ManageStatisticsInfo(users, lastCommands, activeUsersInfo.asMap().keySet());
 	}
 	public synchronized void userAccess(IUserWithPermissions user, final String pathInfo) {
 		activeUsersInfo.put(user.user().username(), user.user().username());
 		try {
-			urlsInfo.get(pathInfo, getCallable(pathInfo)).hitCount++;
 			usersInfo.get(user.user().username(), getCallable(user.user().username())).hitCount++;
 		} catch (ExecutionException e) {
 			throw ExceptionUtils.asUnchecked(e);
 		}
+	}
+	public synchronized void commandExecuted(String project, String command_name, String command_id) {
+		lastCommandsInfo.put(project + "_" + command_name + "_" + command_id, new StringsCommandPair(project, command_name, command_id));
 	}
 	private Callable<StringWithCount> getCallable(final String pathInfo) {
 		Callable<StringWithCount> callable = new Callable<ManageStatisticsCollector.StringWithCount>() {
@@ -58,6 +59,15 @@ public class ManageStatisticsCollector {
 		}
 		private String value;
 		private int hitCount;
+	}
+	@SuppressWarnings("unused")
+	public static class StringsCommandPair {
+		public StringsCommandPair(String project, String command_name, String command_id) {
+			this.project = project;
+			this.command_name = command_name;
+			this.command_id = command_id;
+		}
+		private String project, command_name, command_id;
 	}
 
 }
