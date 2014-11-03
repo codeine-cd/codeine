@@ -37,15 +37,15 @@
         </accordion-group>
     </accordion>
     <accordion close-others="true">
-        <accordion-group is-open="urls_is_open">
+        <accordion-group is-open="last_commands_is_open">
             <accordion-heading>
-                Urls count
-                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': urls_is_open, 'glyphicon-chevron-right': !urls_is_open}"></i>
+                Last Commands
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': last_commands_is_open, 'glyphicon-chevron-right': !last_commands_is_open}"></i>
             </accordion-heading>
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="url in vm.statsitics.urls">
-                    <span class="badge">{{url.hitCount}}</span>
-                    {{url.value}}
+                <li class="list-group-item" ng-repeat="lastCommand in vm.statsitics.lastCommands">
+                    <a ng-href="/codeine/project/{{lastCommand.project}}/command/{{lastCommand.command_name}}/{{lastCommand.command_id}}/status">
+                        {{lastCommand.project}} -> {{lastCommand.command_name}} ({{lastCommand.command_id}})</a>
                 </li>
             </ul>
         </accordion-group>
