@@ -45,7 +45,7 @@ public class DiscardOldCommandsPlugin {
 	private void deleteCommands(List<CommandExecutionStatusInfo> commandsToDelete) {
 		for (CommandExecutionStatusInfo commandExecutionStatusInfo : commandsToDelete) {
 			String commandOutputDir = pathHelper.getCommandOutputDir(commandExecutionStatusInfo.project_name(), String.valueOf(commandExecutionStatusInfo.id()));
-			log.info("deleteCommands - deleting " + commandOutputDir);
+			log.info("deleteCommands - deleting " + commandExecutionStatusInfo);
 			try {
 				FilesUtils.delete(commandOutputDir);
 			} catch (Exception e) {
