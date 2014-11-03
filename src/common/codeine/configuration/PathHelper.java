@@ -94,8 +94,8 @@ public class PathHelper {
 		return files;
 	}
 
-	public List<File> getCommands(String project) {
-		return getFilesForDir(getCommandsDir(project));
+	public List<File> getCommandsOutput(String project) {
+		return getFilesForDir(getAllCommandsInProjectOutputDir(project));
 	}
 
 	public String getProjectDir(String projectName) {

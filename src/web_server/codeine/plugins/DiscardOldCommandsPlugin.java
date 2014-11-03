@@ -31,11 +31,11 @@ public class DiscardOldCommandsPlugin {
 			log.info("discard_old_commands not enabled for project " + project.name());
 			return;
 		}
-		log.info("discard_old_commands will run for project " + project.name());
 		Runnable commandsDeleteRunner = new Runnable() {
 			@Override
 			public void run() {
-				List<File> commands = pathHelper.getCommands(project.name());
+				log.info("discard_old_commands starting for project " + project.name());
+				List<File> commands = pathHelper.getCommandsOutput(project.name());
 				List<CommandExecutionStatusInfo> allsCommands = filesToCommands(project.name(), commands);
 				List<CommandExecutionStatusInfo> commandsToDelete = new DiscardOldCommandSelector(project.discard_old_commands(), allsCommands, System.currentTimeMillis()).commandsToDelete();
 				deleteCommands(commandsToDelete);
