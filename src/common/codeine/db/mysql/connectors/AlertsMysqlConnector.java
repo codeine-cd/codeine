@@ -26,7 +26,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 	private DbUtils dbUtils;
 	private Gson gson;
 	private ExperimentalConfJsonStore webConfJsonStore;
-	private String tableName = "Alerts";
+	private static final String TABLE_NAME = "Alerts";
 	
 	
 	
@@ -45,13 +45,13 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 			return;
 		}
 		String colsDefinition = "id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, data text, collection_type_update_time BIGINT, collection_type BIGINT";
-		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
+		dbUtils.executeUpdate("create table if not exists " + TABLE_NAME + " (" + colsDefinition + ")");
 	}
 
 	@Override
 	public void put(CollectorNotificationJson collectorNotificationJson) {
 		String json = gson.toJson(collectorNotificationJson);
-		dbUtils.executeUpdate("INSERT INTO "+tableName+" (data) VALUES (?)", json);
+		dbUtils.executeUpdate("INSERT INTO "+TABLE_NAME+" (data) VALUES (?)", json);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 				}
 			}
 		};
-		dbUtils.executeUpdateableQuery("SELECT id, data, collection_type_update_time, collection_type FROM " + tableName + 
+		dbUtils.executeUpdateableQuery("SELECT id, data, collection_type_update_time, collection_type FROM " + TABLE_NAME + 
 				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL" , function);
 		if (count.intValue() > 0){
 			log.info("handled col type " + collType + " with num of events " + count.intValue());
@@ -99,7 +99,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		}
 		long timeToRemove = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7);
 		log.info("will remove older than " + timeToRemove);
-		String deleteSql = "delete from " + tableName + " where collection_type_update_time < " + timeToRemove + " AND collection_type = " + AlertsCollectionType.Daily.toLong();
+		String deleteSql = "delete from " + TABLE_NAME + " where collection_type_update_time < " + timeToRemove + " AND collection_type = " + AlertsCollectionType.Daily.toLong();
 		dbUtils.executeUpdate(deleteSql);
 	}
 

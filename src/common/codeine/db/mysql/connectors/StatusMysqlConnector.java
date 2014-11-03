@@ -30,7 +30,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	@Inject
 	private Gson gson;
 	@Inject	private ExperimentalConfJsonStore webConfJsonStore;
-	private String tableName = "ProjectStatusList";
+	private static final String TABLE_NAME = "ProjectStatusList";
 	
 	
 	
@@ -53,15 +53,15 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			return;
 		}
 		String colsDefinition = "peer_key VARCHAR(150) NOT NULL PRIMARY KEY, data text, update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, status VARCHAR(50) DEFAULT 'On' NOT NULL";
-		dbUtils.executeUpdate("create table if not exists " + tableName + " (" + colsDefinition + ")");
+		dbUtils.executeUpdate("create table if not exists " + TABLE_NAME + " (" + colsDefinition + ")");
 	}
 
 	@Override
 	public void putReplaceStatus(PeerStatusJsonV2 p) {
 		String json = gson.toJson(p);
 		log.info("will update status to " + dbUtils.server() + "\n" + json);
-		dbUtils.executeUpdate("DELETE FROM "+tableName+" WHERE peer_key = '" + p.peer_old_key() + "'");
-		dbUtils.executeUpdate("REPLACE INTO "+tableName+" (peer_key, data, update_time ) VALUES (?, ?, CURRENT_TIMESTAMP())", p.peer_key(), json);
+		dbUtils.executeUpdate("DELETE FROM "+TABLE_NAME+" WHERE peer_key = '" + p.peer_old_key() + "'");
+		dbUtils.executeUpdate("REPLACE INTO "+TABLE_NAME+" (peer_key, data, update_time ) VALUES (?, ?, CURRENT_TIMESTAMP())", p.peer_key(), json);
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			}
 
 		};
-		dbUtils.executeQuery("select * from " + tableName, function);
+		dbUtils.executeQuery("select * from " + TABLE_NAME, function);
 		return $;
 	}
 	
@@ -131,18 +131,18 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			}
 
 		};
-		dbUtils.executeUpdateableQuery("select *,TIMESTAMPDIFF(MINUTE,update_time,CURRENT_TIMESTAMP()) as TIME_DIFF from " + tableName, function);
+		dbUtils.executeUpdateableQuery("select *,TIMESTAMPDIFF(MINUTE,update_time,CURRENT_TIMESTAMP()) as TIME_DIFF from " + TABLE_NAME, function);
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 			return;
 		}
 		for (String key : idToRemove) {
 			log.info("deleting " + key);
-			dbUtils.executeUpdate("DELETE from " + tableName + " WHERE peer_key = ?", key);
+			dbUtils.executeUpdate("DELETE from " + TABLE_NAME + " WHERE peer_key = ?", key);
 		}
 		for (String key : idToDisc) {
 			log.info("discing " + key);
-			dbUtils.executeUpdate("UPDATE " + tableName + " SET status = 'Disc' WHERE peer_key = ?", key);
+			dbUtils.executeUpdate("UPDATE " + TABLE_NAME + " SET status = 'Disc' WHERE peer_key = ?", key);
 		}
 	}
 
