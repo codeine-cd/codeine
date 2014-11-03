@@ -43,10 +43,10 @@ public class DiscardOldCommandSelector {
 		Collections.sort(whatsLeft, new Comparator<CommandExecutionStatusInfo>() {
 			@Override
 			public int compare(CommandExecutionStatusInfo arg0, CommandExecutionStatusInfo arg1) {
-				return arg0.finishTimeForRemoval() == arg1.finishTimeForRemoval() ? 0 : arg0.finishTimeForRemoval() > arg1.finishTimeForRemoval() ? -1 : 1;
+				return arg0.finishTimeForRemoval() == arg1.finishTimeForRemoval() ? 0 : arg0.finishTimeForRemoval() < arg1.finishTimeForRemoval() ? -1 : 1;
 			}
 		});
-		$.addAll(whatsLeft.subList(0, whatsLeft.size() - discardOldCommandsJson.max_commands() - 1));
+		$.addAll(whatsLeft.subList(0, whatsLeft.size() - discardOldCommandsJson.max_commands()));
 		return $;
 	}
 

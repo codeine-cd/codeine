@@ -47,11 +47,13 @@ public class DiscardOldCommandSelectorTest {
 	public void testMaxPassed() {
 		DiscardOldCommandsJson discardOldCommandsJson = new DiscardOldCommandsJson(1, 100);
 		DiscardOldCommandSelector tested = new DiscardOldCommandSelector(discardOldCommandsJson, allsCommands, TimeUnit.DAYS.toMillis(2));
-		allsCommands.add(createCommand(1));
-		CommandExecutionStatusInfo createCommand = createCommand(2);
-		allsCommands.add(createCommand);
-		allsCommands.add(createCommand(0));
-		assertEquals(Lists.newArrayList(createCommand), tested.commandsToDelete());
+		CommandExecutionStatusInfo createCommand1 = createCommand(1);
+		allsCommands.add(createCommand1);
+		CommandExecutionStatusInfo createCommand2 = createCommand(2);
+		allsCommands.add(createCommand2);
+		CommandExecutionStatusInfo createCommand0 = createCommand(0);
+		allsCommands.add(createCommand0);
+		assertEquals(Lists.newArrayList(createCommand0, createCommand1), tested.commandsToDelete());
 	}
 
 }
