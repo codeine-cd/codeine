@@ -28,8 +28,10 @@ public class DiscardOldCommandsPlugin {
 
 	public void queueForDelete(final ProjectJson project) {
 		if (!project.discard_old_commands().enabled()) {
+			log.info("discard_old_commands not enabled for project " + project.name());
 			return;
 		}
+		log.info("discard_old_commands will run for project " + project.name());
 		Runnable commandsDeleteRunner = new Runnable() {
 			@Override
 			public void run() {
