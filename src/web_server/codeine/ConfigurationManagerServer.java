@@ -1,5 +1,7 @@
 package codeine;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.inject.Inject;
@@ -13,20 +15,25 @@ import codeine.db.mysql.connectors.ProjectConfigurationDatabaseConnectorListProv
 import codeine.executer.ThreadPoolUtils;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.utils.ExceptionUtils;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 {
 	private static final Logger log = Logger.getLogger(ConfigurationManagerServer.class);
-	private static final int NUM_OF_THREADS = 3;
+	private static final int MAX_NUM_OF_DB_ENTRIES = 30;
+	private static final int NUM_OF_THREADS_FOR_EACH_DB = 1;
 
 	private ProjectConfigurationInPeerUpdater projectsUpdater;
 	private PathHelper pathHelper;
 	private JsonFileUtils jsonFileUtils;
-	private ThreadPoolExecutor updateThreadPool = ThreadPoolUtils.newThreadPool(NUM_OF_THREADS);
 	private ProjectConfigurationDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
-	
+	private Cache<String, ThreadPoolExecutor> dbUpdateThreadsMap = CacheBuilder.newBuilder().maximumSize(MAX_NUM_OF_DB_ENTRIES).build();
+
 	@Inject
 	public ConfigurationManagerServer(JsonFileUtils jsonFileUtils, PathHelper pathHelper, ProjectConfigurationInPeerUpdater projectsUpdater, ProjectConfigurationDatabaseConnectorListProvider statusDatabaseConnectorListProvider)
 	{
@@ -41,33 +48,45 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		String dirName = pathHelper.getProjectsDir() + "/" + projectToDelete.name();
 		FilesUtils.delete(dirName);
 		projects().remove(projectToDelete.name());
-		updateThreadPool.execute(new Runnable() {
-			@Override
-			public void run() {
-				for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
-					projectsConfigurationConnector.deleteProject(projectToDelete);
+		for (final ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
+			getUpdateThreadPool(projectsConfigurationConnector.getKey()).execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						projectsConfigurationConnector.deleteProject(projectToDelete);
+					} catch (Exception e) {
+						log.warn("cannot update project in database " + projectToDelete.name() + " " + projectsConfigurationConnector, e);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
-	
-	
+
+
+	private ThreadPoolExecutor getUpdateThreadPool(String key) {
+		try {
+			return dbUpdateThreadsMap.get(key, new Callable<ThreadPoolExecutor>() {
+				@Override
+				public ThreadPoolExecutor call() throws Exception {
+					return ThreadPoolUtils.newThreadPool(NUM_OF_THREADS_FOR_EACH_DB);
+				}
+			});
+		} catch (ExecutionException e) {
+			throw ExceptionUtils.asUnchecked(e);
+		}
+	}
+
 	public boolean updateProject(final ProjectJson updatedProject) {
 		log.info("updating project " + updatedProject);
 		String file = pathHelper.getProjectsDir() + "/" + updatedProject.name() + "/" + Constants.PROJECT_CONF_FILE;
 		jsonFileUtils.setContent(file, updatedProject);
 		final ProjectJson previousProject = projects().put(updatedProject.name(), updatedProject);
-		updateThreadPool.execute(new Runnable() {
-			@Override
-			public void run() {
-				log.info("updating project in db and peers " + updatedProject.name());
-				updateProjectInDb(updatedProject);
-				projectsUpdater.updatePeers(updatedProject, previousProject);
-			}
-		});
+		log.info("updating project in db and peers " + updatedProject.name());
+		updateProjectInDb(updatedProject);
+		projectsUpdater.updatePeers(updatedProject, previousProject);
 		return null != previousProject;
 	}
-	
+
 	public void updateDb() {
 		for (ProjectJson project : projects().values()) {
 			updateProjectInDb(project);
@@ -75,13 +94,18 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		projectsUpdater.updateAllPeers();
 	}
 
-	private void updateProjectInDb(ProjectJson project) {
-		for (ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
-			try {
-				projectsConfigurationConnector.updateProject(project);
-			} catch (Exception e) {
-				log.warn("cannot update project in database " + project.name(), e);
-			}
+	private void updateProjectInDb(final ProjectJson project) {
+		for (final ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
+			getUpdateThreadPool(projectsConfigurationConnector.getKey()).execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						projectsConfigurationConnector.updateProject(project);
+					} catch (Exception e) {
+						log.warn("cannot update project in database " + project.name() + " " + projectsConfigurationConnector, e);
+					}
+				}
+			});
 		}
 	}
 

@@ -99,4 +99,10 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 		}
 	}
 
+
+	@Override
+	public String getKey() {
+		return dbUtils.server();
+	}
+
 }

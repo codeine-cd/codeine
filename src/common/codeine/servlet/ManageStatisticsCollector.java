@@ -16,9 +16,9 @@ import com.google.common.collect.Lists;
 
 public class ManageStatisticsCollector {
 
-	Cache<String, StringWithCount> usersInfo = CacheBuilder.newBuilder().maximumSize(200).build();
-	Cache<String, String> activeUsersInfo = CacheBuilder.newBuilder().maximumSize(200).expireAfterWrite(20, TimeUnit.MINUTES).build();
-	Cache<String, StringsCommandPair> lastCommandsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
+	private Cache<String, StringWithCount> usersInfo = CacheBuilder.newBuilder().maximumSize(200).build();
+	private Cache<String, String> activeUsersInfo = CacheBuilder.newBuilder().maximumSize(200).expireAfterWrite(20, TimeUnit.MINUTES).build();
+	private Cache<String, StringsCommandPair> lastCommandsInfo = CacheBuilder.newBuilder().maximumSize(20).build();
 	
 	public synchronized ManageStatisticsInfo getCollected() {
 		List<StringsCommandPair> lastCommands = Lists.newArrayList(lastCommandsInfo.asMap().values());
