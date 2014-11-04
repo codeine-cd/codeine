@@ -1,7 +1,6 @@
 package codeine.jsons.project;
 
 import java.util.List;
-import java.util.Map;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.NodeMonitor;
@@ -11,7 +10,6 @@ import codeine.permissions.UserProjectPermissions;
 import codeine.utils.os.OperatingSystem;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class ProjectJson
 {
@@ -28,7 +26,7 @@ public class ProjectJson
 	private List<NodeInfo> nodes_info = Lists.newArrayList();
 	private OperatingSystem operating_system = OperatingSystem.Linux;
 	private DiscardOldCommandsJson discard_old_commands = DiscardOldCommandsJson.DISABLED;
-	private Map<String, String> environment_variables = Maps.newHashMap();
+	private List<EnvironmentVariable> environment_variables = Lists.newArrayList();
 	
 	public ProjectJson(String name) {
 		this.name = name;
