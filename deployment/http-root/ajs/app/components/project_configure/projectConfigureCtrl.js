@@ -37,7 +37,9 @@
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };
-
+        $scope.addEnvVar = function() {
+            $scope.projectConfigurationForEditing.environment_variables.push({});
+        };
         $scope.addUser = function() {
             $scope.projectConfigurationForEditing.permissions.push({can_read:true});
         };

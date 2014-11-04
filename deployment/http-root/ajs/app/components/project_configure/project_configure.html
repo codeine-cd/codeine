@@ -46,31 +46,78 @@
                 </div>
             </accordion-heading>
             <ng-form name=projectAdvancedInnerForm">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <div class="checkbox col-md-offset-1">
-                            <label>
-                                <input type="checkbox" ng-model="projectConfigurationForEditing.discard_old_commands.enabled"> Discard old commands
-                                <help help-id="discardOldCommandsEnabledHelp"></help>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
-                        <label class="col-md-3 control-label" for="discard_old_commands__max_commands">Max # of commands to keep <help help-id="discardMaxCommandsHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_commands.$invalid}">
-                            <input id="discard_old_commands__max_commands" name="max_commands" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_commands" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
-                        <label class="col-md-3 control-label" for="discard_old_commands__max_days">Days to keep commands<help help-id="discardMaxDaysHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_days.$invalid}">
-                            <input id="discard_old_commands__max_days" name="max_days" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_days" class="form-control" >
-                        </div>
-                    </div>
-
-
-
-                </div>
+                <accordion close-others="false">
+                    <accordion-group is-open="true" ng-form="projectDiscardOldParentForm">
+                        <accordion-heading>
+                            <div>
+                                <i class="fa fa-warning" style="color:red;" ng-show="projectDiscardOldParentForm.$invalid"></i>
+                                Cleanup
+                            </div>
+                        </accordion-heading>
+                        <ng-form name=projectDiscardOldParentForm">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <div class="checkbox col-md-offset-1">
+                                        <label>
+                                            <input type="checkbox" ng-model="projectConfigurationForEditing.discard_old_commands.enabled"> Discard old commands
+                                            <help help-id="discardOldCommandsEnabledHelp"></help>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
+                                    <label class="col-md-3 control-label" for="discard_old_commands__max_commands">Max # of commands to keep <help help-id="discardMaxCommandsHelp"></help></label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_commands.$invalid}">
+                                        <input id="discard_old_commands__max_commands" name="max_commands" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_commands" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
+                                    <label class="col-md-3 control-label" for="discard_old_commands__max_days">Days to keep commands<help help-id="discardMaxDaysHelp"></help></label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_days.$invalid}">
+                                        <input id="discard_old_commands__max_days" name="max_days" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_days" class="form-control" >
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-form>
+                    </accordion-group>
+                    <accordion-group is-open="true" ng-form="projectEnvVarsParentForm">
+                        <accordion-heading>
+                            <div>
+                                <i class="fa fa-warning" style="color:red;" ng-show="projectEnvVarsParentForm.$invalid"></i>
+                                Environment Variables <help help-id="projectEnvVarsHelp"></help>
+                            </div>
+                        </accordion-heading>
+                        <ng-form name=projectEnvVarsParentForm">
+                            <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-3" style="text-align: center;">Key</th>
+                                    <th class="col-md-3" style="text-align: center;">Value</th>
+                                    <th class="col-md-1" style="text-align: center;"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="envVar in projectConfigurationForEditing.environment_variables" ng-form="envVariableInfoRow">
+                                    <td class="controls col-md-3" ng-class="{'has-error': envVariableInfoRow.env_key.$invalid}">
+                                        <input type="text" name="env_key" class="form-control" ng-distinct-values="projectConfigurationForEditing.environment_variables" ng-model="envVar.key" required>
+                                    </td>
+                                    <td class="controls col-md-3" ng-class="{'has-error': envVariableInfoRow.env_value.$invalid}">
+                                        <input type="text" name="env_value" class="form-control" ng-model="envVar.value" required>
+                                    </td>
+                                    <td class="col-md-1">
+                                        <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index)" title="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button ng-click="addEnvVar()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add</button>
+                                </div>
+                                <br/><br/>
+                            </div>
+                        </ng-form>
+                    </accordion-group>
+                </accordion>
             </ng-form>
         </accordion-group>
     </accordion>
