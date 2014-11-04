@@ -13,6 +13,16 @@
             vm.command.parameters[i].value = vm.command.parameters[i].default_value;
         }
 
+        var predefinedParams = SelectedNodesService.getSelectedParams($location.path());
+        for (var i1=0; i1 < predefinedParams.length; i1++) {
+            for (var j=0; j < vm.command.parameters.length; j++) {
+                if (vm.command.parameters[j].name === predefinedParams[i1].name) {
+                    vm.command.parameters[j].value = predefinedParams[i1].value;
+                    break;
+                }
+            }
+        }
+
         vm.projectName = $routeParams.project_name;
         vm.commandName = $routeParams.command_name;
 

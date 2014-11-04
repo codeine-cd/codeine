@@ -36,7 +36,7 @@
         vm.rerunCommand = function() {
             $log.debug('commandStatusCtrl: will rerun the command - ' + vm.commandStatus.command);
             var url = '/codeine/project/' + vm.projectName + '/command/' + vm.commandStatus.command + '/setup';
-            SelectedNodesService.setSelectedNodes(vm.commandStatus.nodes_list, url);//, vm.commandStatus.params
+            SelectedNodesService.setSelectedNodes(vm.commandStatus.nodes_list, url, vm.commandStatus.params);
             $location.path(url);
         };
 
