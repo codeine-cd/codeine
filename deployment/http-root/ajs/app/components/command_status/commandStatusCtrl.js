@@ -2,9 +2,12 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService) {
-        $scope.projectName = $routeParams.project_name;
-        $scope.commandStatus = commandStatus;
+    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService) {
+        /*jshint validthis:true */
+        var vm = this;
+
+        vm.projectName = $routeParams.project_name;
+        vm.commandStatus = commandStatus;
 
         var maxUpdatesNotInFocus = 100;
         var intervalTriggered = 0;
@@ -13,10 +16,10 @@
                 return;
             }
             intervalTriggered++;
-            CodeineService.getCommandStatus($scope.projectName, $routeParams.command_id).success(function(data) {
+            CodeineService.getCommandStatus(vm.projectName, $routeParams.command_id).success(function(data) {
                 var scrolledToBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
-                $scope.commandStatus = data;
-                if ($scope.commandStatus.finished) {
+                vm.commandStatus = data;
+                if (vm.commandStatus.finished) {
                     $log.debug('commandStatusCtrl: command is finished');
                     $timeout(function() {
                         $interval.cancel(interval);
@@ -29,6 +32,14 @@
                 }
             });
         },5000);
+
+        vm.rerunCommand = function() {
+            $log.debug('commandStatusCtrl: will rerun the command - ' + vm.commandStatus.command);
+            var url = '/codeine/project/' + vm.projectName + '/command/' + vm.commandStatus.command + '/setup';
+            $log.debug(SelectedNodesService);
+//            SelectedNodesService.setSelectedNodes(vm.commandStatus.nodes_list, url);
+            $location.path(url);
+        };
 
         $scope.$on('$destroy', function() {
             if (interval) {

@@ -19,6 +19,7 @@
             },
 
             getSelectedNodes : function(url) {
+                $log.debug('selectedNodesService: retrieve nodes for url \'' + url + '\'');
                 if ($localStorage.url === url) {
                     return $localStorage.nodes;
                 }

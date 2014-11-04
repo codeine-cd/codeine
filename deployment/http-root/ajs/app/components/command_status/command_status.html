@@ -11,21 +11,21 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-2"><strong>Name:</strong></div><div class="col-md-6"> {{commandStatus.command}}</div>
+                        <div class="col-md-2"><strong>Name:</strong></div><div class="col-md-6"> {{vm.commandStatus.command}}</div>
                     </div>
                     <br/>
                     <div class="row">
-                        <div class="col-md-2"><strong>Start Time:</strong></div><div class="col-md-6"> {{commandStatus.start_time | date:'short'}}</div>
+                        <div class="col-md-2"><strong>Start Time:</strong></div><div class="col-md-6"> {{vm.commandStatus.start_time | date:'short'}}</div>
                     </div>
                     <br/>
                     <div class="row">
-                        <div class="col-md-2"><strong>User:</strong></div><div class="col-md-6"> {{commandStatus.user}}</div>
+                        <div class="col-md-2"><strong>User:</strong></div><div class="col-md-6"> {{vm.commandStatus.user}}</div>
                     </div>
                     <br/>
-                    <div class="row" ng-show="commandStatus.params.length > 0">
+                    <div class="row" ng-show="vm.commandStatus.params.length > 0">
                         <div class="col-md-2"><strong>Parameters:</strong></div>
                     </div>
-                    <div ng-repeat="param in commandStatus.params">
+                    <div ng-repeat="param in vm.commandStatus.params">
                         <br/>
                         <div class="row">
                             <div class="col-md-4 col-md-offset-1"><strong>{{param.name}}:</strong></div><div class="col-md-7" style="word-break: break-all;"> {{param.value}}</div>
@@ -33,24 +33,32 @@
                     </div>
                     <div class="row">
                         <div class="col-md-2"><strong>Status:</strong></div>
-                        <div ng-show="!commandStatus.finished">
+                        <div ng-show="!vm.commandStatus.finished">
                             <div class="col-md-6"><i class="fa fa-spinner fa-spin"></i> Running</div>
                         </div>
-                        <div ng-show="commandStatus.finished">
+                        <div ng-show="vm.commandStatus.finished">
                             <div class="col-md-6"> Finished</div>
                         </div>
 
                     </div>
                     <br/>
+                    <div class="row" admin-action>
+                        <div class="col-md-2">
+                            <button type="button" ng-click="vm.rerunCommand()" class="btn btn-info btn-sm">
+                                <i class="fa fa-repeat"></i> Re-Run
+                            </button>
+                        </div>
+                    </div>
+                    <br/>
                     <accordion close-others="false">
                     <accordion-group is-open="all_nodes_is_open">
                         <accordion-heading>
-                            All Nodes <span class="badge">{{commandStatus.nodes_list.length}}</span>
+                            All Nodes <span class="badge">{{vm.commandStatus.nodes_list.length}}</span>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': all_nodes_is_open, 'glyphicon-chevron-right': !all_nodes_is_open}"></i>
                         </accordion-heading>
-                        <div ng-repeat="node in commandStatus.nodes_list" class="row">
+                        <div ng-repeat="node in vm.commandStatus.nodes_list" class="row">
                             <div class="col-md-8">
-                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
+                                <a ng-href="/codeine/project/{{vm.projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
                             </div>
                         </div>
                     </accordion-group>
@@ -58,12 +66,12 @@
                     <accordion close-others="false">
                     <accordion-group is-open="fail_nodes_is_open">
                         <accordion-heading>
-                            Failed Nodes <span class="badge">{{commandStatus.fail_list.length}}</span>
+                            Failed Nodes <span class="badge">{{vm.commandStatus.fail_list.length}}</span>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': fail_nodes_is_open, 'glyphicon-chevron-right': !fail_nodes_is_open}"></i>
                         </accordion-heading>
-                        <div ng-repeat="node in commandStatus.fail_list" class="row">
+                        <div ng-repeat="node in vm.commandStatus.fail_list" class="row">
                             <div class="col-md-8">
-                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
+                                <a ng-href="/codeine/project/{{vm.projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
                             </div>
                         </div>
                     </accordion-group>
@@ -71,8 +79,8 @@
                 </div>
             </div>
             <h4>Command Log</h4>
-            <pre>{{commandStatus.output}}</pre>
-            <div ng-show="!commandStatus.finished">
+            <pre>{{vm.commandStatus.output}}</pre>
+            <div ng-show="!vm.commandStatus.finished">
                 <i class="fa fa-spinner fa-spin fa-2x"></i>
             </div>
         </div>

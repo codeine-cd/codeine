@@ -235,6 +235,7 @@
             when('/codeine/project/:project_name/command/:command_name/:command_id/status', {
                 templateUrl: '/components/command_status/command_status.html',
                 controller: 'commandStatusCtrl',
+                controllerAs: 'vm',
                 pageTitle: 'Command Status',
                 resolve: {
                     commandStatus :  function($q,$route,CodeineService) {
