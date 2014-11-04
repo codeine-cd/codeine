@@ -1,6 +1,7 @@
 package codeine.jsons.project;
 
 import java.util.List;
+import java.util.Map;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.NodeMonitor;
@@ -10,6 +11,7 @@ import codeine.permissions.UserProjectPermissions;
 import codeine.utils.os.OperatingSystem;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ProjectJson
 {
@@ -137,6 +139,14 @@ public class ProjectJson
 	}
 	public OperatingSystem operating_system() {
 		return operating_system == null ? OperatingSystem.Linux : operating_system;
+	}
+	
+	public Map<String, String> environmentVariables() {
+		Map<String, String> $ = Maps.newHashMap();
+		for (EnvironmentVariable environmentVariable : environment_variables) {
+			$.put(environmentVariable.key(), environmentVariable.value());
+		}
+		return $;
 	}
 
 }

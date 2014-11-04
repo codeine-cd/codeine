@@ -36,6 +36,7 @@ public class NodeScriptDiscovery {
 		log.info("running discovery from dir " + dir);
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
+		env.putAll(projectJson.environmentVariables());
 		ShellScriptWithOutput shellScript = 
 				new ShellScriptWithOutput("discovery_" + projectJson.name(), nodes_discovery_script, dir, env, projectJson.operating_system());
 		String result = shellScript.execute();
