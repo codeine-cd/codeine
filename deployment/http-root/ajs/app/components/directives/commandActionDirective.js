@@ -7,7 +7,6 @@
             restrict: 'A',
             scope: {
                 project: '=',
-                permissions: '=',
                 allowed: '='
             },
             link: function ($scope, element) {
