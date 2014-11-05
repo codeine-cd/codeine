@@ -147,7 +147,7 @@ public class PeerCommandWorker implements Runnable {
 						break;
 					}
 					case ExitStatus.EXCEPTION: {
-						line += " (exception)";
+						line += " (internal error)";
 						break;
 					}
 					}
