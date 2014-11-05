@@ -5,9 +5,9 @@ import org.apache.log4j.Logger;
 public class LogUtils {
 
 	public static void assertFailed(Logger log, Object... o) {
-		StringBuilder sConcat = createLoggingString(new Exception(), o);
-		AssertionError e = new AssertionError("Assertion failed:" + sConcat);
-		log.error(sConcat.toString(), e);
+		String s = createLoggingString(o);
+		AssertionError e = new AssertionError("Assertion failed: " + s);
+		log.error(s, e);
 	}
 
 	public static void assertTrue(Logger log, boolean cond, Object... o) {
@@ -17,7 +17,9 @@ public class LogUtils {
 		assertFailed(log, o);
 	}
 
-	private static StringBuilder createLoggingString(Throwable e, Object... objects) {
+	@SuppressWarnings("unused")
+	@Deprecated //method is slow - not for production
+	private static StringBuilder createLoggingStringWithStack(Throwable e, Object... objects) {
 		String caller = "Unkown";
 		try {
 			StackTraceElement ste[] = e.getStackTrace();
@@ -29,5 +31,12 @@ public class LogUtils {
 			sConcat.append(" " + o);
 		}
 		return sConcat;
+	}
+	private static String createLoggingString(Object... objects) {
+		StringBuilder $ = new StringBuilder();
+		for (final Object o : objects) {
+			$.append(" " + o);
+		}
+		return $.toString();
 	}
 }

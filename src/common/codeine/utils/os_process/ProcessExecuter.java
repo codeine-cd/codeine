@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import codeine.model.ExitStatus;
 import codeine.model.Result;
+import codeine.utils.MapUtils;
 import codeine.utils.ThreadUtils;
 
 import com.google.common.base.Function;
@@ -92,7 +93,7 @@ public class ProcessExecuter {
 		}
 
 		public ProcessExecuter build(){
-			return new ProcessExecuter(cmd, cmdForOutput, timeoutInMinutes, function, runFromDir, env);
+			return new ProcessExecuter(cmd, cmdForOutput, timeoutInMinutes, function, runFromDir, MapUtils.noNullsMap(env));
 		}
 		
 		public ProcessExecuterBuilder cmd(List<String> cmd){

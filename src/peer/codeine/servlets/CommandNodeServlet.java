@@ -148,12 +148,13 @@ public class CommandNodeServlet extends AbstractServlet
 					return null;
 				}
 			};
-			Map<String, String> env = getEnvParams(commandInfo);
+			Map<String, String> env = Maps.newHashMap();
 			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, commandInfo.project_name());
 			env.put(Constants.EXECUTION_ENV_NODE_NAME, commandInfo2.node_name());
 			env.put(Constants.EXECUTION_ENV_NODE_ALIAS, commandInfo2.node_alias());
 			env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(commandInfo.project_name(), commandInfo2.node_name()), ";"));
 			env.putAll(commandInfo2.environment_variables());
+			env.putAll(getEnvParams(commandInfo));
 			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
 			writer.flush();
