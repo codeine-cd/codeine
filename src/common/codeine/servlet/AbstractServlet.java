@@ -18,6 +18,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
+import codeine.servlet.manage_statistics.ManageStatisticsCollector;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ServletUtils;
 import codeine.utils.exceptions.InShutdownException;

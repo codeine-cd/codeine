@@ -8,9 +8,9 @@ import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
 import codeine.permissions.GroupsManager;
 import codeine.permissions.PluginGroupsManager;
 import codeine.plugins.DiscardOldCommandsPlugin;
-import codeine.servlet.ManageStatisticsCollector;
 import codeine.servlet.PrepareForShutdown;
 import codeine.servlet.UsersManager;
+import codeine.servlet.manage_statistics.ManageStatisticsCollector;
 import codeine.statistics.IMonitorStatistics;
 import codeine.statistics.MonitorsStatisticsProvider;
 

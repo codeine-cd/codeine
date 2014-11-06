@@ -1,10 +1,9 @@
-package codeine.servlet;
+package codeine.servlet.manage_statistics;
 
 import java.util.List;
 import java.util.Set;
 
-import codeine.servlet.ManageStatisticsCollector.StringWithCount;
-import codeine.servlet.ManageStatisticsCollector.StringsCommandPair;
+import codeine.servlet.manage_statistics.ManageStatisticsCollector.StringWithCount;
 
 @SuppressWarnings("unused")
 public class ManageStatisticsInfo {

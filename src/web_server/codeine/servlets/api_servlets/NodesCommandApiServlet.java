@@ -66,7 +66,7 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 		commandData.command_info().overrideByConfiguration(configuredCommand);
 		updateNodes(commandData, projectName);
 		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData, project);
-		manageStatisticsCollector().commandExecuted(projectName, command_name, String.valueOf(dir));
+		manageStatisticsCollector().commandExecuted(projectName, command_name, String.valueOf(dir), System.currentTimeMillis());
 		writeResponseJson(response, dir);
 	}
 	

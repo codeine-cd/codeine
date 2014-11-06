@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.servlet.AbstractApiServlet;
-import codeine.servlet.ManageStatisticsCollector;
-import codeine.servlet.ManageStatisticsInfo;
+import codeine.servlet.manage_statistics.ManageStatisticsCollector;
+import codeine.servlet.manage_statistics.ManageStatisticsInfo;
 
 public class ManageStatisticsInfoApiServlet extends AbstractApiServlet {
 
