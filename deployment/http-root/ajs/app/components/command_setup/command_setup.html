@@ -85,7 +85,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group" ng-if="vm.command.stop_on_error && command.command_strategy === 'Progressive'">
+                            <div class="form-group" ng-if="vm.command.stop_on_error && vm.command.command_strategy === 'Progressive'">
                                 <label for="error_percent_val" class="col-md-4 control-label">Percent</label>
                                 <div class="col-md-4" ng-class="{'has-error': config.error_percent_val.$invalid}">
                                     <input id="error_percent_val" name="error_percent_val" min="1" type="number" class="form-control" ng-model="vm.command.error_percent_val" required>
