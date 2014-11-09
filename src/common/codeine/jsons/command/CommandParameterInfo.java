@@ -1,8 +1,6 @@
 package codeine.jsons.command;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
+import java.util.LinkedHashSet;
 
 
 @SuppressWarnings("unused")
@@ -15,7 +13,7 @@ public class CommandParameterInfo {
 	private String value;
 	private Integer command_line; //for backward
 	private CommandParameterType type;
-	private List<String> allowed_values = Lists.newArrayList();
+	private LinkedHashSet<String> allowed_values = new LinkedHashSet<String>();
 	
 	enum CommandParameterType {String, Boolean, Selection, Password}
 
@@ -25,7 +23,7 @@ public class CommandParameterInfo {
 	public String value() {
 		return value;
 	}
-	public List<String> allowed_values() {
+	public LinkedHashSet<String> allowed_values() {
 		return allowed_values;
 	}
 }
