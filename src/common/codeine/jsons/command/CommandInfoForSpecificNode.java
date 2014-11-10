@@ -10,7 +10,7 @@ public class CommandInfoForSpecificNode {
 	private String node_alias;
 	private String tmp_dir;
 	private String key;
-	private Map<String, String> environment_variables = Maps.newHashMap();
+	private Map<String, String> environment_variables = Maps.newLinkedHashMap();
 	
 	public CommandInfoForSpecificNode(String node_name, String node_alias, String tmp_dir, String key, Map<String, String> environment_variables) {
 		super();

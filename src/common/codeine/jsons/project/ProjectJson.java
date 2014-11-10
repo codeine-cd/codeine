@@ -142,7 +142,7 @@ public class ProjectJson
 	}
 	
 	public Map<String, String> environmentVariables() {
-		Map<String, String> $ = Maps.newHashMap();
+		Map<String, String> $ = Maps.newLinkedHashMap();
 		for (EnvironmentVariable environmentVariable : environment_variables) {
 			$.put(environmentVariable.key(), environmentVariable.value());
 		}
