@@ -52,6 +52,7 @@ public class ShellScript {
 			TextFileUtils.setContents(fileName, content);
 		}
 		catch (RuntimeException ex){
+			log.warn("failed to write to file " + fileName);
 			if (ExceptionUtils.getRootCause(ex) instanceof IOException && !windows()) {
 				String filename2 = Constants.getPersistentDir() + File.separator + fileNameNoDir;
 				try {
