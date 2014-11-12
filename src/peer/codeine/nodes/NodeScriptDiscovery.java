@@ -13,7 +13,7 @@ import codeine.jsons.nodes.NodeListJson;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.os.OsUtils;
-import codeine.utils.os_process.ShellScriptWithOutput;
+import codeine.utils.os_process.ShellScript;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -37,8 +37,8 @@ public class NodeScriptDiscovery {
 		Map<String, String> env = Maps.newHashMap();
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
 		env.putAll(projectJson.environmentVariables());
-		ShellScriptWithOutput shellScript = 
-				new ShellScriptWithOutput("discovery_" + projectJson.name(), nodes_discovery_script, dir, env, projectJson.operating_system());
+		ShellScript shellScript = 
+				new ShellScript("discovery_" + projectJson.name(), nodes_discovery_script, projectJson.operating_system(), null, dir, env);
 		String result = shellScript.execute();
 		if (result.trim().isEmpty()){
 			return new NodeListJson();

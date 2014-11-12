@@ -36,7 +36,6 @@ import codeine.utils.network.HttpUtils;
 import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 import codeine.utils.os_process.ShellScript;
-import codeine.utils.os_process.ShellScriptWithOutput;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
@@ -139,8 +138,8 @@ public class RunMonitors implements Task {
 		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project.name(), node.name()), ";"));
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
 		env.putAll(project.environmentVariables());
-		ShellScriptWithOutput script = new ShellScriptWithOutput(
-				"tags_" + projectName + "_" + node.name(), project.tags_discovery_script(), pathHelper.getProjectDir(projectName), env, project.operating_system());
+		ShellScript script = new ShellScript(
+				"tags_" + projectName + "_" + node.name(), project.tags_discovery_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env);
 		String tags = script.execute();
 		if (tags.isEmpty()){
 			tags = "[]";
@@ -164,8 +163,8 @@ public class RunMonitors implements Task {
 		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project.name(), node.name()), ";"));
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
 		env.putAll(project.environmentVariables());
-		ShellScriptWithOutput script = new ShellScriptWithOutput(
-				"version_" + projectName + "_" + node.name(), project.version_detection_script(), pathHelper.getProjectDir(projectName), env, project.operating_system());
+		ShellScript script = new ShellScript(
+				"version_" + projectName + "_" + node.name(), project.version_detection_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env);
 		String version = script.execute();
 		if (version.isEmpty()){
 			version = Constants.NO_VERSION;
@@ -279,7 +278,7 @@ public class RunMonitors implements Task {
 				LogUtils.assertFailed(log, "'shellScript' should be null but not");
 			}
 			fileName += node.name();
-			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system() == OperatingSystem.Windows, null);
+			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system(), null, null, null);
 			fileName = shellScript.create();
 			log.info("file is " + fileName);
 		}

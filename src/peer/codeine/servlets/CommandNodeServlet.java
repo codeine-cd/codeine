@@ -98,7 +98,7 @@ public class CommandNodeServlet extends AbstractServlet
 			boolean windows_peer = project.operating_system() == OperatingSystem.Windows;
 			if (null != script_content){
 				//new
-				cmdScript = new ShellScript(file, script_content, windows_peer, commandInfo2.tmp_dir());
+				cmdScript = new ShellScript(file, script_content, project.operating_system(), commandInfo2.tmp_dir(), null, null);
 				file = cmdScript.create();
 			}
 			else if (FilesUtils.exists(file)) { //TODO remove after build 1100
