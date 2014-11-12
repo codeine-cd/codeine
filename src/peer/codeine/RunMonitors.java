@@ -109,8 +109,8 @@ public class RunMonitors implements Task {
 	private void validateDiskSpaceForMonitorRun() {
 		File tempDir = new File(System.getProperty("java.io.tmpdir"));
 		if (tempDir.getUsableSpace() < 100){
-			log.warn("not enough space to run monitors " + tempDir + " " + tempDir.getUsableSpace());
-			snoozeKeeper.snoozeAll();
+			log.warn("not enough space to run monitors " + tempDir + " usableSpace: " + tempDir.getUsableSpace() + " , but it might work on the backup dir");
+//			snoozeKeeper.snoozeAll();
 		}
 	}
 
