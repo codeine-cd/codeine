@@ -32,6 +32,7 @@ public class CodeinePeerModule extends AbstractModule {
 		bind(PeerStatusChangedUpdater.class).in(Scopes.SINGLETON);
 		bind(NodesManager.class).to(NodesManagerPeer.class).in(Scopes.SINGLETON);
 		bind(SnoozeKeeper.class).in(Scopes.SINGLETON);
+//		install(new FactoryModuleBuilder().build(CollectorsRunnerFactory.class));
 	}
 
 }

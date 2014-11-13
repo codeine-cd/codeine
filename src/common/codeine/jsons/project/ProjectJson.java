@@ -5,6 +5,7 @@ import java.util.Map;
 
 import codeine.api.NodeInfo;
 import codeine.configuration.NodeMonitor;
+import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.permissions.UserProjectPermissions;
@@ -18,6 +19,7 @@ public class ProjectJson
 	private String name;
 	private String description;
 	private List<NodeMonitor> monitors = Lists.newArrayList();
+	private List<CollectorInfo> collectors = Lists.newArrayList();
 	private List<MailPolicyJson> mail = Lists.newArrayList();
 	private NodeDiscoveryStrategy node_discovery_startegy = NodeDiscoveryStrategy.Configuration;
 	private List<CommandInfo> commands = Lists.newArrayList();
@@ -147,6 +149,10 @@ public class ProjectJson
 			$.put(environmentVariable.key(), environmentVariable.value());
 		}
 		return $;
+	}
+
+	public List<CollectorInfo> collectors() {
+		return collectors;
 	}
 
 }
