@@ -14,6 +14,8 @@ import codeine.PeerStatusChangedUpdater;
 import codeine.RunMonitors;
 import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
+import codeine.collectors.CollectorsRunner;
+import codeine.collectors.CollectorsRunnerFactory;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
@@ -45,7 +47,7 @@ public class NodesRunner implements Task{
 	@Inject	private SnoozeKeeper snoozeKeeper;
 	private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();
 	@Inject	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
-//	@Inject	private Provider<CollectorsRunner> collectorsRunnerProvider;
+	@Inject	private CollectorsRunnerFactory collectorsRunnerFactory;
 	
 	@Override
 	public synchronized void run() {
@@ -135,8 +137,9 @@ public class NodesRunner implements Task{
 		log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
 		RunMonitors monitorsTask = new RunMonitors(configurationManager, project.name(), peerStatus, mailSender, pathHelper,
 		nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper);
-//		CollectorsRunner collectorsTask = collectorsRunnerProvider.;
-		SerialTasks serialTasks = new SerialTasks(monitorsTask);//, collectorsTask
+		CollectorsRunner collectorsTask = collectorsRunnerFactory.create(project.name(), nodeJson);
+		collectorsTask.init();
+		SerialTasks serialTasks = new SerialTasks(monitorsTask, collectorsTask);
 		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, 
 				serialTasks, "RunMonitors_" + project.name() + "_" + nodeJson.name());
 		log.info("starting 1executor " + periodicExecuter.name());

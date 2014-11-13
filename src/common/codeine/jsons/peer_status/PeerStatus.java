@@ -13,6 +13,7 @@ import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
+import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
@@ -124,6 +125,22 @@ public class PeerStatus {
 			nodeInfo.monitors().remove(m);
 		}
 		return !monitorsToRemove.isEmpty();
+	}
+	
+	public boolean removeNonExistCollectors(ProjectJson project, String node, String alias) {
+		List<String> collectorsNotToRemove = Lists.newArrayList();
+		for (CollectorInfo collectorInfo : project.collectors()) {
+			collectorsNotToRemove.add(collectorInfo.name());
+		}
+		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
+		List<String> collectorsToRemove = Lists.newArrayList(nodeInfo.collectors().keySet());
+		collectorsToRemove.removeAll(collectorsNotToRemove);
+		
+		for (String c : collectorsToRemove) {
+			log.info("removing not exist collector " + c);
+			nodeInfo.collectors().remove(c);
+		}
+		return !collectorsToRemove.isEmpty();
 	}
 
 	public NodeWithMonitorsInfo nodeInfo(ProjectJson project, String node, String alias) {
