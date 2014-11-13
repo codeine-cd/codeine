@@ -1,5 +1,6 @@
 package codeine.jsons.collectors;
 
+
 public class CollectorInfo {
 
 	private String name;
@@ -28,6 +29,10 @@ public class CollectorInfo {
 
 	public String script_content() {
 		return script_content;
+	}
+
+	public CollectorType type() {
+		return type;
 	}
 	
 	

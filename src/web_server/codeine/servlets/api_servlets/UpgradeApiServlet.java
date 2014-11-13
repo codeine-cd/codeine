@@ -31,7 +31,7 @@ public class UpgradeApiServlet extends AbstractApiServlet {
 		log.info("going to upgrade: " + cmd);
 		Result r = new ProcessExecuterBuilder(cmd).build().execute();
 		PrintWriter writer = getWriter(response);
-		writer.write(r.output);
+		writer.write(r.output());
 	}
 
 	private String getVersion(HttpServletRequest request) {

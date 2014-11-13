@@ -140,7 +140,7 @@ public class RunMonitors implements Task {
 		env.putAll(project.environmentVariables());
 		ShellScript script = new ShellScript(
 				"tags_" + projectName + "_" + node.name(), project.tags_discovery_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env);
-		String tags = script.execute();
+		String tags = script.execute().outputFromFile();
 		if (tags.isEmpty()){
 			tags = "[]";
 		}
@@ -165,7 +165,7 @@ public class RunMonitors implements Task {
 		env.putAll(project.environmentVariables());
 		ShellScript script = new ShellScript(
 				"version_" + projectName + "_" + node.name(), project.version_detection_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env);
-		String version = script.execute();
+		String version = script.execute().outputFromFile();
 		if (version.isEmpty()){
 			version = Constants.NO_VERSION;
 		}
@@ -217,8 +217,8 @@ public class RunMonitors implements Task {
 		}
 		stopwatch.stop();
 		// long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-		if (null == res.output) {
-			res.output = "No Output\n";
+		if (null == res.output()) {
+			res.output("No Output\n");
 		}
 		writeResult(res, monitor, stopwatch);
 		String result = String.valueOf(res.success());
@@ -231,14 +231,14 @@ public class RunMonitors implements Task {
 		if (monitor.notification_enabled()) {
 			if (Constants.IS_MAIL_STARTEGY_MONGO) {
 				if (shouldSendNotificationToMongo(res, previousResult)) {
-					notificationDeliverToMongo.sendCollectorResult(monitor.name(), node, project(), res.output);
+					notificationDeliverToMongo.sendCollectorResult(monitor.name(), node, project(), res.output());
 				}
 			} else {
 				if (null == previousResult) {
 					previousResult = result;
 				}
 				mailSender.sendMailIfNeeded(Boolean.valueOf(result), Boolean.valueOf(previousResult), monitor, node,
-						res.output, project());
+						res.output(), project());
 			}
 		} else {
 			log.debug("notification not enabled for " + monitor);
@@ -320,7 +320,7 @@ public class RunMonitors implements Task {
 //		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
 		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
 			log.debug("writing the new format");
-			String output = res.output == null || res.output.length() <= MAX_OUTPUT_SIZE ? res.output : "\nOutput too long...\n" + res.output.substring(res.output.length() - MAX_OUTPUT_SIZE);
+			String output = res.output() == null || res.output().length() <= MAX_OUTPUT_SIZE ? res.output() : "\nOutput too long...\n" + res.output().substring(res.output().length() - MAX_OUTPUT_SIZE);
 			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(collector.name(), res.exit(), output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
 			out.write(new Gson().toJson(monitorExecutionResult));
 //			out.write("+------------------------------------------------------------------+\n");

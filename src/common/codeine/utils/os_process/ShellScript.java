@@ -83,18 +83,16 @@ public class ShellScript {
 		FilesUtils.delete(getOutputFile());
 	}
 	
-	public String execute() {
+	public Result execute() {
 		try {
 			create();
 			Result result = executeInternal();
-			if (!result.success()) {
-				log.warn("failed to run script " + key +  " output: " + result.output());
-				return "";
+			String outputFromFile = "";
+			if (FilesUtils.exists(getOutputFile())) {
+				outputFromFile = TextFileUtils.getContents(getOutputFile()).trim();
 			}
-			if (!FilesUtils.exists(getOutputFile())) {
-				return "";
-			}
-			return TextFileUtils.getContents(getOutputFile()).trim();
+			result.outputFromFile(outputFromFile);
+			return result;
 		} finally {
 			delete();
 		}

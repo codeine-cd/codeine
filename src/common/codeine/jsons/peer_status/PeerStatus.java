@@ -13,6 +13,7 @@ import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
+import codeine.jsons.collectors.CollectorExecutionInfo;
 import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.project.ProjectJson;
@@ -41,6 +42,15 @@ public class PeerStatus {
 			return null;
 		}
 		return prevMonitorInfo.status();
+	}
+
+	public String updateStatus(ProjectJson project, CollectorExecutionInfo collector, String node, String alias) {
+		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
+		CollectorExecutionInfo prevMonitorInfo = nodeInfo.collectors().put(collector.name(), collector);
+		if (null == prevMonitorInfo) {
+			return null;
+		}
+		return prevMonitorInfo.value();
 	}
 
 	private NodeWithMonitorsInfo initStatus(ProjectJson project, String nodeName, String alias) {

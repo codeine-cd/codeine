@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import codeine.jsons.collectors.CollectorStatusInfo;
+import codeine.jsons.collectors.CollectorExecutionInfo;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.model.Constants;
 import codeine.utils.StringUtils;
@@ -16,7 +16,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 
 	private String projectName;
 	private Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
-	private Map<String, CollectorStatusInfo> collectors = Maps.newHashMap();
+	private Map<String, CollectorExecutionInfo> collectors = Maps.newHashMap();
 	private String version = Constants.NO_VERSION;
 	
 	public NodeWithMonitorsInfo(PeerStatusJsonV2 peer, String name, String alias, String projectName, Map<String,MonitorStatusInfo> monitors) {
@@ -46,7 +46,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		}
 		return monitors;
 	}
-	public Map<String, CollectorStatusInfo> collectors() {
+	public Map<String, CollectorExecutionInfo> collectors() {
 		return collectors;
 	}
 

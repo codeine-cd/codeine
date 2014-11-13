@@ -39,7 +39,7 @@ public class NodeScriptDiscovery {
 		env.putAll(projectJson.environmentVariables());
 		ShellScript shellScript = 
 				new ShellScript("discovery_" + projectJson.name(), nodes_discovery_script, projectJson.operating_system(), null, dir, env);
-		String result = shellScript.execute();
+		String result = shellScript.execute().outputFromFile();
 		if (result.trim().isEmpty()){
 			return new NodeListJson();
 		}
