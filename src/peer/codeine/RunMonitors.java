@@ -203,8 +203,8 @@ public class RunMonitors implements Task {
 		try {
 			boolean hasCredentials = hasCredentials(monitor);
 			List<String> cmd = buildCmd(monitor, hasCredentials);
-			log.info("will execute " + cmd);
-			log.info("will execute encoded " + cmd);
+			log.debug("will execute " + cmd);
+			log.debug("will execute encoded " + cmd);
 			Map<String, String> map = Maps.newHashMap();
 			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
 			map.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
@@ -281,7 +281,7 @@ public class RunMonitors implements Task {
 			fileName += node.name();
 			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system(), null, null, null, null);
 			fileName = shellScript.create();
-			log.info("file is " + fileName);
+			log.debug("file is " + fileName);
 		}
 		else if (FilesUtils.exists(fileName)){ //TODO remove after build 1100
 			log.warn("monitor is in old format " + fileName);

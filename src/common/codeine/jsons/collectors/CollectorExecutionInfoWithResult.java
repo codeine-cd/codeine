@@ -17,5 +17,13 @@ public class CollectorExecutionInfoWithResult {
 		return "CollectorExecutionInfoWithResult [info=" + info + ", result=" + result + "]";
 	}
 
+	public Result result() {
+		return result;
+	}
+
+	public CollectorExecutionInfo info() {
+		return info;
+	}
+
 	
 }

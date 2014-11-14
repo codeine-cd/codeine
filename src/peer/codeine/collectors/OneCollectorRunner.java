@@ -79,16 +79,15 @@ public class OneCollectorRunner {
 		}
 		CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(), collectorInfo.type(), result.exit(), result.outputFromFile(), stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
 		CollectorExecutionInfoWithResult resultWrapped = new CollectorExecutionInfoWithResult(info, result);
-		log.info("resultWrapped: " + resultWrapped);
-		processResult(result, info, resultWrapped);
+		processResult(resultWrapped, stopwatch);
 	}
 
-	private void processResult(Result result, CollectorExecutionInfo info,
-			CollectorExecutionInfoWithResult resultWrapped) {
-		result.limitOutputLength();
+	private void processResult(CollectorExecutionInfoWithResult resultWrapped, Stopwatch stopwatch) {
+		resultWrapped.result().limitOutputLength();
 		writeResult(resultWrapped);
-		String lastValue = updateStatusInDataset(info);
-		updateDatastoreIfNeeded(lastValue, result.outputFromFile());
+		String lastValue = updateStatusInDataset(resultWrapped.info());
+		log.info("collector " + collectorInfo.name() + " ended with value: " + resultWrapped.info().value() + " , previous result " + lastValue + ", took: " + stopwatch);
+		updateDatastoreIfNeeded(lastValue, resultWrapped.result().outputFromFile());
 		sendNotificationIfNeeded();
 	}
 
