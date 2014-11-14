@@ -225,7 +225,7 @@ public class RunMonitors implements Task {
 		String result = String.valueOf(res.success());
 		MonitorStatusInfo monitorInfo = new MonitorStatusInfo(monitor.name(), result);
 		String previousResult = updateStatusInDatastore(monitorInfo);
-		log.info(monitor.name() + " ended with result: " + res.success() + " , previous result " + previousResult + ", took: " + stopwatch);
+		log.info("monitor '" + monitor.name() + "' ended with result: " + res.success() + " , previous result " + previousResult + ", took: " + stopwatch);
 		if (shouldSendStatusToMongo(result, previousResult)) {
 			updateStatusInMongo();
 		}

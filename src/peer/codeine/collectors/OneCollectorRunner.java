@@ -86,7 +86,7 @@ public class OneCollectorRunner {
 		resultWrapped.result().limitOutputLength();
 		writeResult(resultWrapped);
 		String lastValue = updateStatusInDataset(resultWrapped.info());
-		log.info("collector " + collectorInfo.name() + " ended with value: " + resultWrapped.info().value() + " , previous result " + lastValue + ", took: " + stopwatch);
+		log.info("collector '" + collectorInfo.name() + "' ended with value: " + resultWrapped.info().value() + " , previous result " + lastValue + ", took: " + stopwatch);
 		updateDatastoreIfNeeded(lastValue, resultWrapped.result().outputFromFile());
 		sendNotificationIfNeeded();
 	}
