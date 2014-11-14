@@ -2,6 +2,7 @@ package codeine.model;
 
 public class Result {
 	
+	private static final int MAX_OUTPUT_SIZE = 1000000;
 	private int exit;
 	private String output;
 	private String outputFromFile;
@@ -48,5 +49,16 @@ public class Result {
 
 	public String outputFromFile() {
 		return outputFromFile;
+	}
+
+	public void limitOutputLength() {
+		limitOutput(output);
+		limitOutput(outputFromFile);
+	}
+
+	private void limitOutput(String output2) {
+		output2 = output2 == null || output2.length() <= MAX_OUTPUT_SIZE ? 
+				output2 : 
+				"\nOutput too long...\n" + output2.substring(output2.length() - MAX_OUTPUT_SIZE);
 	}
 }

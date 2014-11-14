@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import codeine.configuration.PathHelper;
+import codeine.credentials.CredentialsHelper;
 import codeine.model.Constants;
 import codeine.model.Result;
 import codeine.utils.ExceptionUtils;
@@ -30,13 +32,15 @@ public class ShellScript {
 	private OperatingSystem operatingSystem;
 	private String runFromDir;
 	private Map<String, String> env;
+	private String credentials;
 
-	public ShellScript(String key, String content, OperatingSystem operatingSystem, String tmp_dir, String runFromDir, Map<String, String> env) {
+	public ShellScript(String key, String content, OperatingSystem operatingSystem, String tmp_dir, String runFromDir, Map<String, String> env, String credentials) {
 		this.key = key;
 		this.content = content;
 		this.operatingSystem = operatingSystem;
 		this.runFromDir = runFromDir;
 		this.env = env;
+		this.credentials = credentials;
 		this.tmpDir = StringUtils.isEmpty(tmp_dir) ? System.getProperty("java.io.tmpdir") : tmp_dir;
 	}
 
@@ -103,7 +107,11 @@ public class ShellScript {
 		List<String> cmd = null;
 		switch (operatingSystem) {
 		case Linux:
-			cmd = Lists.newArrayList("/bin/sh", "-xe", fileName);
+			if (null != credentials) {
+				cmd = Lists.newArrayList(PathHelper.getReadLogs(), encode(credentials), encode("/bin/sh"), encode("-xe"), encode(fileName)); 
+			} else {
+				cmd = Lists.newArrayList("/bin/sh", "-xe", fileName);
+			}
 			break;
 		case Windows:
 			cmd = Lists.newArrayList("cmd", "/c", "call", fileName);
@@ -116,6 +124,10 @@ public class ShellScript {
 
 	private String getOutputFile() {
 		return fileName + ".output";
+	}
+	
+	private String encode(final String value) {
+		return CredentialsHelper.encode(value);
 	}
 
 }

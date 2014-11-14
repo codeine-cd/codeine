@@ -195,7 +195,7 @@ public class CommandNodeServletBackup extends AbstractServlet
 	}
 
 	private String encodeIfNeeded(String text, String credentials) {
-		return null == credentials ? text: new CredentialsHelper().encode(text);
+		return null == credentials ? text: CredentialsHelper.encode(text);
 	}
 
 	private ProjectJson getProject(String projectName) {

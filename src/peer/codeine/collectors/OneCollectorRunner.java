@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.PeerStatusChangedUpdater;
+import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
 import codeine.configuration.PathHelper;
 import codeine.jsons.collectors.CollectorExecutionInfo;
@@ -15,7 +17,11 @@ import codeine.jsons.collectors.CollectorExecutionInfoWithResult;
 import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
+import codeine.model.Constants;
+import codeine.model.ExitStatus;
 import codeine.model.Result;
+import codeine.utils.MiscUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 import codeine.utils.network.HttpUtils;
 import codeine.utils.os_process.ShellScript;
@@ -31,6 +37,8 @@ public class OneCollectorRunner {
 	@Inject private PathHelper pathHelper;
 	@Inject private PeerStatus peerStatus;
 	@Inject private Gson gson;
+	@Inject private PeerStatusChangedUpdater peerStatusChangedUpdater;
+	@Inject private SnoozeKeeper snoozeKeeper;
 	private CollectorInfo collectorInfo;
 	private ProjectJson project;
 	private NodeInfo node;
@@ -61,16 +69,10 @@ public class OneCollectorRunner {
 	}
 
 	private void runOnce() {
+		ShellScript shellScript = createShellScript();
 		long startTime = System.currentTimeMillis();
 		Stopwatch stopwatch = Stopwatch.createStarted();
-		String key = pathHelper.getMonitorsDir(project.name()) + File.separator + node.name() + "_" + collectorInfo.name();
-		Map<String, String> env = Maps.newHashMap();
-		ShellScript shellScript = new ShellScript(key, collectorInfo.script_content(), project.operating_system(), null, pathHelper.getProjectDir(project.name()), env);
-//		String fileName = 
-				shellScript.create();
-		//TODO credentials
-		//TODO populate env variables
-		Result result = shellScript.execute();
+		Result result = executeScriptAndDeleteIt(shellScript);
 		stopwatch.stop();
 		if (null == result.output()) {
 			result.output("No Output\n");
@@ -78,20 +80,66 @@ public class OneCollectorRunner {
 		CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(), collectorInfo.type(), result.exit(), result.outputFromFile(), stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
 		CollectorExecutionInfoWithResult resultWrapped = new CollectorExecutionInfoWithResult(info, result);
 		log.info("resultWrapped: " + resultWrapped);
+		processResult(result, info, resultWrapped);
+	}
+
+	private void processResult(Result result, CollectorExecutionInfo info,
+			CollectorExecutionInfoWithResult resultWrapped) {
+		result.limitOutputLength();
 		writeResult(resultWrapped);
 		String lastValue = updateStatusInDataset(info);
-		updateDatastoreIfNeeded();
+		updateDatastoreIfNeeded(lastValue, result.outputFromFile());
 		sendNotificationIfNeeded();
 	}
 
-	private void sendNotificationIfNeeded() {
-		// TODO Auto-generated method stub
-		
+	private ShellScript createShellScript() {
+		ShellScript shellScript = new ShellScript(getKey(), collectorInfo.script_content(), project.operating_system(), null, pathHelper.getProjectDir(project.name()), prepareEnv(), collectorInfo.credentials());
+		shellScript.create();
+		return shellScript;
 	}
 
-	private void updateDatastoreIfNeeded() {
-		// TODO Auto-generated method stub
-		
+	private String getKey() {
+		return pathHelper.getMonitorsDir(project.name()) + File.separator + node.name() + "_" + collectorInfo.name();
+	}
+
+	private Result executeScriptAndDeleteIt(ShellScript shellScript) {
+		Result result;
+		try {
+			result = shellScript.execute();
+		} catch (Exception ex) {
+			result = new Result(ExitStatus.EXCEPTION, ex.getMessage());
+			log.debug("error in collector", ex);
+		} finally {
+			shellScript.delete();
+		}
+		return result;
+	}
+
+	private Map<String, String> prepareEnv() {
+		Map<String, String> env = Maps.newHashMap();
+		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+		env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
+		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
+		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(peerStatus.getTags(project.name(), node.name()), ";"));
+		env.putAll(project.environmentVariables());
+		return env;
+	}
+
+	private void sendNotificationIfNeeded() {
+		if (snoozeKeeper.isSnooze(project.name(), node.name())) {
+			log.info("in snooze period");
+			return;
+		}
+//		return null != previousResult && Boolean.valueOf(previousResult) && !res.success();
+//		collectorInfo.notification_enabled();
+		//TODO decide when to notify somehow
+	}
+
+	private void updateDatastoreIfNeeded(String lastValue, String currentValue) {
+		log.info("last value " + lastValue + " current value " + currentValue);
+		if (!MiscUtils.equals(lastValue, currentValue)) {
+			peerStatusChangedUpdater.pushUpdate();
+		}
 	}
 
 	private String updateStatusInDataset(CollectorExecutionInfo info) {

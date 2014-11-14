@@ -88,8 +88,6 @@ public class Constants
 	public static final String ALL_VERSION = "All versions";
 	public static final String VERSION = "version";
 
-	public static final int ERROR_MONITOR = -1;
-
 	public static final String COMMAND_RESULT = "codeine-command-result=";
 
 	public static final String JSON_COMMAND_FILE_NAME = "/command.json";

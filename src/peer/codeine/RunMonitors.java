@@ -26,6 +26,7 @@ import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
 import codeine.mail.NotificationDeliverToMongo;
 import codeine.model.Constants;
+import codeine.model.ExitStatus;
 import codeine.model.Result;
 import codeine.servlets.api_servlets.angular.MonitorExecutionResult;
 import codeine.utils.ExceptionUtils;
@@ -139,7 +140,7 @@ public class RunMonitors implements Task {
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
 		env.putAll(project.environmentVariables());
 		ShellScript script = new ShellScript(
-				"tags_" + projectName + "_" + node.name(), project.tags_discovery_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env);
+				"tags_" + projectName + "_" + node.name(), project.tags_discovery_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env, null);
 		String tags = script.execute().outputFromFile();
 		if (tags.isEmpty()){
 			tags = "[]";
@@ -164,7 +165,7 @@ public class RunMonitors implements Task {
 		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
 		env.putAll(project.environmentVariables());
 		ShellScript script = new ShellScript(
-				"version_" + projectName + "_" + node.name(), project.version_detection_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env);
+				"version_" + projectName + "_" + node.name(), project.version_detection_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env, null);
 		String version = script.execute().outputFromFile();
 		if (version.isEmpty()){
 			version = Constants.NO_VERSION;
@@ -212,7 +213,7 @@ public class RunMonitors implements Task {
 			map.putAll(project().environmentVariables());
 			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).env(map).build().execute();
 		} catch (Exception e) {
-			res = new Result(Constants.ERROR_MONITOR, e.getMessage());
+			res = new Result(ExitStatus.EXCEPTION, e.getMessage());
 			log.debug("error in monitor", e);
 		}
 		stopwatch.stop();
@@ -278,7 +279,7 @@ public class RunMonitors implements Task {
 				LogUtils.assertFailed(log, "'shellScript' should be null but not");
 			}
 			fileName += node.name();
-			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system(), null, null, null);
+			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system(), null, null, null, null);
 			fileName = shellScript.create();
 			log.info("file is " + fileName);
 		}
@@ -310,7 +311,7 @@ public class RunMonitors implements Task {
 	}
 
 	private String encode(final String value1) {
-		return new CredentialsHelper().encode(value1);
+		return CredentialsHelper.encode(value1);
 	}
 
 	private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch) {

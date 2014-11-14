@@ -4,8 +4,7 @@ import sun.misc.BASE64Encoder;
 
 public class CredentialsHelper {
 
-	public String encode(final String value1){
-		BASE64Encoder encoder = new BASE64Encoder();
-		return new StringBuffer(encoder.encode(value1.getBytes())).reverse().toString().replace("\n", "");
+	public static String encode(final String value){
+		return new StringBuffer(new BASE64Encoder().encode(value.getBytes())).reverse().toString().replace("\n", "");
 	}
 }

@@ -98,7 +98,7 @@ public class CommandNodeServlet extends AbstractServlet
 			boolean windows_peer = project.operating_system() == OperatingSystem.Windows;
 			if (null != script_content){
 				//new
-				cmdScript = new ShellScript(file, script_content, project.operating_system(), commandInfo2.tmp_dir(), null, null);
+				cmdScript = new ShellScript(file, script_content, project.operating_system(), commandInfo2.tmp_dir(), null, null, null);
 				file = cmdScript.create();
 			}
 			else if (FilesUtils.exists(file)) { //TODO remove after build 1100
@@ -264,7 +264,7 @@ public class CommandNodeServlet extends AbstractServlet
 	}
 
 	private String encodeIfNeeded(String text, String credentials) {
-		return null == credentials ? text: new CredentialsHelper().encode(text);
+		return null == credentials ? text: CredentialsHelper.encode(text);
 	}
 
 	private CommandInfo getCommand(String command, String projectName) {

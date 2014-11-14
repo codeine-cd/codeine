@@ -8,6 +8,7 @@ public class CollectorInfo {
 	private int min_interval;
 	private String credentials;
 	private CollectorType type;
+	private boolean notification_enabled;
 	
 	public static enum CollectorType {
 		String,Integer,Boolean
@@ -33,6 +34,14 @@ public class CollectorInfo {
 
 	public CollectorType type() {
 		return type;
+	}
+
+	public String credentials() {
+		return credentials;
+	}
+
+	public boolean notification_enabled() {
+		return notification_enabled;
 	}
 	
 	
