@@ -76,7 +76,9 @@ public class OneCollectorRunner {
 			result.output("No Output\n");
 		}
 		CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(), collectorInfo.type(), result.exit(), result.outputFromFile(), stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
-		writeResult(new CollectorExecutionInfoWithResult(info, result));
+		CollectorExecutionInfoWithResult resultWrapped = new CollectorExecutionInfoWithResult(info, result);
+		log.info("resultWrapped: " + resultWrapped);
+		writeResult(resultWrapped);
 		String lastValue = updateStatusInDataset(info);
 		updateDatastoreIfNeeded();
 		sendNotificationIfNeeded();

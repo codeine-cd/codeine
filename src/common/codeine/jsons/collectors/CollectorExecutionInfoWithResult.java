@@ -2,7 +2,6 @@ package codeine.jsons.collectors;
 
 import codeine.model.Result;
 
-@SuppressWarnings("unused")
 public class CollectorExecutionInfoWithResult {
 
 	private CollectorExecutionInfo info;
@@ -13,4 +12,10 @@ public class CollectorExecutionInfoWithResult {
 		this.result = result;
 	}
 
+	@Override
+	public String toString() {
+		return "CollectorExecutionInfoWithResult [info=" + info + ", result=" + result + "]";
+	}
+
+	
 }

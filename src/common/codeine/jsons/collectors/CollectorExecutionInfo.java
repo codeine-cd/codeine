@@ -2,7 +2,6 @@ package codeine.jsons.collectors;
 
 import codeine.jsons.collectors.CollectorInfo.CollectorType;
 
-@SuppressWarnings("unused")
 public class CollectorExecutionInfo {
 
 	private static final int MAX_SIZE = 100;
@@ -34,6 +33,12 @@ public class CollectorExecutionInfo {
 
 	public String value() {
 		return value;
+	}
+
+	@Override
+	public String toString() {
+		return "CollectorExecutionInfo [name=" + name + ", type=" + type + ", value=" + value + ", exit_status="
+				+ exit_status + ", start_time=" + start_time + ", execution_duration=" + execution_duration + "]";
 	}
 	
 	
