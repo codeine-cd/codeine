@@ -7,6 +7,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletRequest;
+
 import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
 
@@ -32,13 +34,19 @@ public class ManageStatisticsCollector {
 		Collections.sort(lastCommands, new StringsCommandPair.CommandComparator());
 		return new ManageStatisticsInfo(users, lastCommands, activeUsersInfo.asMap().keySet());
 	}
-	public synchronized void userAccess(IUserWithPermissions user, final String pathInfo) {
-		activeUsersInfo.put(user.user().username(), user.user().username());
+	public void userAccess(IUserWithPermissions user, final String pathInfo, HttpServletRequest request) {
+		String username = user.user().username();
+		activeUsersInfo.put(username, username);
 		try {
-			usersInfo.get(user.user().username(), getCallable(user.user().username())).hitCount++;
+			String userAgent = request.getHeader("user-agent");
+			String userWithAgent = username + "_" + userAgent;
+			incHitCount(userWithAgent);
 		} catch (ExecutionException e) {
 			throw ExceptionUtils.asUnchecked(e);
 		}
+	}
+	private synchronized void incHitCount(String userWithAgent) throws ExecutionException {
+		usersInfo.get(userWithAgent , getCallable(userWithAgent)).hitCount++;
 	}
 	public synchronized void commandExecuted(String project, String command_name, String command_id, long startTime) {
 		lastCommandsInfo.put(project + "_" + command_name + "_" + command_id, new StringsCommandPair(project, command_name, command_id, startTime));
