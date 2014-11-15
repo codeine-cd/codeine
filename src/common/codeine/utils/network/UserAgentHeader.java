@@ -14,7 +14,7 @@ public class UserAgentHeader {
 		this.request = request;
 	}
 
-	public void parseBrowserAndOs() {
+	public UserAgentHeader parseBrowserAndOs() {
 		String  browserDetails  =   request.getHeader("User-Agent");
         String  userAgent       =   browserDetails;
         String  user            =   userAgent.toLowerCase();
@@ -79,6 +79,7 @@ public class UserAgentHeader {
         }
 //        log.info("Operating System======>"+os);
 //        log.info("Browser Name==========>"+browser);
+        return this;
 	}
 
 	public String getOs() {
