@@ -76,7 +76,7 @@ public class UserAgentHeader {
         }
         else
         {
-            browser = "UnKnown("+userAgent + ")";
+            browser = "Unknown["+userAgent + "]";
         }
 //        log.info("Operating System======>"+os);
 //        log.info("Browser Name==========>"+browser);
