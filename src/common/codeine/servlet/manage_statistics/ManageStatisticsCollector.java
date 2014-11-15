@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
+import codeine.utils.network.UserAgentHeader;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -38,8 +39,8 @@ public class ManageStatisticsCollector {
 		String username = user.user().username();
 		activeUsersInfo.put(username, username);
 		try {
-			String userAgent = request.getHeader("user-agent");
-			String userWithAgent = username + "_" + userAgent;
+			UserAgentHeader userAgent = new UserAgentHeader(request);
+			String userWithAgent = username + " browser: " + userAgent.getBrowser() + " os: " + userAgent.getOs();
 			incHitCount(userWithAgent);
 		} catch (ExecutionException e) {
 			throw ExceptionUtils.asUnchecked(e);
