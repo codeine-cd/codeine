@@ -40,7 +40,7 @@ public class ManageStatisticsCollector {
 		activeUsersInfo.put(username, username);
 		try {
 			UserAgentHeader userAgent = new UserAgentHeader(request).parseBrowserAndOs();
-			String userWithAgent = username + " browser: " + userAgent.getBrowser() + " os: " + userAgent.getOs();
+			String userWithAgent = username + "  ___  browser=" + userAgent.getBrowser() + ",os=" + userAgent.getOs();
 			incHitCount(userWithAgent);
 		} catch (ExecutionException e) {
 			throw ExceptionUtils.asUnchecked(e);

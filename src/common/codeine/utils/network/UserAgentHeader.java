@@ -17,26 +17,27 @@ public class UserAgentHeader {
 	public UserAgentHeader parseBrowserAndOs() {
 		String  browserDetails  =   request.getHeader("User-Agent");
         String  userAgent       =   browserDetails;
-        String  user            =   userAgent.toLowerCase();
+        String lowerCaseUserAgent = userAgent.toLowerCase();
+		String  user            =   lowerCaseUserAgent;
 
 //        log.info("User Agent for the request is===>"+browserDetails);
         //=================OS=======================
-         if (userAgent.toLowerCase().indexOf("windows") >= 0 )
+         if (lowerCaseUserAgent.indexOf("windows") >= 0 )
          {
              os = "Windows";
          }
-         else if(userAgent.toLowerCase().indexOf("mac") >= 0)
+         else if(lowerCaseUserAgent.indexOf("mac") >= 0)
          {
              os = "Mac";
          }
-         else if(userAgent.toLowerCase().indexOf("x11") >= 0)
+         else if(lowerCaseUserAgent.indexOf("x11") >= 0)
          {
              os = "Unix";
-         }else if(userAgent.toLowerCase().indexOf("android") >= 0)
+         }else if(lowerCaseUserAgent.indexOf("android") >= 0)
          {
              os = "Android";
          }
-         else if(userAgent.toLowerCase().indexOf("iphone") >= 0)
+         else if(lowerCaseUserAgent.indexOf("iphone") >= 0)
          {
              os = "IPhone";
          }else{
@@ -75,7 +76,7 @@ public class UserAgentHeader {
         }
         else
         {
-            browser = "UnKnown, More-Info: "+userAgent;
+            browser = "UnKnown("+userAgent + ")";
         }
 //        log.info("Operating System======>"+os);
 //        log.info("Browser Name==========>"+browser);
