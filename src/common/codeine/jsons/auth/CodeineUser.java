@@ -16,7 +16,7 @@ public class CodeineUser {
 		this.username = username;
 		this.sisma = sisma;
 		this.api_token = EncryptionUtils.encryptToken(UUID.randomUUID().toString(),
-				Constants.CODEINE_API_TOKEN_SECRET_KEY);
+				Constants.CODEINE_API_TOKEN_DERIVER);
 	}
 
 	public static CodeineUser createNewUser(String username, String sisma) {
@@ -41,12 +41,12 @@ public class CodeineUser {
 
 	public String encodedApiTokenWithTime() {
 		return EncryptionUtils.encryptToken(api_token() + "#" + System.currentTimeMillis(),
-				Constants.CODEINE_API_TOKEN_SECRET_KEY);
+				Constants.CODEINE_API_TOKEN_DERIVER);
 	}
 
 	public String api_token() {
 		if (StringUtils.isEmpty(plain_api_token)) {
-			plain_api_token = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_SECRET_KEY, api_token);
+			plain_api_token = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_DERIVER, api_token);
 		}
 		return plain_api_token;
 	}

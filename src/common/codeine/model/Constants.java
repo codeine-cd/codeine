@@ -155,7 +155,7 @@ public class Constants
 			File jarFile = new File(sJarPath);
 			installDir = jarFile.getParentFile().getParent();
 		}
-		System.out.println("Setting installDir to '" + installDir + "'");
+		System.out.println("Setting installDir to '" + installDir + "'"); //$NON-NLS-2$
 		return installDir;
 	}
 
@@ -233,6 +233,6 @@ public class Constants
 
 	public static final String OFFLINE_NODES = "Codeine daemon not running";
 
-	public static final String CODEINE_API_TOKEN_SECRET_KEY = "CodeineSecretKey";
+	public static final String CODEINE_API_TOKEN_DERIVER = Messages.getString("Constants.116");
 	
 }
