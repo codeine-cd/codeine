@@ -11,6 +11,7 @@ import codeine.jsons.auth.CodeineUser;
 import codeine.model.Constants;
 import codeine.servlet.UsersManager;
 import codeine.utils.StringUtils;
+import codeine.utils.network.RequestUtils;
 
 public class UsernameResolverFromRequest {
 
@@ -24,7 +25,7 @@ public class UsernameResolverFromRequest {
 	}
 
 	public CodeineUser getUser(HttpServletRequest request) {
-		String api_token = request.getHeader(Constants.API_TOKEN);
+		String api_token = RequestUtils.getHeader(request, Constants.API_TOKEN);
 		if (!StringUtils.isEmpty(api_token)) { 
 			return usersManager.userByApiToken(api_token);
 		}
@@ -41,6 +42,6 @@ public class UsernameResolverFromRequest {
 	}
 	
 	public CodeineUser getViewAsUser(HttpServletRequest request) {
-		return CodeineUser.createNewUser(request.getHeader(Constants.UrlParameters.VIEW_AS), "blabla");
+		return CodeineUser.createNewUser(RequestUtils.getHeader(request, Constants.UrlParameters.VIEW_AS), "blabla");
 	}
 }

@@ -15,7 +15,7 @@ public class UserAgentHeader {
 	}
 
 	public UserAgentHeader parseBrowserAndOs() {
-		String  browserDetails  =   request.getHeader("User-Agent");
+		String  browserDetails  =   RequestUtils.getHeader(request, "User-Agent");
         String  userAgent       =   browserDetails;
         String lowerCaseUserAgent = userAgent.toLowerCase();
 		String  user            =   lowerCaseUserAgent;

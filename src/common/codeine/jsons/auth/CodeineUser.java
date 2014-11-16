@@ -8,19 +8,19 @@ import codeine.utils.StringUtils;
 public class CodeineUser {
 
 	private String username;
-	private String credentials;
+	private String sisma;
 	private String api_token;// Encrypted
 	private transient String plain_api_token;
 
-	private CodeineUser(String username, String credentials) {
+	private CodeineUser(String username, String sisma) {
 		this.username = username;
-		this.credentials = credentials;
+		this.sisma = sisma;
 		this.api_token = EncryptionUtils.encryptToken(UUID.randomUUID().toString(),
 				Constants.CODEINE_API_TOKEN_SECRET_KEY);
 	}
 
-	public static CodeineUser createNewUser(String username, String credentials) {
-		return new CodeineUser(username, credentials);
+	public static CodeineUser createNewUser(String username, String sisma) {
+		return new CodeineUser(username, sisma);
 	}
 
 	public static CodeineUser createGuestUser() {
@@ -36,7 +36,7 @@ public class CodeineUser {
 	}
 
 	public String credentials() {
-		return credentials;
+		return sisma;
 	}
 
 	public String encodedApiTokenWithTime() {

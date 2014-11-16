@@ -23,6 +23,7 @@ import codeine.utils.ExceptionUtils;
 import codeine.utils.ServletUtils;
 import codeine.utils.exceptions.InShutdownException;
 import codeine.utils.exceptions.UnAuthorizedException;
+import codeine.utils.network.RequestUtils;
 
 import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
@@ -223,16 +224,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 	
 	protected String getParameter(HttpServletRequest request, String parameter) {
-		StringBuilder $ = new StringBuilder();
-		if (null == parameter || parameter.contains("111ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
-			return null;
-		}
-		String parameterValue = request.getParameter(parameter);
-		if (null == parameterValue || parameterValue.contains("22ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
-			return null;
-		}
-		$.append(parameterValue);
-		return $.toString();
+		return RequestUtils.getParameter(request, parameter);
 	}
 
 	public ManageStatisticsCollector manageStatisticsCollector() {

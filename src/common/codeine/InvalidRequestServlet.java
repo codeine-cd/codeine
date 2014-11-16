@@ -16,18 +16,6 @@ public class InvalidRequestServlet extends HttpServlet{
     
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	Object attribute = null;
-		try {
-			attribute = request.getSession().getAttribute("returnUrl");
-		} catch (Exception e) {
-			log.info("problem accessing session: " + e.getMessage());
-			log.debug("error", e);
-		}
-    	if (attribute != null){
-    		request.getSession().setAttribute("returnUrl", null);
-    		response.sendRedirect(attribute.toString());
-    		return;
-    	}
     	response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     	response.sendRedirect("/resources/html/404.html");
     }

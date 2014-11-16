@@ -36,14 +36,14 @@ public class UsersManager {
 		}
 	}
 	
-	private void putUser(String name, String credentials) {
-		hashLoginService.putUser(name, Credential.getCredential(credentials), new String[] { "user" });
+	private void putUser(String name, String sisma) {
+		hashLoginService.putUser(name, Credential.getCredential(sisma), new String[] { "user" });
 	}
 
-	public CodeineUser addUser(String name, String credentials) {
-		CodeineUser user = identityConfJsonStore.get().add(name, credentials);
+	public CodeineUser addUser(String name, String sisma) {
+		CodeineUser user = identityConfJsonStore.get().add(name, sisma);
 		store(identityConfJsonStore.get());
-		putUser(name, credentials);
+		putUser(name, sisma);
 		return user;
 	}
 	
