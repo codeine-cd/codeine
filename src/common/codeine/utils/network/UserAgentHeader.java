@@ -4,11 +4,18 @@ import javax.servlet.http.HttpServletRequest;
 
 public class UserAgentHeader {
 
+	private static final UserAgentHeader NULL = new UserAgentHeader("null_os", "null_browser");
 	private String os;
 	private String browser;
 	private HttpServletRequest request;
 
 	
+	public UserAgentHeader(String os, String browser) {
+		super();
+		this.os = os;
+		this.browser = browser;
+	}
+
 	public UserAgentHeader(HttpServletRequest request) {
 		super();
 		this.request = request;
@@ -16,6 +23,9 @@ public class UserAgentHeader {
 
 	public UserAgentHeader parseBrowserAndOs() {
 		String  browserDetails  =   RequestUtils.getHeader(request, "User-Agent");
+		if (null == browserDetails) {
+			return UserAgentHeader.NULL;
+		}
         String  userAgent       =   browserDetails;
         String lowerCaseUserAgent = userAgent.toLowerCase();
 		String  user            =   lowerCaseUserAgent;
