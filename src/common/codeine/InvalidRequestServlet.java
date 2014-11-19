@@ -16,6 +16,7 @@ public class InvalidRequestServlet extends HttpServlet{
     
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	log.info("InvalidRequestServlet called");
     	response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     	response.sendRedirect("/resources/html/404.html");
     }

@@ -4,89 +4,96 @@ import javax.servlet.http.HttpServletRequest;
 
 public class UserAgentHeader {
 
-	private static final UserAgentHeader NULL = new UserAgentHeader("null_os", "null_browser");
+	public static final UserAgentHeader NULL = new UserAgentHeader("null_os", "null_browser");
 	private String os;
 	private String browser;
-	private HttpServletRequest request;
+	private String header;
 
 	
-	public UserAgentHeader(String os, String browser) {
+	private UserAgentHeader(String os, String browser) {
 		super();
 		this.os = os;
 		this.browser = browser;
 	}
-
-	public UserAgentHeader(HttpServletRequest request) {
+	private UserAgentHeader(String header) {
 		super();
-		this.request = request;
+		this.header = header;
 	}
 
-	public UserAgentHeader parseBrowserAndOs() {
-		String  browserDetails  =   RequestUtils.getHeader(request, "User-Agent");
-		if (null == browserDetails) {
+	public static UserAgentHeader parseBrowserAndOs(HttpServletRequest request) {
+		return parseBrowserAndOs(RequestUtils.getHeader(request, "User-Agent"));
+	}
+	public static UserAgentHeader parseBrowserAndOs(String header) {
+		if (null == header) {
 			return UserAgentHeader.NULL;
 		}
-        String  userAgent       =   browserDetails;
-        String lowerCaseUserAgent = userAgent.toLowerCase();
-		String  user            =   lowerCaseUserAgent;
-
-//        log.info("User Agent for the request is===>"+browserDetails);
+		return new UserAgentHeader(header).parseBrowserAndOs();
+	}
+	private UserAgentHeader parseBrowserAndOs() {
+		String lowerCaseUserHeader = header.toLowerCase();
+		
+		//        log.info("User Agent for the request is===>"+browserDetails);
         //=================OS=======================
-         if (lowerCaseUserAgent.indexOf("windows") >= 0 )
+         if (lowerCaseUserHeader.indexOf("windows") >= 0 )
          {
              os = "Windows";
          }
-         else if(lowerCaseUserAgent.indexOf("mac") >= 0)
+         else if(lowerCaseUserHeader.indexOf("mac") >= 0)
          {
              os = "Mac";
          }
-         else if(lowerCaseUserAgent.indexOf("x11") >= 0)
+         else if(lowerCaseUserHeader.indexOf("x11") >= 0)
          {
              os = "Unix";
-         }else if(lowerCaseUserAgent.indexOf("android") >= 0)
+         }else if(lowerCaseUserHeader.indexOf("android") >= 0)
          {
              os = "Android";
          }
-         else if(lowerCaseUserAgent.indexOf("iphone") >= 0)
+         else if(lowerCaseUserHeader.indexOf("iphone") >= 0)
          {
              os = "IPhone";
          }else{
-             os = "UnKnown, More-Info: "+userAgent;
+             os = "UnKnown, More-Info: "+header;
          }
          //===============Browser===========================
-        if (user.contains("msie"))
+        if (lowerCaseUserHeader.contains("msie"))
         {
-            String substring=userAgent.substring(userAgent.indexOf("MSIE")).split(";")[0];
+            String substring=header.substring(header.indexOf("MSIE")).split(";")[0];
             browser=substring.split(" ")[0].replace("MSIE", "IE")+"-"+substring.split(" ")[1];
         }
-        else if (user.contains("safari") && user.contains("version"))
+        else if (lowerCaseUserHeader.contains("trident"))
         {
-            browser=(userAgent.substring(userAgent.indexOf("Safari")).split(" ")[0]).split("/")[0]+"-"+(userAgent.substring(userAgent.indexOf("Version")).split(" ")[0]).split("/")[1];
+        	String substring=header.substring(header.indexOf("rv:")).split("\\)")[0];
+        	browser=substring.replace("rv:", "IE-");
         }
-        else if ( user.contains("opr") || user.contains("opera"))
+        else if (lowerCaseUserHeader.contains("safari") && lowerCaseUserHeader.contains("version"))
         {
-            if(user.contains("opera"))
-                browser=(userAgent.substring(userAgent.indexOf("Opera")).split(" ")[0]).split("/")[0]+"-"+(userAgent.substring(userAgent.indexOf("Version")).split(" ")[0]).split("/")[1];
-            else if(user.contains("opr"))
-                browser=((userAgent.substring(userAgent.indexOf("OPR")).split(" ")[0]).replace("/", "-")).replace("OPR", "Opera");
+            browser=(header.substring(header.indexOf("Safari")).split(" ")[0]).split("/")[0]+"-"+(header.substring(header.indexOf("Version")).split(" ")[0]).split("/")[1];
         }
-        else if (user.contains("chrome"))
+        else if ( lowerCaseUserHeader.contains("opr") || lowerCaseUserHeader.contains("opera"))
         {
-            browser=(userAgent.substring(userAgent.indexOf("Chrome")).split(" ")[0]).replace("/", "-");
+            if(lowerCaseUserHeader.contains("opera"))
+                browser=(header.substring(header.indexOf("Opera")).split(" ")[0]).split("/")[0]+"-"+(header.substring(header.indexOf("Version")).split(" ")[0]).split("/")[1];
+            else if(lowerCaseUserHeader.contains("opr"))
+                browser=((header.substring(header.indexOf("OPR")).split(" ")[0]).replace("/", "-")).replace("OPR", "Opera");
         }
-        else if ((user.indexOf("mozilla/7.0") > -1) || (user.indexOf("netscape6") != -1)  || (user.indexOf("mozilla/4.7") != -1) || (user.indexOf("mozilla/4.78") != -1) || (user.indexOf("mozilla/4.08") != -1) || (user.indexOf("mozilla/3") != -1) )
+        else if (lowerCaseUserHeader.contains("chrome"))
+        {
+            browser=(header.substring(header.indexOf("Chrome")).split(" ")[0]).replace("/", "-");
+        }
+        else if ((lowerCaseUserHeader.indexOf("mozilla/7.0") > -1) || (lowerCaseUserHeader.indexOf("netscape6") != -1)  || (lowerCaseUserHeader.indexOf("mozilla/4.7") != -1) || (lowerCaseUserHeader.indexOf("mozilla/4.78") != -1) || (lowerCaseUserHeader.indexOf("mozilla/4.08") != -1) || (lowerCaseUserHeader.indexOf("mozilla/3") != -1) )
         {
             //browser=(userAgent.substring(userAgent.indexOf("MSIE")).split(" ")[0]).replace("/", "-");
             browser = "Netscape-?";
 
         }
-        else if (user.contains("firefox"))
+        else if (lowerCaseUserHeader.contains("firefox"))
         {
-            browser=(userAgent.substring(userAgent.indexOf("Firefox")).split(" ")[0]).replace("/", "-");
+            browser=(header.substring(header.indexOf("Firefox")).split(" ")[0]).replace("/", "-");
         }
         else
         {
-            browser = "Unknown["+userAgent + "]";
+            browser = "Unknown["+header + "]";
         }
 //        log.info("Operating System======>"+os);
 //        log.info("Browser Name==========>"+browser);

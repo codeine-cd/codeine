@@ -39,7 +39,7 @@ public class ManageStatisticsCollector {
 		String username = user.user().username();
 		activeUsersInfo.put(username, username);
 		try {
-			UserAgentHeader userAgent = new UserAgentHeader(request).parseBrowserAndOs();
+			UserAgentHeader userAgent = UserAgentHeader.parseBrowserAndOs(request);
 			String userWithAgent = username + "  ___  browser=" + userAgent.getBrowser() + ",os=" + userAgent.getOs();
 			incHitCount(userWithAgent);
 		} catch (ExecutionException e) {
