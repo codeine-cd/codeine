@@ -2,6 +2,7 @@ package codeine.plugins;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +40,12 @@ public class DiscardOldCommandSelector {
 		whatsLeft.removeAll($);
 		if (null == discardOldCommandsJson.max_commands() || whatsLeft.size() <= discardOldCommandsJson.max_commands()) {
 			return $;
+		}
+		for (Iterator<CommandExecutionStatusInfo> iterator = whatsLeft.iterator(); iterator.hasNext();) {
+			CommandExecutionStatusInfo commandExecutionStatusInfo = iterator.next();
+			if (null == commandExecutionStatusInfo) {
+				iterator.remove();
+			}
 		}
 		Collections.sort(whatsLeft, new Comparator<CommandExecutionStatusInfo>() {
 			@Override
