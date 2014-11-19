@@ -16,5 +16,11 @@ public class UserAgentHeaderTest {
 		assertEquals("IE-11.0", tested.getBrowser());
 		assertEquals("Windows", tested.getOs());
 	}
+	@Test
+	public void testCurl() {
+		UserAgentHeader tested = UserAgentHeader.parseBrowserAndOs("curl/7.19.7 (x86_64-suse-linux-gnu) libcurl/7.19.7 OpenSSL/0.9.8j zlib/1.2.3 libidn/1.10");
+		assertEquals("Linux", tested.getOs());
+		assertEquals("curl-7.19.7", tested.getBrowser());
+	}
 
 }
