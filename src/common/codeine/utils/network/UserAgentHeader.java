@@ -8,6 +8,7 @@ public class UserAgentHeader {
 	private String os;
 	private String browser;
 	private String header;
+	private String lowerCaseUserHeader;
 
 	private UserAgentHeader(String os, String browser) {
 		super();
@@ -18,6 +19,7 @@ public class UserAgentHeader {
 	private UserAgentHeader(String header) {
 		super();
 		this.header = header;
+		lowerCaseUserHeader = header.toLowerCase();
 	}
 
 	public static UserAgentHeader parseBrowserAndOs(HttpServletRequest request) {
@@ -32,25 +34,16 @@ public class UserAgentHeader {
 	}
 
 	private UserAgentHeader parseBrowserAndOs() {
-		String lowerCaseUserHeader = header.toLowerCase();
 
 		// log.info("User Agent for the request is===>"+browserDetails);
-		// =================OS=======================
-		if (lowerCaseUserHeader.indexOf("windows") >= 0) {
-			os = "Windows";
-		} else if (lowerCaseUserHeader.indexOf("mac") >= 0) {
-			os = "Mac";
-		} else if (lowerCaseUserHeader.indexOf("x11") >= 0) {
-			os = "Unix";
-		} else if (lowerCaseUserHeader.indexOf("android") >= 0) {
-			os = "Android";
-		} else if (lowerCaseUserHeader.indexOf("iphone") >= 0) {
-			os = "IPhone";
-		} else if (lowerCaseUserHeader.indexOf("linux") >= 0) {
-			os = "Linux";
-		} else {
-			os = "UnKnown, More-Info: " + header;
-		}
+		parseOs();
+		parseBrowser();
+		// log.info("Operating System======>"+os);
+		// log.info("Browser Name==========>"+browser);
+		return this;
+	}
+
+	private void parseBrowser() {
 		// ===============Browser===========================
 		if (lowerCaseUserHeader.contains("msie")) {
 			String substring = header.substring(header.indexOf("MSIE")).split(";")[0];
@@ -87,9 +80,25 @@ public class UserAgentHeader {
 		} else {
 			browser = "Unknown[" + header + "]";
 		}
-		// log.info("Operating System======>"+os);
-		// log.info("Browser Name==========>"+browser);
-		return this;
+	}
+
+	private void parseOs() {
+		// =================OS=======================
+		if (lowerCaseUserHeader.indexOf("windows") >= 0) {
+			os = "Windows";
+		} else if (lowerCaseUserHeader.indexOf("mac") >= 0) {
+			os = "Mac";
+		} else if (lowerCaseUserHeader.indexOf("x11") >= 0) {
+			os = "Unix";
+		} else if (lowerCaseUserHeader.indexOf("android") >= 0) {
+			os = "Android";
+		} else if (lowerCaseUserHeader.indexOf("iphone") >= 0) {
+			os = "IPhone";
+		} else if (lowerCaseUserHeader.indexOf("linux") >= 0) {
+			os = "Linux";
+		} else {
+			os = "UnKnown, More-Info: " + header;
+		}
 	}
 
 	public String getOs() {
