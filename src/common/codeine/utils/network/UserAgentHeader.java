@@ -36,8 +36,12 @@ public class UserAgentHeader {
 	private UserAgentHeader parseBrowserAndOs() {
 
 		// log.info("User Agent for the request is===>"+browserDetails);
-		parseOs();
-		parseBrowser();
+		try {
+			parseOs();
+			parseBrowser();
+		} catch (RuntimeException e) {
+			throw new RuntimeException("error parsing User-Agent header " + header, e);
+		}
 		// log.info("Operating System======>"+os);
 		// log.info("Browser Name==========>"+browser);
 		return this;
