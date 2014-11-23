@@ -33,7 +33,7 @@ public class CommandInfo
 		return name;
 	}
 
-	public String credentials() {
+	public String cred() {
 		return credentials;
 	}
 	public int timeoutInMinutes() {
@@ -110,7 +110,7 @@ public class CommandInfo
 	}
 
 	public void overrideByConfiguration(CommandInfo configuredCommand) {
-		credentials(configuredCommand.credentials());
+		credentials(configuredCommand.cred());
 		script_content(configuredCommand.script_content());
 	    if (null == timeoutInMinutes) {
 	    	timeoutInMinutes = configuredCommand.timeoutInMinutes;

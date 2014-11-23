@@ -106,23 +106,23 @@ public class CommandNodeServletBackup extends AbstractServlet
 			}
 			List<String> cmd = Lists.newArrayList();
 			List<String> cmdForOutput = Lists.newArrayList();
-			String credentials = commandInfo.credentials();
-			log.info("credentials: " + credentials);
-			if (!StringUtils.isEmpty(credentials) && !windows_peer){
-				writer.println("credentials = " + credentials);
+			String cred = commandInfo.cred();
+			log.info("credentials: " + cred);
+			if (!StringUtils.isEmpty(cred) && !windows_peer){
+				writer.println("credentials = " + cred);
 				cmd.add(PathHelper.getReadLogs());
-				cmd.add(encodeIfNeeded(credentials, credentials));
+				cmd.add(encodeIfNeeded(cred, cred));
 			}
 			if (windows_peer) {
-				cmd.add(encodeIfNeeded("cmd", credentials));
-				cmd.add(encodeIfNeeded("/c", credentials));
-				cmd.add(encodeIfNeeded("call", credentials));
+				cmd.add(encodeIfNeeded("cmd", cred));
+				cmd.add(encodeIfNeeded("/c", cred));
+				cmd.add(encodeIfNeeded("call", cred));
 			}
 			else {
-				cmd.add(encodeIfNeeded("/bin/sh", credentials));
-				cmd.add(encodeIfNeeded("-xe", credentials));
+				cmd.add(encodeIfNeeded("/bin/sh", cred));
+				cmd.add(encodeIfNeeded("-xe", cred));
 			}
-			cmd.add(encodeIfNeeded(file, credentials));
+			cmd.add(encodeIfNeeded(file, cred));
 			if (windows_peer) {
 				cmdForOutput.add("cmd");
 				cmdForOutput.add("/c");

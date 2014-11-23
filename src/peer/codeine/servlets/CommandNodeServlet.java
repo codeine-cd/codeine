@@ -31,7 +31,6 @@ import codeine.model.Result;
 import codeine.servlet.AbstractServlet;
 import codeine.utils.FilesUtils;
 import codeine.utils.StringUtils;
-import codeine.utils.network.InetUtils;
 import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 import codeine.utils.os_process.ShellScript;
@@ -112,23 +111,23 @@ public class CommandNodeServlet extends AbstractServlet
 			}
 			List<String> cmd = Lists.newArrayList();
 			List<String> cmdForOutput = Lists.newArrayList();
-			String credentials = commandInfo.credentials();
-			log.info("credentials: " + credentials);
-			if (!StringUtils.isEmpty(credentials) && !windows_peer){
-				writer.println("credentials = " + credentials);
+			String cred = commandInfo.cred();
+			log.info("credentials: " + cred);
+			if (!StringUtils.isEmpty(cred) && !windows_peer){
+				writer.println("credentials = " + cred);
 				cmd.add(PathHelper.getReadLogs());
-				cmd.add(encodeIfNeeded(credentials, credentials));
+				cmd.add(encodeIfNeeded(cred, cred));
 			}
 			if (windows_peer) {
-				cmd.add(encodeIfNeeded("cmd", credentials));
-				cmd.add(encodeIfNeeded("/c", credentials));
-				cmd.add(encodeIfNeeded("call", credentials));
+				cmd.add(encodeIfNeeded("cmd", cred));
+				cmd.add(encodeIfNeeded("/c", cred));
+				cmd.add(encodeIfNeeded("call", cred));
 			}
 			else {
-				cmd.add(encodeIfNeeded("/bin/sh", credentials));
-				cmd.add(encodeIfNeeded("-xe", credentials));
+				cmd.add(encodeIfNeeded("/bin/sh", cred));
+				cmd.add(encodeIfNeeded("-xe", cred));
 			}
-			cmd.add(encodeIfNeeded(file, credentials));
+			cmd.add(encodeIfNeeded(file, cred));
 			if (windows_peer) {
 				cmdForOutput.add("cmd");
 				cmdForOutput.add("/c");
@@ -201,75 +200,11 @@ public class CommandNodeServlet extends AbstractServlet
 		}
 		return $;
 	}
-	//TODO should be removed after build 1000
-	@Override
-	public void myGet(HttpServletRequest req, HttpServletResponse res)
-	{
-		log.info("CommandNodeServlet doGet");
-		String projectName = getParameter(req, "project");
-		final PrintWriter writer = getWriter(res);
-		writer.println("CommandNodeServlet THE OLD DOGET!");
-		String command = getParameter(req, "command");
-		String userArgs = getParameter(req, "version");
-		writer.println("projectName = " + projectName);
-		writer.println("command = " + command);
-		writer.println("user_args = " + userArgs);
-		writer.println("INFO: CommandNodeServlet - executing command " + command + " on host " + InetUtils.getLocalHost().getHostName() +" in project " + projectName + " with args " + userArgs);
-		CommandInfo commandJson = getCommand(command, projectName);
-		
-		String dir = pathHelper.getCommandsDir(projectName);
-		String file = dir + "/" + command;
-		if (!FilesUtils.exists(file)){
-			log.info("command not found " + file);
-			writer.println("command not found " + file);
-			dir = pathHelper.getMonitorsDir(projectName);
-			file = dir + "/" + command;
-			if (!FilesUtils.exists(file)){
-				log.info("2.command not found " + file);
-				writer.println("2.command not found " + file);
-				writer.println(Constants.COMMAND_RESULT + "-2");
-				return;
-			}
-			else {
-				log.warn("command is in monitors and not in plugins. this is deprecated and will be removed soon (backward competability to version 371) " + command, new RuntimeException());
-			}
-		}
-		List<String> cmd = Lists.newArrayList();
-		List<String> cmdForOutput = Lists.newArrayList();
-		String credentials = commandJson.credentials();
-		if (credentials != null){
-			writer.println("credentials = " + credentials);
-			cmd.add(PathHelper.getReadLogs());
-			cmd.add(encodeIfNeeded(credentials, credentials));
-		}
-		cmd.add(encodeIfNeeded(file, credentials));
-		cmdForOutput.add(file);
-		if (userArgs != null)
-		{
-			cmd.add(encodeIfNeeded(userArgs, credentials));
-			cmdForOutput.add(userArgs);
-		}
-		writer.println("executing: " + StringUtils.collectionToString(cmdForOutput));
-		writer.println("output: ");
-		Function<String, Void> function = new Function<String, Void>(){
-			@Override
-			public Void apply(String input){
-				writer.println(input);
-				writer.flush();
-				return null;
-			}
-		};
-		Result result = new ProcessExecuterBuilder(cmd, dir).cmdForOutput(cmdForOutput).timeoutInMinutes(commandJson.timeoutInMinutes()).function(function).build().execute();
-		writer.println(Constants.COMMAND_RESULT + result.exit());
+
+	private String encodeIfNeeded(String text, String cred) {
+		return null == cred ? text: CredHelper.encode(text);
 	}
 
-	private String encodeIfNeeded(String text, String credentials) {
-		return null == credentials ? text: CredHelper.encode(text);
-	}
-
-	private CommandInfo getCommand(String command, String projectName) {
-		return getProject(projectName).getCommand(command);
-	}
 	private ProjectJson getProject(String projectName) {
 		return configurationManager.getProjectForName(projectName);
 	}
