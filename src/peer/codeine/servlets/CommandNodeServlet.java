@@ -17,7 +17,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import codeine.SnoozeKeeper;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
-import codeine.credentials.CredentialsHelper;
+import codeine.credentials.CredHelper;
 import codeine.jsons.auth.EncryptionUtils;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
@@ -264,7 +264,7 @@ public class CommandNodeServlet extends AbstractServlet
 	}
 
 	private String encodeIfNeeded(String text, String credentials) {
-		return null == credentials ? text: CredentialsHelper.encode(text);
+		return null == credentials ? text: CredHelper.encode(text);
 	}
 
 	private CommandInfo getCommand(String command, String projectName) {

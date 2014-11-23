@@ -1,12 +1,14 @@
 package codeine.jsons.collectors;
 
+import com.google.gson.annotations.SerializedName;
+
 
 public class CollectorInfo {
 
 	private String name;
 	private String script_content;
 	private int min_interval;
-	private String credentials;
+	@SerializedName("credentials") private String cred;
 	private CollectorType type;
 	private boolean notification_enabled;
 	
@@ -36,8 +38,8 @@ public class CollectorInfo {
 		return type;
 	}
 
-	public String credentials() {
-		return credentials;
+	public String cred() {
+		return cred;
 	}
 
 	public boolean notification_enabled() {

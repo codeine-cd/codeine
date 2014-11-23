@@ -18,7 +18,7 @@ import codeine.api.NodeInfo;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
-import codeine.credentials.CredentialsHelper;
+import codeine.credentials.CredHelper;
 import codeine.executer.Task;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatus;
@@ -311,7 +311,7 @@ public class RunMonitors implements Task {
 	}
 
 	private String encode(final String value1) {
-		return CredentialsHelper.encode(value1);
+		return CredHelper.encode(value1);
 	}
 
 	private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch) {

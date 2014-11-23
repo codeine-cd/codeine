@@ -92,7 +92,7 @@ public class OneCollectorRunner {
 	}
 
 	private ShellScript createShellScript() {
-		ShellScript shellScript = new ShellScript(getKey(), collectorInfo.script_content(), project.operating_system(), null, pathHelper.getProjectDir(project.name()), prepareEnv(), collectorInfo.credentials());
+		ShellScript shellScript = new ShellScript(getKey(), collectorInfo.script_content(), project.operating_system(), null, pathHelper.getProjectDir(project.name()), prepareEnv(), collectorInfo.cred());
 		shellScript.create();
 		return shellScript;
 	}
