@@ -16,6 +16,7 @@ import codeine.model.ExitStatus;
 import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
+import codeine.utils.logging.LogUtils;
 import codeine.utils.network.HttpUtils;
 
 import com.google.common.base.Function;
@@ -34,6 +35,7 @@ public class PeerCommandWorker implements Runnable {
 	private ProjectJson project;
 	private Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
 	private IUserWithPermissions userObject;
+	private boolean failedReported = false;
 	
 	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject) {
 		this.node = node;
@@ -92,21 +94,34 @@ public class PeerCommandWorker implements Runnable {
 				HttpUtils.doGET(link, function,null, HttpUtils.READ_TIMEOUT_MILLI);
 			}
 			if (result.length() > 0) {
+				String finishedMessage = "command " + (success ? "succeeded" : "failed") + " on node " + node.alias();
 				if (!shouldOutputImmediatly){
-					writeNodeHeader();
-					allNodesCommandExecuter.writeLine(result.toString());
+					allNodesCommandExecuter.writeLine(getAnnounceMessage(getHeaderMessage()) + "\n" + result.toString() + "\n" + finishedMessage);
 				}
-				announce("command " + (success ? "succeeded" : "failed") + " on node " + node.alias());
+				else {
+					announce(finishedMessage);
+				}
 			} else {
 				announce("result is empty for node " + node.alias());
-				allNodesCommandExecuter.fail(node);
+				nodeFailed();
 			}
 		} catch (Exception ex) {
 			announce("error in node " + node.alias() + " message: " + ExceptionUtils.getRootCause(ex).getMessage());
 			log.warn("error in node with link " + url + " ; message "
 					+ ExceptionUtils.getRootCause(ex).getMessage());
 			log.debug("error details", ex);
+			nodeFailed();
+		}
+	}
+
+
+	private void nodeFailed() {
+		if (!failedReported) {
 			allNodesCommandExecuter.fail(node);
+			failedReported = true;
+		}
+		else {
+			LogUtils.assertFailed(log, "nodeFailed reported more than once");
 		}
 	}
 
@@ -115,11 +130,21 @@ public class PeerCommandWorker implements Runnable {
 	}
 
 	private void writeNodeHeader() {
-		announce("executed on node: " + node.alias() + ", output below");
+		announce(getHeaderMessage());
+	}
+
+
+	private String getHeaderMessage() {
+		return "executed on node: " + node.alias() + ", output below";
 	}
 
 	private void announce(String line) {
-		allNodesCommandExecuter.writeLine("===> " + line + " <===");
+		allNodesCommandExecuter.writeLine(getAnnounceMessage(line));
+	}
+
+
+	private String getAnnounceMessage(String line) {
+		return "===> " + line + " <===";
 	}
 
 	private final class ReadCommandOutputFunction implements Function<String, Void> {
@@ -135,7 +160,7 @@ public class PeerCommandWorker implements Runnable {
 			if (matcher.matches()) {
 				int exitStatus = Integer.valueOf(matcher.group(1));
 				if (ExitStatus.SUCCESS != exitStatus) {
-					allNodesCommandExecuter.fail(node);
+					nodeFailed();
 					line = "\nCommand failed with exit status " + exitStatus;
 					switch (exitStatus)	{
 					case ExitStatus.TIMEOUT: {
