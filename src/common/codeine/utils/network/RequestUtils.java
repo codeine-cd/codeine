@@ -28,7 +28,8 @@ public class RequestUtils {
 		if (null == parameterValue || parameterValue.contains("22ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
 			return null;
 		}
-		$.append(parameterValue.substring(0, MAX_HEADER_SIZE).toCharArray());
+		int size = Math.min(parameterValue.length(), MAX_HEADER_SIZE);
+		$.append(parameterValue.substring(0, size).toCharArray());
 		return $.toString();
 	}
 	
