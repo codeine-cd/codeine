@@ -7,6 +7,7 @@ import codeine.api.DurationUnits;
 import codeine.api.RatioType;
 
 import com.google.common.collect.Lists;
+import com.google.gson.annotations.SerializedName;
 
 
 public class CommandInfo 
@@ -14,7 +15,7 @@ public class CommandInfo
     private static final int MAX_CONCURRENCY = 500;    
     private String name, description;
     private String project_name;
-    private String credentials;
+    @SerializedName("credentials") private String cred;
     private Integer timeoutInMinutes;
     private Integer duration, concurrency, error_percent_val;
 	private CommandExcutionType command_strategy;
@@ -34,7 +35,7 @@ public class CommandInfo
 	}
 
 	public String cred() {
-		return credentials;
+		return cred;
 	}
 	public int timeoutInMinutes() {
 		return timeoutInMinutes;
@@ -93,8 +94,8 @@ public class CommandInfo
 		return "CommandInfo [name=" + name + "]";
 	}
 
-	public void credentials(String credentials) {
-		this.credentials = credentials;
+	public void cred(String credentials) {
+		this.cred = credentials;
 	}
 
 	public RatioType ratio() {
@@ -110,7 +111,7 @@ public class CommandInfo
 	}
 
 	public void overrideByConfiguration(CommandInfo configuredCommand) {
-		credentials(configuredCommand.cred());
+		cred(configuredCommand.cred());
 		script_content(configuredCommand.script_content());
 	    if (null == timeoutInMinutes) {
 	    	timeoutInMinutes = configuredCommand.timeoutInMinutes;
