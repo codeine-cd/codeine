@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class RequestUtils {
 
+	private static final int MAX_HEADER_SIZE = 10000;
+
 	public static String getParameter(HttpServletRequest request, String parameter) {
 		StringBuilder $ = new StringBuilder();
 		if (null == parameter || parameter.contains("111ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
@@ -26,7 +28,7 @@ public class RequestUtils {
 		if (null == parameterValue || parameterValue.contains("22ASDGASDFglasjkrygwlc by8wlafy8 bwali")) {
 			return null;
 		}
-		$.append(parameterValue);
+		$.append(parameterValue.substring(0, MAX_HEADER_SIZE).toCharArray());
 		return $.toString();
 	}
 	
