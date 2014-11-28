@@ -31,6 +31,7 @@ public class ProjectJson
 	private OperatingSystem operating_system = OperatingSystem.Linux;
 	private DiscardOldCommandsJson discard_old_commands = DiscardOldCommandsJson.DISABLED;
 	private List<EnvironmentVariable> environment_variables = Lists.newArrayList();
+	private String include_project_commands;
 	
 	public ProjectJson(String name) {
 		this.name = name;
@@ -91,15 +92,6 @@ public class ProjectJson
 		throw new IllegalArgumentException("command " + command + " not found in project " + name());
 	}
 
-	public CommandInfo commandForName(String name) {
-		for (CommandInfo c : commands) {
-			if (c.name().equals(name)){
-				return c;
-			}
-		}
-		throw new IllegalArgumentException("no command " + name);
-	}
-
 	public void nodes_discovery_script(String content) {
 		this.nodes_discovery_script = content;
 		
@@ -153,6 +145,10 @@ public class ProjectJson
 
 	public List<CollectorInfo> collectors() {
 		return collectors;
+	}
+
+	public String include_project_commands() {
+		return include_project_commands;
 	}
 
 }

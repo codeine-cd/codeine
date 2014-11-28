@@ -13,6 +13,7 @@ import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.logging.LogUtils;
 
@@ -83,9 +84,6 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 		List<ProjectJson> configuredProjects = getConfiguredProjects();
 		for (ProjectJson projectJson : configuredProjects) {
 			if (projectName.equals(projectJson.name())){
-				for (CommandInfo c : projectJson.commands()) {
-					c.project_name(projectName);
-				} 
 				return projectJson;
 			}
 		}
@@ -104,5 +102,28 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	@Override
 	public boolean hasProject(String projectName) {
 		return projects.containsKey(projectName);
+	}
+
+	public CommandInfo getCommandOfProject(String projectName, String command_name) {
+		ProjectJson project = getProjectForName(projectName);
+		CommandInfo c = commandForNameOrNull(project, command_name);
+		if (c != null) {
+			return c;
+		}
+		if (!StringUtils.isEmpty(project.include_project_commands())) {
+			CommandInfo c1 = commandForNameOrNull(getProjectForName(project.include_project_commands()), command_name);
+			if (c1 != null) {
+				return c1;
+			}
+		}
+		throw new IllegalArgumentException("command not found " + projectName + " " + command_name);
+	}
+	private CommandInfo commandForNameOrNull(ProjectJson projectJson, String name) {
+		for (CommandInfo c : projectJson.commands()) {
+			if (c.name().equals(name)){
+				return c;
+			}
+		}
+		return null;
 	}
 }

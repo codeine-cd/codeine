@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import codeine.api.NodeGetter;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.command_peer.NodesCommandExecuterProvider;
+import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
@@ -62,7 +63,8 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 		String projectName = commandData.command_info().project_name();
 		ProjectJson project = configurationManager.getProjectForName(projectName);
 		String command_name = commandData.command_info().command_name();
-		CommandInfo configuredCommand = project.commandForName(command_name);
+		CommandInfo configuredCommand = ((ConfigurationReadManagerServer)configurationManager).getCommandOfProject(projectName, command_name);
+		configuredCommand.project_name(projectName);
 		commandData.command_info().overrideByConfiguration(configuredCommand);
 		updateNodes(commandData, projectName);
 		long dir = allNodesCommandExecuterProvider.createExecutor().executeOnAllNodes(permissionsManager.user(request), commandData, project);
