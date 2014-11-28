@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService, projects) {
+    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService, CodeineService) {
         $scope.projectName = $scope.projectConfiguration.name;
         $scope.allNodesCount = 0;
         $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
@@ -267,9 +267,11 @@
 
         $scope.projectConfiguration.commands_include_inherited = [];
         $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat($scope.projectConfiguration.commands);
-        angular.forEach(projects, function(key) {
-            if ($scope.projectConfiguration.projectConfiguration.indexOf(key.name) !== -1) {
-                $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat(key.commands);
+        angular.forEach($scope.projects, function(key) {
+            if ($scope.projectConfiguration.include_project_commands.indexOf(key.name) !== -1) {
+                CodeineService.getProjectConfiguration(key.name).success(function(data) {
+                    $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat(data.commands);
+                });
             }
         });
     }

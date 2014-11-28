@@ -196,15 +196,6 @@
                             deferred.reject('Error - failed to get project status');
                         });
                         return deferred.promise;
-                    },
-                    projects : function($q,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get projects');
-                        });
-                        return deferred.promise;
                     }
                 }
             }).
@@ -228,6 +219,15 @@
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get node status');
+                        });
+                        return deferred.promise;
+                    },
+                    projects : function($q,CodeineService) {
+                        var deferred = $q.defer();
+                        CodeineService.getProjects().success(function(data) {
+                            deferred.resolve(data);
+                        }).error(function() {
+                            deferred.reject('Error - failed to get projects');
                         });
                         return deferred.promise;
                     }
