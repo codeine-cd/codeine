@@ -14,11 +14,11 @@
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" ng-if="projectConfiguration.commands_include_inherited.length">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu" on-toggle="toggled(open)">
-                            <li ng-repeat="command in projectConfiguration.commands">
+                            <li ng-repeat="command in projectConfiguration.commands_include_inherited">
                                 <a ng-click="runCommand(command.name)">{{command.name}}</a>
                             </li>
                         </ul>

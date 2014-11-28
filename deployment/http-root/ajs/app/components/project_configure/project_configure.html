@@ -329,6 +329,15 @@
     </div>
 </accordion-heading>
 <accordion close-others="false">
+<div class="form-horizontal">
+    <div class="form-group">
+        <label for="include_project_commands" class="col-md-4 control-label">Include from <help help-id="projectIncludeCommandsFromHelp"></help></label>
+        <div class="col-md-4">
+            <input type="text" id="include_project_commands" ui-select2="select2OptionsIncludeProjectCommands" ng-model="projectConfigurationForEditing.include_project_commands" class="form-control select2">
+        </div>
+    </div>
+</div>
+<br/>
 <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_info.is_open" ng-form="individualCommandParentForm">
 <accordion-heading>
     <div>

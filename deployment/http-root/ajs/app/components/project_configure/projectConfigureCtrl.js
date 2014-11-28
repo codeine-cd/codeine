@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes) {
+    function projectConfigureCtrl($scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
         $scope.projectName = $routeParams.project_name;
         $log.debug('projectConfigureCtrl: current project is ' + $scope.projectName);
         $scope.projectConfigurationForEditing = projectConfigurationForEditing;
@@ -106,6 +106,18 @@
             'tags': $scope.nodes,
             'tokenSeparators': [",", " "]
         };
+        $scope.projects  = [];
+
+        angular.forEach(projects, function(key) {
+            $scope.projects.push(key.name);
+        });
+        $scope.select2OptionsIncludeProjectCommands = {
+            'multiple': true,
+            'simple_tags': true,
+            'tags': $scope.projects,
+            'tokenSeparators': [",", " "]
+        };
+
     }
 
 

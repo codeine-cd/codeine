@@ -31,7 +31,7 @@ public class ProjectJson
 	private OperatingSystem operating_system = OperatingSystem.Linux;
 	private DiscardOldCommandsJson discard_old_commands = DiscardOldCommandsJson.DISABLED;
 	private List<EnvironmentVariable> environment_variables = Lists.newArrayList();
-	private String include_project_commands;
+	private List<String> include_project_commands = Lists.newArrayList();
 	
 	public ProjectJson(String name) {
 		this.name = name;
@@ -147,7 +147,7 @@ public class ProjectJson
 		return collectors;
 	}
 
-	public String include_project_commands() {
+	public List<String> include_project_commands() {
 		return include_project_commands;
 	}
 

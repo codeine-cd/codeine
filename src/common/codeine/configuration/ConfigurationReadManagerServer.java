@@ -13,7 +13,6 @@ import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
-import codeine.utils.StringUtils;
 import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.logging.LogUtils;
 
@@ -110,10 +109,12 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 		if (c != null) {
 			return c;
 		}
-		if (!StringUtils.isEmpty(project.include_project_commands())) {
-			CommandInfo c1 = commandForNameOrNull(getProjectForName(project.include_project_commands()), command_name);
-			if (c1 != null) {
-				return c1;
+		if (!project.include_project_commands().isEmpty()) {
+			for (String p : project.include_project_commands()) {
+				CommandInfo c1 = commandForNameOrNull(getProjectForName(p), command_name);
+				if (c1 != null) {
+					return c1;
+				}
 			}
 		}
 		throw new IllegalArgumentException("command not found " + projectName + " " + command_name);
