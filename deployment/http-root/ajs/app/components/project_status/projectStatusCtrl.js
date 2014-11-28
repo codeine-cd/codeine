@@ -268,7 +268,7 @@
         $scope.projectConfiguration.commands_include_inherited = [];
         $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat($scope.projectConfiguration.commands);
         angular.forEach(projects, function(key) {
-            if ($scope.projectConfiguration.projectConfiguration.indexOf(key.name) != -1) {
+            if ($scope.projectConfiguration.projectConfiguration.indexOf(key.name) !== -1) {
                 $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat(key.commands);
             }
         });
