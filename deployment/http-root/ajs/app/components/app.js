@@ -146,9 +146,9 @@
                         });
                         return deferred.promise;
                     },
-                    commands : function($q,CodeineService) {
+                    commands : function($q,$route,CodeineService) {
                         var deferred = $q.defer();
-                        CodeineService.getProjectCommands().success(function(data) {
+                        CodeineService.getProjectCommands($route.current.params.project_name).success(function(data) {
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get projects');
@@ -222,9 +222,9 @@
                         });
                         return deferred.promise;
                     },
-                    commands : function($q,CodeineService) {
+                    commands : function($q,$route,CodeineService) {
                         var deferred = $q.defer();
-                        CodeineService.getProjectCommands().success(function(data) {
+                        CodeineService.getProjectCommands($route.current.params.project_name).success(function(data) {
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get projects');
