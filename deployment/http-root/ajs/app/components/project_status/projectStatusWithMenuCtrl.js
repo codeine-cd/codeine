@@ -2,10 +2,10 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectStatusWithMenuCtrl($scope,projectConfiguration,projectStatus, projects) {
+    function projectStatusWithMenuCtrl($scope,projectConfiguration,projectStatus, commands) {
         $scope.projectStatus = projectStatus;
         $scope.projectConfiguration = projectConfiguration;
-        $scope.projects = projects;
+        $scope.projects = commands;
     }
 
     //// Angular Code ////

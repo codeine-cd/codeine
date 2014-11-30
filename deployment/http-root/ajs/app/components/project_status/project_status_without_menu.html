@@ -37,11 +37,11 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right" ng-if="projectConfiguration.commands_include_inherited.length" command-action project="projectName" allowed="true">
+                <ul class="nav navbar-nav navbar-right" ng-if="commands.length" command-action project="projectName" allowed="true">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu" on-toggle="toggled(open)">
-                            <li ng-repeat="command in projectConfiguration.commands_include_inherited"  ng-class=" {disabled : !isAnyNodeChecked() }">
+                            <li ng-repeat="command in commands"  ng-class=" {disabled : !isAnyNodeChecked() }">
                                 <a ng-click="runCommand(command.name)">{{command.name}}</a>
                             </li>
                         </ul>

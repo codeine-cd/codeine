@@ -40,10 +40,10 @@
                 resolve : {
                     command : function($q,CodeineService,$route) {
                         var deferred = $q.defer();
-                        CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                            for (var i=0; i < data.commands.length; i++) {
-                                if (data.commands[i].name === $route.current.params.command_name) {
-                                    deferred.resolve(data.commands[i]);
+                        CodeineService.getProjectCommands($route.current.params.project_name).success(function(data) {
+                            for (var i=0; i < data.length; i++) {
+                                if (data[i].name === $route.current.params.command_name) {
+                                    deferred.resolve(data[i]);
                                 }
                             }
                             deferred.reject('No such command in project ' + $route.current.params.command_name);
@@ -146,9 +146,9 @@
                         });
                         return deferred.promise;
                     },
-                    projects : function($q,CodeineService) {
+                    commands : function($q,CodeineService) {
                         var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
+                        CodeineService.getProjectCommands().success(function(data) {
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get projects');
@@ -222,9 +222,9 @@
                         });
                         return deferred.promise;
                     },
-                    projects : function($q,CodeineService) {
+                    commands : function($q,CodeineService) {
                         var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
+                        CodeineService.getProjectCommands().success(function(data) {
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get projects');
