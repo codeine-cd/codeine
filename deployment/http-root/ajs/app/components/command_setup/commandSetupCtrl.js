@@ -2,6 +2,14 @@
     'use strict';
 
     //// JavaScript Code ////
+    function getParsedParamValue(type, stringValue) {
+        if (type === 'Boolean') {
+            return 'true' === stringValue;
+        } else {
+            return stringValue;
+        }
+    }
+
     function commandSetupCtrl($log, SelectedNodesService, $location, $routeParams,command,CodeineService) {
         /*jshint validthis:true */
         var vm = this;
@@ -10,14 +18,14 @@
         vm.nodes = SelectedNodesService.getSelectedNodes($location.path());
 
         for (var i=0; i <vm.command.parameters.length; i++) {
-            vm.command.parameters[i].value = vm.command.parameters[i].default_value;
+            vm.command.parameters[i].value = getParsedParamValue(vm.command.parameters[i].type, vm.command.parameters[i].default_value);
         }
 
         var predefinedParams = SelectedNodesService.getSelectedParams($location.path());
         for (var i1=0; i1 < predefinedParams.length; i1++) {
             for (var j=0; j < vm.command.parameters.length; j++) {
                 if (vm.command.parameters[j].name === predefinedParams[i1].name) {
-                    vm.command.parameters[j].value = predefinedParams[i1].value;
+                    vm.command.parameters[j].value = getParsedParamValue(vm.command.parameters[j].type, predefinedParams[i1].value);
                     break;
                 }
             }
