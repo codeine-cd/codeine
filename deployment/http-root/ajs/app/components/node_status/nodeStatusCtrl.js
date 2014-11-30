@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, projectConfiguration, SelectedNodesService, projects, CodeineService) {
+    function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, projectConfiguration, SelectedNodesService, commands) {
         $scope.projectName = $routeParams.project_name;
         $scope.nodeStatus = nodeStatus;
         $scope.projectConfiguration= projectConfiguration;
@@ -10,15 +10,7 @@
         $log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
         $log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
         $scope.nodeStatus = nodeStatus;
-        $scope.projectConfiguration.commands_include_inherited = [];
-        $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat($scope.projectConfiguration.commands);
-        angular.forEach(projects, function(key) {
-            if ($scope.projectConfiguration.include_project_commands.indexOf(key.name) !== -1) {
-                CodeineService.getProjectConfiguration(key.name).success(function(data) {
-                    $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat(data.commands);
-                });
-            }
-        });
+        $scope.commands = commands;
 
         $scope.runCommand = function(command) {
             $log.debug('projectStatusCtrl: will run command ' + command);

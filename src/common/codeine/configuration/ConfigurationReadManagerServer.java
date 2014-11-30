@@ -104,27 +104,24 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	}
 
 	public CommandInfo getCommandOfProject(String projectName, String command_name) {
-		ProjectJson project = getProjectForName(projectName);
-		CommandInfo c = commandForNameOrNull(project, command_name);
-		if (c != null) {
-			return c;
-		}
-		if (!project.include_project_commands().isEmpty()) {
-			for (String p : project.include_project_commands()) {
-				CommandInfo c1 = commandForNameOrNull(getProjectForName(p), command_name);
-				if (c1 != null) {
-					return c1;
-				}
+		List<CommandInfo> commands = getProjectCommands(projectName);
+		for (CommandInfo c : commands) {
+			if (c.name().equals(command_name)){
+				return c;
 			}
 		}
 		throw new IllegalArgumentException("command not found " + projectName + " " + command_name);
 	}
-	private CommandInfo commandForNameOrNull(ProjectJson projectJson, String name) {
-		for (CommandInfo c : projectJson.commands()) {
-			if (c.name().equals(name)){
-				return c;
+	
+	public List<CommandInfo> getProjectCommands(String projectName) {
+		List<CommandInfo> $ = Lists.newArrayList();
+		ProjectJson project = getProjectForName(projectName);
+		$.addAll(project.commands());
+		if (!project.include_project_commands().isEmpty()) {
+			for (String p : project.include_project_commands()) {
+				$.addAll(getProjectForName(p).commands());
 			}
 		}
-		return null;
+		return $;
 	}
 }

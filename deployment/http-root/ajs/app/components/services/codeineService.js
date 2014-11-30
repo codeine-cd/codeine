@@ -35,6 +35,9 @@
             getProjectConfiguration: function(project) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", { params: { project: project } , cache: false });
             },
+            getProjectCommands: function(project) {
+                return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-commands-configuration", { params: { project: project } , cache: false });
+            },
             deleteProject : function(project) {
                 return $http.delete(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", { params: { project: project } });
             },

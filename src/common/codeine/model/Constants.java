@@ -75,6 +75,7 @@ public class Constants
 	public static final String GLOBAL_CONFIGURATION_CONTEXT = "/global-configuration";
 	public static final String EXPERIMENTAL_CONFIGURATION_CONTEXT = "/experimental-configuration";
 	public static final String PROJECT_CONFIGURATION_CONTEXT = "/project-configuration";
+	public static final String PROJECT_COMMANDS_CONFIGURATION_CONTEXT = "/project-commands-configuration";
 	public static final String PERMISSIONS_CONFIGURATION_CONTEXT = "/permissions";
 	public static final String SESSION_INFO_CONTEXT = "/session-info";
 
