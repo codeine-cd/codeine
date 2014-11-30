@@ -5,7 +5,7 @@
     function projectStatusWithMenuCtrl($scope,projectConfiguration,projectStatus, commands) {
         $scope.projectStatus = projectStatus;
         $scope.projectConfiguration = projectConfiguration;
-        $scope.projects = commands;
+        $scope.commands = commands;
     }
 
     //// Angular Code ////
