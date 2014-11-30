@@ -13,11 +13,13 @@ import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
 import codeine.utils.JsonFileUtils;
+import codeine.utils.JsonUtils;
 import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.logging.LogUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.reflect.TypeToken;
 
 public class ConfigurationReadManagerServer implements IConfigurationManager
 {
@@ -122,6 +124,10 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 				$.addAll(getProjectForName(p).commands());
 			}
 		}
-		return $;
+		List<CommandInfo> clonedList = JsonUtils.cloneJson($, new TypeToken<List<CommandInfo>>(){}.getType());
+		for (CommandInfo commandInfo : clonedList) {
+			commandInfo.project_name(projectName);
+		}
+		return clonedList;
 	}
 }
