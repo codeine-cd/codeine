@@ -25,6 +25,10 @@
 
         vm.projectName = $routeParams.project_name;
         vm.commandName = $routeParams.command_name;
+        if (vm.nodes.length == 1) {
+            vm.command.command_strategy = 'Single';
+            vm.command.prevent_override = true;
+        }
 
         vm.runCommand = function() {
             $log.debug('commandSetupCtrl: will run the command - ' + angular.toJson(vm.command) + ' on ' + vm.nodes.length + ' nodes');
