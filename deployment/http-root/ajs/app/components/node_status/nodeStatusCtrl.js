@@ -20,6 +20,15 @@
             SelectedNodesService.setSelectedNodes(nodes,url);
             $location.path(url);
         };
+
+        $scope.isEmpty = function(o) {
+            for(var p in o) {
+                if (o.hasOwnProperty(p)) {
+                    return false;
+                }
+            }
+            return true;
+        };
     }
 
     //// Angular Code ////

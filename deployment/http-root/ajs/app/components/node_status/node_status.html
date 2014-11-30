@@ -75,6 +75,49 @@
                     </div>
                     <br/>
                 </div>
+                <div class="panel-heading">
+                    <strong>Collectors</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row" ng-if="!isEmpty(nodeStatus.collectors)">
+                        <div class="col-md-12">
+                            <!--
+                            <a ng-href="/codeine/project/{{projectName}}/node/{{nodeStatus.name}}/monitor/{{monitor_info}}/status">
+                                <i style="color: blue;" class="fa fa-desktop lg"></i>
+                            </a>
+-->
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Duration</th>
+                                    <th>Start Time</th>
+                                    <th>Exit Status</th>
+                                    <th>Show Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="(collectorName,collector) in nodeStatus.collectors" ng-class="{'danger': collector.exit_status != 0}">
+                                    <td>{{collector.name}}</td>
+                                    <td>{{collector.type}}</td>
+                                    <td>{{collector.value}}</td>
+                                    <td>{{collector.execution_duration | duration}}</td>
+                                    <td>{{collector.start_time | date:'short'}}</td>
+                                    <td>{{collector.exit_status}}</td>
+                                    <td>
+                                        <a ng-href="/codeine/project/{{projectName}}/node/{{nodeStatus.name}}/collector/{{collector.name}}/status">
+                                            <i style="color: blue;" class="fa fa-desktop lg"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
             </div>
         </div>
     </div>
