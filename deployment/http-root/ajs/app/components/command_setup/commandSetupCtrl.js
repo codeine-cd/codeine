@@ -25,7 +25,7 @@
 
         vm.projectName = $routeParams.project_name;
         vm.commandName = $routeParams.command_name;
-        if (vm.nodes.length == 1) {
+        if (vm.nodes.length === 1) {
             vm.command.command_strategy = 'Single';
             vm.command.prevent_override = true;
         }
