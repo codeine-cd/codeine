@@ -34,6 +34,7 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		this(node.peer(),node.name(), node.alias(), node.projectName(), node.monitors());
 		this.version = node.version();
 		this.tags(node.tags());
+		this.collectors = node.collectors();
 	}
 	
 	public String projectName() {
