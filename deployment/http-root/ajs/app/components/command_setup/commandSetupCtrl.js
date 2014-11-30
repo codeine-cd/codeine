@@ -29,6 +29,7 @@
             vm.command.command_strategy = 'Single';
             vm.command.prevent_override = true;
         }
+        vm.nodesIsOpen = vm.nodes.length < 6;
 
         vm.runCommand = function() {
             $log.debug('commandSetupCtrl: will run the command - ' + angular.toJson(vm.command) + ' on ' + vm.nodes.length + ' nodes');

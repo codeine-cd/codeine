@@ -131,15 +131,15 @@
                     </div>
                 </div>
                 <accordion>
-                    <accordion-group is-open="vm.isOpen">
+                    <accordion-group is-open="vm.nodesIsOpen">
                         <accordion-heading>
                             <div>
                                 {{vm.nodes.length}} Nodes
-                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': vm.isOpen, 'glyphicon-chevron-right': !vm.isOpen}">
+                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': vm.nodesIsOpen, 'glyphicon-chevron-right': !vm.nodesIsOpen}">
                                 </i>
                             </div>
                         </accordion-heading>
-                        <div ng-if="vm.isOpen">
+                        <div ng-if="vm.nodesIsOpen">
                             <div class="row" ng-repeat="node in vm.nodes">
                                 <div class="col-md-12">
                                     <a ng-href="/codeine/project/{{vm.projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
