@@ -74,15 +74,18 @@ public class DbUtils
 	}
 
 	public void executeQueryAsRoot(String sql, Function<ResultSet, Void> function) {
-		executeQuery(sql, function, true);
+		executeQuery(sql, function, true, false);
 	}
 	public void executeQuery(String sql, Function<ResultSet, Void> function){
-		executeQuery(sql, function, false);
+		executeQuery(sql, function, false, false);
 	}
-	private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root)
+	public void executeQueryCompressed(String sql, Function<ResultSet, Void> function){
+		executeQuery(sql, function, false, true);
+	}
+	private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root, boolean useCompression)
 	{
 		ResultSet rs = null;
-		Connection connection = root ? getConnectionForRoot() : getConnection();
+		Connection connection = root ? getConnectionForRoot() : getConnection(useCompression);
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			rs = preparedStatement.executeQuery();
@@ -107,7 +110,7 @@ public class DbUtils
 	public void executeUpdateableQuery(String sql, Function<ResultSet, Void> function)
 	{
 		ResultSet rs = null;
-		Connection connection = getConnection();
+		Connection connection = getConnection(false);
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 			rs = preparedStatement.executeQuery();
@@ -127,7 +130,7 @@ public class DbUtils
 	}
 	private int executeUpdate(String sql, boolean root, String... args) {
 		PreparedStatement preparedStatement = null;
-		Connection connection = root ? getConnectionForRoot() : getConnection();
+		Connection connection = root ? getConnectionForRoot() : getConnection(false);
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			for (int i = 1; i <= args.length; i++) {
@@ -156,8 +159,11 @@ public class DbUtils
 		}
 	}
 
-	private Connection getConnection() {
+	private Connection getConnection(boolean useCompression) {
 		String url = "jdbc:mysql://"+hostSelector.mysql().host()+":" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME;
+		if (useCompression) {
+			url += "?useCompression=true";
+		}
 		try {
 			return DriverManager.getConnection(url, hostSelector.mysql().user(), hostSelector.mysql().password());
 		} catch (SQLException e) {
