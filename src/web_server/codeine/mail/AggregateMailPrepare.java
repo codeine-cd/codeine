@@ -77,9 +77,9 @@ public class AggregateMailPrepare {
 			}
 			else {
 				title += " on nodes: " + byNode.keySet();
+				title = StringUtils.trimStringToMaxLength(title, 150);
 			}
-			$.add(new Mail(Lists.newArrayList(item.user()), StringUtils.trimStringToMaxLength(
-					title, 150), stringContent));
+			$.add(new Mail(Lists.newArrayList(item.user()), title, stringContent));
 		}
 		return $;
 	}
