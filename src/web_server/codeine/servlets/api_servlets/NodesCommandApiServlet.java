@@ -1,11 +1,16 @@
 package codeine.servlets.api_servlets;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
 import codeine.api.NodeGetter;
+import codeine.api.NodeWithMonitorsInfo;
+import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.ConfigurationReadManagerServer;
@@ -17,6 +22,7 @@ import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.StringUtils;
 
+import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 
 public class NodesCommandApiServlet extends AbstractApiServlet {
@@ -73,12 +79,23 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	}
 	
 	private void updateNodes(ScehudleCommandExecutionInfo commandData, String projectName) {
-		if (!commandData.should_execute_on_all_nodes()) {
-			return;
+		if (commandData.should_execute_on_all_nodes()) {
+			log.info("will fetch all nodes for command execution");
+			commandData.nodes().clear();
+			commandData.nodes().addAll(nodeGetter.getNodes(projectName));
+		} else {
+			List<NodeWithPeerInfo> currentNodes = commandData.nodes();
+			Set<String> nodes = Sets.newHashSet();
+			for (NodeWithPeerInfo nodeWithPeerInfo : currentNodes) {
+				nodes.add(nodeWithPeerInfo.name());
+			}
+			commandData.nodes().clear();
+			for (NodeWithMonitorsInfo node : nodeGetter.getNodes(projectName)) {
+				if (nodes.contains(node.name())) {
+					commandData.nodes().add(node);
+				}
+			}
 		}
-		log.info("will fetch all nodes for command execution");
-		commandData.nodes().clear();
-		commandData.nodes().addAll(nodeGetter.getNodes(projectName));
 	}
 
 	@Override
