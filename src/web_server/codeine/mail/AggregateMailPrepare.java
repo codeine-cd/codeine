@@ -3,6 +3,7 @@ package codeine.mail;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +21,13 @@ import com.google.common.collect.Multimaps;
 import com.google.inject.Inject;
 
 public class AggregateMailPrepare {
+
+	public static class NotificationToHeaderFunction implements Function<CollectorNotificationJson, String> {
+		@Override
+		public String apply(CollectorNotificationJson input) {
+			return input.project_name() + "/" + input.collector_name();
+		}
+	}
 
 	private static final Logger log = Logger.getLogger(AggregateMailPrepare.class);
 	private static final int MAX_MAIL_SIZE = 100000;
@@ -61,9 +69,16 @@ public class AggregateMailPrepare {
 			} else {
 				stringContent = content.toString();
 			}
+			String title = "Aggregated alerts from codeine for policy " + alertsCollectionType;
+			if (byNode.values().size() == 1) {
+				Entry<String, CollectorNotificationJson> e = byNode.entries().iterator().next();
+				title += " on [" + e.getValue().project_name() + "/" + e.getKey() + "/" + e.getValue().collector_name() + "]";
+			}
+			else {
+				title += " on nodes: " + byNode.keySet();
+			}
 			$.add(new Mail(Lists.newArrayList(item.user()), trimStringToMaxLength(
-					"Aggregated alerts from codeine for policy " + alertsCollectionType + " on nodes: "
-							+ byNode.keySet(), 100), stringContent));
+					title, 100), stringContent));
 		}
 		return $;
 	}
@@ -90,14 +105,6 @@ public class AggregateMailPrepare {
 			}
 		};
 		ImmutableListMultimap<String, CollectorNotificationJson> byNode = Multimaps.index(item.notifications(), f);
-		Function<CollectorNotificationJson, String> function = new Function<CollectorNotificationJson, String>() {
-
-			@Override
-			public String apply(CollectorNotificationJson input) {
-				return input.project_name() + "/" + input.collector_name();
-			}
-
-		};
 		if (byNode.values().size() < 2) {
 			log.debug("will not append summary");
 			return byNode;
@@ -105,7 +112,7 @@ public class AggregateMailPrepare {
 		content.append("Summary:\n");
 		for (String n : byNode.keySet()) {
 			content.append(n + " -> "
-					+ trimStringToMaxLength(Collections2.transform(byNode.get(n), function).toString(), 250) + " \n");
+					+ trimStringToMaxLength(Collections2.transform(byNode.get(n), new NotificationToHeaderFunction()).toString(), 250) + " \n");
 		}
 		content.append("========================================================================\n");
 
