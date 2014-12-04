@@ -85,7 +85,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 			}
 
 		};
-		dbUtils.executeQuery("select * from " + TABLE_NAME, function);
+		dbUtils.executeQueryCompressed("select * from " + TABLE_NAME, function);
 		return $;
 	}
 	
