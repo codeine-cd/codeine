@@ -63,9 +63,20 @@ public class AggregateMailPrepare {
 			else {
 				stringContent = content.toString();
 			}
-			$.add(new Mail(Lists.newArrayList(item.user()), "Aggregated alerts from codeine for policy " + alertsCollectionType + " on nodes: " + byNode.keySet(), stringContent));
+			$.add(new Mail(Lists.newArrayList(item.user()), trimStringToMaxLength("Aggregated alerts from codeine for policy " + alertsCollectionType + " on nodes: " + byNode.keySet(),100), stringContent));
 		}
 		return $;
+	}
+	private String trimStringToMaxLength(String s, int size)
+	{
+		if(s.length() > size)
+		{
+			String substring = s.substring(0,size);
+			int lastIndexOf = substring.lastIndexOf(" ");
+			return lastIndexOf == -1 ? substring + "... and some more." : substring.substring(0,lastIndexOf) + "... and some more.";
+		}
+		return s;
+		
 	}
 	private ImmutableListMultimap<String, CollectorNotificationJson> createSummary(NotificationContent item,
 			StringBuilder content) {
@@ -78,30 +89,18 @@ public class AggregateMailPrepare {
 			}
 		};
 		ImmutableListMultimap<String, CollectorNotificationJson> byNode = Multimaps.index(item.notifications(), f );
-		for (String n : byNode.keySet()) {
-			content.append("Node          : " + n + "\n");
-			Function<CollectorNotificationJson, String> f1 = new Function<CollectorNotificationJson, String>() 
-					{
-						@Override
-						public String apply(CollectorNotificationJson notification) {
-							
-							return notification.project_name();
-						}
-					};
-			ImmutableListMultimap<String, CollectorNotificationJson> byProject = Multimaps.index(byNode.get(n), f1  );
-			for (String p : byProject.keySet()) {
-				Function<CollectorNotificationJson, String> function = new Function<CollectorNotificationJson, String>() {
-
-					@Override
-					public String apply(CollectorNotificationJson input) {
-						return input.collector_name();
-					}
-					
-				};
-				content.append("\tProject          : " + p + " has failing monitors: " +  Collections2.transform(byProject.get(p), function ));
+		Function<CollectorNotificationJson, String> function = new Function<CollectorNotificationJson, String>() {
+			
+			@Override
+			public String apply(CollectorNotificationJson input) {
+				return input.project_name() + "=>"+input.collector_name();
 			}
 			
-		}
+		};
+		for (String n : byNode.keySet()) {
+				content.append("Node          : " + n + "failing monitors:" + trimStringToMaxLength(Collections2.transform(byNode.get(n), function ).toString(),250) + " \n" );
+			}
+			
 		return byNode;
 	}
 	private String formatTime(long time) {
