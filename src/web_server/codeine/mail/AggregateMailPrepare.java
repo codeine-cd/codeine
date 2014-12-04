@@ -10,10 +10,13 @@ import codeine.configuration.Links;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
-import codeine.mail.Mail;
 import codeine.model.Constants;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimaps;
 import com.google.inject.Inject;
 
 public class AggregateMailPrepare {
@@ -28,10 +31,15 @@ public class AggregateMailPrepare {
 	public List<Mail> prepare(List<NotificationContent> notificationContent, AlertsCollectionType alertsCollectionType) {
 		List<Mail> $ = Lists.newArrayList();
 		for (NotificationContent item : notificationContent) {
+			
 			StringBuilder content = new StringBuilder();
 			content.append("Hi,\nBelow are alerts from monitors in codeine for policy " + alertsCollectionType + ".\n");
 			content.append("For more info: " + links.getWebServerLandingPage() + "\n");
 			content.append("Enjoy!\n\n");
+			content.append("========================================================================\n");
+			content.append("Summary:\n");
+			ImmutableListMultimap<String, CollectorNotificationJson> byNode = createSummary(item, content);
+			
 			content.append("========================================================================\n");
 			
 			for (CollectorNotificationJson notification : item.notifications()) {
@@ -55,9 +63,46 @@ public class AggregateMailPrepare {
 			else {
 				stringContent = content.toString();
 			}
-			$.add(new Mail(Lists.newArrayList(item.user()), "Aggregated alerts from codeine for policy " + alertsCollectionType, stringContent));
+			$.add(new Mail(Lists.newArrayList(item.user()), "Aggregated alerts from codeine for policy " + alertsCollectionType + " on nodes: " + byNode.keySet(), stringContent));
 		}
 		return $;
+	}
+	private ImmutableListMultimap<String, CollectorNotificationJson> createSummary(NotificationContent item,
+			StringBuilder content) {
+		Function<CollectorNotificationJson, String> f = new Function<CollectorNotificationJson, String>() {
+			
+			@Override
+			public String apply(CollectorNotificationJson notification) {
+				
+				return notification.node() == null ? "unknown" : notification.node().alias();
+			}
+		};
+		ImmutableListMultimap<String, CollectorNotificationJson> byNode = Multimaps.index(item.notifications(), f );
+		for (String n : byNode.keySet()) {
+			content.append("Node          : " + n + "\n");
+			Function<CollectorNotificationJson, String> f1 = new Function<CollectorNotificationJson, String>() 
+					{
+						@Override
+						public String apply(CollectorNotificationJson notification) {
+							
+							return notification.project_name();
+						}
+					};
+			ImmutableListMultimap<String, CollectorNotificationJson> byProject = Multimaps.index(byNode.get(n), f1  );
+			for (String p : byProject.keySet()) {
+				Function<CollectorNotificationJson, String> function = new Function<CollectorNotificationJson, String>() {
+
+					@Override
+					public String apply(CollectorNotificationJson input) {
+						return input.collector_name();
+					}
+					
+				};
+				content.append("\tProject          : " + p + " has failing monitors: " +  Collections2.transform(byProject.get(p), function ));
+			}
+			
+		}
+		return byNode;
 	}
 	private String formatTime(long time) {
 		return new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(new Date(time));
