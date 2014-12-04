@@ -119,5 +119,16 @@ public class StringUtils {
 		}
 		return string.toLowerCase();
 	}
+
+	public static String trimStringToMaxLength(String s, int size) {
+		if (s.length() > size) {
+			String substring = s.substring(0, size);
+			int lastIndexOf = substring.lastIndexOf(" ");
+			return lastIndexOf == -1 ? substring + "... and some more." : substring.substring(0, lastIndexOf)
+					+ "... and some more.";
+		}
+		return s;
+	
+	}
 	
 }

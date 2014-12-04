@@ -12,6 +12,7 @@ import codeine.jsons.labels.LabelJsonProvider;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.model.Constants;
+import codeine.utils.StringUtils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -77,21 +78,10 @@ public class AggregateMailPrepare {
 			else {
 				title += " on nodes: " + byNode.keySet();
 			}
-			$.add(new Mail(Lists.newArrayList(item.user()), trimStringToMaxLength(
-					title, 100), stringContent));
+			$.add(new Mail(Lists.newArrayList(item.user()), StringUtils.trimStringToMaxLength(
+					title, 150), stringContent));
 		}
 		return $;
-	}
-
-	private String trimStringToMaxLength(String s, int size) {
-		if (s.length() > size) {
-			String substring = s.substring(0, size);
-			int lastIndexOf = substring.lastIndexOf(" ");
-			return lastIndexOf == -1 ? substring + "... and some more." : substring.substring(0, lastIndexOf)
-					+ "... and some more.";
-		}
-		return s;
-
 	}
 
 	private ImmutableListMultimap<String, CollectorNotificationJson> createSummary(NotificationContent item,
@@ -112,7 +102,7 @@ public class AggregateMailPrepare {
 		content.append("Summary:\n");
 		for (String n : byNode.keySet()) {
 			content.append(n + " -> "
-					+ trimStringToMaxLength(Collections2.transform(byNode.get(n), new NotificationToHeaderFunction()).toString(), 250) + " \n");
+					+ StringUtils.trimStringToMaxLength(Collections2.transform(byNode.get(n), new NotificationToHeaderFunction()).toString(), 250) + " \n");
 		}
 		content.append("========================================================================\n");
 
