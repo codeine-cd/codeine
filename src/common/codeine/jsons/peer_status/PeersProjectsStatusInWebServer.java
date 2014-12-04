@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -40,6 +41,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	}
 
 	private Map<String, PeerStatusJsonV2> mergeUpdateMaps(List<Map<String, PeerStatusJsonV2>> updateMaps) {
+		log.info("mergin maps");
 		int duplicatePeers = 0;
 		Map<String, PeerStatusJsonV2> res = Maps.newHashMap();
 		for (Map<String, PeerStatusJsonV2> peersStatus : updateMaps) {
@@ -69,7 +71,9 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 			FutureTask<Map<String, PeerStatusJsonV2>> future = new FutureTask<Map<String, PeerStatusJsonV2>>(new Callable<Map<String,PeerStatusJsonV2>>() {
 				@Override
 				public Map<String, PeerStatusJsonV2> call() throws Exception {
+					Stopwatch s = Stopwatch.createStarted();
 					Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
+					log.info("getting status from db " + c + " took " + s);
 					return peersStatus;
 				}
 			});
