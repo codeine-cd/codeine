@@ -59,6 +59,6 @@ public class Result {
 	private void limitOutput(String output2) {
 		output2 = output2 == null || output2.length() <= MAX_OUTPUT_SIZE ? 
 				output2 : 
-				"\nOutput too long...\n" + output2.substring(output2.length() - MAX_OUTPUT_SIZE);
+				output2.substring(output2.length() - MAX_OUTPUT_SIZE) + "\nOutput too long...\n";
 	}
 }
