@@ -13,6 +13,8 @@ my $versionNoDate = getVersionNoDate();
 es("mkdir -p dist/bin");
 es("cp target/codeine-1.0.0-jar-with-dependencies.jar dist/bin/codeine.jar");
 es("cd deployment/http-root/ajs ; npm install");
+es("rm -rf deployment/http-root/ajs/app/bower_components");
+es("cd deployment/http-root/ajs ; bower cache clean");
 es("cd deployment/http-root/ajs ; bower install");
 es("cd deployment/http-root/ajs ; bower update");
 es("cd deployment/http-root/ajs ; grunt");

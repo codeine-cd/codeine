@@ -19,6 +19,11 @@ unless (defined($ENV{INTEL_INSIDE}))
 	es("echo '{\"directory\": \"app/bower_components\"}' > deployment/http-root/ajs/.bowerrc");
 }
 $ENV{mvn} = "mvn" unless defined $ENV{mvn};
+if (defined($ENV{INTEL_INSIDE}))
+{
+	$ENV{http_proxy} = "http://proxy-chain.intel.com:911/";
+	$ENV{https_proxy} = "http://proxy-chain.intel.com:911/";
+}
 print "mvn is $ENV{mvn}\n";
 if (defined($ENV{INTEL_INSIDE}))
 {
@@ -43,11 +48,7 @@ unless ($ENV{'release-to-github'} eq "true")
 	exit(0);
 } 
 print "Will release new version to Github: $versionNoDate\n";
-if (defined($ENV{INTEL_INSIDE}))
-{
-	$ENV{http_proxy} = "http://proxy-chain.intel.com:911/";
-	$ENV{https_proxy} = "http://proxy-chain.intel.com:911/";
-}
+
 my $githubUser = $ENV{GITHUB_USER};
 my $githubPassword = $ENV{GITHUB_PASSWORD};
 my $res = r("curl -X POST -u $githubUser:$githubPassword -H \"Content-Type: application/json\" -d '{  \"tag_name\": \"v$versionNoDate\",  \"target_commitish\": \"master\",  \"name\": \"v$versionNoDate\",  \"body\": \"Codeine Release\",  \"draft\": false,  \"prerelease\": true}' https://api.github.com/repos/codeine-cd/codeine/releases");
