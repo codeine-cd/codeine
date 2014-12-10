@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
+
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
@@ -12,6 +14,8 @@ import codeine.permissions.IUserWithPermissions;
 
 public abstract class CommandExecutionStrategy {
 
+	private static final Logger log = Logger.getLogger(CommandExecutionStrategy.class);
+	
 	private ScehudleCommandExecutionInfo commandData;
 	private AllNodesCommandExecuter allNodesCommandExecuter;
 	private Links links;
@@ -52,11 +56,12 @@ public abstract class CommandExecutionStrategy {
 			commandNode(executor, peer, shouldOutputImmediatly);
 		}
 		executor.shutdown();
-		while (!executor.isTerminated()) {
+		while (!executor.isTerminated() && !isCancel()) {
 			try {
 				Thread.sleep(1000);
 				if (isCancel()) {
-					executor.shutdownNow();
+					List<Runnable> shutdownNow = executor.shutdownNow();
+					log.info("shutdownNow " + shutdownNow.size());
 				}
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
