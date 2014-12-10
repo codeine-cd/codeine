@@ -131,7 +131,7 @@ public class AllNodesCommandExecuter {
 			initStrategy();
 			strategy.execute();
 			if (strategy.isCancel()) {
-				writeLine("command was canceled by user");
+				writeLine("Execution was canceled by user");
 			}
 			if (strategy.isError()) {
 				writeLine(strategy.error());
