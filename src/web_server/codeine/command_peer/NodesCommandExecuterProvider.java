@@ -150,11 +150,11 @@ public class NodesCommandExecuterProvider {
 		return $;
 	}
 
-	public void cancel(String project, long id) {
+	public void cancel(String project, long id, String username) {
 		for (AllNodesCommandExecuter e : cleanAndGet()) {
 			if (e.id() == id && e.project().equals(project)){
 				log.info("cancel command " + id);
-				e.cancel();
+				e.cancel(username);
 				return;
 			}
 		}

@@ -55,6 +55,8 @@ public class AllNodesCommandExecuter {
 	private Object fileWriteSync = new Object();
 	private CommandExecutionStrategy strategy;
 
+	private String cancelingUser;
+
 	public long executeOnAllNodes(IUserWithPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
 		this.project = project;
 		this.userObject = userObject;
@@ -131,7 +133,7 @@ public class AllNodesCommandExecuter {
 			initStrategy();
 			strategy.execute();
 			if (strategy.isCancel()) {
-				writeLine("Execution was canceled by user");
+				writeLine("Execution was canceled by user " + cancelingUser);
 			}
 			if (strategy.isError()) {
 				writeLine(strategy.error());
@@ -284,8 +286,9 @@ public class AllNodesCommandExecuter {
 		return commandId;
 	}
 
-	public void cancel() {
+	public void cancel(String username) {
 		strategy.setCancel();
+		this.cancelingUser = username;
 	}
 
 	public List<NodeWithPeerInfo> nodesList() {
