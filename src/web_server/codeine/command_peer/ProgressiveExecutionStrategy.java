@@ -3,6 +3,8 @@ package codeine.command_peer;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.NodeWithPeerInfo;
@@ -17,6 +19,8 @@ import com.google.common.collect.Lists;
 
 public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 
+	private static final Logger log = Logger.getLogger(ProgressiveExecutionStrategy.class);
+	
 	private NodeGetter nodesGetter;
 	private Object cancelObject = new Object();
 
@@ -76,6 +80,7 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 				writeLine("Execution of " + calc.numOfNodesToExecute() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", will not go to sleep");
 			}
 		}
+		log.info("done executing");
 	}
 	
 	private long durationInMillis() {

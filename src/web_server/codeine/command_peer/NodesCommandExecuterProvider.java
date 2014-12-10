@@ -153,7 +153,7 @@ public class NodesCommandExecuterProvider {
 	public void cancel(String project, long id) {
 		for (AllNodesCommandExecuter e : cleanAndGet()) {
 			if (e.id() == id && e.project().equals(project)){
-				log.info("cancel command " + e);
+				log.info("cancel command " + id);
 				e.cancel();
 				return;
 			}

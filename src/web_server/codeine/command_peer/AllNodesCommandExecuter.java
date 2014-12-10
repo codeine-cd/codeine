@@ -112,6 +112,7 @@ public class AllNodesCommandExecuter {
 	}
 
 	private void finish() {
+		log.info("Finishing command " + commandDataJson.id());
 		if (null != commandDataJson) {
 			commandDataJson.finish();
 			monitorsStatistics.updateCommand(commandDataJson);
