@@ -77,8 +77,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 		return Lists.newArrayList(projects().values());
 	}
 	
-	@Override
-	public ProjectJson getProjectForName(String projectName) {
+	private ProjectJson getProjectForNameOrNull(String projectName) {
 		if (Constants.CODEINE_NODES_PROJECT_NAME.equals(projectName)) {
 			return NODES_INTERNAL_PROJECT;
 		}
@@ -88,7 +87,15 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 				return projectJson;
 			}
 		}
-		throw new ProjectNotFoundException(projectName);
+		return null;
+	}
+	@Override
+	public ProjectJson getProjectForName(String projectName) {
+		ProjectJson $ = getProjectForNameOrNull(projectName);
+		if (null == $) {
+			throw new ProjectNotFoundException(projectName);
+		}
+		return $;
 	}
 
 	public Map<String, ProjectJson> projects() {
@@ -121,7 +128,12 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 		$.addAll(project.commands());
 		if (!project.include_project_commands().isEmpty()) {
 			for (String p : project.include_project_commands()) {
-				$.addAll(getProjectForName(p).commands());
+				ProjectJson projectForNameOrNull = getProjectForNameOrNull(p);
+				if (null == projectForNameOrNull) {
+					log.warn("project not found " + p + " to include from project " + projectName);
+					continue;
+				}
+				$.addAll(projectForNameOrNull.commands());
 			}
 		}
 		List<CommandInfo> clonedList = JsonUtils.cloneJson($, new TypeToken<List<CommandInfo>>(){}.getType());
