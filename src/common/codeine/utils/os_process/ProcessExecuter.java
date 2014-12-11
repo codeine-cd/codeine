@@ -59,9 +59,11 @@ public class ProcessExecuter {
 				return new Result(ExitStatus.TIMEOUT, worker.output());
 			}
 		} catch (IOException e) {
+			log.warn("got IOException " + e.getMessage());
 			String output = null == worker ? "" : worker.output();
 			return new Result(ExitStatus.IO_ERROR, output);
 		} catch (InterruptedException ex) {
+			log.warn("got InterruptedException " + ex.getMessage());
 			worker.interrupt();
 			Thread.currentThread().interrupt();
 			throw new RuntimeException(ex);

@@ -175,6 +175,13 @@ public class PeerCommandWorker implements Runnable {
 						line += " (internal error)";
 						break;
 					}
+					case ExitStatus.IO_ERROR: {
+						line += " (IO Error)";
+						break;
+					}
+					default: 
+						line += " (Definition Missing in PeerCommandWorker)";
+						break;
 					}
 					line += "\n";
 				} else {

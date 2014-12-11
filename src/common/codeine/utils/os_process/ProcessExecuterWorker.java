@@ -14,7 +14,6 @@ import codeine.utils.StringUtils;
 
 import com.google.common.base.Function;
 
-@SuppressWarnings("unused")
 public class ProcessExecuterWorker extends Thread {
 	
 	private static final Logger log = Logger.getLogger(ProcessExecuterWorker.class);
@@ -24,12 +23,12 @@ public class ProcessExecuterWorker extends Thread {
 	private String output = "";
 	private String error = "";
 	private Function<String, Void> function;
-	private List<String> cmd;
+//	private List<String> cmd;
 
 	ProcessExecuterWorker(Process process, Function<String, Void> function, List<String> cmd) {
 		this.process = process;
 		this.function = function;
-		this.cmd = cmd;
+//		this.cmd = cmd;
 	}
 
 	@Override
@@ -54,11 +53,13 @@ public class ProcessExecuterWorker extends Thread {
 				}
 				exit = process.waitFor();
 			} catch (IOException ex) {
+				log.warn("got IOException " + ex.getMessage());
 				error += ExceptionUtils.getStackTrace(ex);
 				function.apply(ExceptionUtils.getStackTrace(ex));
 				exit = ExitStatus.IO_ERROR;
 			}
-		} catch (InterruptedException interrupted) {
+		} catch (InterruptedException e) {
+			log.warn("got InterruptedException " + e.getMessage());
 			error += "\nprocess was interrupted\n";
 			exit = ExitStatus.INTERRUPTED;
 			log.info("thread was interuppted");

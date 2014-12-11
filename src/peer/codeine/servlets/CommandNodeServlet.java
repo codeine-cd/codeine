@@ -112,6 +112,7 @@ public class CommandNodeServlet extends AbstractServlet
 			List<String> cmd = Lists.newArrayList();
 			List<String> cmdForOutput = Lists.newArrayList();
 			String cred = commandInfo.cred();
+			log.info("executing command " + commandInfo.command_name());
 			log.info("credentials: " + cred);
 			if (!StringUtils.isEmpty(cred) && !windows_peer){
 				writer.println("credentials = " + cred);
