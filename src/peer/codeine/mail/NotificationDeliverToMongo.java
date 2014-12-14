@@ -19,10 +19,10 @@ public class NotificationDeliverToMongo {
 	@Inject private IAlertsDatabaseConnector mongoConnector;
 	
 	public void sendCollectorResult(String collectorName, NodeInfo node,
-			ProjectJson project, String output) {
+			ProjectJson project, String output, int exit_status, String duration) {
 		String version = new NodeHelper().getVersionOrNull(peerStatus.createJson(), project, node);
 		CollectorNotificationJson collectorNotificationJson = new CollectorNotificationJson(collectorName,
-				project.name(), output, node, version, InetUtils.getLocalHost().getHostName());
+				project.name(), output, node, version, InetUtils.getLocalHost().getHostName(), exit_status, duration);
 		log.info("sending notification " + collectorNotificationJson.toStringNoOutput());
 		mongoConnector.put(collectorNotificationJson);
 	}

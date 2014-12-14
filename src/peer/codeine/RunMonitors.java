@@ -1,6 +1,6 @@
 package codeine;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -232,7 +232,7 @@ public class RunMonitors implements Task {
 		if (monitor.notification_enabled()) {
 			if (Constants.IS_MAIL_STARTEGY_MONGO) {
 				if (shouldSendNotificationToMongo(res, previousResult)) {
-					notificationDeliverToMongo.sendCollectorResult(monitor.name(), node, project(), res.output());
+					notificationDeliverToMongo.sendCollectorResult(monitor.name(), node, project(), res.output(), res.exit(), stopwatch.toString());
 				}
 			} else {
 				if (null == previousResult) {

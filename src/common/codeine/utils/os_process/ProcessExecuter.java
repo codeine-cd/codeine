@@ -56,11 +56,12 @@ public class ProcessExecuter {
 				return new Result(worker.exitStatus(), worker.output());
 			} else {
 				ThreadUtils.sleep(100);
-				return new Result(ExitStatus.TIMEOUT, worker.output());
+				return new Result(ExitStatus.TIMEOUT, worker.output() + "\n...Got timeout...\n");
 			}
 		} catch (IOException e) {
 			log.warn("got IOException " + e.getMessage());
 			String output = null == worker ? "" : worker.output();
+			output +=  "\n...Got IOException...\n";
 			return new Result(ExitStatus.IO_ERROR, output);
 		} catch (InterruptedException ex) {
 			log.warn("got InterruptedException " + ex.getMessage());

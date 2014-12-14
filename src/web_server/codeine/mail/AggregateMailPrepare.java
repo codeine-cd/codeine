@@ -1,7 +1,5 @@
 package codeine.mail;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -12,6 +10,7 @@ import codeine.jsons.labels.LabelJsonProvider;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.model.Constants;
+import codeine.model.ExitStatus;
 import codeine.utils.StringUtils;
 
 import com.google.common.base.Function;
@@ -22,13 +21,6 @@ import com.google.common.collect.Multimaps;
 import com.google.inject.Inject;
 
 public class AggregateMailPrepare {
-
-	public static class NotificationToHeaderFunction implements Function<CollectorNotificationJson, String> {
-		@Override
-		public String apply(CollectorNotificationJson input) {
-			return input.project_name() + "/" + input.collector_name();
-		}
-	}
 
 	private static final Logger log = Logger.getLogger(AggregateMailPrepare.class);
 	private static final int MAX_MAIL_SIZE = 100000;
@@ -55,11 +47,21 @@ public class AggregateMailPrepare {
 						.labelForVersion(notification.version(), notification.project_name());
 				content.append("Project       : " + notification.project_name() + "\n");
 				content.append("Node          : " + nodeName + "\n");
-				content.append("Server        : " + notification.peer() + "\n");
-				long time = notification.time();
-				content.append("Time on node  : " + formatTime(time) + "\n");
-				content.append("Version       : " + version + "\n");
 				content.append("Monitor       : " + notification.collector_name() + "\n");
+				if (null != notification.exit_status()) {
+				String exitString = "" + notification.exit_status();
+				if (notification.exit_status() <= 0) {
+					exitString += " (" + ExitStatus.fromInt(notification.exit_status()) + ")";
+				}
+				content.append("Exit Status   : " + exitString + "\n");
+				}
+				if (!StringUtils.isEmpty(notification.duration())) {
+				content.append("Duration      : " + notification.duration() + "\n");
+				}
+				content.append("Time on node  : " + getTimeOnNode(notification) + "\n");
+				content.append("Server        : " + notification.peer() + "\n");
+				content.append("Version       : " + version + "\n");
+				content.append("Link to monitor page : " + getLink(notification) + "\n");
 				content.append("Output\n" + notification.output() + "\n");
 				content.append("========================================================================\n");
 			}
@@ -82,6 +84,19 @@ public class AggregateMailPrepare {
 			$.add(new Mail(Lists.newArrayList(item.user()), title, stringContent));
 		}
 		return $;
+	}
+
+	private String getLink(CollectorNotificationJson notification) {
+		return links.getWebServerMonitorStatus(notification.project_name(), notification.node().name(), notification.collector_name());
+	}
+
+	private String getTimeOnNode(CollectorNotificationJson notification) {
+		if (StringUtils.isEmpty(notification.time_formatted())) {
+			return StringUtils.formatDate(notification.time());
+		}
+		else {
+			return notification.time_formatted();
+		}
 	}
 
 	private ImmutableListMultimap<String, CollectorNotificationJson> createSummary(NotificationContent item,
@@ -107,10 +122,6 @@ public class AggregateMailPrepare {
 		content.append("========================================================================\n");
 
 		return byNode;
-	}
-
-	private String formatTime(long time) {
-		return new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(new Date(time));
 	}
 
 	// public static void main(String[] args) {

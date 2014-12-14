@@ -162,26 +162,9 @@ public class PeerCommandWorker implements Runnable {
 				if (ExitStatus.SUCCESS != exitStatus) {
 					nodeFailed();
 					line = "\nCommand failed with exit status " + exitStatus;
-					switch (exitStatus)	{
-					case ExitStatus.TIMEOUT: {
-						line += " (timeout)";
-						break;
-					}
-					case ExitStatus.INTERRUPTED: {
-						line += " (interrupted)";
-						break;
-					}
-					case ExitStatus.EXCEPTION: {
-						line += " (internal error)";
-						break;
-					}
-					case ExitStatus.IO_ERROR: {
-						line += " (IO Error)";
-						break;
-					}
-					default: 
-						line += " (Definition Missing in PeerCommandWorker)";
-						break;
+					if (exitStatus <= 0) {
+						line += " (" + ExitStatus.fromInt(exitStatus) + ")";
+						
 					}
 					line += "\n";
 				} else {
