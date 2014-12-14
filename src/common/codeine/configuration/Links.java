@@ -59,7 +59,7 @@ public class Links {
 
 	public String getWebServerMonitorStatus(String project_name, String node_name, String collector_name) {
 		return getWebServerLink() + "/codeine/project/" + HttpUtils.encodeURL(project_name) +
-				"/node/" + HttpUtils.encodeURL(node_name) + "/monitor" + HttpUtils.encodeURL(collector_name) + "/status";
+				"/node/" + HttpUtils.encodeURL(node_name) + "/monitor/" + HttpUtils.encodeURL(collector_name) + "/status";
 	}
 
 }
