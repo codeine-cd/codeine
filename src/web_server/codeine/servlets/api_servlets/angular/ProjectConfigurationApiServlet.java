@@ -55,8 +55,10 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 
 	@Override
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
+		log.info("got delete request");
 		IUserWithPermissions user = permissionsManager.user(request);
 		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
+		log.info("project " + projectName + " user " + user.user().username());
 		ProjectJson projectToDelete = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
 		configurationManager.deleteProject(projectToDelete);
 		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);

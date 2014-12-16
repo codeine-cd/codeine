@@ -17,6 +17,7 @@ import codeine.utils.JsonUtils;
 import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.logging.LogUtils;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
@@ -78,6 +79,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	}
 	
 	private ProjectJson getProjectForNameOrNull(String projectName) {
+		Preconditions.checkNotNull(projectName);
 		if (Constants.CODEINE_NODES_PROJECT_NAME.equals(projectName)) {
 			return NODES_INTERNAL_PROJECT;
 		}
