@@ -40,7 +40,7 @@ public class PeriodicExecuter implements Runnable
 			Stopwatch s = Stopwatch.createStarted();
 			try {
 				exec();
-			} catch (Exception e1) {
+			} catch (Throwable e1) {
 				log.warn("error executing task " + taskName, e1);
 			}
 			s.stop();
