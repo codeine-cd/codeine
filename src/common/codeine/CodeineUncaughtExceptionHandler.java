@@ -17,6 +17,7 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 		try {
+			System.out.println("Uncaught exception!");
 			if (!errorPrintedToOut) {
 				errorPrintedToOut = true;
 				e.printStackTrace();
@@ -40,6 +41,9 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 	}
 
 	public static void main(String[] args) {
+		
+	}
+	public static void main1(String[] args) {
 		BasicConfigurator.configure();
 		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
 		throw new RuntimeException() {
