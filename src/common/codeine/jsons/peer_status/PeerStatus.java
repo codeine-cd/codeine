@@ -1,7 +1,6 @@
 package codeine.jsons.peer_status;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import com.google.common.collect.Maps;
 public class PeerStatus {
 	private static final Logger log = Logger.getLogger(PeerStatus.class);
 
-	private Map<String, ProjectStatus> project_name_to_status = Maps.newHashMap();
+	private Map<String, ProjectStatus> project_name_to_status = Maps.newConcurrentMap();
 
 	@Inject
 	private CodeineRuntimeInfo codeineRuntimeInfo;
@@ -77,23 +76,17 @@ public class PeerStatus {
 	}
 
 	private ProjectStatus getProjectStatus(String project) {
-		synchronized (this) {
-			ProjectStatus projectStatus = project_name_to_status.get(project);
-			if (null == projectStatus) {
-				projectStatus = new ProjectStatus(project);
-				HashMap<String, ProjectStatus> tempMap = Maps.newHashMap(project_name_to_status);
-				tempMap.put(project, projectStatus);
-				project_name_to_status = tempMap;
-			}
-			return projectStatus;
+		ProjectStatus projectStatus = project_name_to_status.get(project);
+		if (null == projectStatus) {
+			projectStatus = new ProjectStatus(project);
+			project_name_to_status.put(project, projectStatus);
 		}
+		return projectStatus;
 	}
 	
 	public void removeProject(String project) {
 		ProjectStatus status = null;
-		synchronized (this) {
-			status = project_name_to_status.remove(project);
-		}
+		status = project_name_to_status.remove(project);
 		log.info("removed status for project " + project);
 		log.info("status was " + status);
 	}
@@ -105,7 +98,7 @@ public class PeerStatus {
 	public PeerStatusJsonV2 createJson() {
 		return new PeerStatusJsonV2(InetUtils.getLocalHost().getHostName(), codeineRuntimeInfo.port(),
 				codeineRuntimeInfo.version(), codeineRuntimeInfo.startTime(), Constants.getInstallDir(),
-				PathHelper.getTarFile(), project_name_to_status, InetUtils.getLocalHost().getHostAddress(), System.getProperty("DNS_DOMAIN_NAME"));
+				PathHelper.getTarFile(), project_name_to_status(), InetUtils.getLocalHost().getHostAddress(), System.getProperty("DNS_DOMAIN_NAME"));
 	}
 
 	public String updateVersion(ProjectJson project, String node, String alias, String version) {
@@ -138,7 +131,8 @@ public class PeerStatus {
 	}
 	
 	public boolean removeNonExistCollectors(ProjectJson project, String node, String alias) {
-		List<String> collectorsNotToRemove = Lists.newArrayList();
+		List<String> collectorsNotToRemove = Lists.newArrayList(Constants.VERSION);//TODO tags also not to remove
+		//TODO change version monitor name
 		for (CollectorInfo collectorInfo : project.collectors()) {
 			collectorsNotToRemove.add(collectorInfo.name());
 		}
