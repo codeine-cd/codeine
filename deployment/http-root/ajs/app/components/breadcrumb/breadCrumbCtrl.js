@@ -37,6 +37,11 @@
                 vm.lastItem = 'Configure Codeine';
                 return;
             }
+            if ($location.path() === '/codeine/manage/statistics') {
+                vm.items.push( { name : 'Manage Codeine', url : '/codeine/manage-codeine'});
+                vm.lastItem = 'Codeine Statistics';
+                return;
+            }
 
             if (angular.isDefined(current.params.user_name)) {
                 vm.lastItem = current.params.user_name;
