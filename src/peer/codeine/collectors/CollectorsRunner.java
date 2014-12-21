@@ -54,7 +54,7 @@ public class CollectorsRunner implements Task {
 	}
 
 	public void init() {
-		String monitorOutputDirWithNode = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name());
+		String monitorOutputDirWithNode = pathHelper.getCollectorOutputDirWithNode(project().name(), node.name());
 		FilesUtils.mkdirs(monitorOutputDirWithNode);
 	}
 

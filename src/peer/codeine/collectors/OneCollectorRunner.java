@@ -165,7 +165,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 	private void writeResult(CollectorExecutionInfoWithResult result) {
-		String file = pathHelper.getMonitorOutputDirWithNode(project.name(), node.name()) + "/" + HttpUtils.specialEncode(collectorInfo.name())
+		String file = pathHelper.getCollectorOutputDirWithNode(project.name(), node.name()) + "/" + HttpUtils.specialEncode(collectorInfo.name())
 				+ ".txt";
 		log.debug("Output for " + collectorInfo.name() + " will be written to: " + file);
 		TextFileUtils.setContents(file, gson.toJson(result));

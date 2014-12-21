@@ -32,12 +32,18 @@ public class PathHelper {
 	public String getMonitorOutputDir(String projectName) {
 		return getMonitorOutputDirAllProjects() + File.separator + projectName + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
 	}
+	public String getCollectorOutputDir(String projectName) {
+		return getMonitorOutputDirAllProjects() + File.separator + projectName + Constants.COLLECTOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
+	}
 	public String getMonitorOutputDirAllProjects() {
 		return getProjectsDir();
 	}
 
 	public String getMonitorOutputDirWithNode(String projectName, String nodeName) {
 		return getMonitorOutputDir(projectName) + File.separator + HttpUtils.specialEncode(nodeName);
+	}
+	public String getCollectorOutputDirWithNode(String projectName, String nodeName) {
+		return getCollectorOutputDir(projectName) + File.separator + HttpUtils.specialEncode(nodeName);
 	}
 
 	public String getProjectsDir() {
