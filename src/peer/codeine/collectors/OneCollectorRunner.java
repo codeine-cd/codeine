@@ -34,6 +34,7 @@ import com.google.inject.assistedinject.Assisted;
 
 public class OneCollectorRunner implements IOneCollectorRunner {
 
+	private static final int MIN_INTERVAL_MILLI = 20000;
 	private static final Logger log = Logger.getLogger(OneCollectorRunner.class);
 	@Inject private PathHelper pathHelper;
 	@Inject private PeerStatus peerStatus;
@@ -171,8 +172,8 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 	private int minInterval() {
-		if (0 == collectorInfo.min_interval()) {
-			return 20000;
+		if (collectorInfo.min_interval() <= 0) {
+			return MIN_INTERVAL_MILLI;
 		}
 		return collectorInfo.min_interval() * 60000;
 	}

@@ -55,7 +55,8 @@ public class CollectorsListHolder {
 		for (NodeMonitor monitorInfo : project.monitors()) {
 			String name = monitorInfo.name();
 			CollectorType type = CollectorType.Boolean;
-			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), monitorInfo.minInterval(), monitorInfo.credentials(), type, monitorInfo.notification_enabled());
+			int minInterval = monitorInfo.minInterval() == null ? 0 : monitorInfo.minInterval();
+			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), minInterval, monitorInfo.credentials(), type, monitorInfo.notification_enabled());
 			if (runnersMap.containsKey(name)) {
 				runnersMap.get(name).updateConf(collectorInfo);
 			} else {
