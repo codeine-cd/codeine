@@ -12,6 +12,7 @@ import codeine.api.NodeGetter;
 import codeine.api.NodeInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.peer_status.PeerStatusString;
 import codeine.jsons.peer_status.ProjectStatus;
@@ -42,13 +43,20 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		String nodeName = getParameter(request, Constants.UrlParameters.NODE);
 		NodeWithMonitorsInfo nodeByNameOrNull = nodesGetter.getNodeByNameOrNull(projectName, nodeName);
+		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
 		NodeWithMonitorsInfoApi node = null;
 		if (nodeByNameOrNull != null) {
 			boolean can_command = (userPermissionsGetter.user(request).canCommand(projectName, nodeByNameOrNull.alias()));
 			node = new NodeWithMonitorsInfoApi(nodeByNameOrNull, can_command);
 		}
-		else {
+		else if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration){
 			node = getNodeFromConfiguration(projectName, nodeName);
+		}
+		else {
+			log.warn("node not found " + projectName + " " + nodeName);
+			Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
+			NodeWithMonitorsInfo info = new NodeWithMonitorsInfo(nodeName + ":NODE_NOT_FOUND", nodeName + ":NODE_NOT_FOUND", projectName, monitors, Constants.NO_VERSION);
+			node = new NodeWithMonitorsInfoApi(info, false);
 		}
 		writeResponseGzipJson(node, request, response);
 	}
