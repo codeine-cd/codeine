@@ -59,6 +59,9 @@ public class TagsCollectorRunner implements IOneCollectorRunner {
 	public List<String> getTagsList() {
 		switch (project.node_discovery_startegy()) {
 		case Script:
+			if (project.tags_discovery_script() == null) {
+				return Lists.newArrayList();
+			}
 			return getTagsByScript();
 		case Configuration:
 			return getTagsByConfiguration();
