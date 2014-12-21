@@ -11,7 +11,9 @@ import org.apache.log4j.Logger;
 import codeine.PeerStatusChangedUpdater;
 import codeine.api.NodeInfo;
 import codeine.configuration.IConfigurationManager;
+import codeine.configuration.NodeMonitor;
 import codeine.jsons.collectors.CollectorInfo;
+import codeine.jsons.collectors.CollectorInfo.CollectorType;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 
@@ -45,11 +47,21 @@ public class CollectorsListHolder {
 		if (removed) {
 			peerStatusChangedUpdater.pushUpdate();
 		}
-		
 		return runnersMap.values();
 	}
 
 	private void addAndUpdateConfInMap(ProjectJson project) {
+		//TODO monitors backward
+		for (NodeMonitor monitorInfo : project.monitors()) {
+			String name = monitorInfo.name();
+			CollectorType type = CollectorType.Boolean;
+			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), monitorInfo.minInterval(), monitorInfo.credentials(), type, monitorInfo.notification_enabled());
+			if (runnersMap.containsKey(name)) {
+				runnersMap.get(name).updateConf(collectorInfo);
+			} else {
+				runnersMap.put(name, oneCollectorRunnerFactory.create(collectorInfo, project, node));
+			}
+		}
 		for (CollectorInfo collectorInfo : project.collectors()) {
 			String name = collectorInfo.name();
 			if (runnersMap.containsKey(name)) {
@@ -64,6 +76,10 @@ public class CollectorsListHolder {
 		Set<String> names = Sets.newHashSet();
 		for (CollectorInfo c : project.collectors()) {
 			names.add(c.name());
+		}
+		//TODO monitors backward
+		for (NodeMonitor m : project.monitors()) {
+			names.add(m.name());
 		}
 		Set<String> namesToRemove = Sets.newHashSet(runnersMap.keySet());
 		namesToRemove.removeAll(names);

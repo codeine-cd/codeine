@@ -16,6 +16,30 @@ public class CollectorInfo {
 		String,Integer,Boolean
 	}
 
+	public CollectorInfo() {
+		super();
+	}
+	
+	
+	public CollectorInfo(String name, String script_content, int min_interval, String cred, CollectorType type,
+			boolean notification_enabled) {
+		super();
+		this.name = name;
+		this.script_content = script_content;
+		this.min_interval = min_interval;
+		this.cred = cred;
+		this.type = type;
+		this.notification_enabled = notification_enabled;
+	}
+
+
+	public CollectorInfo(String name, String script_content, CollectorType type) {
+		super();
+		this.name = name;
+		this.script_content = script_content;
+		this.type = type;
+	}
+
 	public int min_interval() {
 		return min_interval;
 	}

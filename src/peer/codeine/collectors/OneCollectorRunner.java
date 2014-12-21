@@ -17,6 +17,7 @@ import codeine.jsons.collectors.CollectorExecutionInfoWithResult;
 import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
+import codeine.mail.NotificationDeliverToDatabase;
 import codeine.model.Constants;
 import codeine.model.ExitStatus;
 import codeine.model.Result;
@@ -31,7 +32,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.inject.assistedinject.Assisted;
 
-public class OneCollectorRunner {
+public class OneCollectorRunner implements IOneCollectorRunner {
 
 	private static final Logger log = Logger.getLogger(OneCollectorRunner.class);
 	@Inject private PathHelper pathHelper;
@@ -39,10 +40,14 @@ public class OneCollectorRunner {
 	@Inject private Gson gson;
 	@Inject private PeerStatusChangedUpdater peerStatusChangedUpdater;
 	@Inject private SnoozeKeeper snoozeKeeper;
+	@Inject private NotificationDeliverToDatabase notificationDeliverToDatabase;
 	private CollectorInfo collectorInfo;
 	private ProjectJson project;
 	private NodeInfo node;
 	private Long lastRuntime;
+	private Result result;
+	private Result previousResult;
+	private Stopwatch stopwatch;
 	
 	@Inject
 	public OneCollectorRunner(@Assisted CollectorInfo collector, @Assisted ProjectJson project, @Assisted NodeInfo node) {
@@ -51,7 +56,11 @@ public class OneCollectorRunner {
 		this.node = node;
 	}
 
-	public void run() {
+	/* (non-Javadoc)
+	 * @see codeine.collectors.IOneCollectorRunner#execute()
+	 */
+	@Override
+	public void execute() {
 		runOnceCheckMinInterval();
 	}
 
@@ -71,15 +80,22 @@ public class OneCollectorRunner {
 	private void runOnce() {
 		ShellScript shellScript = createShellScript();
 		long startTime = System.currentTimeMillis();
-		Stopwatch stopwatch = Stopwatch.createStarted();
-		Result result = executeScriptAndDeleteIt(shellScript);
+		stopwatch = Stopwatch.createStarted();
+		executeScriptAndDeleteIt(shellScript);
 		stopwatch.stop();
 		if (null == result.output()) {
 			result.output("No Output\n");
 		}
-		CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(), collectorInfo.type(), result.exit(), result.outputFromFile(), stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
+		CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(), collectorInfo.type(), result.exit(), outputFromFile(), stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
 		CollectorExecutionInfoWithResult resultWrapped = new CollectorExecutionInfoWithResult(info, result);
 		processResult(resultWrapped, stopwatch);
+	}
+
+	public String outputFromFile() {
+		if (null == result) {
+			return "";
+		}
+		return result.outputFromFile();
 	}
 
 	private void processResult(CollectorExecutionInfoWithResult resultWrapped, Stopwatch stopwatch) {
@@ -101,8 +117,7 @@ public class OneCollectorRunner {
 		return pathHelper.getMonitorsDir(project.name()) + File.separator + node.name() + "_" + collectorInfo.name();
 	}
 
-	private Result executeScriptAndDeleteIt(ShellScript shellScript) {
-		Result result;
+	private void executeScriptAndDeleteIt(ShellScript shellScript) {
 		try {
 			result = shellScript.execute();
 		} catch (Exception ex) {
@@ -111,7 +126,6 @@ public class OneCollectorRunner {
 		} finally {
 			shellScript.delete();
 		}
-		return result;
 	}
 
 	private Map<String, String> prepareEnv() {
@@ -129,9 +143,12 @@ public class OneCollectorRunner {
 			log.info("in snooze period");
 			return;
 		}
-//		return null != previousResult && Boolean.valueOf(previousResult) && !res.success();
-//		collectorInfo.notification_enabled();
-		//TODO decide when to notify somehow
+		boolean shouldNotify = null != previousResult && null != result && result.exit() != 0 && result.exit() != previousResult.exit();
+		if (collectorInfo.notification_enabled() && shouldNotify) {
+			notificationDeliverToDatabase.sendCollectorResult(
+					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString());
+		}
+		previousResult = result;
 	}
 
 	private void updateDatastoreIfNeeded(String lastValue, String currentValue) {

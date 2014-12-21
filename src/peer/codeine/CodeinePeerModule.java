@@ -3,6 +3,8 @@ package codeine;
 import codeine.collectors.CollectorsListHolderFactory;
 import codeine.collectors.CollectorsRunnerFactory;
 import codeine.collectors.OneCollectorRunnerFactory;
+import codeine.collectors.tags.TagsCollectorRunnerFactory;
+import codeine.collectors.version.VersionCollectorRunnerFactory;
 import codeine.configuration.IConfigurationManager;
 import codeine.db.IAlertsDatabaseConnector;
 import codeine.db.IStatusDatabaseConnector;
@@ -39,6 +41,8 @@ public class CodeinePeerModule extends AbstractModule {
 		install(new FactoryModuleBuilder().build(CollectorsRunnerFactory.class));
 		install(new FactoryModuleBuilder().build(CollectorsListHolderFactory.class));
 		install(new FactoryModuleBuilder().build(OneCollectorRunnerFactory.class));
+		install(new FactoryModuleBuilder().build(VersionCollectorRunnerFactory.class));
+		install(new FactoryModuleBuilder().build(TagsCollectorRunnerFactory.class));
 	}
 
 }

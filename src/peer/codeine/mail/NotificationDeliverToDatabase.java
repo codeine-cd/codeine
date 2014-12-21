@@ -12,11 +12,11 @@ import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.network.InetUtils;
 
-public class NotificationDeliverToMongo {
+public class NotificationDeliverToDatabase {
 
-	private static final Logger log = Logger.getLogger(NotificationDeliverToMongo.class);
+	private static final Logger log = Logger.getLogger(NotificationDeliverToDatabase.class);
 	@Inject private PeerStatus peerStatus;
-	@Inject private IAlertsDatabaseConnector mongoConnector;
+	@Inject private IAlertsDatabaseConnector alertsConnector;
 	
 	public void sendCollectorResult(String collectorName, NodeInfo node,
 			ProjectJson project, String output, int exit_status, String duration) {
@@ -24,7 +24,7 @@ public class NotificationDeliverToMongo {
 		CollectorNotificationJson collectorNotificationJson = new CollectorNotificationJson(collectorName,
 				project.name(), output, node, version, InetUtils.getLocalHost().getHostName(), exit_status, duration);
 		log.info("sending notification " + collectorNotificationJson.toStringNoOutput());
-		mongoConnector.put(collectorNotificationJson);
+		alertsConnector.put(collectorNotificationJson);
 	}
 
 }

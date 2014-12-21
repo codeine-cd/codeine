@@ -24,7 +24,7 @@ import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
-import codeine.mail.NotificationDeliverToMongo;
+import codeine.mail.NotificationDeliverToDatabase;
 import codeine.model.Constants;
 import codeine.model.ExitStatus;
 import codeine.model.Result;
@@ -49,18 +49,19 @@ public class RunMonitors implements Task {
 	private String projectName;
 	private static final Logger log = Logger.getLogger(RunMonitors.class);
 	private static final int MAX_OUTPUT_SIZE = 1000000;
+	private static final boolean RUNNING_COLLECTORS = true;
 	private Map<String, Long> lastRun = newHashMap();
 	private PeerStatus projectStatusUpdater;
 	private final MailSender mailSender;
 	private final PathHelper pathHelper;
 	private NodeInfo node;
-	private NotificationDeliverToMongo notificationDeliverToMongo;
+	private NotificationDeliverToDatabase notificationDeliverToMongo;
 	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
 	private SnoozeKeeper snoozeKeeper;
 	private ShellScript shellScript;
 
 	public RunMonitors(IConfigurationManager configurationManager, String project, PeerStatus projectStatusUpdater, MailSender mailSender,
-			PathHelper pathHelper, NodeInfo node, NotificationDeliverToMongo notificationDeliverToMongo,
+			PathHelper pathHelper, NodeInfo node, NotificationDeliverToDatabase notificationDeliverToMongo,
 			PeerStatusChangedUpdater mongoPeerStatusUpdater, SnoozeKeeper snoozeKeeper) {
 		this.configurationManager = configurationManager;
 		this.projectName = project;
@@ -252,6 +253,9 @@ public class RunMonitors implements Task {
 	}
 
 	private boolean shouldSendNotificationToMongo(Result res, String previousResult) {
+		if (RUNNING_COLLECTORS) {
+			return false;
+		}
 		if (snoozeKeeper.isSnooze(project().name(), node.name())) {
 			log.info("in snooze period");
 			return false;

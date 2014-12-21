@@ -25,7 +25,7 @@ import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
-import codeine.mail.NotificationDeliverToMongo;
+import codeine.mail.NotificationDeliverToDatabase;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -42,7 +42,7 @@ public class NodesRunner implements Task{
 	@Inject	private PathHelper pathHelper;
 	@Inject	private PeerStatus peerStatus;
 	@Inject	private MailSender mailSender;
-	@Inject	private NotificationDeliverToMongo notificationDeliverToMongo;
+	@Inject	private NotificationDeliverToDatabase notificationDeliverToMongo;
 	@Inject	private NodesManager nodesManager;
 	@Inject	private SnoozeKeeper snoozeKeeper;
 	private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();

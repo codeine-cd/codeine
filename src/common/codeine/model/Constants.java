@@ -88,6 +88,8 @@ public class Constants
 	public static final String NO_VERSION = "No version";
 	public static final String ALL_VERSION = "All versions";
 	public static final String VERSION = "version";
+	public static final String VERSION_COLLECTOR_NAME = "node_version_collector";
+	public static final String TAGS_COLLECTOR_NAME = "node_tags_collector";
 
 	public static final String COMMAND_RESULT = "codeine-command-result=";
 

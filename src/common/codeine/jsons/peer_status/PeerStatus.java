@@ -131,10 +131,13 @@ public class PeerStatus {
 	}
 	
 	public boolean removeNonExistCollectors(ProjectJson project, String node, String alias) {
-		List<String> collectorsNotToRemove = Lists.newArrayList(Constants.VERSION);//TODO tags also not to remove
-		//TODO change version monitor name
+		List<String> collectorsNotToRemove = Lists.newArrayList(Constants.VERSION_COLLECTOR_NAME, Constants.TAGS_COLLECTOR_NAME);
 		for (CollectorInfo collectorInfo : project.collectors()) {
 			collectorsNotToRemove.add(collectorInfo.name());
+		}
+		//TODO monitors backward
+		for (NodeMonitor monitorInfo : project.monitors()) {
+			collectorsNotToRemove.add(monitorInfo.name());
 		}
 		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
 		List<String> collectorsToRemove = Lists.newArrayList(nodeInfo.collectors().keySet());
