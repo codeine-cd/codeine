@@ -49,7 +49,6 @@ public class RunMonitors implements Task {
 	private String projectName;
 	private static final Logger log = Logger.getLogger(RunMonitors.class);
 	private static final int MAX_OUTPUT_SIZE = 1000000;
-	private static final boolean RUNNING_COLLECTORS = true;
 	private Map<String, Long> lastRun = newHashMap();
 	private PeerStatus projectStatusUpdater;
 	private final MailSender mailSender;
@@ -253,7 +252,7 @@ public class RunMonitors implements Task {
 	}
 
 	private boolean shouldSendNotificationToMongo(Result res, String previousResult) {
-		if (RUNNING_COLLECTORS) {
+		if (Constants.RUNNING_COLLECTORS_IN_PEER) {
 			return false;
 		}
 		if (snoozeKeeper.isSnooze(project().name(), node.name())) {
