@@ -56,6 +56,11 @@
                     vm.lastItem = current.params.monitor_name;
                     return;
                 }
+                if (angular.isDefined(current.params.collector_name)) {
+                    vm.items.push( { name : current.params.node_name, url : '/codeine/project/' + current.params.project_name + '/node/' +  current.params.node_name + '/status' });
+                    vm.lastItem = current.params.collector_name;
+                    return;
+                }
                 vm.lastItem = current.params.node_name;
                 return;
             }
