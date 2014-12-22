@@ -95,7 +95,7 @@
                 CodeineService.getProjectConfiguration($scope.projectConfigurationForEditing.name).success(function(data) {
                     $scope.projectConfigurationForEditing = data;
                     AlertService.addAlert('success','Project Configuration was reloaded from disk successfully',3000);
-                })
+                });
             });
         };
 
