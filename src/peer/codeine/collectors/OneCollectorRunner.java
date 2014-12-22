@@ -57,9 +57,6 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		this.node = node;
 	}
 
-	/* (non-Javadoc)
-	 * @see codeine.collectors.IOneCollectorRunner#execute()
-	 */
 	@Override
 	public void execute() {
 		runOnceCheckMinInterval();

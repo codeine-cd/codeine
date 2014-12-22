@@ -74,6 +74,9 @@
             getMonitorStatus : function(project, node, monitor) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/monitor-status", {params: { project: project, node: node, monitor: monitor }, cache: false });
             },
+            getCollectorStatus : function(project, node, collector) {
+                return $http.get(Constants.CODEINE_WEB_SERVER + "/api/collector-status", {params: { project: project, node: node, collector: collector }, cache: false });
+            },
             getCommandStatus : function(project, command_id) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/command-status", {params: { project: project, command: command_id } ,cache: false });
             },

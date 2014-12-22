@@ -10,7 +10,8 @@ public class Constants
 
 
 	public static final boolean SECURITY_ENABLED = true;
-
+	public static final boolean RUNNING_COLLECTORS_IN_PEER = true;
+	
 	public static final String HTTP_ROOT_CONTEXT = "/http-root";
 	public static final String GUEST_USER = "Guest";
 	
@@ -40,6 +41,7 @@ public class Constants
 	public static final String PROJECT_STATUS_CONTEXT = "/project-status";
 	public static final String NODE_STATUS_CONTEXT = "/node-status";
 	public static final String MONITOR_STATUS_CONTEXT = "/monitor-status";
+	public static final String COLLECTOR_STATUS_CONTEXT = "/collector-status";
 	public static final String COMMAND_STATUS_CONTEXT = "/command-status";
 	public static final String REPORTER_CONTEXT = "/reporter";
 	public static final String UPGRADE_SERVER_CONTEXT = "/upgrade-server";
@@ -193,6 +195,7 @@ public class Constants
 		public static final String NODE_NAME = "node-name";
 		public static final String NODE = "node";
 		public static final String MONITOR = "monitor";
+		public static final String COLLECTOR = "collector";
 		public static final String COMMAND_NAME = "command";
 		public static final String PATH_NAME = "path";
 		public static final String RESOURCE_NAME = "resource";
@@ -239,6 +242,5 @@ public class Constants
 
 	public static final String CODEINE_API_TOKEN_DERIVER = Messages.getString("Constants.116");
 
-	public static final boolean RUNNING_COLLECTORS_IN_PEER = false;
 	
 }

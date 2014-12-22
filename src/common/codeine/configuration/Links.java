@@ -37,6 +37,10 @@ public class Links {
 		String nodeContextPath = getNodeMonitorOutputContextPath(projectName);
 		return getPeerLink(hostport) + nodeContextPath + "/" + HttpUtils.specialEncode(nodeName) + "/" + HttpUtils.specialEncode(collectorName) + ".txt";
 	}
+	public String getPeerCollectorResultLink(String hostport, String projectName, String collectorName, String nodeName) {
+		String nodeContextPath = getNodeCollectorOutputContextPath(projectName);
+		return getPeerLink(hostport) + nodeContextPath + "/" + HttpUtils.specialEncode(nodeName) + "/" + HttpUtils.specialEncode(collectorName) + ".txt";
+	}
 
 	public String getWebServerLink() {
 		return "http://" + globalConfiguration.get().web_server_host() + ":" + globalConfiguration.get().web_server_port();
@@ -44,6 +48,9 @@ public class Links {
 
 	public String getNodeMonitorOutputContextPath(String projectName) {
 		return getNodeMonitorOutputContextPathAllProjects() + "/" + HttpUtils.encodeURL(projectName) + Constants.MONITOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
+	}
+	public String getNodeCollectorOutputContextPath(String projectName) {
+		return getNodeMonitorOutputContextPathAllProjects() + "/" + HttpUtils.encodeURL(projectName) + Constants.COLLECTOR_OUTPUT_CONTEXT + Constants.NODE_PATH;
 	}
 	public String getNodeMonitorOutputContextPathAllProjects() {
 		return Constants.PROJECT_PATH;

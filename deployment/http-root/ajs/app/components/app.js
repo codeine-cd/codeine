@@ -250,6 +250,23 @@
                     }
                 }
             }).
+            when('/codeine/project/:project_name/node/:node_name/collector/:collector_name/status', {
+                templateUrl: '/components/collector_status/collector_status.html',
+                controller: 'collectorStatusCtrl',
+                controllerAs: 'vm',
+                pageTitle: 'Collector Status',
+                resolve: {
+                    collectorStatus :  function($q,$route,CodeineService) {
+                        var deferred = $q.defer();
+                        CodeineService.getCollectorStatus($route.current.params.project_name, $route.current.params.node_name, $route.current.params.collector_name).success(function(data) {
+                            deferred.resolve(data);
+                        }).error(function() {
+                            deferred.reject('Error - failed to get collector status');
+                        });
+                        return deferred.promise;
+                    }
+                }
+            }).
             when('/codeine/project/:project_name/command/:command_name/:command_id/status', {
                 templateUrl: '/components/command_status/command_status.html',
                 controller: 'commandStatusCtrl',

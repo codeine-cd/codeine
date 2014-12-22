@@ -21,6 +21,7 @@ import codeine.servlets.api_servlets.UpgradeApiServlet;
 import codeine.servlets.api_servlets.angular.CodeineConfigurationApiServlet;
 import codeine.servlets.api_servlets.angular.CodeineExperimentalConfigurationApiServlet;
 import codeine.servlets.api_servlets.angular.CodeinePermissionsApiServlet;
+import codeine.servlets.api_servlets.angular.CollectorStatusApiServlet;
 import codeine.servlets.api_servlets.angular.CommandStatusApiServlet;
 import codeine.servlets.api_servlets.angular.ManageStatisticsInfoApiServlet;
 import codeine.servlets.api_servlets.angular.MonitorStatusApiServlet;
@@ -66,6 +67,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveApi(ProjectNodesApiServlet.class, (Constants.PROJECT_NODES_CONTEXT));
 		serveApi(NodeStatusApiServlet.class, (Constants.NODE_STATUS_CONTEXT));
 		serveApi(MonitorStatusApiServlet.class, (Constants.MONITOR_STATUS_CONTEXT));
+		serveApi(CollectorStatusApiServlet.class, (Constants.COLLECTOR_STATUS_CONTEXT));
 		serveApi(CommandStatusApiServlet.class, (Constants.COMMAND_STATUS_CONTEXT));
 		serveApi(RuntimeInfoApiServlet.class, (Constants.SESSION_INFO_CONTEXT));
 		serveApi(ProjectsTabsApiServlet.class, (Constants.PROJECTS_TABS_CONTEXT));
