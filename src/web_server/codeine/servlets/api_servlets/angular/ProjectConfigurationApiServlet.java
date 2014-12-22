@@ -35,6 +35,9 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		if (request.getMethod().equals("PUT")) {
 			return canConfigureProject(request);	
 		}
+		if (request.getMethod().equals("POST")) {
+			return canConfigureProject(request);	
+		}
 		return canReadProject(request);
 	}
 	
@@ -64,6 +67,15 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);
 		afterProjectModifyPlugin.call(projectToDelete, StatusChange.remove);
 		getWriter(response).write("{}");
+	}
+	
+	@Override
+	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
+		log.info("got post (reload) request");
+		IUserWithPermissions user = permissionsManager.user(request);
+		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
+		log.info("project " + projectName + " user " + user.user().username());
+		configurationManager.reloadProject(projectName);
 	}
 
 }

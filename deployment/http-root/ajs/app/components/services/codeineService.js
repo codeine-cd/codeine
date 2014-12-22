@@ -44,6 +44,9 @@
             saveProjectConfiguration : function(configuration) {
                 return $http.put(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", configuration, {  params: { project: configuration.name } });
             },
+            reloadProjectConfiguration : function(configuration) {
+                return $http.post(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", {  params: { project: configuration.name } });
+            },
             prepareForShutdown: function() {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/prepare-for-shutdown", { cache: false });
             },

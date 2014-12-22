@@ -119,4 +119,12 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		updateProject(project);
 	}
 
+	public void reloadProject(String projectName) {
+		ProjectJson project = getProjectFromDisk(projectName);
+		final ProjectJson previousProject = projects().put(projectName, project);
+		log.info("updating project in db and peers " + projectName);
+		updateProjectInDb(project);
+		projectsUpdater.updatePeers(project, previousProject);
+	}
+
 }

@@ -54,15 +54,12 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 						log.info("will ignore project dir " + file);
 						continue;
 					}
-					String file2 = pathHelper.getProjectsDir() + "/" + file + "/" + Constants.PROJECT_CONF_FILE;
-					if (!FilesUtils.exists(file2)) {
-						log.info("conf file not exists " + file2);
-						continue;
-					}
-					ProjectJson projectJson = jsonFileUtils.getConfFromFile(file2, ProjectJson.class);
+					ProjectJson projectJson = getProjectFromDisk(file);
 					projects1.put(projectJson.name(), projectJson);
 					FilesUtils.mkdirs(pathHelper.getAllCommandsInProjectOutputDir(projectJson.name()));
-				} catch (Exception e) {
+				} catch (IllegalArgumentException e1) {
+					log.error("failed to configure project " + file + " " + e1.getMessage());
+				}catch (Exception e) {
 					log.error("failed to configure project " + file, e);
 				}
 			}
@@ -71,6 +68,16 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 			throw e;
 		}
 		projects(projects1);
+	}
+
+	protected ProjectJson getProjectFromDisk(String file) {
+		String fileFullPath = pathHelper.getProjectsDir() + "/" + file + "/" + Constants.PROJECT_CONF_FILE;
+		if (!FilesUtils.exists(fileFullPath)) {
+			log.info("conf file not exists " + fileFullPath);
+			throw new IllegalArgumentException("project not found " + file);
+		}
+		ProjectJson projectJson = jsonFileUtils.getConfFromFile(fileFullPath, ProjectJson.class);
+		return projectJson;
 	}
 
 	@Override
