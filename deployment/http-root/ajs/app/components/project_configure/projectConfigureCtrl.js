@@ -33,10 +33,6 @@
             }
         }
 
-        $scope.reloadProject = function() {
-            $scope.projectConfigurationForEditing.nodes_info.push({});
-        };
-
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };
@@ -92,10 +88,11 @@
         $scope.reloadProject = function() {
             $log.debug('reloadProject: ' + angular.toJson($scope.projectConfigurationForEditing));
             CodeineService.reloadProjectConfiguration($scope.projectConfigurationForEditing).success(function() {
-                CodeineService.getProjectConfiguration($scope.projectConfigurationForEditing.name).success(function(data) {
-                    $scope.projectConfigurationForEditing = data;
-                    AlertService.addAlert('success','Project Configuration was reloaded from disk successfully',3000);
-                });
+                AlertService.addAlert('success','Project Configuration was reloaded from disk successfully',3000);
+                $location.path('/codeine/project/' + $scope.projectName + '/status');
+                //CodeineService.getProjectConfiguration($scope.projectConfigurationForEditing.name).success(function(data) {
+                //    $scope.projectConfigurationForEditing = data;
+                //});
             });
         };
 

@@ -45,7 +45,7 @@
                 return $http.put(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", configuration, {  params: { project: configuration.name } });
             },
             reloadProjectConfiguration : function(configuration) {
-                return $http.post(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", {  params: { project: configuration.name } });
+                return $http.post(Constants.CODEINE_WEB_SERVER + "/api/project-configuration?project=" + encodeURIComponent(configuration.name));
             },
             prepareForShutdown: function() {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/prepare-for-shutdown", { cache: false });
@@ -63,7 +63,7 @@
                 return $http.put(Constants.CODEINE_WEB_SERVER + '/api/global-configuration',data);
             },
             login: function(user,password) {
-                return $http.post(Constants.CODEINE_WEB_SERVER + '/j_security_check',"j_username=" + user +"&j_password=" + password, { headers: {'Content-Type': 'application/x-www-form-urlencoded'} });
+                return $http.post(Constants.CODEINE_WEB_SERVER + '/j_security_check',"j_username=" + encodeURIComponent(user) +"&j_password=" + encodeURIComponent(password), { headers: {'Content-Type': 'application/x-www-form-urlencoded'} });
             },
             logout: function() {
                 return $http.get('/logout');
