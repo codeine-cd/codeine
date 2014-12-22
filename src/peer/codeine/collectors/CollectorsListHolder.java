@@ -54,7 +54,7 @@ public class CollectorsListHolder {
 		//TODO monitors backward
 		for (NodeMonitor monitorInfo : project.monitors()) {
 			String name = monitorInfo.name();
-			CollectorType type = CollectorType.Boolean;
+			CollectorType type = CollectorType.Monitor;
 			int minInterval = monitorInfo.minInterval() == null ? 0 : monitorInfo.minInterval();
 			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), minInterval, monitorInfo.credentials(), type, monitorInfo.notification_enabled());
 			if (runnersMap.containsKey(name)) {

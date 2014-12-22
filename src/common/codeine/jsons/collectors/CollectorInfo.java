@@ -13,7 +13,7 @@ public class CollectorInfo {
 	private boolean notification_enabled;
 	
 	public static enum CollectorType {
-		String,Integer,Boolean
+		String,Number,Monitor
 	}
 
 	public CollectorInfo() {
