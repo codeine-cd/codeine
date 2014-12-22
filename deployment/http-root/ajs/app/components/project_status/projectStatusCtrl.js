@@ -5,9 +5,8 @@
     function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService, CodeineService) {
         $scope.projectName = $scope.projectConfiguration.name;
         $scope.allNodesCount = 0;
-        $log.debug('projectStatusCtrl: current project is ' + $scope.projectName);
-        $log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
-        $log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
+        //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
+        //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
         $scope.versionIsOpen = [];
         $scope.maxNodesToShow = 2;

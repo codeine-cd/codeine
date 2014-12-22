@@ -6,9 +6,8 @@
         $scope.projectName = $routeParams.project_name;
         $scope.nodeStatus = nodeStatus;
         $scope.projectConfiguration= projectConfiguration;
-        $log.debug('nodeStatusCtrl: current project is ' + $scope.projectName);
-        $log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
-        $log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
+        //$log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
+        //$log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
         $scope.nodeStatus = nodeStatus;
         $scope.commands = commands;
 

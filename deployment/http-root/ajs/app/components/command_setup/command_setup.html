@@ -142,7 +142,7 @@
                         <div ng-if="vm.nodesIsOpen">
                             <div class="row" ng-repeat="node in vm.nodes">
                                 <div class="col-md-12">
-                                    <a ng-href="/codeine/project/{{vm.projectName}}/node/{{node.name}}/status">{{node.alias}}</a>
+                                    <a ng-href="/codeine/project/{{vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
                                 </div>
                             </div>
                         </div>

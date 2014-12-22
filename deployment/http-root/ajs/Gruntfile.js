@@ -79,6 +79,7 @@ module.exports = function (grunt) {
                         var middlewares = [];
 
                         middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
+                        middlewares.push(modRewrite(['^.*[.].*[/].*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
                         options.base.forEach(function(base) {
                             middlewares.push(connect.static(base));
                         });

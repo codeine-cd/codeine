@@ -4,7 +4,6 @@
     //// JavaScript Code ////
     function projectConfigureCtrl($scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
         $scope.projectName = $routeParams.project_name;
-        $log.debug('projectConfigureCtrl: current project is ' + $scope.projectName);
         $scope.projectConfigurationForEditing = projectConfigurationForEditing;
         $scope.tags = [];
         $scope.nodes = ['all'];
