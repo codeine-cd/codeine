@@ -74,7 +74,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		log.info("got post (reload) request");
 		IUserWithPermissions user = permissionsManager.user(request);
 		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
-		log.info("project " + projectName + " user " + user.user().username());
+		log.info("reloading project " + projectName + " user " + user.user().username());
 		configurationManager.reloadProject(projectName);
 	}
 
