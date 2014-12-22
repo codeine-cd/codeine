@@ -6,7 +6,7 @@
 <div class="col-md-9">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default" ng-show="vm.collectorStatus.json_format">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <strong>Collector Info</strong>
                 </div>
@@ -18,27 +18,27 @@
                     <br/>
                     <div class="row">
                         <div class="col-md-2"><strong>Exit Status:</strong></div>
-                        <div class="col-md-6"> {{vm.collectorStatus.info.exit_Status}}
-                            <i class="fa fa-check fa-lg success" ng-show="vm.monitorStatus.exit_Status == 0"></i>
-                            <i class="fa fa-times fa-lg error" ng-show="vm.monitorStatus.exit_Status != 0"></i>
+                        <div class="col-md-6"> {{vm.collectorStatus.info.exit_status}}
+                            <i class="fa fa-check fa-lg success" ng-show="vm.collectorStatus.info.exit_status == 0"></i>
+                            <i class="fa fa-times fa-lg error" ng-show="vm.collectorStatus.info.exit_status != 0"></i>
                         </div>
                     </div>
                     <br/>
                     <div class="row">
-                        <div class="col-md-2"><strong>Finish Time:</strong></div><div class="col-md-6"> {{vm.monitorStatus.finish_time | date:'short'}}</div>
+                        <div class="col-md-2"><strong>Start Time:</strong></div><div class="col-md-6"> {{vm.collectorStatus.info.start_time | date:'short'}}</div>
                     </div>
                     <br/>
                     <div class="row">
                         <div class="col-md-2"><strong>Total Time:</strong></div>
                         <div class="col-md-6">
-                            {{ vm.monitorStatus.total_time | duration }}
+                            {{ vm.collectorStatus.info.execution_duration | duration }}
                         </div>
                     </div>
                     <br/>
                 </div>
             </div>
-            <h4>Monitor Log</h4>
-            <pre>{{vm.monitorStatus.output}}</pre>
+            <h4>Collector Log</h4>
+            <pre>{{vm.collectorStatus.result.output}}</pre>
         </div>
     </div>
 </div>

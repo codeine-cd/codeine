@@ -36,7 +36,7 @@ public class CollectorStatusApiServlet extends AbstractApiServlet {
 		try {
 			String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 			String nodeName = getParameter(request, Constants.UrlParameters.NODE);
-			String collectorName = getParameter(request, Constants.UrlParameters.MONITOR);
+			String collectorName = getParameter(request, Constants.UrlParameters.COLLECTOR);
 			NodeWithMonitorsInfo node = nodesGetter.getNodeByNameOrNull(projectName, nodeName);
 			String peerCollectorResultLink = links.getPeerCollectorResultLink(node.peer_address(), projectName, collectorName, nodeName);
 			log.info("accessing url " + peerCollectorResultLink);
