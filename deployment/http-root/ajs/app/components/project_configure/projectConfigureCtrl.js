@@ -33,6 +33,10 @@
             }
         }
 
+        $scope.reloadProject = function() {
+            $scope.projectConfigurationForEditing.nodes_info.push({});
+        };
+
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };
@@ -83,6 +87,16 @@
                     $location.path('/codeine/project/' + $scope.projectName + '/status');
                 }
             });
+        };
+
+        $scope.reloadProject = function() {
+            $log.debug('reloadProject: ' + angular.toJson($scope.projectConfigurationForEditing));
+            //CodeineService.saveProjectConfiguration($scope.projectConfigurationForEditing).success(function() {
+            //    AlertService.addAlert('success','Project Configuration was reloaded from disk successfully',3000);
+            //    //if (redirect) {
+            //    //    $location.path('/codeine/project/' + $scope.projectName + '/status');
+            //    //}
+            //});
         };
 
         $scope.select2Options = {

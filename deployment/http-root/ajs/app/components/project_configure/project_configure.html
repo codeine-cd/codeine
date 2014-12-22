@@ -19,6 +19,9 @@
             <div class="col-md-4">
                 <input type="text" ng-model="projectConfigurationForEditing.name" class="form-control readonly_item" name="project_name" id="project_name" readonly>
             </div>
+            <div>
+                <button ng-hide="true" ng-click="reloadProject()" tooltip="Reload project configuration from disk" class="btn btn-default btn-mini"><i class="fa fa-refresh"></i></button>
+            </div>
         </div>
         <div class="form-group">
             <label for="project_description" class="col-md-4 control-label">Description <help help-id="projectDescriptionHelp"></help></label>
@@ -104,7 +107,7 @@
                                         <input type="text" name="env_value" class="form-control" ng-model="envVar.value" required>
                                     </td>
                                     <td class="col-md-1">
-                                        <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index)" title="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                                        <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index)" tooltip="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -179,7 +182,7 @@
                         <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2">
                     </td>
                     <td class="col-md-1">
-                        <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index)" title="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                        <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                     </td>
                 </tr>
 
@@ -228,9 +231,9 @@
                     <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_info.is_open, 'glyphicon-chevron-right': !monitor_info.is_open}">
                     </i>
                     <div class="btn-group btn-group-xs pull-right">
-                        <button title="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-                        <button title="Move down" ng-disabled="$index === projectConfigurationForEditing.monitors.length-1" ng-click="moveDown(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                        <button title="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.monitors,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                        <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                        <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.monitors.length-1" ng-click="moveDown(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                        <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.monitors,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
             </accordion-heading>
@@ -308,7 +311,7 @@
                 </select>
             </td>
             <td class="col-md-1">
-                <button ng-click="removeItem(projectConfigurationForEditing.mail,$index)" title="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                <button ng-click="removeItem(projectConfigurationForEditing.mail,$index)" tooltip="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
             </td>
         </tr>
         </tbody>
@@ -346,9 +349,9 @@
         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.is_open, 'glyphicon-chevron-right': !command_info.is_open}">
         </i>
         <div class="btn-group btn-group-xs pull-right">
-            <button title="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-            <button title="Move down" ng-disabled="$index === projectConfigurationForEditing.commands.length-1" ng-click="moveDown(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-            <button title="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.commands,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+            <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+            <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.commands.length-1" ng-click="moveDown(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+            <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.commands,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
         </div>
     </div>
 </accordion-heading>
@@ -478,9 +481,9 @@
                         <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter.is_open, 'glyphicon-chevron-right': !command_parameter.is_open}">
                         </i>
                         <div class="btn-group btn-group-xs pull-right">
-                            <button title="Move up" ng-disabled="$index === 0" ng-click="moveUp(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-                            <button title="Move down" ng-disabled="$index === command_info.parameters.length-1" ng-click="moveDown(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                            <button title="Remove Monitor" ng-click="removeItem(command_info.parameters,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                            <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                            <button tooltip="Move down" ng-disabled="$index === command_info.parameters.length-1" ng-click="moveDown(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                            <button tooltip="Remove Monitor" ng-click="removeItem(command_info.parameters,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
                         </div>
                     </div>
                 </accordion-heading>
@@ -601,7 +604,7 @@
                     <input type="checkbox" ng-model="permissionObject.can_config">
                 </td>
                 <td class="col-md-1">
-                    <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" title="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                    <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" tooltip="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
                 </td>
             </tr>
             </tbody>
