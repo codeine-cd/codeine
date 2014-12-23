@@ -2,8 +2,9 @@
     'use strict';
 
     //// JavaScript Code ////
-    function configFunc($routeProvider,$locationProvider,$httpProvider,$sceProvider) {
+    function configFunc($compileProvider,$routeProvider,$locationProvider,$httpProvider,$sceProvider) {
         $locationProvider.html5Mode(true);
+        $compileProvider.debugInfoEnabled(false);
         $httpProvider.interceptors.push('myHttpInterceptor');
         $sceProvider.enabled(false);
         $routeProvider.
