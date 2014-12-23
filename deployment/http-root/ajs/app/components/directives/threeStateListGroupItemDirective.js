@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function threeStateListGroupItem($animate) {
+    function threeStateListGroupItem($animate, $timeout) {
         return {
             restrict: 'A',
             scope: {
@@ -36,8 +36,9 @@
                     scope.state %= 3;
 
                     setClass();
-                    scope.$digest();
-                    scope.onChange();
+                    $timeout(function() {
+                        scope.onChange();
+                    });
                 };
                 element.addClass('list-group-item');
                 element.bind('click', scope.click);

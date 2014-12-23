@@ -124,6 +124,7 @@
             }
         };
         $scope.refreshFilters = function() {
+            $log.debug("refreshFilters");
             var count = 0;
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
                 $scope.projectStatus.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatus.nodes_for_version[i].filteredNodes.length);
