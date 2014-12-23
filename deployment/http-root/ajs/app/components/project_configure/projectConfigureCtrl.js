@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
+    function projectConfigureCtrl($route, $scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
         $scope.projectName = $routeParams.project_name;
         $scope.projectConfigurationForEditing = projectConfigurationForEditing;
         $scope.tags = [];
@@ -33,9 +33,9 @@
             }
         }
 
-        for (var i1=0; i1 < projectConfigurationForEditing.nodes_info.length ; i1++) {
-            if (projectConfigurationForEditing.nodes_info[i1].tags.length === 0) {
-                delete projectConfigurationForEditing.nodes_info[i1].tags;
+        for (var i2=0; i2 < projectConfigurationForEditing.nodes_info.length ; i2++) {
+            if (projectConfigurationForEditing.nodes_info[i2].tags.length === 0) {
+                delete projectConfigurationForEditing.nodes_info[i2].tags;
             }
         }
 
@@ -95,10 +95,7 @@
             $log.debug('reloadProject: ' + angular.toJson($scope.projectConfigurationForEditing));
             CodeineService.reloadProjectConfiguration($scope.projectConfigurationForEditing).success(function() {
                 AlertService.addAlert('success','Project Configuration was reloaded from disk successfully',3000);
-                $location.path('/codeine/project/' + $scope.projectName + '/status');
-                //CodeineService.getProjectConfiguration($scope.projectConfigurationForEditing.name).success(function(data) {
-                //    $scope.projectConfigurationForEditing = data;
-                //});
+                $route.reload();
             });
         };
 
@@ -127,6 +124,7 @@
         angular.forEach(projects, function(key) {
             $scope.projects.push(key.name);
         });
+
         $scope.select2OptionsIncludeProjectCommands = {
             'multiple': true,
             'simple_tags': true,
