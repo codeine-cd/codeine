@@ -105,4 +105,13 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return $;
 	}
 
+	public List<String> failed_collectors() {
+		List<String> $ = Lists.newArrayList();
+		for (Entry<String, CollectorExecutionInfo> entry : collectors().entrySet()) {
+			if (!entry.getValue().isSuccess())
+				$.add(entry.getKey());
+		}
+		return $;
+	}
+
 }

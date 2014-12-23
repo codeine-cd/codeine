@@ -10,6 +10,7 @@ public class NodeStatusInfo {
 	private String node_alias;
 	private String node_name;
 	private List<String> failed_monitors;
+	private List<String> failed_collectors;
 	private List<String> ok_monitors;
 	private List<String> tags;
 	private String peer_key;
@@ -21,6 +22,7 @@ public class NodeStatusInfo {
 		this.node_alias = nodeWithMonitorsInfo.node_alias();
 		this.node_name = nodeWithMonitorsInfo.name();
 		this.failed_monitors = nodeWithMonitorsInfo.failedMonitors();
+		this.failed_collectors = nodeWithMonitorsInfo.failed_collectors();
 		this.ok_monitors = nodeWithMonitorsInfo.ok_monitors();
 		this.tags = nodeWithMonitorsInfo.tags();
 		this.peer_key = nodeWithMonitorsInfo.peer_key();

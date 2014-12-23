@@ -19,7 +19,6 @@ import codeine.collectors.CollectorsRunnerFactory;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
-import codeine.executer.SerialTasks;
 import codeine.executer.Task;
 import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.peer_status.PeerStatus;
@@ -136,19 +135,19 @@ public class NodesRunner implements Task{
 
 	private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
 		log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
-		Task serialTasks;
+		Task task;
 		RunMonitors monitorsTask = new RunMonitors(configurationManager, project.name(), peerStatus, mailSender, pathHelper,
 		nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper);
 		if (Constants.RUNNING_COLLECTORS_IN_PEER) {
 			CollectorsRunner collectorsTask = collectorsRunnerFactory.create(project.name(), nodeJson);
 			collectorsTask.init();
-			serialTasks = new SerialTasks(monitorsTask, collectorsTask);
+			task = collectorsTask;
 		}
 		else {
-			serialTasks = monitorsTask;
+			task = monitorsTask;
 		}
 		PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, 
-				serialTasks, "RunMonitors_" + project.name() + "_" + nodeJson.name());
+				task, "RunMonitors_" + project.name() + "_" + nodeJson.name());
 		log.info("starting 1executor " + periodicExecuter.name());
 		periodicExecuter.runInThread();
 		return periodicExecuter;

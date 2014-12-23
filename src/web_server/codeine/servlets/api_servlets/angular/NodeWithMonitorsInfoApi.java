@@ -8,6 +8,7 @@ import codeine.api.NodeWithMonitorsInfo;
 public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 
 	private List<String> failed_monitors;
+	private List<String> failed_collectors;
 	private List<String> ok_monitors;
 	private boolean user_can_command;
 	
@@ -15,6 +16,7 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 	{
 		super(info);
 		this.failed_monitors = info.failedMonitors();
+		this.failed_collectors = info.failed_collectors();
 		this.ok_monitors = info.ok_monitors();
 		this.user_can_command = user_can_command;
 	}

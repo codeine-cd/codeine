@@ -40,6 +40,10 @@ public class CollectorExecutionInfo {
 		return "CollectorExecutionInfo [name=" + name + ", type=" + type + ", value=" + value + ", exit_status="
 				+ exit_status + ", start_time=" + start_time + ", execution_duration=" + execution_duration + "]";
 	}
+
+	public boolean isSuccess() {
+		return exit_status == 0;
+	}
 	
 	
 }
