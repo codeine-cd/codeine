@@ -74,7 +74,11 @@ public class ProcessExecuter {
 			Thread.currentThread().interrupt();
 			throw new RuntimeException(ex);
 		} finally {
-			cleanup(process);
+			try {
+				cleanup(process);
+			} catch (RuntimeException e) {
+				log.warn("failed in cleanup", e);
+			}
 		}
 	}
 
@@ -82,17 +86,14 @@ public class ProcessExecuter {
 		if (null == process) {
 			return;
 		}
-		boolean cleaned = false;
 		if (OsUtils.isLinux() && !simpleCleanupOnly) {
 			try {
-				cleaned = new LinuxProcessCleaner(process, user).cleanup();
+				new LinuxProcessCleaner(process, user).cleanup();
 			} catch (RuntimeException e) {
 				log.warn("failed in cleanup " + cmd + " " + e.getMessage());
 			}
 		}
-		if (!cleaned) {
-			process.destroy();
-		}
+		process.destroy();
 	}
 
 	public static class ProcessExecuterBuilder{
