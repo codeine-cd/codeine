@@ -94,7 +94,8 @@ public class LinuxProcessCleaner {
 				}
 			}
 		}
-		return $ ;
+		log.info("pids from pstree: " + $);
+		return $;
 	}
 
 }

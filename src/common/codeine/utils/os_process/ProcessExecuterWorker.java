@@ -19,7 +19,7 @@ public class ProcessExecuterWorker extends Thread {
 	private static final Logger log = Logger.getLogger(ProcessExecuterWorker.class);
 	
 	private final Process process;
-	private Integer exit;
+	private volatile Integer exit;
 	private String output = "";
 	private String error = "";
 	private Function<String, Void> function;

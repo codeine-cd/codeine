@@ -47,6 +47,7 @@ public class ProcessExecuter {
 		log.debug("executing " + cmd);
 		Process process = null;
 		ProcessExecuterWorker worker = null;
+		Result result = null;
 		try {
 			ProcessBuilder pb = new ProcessBuilder(cmd);
 			pb.environment().putAll(env);
@@ -58,16 +59,19 @@ public class ProcessExecuter {
 			long timeout = TimeUnit.MINUTES.toMillis(timeoutInMinutes);
 			worker.join(timeout);
 			if (worker.exitStatus() != null) {
-				return new Result(worker.exitStatus(), worker.output());
+				result = new Result(worker.exitStatus(), worker.output());
+				return result;
 			} else {
 				ThreadUtils.sleep(100);
-				return new Result(ExitStatus.TIMEOUT, worker.output() + "\n...Got timeout...\n");
+				result = new Result(ExitStatus.TIMEOUT, worker.output() + "\n...Got timeout...\n");
+				return result;
 			}
 		} catch (IOException e) {
 			log.warn("got IOException " + e.getMessage());
 			String output = null == worker ? "" : worker.output();
 			output +=  "\n...Got IOException...\n";
-			return new Result(ExitStatus.IO_ERROR, output);
+			result = new Result(ExitStatus.IO_ERROR, output);
+			return result;
 		} catch (InterruptedException ex) {
 			log.warn("got InterruptedException " + ex.getMessage());
 			worker.interrupt();
@@ -75,18 +79,18 @@ public class ProcessExecuter {
 			throw new RuntimeException(ex);
 		} finally {
 			try {
-				cleanup(process);
+				cleanup(process, result);
 			} catch (RuntimeException e) {
 				log.warn("failed in cleanup", e);
 			}
 		}
 	}
 
-	public void cleanup(Process process) {
+	public void cleanup(Process process, Result result) {
 		if (null == process) {
 			return;
 		}
-		if (OsUtils.isLinux() && !simpleCleanupOnly) {
+		if (OsUtils.isLinux() && !simpleCleanupOnly && (result == null || result.exit() < 0)) {
 			try {
 				new LinuxProcessCleaner(process, user).cleanup();
 			} catch (RuntimeException e) {
