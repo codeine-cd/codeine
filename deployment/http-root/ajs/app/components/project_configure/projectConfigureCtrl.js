@@ -33,6 +33,12 @@
             }
         }
 
+        for (var i1=0; i1 < projectConfigurationForEditing.nodes_info.length ; i1++) {
+            if (projectConfigurationForEditing.nodes_info[i1].tags.length === 0) {
+                delete projectConfigurationForEditing.nodes_info[i1].tags;
+            }
+        }
+
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };
