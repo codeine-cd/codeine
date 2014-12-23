@@ -33,7 +33,7 @@ public class PeerCommandWorker implements Runnable {
 	private boolean success = false;
 	private boolean POST = true;
 	private ProjectJson project;
-	private Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
+	private static Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
 	private IUserWithPermissions userObject;
 	private boolean failedReported = false;
 	

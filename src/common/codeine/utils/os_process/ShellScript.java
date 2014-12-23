@@ -119,7 +119,7 @@ public class ShellScript {
 		default:
 			throw new RuntimeException("missing implementation for " + operatingSystem);
 		}
-		return new ProcessExecuterBuilder(cmd, runFromDir).env(env).build().execute();
+		return new ProcessExecuterBuilder(cmd, runFromDir).env(env).user(cred).build().execute();
 	}
 
 	private String getOutputFile() {

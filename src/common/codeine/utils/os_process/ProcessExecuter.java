@@ -12,6 +12,7 @@ import codeine.model.ExitStatus;
 import codeine.model.Result;
 import codeine.utils.MapUtils;
 import codeine.utils.ThreadUtils;
+import codeine.utils.os.OsUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -27,15 +28,19 @@ public class ProcessExecuter {
 	private Function<String, Void> function;
 	private String runFromDir;
 	private Map<String, String> env;
+	private String user;
+	private boolean simpleCleanupOnly;
 	
 
-	private ProcessExecuter(List<String> cmd, List<String> cmdForOutput, long timeoutInMinutes, Function<String, Void> function, String runFromDir, Map<String, String> env) {
+	private ProcessExecuter(List<String> cmd, List<String> cmdForOutput, long timeoutInMinutes, Function<String, Void> function, String runFromDir, Map<String, String> env, String user, boolean simpleCleanupOnly) {
 		super();
 		this.cmd = cmd;
 		this.timeoutInMinutes = timeoutInMinutes;
 		this.function = function;
 		this.runFromDir = runFromDir;
 		this.env = env;
+		this.user = user;
+		this.simpleCleanupOnly = simpleCleanupOnly;
 	}
 
 	public Result execute() {
@@ -69,14 +74,31 @@ public class ProcessExecuter {
 			Thread.currentThread().interrupt();
 			throw new RuntimeException(ex);
 		} finally {
-			if (null != process) {
-				process.destroy();
+			cleanup(process);
+		}
+	}
+
+	public void cleanup(Process process) {
+		if (null == process) {
+			return;
+		}
+		boolean cleaned = false;
+		if (OsUtils.isLinux() && !simpleCleanupOnly) {
+			try {
+				cleaned = new LinuxProcessCleaner(process, user).cleanup();
+			} catch (RuntimeException e) {
+				log.warn("failed in cleanup " + cmd + " " + e.getMessage());
 			}
+		}
+		if (!cleaned) {
+			process.destroy();
 		}
 	}
 
 	public static class ProcessExecuterBuilder{
 		
+		private String user;
+		private boolean simpleCleanupOnly;
 		private List<String> cmd;
 		private List<String> cmdForOutput;
 		private long timeoutInMinutes = 2;
@@ -96,11 +118,19 @@ public class ProcessExecuter {
 		}
 
 		public ProcessExecuter build(){
-			return new ProcessExecuter(cmd, cmdForOutput, timeoutInMinutes, function, runFromDir, MapUtils.noNullsMap(env));
+			return new ProcessExecuter(cmd, cmdForOutput, timeoutInMinutes, function, runFromDir, MapUtils.noNullsMap(env), user, simpleCleanupOnly);
 		}
 		
 		public ProcessExecuterBuilder cmd(List<String> cmd){
 			this.cmd = cmd;
+			return this;
+		}
+		public ProcessExecuterBuilder user(String user){
+			this.user = user;
+			return this;
+		}
+		public ProcessExecuterBuilder simpleCleanupOnly(boolean simpleCleanupOnly){
+			this.simpleCleanupOnly = simpleCleanupOnly;
 			return this;
 		}
 		public ProcessExecuterBuilder env(Map<String, String> env){

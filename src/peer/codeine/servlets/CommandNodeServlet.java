@@ -155,7 +155,7 @@ public class CommandNodeServlet extends AbstractServlet
 			env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(commandInfo.project_name(), commandInfo2.node_name()), ";"));
 			env.putAll(commandInfo2.environment_variables());
 			env.putAll(getEnvParams(commandInfo));
-			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env).build().execute();
+			Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env).user(cred).build().execute();
 			writer.println(Constants.COMMAND_RESULT + result.exit());
 			writer.flush();
 			log.info("command exit status is " + result.exit());

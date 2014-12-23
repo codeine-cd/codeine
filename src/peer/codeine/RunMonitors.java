@@ -211,7 +211,7 @@ public class RunMonitors implements Task {
 			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
 			map.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
 			map.putAll(project().environmentVariables());
-			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).env(map).build().execute();
+			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).user(monitor.credentials()).env(map).build().execute();
 		} catch (Exception e) {
 			res = new Result(ExitStatus.EXCEPTION, e.getMessage());
 			log.debug("error in monitor", e);
