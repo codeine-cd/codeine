@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function threeStateListGroupItem($animate, $timeout) {
+    function threeStateListGroupItem($animate) {
         return {
             restrict: 'A',
             scope: {
