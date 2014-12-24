@@ -33,7 +33,7 @@ public class CodeineLogBootstrap {
 		}
 		FilesUtils.mkdirs(Constants.getLogDir());
 		System.out.println("writing log to " + logfile);
-		String pattern = "%d{ISO8601} [%t] [%c] %p %m %n";
+		String pattern = "%d{ISO8601} [%t] [%c{1}] %p %m %n";
 		PatternLayout layout = new PatternLayout(pattern);
 		RollingFileAppender appender;
 		try {
