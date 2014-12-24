@@ -6,7 +6,7 @@
         return {
             restrict: 'A',
             scope: {
-                state : '=',
+                tag : '=',
                 onChange: '&'
             },
             link: function (scope, element) {
@@ -14,35 +14,33 @@
                 function setClass() {
                     $animate.removeClass(element,'list-group-item-info');
                     $animate.removeClass(element,'list-group-item-danger');
-                    if (scope.state === 1) {
+                    if (scope.tag.state === 1) {
                         $animate.addClass(element,'list-group-item-info');
                     }
-                    if (scope.state === 2) {
+                    if (scope.tag.state === 2) {
                         $animate.addClass(element,'list-group-item-danger');
                     }
                 }
 
-                scope.$watch("state",function( newValue, oldValue ) {
+                scope.$watch("tag.state",function( newValue, oldValue ) {
                     if (newValue !== oldValue) {
                         setClass();
                     }
                 });
 
                 scope.click = function() {
-                    if (!scope.state) {
-                        scope.state = 0;
+                    if (!scope.tag.state) {
+                        scope.tag.state = 0;
                     }
-                    scope.state++;
-                    scope.state %= 3;
+                    scope.tag.state++;
+                    scope.tag.state %= 3;
 
                     setClass();
-                    $timeout(function() {
-                        scope.onChange();
-                    });
+                    scope.onChange();
                 };
                 element.addClass('list-group-item');
                 element.bind('click', scope.click);
-                if (scope.state) {
+                if (scope.tag.state) {
                     setClass();
                 }
             }

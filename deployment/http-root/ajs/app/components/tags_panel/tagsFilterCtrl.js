@@ -49,10 +49,8 @@
                     off.push($scope.projectStatus.tag_info[i].name);
                 }
             }
-            $scope.$apply(function() {
-                $location.search('tagsOn',on.join(','));
-                $location.search('tagsOff',off.join(','));
-            });
+            $location.search('tagsOn',on.join(','));
+            $location.search('tagsOff',off.join(','));
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
     }

@@ -4,7 +4,7 @@
     </div>
     <div class="list-group">
         <a class="list-group-item" ng-hide="projectStatus.tag_info.length" ng-cloak><div class="text-center">No tags</div></a>
-        <a three-state-list-group-item state='tag.state' class="cursor_pointer" on-change="vm.updateTags()" href="#" style="padding-top: 3px; padding-bottom: 3px;" ng-repeat="tag in  projectStatus.tag_info | limitTo:vm.maxTags ">{{tag.name}} <span class="badge pull-right">{{tag.count}}</span></a>
+        <a three-state-list-group-item tag='tag' class="cursor_pointer" on-change="vm.updateTags()" href="#" style="padding-top: 3px; padding-bottom: 3px;" ng-repeat="tag in  projectStatus.tag_info | limitTo:vm.maxTags ">{{tag.name}} <span class="badge pull-right">{{tag.count}}</span></a>
         <list-group-more-item items="projectStatus.tag_info" max-items="vm.maxTags"></list-group-more-item>
     </div>
 </div>
