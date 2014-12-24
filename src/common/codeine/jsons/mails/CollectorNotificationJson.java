@@ -17,12 +17,13 @@ public class CollectorNotificationJson {
 	private String peer;
 	private Integer exit_status;
 	private String duration;
+	private boolean is_for_collector;
 
 	public CollectorNotificationJson(){
 		
 	}
 	
-	public CollectorNotificationJson(String collector_name, String project_name, String output, NodeInfo node, String version, String peer, int exit_status, String duration) {
+	public CollectorNotificationJson(String collector_name, String project_name, String output, NodeInfo node, String version, String peer, int exit_status, String duration, boolean is_for_collector) {
 		this.collector_name = collector_name;
 		this.project_name = project_name;
 		this.output = output;
@@ -34,6 +35,7 @@ public class CollectorNotificationJson {
 		this.time_formatted = StringUtils.formatDate(this.time);
 		this.collection_type = AlertsCollectionType.NotCollected.toLong();
 		this.peer = peer;
+		this.is_for_collector = is_for_collector;
 	}
 
 	public String collector_name() {
@@ -95,6 +97,10 @@ public class CollectorNotificationJson {
 				+ ", duration=" + duration 
 				+ ", peer="
 				+ peer + "]";
+	}
+
+	public boolean is_for_collector() {
+		return is_for_collector;
 	}
 
 	

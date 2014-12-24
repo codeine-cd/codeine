@@ -144,7 +144,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		boolean shouldNotify = null != previousResult && null != result && result.exit() != 0 && result.exit() != previousResult.exit();
 		if (collectorInfo.notification_enabled() && shouldNotify) {
 			notificationDeliverToDatabase.sendCollectorResult(
-					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString());
+					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString(), true);
 		}
 		previousResult = result;
 	}

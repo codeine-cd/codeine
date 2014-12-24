@@ -19,10 +19,10 @@ public class NotificationDeliverToDatabase {
 	@Inject private IAlertsDatabaseConnector alertsConnector;
 	
 	public void sendCollectorResult(String collectorName, NodeInfo node,
-			ProjectJson project, String output, int exit_status, String duration) {
+			ProjectJson project, String output, int exit_status, String duration, boolean is_for_collector) {
 		String version = new NodeHelper().getVersionOrNull(peerStatus.createJson(), project, node);
 		CollectorNotificationJson collectorNotificationJson = new CollectorNotificationJson(collectorName,
-				project.name(), output, node, version, InetUtils.getLocalHost().getHostName(), exit_status, duration);
+				project.name(), output, node, version, InetUtils.getLocalHost().getHostName(), exit_status, duration, is_for_collector);
 		log.info("sending notification " + collectorNotificationJson.toStringNoOutput());
 		alertsConnector.put(collectorNotificationJson);
 	}
