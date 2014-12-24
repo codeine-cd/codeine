@@ -2,6 +2,7 @@ package codeine.utils.os_process;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class LinuxProcessCleaner {
 
@@ -32,16 +34,17 @@ public class LinuxProcessCleaner {
 
 	public void cleanup(){
 		log.info("cleanup linux pid " + pid + " user " + user);
-		kill(false);
+		Set<String> pids = kill(false, Sets.<String>newHashSet());
 		ThreadUtils.sleep(SLEEP_BETWEEN_KILL);
-		kill(true);
+		kill(true, pids);
 	}
 
-	private void kill(boolean force) {
-		List<String> pids1 = getPids();
+	private Set<String> kill(boolean force, Set<String> pids) {
+		Set<String> pids1 = getPids();
+		pids1.addAll(pids);
 		if (pids1.isEmpty()) {
 			log.info("pids is empty " + force);
-			return;
+			return pids1;
 		}
 		ArrayList<String> cmd1 = Lists.newArrayList("kill");
 		if (force) {
@@ -49,10 +52,11 @@ public class LinuxProcessCleaner {
 		}
 		cmd1.addAll(pids1);
 		executeAsUserIfNeeded(cmd1);
+		return pids1;
 	}
 
-	private List<String> getPids() {
-		List<String> cmd = Lists.newArrayList("/usr/bin/pstree", "-pA", pid.toString());
+	private Set<String> getPids() {
+		List<String> cmd = Lists.newArrayList("/usr/bin/pstree", "-pAl", pid.toString());
 		Result result = execute(cmd);
 		return getPidsFromOutput(result.output());
 	}
@@ -76,21 +80,18 @@ public class LinuxProcessCleaner {
 		return new ProcessExecuterBuilder(cmd1).simpleCleanupOnly(true).build().execute();
 	}
 
-	private static Pattern PATTERN = Pattern.compile("\\d+");
+	private static Pattern PATTERN = Pattern.compile(".*[^}]\\((\\d+)\\).*");
 
 	private Integer pid;
-	static List<String> getPidsFromOutput(String output) {
-		List<String> $ = Lists.newArrayList();
-		List<String> list = Splitter.on(CharMatcher.anyOf("(\n")).splitToList(output);
-		for (String string : list) {
-			if (!string.contains(")")) {
-				continue;
-			}
-			List<String> list2 = Splitter.on(CharMatcher.anyOf(")")).splitToList(string);
-			for (String string2 : list2) {
-				Matcher matcher = PATTERN.matcher(string2);
+	static Set<String> getPidsFromOutput(String output) {
+		Set<String> $ = Sets.newHashSet();
+		List<String> list = Splitter.on(CharMatcher.anyOf("\n")).splitToList(output);
+		for (String line : list) {
+			List<String> perProcess = Splitter.on(CharMatcher.anyOf("-")).splitToList(line);
+			for (String p : perProcess) {
+				Matcher matcher = PATTERN.matcher(p);
 				if (matcher.matches()) {
-					$.add(string2);
+					$.add(matcher.group(1));
 				}
 			}
 		}
