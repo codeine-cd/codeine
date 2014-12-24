@@ -24,6 +24,24 @@
         vm.permissionsForEditing = angular.copy(permissions);
         vm.globalConfigurationForEditing = angular.copy(CodeineConfigurationService.getGlobalConfiguration());
 
+        for (var i1=0; i1 < vm.tabsForEditing.length ; i1++) {
+            if (vm.tabsForEditing[i1].exp.length === 0) {
+                delete vm.tabsForEditing[i1].exp;
+            }
+        }
+
+        for (var i2=0; i2 < vm.permissionsForEditing.length ; i2++) {
+            if (vm.permissionsForEditing[i2].read_project.length === 0) {
+                delete vm.permissionsForEditing[i2].read_project;
+            }
+            if (vm.permissionsForEditing[i2].command_project.length === 0) {
+                delete vm.permissionsForEditing[i2].command_project;
+            }
+            if (vm.permissionsForEditing[i2].configure_project.length === 0) {
+                delete vm.permissionsForEditing[i2].configure_project;
+            }
+        }
+
         vm.addMysql = function() {
             vm.globalConfigurationForEditing.mysql.push({});
         };

@@ -39,6 +39,16 @@
             }
         }
 
+        if (projectConfigurationForEditing.include_project_commands.length ===0) {
+            delete projectConfigurationForEditing.include_project_commands;
+        }
+
+        for (var i3=0; i3 < projectConfigurationForEditing.permissions.length ; i3++) {
+            if (projectConfigurationForEditing.permissions[i3].can_command.length === 0) {
+                delete projectConfigurationForEditing.permissions[i3].can_command;
+            }
+        }
+
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };

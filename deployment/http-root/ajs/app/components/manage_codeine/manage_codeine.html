@@ -120,13 +120,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" ng-class="{'has-error': mysqlForm.mysql_dir.$invalid }" ng-show="globalConfigurationForEditing.mysql[$index].managed_by_codeine" >
+                    <div class="form-group" ng-class="{'has-error': mysqlForm.mysql_dir.$invalid }" ng-show="mysql_instance.managed_by_codeine" >
                         <label for="mysql_dir_{{$index}}" class="col-md-3 control-label">MySQL Work Dir <help help-id="MysqlDirConfigureHelp"></help></label>
                         <div class="col-md-4">
                             <input type="text" ng-model="mysql_instance.dir" class="form-control" id="mysql_dir_{{$index}}" name="mysql_dir" placeholder="MySQL Work Dir">
                         </div>
                     </div>
-                    <div class="form-group" ng-class="{'has-error': mysqlForm.mysql_bin_dir.$invalid }" ng-show="globalConfigurationForEditing.mysql[$index].managed_by_codeine" >
+                    <div class="form-group" ng-class="{'has-error': mysqlForm.mysql_bin_dir.$invalid }" ng-show="mysql_instance.managed_by_codeine" >
                         <label for="mysql_bin_dir_{{$index}}" class="col-md-3 control-label">MySQL Bin Dir <help help-id="MysqlBinDirConfigureHelp"></help></label>
                         <div class="col-md-4">
                             <input type="text" ng-model="mysql_instance.bin_dir" class="form-control" id="mysql_bin_dir_{{$index}}" name="mysql_bin_dir" placeholder="MySQL Bin Dir">
