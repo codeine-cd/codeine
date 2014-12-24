@@ -44,6 +44,11 @@ public class CollectorExecutionInfo {
 	public boolean isSuccess() {
 		return exit_status == 0;
 	}
+
+	public String valueAndExitStatus() {
+		return "[val=" + value + ",exi="
+				+ exit_status + "]";
+	}
 	
 	
 }

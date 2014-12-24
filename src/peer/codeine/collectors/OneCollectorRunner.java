@@ -99,8 +99,8 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	private void processResult(CollectorExecutionInfoWithResult resultWrapped, Stopwatch stopwatch) {
 		resultWrapped.result().limitOutputLength();
 		writeResult(resultWrapped);
-		String lastValue = updateStatusInDataset(resultWrapped.info());
-		log.info("collector '" + collectorInfo.name() + "' ended with value '" + resultWrapped.info().value() + "' , previous value '" + lastValue + "', took: " + stopwatch);
+		CollectorExecutionInfo lastValue = updateStatusInDataset(resultWrapped.info());
+		log.info("collector '" + collectorInfo.name() + "' took:" + stopwatch + " result:" + resultWrapped.info().valueAndExitStatus() + " previous:" + lastValue.valueAndExitStatus());
 		updateDatastoreIfNeeded();
 		sendNotificationIfNeeded();
 	}
@@ -170,9 +170,8 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 
-	private String updateStatusInDataset(CollectorExecutionInfo info) {
-		String lastValue = peerStatus.updateStatus(project, info, node.name(), node.alias());
-		return lastValue;
+	private CollectorExecutionInfo updateStatusInDataset(CollectorExecutionInfo info) {
+		return peerStatus.updateStatus(project, info, node.name(), node.alias());
 	}
 
 	private void writeResult(CollectorExecutionInfoWithResult result) {

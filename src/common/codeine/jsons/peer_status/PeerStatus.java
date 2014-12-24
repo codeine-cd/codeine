@@ -43,13 +43,13 @@ public class PeerStatus {
 		return prevMonitorInfo.status();
 	}
 
-	public String updateStatus(ProjectJson project, CollectorExecutionInfo collector, String node, String alias) {
+	public CollectorExecutionInfo updateStatus(ProjectJson project, CollectorExecutionInfo collector, String node, String alias) {
 		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
 		CollectorExecutionInfo prevMonitorInfo = nodeInfo.collectors().put(collector.name(), collector);
 		if (null == prevMonitorInfo) {
 			return null;
 		}
-		return prevMonitorInfo.value();
+		return prevMonitorInfo;
 	}
 
 	private NodeWithMonitorsInfo initStatus(ProjectJson project, String nodeName, String alias) {
