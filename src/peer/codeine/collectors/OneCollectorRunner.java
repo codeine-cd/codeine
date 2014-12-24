@@ -100,7 +100,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		resultWrapped.result().limitOutputLength();
 		writeResult(resultWrapped);
 		CollectorExecutionInfo lastValue = updateStatusInDataset(resultWrapped.info());
-		log.info("collector '" + collectorInfo.name() + "' took:" + stopwatch + " result:" + resultWrapped.info().valueAndExitStatus() + " previous:" + lastValue.valueAndExitStatus());
+		log.info("collector '" + collectorInfo.name() + "' took:" + stopwatch + " result:" + resultWrapped.info().valueAndExitStatus() + (null != lastValue ? " previous:" + lastValue.valueAndExitStatus() : ""));
 		updateDatastoreIfNeeded();
 		sendNotificationIfNeeded();
 	}
