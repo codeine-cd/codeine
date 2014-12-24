@@ -101,7 +101,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		writeResult(resultWrapped);
 		String lastValue = updateStatusInDataset(resultWrapped.info());
 		log.info("collector '" + collectorInfo.name() + "' ended with value '" + resultWrapped.info().value() + "' , previous value '" + lastValue + "', took: " + stopwatch);
-		updateDatastoreIfNeeded(lastValue, resultWrapped.result().outputFromFile());
+		updateDatastoreIfNeeded();
 		sendNotificationIfNeeded();
 	}
 
@@ -141,20 +141,34 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 			log.info("in snooze period");
 			return;
 		}
-		boolean shouldNotify = null != previousResult && null != result && result.exit() != 0 && result.exit() != previousResult.exit();
-		if (collectorInfo.notification_enabled() && shouldNotify) {
+		if (collectorInfo.notification_enabled() && shouldNotify()) {
 			notificationDeliverToDatabase.sendCollectorResult(
 					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString(), true);
 		}
 		previousResult = result;
 	}
 
-	private void updateDatastoreIfNeeded(String lastValue, String currentValue) {
-		log.info("last value " + lastValue + " current value " + currentValue);
-		if (!MiscUtils.equals(lastValue, currentValue)) {
+	private boolean shouldNotify() {
+		return null != previousResult && null != result 
+				&& result.exit() != 0 && result.exit() != previousResult.exit();
+	}
+
+	private boolean shouldUpdate() {
+		if (result == null) {
+			return false;
+		}
+		if (previousResult == null) {
+			return true;
+		}
+		return !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile()) || !MiscUtils.equals(result.exit(), previousResult.exit());
+	}
+	
+	private void updateDatastoreIfNeeded() {
+		if (shouldUpdate()) {
 			peerStatusChangedUpdater.pushUpdate();
 		}
 	}
+
 
 	private String updateStatusInDataset(CollectorExecutionInfo info) {
 		String lastValue = peerStatus.updateStatus(project, info, node.name(), node.alias());
