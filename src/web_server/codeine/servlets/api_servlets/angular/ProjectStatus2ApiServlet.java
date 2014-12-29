@@ -70,6 +70,13 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 				}
 				monitorCount.put(monitor, count + 1);
 			}
+			for (String monitor : nodeWithMonitorsInfo.failed_collectors()) {
+				Integer count = monitorCount.get(monitor);
+				if (count == null) {
+					count = 0;
+				}
+				monitorCount.put(monitor, count + 1);
+			}
 			if (!nodeWithMonitorsInfo.status()) {
 				totalNumberOfNodesWithAlerts++;
 			}
