@@ -206,7 +206,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 
 		public void add(NodeWithMonitorsInfo nodeStatusInfo) {
 			nodes.add(nodeStatusInfo);
-			if (!nodeStatusInfo.failedMonitors().isEmpty()) {
+			if (!nodeStatusInfo.status()) {
 				failing_nodes_count++;
 			}
 		}
