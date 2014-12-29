@@ -48,12 +48,20 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return monitors;
 	}
 	public Map<String, CollectorExecutionInfo> collectors() {
+		if (null == collectors) {
+			return Maps.newHashMap();
+		}
 		return collectors;
 	}
 
 	public boolean status() {
 		for (MonitorStatusInfo m : monitors().values()) {
 			if (m.fail()){
+				return false;
+			}
+		}
+		for (CollectorExecutionInfo m : collectors().values()) {
+			if (!m.isSuccess()){
 				return false;
 			}
 		}
