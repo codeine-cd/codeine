@@ -22,6 +22,17 @@
 
             return monitors.indexOf(selectedMonitor) !== -1;
         };
+        var showByCollectors = function(selectedMonitor,collectors) {
+            if (selectedMonitor === 'All Nodes') {
+                return true;
+            }
+
+            if (selectedMonitor === 'Any Alert') {
+                return collectors.length > 0;
+            }
+
+            return collectors.indexOf(selectedMonitor) !== -1;
+        };
 
         var showByTags = function(tags,nodeTags) {
             for (var i=0; i < tags.length ; i++) {
@@ -42,7 +53,9 @@
         };
 
         return function(node, query, monitor, tags) {
-            return (showByName(query, node.alias) && showByMonitor(monitor, node.failed_monitors) && showByTags(tags,node.tags));
+            return (showByName(query, node.alias) &&
+            (showByMonitor(monitor, node.failed_monitors) || showByCollectors(monitor, node.failed_collectors)) &&
+            showByTags(tags,node.tags));
         };
     }
 
