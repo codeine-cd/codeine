@@ -111,11 +111,11 @@
                             </div>
                             <div class="col-md-9" style="word-break: break-all;">
                                 <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="node.failed_monitors.length === 0 && node.failed_collectors.length === 0"></i>
+                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="node.failed_monitors.length === 0 && node.failed_collectors.length === 0 && node.collectors_info.length === 0"></i>
                                 </a>
                                 <span ng-repeat="failing_monitor in node.failed_monitors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
                                 <span ng-repeat="failed_collector in node.failed_collectors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/collector/{{failed_collector}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failed_collector}}</a>&nbsp;</span>
-                                <span ng-repeat="collector_info in node.collectors_info"><a title="collector_info.name" ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/collector/{{collector_info.name}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-info': node.peer_status == 'On'}" >{{collector_info.value}}</a>&nbsp;</span>
+                                <span ng-repeat="collector_info in node.collectors_info"><a tooltip="{{collector_info.name}}" ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/collector/{{collector_info.name}}/status" class="label label-default">{{collector_info.value}}</a>&nbsp;</span>
                             </div>
                         </div>
                         <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>
