@@ -107,7 +107,7 @@
                                         <input type="text" name="env_value" class="form-control" ng-model="envVar.value" required>
                                     </td>
                                     <td class="col-md-1">
-                                        <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index)" tooltip="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                                        <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index,$event)" tooltip="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -182,7 +182,7 @@
                         <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2">
                     </td>
                     <td class="col-md-1">
-                        <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                        <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index,$event)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                     </td>
                 </tr>
 
@@ -214,6 +214,12 @@
         </div>
     </div>
 </accordion-group>
+
+
+
+
+
+
 <accordion-group is-open="monitors_is_open" ng-form="monitorsConfigureParentForm">
     <accordion-heading>
         <div>
@@ -233,7 +239,7 @@
                     <div class="btn-group btn-group-xs pull-right">
                         <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
                         <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.monitors.length-1" ng-click="moveDown(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                        <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.monitors,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                        <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
             </accordion-heading>
@@ -282,6 +288,99 @@
         <br/><br/>
     </div>
 </accordion-group>
+
+
+
+
+
+
+    <accordion-group is-open="collectors_is_open" ng-form="collectorsConfigureParentForm">
+        <accordion-heading>
+            <div>
+                <i class="fa fa-warning" style="color:red;" ng-show="collectorsConfigureParentForm.$invalid"></i>
+                Collectors <help help-id="collectorsConfigureHelp"></help>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': collectors_is_open, 'glyphicon-chevron-right': !collectors_is_open}"></i>
+            </div>
+        </accordion-heading>
+        <accordion close-others="false">
+            <accordion-group ng-repeat="collector_info in projectConfigurationForEditing.collectors" is-open="collector_info.is_open" ng-form="individualCollectorParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="individualCollectorParentForm.$invalid"></i>
+                        Collector: {{collector_info.name}}
+                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': collector_info.is_open, 'glyphicon-chevron-right': !collector_info.is_open}">
+                        </i>
+                        <div class="btn-group btn-group-xs pull-right">
+                            <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                            <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.collectors.length-1" ng-click="moveDown(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                            <button tooltip="Remove Collector" ng-click="removeItem(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                </accordion-heading>
+                <ng-form name="collectorsInnerForm">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="collector_info{{$index}}.name">Name</label>
+                            <div class="controls col-md-3" ng-class="{'has-error': collectorsInnerForm.name.$invalid}">
+                                <input id="collector_info{{$index}}.name" name="name" type="text" ng-model="collector_info.name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="collector_info_{{$index}}_type">Type <help help-id="collectorTypeHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <select  class="form-control select2" name="type" id="collector_info_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="collector_info.type" required>
+                                    <option value="String">String</option>
+                                    <option value="Number">Number</option>
+                                    <option value="Monitor">Monitor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="collector_info{{$index}}.min_interval">Min Interval <help help-id="minIntervalHelp"></help></label>
+                            <div class="controls col-md-3" ng-class="{'has-error': collectorsInnerForm.min_interval.$invalid}">
+                                <input id="collector_info{{$index}}.min_interval" name="min_interval" type="number" min="1" ng-model="collector_info.min_interval" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="collector_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
+                            <div class="controls col-md-3">
+                                <input id="collector_info{{$index}}.credentials" name="credentials" ng-model="collector_info.credentials" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox col-md-offset-3">
+                                <label>
+                                    <input type="checkbox" ng-model="collector_info.notification_enabled"> Notification Enabled
+                                    <help help-id="notificationsEnabledHelp"></help>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="collector_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="collectorScriptHelp"></help></label>
+                            <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.script_content.$invalid}">
+                                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='collector_info.script_content' rows="3" element-class="form-control" element-id="collector_info{{$index}}.script" is-required="true"></textcomplete>
+                            </div>
+                        </div>
+                    </div>
+                </ng-form>
+            </accordion-group>
+        </accordion>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-click="addCollector()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Collector</button>
+            </div>
+            <br/><br/>
+        </div>
+    </accordion-group>
+
+
+
+
+
+
+
+
+
 <accordion-group is-open="email_is_open" ng-form="emailConfigureParentForm">
     <accordion-heading>
         <div>
@@ -311,7 +410,7 @@
                 </select>
             </td>
             <td class="col-md-1">
-                <button ng-click="removeItem(projectConfigurationForEditing.mail,$index)" tooltip="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                <button ng-click="removeItem(projectConfigurationForEditing.mail,$index,$event)" tooltip="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
             </td>
         </tr>
         </tbody>
@@ -351,7 +450,7 @@
         <div class="btn-group btn-group-xs pull-right">
             <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
             <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.commands.length-1" ng-click="moveDown(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-            <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.commands,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+            <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
         </div>
     </div>
 </accordion-heading>
@@ -483,7 +582,7 @@
                         <div class="btn-group btn-group-xs pull-right">
                             <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
                             <button tooltip="Move down" ng-disabled="$index === command_info.parameters.length-1" ng-click="moveDown(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                            <button tooltip="Remove Monitor" ng-click="removeItem(command_info.parameters,$index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                            <button tooltip="Remove Monitor" ng-click="removeItem(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
                         </div>
                     </div>
                 </accordion-heading>
@@ -542,7 +641,7 @@
         </accordion>
         <div class="row">
             <div class="col-md-12">
-                <button ng-click="addParameter($parent.$index)" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
+                <button ng-click="addParameter(command_info)" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
             </div>
             <br/><br/>
         </div>
@@ -604,7 +703,7 @@
                     <input type="checkbox" ng-model="permissionObject.can_config">
                 </td>
                 <td class="col-md-1">
-                    <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index)" tooltip="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                    <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index,$event)" tooltip="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
                 </td>
             </tr>
             </tbody>

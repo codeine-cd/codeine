@@ -182,7 +182,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 	private int minInterval() {
-		if (collectorInfo.min_interval() <= 0) {
+		if (collectorInfo.min_interval() == null || collectorInfo.min_interval() <= 0) {
 			return MIN_INTERVAL_MILLI;
 		}
 		return collectorInfo.min_interval() * 60000;

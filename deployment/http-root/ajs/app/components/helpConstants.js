@@ -54,14 +54,18 @@
                 "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>",
             "monitorsConfigureHelp" : "Monitors used to detect malfunctions and errors on the running nodes.<br/><br/>" +
                 "Codeine runs the monitors periodically on all nodes, and notifies when a node fails.",
+            "collectorsConfigureHelp" : "Collectors used to detect malfunctions and errors on the running nodes, and also to provide information about nodes status.<br/><br/>" +
+                "Codeine runs the collectors periodically on all nodes, and notifies when a node fails.",
             "versionHelp" : "A version will be reported by each node.",
-            "minIntervalHelp" : "The minimal interval that Codeine will run the monitor.<br/><br/>" +
-                "This option is good when the monitor execution itself is time consuming or may cause load on the node itself and hence should not executed at high frequency.<br/><br/>" +
+            "minIntervalHelp" : "The minimal interval that Codeine will run the collector.<br/><br/>" +
+                "This option is good when the collector execution itself is time consuming or may cause load on the node itself and hence should not executed at high frequency.<br/><br/>" +
                 "Specify an <strong>integer in minutes</strong>. Default is less than a minute.",
             "commandTimeoutHelp" : "The maximum time in <strong>minutes</strong> command will be allowed to run on node, before termination",
             "credentialsHelp" : "The user that will be used to execute the configured script.<br/><br/> This feature does not work for most cases right now.",
-            "notificationsEnabledHelp" : "If not checked, emails will not be sent to the configured users, even if this monitor fails.",
+            "notificationsEnabledHelp" : "If checked, emails will not be sent to the configured users, when this collector starts to fail.",
             "monitorScriptHelp" : "Type a shell script to monitor the desired functionality of the node.<br/><br/>By convention, monitors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
+                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
+            "collectorScriptHelp" : "Type a shell script to collector the desired functionality of the node.<br/><br/>By convention, collectors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
                 "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
             "versionScriptHelp" : "Type a shell script to specify the node's version.<br/><br/>" +
                 "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> and should contain the version number (e.g.: 1.0.3).<br/><br/>" +
@@ -96,6 +100,8 @@
             "projectDescriptionHelp" : "Description is a convenient way to let users know what this project is about.",
             "commandDescriptionHelp" : "Description is a convenient way to let users know what this command is doing and for what purpose it should be used.",
             "projectIncludeCommandsFromHelp" : "List here projects to include their configured commands in this project",
+            "typeHelp" : "Select a type for the parameter for command execution",
+            "collectorTypeHelp" : "Select a type of the collector",
             "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)"
         });
 

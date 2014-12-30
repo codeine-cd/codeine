@@ -13,7 +13,7 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 
 	private List<String> failed_monitors;
 	private List<String> failed_collectors;
-	private List<CollectorInfo> collectors_info = Lists.newArrayList();
+	private List<CollectorInfoForUI> collectors_info = Lists.newArrayList();
 	private List<String> ok_monitors;
 	private boolean user_can_command;
 	
@@ -26,15 +26,15 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 		this.user_can_command = user_can_command;
 		for (CollectorExecutionInfo collectorInfo : info.collectors().values()) {
 			if (collectorInfo.isSuccess() && !StringUtils.isEmpty(collectorInfo.value())) {
-				collectors_info.add(new CollectorInfo(collectorInfo.name(), collectorInfo.value()));
+				collectors_info.add(new CollectorInfoForUI(collectorInfo.name(), collectorInfo.value()));
 			}
 		}
 	}
 	
-	private static class CollectorInfo {
+	private static class CollectorInfoForUI {
 		private String name;
 		private String value;
-		public CollectorInfo(String name, String value) {
+		public CollectorInfoForUI(String name, String value) {
 			this.name = name;
 			this.value = value;
 		}

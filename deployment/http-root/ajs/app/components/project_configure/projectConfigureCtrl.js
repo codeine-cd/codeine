@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($route, $scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
+    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
         $scope.projectName = $routeParams.project_name;
         $scope.projectConfigurationForEditing = projectConfigurationForEditing;
         $scope.tags = [];
@@ -62,8 +62,13 @@
         $scope.addMonitor = function() {
             $scope.projectConfigurationForEditing.monitors.push({is_open: true, name: "new_monitor_" + $scope.projectConfigurationForEditing.monitors.length, notification_enabled: true});
         };
+        $scope.addCollector = function() {
+            $scope.projectConfigurationForEditing.collectors.push({is_open: true, name: "new_collector_" + $scope.projectConfigurationForEditing.collectors.length, notification_enabled: true});
+        };
 
-        $scope.removeItem = function(array,index) {
+        $scope.removeItem = function(array,index,$event) {
+            $event.preventDefault();
+            $event.stopPropagation();
             array.splice(index,1);
         };
 
@@ -83,8 +88,8 @@
             $scope.projectConfigurationForEditing.commands.push({is_open: true, name: "new_command_" + $scope.projectConfigurationForEditing.commands.length, parameters: [], concurrency : 1, command_strategy : 'Immediately', duration_units : 'Minutes', ratio : 'Linear', timeoutInMinutes: 10, prevent_override: true});
         };
 
-        $scope.addParameter = function(index) {
-            $scope.projectConfigurationForEditing.commands[index].parameters.push({is_open: true, name: "NEW_PARAMETER", type : 'String'});
+        $scope.addParameter = function(command_info) {
+            $scope.projectConfigurationForEditing.commands[$scope.projectConfigurationForEditing.commands.indexOf(command_info)].parameters.push({is_open: true, name: "NEW_PARAMETER", type : 'String'});
         };
 
         $scope.addNotification = function() {

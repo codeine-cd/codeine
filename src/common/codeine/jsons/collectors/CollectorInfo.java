@@ -7,7 +7,7 @@ public class CollectorInfo {
 
 	private String name;
 	private String script_content;
-	private int min_interval;
+	private Integer min_interval;
 	@SerializedName("credentials") private String cred;
 	private CollectorType type;
 	private boolean notification_enabled;
@@ -21,7 +21,7 @@ public class CollectorInfo {
 	}
 	
 	
-	public CollectorInfo(String name, String script_content, int min_interval, String cred, CollectorType type,
+	public CollectorInfo(String name, String script_content, Integer min_interval, String cred, CollectorType type,
 			boolean notification_enabled) {
 		super();
 		this.name = name;
@@ -40,7 +40,7 @@ public class CollectorInfo {
 		this.type = type;
 	}
 
-	public int min_interval() {
+	public Integer min_interval() {
 		return min_interval;
 	}
 
