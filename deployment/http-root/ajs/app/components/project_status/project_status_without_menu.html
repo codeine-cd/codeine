@@ -115,6 +115,7 @@
                                 </a>
                                 <span ng-repeat="failing_monitor in node.failed_monitors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/monitor/{{failing_monitor}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failing_monitor}}</a>&nbsp;</span>
                                 <span ng-repeat="failed_collector in node.failed_collectors"><a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/collector/{{failed_collector}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-danger': node.peer_status == 'On'}" >{{failed_collector}}</a>&nbsp;</span>
+                                <span ng-repeat="collector_info in node.collectors_info"><a title="collector_info.name" ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/collector/{{collector_info.name}}/status" class="label"  ng-class="{'label-default': node.peer_status == 'Disc' , 'label-info': node.peer_status == 'On'}" >{{collector_info.value}}</a>&nbsp;</span>
                             </div>
                         </div>
                         <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>
