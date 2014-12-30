@@ -4,6 +4,7 @@ import java.util.List;
 
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.jsons.collectors.CollectorExecutionInfo;
+import codeine.model.Constants;
 import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
@@ -25,12 +26,19 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 		this.ok_monitors = info.ok_monitors();
 		this.user_can_command = user_can_command;
 		for (CollectorExecutionInfo collectorInfo : info.collectors().values()) {
-			if (collectorInfo.isSuccess() && !StringUtils.isEmpty(collectorInfo.value())) {
+			if (collectorInfo.isSuccess() && !StringUtils.isEmpty(collectorInfo.value()) && shouldDisplayByName(collectorInfo.name())) {
 				collectors_info.add(new CollectorInfoForUI(collectorInfo.name(), collectorInfo.value()));
 			}
 		}
 	}
 	
+	private boolean shouldDisplayByName(String name) {
+		if (Constants.VERSION_COLLECTOR_NAME.equals(name) || Constants.TAGS_COLLECTOR_NAME.equals(name)) {
+			return false;
+		}
+		return true;
+	}
+
 	private static class CollectorInfoForUI {
 		private String name;
 		private String value;
