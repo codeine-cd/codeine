@@ -107,7 +107,7 @@ public class ShellScript {
 		List<String> cmd = null;
 		switch (operatingSystem) {
 		case Linux:
-			if (null != cred) {
+			if (!StringUtils.isEmpty(cred)) {
 				cmd = Lists.newArrayList(PathHelper.getReadLogs(), encode(cred), encode("/bin/sh"), encode("-xe"), encode(fileName)); 
 			} else {
 				cmd = Lists.newArrayList("/bin/sh", "-xe", fileName);
