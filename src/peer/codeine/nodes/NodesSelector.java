@@ -25,13 +25,13 @@ public class NodesSelector {
 	}
 
 	public SelectedNodes selectStartStop() {
-		log.info("runningNodes " + runningNodes);
+		log.debug("runningNodes " + runningNodes);
 		Map<NodeInfo, PeriodicExecuter> existingProjectExecutors = Maps.newHashMap();
 		List<NodeInfo> nodesToStart = Lists.newArrayList();
 		Map<NodeInfo, PeriodicExecuter> nodesToStop = Maps.newHashMap();
 		
 		Set<NodeInfo> newAndCuerrentNodes = getNewAndCuerrentNodes();
-		log.info("newAndCuerrentNodes " + newAndCuerrentNodes);
+		log.debug("newAndCuerrentNodes " + newAndCuerrentNodes);
 		for (NodeInfo node : newAndCuerrentNodes) {
 			if (shouldContinueRun(node)) {
 				if (!runningNodes.containsKey(node)) {
