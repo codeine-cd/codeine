@@ -197,6 +197,9 @@
                             deferred.reject('Error - failed to get project status');
                         });
                         return deferred.promise;
+                    },
+                    commands : function(){
+                        return [];
                     }
                 }
             }).

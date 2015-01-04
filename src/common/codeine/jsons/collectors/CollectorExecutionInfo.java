@@ -53,6 +53,18 @@ public class CollectorExecutionInfo {
 		return "[val=" + value + ",exi="
 				+ exit_status + "]";
 	}
+
+	public int exit_status() {
+		return exit_status;
+	}
+
+	public long execution_duration() {
+		return execution_duration;
+	}
+
+	public long start_time() {
+		return start_time;
+	}
 	
 	
 }

@@ -2,9 +2,11 @@ package codeine.api;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.collectors.CollectorExecutionInfo;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
@@ -17,6 +19,7 @@ import codeine.version.ViewNodesFilter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
 public class NodeGetter {
@@ -78,9 +81,27 @@ public class NodeGetter {
 					if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration && !projectName.equals(Constants.CODEINE_NODES_PROJECT_NAME)) {
 						node.tags(findTags(projectJson, node));
 					}
+					if (projectName.equals(Constants.CODEINE_NODES_PROJECT_NAME)) {
+						node.collectors(allCollectorsForInternalProject(peerStatusJsonV2));
+					}
 					node.peer(peerStatusJsonV2);
 					$.add(node);
 				} 
+			}
+		}
+		return $;
+	}
+
+	private Map<String, CollectorExecutionInfo> allCollectorsForInternalProject(PeerStatusJsonV2 peerStatusJsonV2) {
+		Map<String, CollectorExecutionInfo> $ = Maps.newHashMap();
+		for (Entry<String, ProjectStatus> projName2Status : peerStatusJsonV2.project_name_to_status().entrySet()) {
+			for (NodeWithMonitorsInfo nodeInfo : projName2Status.getValue().nodes_info()) {
+				for (Entry<String, CollectorExecutionInfo> colName2Info : nodeInfo.collectors().entrySet()) {
+					CollectorExecutionInfo c = colName2Info.getValue();
+					String name = projName2Status.getKey() + "|" + nodeInfo.alias() + "|" + c.name();
+					CollectorExecutionInfo value = new CollectorExecutionInfo(name, c.type(), c.exit_status(), c.value(), c.execution_duration(), c.start_time());
+					$.put(name, value);
+				}
 			}
 		}
 		return $;

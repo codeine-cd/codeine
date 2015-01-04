@@ -125,4 +125,8 @@ public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 		return $;
 	}
 
+	public void collectors(Map<String, CollectorExecutionInfo> collectors) {
+		this.collectors = collectors;
+	}
+
 }
