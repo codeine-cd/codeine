@@ -53,13 +53,13 @@ public class ProcessExecuterWorker extends Thread {
 				}
 				exit = process.waitFor();
 			} catch (IOException ex) {
-				log.warn("got IO-Exception " + ex.getMessage());
+				log.warn("got IO-Ex " + ex.getMessage());
 				error += ExceptionUtils.getStackTrace(ex);
 				function.apply(ExceptionUtils.getStackTrace(ex));
 				exit = ExitStatus.IO_ERROR;
 			}
 		} catch (InterruptedException e) {
-			log.warn("got Interrupted-Exception " + e.getMessage());
+			log.warn("got Interrupted-Ex " + e.getMessage());
 			error += "\nprocess was interrupted\n";
 			exit = ExitStatus.INTERRUPTED;
 			log.info("thread was interuppted");
