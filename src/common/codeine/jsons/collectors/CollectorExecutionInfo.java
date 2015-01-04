@@ -30,6 +30,9 @@ public class CollectorExecutionInfo {
 	public String name() {
 		return name;
 	}
+	public CollectorType type() {
+		return type;
+	}
 
 	public String value() {
 		return value;
