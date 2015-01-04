@@ -1,6 +1,7 @@
 package codeine.jsons.collectors;
 
 import codeine.jsons.collectors.CollectorInfo.CollectorType;
+import codeine.utils.StringUtils;
 
 public class CollectorExecutionInfo {
 
@@ -17,7 +18,7 @@ public class CollectorExecutionInfo {
 		this.name = name;
 		this.type = type;
 		this.exit_status = exit_status;
-		if (value.length() > MAX_SIZE) {
+		if (!StringUtils.isEmpty(value) && value.length() > MAX_SIZE) {
 			this.value = value.substring(0, MAX_SIZE);
 		}
 		else {
