@@ -130,5 +130,9 @@ public class StringUtils {
 		return s;
 	
 	}
+
+	public static String arrayToString(Object[] arr) {
+		return collectionToString(Arrays.asList(arr));
+	}
 	
 }

@@ -24,6 +24,7 @@ import codeine.model.Result;
 import codeine.utils.MiscUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
+import codeine.utils.logging.LogUtils;
 import codeine.utils.network.HttpUtils;
 import codeine.utils.os_process.ShellScript;
 
@@ -160,7 +161,11 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		if (previousResult == null) {
 			return true;
 		}
-		return !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile()) || !MiscUtils.equals(result.exit(), previousResult.exit());
+		boolean shouldUpdate = !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile()) || !MiscUtils.equals(result.exit(), previousResult.exit());
+		if (shouldUpdate) {
+			LogUtils.info(log, "collector should update", result.outputFromFile(), previousResult.outputFromFile(), result.exit(), previousResult.exit());
+		}
+		return shouldUpdate;
 	}
 	
 	private void updateDatastoreIfNeeded() {

@@ -2,6 +2,8 @@ package codeine.utils.logging;
 
 import org.apache.log4j.Logger;
 
+import codeine.utils.StringUtils;
+
 public class LogUtils {
 
 	public static void assertFailed(Logger log, Object... o) {
@@ -38,5 +40,9 @@ public class LogUtils {
 			$.append(" " + o);
 		}
 		return $.toString();
+	}
+
+	public static void info(Logger log, Object... message) {
+		log.info(StringUtils.arrayToString(message));
 	}
 }

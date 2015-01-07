@@ -52,6 +52,7 @@ public class TagsCollectorRunner implements IOneCollectorRunner {
 	public void updateTags(List<String> tags) {
 		List<String> prevTags = projectStatusUpdater.updateTags(project, node.name(), node.alias(), tags);
 		if (!tags.equals(prevTags)) {
+			LogUtils.info(log, "tags should update", tags, prevTags);
 			peerStatusChangedUpdater.pushUpdate();
 		}
 	}
