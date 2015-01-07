@@ -166,3 +166,8 @@ div.sidebar-nav i.codeine_help {
 .cursor_pointer {
     cursor: pointer;
 }
+
+.my-fixed-table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
