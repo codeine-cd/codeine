@@ -11,7 +11,6 @@ import codeine.api.NodeInfo;
 import codeine.collectors.IOneCollectorRunner;
 import codeine.collectors.OneCollectorRunner;
 import codeine.collectors.OneCollectorRunnerFactory;
-import codeine.configuration.IConfigurationManager;
 import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.collectors.CollectorInfo.CollectorType;
 import codeine.jsons.peer_status.PeerStatus;
@@ -30,33 +29,22 @@ public class TagsCollectorRunner implements IOneCollectorRunner {
 	
 	@Inject private PeerStatus projectStatusUpdater;
 	@Inject private PeerStatusChangedUpdater peerStatusChangedUpdater;
-	@Inject private OneCollectorRunnerFactory oneCollectorRunnerFactory;
-	private IConfigurationManager configurationManager;
 	private OneCollectorRunner runner;
 	private ProjectJson project;
-	private String projectName;
 	private NodeInfo node;
 
 	@Inject 
-	public TagsCollectorRunner(@Assisted String projectName, @Assisted NodeInfo node, IConfigurationManager configurationManager) {
+	public TagsCollectorRunner(@Assisted ProjectJson project, @Assisted NodeInfo node,
+			OneCollectorRunnerFactory oneCollectorRunnerFactory) {
 		super();
-		this.projectName = projectName;
+		this.project = project;
 		this.node = node;
-		this.configurationManager = configurationManager;
-		CollectorInfo collectorInfo = initAndGetConf();
-		runner = oneCollectorRunnerFactory.create(collectorInfo, project, node);
-	}
-
-	private CollectorInfo initAndGetConf() {
-		project = configurationManager.getProjectForName(projectName);
 		CollectorInfo collectorInfo = new CollectorInfo(Constants.TAGS_COLLECTOR_NAME, project.tags_discovery_script(), CollectorType.String);
-		return collectorInfo;
+		runner = oneCollectorRunnerFactory.create(collectorInfo, project, node);
 	}
 
 	@Override
 	public void execute() {
-		CollectorInfo collectorInfo = initAndGetConf();
-		runner.updateConf(collectorInfo);
 		List<String> tags = getTagsList();
 		updateTags(tags);
 	}

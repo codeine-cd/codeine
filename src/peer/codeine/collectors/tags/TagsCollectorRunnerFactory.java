@@ -1,8 +1,9 @@
 package codeine.collectors.tags;
 
 import codeine.api.NodeInfo;
+import codeine.jsons.project.ProjectJson;
 
 public interface TagsCollectorRunnerFactory {
 
-	public TagsCollectorRunner create(String name, NodeInfo node);
+	public TagsCollectorRunner create(ProjectJson project, NodeInfo node);
 }
