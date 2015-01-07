@@ -8,7 +8,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:tab">
+                            <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:tab" tooltip="{{project.description}}" tooltip-placement="left">
                                 <a href="/codeine/project/{{project.name}}/status">
                                     <i class="icon-folder-close"></i> {{project.name}}
                                 </a>

@@ -151,4 +151,8 @@ public class ProjectJson
 		return include_project_commands;
 	}
 
+	public String description() {
+		return description;
+	}
+
 }

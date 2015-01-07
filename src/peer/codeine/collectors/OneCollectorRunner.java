@@ -161,7 +161,8 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		if (previousResult == null) {
 			return true;
 		}
-		boolean shouldUpdate = !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile()) || !MiscUtils.equals(result.exit(), previousResult.exit());
+		boolean shouldUpdate;
+		shouldUpdate = !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile()) || !MiscUtils.equals(result.exit(), previousResult.exit());
 		if (shouldUpdate) {
 			LogUtils.info(log, "collector should update", result.outputFromFile(), previousResult.outputFromFile(), result.exit(), previousResult.exit());
 		}

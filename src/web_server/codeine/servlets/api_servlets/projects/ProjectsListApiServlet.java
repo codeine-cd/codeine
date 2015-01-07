@@ -53,7 +53,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 			if (permissionsManager.user(request).canRead(projectJson.name())){
 				try {
 					VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
-					projects.add(new CodeineProject(projectJson.name(), versionItem.count()));
+					projects.add(new CodeineProject(projectJson.name(), versionItem.count(), projectJson.description()));
 				} catch (Exception e) {
 					log.error("failed to add project " + projectJson.name(), e);
 				}
