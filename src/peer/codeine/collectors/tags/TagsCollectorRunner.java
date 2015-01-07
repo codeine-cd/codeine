@@ -30,7 +30,6 @@ public class TagsCollectorRunner implements IOneCollectorRunner {
 	
 	@Inject private PeerStatus projectStatusUpdater;
 	@Inject private PeerStatusChangedUpdater peerStatusChangedUpdater;
-	@Inject private OneCollectorRunnerFactory oneCollectorRunnerFactory;
 	private IConfigurationManager configurationManager;
 	private OneCollectorRunner runner;
 	private ProjectJson project;
@@ -38,7 +37,8 @@ public class TagsCollectorRunner implements IOneCollectorRunner {
 	private NodeInfo node;
 
 	@Inject 
-	public TagsCollectorRunner(@Assisted String projectName, @Assisted NodeInfo node, IConfigurationManager configurationManager) {
+	public TagsCollectorRunner(@Assisted String projectName, @Assisted NodeInfo node
+			, IConfigurationManager configurationManager, OneCollectorRunnerFactory oneCollectorRunnerFactory) {
 		super();
 		this.projectName = projectName;
 		this.node = node;
