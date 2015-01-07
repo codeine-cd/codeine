@@ -248,7 +248,7 @@ public class RunMonitors implements Task {
 	}
 
 	private void updateStatusInMongo() {
-		mongoPeerStatusUpdater.pushUpdate();
+		mongoPeerStatusUpdater.pushUpdate("Plain Old Monitor");
 	}
 
 	private boolean shouldSendNotificationToMongo(Result res, String previousResult) {

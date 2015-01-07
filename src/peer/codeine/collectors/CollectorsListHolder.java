@@ -45,7 +45,7 @@ public class CollectorsListHolder {
 		addAndUpdateConfInMap(project);
 		boolean removed = peerStatus.removeNonExistCollectors(project, node.name(), node.alias());
 		if (removed) {
-			peerStatusChangedUpdater.pushUpdate();
+			peerStatusChangedUpdater.pushUpdate("CollectorsListHolder.getCurrentListAndRemoveOldCollectors()");
 		}
 		return runnersMap.values();
 	}

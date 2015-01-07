@@ -58,7 +58,7 @@ public class VersionCollectorRunner implements IOneCollectorRunner {
 		String prevVersion = projectStatusUpdater.updateVersion(project, node.name(), node.alias(), version);
 		if (!version.equals(prevVersion)) {
 			LogUtils.info(log, "version should update", version, prevVersion);
-			peerStatusChangedUpdater.pushUpdate();
+			peerStatusChangedUpdater.pushUpdate("VersionCollectorRunner.execute()");
 		}
 	}
 

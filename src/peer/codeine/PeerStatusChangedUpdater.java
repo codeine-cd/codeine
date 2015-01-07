@@ -41,8 +41,8 @@ public class PeerStatusChangedUpdater implements Runnable{
 		}
 	}
 
-	public void pushUpdate() {
-		log.debug("pushUpdate()");
+	public void pushUpdate(String whoCalled) {
+		log.info("pushUpdate called by " + whoCalled);
 		blockingQueue.add(new Object());
 	}
 

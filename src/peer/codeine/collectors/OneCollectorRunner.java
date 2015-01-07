@@ -171,7 +171,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	
 	private void updateDatastoreIfNeeded() {
 		if (shouldUpdate()) {
-			peerStatusChangedUpdater.pushUpdate();
+			peerStatusChangedUpdater.pushUpdate("collector " + collectorInfo.name());
 		}
 	}
 
