@@ -74,21 +74,21 @@
                                 <thead>
                                 <tr>
                                     <th class="col-md-2">Name</th>
-                                    <th class="col-md-1">Type</th>
                                     <th class="col-md-3">Value</th>
-                                    <th class="col-md-2">Duration</th>
                                     <th class="col-md-2">Start Time</th>
+                                    <th class="col-md-2">Duration</th>
+                                    <th class="col-md-1">Type</th>
                                     <th class="col-md-1">Exit Status</th>
-                                    <th class="col-md-1">Show Status</th>
+                                    <th class="col-md-1">Output</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="(collectorName,collector) in nodeStatus.collectors" ng-class="{'danger': collector.exit_status != 0}">
                                     <td class="col-md-2">{{collector.name}}</td>
-                                    <td class="col-md-1">{{collector.type}}</td>
                                     <td class="col-md-3">{{collector.value}}</td>
-                                    <td class="col-md-2">{{collector.execution_duration | duration}}</td>
                                     <td class="col-md-2">{{collector.start_time | date:'short'}}</td>
+                                    <td class="col-md-2">{{collector.execution_duration | duration}}</td>
+                                    <td class="col-md-1">{{collector.type}}</td>
                                     <td class="col-md-1">{{collector.exit_status}}</td>
                                     <td class="col-md-1">
                                         <a ng-href="/codeine/project/{{projectName}}/node/{{nodeStatus.name}}/collector/{{collector.name}}/status">
