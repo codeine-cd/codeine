@@ -18,8 +18,8 @@ public class CollectionTypeGetter {
 	private static final Logger log = Logger.getLogger(CollectionTypeGetter.class);
 	
 	private static final int TIME_WINDOW_TO_REPORT_HOUR = 5;
-	private static final int TIME_WINDOW_TO_REPORT_DAY_MIN = 7;
-	private static final int TIME_WINDOW_TO_REPORT_DAY_MAX = 8;
+	private static final int TIME_WINDOW_TO_REPORT_DAY_MIN = 21;
+	private static final int TIME_WINDOW_TO_REPORT_DAY_MAX = 22;
 	
 	private DateTime lastGet;
 	private DateTime lastDailyCollection;
