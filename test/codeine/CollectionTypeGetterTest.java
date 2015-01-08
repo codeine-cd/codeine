@@ -44,8 +44,8 @@ public class CollectionTypeGetterTest {
 	}
 	@Test
 	public void testDailyOn7to8InTheMorningOnce() {
-		assertEquals(daily(), tested.getCollectionType(dateTime.plus(TimeUnit.HOURS.toMillis(7))));
-		assertEquals(immediatly(), tested.getCollectionType(dateTime.plus(TimeUnit.HOURS.toMillis(7)+1)));
+		assertEquals(daily(), tested.getCollectionType(dateTime.plus(TimeUnit.HOURS.toMillis(21))));
+		assertEquals(immediatly(), tested.getCollectionType(dateTime.plus(TimeUnit.HOURS.toMillis(21)+1)));
 	}
 	private ArrayList<AlertsCollectionType> daily() {
 		return Lists.newArrayList(AlertsCollectionType.Immediately, AlertsCollectionType.Hourly, AlertsCollectionType.Daily);
