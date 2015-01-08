@@ -59,26 +59,34 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 	public Multimap<String, CollectorNotificationJson> getAlertsAndUpdate(final AlertsCollectionType collType) {
 		long time = System.currentTimeMillis();
 		Stopwatch s = Stopwatch.createStarted();
-		Multimap<String, CollectorNotificationJson> $ = query(collType);
+		MapWithId $ = query(collType);
 		String queryMessage = "query took " + s;
 		s = Stopwatch.createStarted();
-		updateCollectionType(collType, time);
+		updateCollectionType(collType, time, $.maxId);
 		log.info(queryMessage + ", update took " + s + " on " + dbUtils);
-		return $;
+		return $.map;
 	}
 
 
-	private void updateCollectionType(final AlertsCollectionType collType, long time) {
+	private void updateCollectionType(final AlertsCollectionType collType, long time, int maxId) {
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 		}
 		dbUtils.executeUpdate("UPDATE " + TABLE_NAME + " SET collection_type_update_time=" + time +
 				",collection_type=" + collType.toLong() + 
-				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL");
+				" WHERE (collection_type < " + collType.toLong() + " OR collection_type IS NULL) AND id<="+maxId);
 	}
-	
-	private Multimap<String, CollectorNotificationJson> query(final AlertsCollectionType collType) {
+	private static class MapWithId {
+		Multimap<String, CollectorNotificationJson> map;
+		int maxId;
+		public MapWithId(Multimap<String, CollectorNotificationJson> map, int maxId) {
+			this.map = map;
+			this.maxId = maxId;
+		}
+	}
+	private MapWithId query(final AlertsCollectionType collType) {
 		final AtomicInteger count = new AtomicInteger(0);
+		final AtomicInteger maxId = new AtomicInteger(0);
 		final Multimap<String, CollectorNotificationJson> $ = HashMultimap.create();
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
@@ -89,7 +97,8 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 				try {
 					String data = rs.getString("data");
 //					Long type = rs.getLong("collection_type");
-//					int id = rs.getInt("id");
+					int id = rs.getInt("id");
+					maxId.set(Math.max(maxId.get(), id));
 					CollectorNotificationJson n = gson.fromJson(data, CollectorNotificationJson.class);
 					$.put(n.project_name(),n);
 					count.incrementAndGet();
@@ -104,7 +113,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		if (count.intValue() > 0){
 			log.info("handled col type " + collType + " with num of events " + count.intValue());
 		}
-		return $;
+		return new MapWithId($, maxId.get());
 	}
 
 	@Override
