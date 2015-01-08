@@ -117,7 +117,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		dbUtils.executeQueryCompressed("SELECT id, data, collection_type_update_time, collection_type FROM " + TABLE_NAME + 
 				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL" , function);
 		if (count.intValue() > 0){
-			log.info("handled col type " + collType + " with num of events " + count.intValue());
+			log.info("handled col type " + collType + " with num of events " + count.intValue() + " on " + dbUtils);
 		}
 		return new MapWithId($, maxId.get());
 	}
@@ -129,7 +129,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 			return;
 		}
 		long timeToRemove = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(3);
-		log.info("will remove older than " + timeToRemove);
+		log.info("will remove older than " + timeToRemove + " on " + dbUtils);
 		String deleteSql = "delete from " + TABLE_NAME + " where collection_type_update_time < " + timeToRemove + " AND collection_type = " + AlertsCollectionType.Daily.toLong();
 		dbUtils.executeUpdate(deleteSql);
 	}
