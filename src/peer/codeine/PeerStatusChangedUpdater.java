@@ -1,5 +1,6 @@
 package codeine;
 
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -48,8 +49,9 @@ public class PeerStatusChangedUpdater implements Runnable{
 
 	@Override
 	public void run() {
-		log.info("start updating");
-		ThreadUtils.sleep(INITIAL_SLEEP);
+		long initialSleep = INITIAL_SLEEP + new Random().nextInt((int) MIN_TIME_BETWEEN_UPDATES_MILLIS);
+		log.info("start updating, will sleep before " + initialSleep);
+		ThreadUtils.sleep(initialSleep);
 		while (true){
 			try {
 				pushUpdateNow();
