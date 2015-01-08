@@ -63,7 +63,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		String queryMessage = "query took " + s;
 		s = Stopwatch.createStarted();
 		updateCollectionType(collType, time);
-		log.info(queryMessage + ", update took " + s);
+		log.info(queryMessage + ", update took " + s + " on " + dbUtils);
 		return $;
 	}
 
