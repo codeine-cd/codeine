@@ -17,6 +17,7 @@ import codeine.jsons.mails.CollectorNotificationJson;
 import codeine.utils.ExceptionUtils;
 
 import com.google.common.base.Function;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
@@ -56,11 +57,29 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 
 	@Override
 	public Multimap<String, CollectorNotificationJson> getAlertsAndUpdate(final AlertsCollectionType collType) {
-		final AtomicInteger count = new AtomicInteger(0);
-		final Multimap<String, CollectorNotificationJson> $ = HashMultimap.create();
+		long time = System.currentTimeMillis();
+		Stopwatch s = Stopwatch.createStarted();
+		Multimap<String, CollectorNotificationJson> $ = query(collType);
+		String queryMessage = "query took " + s;
+		s = Stopwatch.createStarted();
+		updateCollectionType(collType, time);
+		log.info(queryMessage + ", update took " + s);
+		return $;
+	}
+
+
+	private void updateCollectionType(final AlertsCollectionType collType, long time) {
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 		}
+		dbUtils.executeUpdate("UPDATE " + TABLE_NAME + " SET collection_type_update_time=" + time +
+				",collection_type=" + collType.toLong() + 
+				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL");
+	}
+	
+	private Multimap<String, CollectorNotificationJson> query(final AlertsCollectionType collType) {
+		final AtomicInteger count = new AtomicInteger(0);
+		final Multimap<String, CollectorNotificationJson> $ = HashMultimap.create();
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
 			public Void apply(ResultSet rs){
@@ -72,10 +91,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 //					Long type = rs.getLong("collection_type");
 //					int id = rs.getInt("id");
 					CollectorNotificationJson n = gson.fromJson(data, CollectorNotificationJson.class);
-					rs.updateLong("collection_type_update_time", System.currentTimeMillis());
-					rs.updateLong("collection_type", collType.toLong());
 					$.put(n.project_name(),n);
-					rs.updateRow();
 					count.incrementAndGet();
 					return null;
 				} catch (SQLException e) {
@@ -83,7 +99,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 				}
 			}
 		};
-		dbUtils.executeUpdateableQuery("SELECT id, data, collection_type_update_time, collection_type FROM " + TABLE_NAME + 
+		dbUtils.executeQueryCompressed("SELECT id, data, collection_type_update_time, collection_type FROM " + TABLE_NAME + 
 				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL" , function);
 		if (count.intValue() > 0){
 			log.info("handled col type " + collType + " with num of events " + count.intValue());
@@ -97,7 +113,7 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 			log.info("read only mode");
 			return;
 		}
-		long timeToRemove = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7);
+		long timeToRemove = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(3);
 		log.info("will remove older than " + timeToRemove);
 		String deleteSql = "delete from " + TABLE_NAME + " where collection_type_update_time < " + timeToRemove + " AND collection_type = " + AlertsCollectionType.Daily.toLong();
 		dbUtils.executeUpdate(deleteSql);
