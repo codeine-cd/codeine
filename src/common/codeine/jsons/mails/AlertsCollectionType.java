@@ -3,18 +3,19 @@ package codeine.jsons.mails;
 import java.util.concurrent.TimeUnit;
 
 public enum AlertsCollectionType {
-	Daily(TimeUnit.DAYS),
-	Hourly(TimeUnit.HOURS),
-	Immediately(TimeUnit.SECONDS),
-	Immediatly(TimeUnit.SECONDS),
-	NotCollected(TimeUnit.NANOSECONDS)
+	NotCollected(TimeUnit.NANOSECONDS, null),
+	Immediately(TimeUnit.SECONDS, NotCollected),
+	Hourly(TimeUnit.HOURS, Immediately),
+	Daily(TimeUnit.DAYS, Hourly)
 	;
 	
 	private TimeUnit type;
+	private AlertsCollectionType previousType;
 	
-	private AlertsCollectionType(TimeUnit type)
+	private AlertsCollectionType(TimeUnit type, AlertsCollectionType previousType)
 	{
 		this.type = type;
+		this.previousType = previousType;
 	}
 	
 	public AlertsCollectionType fromInt(TimeUnit t)
@@ -36,5 +37,8 @@ public enum AlertsCollectionType {
 	
 	public long toLong() {
 		return toTimeUnit().toMillis(1);
+	}
+	public AlertsCollectionType previousType() {
+		return previousType;
 	}
 }

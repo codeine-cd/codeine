@@ -72,9 +72,15 @@ public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 		}
-		dbUtils.executeUpdate("UPDATE " + TABLE_NAME + " SET collection_type_update_time=" + time +
+		String updateString = "UPDATE " + TABLE_NAME + " SET collection_type_update_time=" + time +
 				",collection_type=" + collType.toLong() + 
-				" WHERE (collection_type < " + collType.toLong() + " OR collection_type IS NULL) AND id<="+maxId);
+				" WHERE id<=" + maxId + " AND ("
+				+ "(collection_type < " + collType.toLong() + " AND collection_type >= " + collType.previousType().toLong() + ")";
+		if (collType == AlertsCollectionType.Immediately) {
+			updateString += " OR collection_type IS NULL";
+		} 
+		updateString += ")";
+		dbUtils.executeUpdate(updateString);
 	}
 	private static class MapWithId {
 		Multimap<String, CollectorNotificationJson> map;
