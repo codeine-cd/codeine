@@ -62,7 +62,7 @@
                 "Specify an <strong>integer in minutes</strong>. Default is less than a minute.",
             "commandTimeoutHelp" : "The maximum time in <strong>minutes</strong> command will be allowed to run on node, before termination",
             "credentialsHelp" : "The user that will be used to execute the configured script.<br/><br/> This feature does not work for most cases right now.",
-            "notificationsEnabledHelp" : "If checked, emails will not be sent to the configured users, when this collector starts to fail.",
+            "notificationsEnabledHelp" : "If checked, emails will be sent to the configured users, when this collector starts to fail.",
             "monitorScriptHelp" : "Type a shell script to monitor the desired functionality of the node.<br/><br/>By convention, monitors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
                 "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
             "collectorScriptHelp" : "Type a shell script to collector the desired functionality of the node.<br/><br/>By convention, collectors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
