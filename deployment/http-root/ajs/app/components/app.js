@@ -1,7 +1,16 @@
-(function (angular) {
+(function (angular,document) {
     'use strict';
 
     //// JavaScript Code ////
+
+    function scrollToTop() {
+        var verticalOffset = typeof(verticalOffset) !== 'undefined' ? verticalOffset : 0;
+        var element = $('body');
+        var offset = element.offset();
+        var offsetTop = offset.top;
+        $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
+    }
+
     function configFunc($compileProvider,$routeProvider,$locationProvider,$httpProvider,$sceProvider) {
         $locationProvider.html5Mode(true);
         $compileProvider.debugInfoEnabled(false);
@@ -350,6 +359,16 @@
     }
 
     function runFunc($rootScope, $log, $q, ApplicationFocusService, LoginService, CodeineConfigurationService) {
+
+        $(document).on( 'scroll', function(){
+            if ($(window).scrollTop() > 100) {
+                $('.scroll-top-wrapper').addClass('show');
+            } else {
+                $('.scroll-top-wrapper').removeClass('show');
+            }
+        });
+        $('.scroll-top-wrapper').on('click', scrollToTop);
+
         $rootScope.app = {
             loading: null,
             initializing : true
@@ -381,4 +400,4 @@
     .config(configFunc)
     .run(runFunc);
 
-})(angular);
+})(angular,document);
