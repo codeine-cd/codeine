@@ -83,13 +83,14 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 		if (0 != getHttpPort()) {
 			return super.startServer(contexts);
 		}
+		Server server = new Server(Constants.DEFAULT_PEER_PORT);
 		try {
-			Server server = new Server(Constants.DEFAULT_PEER_PORT);
 			return startServer(contexts, server);
 		} catch (Exception e) {
 			log.warn("could not bind to default port " + Constants.DEFAULT_PEER_PORT + " will fallback to random port", e);
+			server.stop();
 		}
-		Server server = new Server(0);
+		server = new Server(0);
 		return startServer(contexts, server);
 	}
 	
