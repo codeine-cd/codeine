@@ -3,6 +3,7 @@ package codeine;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
 import codeine.configuration.Links;
@@ -75,6 +76,21 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 		String portString = System.getProperty("codeinePeerPort");
 		int port = null == portString ? 0 : Integer.valueOf(portString);
 		return port;
+	}
+	
+	@Override
+	protected int startServer(ContextHandlerCollection contexts) throws Exception {
+		if (0 != getHttpPort()) {
+			return super.startServer(contexts);
+		}
+		try {
+			Server server = new Server(Constants.DEFAULT_PEER_PORT);
+			return startServer(contexts, server);
+		} catch (Exception e) {
+			log.warn("could not bind to default port " + Constants.DEFAULT_PEER_PORT + " will fallback to random port", e);
+		}
+		Server server = new Server(0);
+		return startServer(contexts, server);
 	}
 	
 }

@@ -74,14 +74,20 @@ public abstract class AbstractCodeineBootstrap {
 		createAdditionalServlets(handler);
 		ContextHandlerCollection contexts = createFileServerContexts();
 		contexts.addHandler(handler);
-		Server jettyServer = injector.getInstance(Server.class);
+		int port = startServer(contexts);
+		log.info("jetty started on port " + port);
+		injector.getInstance(CodeineRuntimeInfo.class).setPort(port);
+		execute();
+	}
+	protected int startServer(ContextHandlerCollection contexts) throws Exception {
+		return startServer(contexts, injector.getInstance(Server.class));
+	}
+	protected int startServer(ContextHandlerCollection contexts, Server jettyServer) throws Exception {
 		jettyServer.getConnectors()[0].setRequestHeaderSize(30000);
 		jettyServer.setHandler(contexts);
 		jettyServer.start();
 		int port = jettyServer.getConnectors()[0].getLocalPort();
-		log.info("jetty started on port " + port);
-		injector.getInstance(CodeineRuntimeInfo.class).setPort(port);
-		execute();
+		return port;
 	}
 	protected void createAdditionalServlets(ServletContextHandler handler) {
 		handler.addServlet(InvalidRequestServlet.class, "/*");
