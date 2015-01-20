@@ -9,7 +9,7 @@ import codeine.db.IAlertsDatabaseConnector;
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.ProjectsConfigurationConnector;
 import codeine.db.mysql.MysqlHostSelector;
-import codeine.db.mysql.NearestMysqlHostSelector;
+import codeine.db.mysql.NearestMysqlHostSelectorPreferLocalhost;
 import codeine.db.mysql.StaticMysqlHostSelector;
 import codeine.db.mysql.connectors.AlertsMysqlConnector;
 import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
@@ -48,7 +48,7 @@ public class CodeineDirectoryModule extends AbstractModule
 
 		@Override
 		public MysqlHostSelector get() {
-			MysqlConfigurationJson localConfOrNull = NearestMysqlHostSelector.getLocalConfOrNull(conf);
+			MysqlConfigurationJson localConfOrNull = NearestMysqlHostSelectorPreferLocalhost.getLocalConfOrNull(conf);
 			if (null == localConfOrNull) {
 				throw new RuntimeException("could not find db conf to start with");
 			}

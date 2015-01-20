@@ -10,7 +10,7 @@ import codeine.db.IAlertsDatabaseConnector;
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.ProjectsConfigurationConnector;
 import codeine.db.mysql.MysqlHostSelector;
-import codeine.db.mysql.NearestMysqlHostSelector;
+import codeine.db.mysql.NearestMysqlHostSelectorPeer;
 import codeine.db.mysql.connectors.AlertsMysqlConnector;
 import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
@@ -30,7 +30,7 @@ public class CodeinePeerModule extends AbstractModule {
 		bind(IAlertsDatabaseConnector.class).to(AlertsMysqlConnector.class);
 		bind(ProjectsConfigurationConnector.class).to(ProjectsConfigurationMysqlConnector.class);
 		bind(IStatusDatabaseConnector.class).to(StatusMysqlConnector.class);
-		bind(MysqlHostSelector.class).to(NearestMysqlHostSelector.class).in(Scopes.SINGLETON);
+		bind(MysqlHostSelector.class).to(NearestMysqlHostSelectorPeer.class).in(Scopes.SINGLETON);
 		bind(PeerStatus.class).in(Scopes.SINGLETON);
 		bind(IConfigurationManager.class).to(ConfigurationManagerPeer.class).in(Scopes.SINGLETON);
 		bind(NodesRunner.class).in(Scopes.SINGLETON);

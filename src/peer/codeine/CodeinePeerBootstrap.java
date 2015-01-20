@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.db.mysql.MysqlHostSelector;
-import codeine.db.mysql.NearestMysqlHostSelector;
+import codeine.db.mysql.NearestMysqlHostSelectorPeer;
 import codeine.executer.PeriodicExecuter;
 import codeine.executer.Task;
 import codeine.jsons.info.CodeineRuntimeInfo;
@@ -55,7 +55,7 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 	}
 
 	private void startMysqlSelectorThread() {
-		new PeriodicExecuter(NearestMysqlHostSelector.INTERVAL, (Task) injector().getInstance(MysqlHostSelector.class)).runInThread();
+		new PeriodicExecuter(NearestMysqlHostSelectorPeer.INTERVAL, (Task) injector().getInstance(MysqlHostSelector.class)).runInThread();
 	}
 	
 	@Override

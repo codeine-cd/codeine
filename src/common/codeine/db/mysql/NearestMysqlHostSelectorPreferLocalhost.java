@@ -2,7 +2,6 @@ package codeine.db.mysql;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -13,10 +12,9 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.network.InetUtils;
 
-public class NearestMysqlHostSelector implements Task, MysqlHostSelector{
+public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostSelector{
 
-	public static final long INTERVAL = TimeUnit.HOURS.toMillis(1);
-	private static final Logger log = Logger.getLogger(NearestMysqlHostSelector.class);
+	private static final Logger log = Logger.getLogger(NearestMysqlHostSelectorPreferLocalhost.class);
 	@Inject
 	private GlobalConfigurationJsonStore conf;
 	
