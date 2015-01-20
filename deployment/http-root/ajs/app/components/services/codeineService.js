@@ -47,6 +47,9 @@
             reloadProjectConfiguration : function(configuration) {
                 return $http.post(Constants.CODEINE_WEB_SERVER + "/api/project-configuration?project=" + encodeURIComponent(configuration.name));
             },
+            pushProjectsToDb : function() {
+                return $http.post(Constants.CODEINE_WEB_SERVER + "/api/push-projects-to-db");
+            },
             prepareForShutdown: function() {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/prepare-for-shutdown", { cache: false });
             },

@@ -81,6 +81,7 @@ public class Constants
 	public static final String PROJECT_COMMANDS_CONFIGURATION_CONTEXT = "/project-commands-configuration";
 	public static final String PERMISSIONS_CONFIGURATION_CONTEXT = "/permissions";
 	public static final String SESSION_INFO_CONTEXT = "/session-info";
+	public static final String PUSH_PROJECTS_TO_DB_CONTEXT = "/push-projects-to-db";
 
 	public static final String REPLACE_NODE_NAME = "$node_name";	
 	public static final String DB_NAME = "codeineDB";

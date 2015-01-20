@@ -2,9 +2,10 @@
     'use strict';
 
     //// JavaScript Code ////
-    function manageCodeineCtrl(tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService) {
+    function manageCodeineCtrl(tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService, $log) {
         /*jshint validthis:true */
         var vm = this;
+        vm.admin_is_open = true;
 
         function addSuccessMessage(msg) {
             AlertService.addAlert('success',msg);
@@ -101,6 +102,13 @@
             'simple_tags': true,
             'tags': vm.projects ,
             'tokenSeparators': [",", " "]
+        };
+
+        vm.pushProjectsToDb = function() {
+            $log.debug('reloadProjects');
+            CodeineService.pushProjectsToDb().success(function() {
+                AlertService.addAlert('success','Project Configuration was pushed to databases',3000);
+            });
         };
     }
 

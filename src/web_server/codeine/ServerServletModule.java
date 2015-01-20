@@ -1,6 +1,7 @@
 package codeine;
 
-import static codeine.model.Constants.*;
+import static codeine.model.Constants.apiContext;
+import static codeine.model.Constants.apiTokenContext;
 
 import javax.servlet.http.HttpServlet;
 
@@ -32,6 +33,7 @@ import codeine.servlets.api_servlets.angular.ProjectNodesApiServlet;
 import codeine.servlets.api_servlets.angular.ProjectStatus2ApiServlet;
 import codeine.servlets.api_servlets.angular.ProjectsTabsApiServlet;
 import codeine.servlets.api_servlets.angular.RuntimeInfoApiServlet;
+import codeine.servlets.api_servlets.angular.UpdateDbApiServlet;
 import codeine.servlets.api_servlets.angular.UserInfoApiServlet;
 import codeine.servlets.api_servlets.projects.ProjectsListApiServlet;
 import codeine.users.RegisterServlet;
@@ -58,6 +60,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveApi(ProjectsListApiServlet.class, (Constants.PROJECTS_LIST_CONTEXT));
 		serveApi(NodesCommandApiServlet.class, (Constants.COMMAND_NODES_CONTEXT));
 		serveApi(CodeineConfigurationApiServlet.class, (Constants.GLOBAL_CONFIGURATION_CONTEXT));
+		serveApi(UpdateDbApiServlet.class, (Constants.PUSH_PROJECTS_TO_DB_CONTEXT));
 		serveApi(CodeineExperimentalConfigurationApiServlet.class, (Constants.EXPERIMENTAL_CONFIGURATION_CONTEXT));
 		serveApi(ProjectConfigurationApiServlet.class, (Constants.PROJECT_CONFIGURATION_CONTEXT));
 		serveApi(ProjectCommandsApiServlet.class, (Constants.PROJECT_COMMANDS_CONFIGURATION_CONTEXT));

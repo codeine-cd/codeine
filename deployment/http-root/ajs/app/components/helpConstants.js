@@ -97,6 +97,7 @@
             "MysqlPasswordConfigureHelp" : "Password for MySQL connections",
             "MysqlManagedByCodeineConfigureHelp" : "Codeine is responsible to start/stop MySQL server instance.",
             "codeineConfigureHelp" : "Here the admin can configure all the Codeine global settings.<br/>Some changes might require a restart.",
+            "codeineAdminHelp" : "Here the admin can perform operations on codeine.",
             "projectDescriptionHelp" : "Description is a convenient way to let users know what this project is about.",
             "commandDescriptionHelp" : "Description is a convenient way to let users know what this command is doing and for what purpose it should be used.",
             "projectIncludeCommandsFromHelp" : "List here projects to include their configured commands in this project",

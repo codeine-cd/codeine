@@ -13,7 +13,23 @@
 </div>
 <div class="col-md-9">
 <accordion close-others="true">
-<accordion-group is-open="vm.config_is_open" ng-form="codeineConfigureParentForm">
+
+    <accordion-group is-open="vm.admin_is_open" ng-form="vm.codeineAdminParentForm">
+        <accordion-heading>
+            <div>
+                <i class="fa fa-warning" style="color:red;" ng-show="vm.codeineAdminParentForm.$invalid"></i>
+                Codeine Administration <help help-id="codeineAdminHelp"></help>
+                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': vm.admin_is_open, 'glyphicon-chevron-right': !vm.admin_is_open}"></i>
+            </div>
+        </accordion-heading>
+        <form name="codeineConfigurationForm" class="form-horizontal" novalidate>
+            <div>
+                <button ng-click="vm.pushProjectsToDb()" class="btn btn-default"><i class="fa fa-reply-all"></i> Push projects configuration to databases</button>
+            </div>
+        </form>
+    </accordion-group>
+
+    <accordion-group is-open="vm.config_is_open" ng-form="codeineConfigureParentForm">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="vm.codeineConfigureParentForm.$invalid"></i>
