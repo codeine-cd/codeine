@@ -7,6 +7,7 @@ Codeine is a continuous deployment tool that makes product deployment faster and
 [![Code Climate](https://codeclimate.com/github/codeine-cd/codeine/badges/gpa.svg)](https://codeclimate.com/github/codeine-cd/codeine)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 [![Built with Maven](http://maven.apache.org/images/logos/maven-feather.png)](http://maven.apache.org)
+[![Stories in Ready](https://badge.waffle.io/codeine-cd/codeine.svg?label=ready&title=Ready)](http://waffle.io/codeine-cd/codeine)
 
 
 ## Getting started
