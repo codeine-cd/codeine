@@ -8,10 +8,13 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:tab" tooltip="{{project.description}}" tooltip-placement="left">
+                            <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:tab">
                                 <a href="/codeine/project/{{project.name}}/status">
-                                    <i class="icon-folder-close"></i> {{project.name}}
+                                    <i class="fa fa-folder-open"></i> {{project.name}}
                                 </a>
+                                <small>
+                                    <span ng-if="project.description !== undefined" > - <span ng-bind-html="project.description"></span></span>
+                                </small>
                                 <a href="/codeine/project/{{project.name}}/status" class="pull-right">
                                     <span class="badge badge-info">{{project.nodes_count}}</span>
                                 </a>
