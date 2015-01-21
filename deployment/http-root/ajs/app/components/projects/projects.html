@@ -12,9 +12,7 @@
                                 <a href="/codeine/project/{{project.name}}/status">
                                     <i class="fa fa-folder-open"></i> {{project.name}}
                                 </a>
-                                <small>
-                                    <span ng-if="project.description !== undefined" > - <span ng-bind-html="project.description"></span></span>
-                                </small>
+                                <help help-txt="project.description" ng-if="project.description"></help>
                                 <a href="/codeine/project/{{project.name}}/status" class="pull-right">
                                     <span class="badge badge-info">{{project.nodes_count}}</span>
                                 </a>
