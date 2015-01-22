@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class CollectorInfo {
 
 	private String name;
+	private String description;
 	private String script_content;
 	private Integer min_interval;
 	@SerializedName("credentials") private String cred;

@@ -16,6 +16,11 @@
                         <div class="col-md-6"> {{vm.collectorStatus.info.name}}</div>
                     </div>
                     <br/>
+                    <div class="row" ng-if="vm.collectorStatus.info.description">
+                        <div class="col-md-2"><strong>Name:</strong></div>
+                        <div class="col-md-6"> {{vm.collectorStatus.info.description}}</div>
+                    </div>
+                    <br/>
                     <div class="row">
                         <div class="col-md-2"><strong>Exit Status:</strong></div>
                         <div class="col-md-6"> {{vm.collectorStatus.info.exit_status}}

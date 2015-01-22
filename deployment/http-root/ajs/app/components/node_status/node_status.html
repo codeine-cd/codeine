@@ -84,7 +84,7 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="(collectorName,collector) in nodeStatus.collectors" ng-class="{'danger': collector.exit_status != 0}">
-                                    <td class="col-md-2">{{collector.name}}</td>
+                                    <td class="col-md-2">{{collector.name}} <help help-txt="collector.description" ng-if="collector.description"></help></td>
                                     <td class="col-md-3">{{collector.value}}</td>
                                     <td class="col-md-2">{{collector.start_time | date:'short'}}</td>
                                     <td class="col-md-2">{{collector.execution_duration | duration}}</td>

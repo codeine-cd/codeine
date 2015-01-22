@@ -102,6 +102,7 @@
             "commandDescriptionHelp" : "Description is a convenient way to let users know what this command is doing and for what purpose it should be used.",
             "projectIncludeCommandsFromHelp" : "List here projects to include their configured commands in this project",
             "typeHelp" : "Select a type for the parameter for command execution",
+            "collectorDescriptionHelp" : "Description will be displayed to explain what the collector is doing",
             "collectorTypeHelp" : "Select a type of the collector",
             "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)"
         });

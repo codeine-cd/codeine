@@ -326,6 +326,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="collector_info{{$index}}.description" class="col-md-3 control-label">Description <help help-id="collectorDescriptionHelp"></help></label>
+                            <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.description.$invalid}">
+                                <textcomplete element-placeholder='Type monitor description' message='collector_info.description' rows="3" element-class="form-control" element-id="collector_info{{$index}}.description"></textcomplete>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3 control-label" for="collector_info_{{$index}}_type">Type <help help-id="collectorTypeHelp"></help></label>
                             <div class="controls col-md-3">
                                 <select  class="form-control select2" name="type" id="collector_info_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="collector_info.type" required>
