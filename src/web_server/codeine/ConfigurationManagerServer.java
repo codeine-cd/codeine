@@ -9,10 +9,13 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.configuration.ConfigurationReadManagerServer;
+import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
 import codeine.db.ProjectsConfigurationConnector;
 import codeine.db.mysql.connectors.ProjectConfigurationDatabaseConnectorListProvider;
 import codeine.executer.ThreadPoolUtils;
+import codeine.jsons.collectors.CollectorInfo;
+import codeine.jsons.collectors.CollectorInfo.CollectorType;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
@@ -78,6 +81,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 
 	public boolean updateProject(final ProjectJson updatedProject) {
 		log.info("updating project " + updatedProject);
+		changeMonitorsToCollectors(updatedProject);
 		String file = pathHelper.getProjectsDir() + "/" + updatedProject.name() + "/" + Constants.PROJECT_CONF_FILE;
 		jsonFileUtils.setContent(file, updatedProject);
 		final ProjectJson previousProject = projects().put(updatedProject.name(), updatedProject);
@@ -85,6 +89,17 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		updateProjectInDb(updatedProject);
 		projectsUpdater.updatePeers(updatedProject, previousProject);
 		return null != previousProject;
+	}
+
+	private void changeMonitorsToCollectors(ProjectJson updatedProject) {
+		for (NodeMonitor monitorInfo : updatedProject.monitors()) {
+			String name = monitorInfo.name();
+			CollectorType type = CollectorType.Monitor;
+			int minInterval = monitorInfo.minInterval() == null ? 0 : monitorInfo.minInterval();
+			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), minInterval, monitorInfo.credentials(), type, monitorInfo.notification_enabled());
+			updatedProject.collectors().add(collectorInfo);
+		}
+		updatedProject.monitors().clear();
 	}
 
 	public void updateDb() {
