@@ -24,7 +24,7 @@
         var watchHandler = $scope.$watch('model.projectSearch', function(value) {
             if (value) {
                 $log.debug('navbarCtrl: selected project: ' + value);
-                $location.path('/codeine/project/' + value + '/status').replace();
+                $location.path('/codeine/project/' + value + '/status');
             }
             $scope.model.projectSearch = '';
         });
