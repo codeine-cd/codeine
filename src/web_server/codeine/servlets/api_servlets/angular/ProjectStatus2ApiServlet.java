@@ -18,6 +18,7 @@ import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
+import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.UserPermissionsGetter;
@@ -35,6 +36,8 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private UserPermissionsGetter userPermissionsGetter;
+	@Inject	private PeersProjectsStatus peersProjectsStatus;
+	
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -93,9 +96,12 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		calculatePrecent(totalNumberOfNodes, nodes_for_version);
 		List<CountInfo> tag_info = createSortedList(tagCount);
 		List<CountInfo> monitor_info = createSortedList(monitorCount);
-		NodesForVersion offlineNodes = createOfflineNodes(projectJson, nodes);
-		if (offlineNodes.nodes.size() > 0) {
-			nodes_for_version.add(0, offlineNodes);
+		NodesForVersion[] offlineNodes = createOfflineNodes(projectJson, nodes);
+		if (null != offlineNodes[0] && offlineNodes[0].nodes.size() > 0) {
+			nodes_for_version.add(0, offlineNodes[0]);
+		}
+		if (null != offlineNodes[1] && offlineNodes[1].nodes.size() > 0) {
+			nodes_for_version.add(0, offlineNodes[1]);
 		}
 		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts, isMoreEnabled(projectJson, nodes));
 	}
@@ -130,22 +136,44 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		return $;
 	}
 
-	private NodesForVersion createOfflineNodes(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
+	private NodesForVersion[] createOfflineNodes(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
+		NodesForVersion[] $ = new NodesForVersion[2];
 		if (projectJson.node_discovery_startegy() != NodeDiscoveryStrategy.Configuration) {
-			return new NodesForVersion(Constants.OFFLINE_NODES);
+			return $;
 		}
 		NodesForVersion offlineNodes = new NodesForVersion(Constants.OFFLINE_NODES);
+		NodesForVersion notReportedNodes = new NodesForVersion(Constants.NOT_REPORTING_NODES);
 		for (NodeInfo nodeInfo : projectJson.nodes_info()) {
 			if (notOffline(nodeInfo, nodes)) {
 				continue;
 			}
 			Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
+			String peerStatus = getPeerStatus(nodeInfo.name());
 			NodeWithMonitorsInfoApi nodeStatusInfo = new NodeWithMonitorsInfoApi(new NodeWithMonitorsInfo(
-					nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors, Constants.OFFLINE_NODES), false);
+					nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors, peerStatus), false);
 			log.info("adding offline node " + nodeStatusInfo);
-			offlineNodes.add(nodeStatusInfo);
+			if (peerStatus.equals(Constants.OFFLINE_NODES)) {
+				offlineNodes.add(nodeStatusInfo);
+			} else {
+				notReportedNodes.add(nodeStatusInfo);
+			}
 		}
-		return offlineNodes;
+		$[0] = offlineNodes;
+		$[1] = notReportedNodes;
+		return $;
+	}
+	private String getPeerStatus(String nodeName) {
+		String nodeHost = nodeName;
+		if (nodeHost.contains(":")) {
+			nodeHost = nodeHost.substring(0, nodeHost.indexOf(":"));
+		}
+		log.info("checking nodeHost " + nodeHost);
+		for (String peer : peersProjectsStatus.peer_to_projects().keySet()) {
+			if (peer.equals(nodeHost)) {
+				return Constants.NOT_REPORTING_NODES;
+			}
+		}
+		return Constants.OFFLINE_NODES;
 	}
 
 	private boolean notOffline(NodeInfo nodeInfo, List<NodeWithMonitorsInfo> nodes) {
