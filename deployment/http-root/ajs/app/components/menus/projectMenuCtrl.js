@@ -10,9 +10,9 @@
         vm.permissions = LoginService.getSessionInfo().permissions;
 
         vm.deleteProject = function() {
-            if ($window.confirm('Are you sure you would like to delete project ' + $scope.projectName + ' ? THIS IS NOT REVERSIBLE!!!')) {
-                CodeineService.deleteProject($scope.projectName).success(function() {
-                    AlertService.addAlert('success','Project ' + $scope.projectName + ' was deleted successfully',3000);
+            if ($window.confirm('Are you sure you would like to delete project ' + vm.projectName + ' ? THIS IS NOT REVERSIBLE!!!')) {
+                CodeineService.deleteProject(vm.projectName).success(function() {
+                    AlertService.addAlert('success','Project ' + vm.projectName + ' was deleted successfully',3000);
                     $location.path('/codeine');
                 });
             }
