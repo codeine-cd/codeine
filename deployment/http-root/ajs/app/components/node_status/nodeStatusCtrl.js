@@ -5,7 +5,7 @@
     function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, projectConfiguration, SelectedNodesService, commands) {
         $scope.projectName = $routeParams.project_name;
         $scope.nodeStatus = nodeStatus;
-        $scope.projectConfiguration= projectConfiguration;
+        $scope.projectConfiguration = projectConfiguration;
         //$log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
         //$log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
         $scope.nodeStatus = nodeStatus;
@@ -18,6 +18,15 @@
             nodes.push($scope.nodeStatus);
             SelectedNodesService.setSelectedNodes(nodes,url);
             $location.path(url);
+        };
+
+        $scope.getCollectorDescription = function(collectorName){
+            for (var i3=0; i3 < $scope.projectConfiguration.collectors.length ; i3++) {
+                if ($scope.projectConfiguration.collectors[i3].name === collectorName) {
+                    return $scope.projectConfiguration.collectors[i3].description;
+                }
+            }
+            return '';
         };
 
         $scope.isEmpty = function(o) {
