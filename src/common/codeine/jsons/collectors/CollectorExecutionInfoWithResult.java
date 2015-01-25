@@ -6,6 +6,7 @@ public class CollectorExecutionInfoWithResult {
 
 	private CollectorExecutionInfo info;
 	private Result result;
+	private CollectorInfo collector_configuration;
 
 	public CollectorExecutionInfoWithResult(CollectorExecutionInfo info, Result result) {
 		this.info = info;
@@ -23,6 +24,10 @@ public class CollectorExecutionInfoWithResult {
 
 	public CollectorExecutionInfo info() {
 		return info;
+	}
+
+	public void collector_configuration(CollectorInfo collector_configuration) {
+		this.collector_configuration = collector_configuration;
 	}
 
 	

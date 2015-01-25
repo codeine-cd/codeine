@@ -7,8 +7,11 @@ import org.apache.log4j.Logger;
 
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
+import codeine.configuration.IConfigurationManager;
 import codeine.configuration.Links;
 import codeine.jsons.collectors.CollectorExecutionInfoWithResult;
+import codeine.jsons.collectors.CollectorInfo;
+import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.network.HttpUtils;
@@ -24,6 +27,7 @@ public class CollectorStatusApiServlet extends AbstractApiServlet {
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private Links links;
 	@Inject	private Gson gson;
+	@Inject private IConfigurationManager configurationManager;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -43,11 +47,22 @@ public class CollectorStatusApiServlet extends AbstractApiServlet {
 			String outputFromPeer = HttpUtils.doGET(peerCollectorResultLink,null, HttpUtils.MEDIUM_READ_TIMEOUT_MILLI);
 			//		String encodeOutput = HttpUtils.encodeHTML(outputFromPeer);
 			collectorResult = gson.fromJson(outputFromPeer, CollectorExecutionInfoWithResult.class);
+			collectorResult.collector_configuration(getCollectorInfo(projectName, collectorName));
 		} catch (Exception e) {
 			log.error("failed to get collector output", e);
 			collectorResult = new CollectorExecutionInfoWithResult(null, null);
 		}
 		writeResponseGzipJson(collectorResult, request, response);
+	}
+
+	private CollectorInfo getCollectorInfo(String projectName, String collectorName) {
+		ProjectJson projectForName = configurationManager.getProjectForName(projectName);
+		for (CollectorInfo c : projectForName.collectors()) {
+			if (c.name().equals(collectorName)) {
+				return c;
+			}
+		}
+		throw new IllegalArgumentException(collectorName + " not found in project " + projectName);
 	}
 	
 	
