@@ -95,8 +95,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		for (NodeMonitor monitorInfo : updatedProject.monitors()) {
 			String name = monitorInfo.name();
 			CollectorType type = CollectorType.Monitor;
-			int minInterval = monitorInfo.minInterval() == null ? 0 : monitorInfo.minInterval();
-			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), minInterval, monitorInfo.credentials(), type, monitorInfo.notification_enabled());
+			CollectorInfo collectorInfo = new CollectorInfo(name, monitorInfo.script_content(), monitorInfo.minInterval(), monitorInfo.credentials(), type, monitorInfo.notification_enabled());
 			updatedProject.collectors().add(collectorInfo);
 		}
 		updatedProject.monitors().clear();
