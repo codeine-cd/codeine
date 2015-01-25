@@ -21,6 +21,7 @@ import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
+import codeine.utils.network.InetUtils;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -81,13 +82,8 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 	}
 
 	private PeerStatusString getPeerStatus(String nodeName) {
-		String nodeHost = nodeName;
-		if (nodeHost.contains(":")) {
-			nodeHost = nodeHost.substring(0, nodeHost.indexOf(":"));
-		}
-		log.info("checking nodeHost " + nodeHost);
 		for (String peer : peersProjectsStatus.peer_to_projects().keySet()) {
-			if (peer.equals(nodeHost)) {
+			if (InetUtils.nameWithoutPort(peer).equals(InetUtils.nameWithoutPort(nodeName))) {
 				return PeerStatusString.NodeNotReported;
 			}
 		}
