@@ -15,6 +15,7 @@ import codeine.configuration.IConfigurationManager;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.peer_status.PeerStatusString;
+import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.ProjectStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
@@ -32,6 +33,7 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 	@Inject	private NodeGetter nodesGetter;
 	@Inject	private IConfigurationManager configurationManager;
 	@Inject	private UserPermissionsGetter userPermissionsGetter;
+	@Inject	private PeersProjectsStatus peersProjectsStatus;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -68,7 +70,7 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 				Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
 				ProjectStatus projectStatus = new ProjectStatus();
 				PeerStatusJsonV2 peer = new PeerStatusJsonV2("", projectStatus);
-				peer.status(PeerStatusString.Offline);
+				peer.status(getPeerStatus(nodeName));
 				NodeWithMonitorsInfoApi nodeStatusInfo = new NodeWithMonitorsInfoApi(new NodeWithMonitorsInfo(
 						peer, nodeInfo.name(), nodeInfo.alias(), projectJson.name(), monitors), false);
 				log.info("offline node " + nodeStatusInfo);
@@ -76,6 +78,20 @@ public class NodeStatusApiServlet extends AbstractApiServlet {
 			}
 		}
 		throw new IllegalArgumentException("node not found " + nodeName);
+	}
+
+	private PeerStatusString getPeerStatus(String nodeName) {
+		String nodeHost = nodeName;
+		if (nodeHost.contains(":")) {
+			nodeHost = nodeHost.substring(0, nodeHost.indexOf(":"));
+		}
+		log.info("checking nodeHost " + nodeHost);
+		for (String peer : peersProjectsStatus.peer_to_projects().keySet()) {
+			if (peer.equals(nodeHost)) {
+				return PeerStatusString.NodeNotReported;
+			}
+		}
+		return PeerStatusString.Offline;
 	}
 
 }

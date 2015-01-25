@@ -3,5 +3,6 @@ package codeine.jsons.peer_status;
 public enum PeerStatusString {
 	On,
 	Disc,
-	Offline
+	Offline,
+	NodeNotReported
 }
