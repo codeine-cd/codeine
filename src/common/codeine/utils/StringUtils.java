@@ -79,6 +79,12 @@ public class StringUtils {
 		}
 		return obj.toString();
 	}
+	public static String nullSafeToString(Object obj) {
+		if (null == obj){
+			return "null";
+		}
+		return obj.toString();
+	}
 	
 	public static String collectionToString(Collection<?> c){
 		return collectionToString(c, " ");
@@ -89,7 +95,7 @@ public class StringUtils {
 		Function predicate = new Function<Object, String>() {
 			@Override
 			public String apply(Object input) {
-				return input.toString();
+				return nullSafeToString(input);
 			}
 		};
 		return collectionToString(c, predicate, delimiter);
