@@ -6,6 +6,7 @@ public class CollectorExecutionInfoWithResult {
 
 	private CollectorExecutionInfo info;
 	private Result result;
+	@SuppressWarnings("unused")
 	private CollectorInfo collector_configuration;
 
 	public CollectorExecutionInfoWithResult(CollectorExecutionInfo info, Result result) {
