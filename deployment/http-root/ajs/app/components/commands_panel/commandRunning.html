@@ -1,6 +1,6 @@
 <div class="panel panel-default hidden-xs" ng-controller="commandRunningCtrl as vm">
     <div class="panel-heading">
-        <span class="panel-title">Running Commands <i data-help-message="commandExecutorHelp" rel="popover" data-placement="bottom" data-trigger="hover" class="icon-question-sign codeine_help" data-original-title="" title=""></i></span>
+        <span class="panel-title">Running Commands <help help-id="commandExecutorHelp"></help></span>
     </div>
     <div class="list-group">
         <a href="/" class="list-group-item" ng-hide="vm.history.length" ng-cloak><div class="text-center">No running commands</div></a>

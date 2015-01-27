@@ -14,8 +14,10 @@ public class CommandStatusJson {
 	private long id;
 	private boolean finished;
 	private boolean can_cancel;
+	@SuppressWarnings("unused")
+	private String one_node_alias;
 	
-	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished) {
+	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished, String one_node_alias) {
 		super();
 		this.name = name;
 		this.project = project;
@@ -25,6 +27,7 @@ public class CommandStatusJson {
 		this.id = id;
 		this.finished = finished;
 		this.date_long = date;
+		this.one_node_alias = one_node_alias;
 		this.skipPercent = finished ?  100 - successPercent - failPercent : 0;
 	}
 

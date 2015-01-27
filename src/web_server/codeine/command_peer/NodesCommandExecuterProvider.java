@@ -66,7 +66,8 @@ public class NodesCommandExecuterProvider {
 				int sizeNotZero = size != 0 ? size :  successSize + failSize != 0 ? successSize + failSize : 1;
 				int successPercent = successSize * 100 / sizeNotZero;
 				int failPercent = failSize * 100 / sizeNotZero;
-				$.add(new CommandStatusJson(j.command(), projectName, size, successPercent, failPercent, j.start_time(), j.id() ,j.finished()));
+				String alias = j.nodes_list().size() == 1 ? j.nodes_list().get(0).alias() : null;
+				$.add(new CommandStatusJson(j.command(), projectName, size, successPercent, failPercent, j.start_time(), j.id() ,j.finished(), alias));
 			} catch (Exception e) {
 				log.warn("failed in command " +  dir + " for project " + projectName + " file is '" + file + "' and error is " + e.getMessage());
 			}
@@ -129,7 +130,8 @@ public class NodesCommandExecuterProvider {
 	private List<CommandStatusJson> getActiveStatusFromList(Iterable<AllNodesCommandExecuter> iterable) {
 		List<CommandStatusJson> $ = Lists.newArrayList();
 		for (AllNodesCommandExecuter e : iterable) {
-			$.add(new CommandStatusJson(e.name(), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(), e.commandData().id(),  !e.isActive()));
+			String alias = e.nodes() == 1 ? e.nodesList().get(0).alias() : null;
+			$.add(new CommandStatusJson(e.name(), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(), e.commandData().id(),  !e.isActive(), alias));
 		}
 		return $;
 	}
