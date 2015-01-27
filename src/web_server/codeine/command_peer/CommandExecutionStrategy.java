@@ -88,4 +88,8 @@ public abstract class CommandExecutionStrategy {
 	protected void error(String error) {
 		this.error = error;
 	}
+	
+	protected AllNodesCommandExecuter allNodesCommandExecuter() {
+		return allNodesCommandExecuter;
+	}
 }
