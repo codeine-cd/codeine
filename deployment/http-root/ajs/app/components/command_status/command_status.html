@@ -51,7 +51,7 @@
                     </div>
                     <br/>
                     <accordion close-others="false">
-                    <accordion-group is-open="all_nodes_is_open">
+                    <accordion-group is-open="vm.all_nodes_is_open">
                         <accordion-heading>
                             All Nodes <span class="badge">{{vm.commandStatus.nodes_list.length}}</span>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': all_nodes_is_open, 'glyphicon-chevron-right': !all_nodes_is_open}"></i>
@@ -64,7 +64,7 @@
                     </accordion-group>
                     </accordion>
                     <accordion close-others="false">
-                    <accordion-group is-open="fail_nodes_is_open">
+                    <accordion-group is-open="vm.fail_nodes_is_open">
                         <accordion-heading>
                             Failed Nodes <span class="badge">{{vm.commandStatus.fail_list.length}}</span>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': fail_nodes_is_open, 'glyphicon-chevron-right': !fail_nodes_is_open}"></i>

@@ -10,6 +10,8 @@
         vm.commandStatus = commandStatus;
 
         var maxUpdatesNotInFocus = 100;
+        vm.all_nodes_is_open = vm.commandStatus.nodes_list.length < 6;
+        vm.fail_nodes_is_open = vm.commandStatus.fail_list.length < 6;
         var intervalTriggered = 0;
         var interval = $interval(function() {
             if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
