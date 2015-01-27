@@ -13,6 +13,10 @@ public class CodeineProject {
 		this.description = description;
 		this.nodes_count = nodes_count;
 	}
+
+	public String name() {
+		return name;
+	}
 	
 	
 }
