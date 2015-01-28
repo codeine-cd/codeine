@@ -50,7 +50,7 @@ public class CommandInfo
 	}
 
 	public boolean stop_on_error() {
-		return stop_on_error;
+		return stop_on_error != null && stop_on_error;
 	}
 
 	public Integer error_percent_val() {
@@ -74,7 +74,7 @@ public class CommandInfo
 	}
 	
 	public boolean prevent_override() {
-		return prevent_override;
+		return prevent_override != null && prevent_override;
 	}
 	
 	public List<CommandParameterInfo> parameters() {
