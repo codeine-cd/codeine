@@ -13,24 +13,34 @@ import com.google.common.collect.Lists;
 @SuppressWarnings("unused")
 public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 
-	private List<String> failed_monitors;
 	private List<String> failed_collectors;
 	private List<CollectorInfoForUI> collectors_info = Lists.newArrayList();
-	private List<String> ok_monitors;
 	private boolean user_can_command;
+	private Boolean ok;
 	
 	public NodeWithMonitorsInfoApi(NodeWithMonitorsInfo info, boolean user_can_command) 
 	{
 		super(info);
-		this.failed_monitors = info.failedMonitors();
-		this.failed_collectors = info.failed_collectors();
-		this.ok_monitors = info.ok_monitors();
 		this.user_can_command = user_can_command;
+		boolean allOk = true;
 		for (CollectorExecutionInfo collectorInfo : info.collectors().values()) {
-			if (!(collectorInfo.type()== CollectorType.Monitor) && collectorInfo.isSuccess() && !StringUtils.isEmpty(collectorInfo.value()) && shouldDisplayByName(collectorInfo.name())) {
-				collectors_info.add(new CollectorInfoForUI(collectorInfo.name(), collectorInfo.value()));
+			if (shouldShowInStatusPage(collectorInfo)) {
+				collectors_info.add(new CollectorInfoForUI(collectorInfo.name(), collectorInfo.value(), collectorInfo.exit_status()));
+			}
+			if (!collectorInfo.isSuccess()) {
+				allOk = false;
 			}
 		}
+		if (allOk) {
+			ok = true;
+		}
+	}
+
+	private boolean shouldShowInStatusPage(CollectorExecutionInfo collectorInfo) {
+		if (collectorInfo.type()== CollectorType.Monitor){
+			return !collectorInfo.isSuccess();
+		}
+		return !StringUtils.isEmpty(collectorInfo.value()) && shouldDisplayByName(collectorInfo.name());
 	}
 	
 	private boolean shouldDisplayByName(String name) {
@@ -43,9 +53,11 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 	private static class CollectorInfoForUI {
 		private String name;
 		private String value;
-		public CollectorInfoForUI(String name, String value) {
+		private int exit_status;
+		public CollectorInfoForUI(String name, String value, int exit_status) {
 			this.name = name;
 			this.value = value;
+			this.exit_status = exit_status;
 		}
 	}
 }

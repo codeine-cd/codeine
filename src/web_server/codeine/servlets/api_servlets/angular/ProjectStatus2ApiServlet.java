@@ -50,9 +50,18 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		List<NodeWithMonitorsInfo> nodes = nodesGetter.getNodes(projectName,Constants.ALL_VERSION);
 		ProjectJson projectJson = configurationManager.getProjectForName(projectName);
-		ProjectStatusInfo theNewObject = create(projectJson, nodes, request);
-		writeResponseGzipJson(theNewObject, request, response);
+		ProjectStatusInfo projectStatusInfo = create(projectJson, nodes, request);
+		optimizeForUi(projectStatusInfo);
+		writeResponseGzipJson(projectStatusInfo, request, response);
 	}
+	private void optimizeForUi(ProjectStatusInfo projectStatusInfo) {
+		for (NodesForVersion nodesForVersion : projectStatusInfo.nodes_for_version) {
+			for (NodeWithMonitorsInfo node : nodesForVersion.nodes) {
+				node.collectors(null);
+			}
+		}
+	}
+
 	//TODO handle duplicate node and and refactor to other class
 	private ProjectStatusInfo create(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes, HttpServletRequest request) {
 		Map<String, Integer> tagCount = Maps.newHashMap();
@@ -96,7 +105,6 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		int totalNumberOfNodes = nodes_for_version.isEmpty() ? 0 : nodes_for_version.get(0).nodes.size();
 		calculatePrecent(totalNumberOfNodes, nodes_for_version);
 		List<CountInfo> tag_info = createSortedList(tagCount);
-		List<CountInfo> monitor_info = createSortedList(monitorCount);
 		NodesForVersion[] offlineNodes = createOfflineNodes(projectJson, nodes);
 		if (null != offlineNodes[0] && offlineNodes[0].nodes.size() > 0) {
 			nodes_for_version.add(0, offlineNodes[0]);
@@ -104,7 +112,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		if (null != offlineNodes[1] && offlineNodes[1].nodes.size() > 0) {
 			nodes_for_version.add(0, offlineNodes[1]);
 		}
-		return new ProjectStatusInfo(nodes_for_version, tag_info, monitor_info, totalNumberOfNodesWithAlerts, isMoreEnabled(projectJson, nodes));
+		return new ProjectStatusInfo(nodes_for_version, tag_info, totalNumberOfNodesWithAlerts, isMoreEnabled(projectJson, nodes));
 	}
 
 	private boolean isMoreEnabled(ProjectJson projectJson, List<NodeWithMonitorsInfo> nodes) {
@@ -202,13 +210,11 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		private int any_alert_count;
 		private List<NodesForVersion> nodes_for_version;
 		private List<CountInfo> tag_info;
-		private List<CountInfo> monitor_info;
 		private boolean more_nodes_enabled;
-		public ProjectStatusInfo(List<NodesForVersion> nodes_for_version, List<CountInfo> tag_info,List<CountInfo> monitor_info,int any_alert_count, boolean more_nodes_enabled) {
+		public ProjectStatusInfo(List<NodesForVersion> nodes_for_version, List<CountInfo> tag_info,int any_alert_count,boolean more_nodes_enabled) {
 			super();
 			this.nodes_for_version = nodes_for_version;
 			this.tag_info = tag_info;
-			this.monitor_info = monitor_info;
 			this.any_alert_count = any_alert_count;
 			this.more_nodes_enabled = more_nodes_enabled;
 		}
