@@ -21,6 +21,7 @@ import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.network.InetUtils;
@@ -68,6 +69,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 		Map<String, Integer> monitorCount = Maps.newHashMap();
 		Map<String, NodesForVersion> nodesByVersion = Maps.newHashMap();
 		int totalNumberOfNodesWithAlerts = 0;
+		IUserWithPermissions user = userPermissionsGetter.user(request);
 		for (NodeWithMonitorsInfo nodeWithMonitorsInfo : nodes) {
 			for (String tag : nodeWithMonitorsInfo.tags()) {
 				Integer count = tagCount.get(tag);
@@ -98,7 +100,7 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 				nodeStatusInfoList = new NodesForVersion(nodeWithMonitorsInfo.version());
 				nodesByVersion.put(nodeWithMonitorsInfo.version(), nodeStatusInfoList);
 			}
-			boolean can_command = userPermissionsGetter.user(request).canCommand(projectJson.name(), nodeWithMonitorsInfo.alias());
+			boolean can_command = user.canCommand(projectJson.name(), nodeWithMonitorsInfo.alias());
 			nodeStatusInfoList.add(new NodeWithMonitorsInfoApi(nodeWithMonitorsInfo, can_command));
 		}
 		List<NodesForVersion> nodes_for_version = createNodesList(nodesByVersion, nodes, projectJson);
