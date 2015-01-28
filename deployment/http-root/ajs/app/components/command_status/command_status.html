@@ -81,7 +81,7 @@
                     <accordion-group is-open="vm.fail_nodes_is_open">
                         <accordion-heading>
                             Failed Nodes <span class="badge">{{vm.commandStatus.fail_list.length}}</span>
-                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': fail_nodes_is_open, 'glyphicon-chevron-right': !fail_nodes_is_open}"></i>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': vm.fail_nodes_is_open, 'glyphicon-chevron-right': !vm.fail_nodes_is_open}"></i>
                         </accordion-heading>
                         <div ng-if="vm.fail_nodes_is_open">
                             <div ng-repeat="node in vm.commandStatus.fail_list" class="row">
