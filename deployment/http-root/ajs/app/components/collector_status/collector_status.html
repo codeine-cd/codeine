@@ -20,7 +20,7 @@
                         <div class="col-md-2"><strong>Description:</strong></div>
                         <div class="col-md-6"> {{vm.collectorStatus.collector_configuration.description}}</div>
                     </div>
-                    <br/>
+                    <br ng-if="vm.collectorStatus.collector_configuration.description"/>
                     <div class="row">
                         <div class="col-md-2"><strong>Exit Status:</strong></div>
                         <div class="col-md-6"> {{vm.collectorStatus.info.exit_status}}
