@@ -1,7 +1,6 @@
 package codeine;
 
-import static codeine.model.Constants.apiContext;
-import static codeine.model.Constants.apiTokenContext;
+import static codeine.model.Constants.*;
 
 import javax.servlet.http.HttpServlet;
 
@@ -68,6 +67,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveApi(ManageStatisticsInfoApiServlet.class, (Constants.MANAGE_STATISTICS_INFO_CONTEXT));
 		serveApi(ProjectStatus2ApiServlet.class, (Constants.PROJECT_STATUS_CONTEXT + "2"));
 		serveApi(ProjectNodesApiServlet.class, (Constants.PROJECT_NODES_CONTEXT));
+		serveApi(ProjectNodesApiServlet.class, (Constants.PROJECT_NODES_ALIASES_CONTEXT));
 		serveApi(NodeStatusApiServlet.class, (Constants.NODE_STATUS_CONTEXT));
 		serveApi(MonitorStatusApiServlet.class, (Constants.MONITOR_STATUS_CONTEXT));
 		serveApi(CollectorStatusApiServlet.class, (Constants.COLLECTOR_STATUS_CONTEXT));

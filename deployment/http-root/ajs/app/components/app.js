@@ -313,7 +313,7 @@
                     },
                     nodes :  function($q,$route,CodeineService) {
                         var deferred = $q.defer();
-                        CodeineService.getProjectNodes($route.current.params.project_name).success(function(data) {
+                        CodeineService.getProjectNodesAliases($route.current.params.project_name).success(function(data) {
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get project nodes');

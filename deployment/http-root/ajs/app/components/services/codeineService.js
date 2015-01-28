@@ -108,6 +108,9 @@
             getProjectNodes : function(project) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-nodes", {params: { project: project } ,cache: false });
             },
+            getProjectNodesAliases : function(project) {
+                return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-nodes-aliases", {params: { project: project } ,cache: false });
+            },
             cancelCommand : function(project,commandId) {
                 return $http.delete(Constants.CODEINE_WEB_SERVER + "/api/command-nodes", { params: { 'project': project, 'command-id': commandId } });
             }

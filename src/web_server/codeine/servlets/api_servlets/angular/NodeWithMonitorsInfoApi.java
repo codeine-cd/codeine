@@ -16,23 +16,15 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 	private List<String> failed_collectors;
 	private List<CollectorInfoForUI> collectors_info = Lists.newArrayList();
 	private boolean user_can_command;
-	private Boolean ok;
 	
 	public NodeWithMonitorsInfoApi(NodeWithMonitorsInfo info, boolean user_can_command) 
 	{
 		super(info);
 		this.user_can_command = user_can_command;
-		boolean allOk = true;
 		for (CollectorExecutionInfo collectorInfo : info.collectors().values()) {
 			if (shouldShowInStatusPage(collectorInfo)) {
 				collectors_info.add(new CollectorInfoForUI(collectorInfo.name(), collectorInfo.value(), collectorInfo.exit_status()));
 			}
-			if (!collectorInfo.isSuccess()) {
-				allOk = false;
-			}
-		}
-		if (allOk) {
-			ok = true;
 		}
 	}
 

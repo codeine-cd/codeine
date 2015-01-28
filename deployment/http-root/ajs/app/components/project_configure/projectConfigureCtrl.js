@@ -8,9 +8,7 @@
         $scope.tags = [];
         $scope.nodes = ['all'];
         $scope.project_is_open = true;
-        for (var i=0;i < nodes.length ; i++) {
-            $scope.nodes.push(nodes[i].alias);
-        }
+        $scope.nodes = $scope.nodes.concat(nodes);
 
         $scope.model = {
             commandAndMonitorAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_NODE_TAGS'],
