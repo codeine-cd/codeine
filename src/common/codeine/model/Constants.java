@@ -242,7 +242,7 @@ public class Constants
 	}
 
 	public static final String OFFLINE_NODES = "Codeine daemon not running";
-	public static final String NOT_REPORTING_NODES = "Peer is not reporting node";
+	public static final String NOT_REPORTING_NODES = "Codeine daemon not reporting node";
 
 	public static final String CODEINE_API_TOKEN_DERIVER = Messages.getString("Constants.116");
 
