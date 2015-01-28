@@ -91,7 +91,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 	public String outputFromFile() {
-		if (null == result) {
+		if (null == result || null == result.outputFromFile()) {
 			return "";
 		}
 		return result.outputFromFile();
