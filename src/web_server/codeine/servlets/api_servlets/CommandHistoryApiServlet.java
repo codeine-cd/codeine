@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import codeine.api.CommandStatusJson;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.model.Constants;
+import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
@@ -28,10 +29,11 @@ public class CommandHistoryApiServlet extends AbstractApiServlet {
 		String nodeName = getParameter(request, Constants.UrlParameters.NODE);
 		List<CommandStatusJson> allCommands = nodesCommandExecuterProvider.getAllCommands(projectName, nodeName);
 		List<CommandStatusJson> allCommandsWithPermissions = Lists.newArrayList();
+		IUserWithPermissions user = permissionsManager.user(request);
 		for (CommandStatusJson commandStatusJson : allCommands) {
-			if (permissionsManager.user(request).canRead(commandStatusJson.project())){
+			if (user.canRead(commandStatusJson.project())){
 				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-				c.can_cancel(permissionsManager.user(request).canCommand(c.project()) && !c.finished());
+				c.can_cancel(user.canCommand(c.project()) && !c.finished());
 				allCommandsWithPermissions.add(c);
 			}
 		}

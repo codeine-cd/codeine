@@ -15,6 +15,7 @@ import codeine.api.VersionItemInfo;
 import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.plugins.AfterProjectModifyPlugin;
 import codeine.plugins.AfterProjectModifyPlugin.StatusChange;
@@ -49,8 +50,9 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 		Collections.sort(configuredProjects, c);
 		
 		List<CodeineProject> projects = Lists.newArrayList();
+		IUserWithPermissions user = permissionsManager.user(request);
 		for (ProjectJson projectJson : configuredProjects) {
-			if (permissionsManager.user(request).canRead(projectJson.name())){
+			if (user.canRead(projectJson.name())){
 				try {
 					VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
 					projects.add(new CodeineProject(projectJson.name(), versionItem.count(), projectJson.description()));
