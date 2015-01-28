@@ -2,734 +2,654 @@
     <div ng-include="'/components/menus/projectMenu.html'"></div>
     <div ng-include="'/components/commands_panel/commandHistory.html'"></div>
 </div>
-<div class="col-md-9">
-<form novalidate name="configForm">
-<accordion close-others="false">
-<accordion-group is-open="project_is_open" ng-form="projectInfoParentForm">
-    <accordion-heading>
-        <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="projectInfoParentForm.$invalid"></i>
-            General Configuration
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_is_open, 'glyphicon-chevron-right': !project_is_open}"></i>
-        </div>
-    </accordion-heading>
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label for="project_name" class="col-md-4 control-label">Name</label>
-            <div class="col-md-4">
-                <input type="text" ng-model="projectConfigurationForEditing.name" class="form-control readonly_item" name="project_name" id="project_name" readonly>
-            </div>
-            <div>
-                <button ng-click="reloadProject()" tooltip="Reload project configuration from disk" class="btn btn-default btn-mini"><i class="fa fa-refresh"></i></button>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="project_description" class="col-md-4 control-label">Description <help help-id="projectDescriptionHelp"></help></label>
-            <div class="col-md-7">
-                <textcomplete element-placeholder='Type project description in plain text or html format' members='projectConfigurationForEditing.description' message='projectConfigurationForEditing.description' rows="3" element-class="form-control" element-id="project_description" is-required="false"></textcomplete>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="operating_system" class="col-md-4 control-label">Operating System <help help-id="operatingSystemHelp"></help></label>
-            <div class="col-md-4">
-                <select  class="form-control select2" name="operating_system" id="operating_system"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.operating_system">
-                    <option value="Linux">Linux</option>
-                    <option value="Windows">Windows</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <accordion close-others="false">
-        <accordion-group is-open="project_advanced_is_open" ng-form="projectAdvancedParentForm">
-            <accordion-heading>
-                <div>
-                    <i class="fa fa-warning" style="color:red;" ng-show="projectAdvancedParentForm.$invalid"></i>
-                    Advanced
-                    <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_advanced_is_open, 'glyphicon-chevron-right': !project_advanced_is_open}"></i>
+<div class="col-md-9" cg-busy="configPromise">
+    <form novalidate name="configForm">
+        <accordion close-others="false">
+            <accordion-group is-open="project_is_open" ng-form="projectInfoParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="projectInfoParentForm.$invalid"></i>
+                        General Configuration
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_is_open, 'glyphicon-chevron-right': !project_is_open}"></i>
+                    </div>
+                </accordion-heading>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="project_name" class="col-md-4 control-label">Name</label>
+                        <div class="col-md-4">
+                            <input type="text" ng-model="projectConfigurationForEditing.name" class="form-control readonly_item" name="project_name" id="project_name" readonly>
+                        </div>
+                        <div>
+                            <button ng-click="reloadProject()" tooltip="Reload project configuration from disk" class="btn btn-default btn-mini"><i class="fa fa-refresh"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="project_description" class="col-md-4 control-label">Description <help help-id="projectDescriptionHelp"></help></label>
+                        <div class="col-md-7">
+                            <textcomplete element-placeholder='Type project description in plain text or html format' members='projectConfigurationForEditing.description' message='projectConfigurationForEditing.description' rows="3" element-class="form-control" element-id="project_description" is-required="false"></textcomplete>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="operating_system" class="col-md-4 control-label">Operating System <help help-id="operatingSystemHelp"></help></label>
+                        <div class="col-md-4">
+                            <select  class="form-control select2" name="operating_system" id="operating_system"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.operating_system">
+                                <option value="Linux">Linux</option>
+                                <option value="Windows">Windows</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </accordion-heading>
-            <ng-form name=projectAdvancedInnerForm">
                 <accordion close-others="false">
-                    <accordion-group is-open="true" ng-form="projectDiscardOldParentForm">
+                    <accordion-group is-open="project_advanced_is_open" ng-form="projectAdvancedParentForm">
                         <accordion-heading>
                             <div>
-                                <i class="fa fa-warning" style="color:red;" ng-show="projectDiscardOldParentForm.$invalid"></i>
-                                Cleanup
+                                <i class="fa fa-warning" style="color:red;" ng-show="projectAdvancedParentForm.$invalid"></i>
+                                Advanced
+                                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': project_advanced_is_open, 'glyphicon-chevron-right': !project_advanced_is_open}"></i>
                             </div>
                         </accordion-heading>
-                        <ng-form name=projectDiscardOldParentForm">
+                        <ng-form name=projectAdvancedInnerForm">
+                            <accordion close-others="false">
+                                <accordion-group is-open="true" ng-form="projectDiscardOldParentForm">
+                                    <accordion-heading>
+                                        <div>
+                                            <i class="fa fa-warning" style="color:red;" ng-show="projectDiscardOldParentForm.$invalid"></i>
+                                            Cleanup
+                                        </div>
+                                    </accordion-heading>
+                                    <ng-form name=projectDiscardOldParentForm">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="checkbox col-md-offset-1">
+                                                    <label>
+                                                        <input type="checkbox" ng-model="projectConfigurationForEditing.discard_old_commands.enabled"> Discard old commands
+                                                        <help help-id="discardOldCommandsEnabledHelp"></help>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
+                                                <label class="col-md-3 control-label" for="discard_old_commands__max_commands">Max # of commands to keep <help help-id="discardMaxCommandsHelp"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_commands.$invalid}">
+                                                    <input id="discard_old_commands__max_commands" name="max_commands" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_commands" class="form-control" >
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
+                                                <label class="col-md-3 control-label" for="discard_old_commands__max_days">Days to keep commands<help help-id="discardMaxDaysHelp"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_days.$invalid}">
+                                                    <input id="discard_old_commands__max_days" name="max_days" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_days" class="form-control" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-form>
+                                </accordion-group>
+                                <accordion-group is-open="true" ng-form="projectEnvVarsParentForm">
+                                    <accordion-heading>
+                                        <div>
+                                            <i class="fa fa-warning" style="color:red;" ng-show="projectEnvVarsParentForm.$invalid"></i>
+                                            Environment Variables <help help-id="projectEnvVarsHelp"></help>
+                                        </div>
+                                    </accordion-heading>
+                                    <ng-form name=projectEnvVarsParentForm">
+                                        <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                                            <thead>
+                                            <tr>
+                                                <th class="col-md-3" style="text-align: center;">Key</th>
+                                                <th class="col-md-3" style="text-align: center;">Value</th>
+                                                <th class="col-md-1" style="text-align: center;"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="envVar in projectConfigurationForEditing.environment_variables" ng-form="envVariableInfoRow">
+                                                <td class="controls col-md-3" ng-class="{'has-error': envVariableInfoRow.env_key.$invalid}">
+                                                    <input type="text" name="env_key" class="form-control" ng-distinct-values="projectConfigurationForEditing.environment_variables" ng-model="envVar.key" required>
+                                                </td>
+                                                <td class="controls col-md-3" ng-class="{'has-error': envVariableInfoRow.env_value.$invalid}">
+                                                    <input type="text" name="env_value" class="form-control" ng-model="envVar.value" required>
+                                                </td>
+                                                <td class="col-md-1">
+                                                    <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index,$event)" tooltip="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button ng-click="addEnvVar()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                            <br/><br/>
+                                        </div>
+                                    </ng-form>
+                                </accordion-group>
+                            </accordion>
+                        </ng-form>
+                    </accordion-group>
+                </accordion>
+            </accordion-group>
+            <accordion-group is-open="nodes_is_open" ng-form="nodesInfoParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="nodesInfoParentForm.$invalid"></i>
+                        Nodes Info
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
+                    </div>
+                </accordion-heading>
+                <div class="form-horizontal">
+                    <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_startegy.$invalid}">
+                        <label for="node_discovery_startegy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
+                        <div class="col-md-4">
+                            <select  class="form-control select2" name="node_discovery_startegy" id="node_discovery_startegy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_startegy">
+                                <option value="Configuration">Configuration</option>
+                                <option value="Reporter">Reporter</option>
+                                <option value="Script">Script</option>
+                            </select>
+                        </div>
+                    </div>
+                    <ng-form name="scriptDiscoveryStartegyInnerForm">
+                        <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
+                            <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
+                            <div class="col-md-7" ng-class="{'has-error': scriptDiscoveryStartegyInnerForm.script_content.$invalid}">
+                                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
+                            </div>
+                        </div>
+                    </ng-form>
+                    <ng-form name="tagsDiscoveryInnerForm">
+                        <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
+                            <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
+                            <div class="col-md-7">
+                                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.tagsAutoComplete' message='projectConfigurationForEditing.tags_discovery_script' rows="3" element-class="form-control" element-id="tags_discovery_script" is-required="false"></textcomplete>
+                            </div>
+                        </div>
+                    </ng-form>
+                    <div ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Configuration'">
+                        <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                            <thead>
+                            <tr>
+                                <th class="col-md-3" style="text-align: center;">Host : Unique Key</th>
+                                <th class="col-md-3" style="text-align: center;">Alias</th>
+                                <th class="col-md-5" style="text-align: center">Tags</th>
+                                <th class="col-md-1" style="text-align: center;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="node_info in projectConfigurationForEditing.nodes_info" ng-form="nodesInfoRow">
+                                <td class="controls col-md-3" ng-class="{'has-error': nodesInfoRow.node_name.$invalid}">
+                                    <input type="text" name="node_name" class="form-control" ng-distinct-values="projectConfigurationForEditing.nodes_info" ng-model="node_info.name" required>
+                                </td>
+                                <td class="controls col-md-3" ng-class="{'has-error': nodesInfoRow.alias.$invalid}">
+                                    <input type="text" name="alias" class="form-control" ng-model="node_info.alias" required>
+                                </td>
+                                <td class="col-md-5">
+                                    <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2">
+                                </td>
+                                <td class="col-md-1">
+                                    <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index,$event)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button ng-click="addNode()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
+                            </div>
+                            <br/><br/>
+                        </div>
+                    </div>
+                </div>
+            </accordion-group>
+            <accordion-group is-open="version_is_open" ng-form="versionInfoParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="versionInfoParentForm.$invalid"></i>
+                        Version Detection <help help-id="versionHelp"></help>
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': version_is_open, 'glyphicon-chevron-right': !version_is_open}"></i>
+                    </div>
+                </accordion-heading>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="version_detection_script" class="col-md-4 control-label">Script <help help-id="versionScriptHelp"></help></label>
+                        <div class="col-md-7">
+                            <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.versionAutoComplete' message='projectConfigurationForEditing.version_detection_script' rows="3" element-class="form-control" element-id="version_detection_script" is-required="false"></textcomplete>
+                        </div>
+                    </div>
+                </div>
+            </accordion-group>
+            <accordion-group is-open="collectors_is_open" ng-form="collectorsConfigureParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="collectorsConfigureParentForm.$invalid"></i>
+                        Collectors <help help-id="collectorsConfigureHelp"></help>
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': collectors_is_open, 'glyphicon-chevron-right': !collectors_is_open}"></i>
+                    </div>
+                </accordion-heading>
+                <accordion close-others="false">
+                    <accordion-group ng-repeat="collector_info in projectConfigurationForEditing.collectors" is-open="collector_info.is_open" ng-form="individualCollectorParentForm">
+                        <accordion-heading>
+                            <div>
+                                <i class="fa fa-warning" style="color:red;" ng-show="individualCollectorParentForm.$invalid"></i>
+                                Collector: {{collector_info.name}}
+                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': collector_info.is_open, 'glyphicon-chevron-right': !collector_info.is_open}">
+                                </i>
+                                <div class="btn-group btn-group-xs pull-right">
+                                    <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                                    <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.collectors.length-1" ng-click="moveDown(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                                    <button tooltip="Remove Collector" ng-click="removeItem(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                        </accordion-heading>
+                        <ng-form name="collectorsInnerForm">
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <div class="checkbox col-md-offset-1">
+                                    <label class="col-md-3 control-label" for="collector_info{{$index}}.name">Name</label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': collectorsInnerForm.name.$invalid}">
+                                        <input id="collector_info{{$index}}.name" name="name" type="text" ng-model="collector_info.name" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="collector_info{{$index}}.description" class="col-md-3 control-label">Description <help help-id="collectorDescriptionHelp"></help></label>
+                                    <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.description.$invalid}">
+                                        <textcomplete element-placeholder='Type monitor description' message='collector_info.description' rows="3" element-class="form-control" element-id="collector_info{{$index}}.description"></textcomplete>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="collector_info_{{$index}}_type">Type <help help-id="collectorTypeHelp"></help></label>
+                                    <div class="controls col-md-3">
+                                        <select  class="form-control select2" name="type" id="collector_info_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="collector_info.type" required>
+                                            <option value="String">String</option>
+                                            <option value="Number">Number</option>
+                                            <option value="Monitor">Monitor</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="collector_info{{$index}}.min_interval">Min Interval <help help-id="minIntervalHelp"></help></label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': collectorsInnerForm.min_interval.$invalid}">
+                                        <input id="collector_info{{$index}}.min_interval" name="min_interval" type="number" min="1" ng-model="collector_info.min_interval" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="collector_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
+                                    <div class="controls col-md-3">
+                                        <input id="collector_info{{$index}}.credentials" name="credentials" ng-model="collector_info.credentials" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox col-md-offset-3">
                                         <label>
-                                            <input type="checkbox" ng-model="projectConfigurationForEditing.discard_old_commands.enabled"> Discard old commands
-                                            <help help-id="discardOldCommandsEnabledHelp"></help>
+                                            <input type="checkbox" ng-model="collector_info.notification_enabled"> Notification Enabled
+                                            <help help-id="notificationsEnabledHelp"></help>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
-                                    <label class="col-md-3 control-label" for="discard_old_commands__max_commands">Max # of commands to keep <help help-id="discardMaxCommandsHelp"></help></label>
-                                    <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_commands.$invalid}">
-                                        <input id="discard_old_commands__max_commands" name="max_commands" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_commands" class="form-control" >
+                                <div class="form-group">
+                                    <label for="collector_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="collectorScriptHelp"></help></label>
+                                    <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.script_content.$invalid}">
+                                        <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='collector_info.script_content' rows="3" element-class="form-control" element-id="collector_info{{$index}}.script" is-required="true"></textcomplete>
                                     </div>
                                 </div>
-                                <div class="form-group" ng-show="projectConfigurationForEditing.discard_old_commands.enabled">
-                                    <label class="col-md-3 control-label" for="discard_old_commands__max_days">Days to keep commands<help help-id="discardMaxDaysHelp"></help></label>
-                                    <div class="controls col-md-3" ng-class="{'has-error': projectAdvancedInnerForm.max_days.$invalid}">
-                                        <input id="discard_old_commands__max_days" name="max_days" type="number" min="1" ng-model="projectConfigurationForEditing.discard_old_commands.max_days" class="form-control" >
-                                    </div>
-                                </div>
-                            </div>
-                        </ng-form>
-                    </accordion-group>
-                    <accordion-group is-open="true" ng-form="projectEnvVarsParentForm">
-                        <accordion-heading>
-                            <div>
-                                <i class="fa fa-warning" style="color:red;" ng-show="projectEnvVarsParentForm.$invalid"></i>
-                                Environment Variables <help help-id="projectEnvVarsHelp"></help>
-                            </div>
-                        </accordion-heading>
-                        <ng-form name=projectEnvVarsParentForm">
-                            <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
-                                <thead>
-                                <tr>
-                                    <th class="col-md-3" style="text-align: center;">Key</th>
-                                    <th class="col-md-3" style="text-align: center;">Value</th>
-                                    <th class="col-md-1" style="text-align: center;"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="envVar in projectConfigurationForEditing.environment_variables" ng-form="envVariableInfoRow">
-                                    <td class="controls col-md-3" ng-class="{'has-error': envVariableInfoRow.env_key.$invalid}">
-                                        <input type="text" name="env_key" class="form-control" ng-distinct-values="projectConfigurationForEditing.environment_variables" ng-model="envVar.key" required>
-                                    </td>
-                                    <td class="controls col-md-3" ng-class="{'has-error': envVariableInfoRow.env_value.$invalid}">
-                                        <input type="text" name="env_value" class="form-control" ng-model="envVar.value" required>
-                                    </td>
-                                    <td class="col-md-1">
-                                        <button ng-click="removeItem(projectConfigurationForEditing.environment_variables,$index,$event)" tooltip="Remove" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button ng-click="addEnvVar()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add</button>
-                                </div>
-                                <br/><br/>
                             </div>
                         </ng-form>
                     </accordion-group>
                 </accordion>
-            </ng-form>
-        </accordion-group>
-    </accordion>
-</accordion-group>
-<accordion-group is-open="nodes_is_open" ng-form="nodesInfoParentForm">
-    <accordion-heading>
-        <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="nodesInfoParentForm.$invalid"></i>
-            Nodes Info
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': nodes_is_open, 'glyphicon-chevron-right': !nodes_is_open}"></i>
-        </div>
-    </accordion-heading>
-    <div class="form-horizontal">
-        <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_startegy.$invalid}">
-            <label for="node_discovery_startegy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
-            <div class="col-md-4">
-                <select  class="form-control select2" name="node_discovery_startegy" id="node_discovery_startegy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_startegy">
-                    <option value="Configuration">Configuration</option>
-                    <option value="Reporter">Reporter</option>
-                    <option value="Script">Script</option>
-                </select>
-            </div>
-        </div>
-        <ng-form name="scriptDiscoveryStartegyInnerForm">
-            <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
-                <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
-                <div class="col-md-7" ng-class="{'has-error': scriptDiscoveryStartegyInnerForm.script_content.$invalid}">
-                    <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button ng-click="addCollector()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Collector</button>
+                    </div>
+                    <br/><br/>
                 </div>
-            </div>
-        </ng-form>
-        <ng-form name="tagsDiscoveryInnerForm">
-            <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
-                <label for="tags_discovery_script" class="col-md-4 control-label">Tags Script <help help-id="tagsdiscoveryScriptHelp"></help></label>
-                <div class="col-md-7">
-                    <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.tagsAutoComplete' message='projectConfigurationForEditing.tags_discovery_script' rows="3" element-class="form-control" element-id="tags_discovery_script" is-required="false"></textcomplete>
-                </div>
-            </div>
-        </ng-form>
-        <div ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Configuration'">
-            <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
-                <thead>
-                <tr>
-                    <th class="col-md-3" style="text-align: center;">Host : Unique Key</th>
-                    <th class="col-md-3" style="text-align: center;">Alias</th>
-                    <th class="col-md-5" style="text-align: center">Tags</th>
-                    <th class="col-md-1" style="text-align: center;"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="node_info in projectConfigurationForEditing.nodes_info" ng-form="nodesInfoRow">
-                    <td class="controls col-md-3" ng-class="{'has-error': nodesInfoRow.node_name.$invalid}">
-                        <input type="text" name="node_name" class="form-control" ng-distinct-values="projectConfigurationForEditing.nodes_info" ng-model="node_info.name" required>
-                    </td>
-                    <td class="controls col-md-3" ng-class="{'has-error': nodesInfoRow.alias.$invalid}">
-                        <input type="text" name="alias" class="form-control" ng-model="node_info.alias" required>
-                    </td>
-                    <td class="col-md-5">
-                        <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2">
-                    </td>
-                    <td class="col-md-1">
-                        <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index,$event)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-md-12">
-                    <button ng-click="addNode()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
-                </div>
-                <br/><br/>
-            </div>
-        </div>
-    </div>
-</accordion-group>
-<accordion-group is-open="version_is_open" ng-form="versionInfoParentForm">
-    <accordion-heading>
-        <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="versionInfoParentForm.$invalid"></i>
-            Version Detection <help help-id="versionHelp"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': version_is_open, 'glyphicon-chevron-right': !version_is_open}"></i>
-        </div>
-    </accordion-heading>
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label for="version_detection_script" class="col-md-4 control-label">Script <help help-id="versionScriptHelp"></help></label>
-            <div class="col-md-7">
-                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.versionAutoComplete' message='projectConfigurationForEditing.version_detection_script' rows="3" element-class="form-control" element-id="version_detection_script" is-required="false"></textcomplete>
-            </div>
-        </div>
-    </div>
-</accordion-group>
+            </accordion-group>
 
 
 
 
 
-<!--
-<accordion-group is-open="monitors_is_open" ng-form="monitorsConfigureParentForm">
-    <accordion-heading>
-        <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="monitorsConfigureParentForm.$invalid"></i>
-            Monitors <help help-id="monitorsConfigureHelp"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': monitors_is_open, 'glyphicon-chevron-right': !monitors_is_open}"></i>
-        </div>
-    </accordion-heading>
-    <accordion close-others="false">
-        <accordion-group ng-repeat="monitor_info in projectConfigurationForEditing.monitors" is-open="monitor_info.is_open" ng-form="individualMonitorParentForm">
-            <accordion-heading>
-                <div>
-                    <i class="fa fa-warning" style="color:red;" ng-show="individualMonitorParentForm.$invalid"></i>
-                    Monitor: {{monitor_info.name}}
-                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': monitor_info.is_open, 'glyphicon-chevron-right': !monitor_info.is_open}">
-                    </i>
-                    <div class="btn-group btn-group-xs pull-right">
-                        <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-                        <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.monitors.length-1" ng-click="moveDown(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                        <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.monitors,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-            </accordion-heading>
-            <ng-form name="monitorsInnerForm">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="monitor_info{{$index}}.name">Name</label>
-                        <div class="controls col-md-3" ng-class="{'has-error': monitorsInnerForm.name.$invalid}">
-                            <input id="monitor_info{{$index}}.name" name="name" type="text" ng-model="monitor_info.name" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="monitor_info{{$index}}.minInterval">Min Interval <help help-id="minIntervalHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': monitorsInnerForm.minInterval.$invalid}">
-                            <input id="monitor_info{{$index}}.minInterval" name="minInterval" type="number" min="1" ng-model="monitor_info.minInterval" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="monitor_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
-                        <div class="controls col-md-3">
-                            <input id="monitor_info{{$index}}.credentials" name="credentials" ng-model="monitor_info.credentials" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox col-md-offset-3">
-                            <label>
-                                <input type="checkbox" ng-model="monitor_info.notification_enabled"> Notification Enabled
-                                <help help-id="notificationsEnabledHelp"></help>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="monitor_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="monitorScriptHelp"></help></label>
-                        <div class="col-md-7" ng-class="{'has-error': monitorsInnerForm.script_content.$invalid}">
-                            <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='monitor_info.script_content' rows="3" element-class="form-control" element-id="monitor_info{{$index}}.script" is-required="true"></textcomplete>
-                        </div>
-                    </div>
-                </div>
-            </ng-form>
-        </accordion-group>
-    </accordion>
-    <div class="row">
-        <div class="col-md-12">
-            <button ng-click="addMonitor()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Monitor</button>
-        </div>
-        <br/><br/>
-    </div>
-</accordion-group>
--->
 
 
 
 
-
-    <accordion-group is-open="collectors_is_open" ng-form="collectorsConfigureParentForm">
-        <accordion-heading>
-            <div>
-                <i class="fa fa-warning" style="color:red;" ng-show="collectorsConfigureParentForm.$invalid"></i>
-                Collectors <help help-id="collectorsConfigureHelp"></help>
-                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': collectors_is_open, 'glyphicon-chevron-right': !collectors_is_open}"></i>
-            </div>
-        </accordion-heading>
-        <accordion close-others="false">
-            <accordion-group ng-repeat="collector_info in projectConfigurationForEditing.collectors" is-open="collector_info.is_open" ng-form="individualCollectorParentForm">
+            <accordion-group is-open="email_is_open" ng-form="emailConfigureParentForm">
                 <accordion-heading>
                     <div>
-                        <i class="fa fa-warning" style="color:red;" ng-show="individualCollectorParentForm.$invalid"></i>
-                        Collector: {{collector_info.name}}
-                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': collector_info.is_open, 'glyphicon-chevron-right': !collector_info.is_open}">
-                        </i>
-                        <div class="btn-group btn-group-xs pull-right">
-                            <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-                            <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.collectors.length-1" ng-click="moveDown(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                            <button tooltip="Remove Collector" ng-click="removeItem(projectConfigurationForEditing.collectors,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
-                        </div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="emailConfigureParentForm.$invalid"></i>
+                        Email Notifications <help help-id="emailHelp"></help>
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': email_is_open, 'glyphicon-chevron-right': !email_is_open}"></i>
                     </div>
                 </accordion-heading>
-                <ng-form name="collectorsInnerForm">
+                <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3" style="text-align: center;">Email</th>
+                        <th class="col-md-3" style="text-align: center;">Frequency</th>
+                        <th class="col-md-1" style="text-align: center;"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="mail_info in projectConfigurationForEditing.mail" ng-form="mailInfoRow">
+                        <td class="controls col-md-3" ng-class="{'has-error': mailInfoRow.username.$invalid}">
+                            <input name="username" type="text" ng-distinct-values="projectConfigurationForEditing.mail" class="form-control" ng-model="mail_info.user" required>
+                        </td>
+                        <td class="col-md-3">
+                            <select class="form-control select2" name="intensity{{$index}}" id="intensity{{$index}}"  ui-select2="{ allowClear: false}" ng-model="mail_info.intensity" required>
+                                <option value="Immediately">Immediately</option>
+                                <option value="Hourly">Hourly</option>
+                                <option value="Daily">Daily</option>
+                            </select>
+                        </td>
+                        <td class="col-md-1">
+                            <button ng-click="removeItem(projectConfigurationForEditing.mail,$index,$event)" tooltip="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button ng-click="addNotification()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Notification</button>
+                    </div>
+                    <br/><br/>
+                </div>
+            </accordion-group>
+            <accordion-group is-open="commands_is_open" ng-form="commandsConfigureParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="commandsConfigureParentForm.$invalid"></i>
+                        Commands <help help-id="commandsConfigureHelp"></help>
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': commands_is_open, 'glyphicon-chevron-right': !commands_is_open}"></i>
+                    </div>
+                </accordion-heading>
+                <accordion close-others="false">
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="collector_info{{$index}}.name">Name</label>
-                            <div class="controls col-md-3" ng-class="{'has-error': collectorsInnerForm.name.$invalid}">
-                                <input id="collector_info{{$index}}.name" name="name" type="text" ng-model="collector_info.name" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="collector_info{{$index}}.description" class="col-md-3 control-label">Description <help help-id="collectorDescriptionHelp"></help></label>
-                            <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.description.$invalid}">
-                                <textcomplete element-placeholder='Type monitor description' message='collector_info.description' rows="3" element-class="form-control" element-id="collector_info{{$index}}.description"></textcomplete>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="collector_info_{{$index}}_type">Type <help help-id="collectorTypeHelp"></help></label>
-                            <div class="controls col-md-3">
-                                <select  class="form-control select2" name="type" id="collector_info_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="collector_info.type" required>
-                                    <option value="String">String</option>
-                                    <option value="Number">Number</option>
-                                    <option value="Monitor">Monitor</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="collector_info{{$index}}.min_interval">Min Interval <help help-id="minIntervalHelp"></help></label>
-                            <div class="controls col-md-3" ng-class="{'has-error': collectorsInnerForm.min_interval.$invalid}">
-                                <input id="collector_info{{$index}}.min_interval" name="min_interval" type="number" min="1" ng-model="collector_info.min_interval" class="form-control" >
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="collector_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
-                            <div class="controls col-md-3">
-                                <input id="collector_info{{$index}}.credentials" name="credentials" ng-model="collector_info.credentials" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox col-md-offset-3">
-                                <label>
-                                    <input type="checkbox" ng-model="collector_info.notification_enabled"> Notification Enabled
-                                    <help help-id="notificationsEnabledHelp"></help>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="collector_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="collectorScriptHelp"></help></label>
-                            <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.script_content.$invalid}">
-                                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='collector_info.script_content' rows="3" element-class="form-control" element-id="collector_info{{$index}}.script" is-required="true"></textcomplete>
+                            <label for="include_project_commands" class="col-md-4 control-label">Include from <help help-id="projectIncludeCommandsFromHelp"></help></label>
+                            <div class="col-md-4">
+                                <input type="text" id="include_project_commands" ui-select2="select2OptionsIncludeProjectCommands" ng-model="projectConfigurationForEditing.include_project_commands" class="form-control select2">
                             </div>
                         </div>
                     </div>
-                </ng-form>
+                    <br/>
+                    <accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_info.is_open" ng-form="individualCommandParentForm">
+                        <accordion-heading>
+                            <div>
+                                <i class="fa fa-warning" style="color:red;" ng-show="individualCommandParentForm.$invalid"></i>
+                                Command: {{command_info.name}}
+                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.is_open, 'glyphicon-chevron-right': !command_info.is_open}">
+                                </i>
+                                <div class="btn-group btn-group-xs pull-right">
+                                    <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                                    <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.commands.length-1" ng-click="moveDown(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                                    <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                                </div>
+                            </div>
+                        </accordion-heading>
+                        <ng-form name="commandsInnerForm">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="command_info{{$index}}.name">Name</label>
+                                    <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.name.$invalid}">
+                                        <input id="command_info{{$index}}.name" name="name" type="text" ng-model="command_info.name" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="command_info{{$index}}.description" class="col-md-3 control-label">Description <help help-id="commandDescriptionHelp"></help></label>
+                                    <div class="col-md-6">
+                                        <textcomplete element-placeholder='Type command description' members='command_info.description' message='command_info.description' rows="3" element-class="form-control" element-id="command_description" is-required="false"></textcomplete>
+                                    </div>
+                                </div>
+                                <accordion close-others="false">
+                                    <accordion-group is-open="command_info.schedule_is_open" ng-form="commandScheduleParentForm">
+                                        <accordion-heading>
+                                            <div>
+                                                <i class="fa fa-warning" style="color:red;" ng-show="commandScheduleParentForm.$invalid"></i>
+                                                Schedule
+                                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.schedule_is_open, 'glyphicon-chevron-right': !command_info.schedule_is_open}">
+                                                </i>
+                                            </div>
+                                        </accordion-heading>
+                                        <ng-form name="commandsInnerFormSchedule">
+                                            <div class="form-group">
+                                                <div class="checkbox col-lg-offset-3">
+                                                    <label>
+                                                        <input type="checkbox" name="prevent_override" id="command_info{{$index}}.prevent_override" ng-model="command_info.prevent_override"> Prevent override of default configuration
+                                                        <help help-id="preventOverrideHelp"></help>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="command_info_{{$index}}command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.command_strategy.$invalid}">
+                                                    <select class="form-control select2" name="command_strategy" id="command_info_{{$index}}command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
+                                                        <option value="Single">Single</option>
+                                                        <option value="Immediately">Immediately</option>
+                                                        <option value="Progressive">Progressive</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-show="command_info.command_strategy == 'Immediately'">
+                                                <label class="col-md-3 control-label" for="command_info{{$index}}.concurrency">Concurrency <help help-id="concurrencyHelp"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.concurrency.$invalid}">
+                                                    <input id="command_info{{$index}}.concurrency" name="concurrency" ng-model="command_info.concurrency" type="number" min="1" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div ng-if="command_info.command_strategy == 'Progressive'">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label" for="command_info{{$index}}.duration">Duration <help help-id="durationHelp"></help></label>
+                                                    <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.duration.$invalid}">
+                                                        <input id="command_info{{$index}}.duration" name="duration" ng-model="command_info.duration" type="text" class="form-control" required>
+                                                    </div>
+                                                    <div class="controls col-md-3">
+                                                        <select class="form-control select2" name="command_info{{$index}}.duration_units" id="command_info_{{$index}}_duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units" required>
+                                                            <option value="Minutes">Minutes</option>
+                                                            <option value="Hours">Hours</option>
+                                                            <option value="Days">Days</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label" for="command_info_{{$index}}_ratio">Ratio <help help-id="ratioHelp"></help></label>
+                                                    <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.ratio.$invalid}">
+                                                        <select  class="form-control select2" name="ratio" id="command_info_{{$index}}_ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio" required>
+                                                            <option value="Linear">Linear</option>
+                                                            <option value="Exponential">Exponential</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="checkbox col-lg-offset-3">
+                                                        <label>
+                                                            <input type="checkbox" name="stop_on_error" id="command_info{{$index}}.stop_on_error" ng-model="command_info.stop_on_error"> Stop on error
+                                                            <help help-id="stopOnErrorHelp"></help>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group" ng-if="command_info.stop_on_error">
+                                                    <label class="col-md-3 control-label" for="command_info{{$index}}.error_percent_val">Error percent</label>
+                                                    <div class="controls col-md-3">
+                                                        <input element-placeholder="%" id="command_info{{$index}}.error_percent_val" name="error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-form>
+                                    </accordion-group>
+                                </accordion>
+                                <accordion close-others="false">
+                                    <accordion-group is-open="command_info.advanced_is_open" ng-form="commandAdvancedParentForm">
+                                        <accordion-heading>
+                                            <div>
+                                                <i class="fa fa-warning" style="color:red;" ng-show="commandAdvancedParentForm.$invalid"></i>
+                                                Advanced
+                                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.advanced_is_open, 'glyphicon-chevron-right': !command_info.advanced_is_open}">
+                                                </i>
+                                            </div>
+                                        </accordion-heading>
+                                        <ng-form name="commandsInnerFormAdvanced">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="command_info{{$index}}.timeoutInMinutes">Timeout <help help-id="commandTimeoutHelp"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.timeoutInMinutes.$invalid}">
+                                                    <input id="command_info{{$index}}.timeoutInMinutes" name="timeoutInMinutes" ng-model="command_info.timeoutInMinutes" type="number" min="1" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="command_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
+                                                <div class="controls col-md-3">
+                                                    <input id="command_info{{$index}}.credentials" name="credentials" ng-model="command_info.credentials" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </ng-form>
+                                    </accordion-group>
+                                </accordion>
+                                <!-- command parameters -->
+                                <accordion close-others="false">
+                                    <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter.is_open" ng-form="commandParameterParentForm">
+                                        <accordion-heading>
+                                            <div>
+                                                <i class="fa fa-warning" style="color:red;" ng-show="commandParameterParentForm.$invalid"></i>
+                                                Parameter: {{command_parameter.name}}
+                                                <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter.is_open, 'glyphicon-chevron-right': !command_parameter.is_open}">
+                                                </i>
+                                                <div class="btn-group btn-group-xs pull-right">
+                                                    <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
+                                                    <button tooltip="Move down" ng-disabled="$index === command_info.parameters.length-1" ng-click="moveDown(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
+                                                    <button tooltip="Remove Monitor" ng-click="removeItem(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                        </accordion-heading>
+                                        <ng-form name="paramsInnerForm">
+                                            <div class="form-group" ng-class="{'has-error': paramsInnerForm.name.$invalid}">
+                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.name">Name <help help-id="command_patameter_name_Help"></help></label>
+                                                <div class="controls col-md-3">
+                                                    <input id="command_parameter{{$index}}.name" name="name" type="text" ng-model="command_parameter.name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="command_parameter_{{$index}}_type">Type <help help-id="typeHelp"></help></label>
+                                                <div class="controls col-md-3">
+                                                    <select  class="form-control select2" name="type" id="command_parameter_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="command_parameter.type" required>
+                                                        <option value="String">String</option>
+                                                        <option value="Boolean">Boolean</option>
+                                                        <option value="Selection">Selection</option>
+                                                        <option value="Password">Password</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.description">Description <help help-id="command_patameter_name_Help"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': paramsInnerForm.description.$invalid}">
+                                                    <input id="command_parameter{{$index}}.description" name="description" type="text" ng-model="command_parameter.description" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="command_parameter.type == 'String'">
+                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.validation_expression">Validation Expression <help help-id="command_patameter_validation_expression_Help"></help></label>
+                                                <div class="controls col-md-3">
+                                                    <input id="command_parameter{{$index}}.validation_expression" name="validation_expression" type="text" ng-model="command_parameter.validation_expression" class="form-control" >
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="command_parameter.type == 'Selection'">
+                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}_allowed_values">Allowed values <help help-id="command_patameter_values_Help"></help></label>
+                                                <div class="controls col-md-3" ng-class="{'has-error': paramsInnerForm.command_parameter.allowed_values.$invalid}">
+                                                    <input type="text" id="command_parameter{{$index}}_allowed_values" name="allowed_values" ui-select2="select2OptionsAllowedValues" ng-model="command_parameter.allowed_values" class="form-control select2">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="command_parameter.type == 'String' || command_parameter.type == 'Password'">
+                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.default_value">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
+                                                <div class="controls col-md-3">
+                                                    <input id="command_parameter{{$index}}.default_value" name="default_value" type="text" ng-model="command_parameter.default_value" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="command_parameter.type == 'Boolean'">
+                                                <div class="checkbox col-lg-offset-3">
+                                                    <label>
+                                                        <input type="checkbox" ng-model="command_info.default_value"> Default value
+                                                        <help help-id="command_patameter_default_val_Help"></help>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </ng-form>
+                                    </accordion-group>
+                                </accordion>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button ng-click="addParameter(command_info)" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
+                                    </div>
+                                    <br/><br/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="command_info{{$index}}.script_content" class="col-md-3 control-label">Script <help help-id="commandScriptHelp"></help></label>
+                                    <div class="col-md-7" ng-class="{'has-error': commandsInnerForm.script_content.$invalid}">
+                                        <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='command_info.script_content' rows="3" element-class="form-control" element-id="command_info{{$index}}.script_content" is-required="true"></textcomplete>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-form>
+                    </accordion-group>
+                </accordion>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button ng-click="addCommand()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Command</button>
+                    </div>
+                    <br/><br/>
+                </div>
+            </accordion-group>
+            <accordion-group is-open="is_open" ng-form="permissionsParentForm">
+                <accordion-heading>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="permissionsParentForm.$invalid"></i>
+                        Permissions <help help-id="ProjectPermissionsConfigureSection"></help>
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i>
+                    </div>
+                </accordion-heading>
+                <div class="form-horizontal">
+                    <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
+                        <thead>
+                        <tr>
+                            <th class="col-md-3">User / Group
+                            </th>
+                            <th class="col-md-2">View
+                                <help help-id="ProjectPermissionsConfigureSection_read"></help>
+                            </th>
+                            <th class="col-md-4">Command
+                                <help help-id="ProjectPermissionsConfigureSection_command"></help>
+                            </th>
+                            <th class="col-md-2">Configure
+                                <help help-id="ProjectPermissionsConfigureSection_configure"></help>
+                            </th>
+                            <th class="col-md-1"></th>
+                        </tr>
+                        </thead>
+                        <tbody >
+                        <tr ng-repeat="permissionObject in projectConfigurationForEditing.permissions" ng-form="permissionsForm">
+                            <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
+                                <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
+                            </td>
+                            <td class="col-md-2">
+                                <input type="checkbox" checked disabled class="readonly_item">
+                            </td>
+                            <td class="col-md-4">
+                                <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
+                            </td>
+                            <td class="col-md-2">
+                                <input type="checkbox" ng-model="permissionObject.can_config">
+                            </td>
+                            <td class="col-md-1">
+                                <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index,$event)" tooltip="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" ng-click="addUser()" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add User / Group</button>
+                        </div>
+                        <br/><br/>
+                    </div>
+                </div>
             </accordion-group>
         </accordion>
         <div class="row">
             <div class="col-md-12">
-                <button ng-click="addCollector()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Collector</button>
+                <button ng-disabled="configForm.$invalid" ng-click="applyConfiguration(true)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
+                <button ng-disabled="configForm.$invalid" ng-click="applyConfiguration(false)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
             </div>
             <br/><br/>
         </div>
-    </accordion-group>
-
-
-
-
-
-
-
-
-
-<accordion-group is-open="email_is_open" ng-form="emailConfigureParentForm">
-    <accordion-heading>
-        <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="emailConfigureParentForm.$invalid"></i>
-            Email Notifications <help help-id="emailHelp"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': email_is_open, 'glyphicon-chevron-right': !email_is_open}"></i>
-        </div>
-    </accordion-heading>
-    <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
-        <thead>
-        <tr>
-            <th class="col-md-3" style="text-align: center;">Email</th>
-            <th class="col-md-3" style="text-align: center;">Frequency</th>
-            <th class="col-md-1" style="text-align: center;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="mail_info in projectConfigurationForEditing.mail" ng-form="mailInfoRow">
-            <td class="controls col-md-3" ng-class="{'has-error': mailInfoRow.username.$invalid}">
-                <input name="username" type="text" ng-distinct-values="projectConfigurationForEditing.mail" class="form-control" ng-model="mail_info.user" required>
-            </td>
-            <td class="col-md-3">
-                <select class="form-control select2" name="intensity{{$index}}" id="intensity{{$index}}"  ui-select2="{ allowClear: false}" ng-model="mail_info.intensity" required>
-                    <option value="Immediately">Immediately</option>
-                    <option value="Hourly">Hourly</option>
-                    <option value="Daily">Daily</option>
-                </select>
-            </td>
-            <td class="col-md-1">
-                <button ng-click="removeItem(projectConfigurationForEditing.mail,$index,$event)" tooltip="Remove Notification" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-md-12">
-            <button ng-click="addNotification()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Notification</button>
-        </div>
-        <br/><br/>
-    </div>
-</accordion-group>
-<accordion-group is-open="commands_is_open" ng-form="commandsConfigureParentForm">
-<accordion-heading>
-    <div>
-        <i class="fa fa-warning" style="color:red;" ng-show="commandsConfigureParentForm.$invalid"></i>
-        Commands <help help-id="commandsConfigureHelp"></help>
-        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': commands_is_open, 'glyphicon-chevron-right': !commands_is_open}"></i>
-    </div>
-</accordion-heading>
-<accordion close-others="false">
-<div class="form-horizontal">
-    <div class="form-group">
-        <label for="include_project_commands" class="col-md-4 control-label">Include from <help help-id="projectIncludeCommandsFromHelp"></help></label>
-        <div class="col-md-4">
-            <input type="text" id="include_project_commands" ui-select2="select2OptionsIncludeProjectCommands" ng-model="projectConfigurationForEditing.include_project_commands" class="form-control select2">
-        </div>
-    </div>
-</div>
-<br/>
-<accordion-group ng-repeat="command_info in projectConfigurationForEditing.commands" is-open="command_info.is_open" ng-form="individualCommandParentForm">
-<accordion-heading>
-    <div>
-        <i class="fa fa-warning" style="color:red;" ng-show="individualCommandParentForm.$invalid"></i>
-        Command: {{command_info.name}}
-        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.is_open, 'glyphicon-chevron-right': !command_info.is_open}">
-        </i>
-        <div class="btn-group btn-group-xs pull-right">
-            <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-            <button tooltip="Move down" ng-disabled="$index === projectConfigurationForEditing.commands.length-1" ng-click="moveDown(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-            <button tooltip="Remove Monitor" ng-click="removeItem(projectConfigurationForEditing.commands,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
-        </div>
-    </div>
-</accordion-heading>
-<ng-form name="commandsInnerForm">
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label class="col-md-3 control-label" for="command_info{{$index}}.name">Name</label>
-            <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.name.$invalid}">
-                <input id="command_info{{$index}}.name" name="name" type="text" ng-model="command_info.name" class="form-control" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="command_info{{$index}}.description" class="col-md-3 control-label">Description <help help-id="commandDescriptionHelp"></help></label>
-            <div class="col-md-6">
-                <textcomplete element-placeholder='Type command description' members='command_info.description' message='command_info.description' rows="3" element-class="form-control" element-id="command_description" is-required="false"></textcomplete>
-            </div>
-        </div>
-        <accordion close-others="false">
-            <accordion-group is-open="command_info.schedule_is_open" ng-form="commandScheduleParentForm">
-                <accordion-heading>
-                    <div>
-                        <i class="fa fa-warning" style="color:red;" ng-show="commandScheduleParentForm.$invalid"></i>
-                        Schedule
-                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.schedule_is_open, 'glyphicon-chevron-right': !command_info.schedule_is_open}">
-                        </i>
-                    </div>
-                </accordion-heading>
-                <ng-form name="commandsInnerFormSchedule">
-                    <div class="form-group">
-                        <div class="checkbox col-lg-offset-3">
-                            <label>
-                                <input type="checkbox" name="prevent_override" id="command_info{{$index}}.prevent_override" ng-model="command_info.prevent_override"> Prevent override of default configuration
-                                <help help-id="preventOverrideHelp"></help>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info_{{$index}}command_strategy">How to Run <help help-id="howToRunHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.command_strategy.$invalid}">
-                            <select class="form-control select2" name="command_strategy" id="command_info_{{$index}}command_strategy"  ui-select2="{ allowClear: false}" ng-model="command_info.command_strategy" required>
-                                <option value="Single">Single</option>
-                                <option value="Immediately">Immediately</option>
-                                <option value="Progressive">Progressive</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-show="command_info.command_strategy == 'Immediately'">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.concurrency">Concurrency <help help-id="concurrencyHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.concurrency.$invalid}">
-                            <input id="command_info{{$index}}.concurrency" name="concurrency" ng-model="command_info.concurrency" type="number" min="1" class="form-control" required>
-                        </div>
-                    </div>
-                    <div ng-if="command_info.command_strategy == 'Progressive'">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="command_info{{$index}}.duration">Duration <help help-id="durationHelp"></help></label>
-                            <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.duration.$invalid}">
-                                <input id="command_info{{$index}}.duration" name="duration" ng-model="command_info.duration" type="text" class="form-control" required>
-                            </div>
-                            <div class="controls col-md-3">
-                                <select class="form-control select2" name="command_info{{$index}}.duration_units" id="command_info_{{$index}}_duration_units"  ui-select2="{ allowClear: false}" ng-model="command_info.duration_units" required>
-                                    <option value="Minutes">Minutes</option>
-                                    <option value="Hours">Hours</option>
-                                    <option value="Days">Days</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="command_info_{{$index}}_ratio">Ratio <help help-id="ratioHelp"></help></label>
-                            <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.ratio.$invalid}">
-                                <select  class="form-control select2" name="ratio" id="command_info_{{$index}}_ratio"  ui-select2="{ allowClear: false}" ng-model="command_info.ratio" required>
-                                    <option value="Linear">Linear</option>
-                                    <option value="Exponential">Exponential</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox col-lg-offset-3">
-                                <label>
-                                    <input type="checkbox" name="stop_on_error" id="command_info{{$index}}.stop_on_error" ng-model="command_info.stop_on_error"> Stop on error
-                                    <help help-id="stopOnErrorHelp"></help>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group" ng-if="command_info.stop_on_error">
-                            <label class="col-md-3 control-label" for="command_info{{$index}}.error_percent_val">Error percent</label>
-                            <div class="controls col-md-3">
-                                <input element-placeholder="%" id="command_info{{$index}}.error_percent_val" name="error_percent_val" ng-model="command_info.error_percent_val" type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </ng-form>
-            </accordion-group>
-        </accordion>
-        <accordion close-others="false">
-            <accordion-group is-open="command_info.advanced_is_open" ng-form="commandAdvancedParentForm">
-                <accordion-heading>
-                    <div>
-                        <i class="fa fa-warning" style="color:red;" ng-show="commandAdvancedParentForm.$invalid"></i>
-                        Advanced
-                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_info.advanced_is_open, 'glyphicon-chevron-right': !command_info.advanced_is_open}">
-                        </i>
-                    </div>
-                </accordion-heading>
-                <ng-form name="commandsInnerFormAdvanced">
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.timeoutInMinutes">Timeout <help help-id="commandTimeoutHelp"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': commandsInnerForm.timeoutInMinutes.$invalid}">
-                            <input id="command_info{{$index}}.timeoutInMinutes" name="timeoutInMinutes" ng-model="command_info.timeoutInMinutes" type="number" min="1" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_info{{$index}}.credentials">Credentials <help help-id="credentialsHelp"></help></label>
-                        <div class="controls col-md-3">
-                            <input id="command_info{{$index}}.credentials" name="credentials" ng-model="command_info.credentials" type="text" class="form-control">
-                        </div>
-                    </div>
-                </ng-form>
-            </accordion-group>
-        </accordion>
-        <!-- command parameters -->
-        <accordion close-others="false">
-            <accordion-group ng-repeat="command_parameter in command_info.parameters" is-open="command_parameter.is_open" ng-form="commandParameterParentForm">
-                <accordion-heading>
-                    <div>
-                        <i class="fa fa-warning" style="color:red;" ng-show="commandParameterParentForm.$invalid"></i>
-                        Parameter: {{command_parameter.name}}
-                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': command_parameter.is_open, 'glyphicon-chevron-right': !command_parameter.is_open}">
-                        </i>
-                        <div class="btn-group btn-group-xs pull-right">
-                            <button tooltip="Move up" ng-disabled="$index === 0" ng-click="moveUp(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-up"></i></button>
-                            <button tooltip="Move down" ng-disabled="$index === command_info.parameters.length-1" ng-click="moveDown(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-arrow-down"></i></button>
-                            <button tooltip="Remove Monitor" ng-click="removeItem(command_info.parameters,$index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                </accordion-heading>
-                <ng-form name="paramsInnerForm">
-                    <div class="form-group" ng-class="{'has-error': paramsInnerForm.name.$invalid}">
-                        <label class="col-md-3 control-label" for="command_parameter{{$index}}.name">Name <help help-id="command_patameter_name_Help"></help></label>
-                        <div class="controls col-md-3">
-                            <input id="command_parameter{{$index}}.name" name="name" type="text" ng-model="command_parameter.name" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_parameter_{{$index}}_type">Type <help help-id="typeHelp"></help></label>
-                        <div class="controls col-md-3">
-                            <select  class="form-control select2" name="type" id="command_parameter_{{$index}}_type"  ui-select2="{ allowClear: false}" ng-model="command_parameter.type" required>
-                                <option value="String">String</option>
-                                <option value="Boolean">Boolean</option>
-                                <option value="Selection">Selection</option>
-                                <option value="Password">Password</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label" for="command_parameter{{$index}}.description">Description <help help-id="command_patameter_name_Help"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': paramsInnerForm.description.$invalid}">
-                            <input id="command_parameter{{$index}}.description" name="description" type="text" ng-model="command_parameter.description" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-if="command_parameter.type == 'String'">
-                        <label class="col-md-3 control-label" for="command_parameter{{$index}}.validation_expression">Validation Expression <help help-id="command_patameter_validation_expression_Help"></help></label>
-                        <div class="controls col-md-3">
-                            <input id="command_parameter{{$index}}.validation_expression" name="validation_expression" type="text" ng-model="command_parameter.validation_expression" class="form-control" >
-                        </div>
-                    </div>
-                    <div class="form-group" ng-if="command_parameter.type == 'Selection'">
-                        <label class="col-md-3 control-label" for="command_parameter{{$index}}_allowed_values">Allowed values <help help-id="command_patameter_values_Help"></help></label>
-                        <div class="controls col-md-3" ng-class="{'has-error': paramsInnerForm.command_parameter.allowed_values.$invalid}">
-                            <input type="text" id="command_parameter{{$index}}_allowed_values" name="allowed_values" ui-select2="select2OptionsAllowedValues" ng-model="command_parameter.allowed_values" class="form-control select2">
-                        </div>
-                    </div>
-                    <div class="form-group" ng-if="command_parameter.type == 'String' || command_parameter.type == 'Password'">
-                        <label class="col-md-3 control-label" for="command_parameter{{$index}}.default_value">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
-                        <div class="controls col-md-3">
-                            <input id="command_parameter{{$index}}.default_value" name="default_value" type="text" ng-model="command_parameter.default_value" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group" ng-if="command_parameter.type == 'Boolean'">
-                        <div class="checkbox col-lg-offset-3">
-                            <label>
-                                <input type="checkbox" ng-model="command_info.default_value"> Default value
-                                <help help-id="command_patameter_default_val_Help"></help>
-                            </label>
-                        </div>
-                    </div>
-                </ng-form>
-            </accordion-group>
-        </accordion>
-        <div class="row">
-            <div class="col-md-12">
-                <button ng-click="addParameter(command_info)" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Parameter</button>
-            </div>
-            <br/><br/>
-        </div>
-        <div class="form-group">
-            <label for="command_info{{$index}}.script_content" class="col-md-3 control-label">Script <help help-id="commandScriptHelp"></help></label>
-            <div class="col-md-7" ng-class="{'has-error': commandsInnerForm.script_content.$invalid}">
-                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='command_info.script_content' rows="3" element-class="form-control" element-id="command_info{{$index}}.script_content" is-required="true"></textcomplete>
-            </div>
-        </div>
-    </div>
-</ng-form>
-</accordion-group>
-</accordion>
-<div class="row">
-    <div class="col-md-12">
-        <button ng-click="addCommand()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Command</button>
-    </div>
-    <br/><br/>
-</div>
-</accordion-group>
-<accordion-group is-open="is_open" ng-form="permissionsParentForm">
-    <accordion-heading>
-        <div>
-            <i class="fa fa-warning" style="color:red;" ng-show="permissionsParentForm.$invalid"></i>
-            Permissions <help help-id="ProjectPermissionsConfigureSection"></help>
-            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': is_open, 'glyphicon-chevron-right': !is_open}"></i>
-        </div>
-    </accordion-heading>
-    <div class="form-horizontal">
-        <table class="table table-condensed table-hover table-striped table-bordered table-responsive">
-            <thead>
-            <tr>
-                <th class="col-md-3">User / Group
-                </th>
-                <th class="col-md-2">View
-                    <help help-id="ProjectPermissionsConfigureSection_read"></help>
-                </th>
-                <th class="col-md-4">Command
-                    <help help-id="ProjectPermissionsConfigureSection_command"></help>
-                </th>
-                <th class="col-md-2">Configure
-                    <help help-id="ProjectPermissionsConfigureSection_configure"></help>
-                </th>
-                <th class="col-md-1"></th>
-            </tr>
-            </thead>
-            <tbody >
-            <tr ng-repeat="permissionObject in projectConfigurationForEditing.permissions" ng-form="permissionsForm">
-                <td class="col-md-3" ng-class="{'has-error': permissionsForm.username.$invalid}">
-                    <input type="text" class="form-control" name="username" id="username" ng-distinct-values="projectConfigurationForEditing.permissions" ng-model="projectConfigurationForEditing.permissions[$index].username" required>
-                </td>
-                <td class="col-md-2">
-                    <input type="checkbox" checked disabled class="readonly_item">
-                </td>
-                <td class="col-md-4">
-                    <input type="text" ui-select2="select2OptionsNodesValues" ng-model="permissionObject.can_command" class="form-control select2" required>
-                </td>
-                <td class="col-md-2">
-                    <input type="checkbox" ng-model="permissionObject.can_config">
-                </td>
-                <td class="col-md-1">
-                    <button ng-click="removeItem(projectConfigurationForEditing.permissions,$index,$event)" tooltip="Remove User" class="btn btn-default btn-mini "><i class="fa fa-times"></i></button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="row">
-            <div class="col-md-12">
-                <button type="button" ng-click="addUser()" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add User / Group</button>
-            </div>
-            <br/><br/>
-        </div>
-    </div>
-</accordion-group>
-</accordion>
-<div class="row">
-    <div class="col-md-12">
-        <button ng-disabled="configForm.$invalid" ng-click="applyConfiguration(true)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
-        <button ng-disabled="configForm.$invalid" ng-click="applyConfiguration(false)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
-    </div>
-    <br/><br/>
-</div>
-</form>
+    </form>
 </div>
 

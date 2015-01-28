@@ -41,7 +41,7 @@
 
         vm.runCommand = function() {
             $log.debug('commandSetupCtrl: will run the command - ' + angular.toJson(vm.command) + ' on ' + vm.nodes.length + ' nodes');
-            CodeineService.runCommand(vm.command,vm.nodes).success(function(data) {
+            vm.runPromise = CodeineService.runCommand(vm.command,vm.nodes).success(function(data) {
                 $log.debug('commandSetupCtrl: Command executed, result is ' + angular.toJson(data));
                 $location.path('/codeine/project/' + vm.projectName + '/command/' + vm.commandName + '/' + data + '/status');
             });

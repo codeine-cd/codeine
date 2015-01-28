@@ -56,27 +56,27 @@
         };
 
         vm.saveConfiguration = function() {
-            CodeineConfigurationService.updateGlobalConfiguration(vm.globalConfigurationForEditing).then(function() {
-                addSuccessMessage('success','Configuration was saved successfully');
+            vm.codeineConfigPromise = CodeineConfigurationService.updateGlobalConfiguration(vm.globalConfigurationForEditing).then(function() {
+                addSuccessMessage('Configuration was saved successfully');
             }, function() {
-                addFailMessage('danger','Failed to save Configuration');
+                addFailMessage('Failed to save Configuration');
             });
         };
 
         vm.saveTabs = function() {
-            CodeineService.updateViewTabs(vm.tabsForEditing).success(function() {
-                addSuccessMessage('success','Tabs were saved successfully');
+            vm.codeineTabsPromise = CodeineService.updateViewTabs(vm.tabsForEditing).success(function() {
+                addSuccessMessage('Tabs were saved successfully');
             }, function() {
-                addFailMessage('danger','Failed to save Tabs');
+                addFailMessage('Failed to save Tabs');
             });
 
         };
 
         vm.savePermissions = function() {
-            CodeineService.updatePermissions(vm.permissionsForEditing).success(function() {
-                addSuccessMessage('success','Permissions were saved successfully');
+            vm.codeinePermissionsPromise = CodeineService.updatePermissions(vm.permissionsForEditing).success(function() {
+                addSuccessMessage('Permissions were saved successfully');
             }, function() {
-                addFailMessage('danger','Failed to save Permissions');
+                addFailMessage('Failed to save Permissions');
             });
 
         };

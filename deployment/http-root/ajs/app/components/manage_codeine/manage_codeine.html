@@ -29,7 +29,7 @@
         </form>
     </accordion-group>
 
-    <accordion-group is-open="vm.config_is_open" ng-form="codeineConfigureParentForm">
+    <accordion-group is-open="vm.config_is_open" ng-form="codeineConfigureParentForm" cg-busy="{promise:vm.codeineConfigPromise,message:'Saving...'}">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="vm.codeineConfigureParentForm.$invalid"></i>
@@ -165,7 +165,7 @@
         </div>
     </form>
 </accordion-group>
-<accordion-group is-open="vm.tabs_is_open" ng-form="tabsConfigParentForm">
+<accordion-group is-open="vm.tabs_is_open" ng-form="tabsConfigParentForm" cg-busy="{promise:vm.codeineTabsPromise,message:'Saving...'}">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="tabsConfigParentForm.$invalid"></i>
@@ -214,7 +214,7 @@
         </div>
     </form>
 </accordion-group>
-<accordion-group is-open="vm.permissions_is_open" ng-form="permissionsConfigParentForm">
+<accordion-group is-open="vm.permissions_is_open" ng-form="permissionsConfigParentForm" cg-busy="{promise:vm.codeinePermissionsPromise,message:'Saving...'}">
     <accordion-heading>
         <div>
             <i class="fa fa-warning" style="color:red;" ng-show="permissionsConfigParentForm.$invalid"></i>

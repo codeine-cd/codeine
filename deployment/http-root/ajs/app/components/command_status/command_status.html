@@ -54,7 +54,7 @@
                     <accordion-group is-open="vm.all_nodes_is_open">
                         <accordion-heading>
                             All Nodes <span class="badge">{{vm.commandStatus.nodes_list.length}}</span>
-                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': all_nodes_is_open, 'glyphicon-chevron-right': !all_nodes_is_open}"></i>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': vm.all_nodes_is_open, 'glyphicon-chevron-right': !vm.all_nodes_is_open}"></i>
                         </accordion-heading>
                         <div ng-if="vm.all_nodes_is_open && vm.commandStatus.nodes_list.length < 100">
                             <div ng-repeat="node in vm.commandStatus.nodes_list" class="row">
