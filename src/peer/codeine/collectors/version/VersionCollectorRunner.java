@@ -15,6 +15,7 @@ import codeine.jsons.collectors.CollectorInfo.CollectorType;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.utils.MiscUtils;
 import codeine.utils.logging.LogUtils;
 
 import com.google.inject.assistedinject.Assisted;
@@ -56,7 +57,7 @@ public class VersionCollectorRunner implements IOneCollectorRunner {
 		String version = runner.outputFromFile();
 		log.info("version is " + version);
 		String prevVersion = projectStatusUpdater.updateVersion(project, node.name(), node.alias(), version);
-		if (!version.equals(prevVersion)) {
+		if (!MiscUtils.equals(version, prevVersion)) {
 			LogUtils.info(log, "version should update", version, prevVersion);
 			peerStatusChangedUpdater.pushUpdate("VersionCollectorRunner.execute()");
 		}
