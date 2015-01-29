@@ -15,6 +15,7 @@ import codeine.configuration.PathHelper;
 import codeine.jsons.collectors.CollectorExecutionInfo;
 import codeine.jsons.collectors.CollectorExecutionInfoWithResult;
 import codeine.jsons.collectors.CollectorInfo;
+import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.NotificationDeliverToDatabase;
@@ -43,6 +44,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	@Inject private PeerStatusChangedUpdater peerStatusChangedUpdater;
 	@Inject private SnoozeKeeper snoozeKeeper;
 	@Inject private NotificationDeliverToDatabase notificationDeliverToDatabase;
+	@Inject private CodeineRuntimeInfo codeineRuntimeInfo;
 	private CollectorInfo collectorInfo;
 	private ProjectJson project;
 	private NodeInfo node;
@@ -113,7 +115,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 	private String getKey() {
-		return pathHelper.getMonitorsDir(project.name()) + File.separator + node.name() + "_" + collectorInfo.name();
+		return codeineRuntimeInfo.port() + "_" + pathHelper.getMonitorsDir(project.name()) + File.separator + node.name() + "_" + collectorInfo.name();
 	}
 
 	private void executeScriptAndDeleteIt(ShellScript shellScript) {
