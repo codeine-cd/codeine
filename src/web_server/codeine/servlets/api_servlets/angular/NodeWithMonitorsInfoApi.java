@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 @SuppressWarnings("unused")
 public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 
-	private List<String> failed_collectors;
+	private List<String> failed_collectors = Lists.newArrayList();
 	private List<CollectorInfoForUI> collectors_info = Lists.newArrayList();
 	private boolean user_can_command;
 	
