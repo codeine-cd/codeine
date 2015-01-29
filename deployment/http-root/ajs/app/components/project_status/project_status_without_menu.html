@@ -24,8 +24,8 @@
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href class="dropdown-toggle" dropdown-toggle>{{selectedMonitor}} <b class="caret"></b> <help help-id="monitorHelp"></help></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="monitor in projectStatus.monitor_info">
-                                <a ng-click="selectMonitor(monitor.name)">{{::monitor.name}} <span class="badge pull-right">{{::monitor.count}}</span></a>
+                            <li ng-repeat="collectorCount in projectStatus.collectors_count">
+                                <a ng-click="selectMonitor(collectorCount.name)">{{::collectorCount.name}} <span class="badge pull-right">{{::collectorCount.count}}</span></a>
                             </li>
                             <li class="divider"></li>
                             <li>
