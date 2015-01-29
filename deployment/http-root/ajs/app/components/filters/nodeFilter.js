@@ -11,17 +11,6 @@
             return node_name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
         };
 
-        var showByMonitor = function(selectedMonitor,monitors) {
-            if (selectedMonitor === 'All Nodes') {
-                return true;
-            }
-
-            if (selectedMonitor === 'Any Alert') {
-                return monitors.length > 0;
-            }
-
-            return monitors.indexOf(selectedMonitor) !== -1;
-        };
         var showByCollectors = function(selectedMonitor,collectors) {
             if (selectedMonitor === 'All Nodes') {
                 return true;
@@ -54,7 +43,7 @@
 
         return function(node, query, monitor, tags) {
             return (showByName(query, node.alias) &&
-            (showByMonitor(monitor, node.failed_monitors) || showByCollectors(monitor, node.failed_collectors)) &&
+            (showByCollectors(monitor, node.failed_collectors)) &&
             showByTags(tags,node.tags));
         };
     }

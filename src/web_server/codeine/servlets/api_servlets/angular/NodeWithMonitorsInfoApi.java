@@ -25,6 +25,9 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 			if (shouldShowInStatusPage(collectorInfo)) {
 				collectors_info.add(new CollectorInfoForUI(collectorInfo.name(), collectorInfo.value(), collectorInfo.exit_status()));
 			}
+			if (!collectorInfo.isSuccess()) {
+				failed_collectors.add(collectorInfo.name());
+			}
 		}
 	}
 
