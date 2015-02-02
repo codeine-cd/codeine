@@ -246,5 +246,8 @@ public class Constants
 
 	public static final String CODEINE_API_TOKEN_DERIVER = Messages.getString("Constants.116");
 
-	
+
+	public static String getFeatureFlagsDir() {
+		return getWorkarea() + "/features";
+	}
 }

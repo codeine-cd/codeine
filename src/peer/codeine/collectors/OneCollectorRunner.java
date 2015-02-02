@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import codeine.PeerStatusChangedUpdater;
 import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
+import codeine.configuration.FeatureFlags;
 import codeine.configuration.PathHelper;
 import codeine.jsons.collectors.CollectorExecutionInfo;
 import codeine.jsons.collectors.CollectorExecutionInfoWithResult;
@@ -39,6 +40,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	private static final int MIN_INTERVAL_MILLI = 20000;
 	private static final Logger log = Logger.getLogger(OneCollectorRunner.class);
 	@Inject private PathHelper pathHelper;
+	@Inject private FeatureFlags featureFlags;
 	@Inject private PeerStatus peerStatus;
 	@Inject private Gson gson;
 	@Inject private PeerStatusChangedUpdater peerStatusChangedUpdater;
@@ -66,6 +68,10 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	}
 
 	private void runOnceCheckMinInterval() {
+		if (featureFlags.isCollectorsDisabled()) {
+			log.info("collectors are disabled");
+			return;
+		}
 		if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval()) {
 			try {
 				runOnce();
