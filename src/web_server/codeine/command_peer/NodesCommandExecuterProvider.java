@@ -131,7 +131,13 @@ public class NodesCommandExecuterProvider {
 	private List<CommandStatusJson> getActiveStatusFromList(Iterable<AllNodesCommandExecuter> iterable) {
 		List<CommandStatusJson> $ = Lists.newArrayList();
 		for (AllNodesCommandExecuter e : iterable) {
-			String alias = e.nodes() == 1 ? e.nodesList().get(0).alias() : null;
+			String alias;
+			if (e.nodes() == 1) {
+				NodeWithPeerInfo nodeWithPeerInfo = e.nodesList().get(0);
+				alias = nodeWithPeerInfo.alias();
+			} else {
+				alias = null;
+			}
 			$.add(new CommandStatusJson(e.name(), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(), e.commandData().id(),  !e.isActive(), alias));
 		}
 		return $;
