@@ -103,6 +103,8 @@ public class PeerCommandWorker implements Runnable {
 				}
 			} else {
 				announce("result is empty for node " + node.alias());
+			}
+			if (!success) {
 				nodeFailed();
 			}
 		} catch (Exception ex) {
@@ -160,7 +162,6 @@ public class PeerCommandWorker implements Runnable {
 			if (matcher.matches()) {
 				int exitStatus = Integer.valueOf(matcher.group(1));
 				if (ExitStatus.SUCCESS != exitStatus) {
-					nodeFailed();
 					line = "\nCommand failed with exit status " + exitStatus;
 					if (exitStatus <= 0) {
 						line += " (" + ExitStatus.fromInt(exitStatus) + ")";
