@@ -557,7 +557,7 @@
                                             <div class="form-group" ng-if="command_parameter.type == 'Boolean'">
                                                 <div class="checkbox col-lg-offset-3">
                                                     <label>
-                                                        <input type="checkbox" ng-model="command_info.default_value"> Default value
+                                                        <input type="checkbox" ng-model="command_parameter{{$index}}.default_value"> Default value
                                                         <help help-id="command_patameter_default_val_Help"></help>
                                                     </label>
                                                 </div>
