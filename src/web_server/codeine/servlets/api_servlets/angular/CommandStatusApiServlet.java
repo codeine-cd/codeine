@@ -4,6 +4,10 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
+import codeine.command_peer.AllNodesCommandExecuter;
+import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
@@ -14,7 +18,9 @@ import codeine.utils.TextFileUtils;
 public class CommandStatusApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(CommandStatusApiServlet.class);
 	@Inject private PathHelper pathHelper;
+	@Inject private NodesCommandExecuterProvider allNodesCommandExecuterProvider;
 	
 	protected CommandStatusApiServlet() {
 	}
@@ -25,9 +31,22 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 		String commandName = getParameter(request, Constants.UrlParameters.COMMAND_NAME);
 		String file = pathHelper.getCommandOutputInfoFile(projectName, commandName);
 		String outputfile = pathHelper.getCommandOutputFile(projectName, commandName);
-		CommandExecutionStatusInfo commandInfo = new JsonFileUtils(gson()).getConfFromFile(file, CommandExecutionStatusInfo.class);
+		AllNodesCommandExecuter e = allNodesCommandExecuterProvider.getCommandOrNull(projectName, commandName);
+		CommandExecutionStatusInfo commandInfo;
+		if (e == null) {
+			commandInfo = getCommandInfo(file);
+		} else {
+			synchronized (e.fileWriteSync()) {
+				log.info("command is running so getting a lock " + projectName + " " + commandName);
+				commandInfo = getCommandInfo(file);
+			}
+		}
 		commandInfo.output(TextFileUtils.getContents(outputfile));
 		writeResponseGzipJson(commandInfo, request, response);
+	}
+
+	private CommandExecutionStatusInfo getCommandInfo(String file) {
+		return new JsonFileUtils(gson()).getConfFromFile(file, CommandExecutionStatusInfo.class);
 	}
 	
 	@Override

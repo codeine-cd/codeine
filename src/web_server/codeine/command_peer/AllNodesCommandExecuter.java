@@ -295,4 +295,7 @@ public class AllNodesCommandExecuter {
 	public List<NodeWithPeerInfo> nodesList() {
 		return commandData.nodes();
 	}
+	public Object fileWriteSync() {
+		return fileWriteSync;
+	}
 }

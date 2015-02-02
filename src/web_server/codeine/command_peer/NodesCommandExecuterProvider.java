@@ -16,6 +16,7 @@ import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
 import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;
+import codeine.utils.MiscUtils;
 import codeine.utils.TextFileUtils;
 import codeine.utils.exceptions.InShutdownException;
 
@@ -165,6 +166,18 @@ public class NodesCommandExecuterProvider {
 
 	public List<CommandStatusJson> getActive() {
 		return getActiveStatusFromList(cleanAndGet());
+	}
+
+	public AllNodesCommandExecuter getCommandOrNull(String projectName, String commandName) {
+		synchronized (executers) {
+			for (AllNodesCommandExecuter e : executers) {
+				if (MiscUtils.equals(e.project(), projectName) && 
+						MiscUtils.equals(String.valueOf(e.id()), commandName)) {
+					return e;
+				}
+			}
+		}
+		return null;
 	}
 
 }
