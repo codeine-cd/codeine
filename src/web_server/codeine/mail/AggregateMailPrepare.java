@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 import codeine.configuration.Links;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.jsons.mails.AlertsCollectionType;
 import codeine.jsons.mails.CollectorNotificationJson;
@@ -28,6 +29,8 @@ public class AggregateMailPrepare {
 	private Links links;
 	@Inject
 	private LabelJsonProvider labelJsonProvider;
+	@Inject
+	private GlobalConfigurationJsonStore globalConfigurationJsonStore;
 
 	public List<Mail> prepare(List<NotificationContent> notificationContent, AlertsCollectionType alertsCollectionType) {
 		List<Mail> $ = Lists.newArrayList();
@@ -81,7 +84,7 @@ public class AggregateMailPrepare {
 				title += " on nodes: " + byNode.keySet();
 				title = StringUtils.trimStringToMaxLength(title, 150);
 			}
-			$.add(new Mail(Lists.newArrayList(item.user()), title, stringContent));
+			$.add(new Mail(Lists.newArrayList(item.user()), title, stringContent, globalConfigurationJsonStore.get().admin_mail()));
 		}
 		return $;
 	}

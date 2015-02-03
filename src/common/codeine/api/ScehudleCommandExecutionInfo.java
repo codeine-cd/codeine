@@ -18,7 +18,7 @@ public class ScehudleCommandExecutionInfo {
 	public ScehudleCommandExecutionInfo() {
 	}
 
-	private ScehudleCommandExecutionInfo(CommandInfo command_info, List<NodeWithPeerInfo> nodes, boolean should_execute_on_all_nodes) {
+	public ScehudleCommandExecutionInfo(CommandInfo command_info, List<NodeWithPeerInfo> nodes, boolean should_execute_on_all_nodes) {
 		this.command_info = command_info;
 		this.nodes = nodes;
 		this.should_execute_on_all_nodes = should_execute_on_all_nodes;

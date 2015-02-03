@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -15,19 +14,14 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.GlobalConfigurationJsonStore;
-
 
 public class JavaMailSendWrapper
 {
 	private static final Logger log = Logger.getLogger(JavaMailSendWrapper.class);
 	
-	@Inject
-	private GlobalConfigurationJsonStore globalConfiguration;
 	
-	public void sendMail(String subject, String content, List<String> recipients)
+	public void sendMail(String subject, String content, List<String> recipients, String from)
 	{
-		String from = globalConfiguration.get().admin_mail();
 		String host = "localhost";
 		Properties props = new Properties();
 		props.put("mail.smtp.host", host);
@@ -69,7 +63,7 @@ public class JavaMailSendWrapper
 	}
 
 	public void sendMail(Mail mail) {
-		sendMail(mail.subject(), mail.content(), mail.recipients());
+		sendMail(mail.subject(), mail.content(), mail.recipients(), mail.sender());
 	}
 	
 }

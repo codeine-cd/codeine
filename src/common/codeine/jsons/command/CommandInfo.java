@@ -145,5 +145,9 @@ public class CommandInfo
 	    }
 	}
 
+	public void duration(int duration) {
+		this.duration = duration;
+	}
+
 	
 }

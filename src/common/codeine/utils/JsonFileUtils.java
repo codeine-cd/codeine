@@ -1,5 +1,7 @@
 package codeine.utils;
 
+import java.lang.reflect.Type;
+
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -19,11 +21,17 @@ public class JsonFileUtils {
 	}
 
 
-	public <T> T getConfFromFile(String file, Class<T> clazz)
-	{
+	public <T> T getConfFromFile(String file, Class<T> clazz) {
 		log.info("parsing file " + file);
 		if (!FilesUtils.exists(file)) {
 			return ReflectionUtils.newInstance(clazz);
+		}
+		return gson.fromJson(TextFileUtils.getContents(file), clazz);
+	}
+	public <T> T getConfFromFile(String file, Type clazz, T defaulValue) {
+		log.info("parsing file " + file);
+		if (!FilesUtils.exists(file)) {
+			return defaulValue;
 		}
 		return gson.fromJson(TextFileUtils.getContents(file), clazz);
 	}
