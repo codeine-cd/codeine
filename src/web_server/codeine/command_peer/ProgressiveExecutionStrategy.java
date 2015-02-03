@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 
 	private static final Logger log = Logger.getLogger(ProgressiveExecutionStrategy.class);
-	
 	private NodeGetter nodesGetter;
 	private Object cancelObject = new Object();
 
@@ -66,18 +65,24 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 			long startLoop = System.currentTimeMillis();
 			double minutesLeft = (double) TimeUnit.MILLISECONDS.toMinutes(endTime - System.currentTimeMillis());
 			calc.iterationStart(minutesLeft, leftNodes.size());
-			writeLine("Will execute on " + calc.numOfNodesToExecute() + " nodes");
-			List<NodeWithPeerInfo> subList = leftNodes.subList(0, calc.numOfNodesToExecute());
-			executeConcurrent(subList, calc.numOfNodesToExecute());
+			int numOfNodesToExecute = calc.numOfNodesToExecute();
+			writeLine("Will execute on " + numOfNodesToExecute + " nodes");
+			if (numOfNodesToExecute < CommandExecutionStrategy.MAX_NODES_TO_EXECUTE) {
+				log.info("numOfNodesToExecute is above limit " + numOfNodesToExecute);
+				writeLine("execution concurrency is above limit, will set it to " + CommandExecutionStrategy.MAX_NODES_TO_EXECUTE);
+				numOfNodesToExecute = CommandExecutionStrategy.MAX_NODES_TO_EXECUTE;
+			}
+			List<NodeWithPeerInfo> subList = leftNodes.subList(0, numOfNodesToExecute);
+			executeConcurrent(subList, numOfNodesToExecute);
 			completedNodes.addAll(subList);
 			subList.clear();
 			long loopTime = System.currentTimeMillis() - startLoop;
 			long sleepTime = calc.getTimeToSleep(loopTime);
 			if ((sleepTime > 0) && (leftNodes.size() > 0)) {
-				writeLine("Execution of " + calc.numOfNodesToExecute() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", going to sleep for " + StringUtils.formatTimePeriod(sleepTime));
+				writeLine("Execution of " + numOfNodesToExecute + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", going to sleep for " + StringUtils.formatTimePeriod(sleepTime));
 				ThreadUtils.wait(cancelObject, sleepTime);
 			} else {
-				writeLine("Execution of " + calc.numOfNodesToExecute() + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", will not go to sleep");
+				writeLine("Execution of " + numOfNodesToExecute + " nodes took " + StringUtils.formatTimePeriod(loopTime) + ", will not go to sleep");
 			}
 		}
 		log.info("done executing");

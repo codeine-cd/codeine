@@ -23,6 +23,8 @@ public abstract class CommandExecutionStrategy {
 	private ProjectJson project;
 	private IUserWithPermissions userObject;
 	private String error;
+
+	static final int MAX_NODES_TO_EXECUTE = 100;
 	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
 			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserWithPermissions userObject) {
@@ -51,6 +53,11 @@ public abstract class CommandExecutionStrategy {
 
 	protected void executeConcurrent(List<NodeWithPeerInfo> nodes, int concurrency) {
 		boolean shouldOutputImmediatly = concurrency < 2 || nodes.size() < 2;
+		if (concurrency > MAX_NODES_TO_EXECUTE) {
+			log.info("concurrency is above limit " + concurrency);
+			writeLine("concurrency is above limit, will reduce it to " + MAX_NODES_TO_EXECUTE);
+			concurrency = MAX_NODES_TO_EXECUTE;
+		}
 		ExecutorService executor = Executors.newFixedThreadPool(concurrency);
 		for (NodeWithPeerInfo peer : nodes) {
 			commandNode(executor, peer, shouldOutputImmediatly);
