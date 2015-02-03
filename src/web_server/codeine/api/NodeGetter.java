@@ -14,6 +14,7 @@ import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.ProjectStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
+import codeine.utils.MiscUtils;
 import codeine.version.ViewNodesFilter;
 
 import com.google.common.base.Predicate;
@@ -109,7 +110,7 @@ public class NodeGetter {
 
 	private List<String> findTags(ProjectJson projectJson, NodeWithMonitorsInfo node) {
 		for (NodeInfo n : projectJson.nodes_info()) {
-			if (n.name().equals(node.name())) {
+			if (MiscUtils.equals(n.name(), node.name())) {
 				return n.tags();
 			}
 		}
