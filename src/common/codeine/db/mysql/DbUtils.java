@@ -180,7 +180,7 @@ public class DbUtils
 	}
 	
 	public static boolean checkConnection(String host, Integer port, String user, String password) {
-		String url = "jdbc:mysql://"+host+":" + port + "/" + MysqlConstants.DB_NAME;
+		String url = "jdbc:mysql://"+host+":" + port + "/" + MysqlConstants.DB_NAME + "?socketTimeout=10000&connectTimeout=10000";
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(url, user, password);			
