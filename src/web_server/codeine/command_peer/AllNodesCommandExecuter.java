@@ -84,6 +84,7 @@ public class AllNodesCommandExecuter {
 				};
 			}, "AllNodesCommandExecuter_"+commandData.command_info().command_name());
 			commandThread.start();
+			monitorsStatistics.updateCommand(commandDataJson);
 			return commandId;
 		} catch (Exception ex) {
 			finish();
@@ -118,7 +119,6 @@ public class AllNodesCommandExecuter {
 		log.info("Finishing command " + commandDataJson.id());
 		if (null != commandDataJson) {
 			commandDataJson.finish();
-			monitorsStatistics.updateCommand(commandDataJson);
 		}
 		try {
 			updateJson();
