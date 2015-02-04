@@ -132,6 +132,9 @@
                     }
                 }
             }).
+            when('/codeine/project/:project_name', {
+                redirectTo: '/codeine/project/:project_name/status'
+            }).
             when('/codeine/project/:project_name/status', {
                 templateUrl: '/components/project_status/project_status.html',
                 controller: 'projectStatusWithMenuCtrl',
@@ -212,6 +215,9 @@
                     }
                 }
             }).
+            when('/codeine/project/:project_name/node/:node_name', {
+                redirectTo: '/codeine/project/:project_name/node/:node_name/status'
+            }).
             when('/codeine/project/:project_name/node/:node_name/status', {
                 templateUrl: '/components/node_status/node_status.html',
                 controller: 'nodeStatusCtrl',
@@ -246,22 +252,8 @@
                     }
                 }
             }).
-            when('/codeine/project/:project_name/node/:node_name/monitor/:monitor_name/status', {
-                templateUrl: '/components/monitor_status/monitor_status.html',
-                controller: 'monitorStatusCtrl',
-                controllerAs: 'vm',
-                pageTitle: 'Monitor Status',
-                resolve: {
-                    monitorStatus :  function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getMonitorStatus($route.current.params.project_name, $route.current.params.node_name, $route.current.params.monitor_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get monitor status');
-                        });
-                        return deferred.promise;
-                    }
-                }
+            when('/codeine/project/:project_name/node/:node_name/collector/:collector_name', {
+                redirectTo: '/codeine/project/:project_name/node/:node_name/collector/:collector_name/status'
             }).
             when('/codeine/project/:project_name/node/:node_name/collector/:collector_name/status', {
                 templateUrl: '/components/collector_status/collector_status.html',
@@ -279,6 +271,9 @@
                         return deferred.promise;
                     }
                 }
+            }).
+            when('/codeine/project/:project_name/command/:command_name/:command_id', {
+                redirectTo: '/codeine/project/:project_name/command/:command_name/:command_id/status'
             }).
             when('/codeine/project/:project_name/command/:command_name/:command_id/status', {
                 templateUrl: '/components/command_status/command_status.html',
