@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService) {
+    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService) {
         /*jshint validthis:true */
         var vm = this;
 
@@ -39,6 +39,15 @@
             var url = '/codeine/project/' + vm.projectName + '/command/' + vm.commandStatus.command + '/setup';
             SelectedNodesService.setSelectedNodes(vm.commandStatus.nodes_list, url, vm.commandStatus.params);
             $location.path(url);
+        };
+
+        vm.cancelCommand =function($event) {
+            $event.stopPropagation();
+            if ($window.confirm('Are you sure you would like to cancel the command?')) {
+                CodeineService.cancelCommand(vm.projectName, $routeParams.command_id).success(function () {
+                    AlertService.addAlert('success', 'Command was canceled successfully');
+                });
+            }
         };
 
         $scope.$on('$destroy', function() {
