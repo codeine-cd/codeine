@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 public class JsonFileUtils {
 	
@@ -28,12 +29,18 @@ public class JsonFileUtils {
 		}
 		return gson.fromJson(TextFileUtils.getContents(file), clazz);
 	}
-	public <T> T getConfFromFile(String file, Type clazz, T defaulValue) {
+	public <T> T getConfFromFile(String file, Type clazz, T defaultValue) {
 		log.info("parsing file " + file);
 		if (!FilesUtils.exists(file)) {
-			return defaulValue;
+			return defaultValue;
 		}
-		return gson.fromJson(TextFileUtils.getContents(file), clazz);
+		T $ = null;
+		try {
+			$ = gson.fromJson(TextFileUtils.getContents(file), clazz);
+		} catch (JsonSyntaxException e) {
+			e.printStackTrace();
+		}
+		return $ == null ? defaultValue : $;
 	}
 
 
