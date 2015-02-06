@@ -22,7 +22,15 @@ public class NodeInfo {
 		this.name = name;
 		this.alias = alias == null ? name : alias;
 	}
+	
+	
 
+	public NodeInfo(String name, String alias, List<String> tags) {
+		super();
+		this.name = name;
+		this.alias = alias;
+		this.tags = tags;
+	}
 	public String alias() {
 		return null == alias ? name : alias;
 	}

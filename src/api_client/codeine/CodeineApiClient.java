@@ -3,8 +3,12 @@ package codeine;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 
 import codeine.api.CommandStatusJson;
+import codeine.api.NodeInfo;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.api.VersionItemInfo;
@@ -12,16 +16,21 @@ import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.model.Constants.UrlParameters;
+import codeine.permissions.UserProjectPermissions;
+import codeine.servlets.api_servlets.projects.CreateNewProjectJson;
 import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
 public class CodeineApiClient {
 
+	private Logger log = Logger.getLogger(CodeineApiClient.class);
+	
 	private String host;
 	private int port;
 	private Gson gson = new Gson();
@@ -46,6 +55,9 @@ public class CodeineApiClient {
 	
 	public void report(NodeWithMonitorsInfo nodeWithMonitorsInfo) {
 		apiPostCall(Constants.REPORTER_CONTEXT, "", nodeWithMonitorsInfo);
+	}
+	public void createProject(CreateNewProjectJson newProjectProperties) {
+		apiPostCall(Constants.PROJECTS_LIST_CONTEXT, "", newProjectProperties);
 	}
 
 
@@ -102,5 +114,38 @@ public class CodeineApiClient {
 	public String saveProject(ProjectJson project) {
 		String url = getServerPath(Constants.PROJECT_CONFIGURATION_CONTEXT);
 		return HttpUtils.doPUT(url, gson.toJson(project),headers);
+	}
+
+	public void addCommandPermissionsToProject(String projectName, String user, String nodeAlias) {
+		log.info("addCommandPermissionsToProject " + projectName + " " + user + " " + nodeAlias);
+		ProjectJson project = project(projectName);
+		boolean found = false;
+		for (UserProjectPermissions p : project.permissions()) {
+			if (p.username().equals(user)) {
+				p.can_command().add(nodeAlias);
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			Set<String> can_command = Sets.newHashSet(nodeAlias);
+			project.permissions().add(new UserProjectPermissions(user, false, can_command, true));
+		}
+		saveProject(project);
+	}
+	
+	public void addNodeToProject(String projectName, NodeInfo nodeInfo) {
+		log.info("addNodeToProject " + projectName + " " + nodeInfo);
+		ProjectJson project = project(projectName);
+		for (NodeInfo n : project.nodes_info()) {
+			if (n.name().equals(nodeInfo.name())) {
+				throw new IllegalArgumentException("node name already defined " + nodeInfo.name());
+			}
+			if (n.alias().equals(nodeInfo.alias())) {
+				throw new IllegalArgumentException("node alias already defined " + nodeInfo.alias());
+			}
+		}
+		project.nodes_info().add(nodeInfo);
+		saveProject(project);
 	}
 }

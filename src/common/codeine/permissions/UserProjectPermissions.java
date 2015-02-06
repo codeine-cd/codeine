@@ -19,17 +19,38 @@ public class UserProjectPermissions extends AbstractUserPermissions{
 		this.can_read = can_read;
 	}
 
+	/**
+	 * @return can_read configured value
+	 */
+	public boolean can_read() {
+		return can_read;
+	}
+	/**
+	 * @return can_read resolved value
+	 */
 	public boolean canRead() {
 		return can_read || canCommand();
 	}
 	
 	/**
-	 * @return true if can command any node
+	 * @return true if can command any node (resolved)
 	 */
 	public boolean canCommand() {
 		return !can_command.isEmpty() || canConfigure();
 	}
-
+	/**
+	 * @return can_command configured value
+	 */
+	public Set<String> can_command() {
+		return can_command;
+	}
+	/**
+	 * @return can_config configured value
+	 */
+	public boolean can_config() {
+		return can_config;
+	}
+	
 	public boolean canConfigure() {
 		return can_config;
 	}
