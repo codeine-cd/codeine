@@ -67,7 +67,7 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 			calc.iterationStart(minutesLeft, leftNodes.size());
 			int numOfNodesToExecute = calc.numOfNodesToExecute();
 			writeLine("Will execute on " + numOfNodesToExecute + " nodes");
-			if (numOfNodesToExecute < CommandExecutionStrategy.MAX_NODES_TO_EXECUTE) {
+			if (numOfNodesToExecute > CommandExecutionStrategy.MAX_NODES_TO_EXECUTE) {
 				log.info("numOfNodesToExecute is above limit " + numOfNodesToExecute);
 				writeLine("execution concurrency is above limit, will set it to " + CommandExecutionStrategy.MAX_NODES_TO_EXECUTE);
 				numOfNodesToExecute = CommandExecutionStrategy.MAX_NODES_TO_EXECUTE;
