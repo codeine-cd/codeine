@@ -46,7 +46,7 @@ public class UserPermissionsBuilder {
 		HashMap<String, Map<String, UserProjectPermissions>> $ = Maps.newHashMap();
 		List<String> groups = groupsManager.groups(user);
 		for (String group : groups) {
-			log.info("group is " + group);
+			log.debug("group is " + group);
 			Map<String, UserProjectPermissions> projectPermissions = getProjectPermissions(group);
 			if (!projectPermissions.isEmpty()) {
 				$.put(group, projectPermissions);
@@ -72,7 +72,6 @@ public class UserPermissionsBuilder {
 		Map<String, UserProjectPermissions> p = Maps.newHashMap();
 		for (ProjectJson projectJson : configuredProjects) {
 			for (UserProjectPermissions u : projectJson.permissions()) {
-				log.info("u is " + u);
 				if (u.username().equals(theUser)){
 					p.put(projectJson.name(), u);
 				}
