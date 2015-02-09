@@ -74,14 +74,14 @@ public class NotificationsFetchAndUpdateTask implements Task {
 				log.info("error fetching alerts from db " + c, e);
 			}
 		}
-		for (NotificationsMysqlConnector c : notificationsConnectors) {
-			try {
-				log.info("fetching from " + c);
-				allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
-			} catch (Exception e) {
-				log.info("error fetching alerts from db " + c, e);
-			}
-		}
+//		for (NotificationsMysqlConnector c : notificationsConnectors) {
+//			try {
+//				log.info("fetching from " + c);
+//				allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
+//			} catch (Exception e) {
+//				log.info("error fetching alerts from db " + c, e);
+//			}
+//		}
 		List<NotificationContent> notificationContent = mailCreator.prepareMailsToUsers(alertsCollectionType, allItems, configurationManager.getConfiguredProjects());
 		List<Mail> mails = mailPrepare.prepare(notificationContent, alertsCollectionType);
 		for (Mail mail : mails) {
