@@ -24,7 +24,7 @@ public abstract class CommandExecutionStrategy {
 	private IUserWithPermissions userObject;
 	private String error;
 
-	static final int MAX_NODES_TO_EXECUTE = 100;
+	public static final int MAX_NODES_TO_EXECUTE = 100;
 	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
 			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserWithPermissions userObject) {

@@ -2,9 +2,12 @@ package codeine.command_peer;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+
 public class LinearProgressiveRateClaculator implements ProgressiveRateClaculator {
 
-	private static final int MAX_CONCERENCY = 100;
+	private static final Logger log = Logger.getLogger(CommandExecutionStrategy.class);
+	
 	private double minutesLeft;
 	private int nodesLeft,numOfNodesToExecute;
 	private double ratio;
@@ -20,7 +23,10 @@ public class LinearProgressiveRateClaculator implements ProgressiveRateClaculato
 		minutesLeft = minutesLeft < 1 ? 1 : minutesLeft;
 		ratio = nodesLeft / minutesLeft;
 		numOfNodesToExecute = (int) Math.ceil(ratio);
-		numOfNodesToExecute = Math.min(numOfNodesToExecute, MAX_CONCERENCY);
+		if (numOfNodesToExecute > CommandExecutionStrategy.MAX_NODES_TO_EXECUTE) {
+			log.info("linear concurrency is above limit " + numOfNodesToExecute);
+		}
+		numOfNodesToExecute = Math.min(numOfNodesToExecute, CommandExecutionStrategy.MAX_NODES_TO_EXECUTE);
 	}
 	
 
