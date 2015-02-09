@@ -5,13 +5,11 @@ import javax.inject.Provider;
 
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
-import codeine.db.IAlertsDatabaseConnector;
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.ProjectsConfigurationConnector;
 import codeine.db.mysql.MysqlHostSelector;
 import codeine.db.mysql.NearestMysqlHostSelectorPreferLocalhost;
 import codeine.db.mysql.StaticMysqlHostSelector;
-import codeine.db.mysql.connectors.AlertsMysqlConnector;
 import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
@@ -32,7 +30,6 @@ public class CodeineDirectoryModule extends AbstractModule
 	@Override
 	protected void configure()
 	{
-		bind(IAlertsDatabaseConnector.class).to(AlertsMysqlConnector.class);
 		bind(ProjectsConfigurationConnector.class).to(ProjectsConfigurationMysqlConnector.class);
 		bind(IStatusDatabaseConnector.class).to(StatusMysqlConnector.class);
 		bind(MysqlHostSelector.class).toProvider(MysqlHostSelectorProvider.class).in(Scopes.SINGLETON);

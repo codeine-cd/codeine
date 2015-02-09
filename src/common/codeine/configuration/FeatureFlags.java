@@ -10,7 +10,15 @@ import codeine.model.Constants;
 public class FeatureFlags {
 
 	public boolean isCollectorsDisabled() {
-		Path path = Paths.get(Constants.getFeatureFlagsDir() + File.pathSeparator + "collectors_disabled");
+		return isFeatureExists("collectors_disabled");
+	}
+
+	private boolean isFeatureExists(String file) {
+		Path path = Paths.get(Constants.getFeatureFlagsDir() + File.pathSeparator + file);
 		return Files.exists(path);
+	}
+
+	public boolean isNotificationsDisabled() {
+		return isFeatureExists("notifications_disabled");
 	}
 }

@@ -2,6 +2,7 @@ package codeine.collectors;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -31,6 +32,9 @@ import codeine.utils.network.HttpUtils;
 import codeine.utils.os_process.ShellScript;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.inject.assistedinject.Assisted;
@@ -54,6 +58,16 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 	private Result result;
 	private Result previousResult;
 	private Stopwatch stopwatch;
+	private LoadingCache<Long, Object> notificationsCount = CacheBuilder.newBuilder()
+		       .maximumSize(100)
+		       .expireAfterWrite(24, TimeUnit.HOURS)
+		       .build(
+		           new CacheLoader<Long, Object>() {
+		             @Override
+					public Object load(Long key) {
+		               return new Object();
+		             }
+		           });
 	
 	@Inject
 	public OneCollectorRunner(@Assisted CollectorInfo collector, @Assisted ProjectJson project, @Assisted NodeInfo node) {
@@ -151,8 +165,13 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 			return;
 		}
 		if (collectorInfo.notification_enabled() && shouldNotify()) {
+			try {
+				notificationsCount.get(System.currentTimeMillis());
+			} catch (ExecutionException e) {
+				log.warn("could not get from cache", e);
+			}
 			notificationDeliverToDatabase.sendCollectorResult(
-					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString(), true);
+					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString(), true, (int)notificationsCount.size());
 		}
 		previousResult = result;
 	}

@@ -3,6 +3,7 @@ package codeine.db.mysql;
 import javax.inject.Inject;
 
 import codeine.db.mysql.connectors.AlertsMysqlConnector;
+import codeine.db.mysql.connectors.NotificationsMysqlConnector;
 import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
 
@@ -14,6 +15,8 @@ public class MysqlDatabaseSchemaManagement {
 	private StatusMysqlConnector statusMysqlConnector;
 	@Inject
 	private AlertsMysqlConnector alertMysqlConnector;
+	@Inject
+	private NotificationsMysqlConnector notificationMysqlConnector;
 	@Inject
 	private ProjectsConfigurationMysqlConnector projectsConfiguratioConnector;
 	
@@ -30,5 +33,6 @@ public class MysqlDatabaseSchemaManagement {
 		statusMysqlConnector.createTables();
 		alertMysqlConnector.createTables();
 		projectsConfiguratioConnector.createTables();
+		notificationMysqlConnector.createTables();
 	}
 }

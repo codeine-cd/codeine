@@ -1,7 +1,6 @@
 package codeine;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +111,7 @@ public class AggregateNotificationTest {
 		return mailPolicy;
 	}
 	private CollectorNotificationJson createNotification(ProjectJson projectJson) {
-		CollectorNotificationJson value = new CollectorNotificationJson(null, projectJson.name(), null, null, null, null, 0, null, false);
+		CollectorNotificationJson value = new CollectorNotificationJson(null, projectJson.name(), null, null, null, null, 0, null, false, 1);
 		projectNameToItems.put(projectJson.name(), value);
 		return value;
 	}

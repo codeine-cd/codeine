@@ -48,22 +48,23 @@ public class AggregateMailPrepare {
 				String nodeName = notification.node() == null ? "unknown" : notification.node().alias();
 				String version = notification.version() == null ? Constants.NO_VERSION : labelJsonProvider
 						.labelForVersion(notification.version(), notification.project_name());
-				content.append("Project       : " + notification.project_name() + "\n");
-				content.append("Node          : " + nodeName + "\n");
-				content.append("Monitor       : " + notification.collector_name() + "\n");
+				content.append("Project        : " + notification.project_name() + "\n");
+				content.append("Node           : " + nodeName + "\n");
+				content.append("Monitor        : " + notification.collector_name() + "\n");
 				if (null != notification.exit_status()) {
 				String exitString = "" + notification.exit_status();
 				if (notification.exit_status() <= 0) {
 					exitString += " (" + ExitStatus.fromInt(notification.exit_status()) + ")";
 				}
-				content.append("Exit Status   : " + exitString + "\n");
+				content.append("Exit Status    : " + exitString + "\n");
 				}
 				if (!StringUtils.isEmpty(notification.duration())) {
-				content.append("Duration      : " + notification.duration() + "\n");
+				content.append("Duration       : " + notification.duration() + "\n");
 				}
-				content.append("Time on node  : " + getTimeOnNode(notification) + "\n");
-				content.append("Server        : " + notification.peer() + "\n");
-				content.append("Version       : " + version + "\n");
+				content.append("# in last 24h  : " + notification.notifications_in_24h() + "\n");
+				content.append("Time on node   : " + getTimeOnNode(notification) + "\n");
+				content.append("Server         : " + notification.peer() + "\n");
+				content.append("Version        : " + version + "\n");
 				content.append("Link to monitor page : " + getLink(notification) + "\n");
 				content.append("Output\n" + notification.output() + "\n");
 				content.append("========================================================================\n");

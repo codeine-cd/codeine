@@ -26,7 +26,7 @@ import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
-import codeine.mail.MonitorDBTask;
+import codeine.mail.NotificationsFetchAndUpdateTask;
 import codeine.model.Constants;
 import codeine.servlet.UsersManager;
 import codeine.servlets.AngularServlet;
@@ -64,7 +64,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 			log.error("fail to update projects in db", e);
 		}
 		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(IMonitorStatistics.class)).runInThreadSleepFirst();
-		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(5), injector().getInstance(MonitorDBTask.class)).runInThreadSleepFirst();
+		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(5), injector().getInstance(NotificationsFetchAndUpdateTask.class)).runInThreadSleepFirst();
 	}
 
 	@Override

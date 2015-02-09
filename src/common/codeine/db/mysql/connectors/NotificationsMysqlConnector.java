@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.configuration.FeatureFlags;
 import codeine.db.IAlertsDatabaseConnector;
 import codeine.db.mysql.DbUtils;
 import codeine.jsons.global.ExperimentalConfJsonStore;
@@ -22,38 +23,42 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 
-//TODO remove after all components using notifications
-public class AlertsMysqlConnector implements IAlertsDatabaseConnector{
-	private static final Logger log = Logger.getLogger(AlertsMysqlConnector.class);
+public class NotificationsMysqlConnector implements IAlertsDatabaseConnector{
+	private static final Logger log = Logger.getLogger(NotificationsMysqlConnector.class);
 	private DbUtils dbUtils;
 	private Gson gson;
 	private ExperimentalConfJsonStore webConfJsonStore;
-	private static final String TABLE_NAME = "Alerts";
-	
+	private FeatureFlags featureFlags;
+	private static final String TABLE_NAME = "CollectorsNotifications";
 	
 	
 	@Inject
-	public AlertsMysqlConnector(DbUtils dbUtils, Gson gson, ExperimentalConfJsonStore webConfJsonStore) {
+	public NotificationsMysqlConnector(DbUtils dbUtils, Gson gson, ExperimentalConfJsonStore webConfJsonStore,
+			FeatureFlags featureFlags) {
 		super();
 		this.dbUtils = dbUtils;
 		this.gson = gson;
 		this.webConfJsonStore = webConfJsonStore;
+		this.featureFlags = featureFlags;
 	}
-
 
 	public void createTables() {
 		if (webConfJsonStore.get().readonly_web_server()) {
 			log.info("read only mode");
 			return;
 		}
-		String colsDefinition = "id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, data text, collection_type_update_time BIGINT, collection_type BIGINT";
+		String colsDefinition = "notification_id VARCHAR(150) NOT NULL PRIMARY KEY, data text, collection_type_update_time BIGINT, collection_type BIGINT";
 		dbUtils.executeUpdate("create table if not exists " + TABLE_NAME + " (" + colsDefinition + ")");
 	}
 
 	@Override
 	public void put(CollectorNotificationJson collectorNotificationJson) {
+		if (featureFlags.isNotificationsDisabled()) {
+			log.info("notification disabled");
+			return;
+		}
 		String json = gson.toJson(collectorNotificationJson);
-		dbUtils.executeUpdate("INSERT INTO "+TABLE_NAME+" (data) VALUES (?)", json);
+		dbUtils.executeUpdate("REPLACE INTO "+TABLE_NAME+" (notification_id, data) VALUES (?,?)", collectorNotificationJson.notification_id(), json);
 	}
 
 	@Override
