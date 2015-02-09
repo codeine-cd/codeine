@@ -117,18 +117,14 @@ div.sidebar-nav div.popover {
     padding: 0px !important;
 }
 
-/* This cuts off wide node names in status view. */
-form.form-inline fieldset div:first-child {
+/* This cuts off text where it is too wide for its container. */
+.fade_me {
   overflow: hidden;
-  /* text-overflow: ellipsis; */
-  position: relative;
-  max-height: 18px;
-  max-height: 1.1rem;
   white-space: nowrap;
 }
 
-/* This applies a gradient fade over the node name (instead of an ellipsis) */
-form.form-inline span.version_label:before {
+/* This applies a gradient fade over the to-wide text. */
+.fade_me:before {
   background: -moz-linear-gradient(left,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
@@ -137,6 +133,115 @@ form.form-inline span.version_label:before {
   background: linear-gradient(to right,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00ffffff', endColorstr='#ffffff')"; /* For Internet Explorer 8 */
+  bottom: 0;
+  content: " ";
+  display: block;
+  left: 80%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* States (i.e., classes) that the <a> can have:
+    
+    * list-group-item-info  (light blue: rgb(217, 237, 247), #c4e3f3 on hover)
+    * list-group-item-danger (pink: rgb(242, 222, 222), #ebcccc on hover rgb(235, 204, 204)))
+
+   And each of these has a hover state that changes the color...
+
+*/
+
+/* This applies a GREY fade over the too-wide text on hover */
+.fade_me:hover:before {
+  background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgb(255, 255, 255) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00ffffff', endColorstr='#ffffff')"; /* For Internet Explorer 8 */
+  bottom: 0;
+  content: " ";
+  display: block;
+  left: 80%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* This applies a BLUE fade over the too-wide text when its parent <a> has the active state */
+.list-group-item-info .fade_me:before {
+  background: -moz-linear-gradient(left, rgba(217, 237, 247,0) 0%, rgb(217, 237, 247) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(217, 237, 247,0)), color-stop(100%,rgba(217, 237, 247,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(217, 237, 247,0) 0%,rgba(217, 237, 247,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(217, 237, 247,0) 0%,rgba(217, 237, 247,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(217, 237, 247,0) 0%,rgba(217, 237, 247,1) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(217, 237, 247,0) 0%,rgba(217, 237, 247,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00d9edf7', endColorstr='#d9edf7',GradientType=1 ); /* IE6-9 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00d9edf7', endColorstr='#d9edf7')"; /* For Internet Explorer 8 */
+  bottom: 0;
+  content: " ";
+  display: block;
+  left: 80%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* This applies a slightly darker BLUE fade over the too-wide text when its parent <a> has the active state AND hover is in effect */
+.list-group-item-info .fade_me:hover:before, .list-group-item-info .fade_me:focus:before {
+  background: -moz-linear-gradient(left, rgba(196, 227, 243,0) 0%, rgb(196, 227, 243) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(196, 227, 243,0)), color-stop(100%,rgba(196, 227, 243,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(196, 227, 243,0) 0%,rgba(196, 227, 243,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(196, 227, 243,0) 0%,rgba(196, 227, 243,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(196, 227, 243,0) 0%,rgba(196, 227, 243,1) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(196, 227, 243,0) 0%,rgba(196, 227, 243,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00c4e3f3', endColorstr='#c4e3f3',GradientType=1 ); /* IE6-9 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00c4e3f3', endColorstr='#c4e3f3')"; /* For Internet Explorer 8 */
+  bottom: 0;
+  content: " ";
+  display: block;
+  left: 80%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* This applies a PINK fade over the too-wide text when its parent <a> has the danger state */
+.list-group-item-danger .fade_me:before {
+  background: -moz-linear-gradient(left, rgba(242, 222, 222,0) 0%, rgb(242, 222, 222) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(242, 222, 222,0)), color-stop(100%,rgba(242, 222, 222,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(242, 222, 222,0) 0%,rgba(242, 222, 222,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(242, 222, 222,0) 0%,rgba(242, 222, 222,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(242, 222, 222,0) 0%,rgba(242, 222, 222,1) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(242, 222, 222,0) 0%,rgba(242, 222, 222,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f2dede', endColorstr='#f2dede',GradientType=1 ); /* IE6-9 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00f2dede', endColorstr='#f2dede')"; /* For Internet Explorer 8 */
+  bottom: 0;
+  content: " ";
+  display: block;
+  left: 80%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* This applies a slightly darker PINK fade over the too-wide text when its parent <a> has the danger state AND hover is in effect */
+.list-group-item-danger .fade_me:hover:before, .list-group-item-danger .fade_me:focus:before {
+  background: -moz-linear-gradient(left, rgba(235, 204, 204,0) 0%, rgb(235, 204, 204) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(235, 204, 204,0)), color-stop(100%,rgba(235, 204, 204,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(235, 204, 204,0) 0%,rgba(235, 204, 204,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(235, 204, 204,0) 0%,rgba(235, 204, 204,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(235, 204, 204,0) 0%,rgba(235, 204, 204,1) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(235, 204, 204,0) 0%,rgba(235, 204, 204,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ebcccc', endColorstr='#ebcccc',GradientType=1 ); /* IE6-9 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00ebcccc', endColorstr='#ebcccc')"; /* For Internet Explorer 8 */
   bottom: 0;
   content: " ";
   display: block;
