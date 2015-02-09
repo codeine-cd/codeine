@@ -7,7 +7,10 @@ public class CollectorNotificationJson {
 
 	private String collector_name;
 	private String project_name;
+	//TODO remove after peers in version > 1062
 	private NodeInfo node;
+	private String node_name;
+	private String node_alias;
 	private String output;
 	private long time;
 	private String time_formatted;
@@ -25,11 +28,12 @@ public class CollectorNotificationJson {
 		
 	}
 	
-	public CollectorNotificationJson(String collector_name, String project_name, String output, NodeInfo node, String version, String peer, int exit_status, String duration, boolean is_for_collector, int notifications_in_24h) {
+	public CollectorNotificationJson(String collector_name, String project_name, String output, String node_name, String node_alias, String version, String peer, int exit_status, String duration, boolean is_for_collector, int notifications_in_24h) {
 		this.collector_name = collector_name;
 		this.project_name = project_name;
 		this.output = output;
-		this.node = node;
+		this.node_name = node_name;
+		this.node_alias = node_alias;
 		this.version = version;
 		this.exit_status = exit_status;
 		this.duration = duration;
@@ -38,7 +42,7 @@ public class CollectorNotificationJson {
 		this.collection_type = AlertsCollectionType.NotCollected.toLong();
 		this.peer = peer;
 		this.is_for_collector = is_for_collector;
-		notification_id = project_name + "_" + node.name() + "_" + collector_name;
+		notification_id = project_name + "_" + node_name + "_" + collector_name;
 		this.notifications_in_24h = notifications_in_24h;
 	}
 
@@ -62,8 +66,17 @@ public class CollectorNotificationJson {
 		return collection_type;
 	}
 	
-	public NodeInfo node(){
-		return node;
+	public String node_name(){
+		if (null != node) {
+			return node.name();
+		}
+		return node_name;
+	}
+	public String node_alias(){
+		if (null != node) {
+			return node.alias();
+		}
+		return node_alias;
 	}
 
 	public String version() {

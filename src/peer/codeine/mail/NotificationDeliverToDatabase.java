@@ -22,7 +22,7 @@ public class NotificationDeliverToDatabase {
 			ProjectJson project, String output, int exit_status, String duration, boolean is_for_collector, int notifications_in_24h) {
 		String version = new NodeHelper().getVersionOrNull(peerStatus.createJson(), project, node);
 		CollectorNotificationJson collectorNotificationJson = new CollectorNotificationJson(collectorName,
-				project.name(), output, node, version, InetUtils.getLocalHost().getHostName(), exit_status, duration, is_for_collector, notifications_in_24h);
+				project.name(), output, node.name(), node.alias(), version, InetUtils.getLocalHost().getHostName(), exit_status, duration, is_for_collector, notifications_in_24h);
 		log.info("sending notification " + collectorNotificationJson.toStringNoOutput());
 		alertsConnector.put(collectorNotificationJson);
 	}

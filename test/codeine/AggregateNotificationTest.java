@@ -111,7 +111,7 @@ public class AggregateNotificationTest {
 		return mailPolicy;
 	}
 	private CollectorNotificationJson createNotification(ProjectJson projectJson) {
-		CollectorNotificationJson value = new CollectorNotificationJson(null, projectJson.name(), null, null, null, null, 0, null, false, 1);
+		CollectorNotificationJson value = new CollectorNotificationJson(null, projectJson.name(), "node", "node", null, null, null, 0, null, false, 1);
 		projectNameToItems.put(projectJson.name(), value);
 		return value;
 	}

@@ -45,7 +45,7 @@ public class AggregateMailPrepare {
 			ImmutableListMultimap<String, CollectorNotificationJson> byNode = createSummary(item, content);
 
 			for (CollectorNotificationJson notification : item.notifications()) {
-				String nodeName = notification.node() == null ? "unknown" : notification.node().alias();
+				String nodeName = notification.node_alias();
 				String version = notification.version() == null ? Constants.NO_VERSION : labelJsonProvider
 						.labelForVersion(notification.version(), notification.project_name());
 				content.append("Project        : " + notification.project_name() + "\n");
@@ -92,9 +92,9 @@ public class AggregateMailPrepare {
 
 	private String getLink(CollectorNotificationJson notification) {
 		if (notification.is_for_collector()) {
-			return links.getWebServerCollectorStatus(notification.project_name(), notification.node().name(), notification.collector_name());
+			return links.getWebServerCollectorStatus(notification.project_name(), notification.node_name(), notification.collector_name());
 		} else {
-			return links.getWebServerMonitorStatus(notification.project_name(), notification.node().name(), notification.collector_name());
+			return links.getWebServerMonitorStatus(notification.project_name(), notification.node_name(), notification.collector_name());
 		}
 	}
 
@@ -113,8 +113,7 @@ public class AggregateMailPrepare {
 
 			@Override
 			public String apply(CollectorNotificationJson notification) {
-
-				return notification.node() == null ? "unknown" : notification.node().alias();
+				return notification.node_alias();
 			}
 		};
 		ImmutableListMultimap<String, CollectorNotificationJson> byNode = Multimaps.index(item.notifications(), f);
