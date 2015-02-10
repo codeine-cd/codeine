@@ -47,7 +47,7 @@ public class NotificationsMysqlConnector implements IAlertsDatabaseConnector{
 			log.info("read only mode");
 			return;
 		}
-		String colsDefinition = "notification_id VARCHAR(150) NOT NULL PRIMARY KEY, data text, collection_type_update_time BIGINT, collection_type BIGINT";
+		String colsDefinition = "id INT NOT NULL AUTO_INCREMENT, INDEX (id), notification_id VARCHAR(150) NOT NULL PRIMARY KEY, data text, collection_type_update_time BIGINT, collection_type BIGINT";
 		dbUtils.executeUpdate("create table if not exists " + TABLE_NAME + " (" + colsDefinition + ")");
 	}
 
