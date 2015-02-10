@@ -117,7 +117,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 //						rs.deleteRow();
 						idToRemove.add(key);
 					}
-					else if (timeDiff > timeToDiscPeer && !status.equals("Disc")){
+					else if (timeDiff > timeToDiscPeer && !status.equals(PeerStatusString.Disc.toString())){
 						log.info("time diff is " + timeDiff);
 						log.info("update to disc " + peerStatus);
 						idToDisc.add(key);
@@ -142,7 +142,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 		}
 		for (String key : idToDisc) {
 			log.info("discing " + key);
-			dbUtils.executeUpdate("UPDATE " + TABLE_NAME + " SET status = 'Disc' WHERE peer_key = ?", key);
+			dbUtils.executeUpdate("UPDATE " + TABLE_NAME + " SET status = '" + PeerStatusString.Disc.toString() + "' WHERE peer_key = ?", key);
 		}
 	}
 
