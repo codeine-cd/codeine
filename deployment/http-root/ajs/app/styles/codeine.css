@@ -156,7 +156,27 @@ div.sidebar-nav div.popover {
 /* The following rules are just for the tags panel and its multiple colors. */
 
 /* This applies a GREY fade over the too-wide text on hover */
-.list-group-item .fade_me:hover:before {
+.list-group-item:hover .fade_me:before {
+  background: -moz-linear-gradient(left, rgba(245, 245, 245,0) 0%, rgb(245, 245, 245) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(245, 245, 245,0)), color-stop(100%,rgba(245, 245, 245,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(245, 245, 245,0) 0%,rgba(245, 245, 245,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(245, 245, 245,0) 0%,rgba(245, 245, 245,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(245, 245, 245,0) 0%,rgba(245, 245, 245,1) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(245, 245, 245,0) 0%,rgba(245, 245, 245,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00f5f5f5', endColorstr='#f5f5f5',GradientType=1 ); /* IE6-9 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#00f5f5f5', endColorstr='#f5f5f5')"; /* For Internet Explorer 8 */
+  bottom: 0;
+  content: " ";
+  display: block;
+  left: 80%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+/* This applies a GREY fade over the too-wide text on hover when it has focus (grey gbackground) */
+.list-group-item:focus .fade_me:before {
   background: -moz-linear-gradient(left, rgba(245, 245, 245,0) 0%, rgb(245, 245, 245) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(245, 245, 245,0)), color-stop(100%,rgba(245, 245, 245,1))); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(left, rgba(245, 245, 245,0) 0%,rgba(245, 245, 245,1) 100%); /* Chrome10+,Safari5.1+ */
