@@ -20,8 +20,6 @@ public class CollectorNotificationJson {
 	private String peer;
 	private Integer exit_status;
 	private String duration;
-	//TODO remove
-	private boolean is_for_collector;
 	private String notification_id;
 	private int notifications_in_24h;
 	public CollectorNotificationJson(){
@@ -41,7 +39,6 @@ public class CollectorNotificationJson {
 		this.time_formatted = StringUtils.formatDate(this.time);
 		this.collection_type = AlertsCollectionType.NotCollected.toLong();
 		this.peer = peer;
-		this.is_for_collector = is_for_collector;
 		notification_id = project_name + "_" + node_name + "_" + collector_name;
 		this.notifications_in_24h = notifications_in_24h;
 	}
@@ -114,10 +111,6 @@ public class CollectorNotificationJson {
 				+ ", duration=" + duration 
 				+ ", peer="
 				+ peer + "]";
-	}
-
-	public boolean is_for_collector() {
-		return is_for_collector;
 	}
 
 	public String notification_id() {

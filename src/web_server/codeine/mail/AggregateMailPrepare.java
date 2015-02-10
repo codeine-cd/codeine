@@ -91,11 +91,7 @@ public class AggregateMailPrepare {
 	}
 
 	private String getLink(CollectorNotificationJson notification) {
-		if (notification.is_for_collector()) {
-			return links.getWebServerCollectorStatus(notification.project_name(), notification.node_name(), notification.collector_name());
-		} else {
-			return links.getWebServerMonitorStatus(notification.project_name(), notification.node_name(), notification.collector_name());
-		}
+		return links.getWebServerCollectorStatus(notification.project_name(), notification.node_name(), notification.collector_name());
 	}
 
 	private String getTimeOnNode(CollectorNotificationJson notification) {
