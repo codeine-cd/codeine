@@ -55,8 +55,8 @@
                     <br/>
                     <div class="row">
                         <div class="col-md-2"><strong>Peer Status:</strong></div>
-                        <div class="col-md-6">
-                            <i ng-class="{'fa-unlink': nodeStatus.peer_status == 'Disc', 'fa-power-off' : nodeStatus.peer_status == 'Offline', 'fa-link' : nodeStatus.peer_status == 'On' }" class="fa"></i> {{nodeStatus.peer_status}}
+                        <div class="col-md-6" ng-style="{'color': nodeStatus.peer_status === 'On' ? 'black' : 'red'}">
+                            <i ng-class="{'fa-unlink': nodeStatus.peer_status === 'Disc', 'fa-power-off' : nodeStatus.peer_status === 'Offline', 'fa-link' : nodeStatus.peer_status === 'On'}" class="fa"></i> {{nodeStatus.peer_status}}
                             <a admin-action href="/codeine/project/Codeine_Internal_Nodes_Project/node/{{nodeStatus.peer_key}}/status">Peer status page
                             </a>
                         </div>
