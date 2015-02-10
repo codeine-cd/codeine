@@ -36,8 +36,8 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 		if (e == null) {
 			commandInfo = getCommandInfo(file);
 		} else {
+			log.info("command is running so getting a lock " + e.commandString());
 			synchronized (e.fileWriteSync()) {
-				log.info("command is running so getting a lock " + projectName + " " + commandName);
 				commandInfo = getCommandInfo(file);
 			}
 		}
