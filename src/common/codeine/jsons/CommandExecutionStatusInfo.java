@@ -9,6 +9,8 @@ import codeine.api.NodeWithPeerInfo;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.utils.StringUtils;
 
+import com.google.common.collect.Lists;
+
 @SuppressWarnings("unused")
 public class CommandExecutionStatusInfo {
 
@@ -33,18 +35,37 @@ public class CommandExecutionStatusInfo {
 		this.command = command;
 		this.params = params;
 		this.project_name = projectName;
-		this.nodes_list = nodes_list;
+		this.nodes_list = copyNodesInfo(nodes_list);
 		this.id = id;
 		this.start_time = System.currentTimeMillis();
 		this.user = StringUtils.isEmpty(user) ? "Guest" : user; 
 	}
 
+	private List<NodeWithPeerInfo> copyNodesInfo(List<NodeWithPeerInfo> nodes_list) {
+		List<NodeWithPeerInfo> $ = Lists.newArrayList();
+		for (NodeWithPeerInfo nodeWithPeerInfo : nodes_list) {
+			$.add(copyOnlyNodeInfo(nodeWithPeerInfo));
+		}
+		return $;
+	}
+
+	private NodeWithPeerInfo copyOnlyNodeInfo(NodeWithPeerInfo nodeWithPeerInfo) {
+		NodeWithPeerInfo n = null;
+		if (nodeWithPeerInfo.getClass().equals(NodeWithPeerInfo.class)) {
+			n = nodeWithPeerInfo;
+		}
+		else {
+			n = new NodeWithPeerInfo(nodeWithPeerInfo);
+		}
+		return n;
+	}
+
 	public void addFailedNode(NodeWithPeerInfo node) {
-		fail_list.add(node);
+		fail_list.add(copyOnlyNodeInfo(node));
 	}
 
 	public void addSuccessNode(NodeWithPeerInfo node) {
-		success_list.add(node);
+		success_list.add(copyOnlyNodeInfo(node));
 	}
 
 	public Collection<NodeWithPeerInfo> fail_list() {

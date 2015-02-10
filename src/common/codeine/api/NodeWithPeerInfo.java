@@ -22,6 +22,10 @@ public class NodeWithPeerInfo extends NodeInfo{
 		}
 	}
 
+	public NodeWithPeerInfo(NodeWithPeerInfo nodeWithPeerInfo) {
+		this(nodeWithPeerInfo.name(), nodeWithPeerInfo.alias(), nodeWithPeerInfo.peer());
+	}
+
 	public PeerStatusJsonV2 peer() {
 		return peer;
 	}
