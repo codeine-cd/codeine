@@ -130,4 +130,8 @@ public class CommandExecutionStatusInfo {
 				+ ", finished=" + finished + "]";
 	}
 
+	public String command_name() {
+		return command();
+	}
+
 }

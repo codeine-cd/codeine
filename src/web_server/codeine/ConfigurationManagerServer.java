@@ -71,7 +71,7 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 			return dbUpdateThreadsMap.get(key, new Callable<ThreadPoolExecutor>() {
 				@Override
 				public ThreadPoolExecutor call() throws Exception {
-					return ThreadPoolUtils.newThreadPool(NUM_OF_THREADS_FOR_EACH_DB);
+					return ThreadPoolUtils.newThreadPool(NUM_OF_THREADS_FOR_EACH_DB, "ConfigurationManagerServer-DB-Update");
 				}
 			});
 		} catch (ExecutionException e) {

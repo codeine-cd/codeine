@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import codeine.db.IStatusDatabaseConnector;
 import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
+import codeine.utils.ThreadUtils;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
@@ -66,7 +66,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		List<FutureTask<Map<String, PeerStatusJsonV2>>> futures = Lists.newArrayList();
 		List<IStatusDatabaseConnector> providers = statusDatabaseConnectorListProvider.get();
 		log.info("will get update concurrent with pool size " + providers.size());
-		ExecutorService executor = Executors.newFixedThreadPool(providers.size());
+		ExecutorService executor = ThreadUtils.newFixedThreadPool(providers.size(), "PeersProjectsStatus");
 		for (final IStatusDatabaseConnector c : providers) {
 			FutureTask<Map<String, PeerStatusJsonV2>> future = new FutureTask<Map<String, PeerStatusJsonV2>>(new Callable<Map<String,PeerStatusJsonV2>>() {
 				@Override

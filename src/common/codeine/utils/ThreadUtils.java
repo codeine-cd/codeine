@@ -1,5 +1,9 @@
 package codeine.utils;
 
+import java.util.concurrent.ExecutorService;
+
+import codeine.executer.ThreadPoolUtils;
+
 
 
 public class ThreadUtils {
@@ -28,5 +32,9 @@ public class ThreadUtils {
 
 	public static Thread createThread(Runnable runnable, String threadName) {
 		return new Thread(runnable, threadName);
+	}
+	
+	public static ExecutorService newFixedThreadPool(int concurrency, String poolName) {
+		return ThreadPoolUtils.newFixedThreadPool(concurrency, poolName);
 	}
 }

@@ -296,4 +296,8 @@ public class AllNodesCommandExecuter {
 	public CommandExecutionStatusInfo commandExecutionInfo() {
 		return commandExecutionInfo;
 	}
+
+	public String commandString() {
+		return commandExecutionInfo().project_name() + "/" + commandExecutionInfo().command_name() + "/" + commandExecutionInfo().id();
+	}
 }

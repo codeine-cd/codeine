@@ -24,7 +24,7 @@ public class DiscardOldCommandsPlugin {
 	
 	@Inject	private PathHelper pathHelper;
 	@Inject	private Gson gson;
-	private ThreadPoolExecutor executor = ThreadPoolUtils.newThreadPool(2);
+	private ThreadPoolExecutor executor = ThreadPoolUtils.newThreadPool(2, "DiscardOldCommandsPlugin");
 
 	public void queueForDelete(final ProjectJson project) {
 		if (!project.discard_old_commands().enabled()) {

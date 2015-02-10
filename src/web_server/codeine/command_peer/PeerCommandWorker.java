@@ -76,7 +76,7 @@ public class PeerCommandWorker implements Runnable {
 
 	private void executeInternal() {
 		String url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;
-		log.info("commandNode " + command_info.project_name() + "/" + command_info.command_name() + "/" + executionInfo.id() + " for " + node.alias() + " url is " + url);
+		log.info("commandNode " + allNodesCommandExecuter.commandString() + " for " + node.alias() + " url is " + url);
 		try {
 			ThreadUtils.sleep(getSleepTime());
 			log.debug("running worker " + node);

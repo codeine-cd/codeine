@@ -2,7 +2,6 @@ package codeine.command_peer;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
@@ -11,6 +10,7 @@ import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.jsons.project.ProjectJson;
 import codeine.permissions.IUserWithPermissions;
+import codeine.utils.ThreadUtils;
 
 public abstract class CommandExecutionStrategy {
 
@@ -58,7 +58,7 @@ public abstract class CommandExecutionStrategy {
 			writeLine("concurrency is above limit, will reduce it to " + MAX_NODES_TO_EXECUTE);
 			concurrency = MAX_NODES_TO_EXECUTE;
 		}
-		ExecutorService executor = Executors.newFixedThreadPool(concurrency);
+		ExecutorService executor = ThreadUtils.newFixedThreadPool(concurrency, "CommandExecution-" + allNodesCommandExecuter.commandString());
 		for (NodeWithPeerInfo peer : nodes) {
 			commandNode(executor, peer, shouldOutputImmediatly);
 		}
