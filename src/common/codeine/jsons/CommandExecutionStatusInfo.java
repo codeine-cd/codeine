@@ -1,12 +1,13 @@
 package codeine.jsons;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import codeine.api.NodeWithPeerInfo;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.utils.StringUtils;
-
-import com.google.common.collect.Lists;
 
 @SuppressWarnings("unused")
 public class CommandExecutionStatusInfo {
@@ -15,8 +16,8 @@ public class CommandExecutionStatusInfo {
 	private List<CommandParameterInfo> params;
 	private String project_name;
 	private List<NodeWithPeerInfo> nodes_list;
-	private List<NodeWithPeerInfo> fail_list = Lists.newArrayList();
-	private List<NodeWithPeerInfo> success_list = Lists.newArrayList();
+	private Queue<NodeWithPeerInfo> fail_list = new ConcurrentLinkedDeque<NodeWithPeerInfo>();
+	private Queue<NodeWithPeerInfo> success_list = new ConcurrentLinkedDeque<NodeWithPeerInfo>();
 	private long start_time;
 	private Long finish_time;
 	private String user = "Guest";
@@ -46,10 +47,10 @@ public class CommandExecutionStatusInfo {
 		success_list.add(node);
 	}
 
-	public List<NodeWithPeerInfo> fail_list() {
+	public Collection<NodeWithPeerInfo> fail_list() {
 		return fail_list;
 	}
-	public List<NodeWithPeerInfo> success_list() {
+	public Collection<NodeWithPeerInfo> success_list() {
 		return success_list;
 	}
 	public List<NodeWithPeerInfo> nodes_list() {

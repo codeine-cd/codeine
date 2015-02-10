@@ -228,16 +228,12 @@ public class AllNodesCommandExecuter {
 	public void fail(NodeWithPeerInfo node) {
 		log.debug("node fail " + node.name());
 		fail++;
-		synchronized (commandExecutionInfo) {
-			commandExecutionInfo.addFailedNode(node);
-		}
+		commandExecutionInfo.addFailedNode(node);
 	}
 
 	public void nodeSuccess(NodeWithPeerInfo node) {
 		log.debug("node success " + node.name());
-		synchronized (commandExecutionInfo) {
-			commandExecutionInfo.addSuccessNode(node);
-		}
+		commandExecutionInfo.addSuccessNode(node);
 	}
 
 	public void workerFinished() {
@@ -251,9 +247,7 @@ public class AllNodesCommandExecuter {
 
 	private void updateJson() {
 		String json;
-		synchronized (commandExecutionInfo) {
-			json = gson.toJson(commandExecutionInfo);
-		}
+		json = gson.toJson(commandExecutionInfo);
 		synchronized (fileWriteSync) {
 			TextFileUtils.setContents(commandFile(), json);
 		}
