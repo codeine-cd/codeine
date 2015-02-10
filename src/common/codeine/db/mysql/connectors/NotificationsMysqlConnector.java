@@ -143,7 +143,7 @@ public class NotificationsMysqlConnector implements IAlertsDatabaseConnector{
 
 	@Override
 	public String toString() {
-		return "AlertsMysqlConnector [dbUtils=" + dbUtils + "]";
+		return "NotificationsMysqlConnector [dbUtils=" + dbUtils + "]";
 	}
 
 	
