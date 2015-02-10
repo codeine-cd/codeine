@@ -4,6 +4,7 @@ import java.util.List;
 
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.jsons.collectors.CollectorExecutionInfo;
+import codeine.jsons.collectors.CollectorInfo.CollectorType;
 import codeine.model.Constants;
 import codeine.utils.StringUtils;
 
@@ -31,6 +32,9 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 	}
 
 	private boolean shouldShowInStatusPage(CollectorExecutionInfo collectorInfo) {
+		if (collectorInfo.type()== CollectorType.Monitor){
+			return !collectorInfo.isSuccess();
+		}
 		if (!collectorInfo.isSuccess() && shouldDisplayByName(collectorInfo.name())){
 			return true;
 		}
