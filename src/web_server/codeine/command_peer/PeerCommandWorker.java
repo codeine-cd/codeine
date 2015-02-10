@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.Links;
+import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.project.ProjectJson;
@@ -36,8 +37,9 @@ public class PeerCommandWorker implements Runnable {
 	private static Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
 	private IUserWithPermissions userObject;
 	private boolean failedReported = false;
+	private CommandExecutionStatusInfo executionInfo;
 	
-	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject) {
+	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject, CommandExecutionStatusInfo executionInfo) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.command_info = command_info;
@@ -45,6 +47,7 @@ public class PeerCommandWorker implements Runnable {
 		this.links = links;
 		this.project = project;
 		this.userObject = userObject;
+		this.executionInfo = executionInfo;
 	}
 
 
@@ -73,10 +76,10 @@ public class PeerCommandWorker implements Runnable {
 
 	private void executeInternal() {
 		String url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;
-		log.info("commandNode url is " + url);
+		log.info("commandNode " + command_info.project_name() + "/" + command_info.command_name() + "/" + executionInfo.id() + " for " + node.alias() + " url is " + url);
 		try {
 			ThreadUtils.sleep(getSleepTime());
-			log.info("running worker " + node);
+			log.debug("running worker " + node);
 			final StringBuilder result = new StringBuilder();
 			Function<String, Void> function = new ReadCommandOutputFunction(result);
 			if (shouldOutputImmediatly){

@@ -49,7 +49,7 @@ public class AllNodesCommandExecuter {
 	private long commandId;
 	private String dirNameFull;
 	private ScehudleCommandExecutionInfo commandData;
-	private CommandExecutionStatusInfo commandDataJson;
+	private CommandExecutionStatusInfo commandExecutionInfo;
 	private ProjectJson project;
 	private IUserWithPermissions userObject;
 	private Object fileWriteSync = new Object();
@@ -84,7 +84,7 @@ public class AllNodesCommandExecuter {
 				};
 			}, "AllNodesCommandExecuter_"+commandData.command_info().command_name());
 			commandThread.start();
-			monitorsStatistics.updateCommand(commandDataJson);
+			monitorsStatistics.updateCommand(commandExecutionInfo);
 			return commandId;
 		} catch (Exception ex) {
 			finish();
@@ -116,15 +116,15 @@ public class AllNodesCommandExecuter {
 	}
 
 	private void finish() {
-		log.info("Finishing command " + commandDataJson.id());
-		if (null != commandDataJson) {
-			commandDataJson.finish();
+		log.info("Finishing command " + commandExecutionInfo.id());
+		if (null != commandExecutionInfo) {
+			commandExecutionInfo.finish();
 		}
 		try {
 			updateJson();
 			FilesUtils.createNewFile(dirNameFull + Constants.COMMAND_FINISH_FILE);
 		} catch (Exception e) {
-			log.warn("Failed to mark command as finished " + commandDataJson, e);
+			log.warn("Failed to mark command as finished " + commandExecutionInfo, e);
 		}
 		active = false;
 	}
@@ -179,14 +179,14 @@ public class AllNodesCommandExecuter {
 				return n.alias();
 			}
 		};
-		if (!commandDataJson.fail_list().isEmpty()) {
-			writeLine("failed nodes: " + StringUtils.collectionToString(commandDataJson.fail_list(), f));
+		if (!commandExecutionInfo.fail_list().isEmpty()) {
+			writeLine("failed nodes: " + StringUtils.collectionToString(commandExecutionInfo.fail_list(), f));
 		}
 		writeLine("=========> aggregate-command-statistics (success/total): " + (total - fail) + "/" + total + "\n");
 	}
 
 	private void createCommandDataFile(String user) {
-		commandDataJson = new CommandExecutionStatusInfo(user, commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
+		commandExecutionInfo = new CommandExecutionStatusInfo(user, commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
 				commandData.nodes(), commandId);
 		FilesUtils.createNewFile(commandFile());
 		updateJson();
@@ -228,15 +228,15 @@ public class AllNodesCommandExecuter {
 	public void fail(NodeWithPeerInfo node) {
 		log.debug("node fail " + node.name());
 		fail++;
-		synchronized (commandDataJson) {
-			commandDataJson.addFailedNode(node);
+		synchronized (commandExecutionInfo) {
+			commandExecutionInfo.addFailedNode(node);
 		}
 	}
 
 	public void nodeSuccess(NodeWithPeerInfo node) {
 		log.debug("node success " + node.name());
-		synchronized (commandDataJson) {
-			commandDataJson.addSuccessNode(node);
+		synchronized (commandExecutionInfo) {
+			commandExecutionInfo.addSuccessNode(node);
 		}
 	}
 
@@ -251,8 +251,8 @@ public class AllNodesCommandExecuter {
 
 	private void updateJson() {
 		String json;
-		synchronized (commandDataJson) {
-			json = gson.toJson(commandDataJson);
+		synchronized (commandExecutionInfo) {
+			json = gson.toJson(commandExecutionInfo);
 		}
 		synchronized (fileWriteSync) {
 			TextFileUtils.setContents(commandFile(), json);
@@ -280,7 +280,7 @@ public class AllNodesCommandExecuter {
 	}
 
 	public CommandExecutionStatusInfo commandData() {
-		return commandDataJson;
+		return commandExecutionInfo;
 	}
 
 	public long id() {
@@ -297,5 +297,9 @@ public class AllNodesCommandExecuter {
 	}
 	public Object fileWriteSync() {
 		return fileWriteSync;
+	}
+
+	public CommandExecutionStatusInfo commandExecutionInfo() {
+		return commandExecutionInfo;
 	}
 }
