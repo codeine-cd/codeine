@@ -4,6 +4,11 @@ html {
      overflow-y: scroll;
 }
 
+.tooltip-inner {
+    white-space:pre;
+    max-width:none;
+}
+
 .loading {
     position: absolute;
     top: 50%;

@@ -100,11 +100,13 @@
                             </div>
                         </accordion-heading>
                         <div class="row" ng-repeat="node in versionItem.visibleNodes | orderBy:'alias'">
-                            <div class="col-md-3 fade_me">
+                            <div class="col-md-3 fade_me" tooltip="{{::node.alias.length > 20 ? node.alias : ''}}" tooltip-placement="right" tooltip-popup-delay="500">
                                 <form class="form-inline" role="form">
                                     <div class="checkbox">
                                         <label>
-                                            <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;<a ng-href="/codeine/project/{{::projectName}}/node/{{::node.name}}/status"> {{::node.alias}}</a>
+                                            <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;
+                                            <a ng-href="/codeine/project/{{::projectName}}/node/{{::node.name}}/status"
+                                               > {{::node.alias}}</a>
                                         </label>
                                     </div>
                                 </form>
