@@ -35,59 +35,66 @@ public class AggregateMailPrepare {
 	public List<Mail> prepare(List<NotificationContent> notificationContent, AlertsCollectionType alertsCollectionType) {
 		List<Mail> $ = Lists.newArrayList();
 		for (NotificationContent item : notificationContent) {
-
-			StringBuilder content = new StringBuilder();
-			content.append("Hi,\nBelow are alerts from monitors in codeine for policy " + alertsCollectionType + ".\n");
-			content.append("For more info: " + links.getWebServerLandingPage() + "\n");
-			content.append("Enjoy!\n\n");
-			content.append("========================================================================\n");
-
-			ImmutableListMultimap<String, CollectorNotificationJson> byNode = createSummary(item, content);
-
-			for (CollectorNotificationJson notification : item.notifications()) {
-				String nodeName = notification.node_alias();
-				String version = notification.version() == null ? Constants.NO_VERSION : labelJsonProvider
-						.labelForVersion(notification.version(), notification.project_name());
-				content.append("Project        : " + notification.project_name() + "\n");
-				content.append("Node           : " + nodeName + "\n");
-				content.append("Monitor        : " + notification.collector_name() + "\n");
-				if (null != notification.exit_status()) {
-				String exitString = "" + notification.exit_status();
-				if (notification.exit_status() <= 0) {
-					exitString += " (" + ExitStatus.fromInt(notification.exit_status()) + ")";
-				}
-				content.append("Exit Status    : " + exitString + "\n");
-				}
-				if (!StringUtils.isEmpty(notification.duration())) {
-				content.append("Duration       : " + notification.duration() + "\n");
-				}
-				content.append("# in last 24h  : " + notification.notifications_in_24h() + "\n");
-				content.append("Time on node   : " + getTimeOnNode(notification) + "\n");
-				content.append("Server         : " + notification.peer() + "\n");
-				content.append("Version        : " + version + "\n");
-				content.append("Link to monitor page : " + getLink(notification) + "\n");
-				content.append("Output\n" + notification.output() + "\n");
-				content.append("========================================================================\n");
+			try {
+				prepareOnMail(alertsCollectionType, $, item);
+			} catch (Exception e) {
+				log.warn("error in mail prepare",e);
 			}
-			String stringContent = "";
-			if (content.length() > MAX_MAIL_SIZE) {
-				log.warn("mail was too big to user " + item.user());
-				stringContent = content.substring(0, MAX_MAIL_SIZE) + "\n...Mail was too long...";
-			} else {
-				stringContent = content.toString();
-			}
-			String title = "Aggregated alerts from codeine for policy " + alertsCollectionType;
-			if (byNode.values().size() == 1) {
-				Entry<String, CollectorNotificationJson> e = byNode.entries().iterator().next();
-				title += " on [" + e.getValue().project_name() + "/" + e.getKey() + "/" + e.getValue().collector_name() + "]";
-			}
-			else {
-				title += " on nodes: " + byNode.keySet();
-				title = StringUtils.trimStringToMaxLength(title, 150);
-			}
-			$.add(new Mail(Lists.newArrayList(item.user()), title, stringContent, globalConfigurationJsonStore.get().admin_mail()));
 		}
 		return $;
+	}
+
+	private void prepareOnMail(AlertsCollectionType alertsCollectionType, List<Mail> $, NotificationContent item) {
+		StringBuilder content = new StringBuilder();
+		content.append("Hi,\nBelow are alerts from monitors in codeine for policy " + alertsCollectionType + ".\n");
+		content.append("For more info: " + links.getWebServerLandingPage() + "\n");
+		content.append("Enjoy!\n\n");
+		content.append("========================================================================\n");
+
+		ImmutableListMultimap<String, CollectorNotificationJson> byNode = createSummary(item, content);
+
+		for (CollectorNotificationJson notification : item.notifications()) {
+			String nodeName = notification.node_alias();
+			String version = notification.version() == null ? Constants.NO_VERSION : labelJsonProvider
+					.labelForVersion(notification.version(), notification.project_name());
+			content.append("Project        : " + notification.project_name() + "\n");
+			content.append("Node           : " + nodeName + "\n");
+			content.append("Monitor        : " + notification.collector_name() + "\n");
+			if (null != notification.exit_status()) {
+			String exitString = "" + notification.exit_status();
+			if (notification.exit_status() <= 0) {
+				exitString += " (" + ExitStatus.fromInt(notification.exit_status()) + ")";
+			}
+			content.append("Exit Status    : " + exitString + "\n");
+			}
+			if (!StringUtils.isEmpty(notification.duration())) {
+			content.append("Duration       : " + notification.duration() + "\n");
+			}
+			content.append("# in last 24h  : " + notification.notifications_in_24h() + "\n");
+			content.append("Time on node   : " + getTimeOnNode(notification) + "\n");
+			content.append("Server         : " + notification.peer() + "\n");
+			content.append("Version        : " + version + "\n");
+			content.append("Link to monitor page : " + getLink(notification) + "\n");
+			content.append("Output\n" + notification.output() + "\n");
+			content.append("========================================================================\n");
+		}
+		String stringContent = "";
+		if (content.length() > MAX_MAIL_SIZE) {
+			log.warn("mail was too big to user " + item.user());
+			stringContent = content.substring(0, MAX_MAIL_SIZE) + "\n...Mail was too long...";
+		} else {
+			stringContent = content.toString();
+		}
+		String title = "Aggregated alerts from codeine for policy " + alertsCollectionType;
+		if (byNode.values().size() == 1) {
+			Entry<String, CollectorNotificationJson> e = byNode.entries().iterator().next();
+			title += " on [" + e.getValue().project_name() + "/" + e.getKey() + "/" + e.getValue().collector_name() + "]";
+		}
+		else {
+			title += " on nodes: " + byNode.keySet();
+			title = StringUtils.trimStringToMaxLength(title, 150);
+		}
+		$.add(new Mail(Lists.newArrayList(item.user()), title, stringContent, globalConfigurationJsonStore.get().admin_mail()));
 	}
 
 	private String getLink(CollectorNotificationJson notification) {

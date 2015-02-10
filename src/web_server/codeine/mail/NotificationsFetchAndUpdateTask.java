@@ -90,7 +90,11 @@ public class NotificationsFetchAndUpdateTask implements Task {
 				log.info("read only mode");
 				continue;
 			}
-			mailsStrategy.sendMail(mail);
+			try {
+				mailsStrategy.sendMail(mail);
+			} catch (Exception e) {
+				log.warn("error in mail send " + mail,e);
+			}
 		}
 	}
 }

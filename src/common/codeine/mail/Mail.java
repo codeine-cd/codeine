@@ -32,6 +32,11 @@ public class Mail {
 	public String sender() {
 		return sender;
 	}
+
+	@Override
+	public String toString() {
+		return "Mail [recepients=" + recepients + ", subject=" + subject + ", sender=" + sender + "]";
+	}
 	
 	
 }
