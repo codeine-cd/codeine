@@ -14,8 +14,6 @@ public class CollectorNotificationJson {
 	private String output;
 	private long time;
 	private String time_formatted;
-	private long collection_type;
-	private long collection_type_update_time;
 	private String version;
 	private String peer;
 	private Integer exit_status;
@@ -37,7 +35,6 @@ public class CollectorNotificationJson {
 		this.duration = duration;
 		this.time = System.currentTimeMillis();
 		this.time_formatted = StringUtils.formatDate(this.time);
-		this.collection_type = AlertsCollectionType.NotCollected.toLong();
 		this.peer = peer;
 		notification_id = project_name + "_" + node_name + "_" + collector_name;
 		this.notifications_in_24h = notifications_in_24h;
@@ -59,10 +56,6 @@ public class CollectorNotificationJson {
 		return time;
 	}
 
-	public long collection_type() {
-		return collection_type;
-	}
-	
 	public String node_name(){
 		if (null != node) {
 			return node.name();
@@ -97,16 +90,13 @@ public class CollectorNotificationJson {
 	public String toString() {
 		return "CollectorNotificationJson [collector_name=" + collector_name + ", project_name=" + project_name
 				+ ", node=" + node + ", output=" + output + ", time=" + time + ", time_formatted=" + time_formatted
-				+ ", collection_type=" + collection_type + ", collection_type_update_time="
-				+ collection_type_update_time + ", version=" + version + ", peer=" + peer + ", exit_status="
+				+ ", version=" + version + ", peer=" + peer + ", exit_status="
 				+ exit_status + ", duration=" + duration + "]";
 	}
 
 	public String toStringNoOutput() {
 		return "CollectorNotificationJson [collector_name=" + collector_name + ", project_name=" + project_name
-				+ ", node_name=" + node_name + ", time=" + time + ", collection_type=" + collection_type
-				+ ", collection_type_update_time=" + collection_type_update_time 
-				+ ", version=" + version 
+				+ ", node_name=" + node_name + ", time=" + time + ", version=" + version 
 				+ ", exit_status=" + exit_status 
 				+ ", duration=" + duration 
 				+ ", peer="

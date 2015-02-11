@@ -34,9 +34,7 @@ public class AggregateNotification {
 		NotificationContent n = notifications.get(user) == null ? new NotificationContent(user) : notifications.get(user);
 		List<CollectorNotificationJson> list = Lists.newArrayList();
 		for (CollectorNotificationJson collectorNotificationJson : collection) {
-			if (collType.toLong() >= collectorNotificationJson.collection_type()){
-				list.add(collectorNotificationJson);
-			}
+			list.add(collectorNotificationJson);
 		}
 		if (!list.isEmpty()){
 			n.addAll(list);

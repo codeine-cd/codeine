@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.Links;
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.project.ProjectJson;
@@ -37,9 +36,8 @@ public class PeerCommandWorker implements Runnable {
 	private static Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
 	private IUserWithPermissions userObject;
 	private boolean failedReported = false;
-	private CommandExecutionStatusInfo executionInfo;
 	
-	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject, CommandExecutionStatusInfo executionInfo) {
+	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.command_info = command_info;
@@ -47,7 +45,6 @@ public class PeerCommandWorker implements Runnable {
 		this.links = links;
 		this.project = project;
 		this.userObject = userObject;
-		this.executionInfo = executionInfo;
 	}
 
 
