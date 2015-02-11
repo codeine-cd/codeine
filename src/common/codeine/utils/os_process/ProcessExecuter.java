@@ -166,7 +166,15 @@ public class ProcessExecuter {
 	public static String executeSuccess(String cmd) {
 		Result r = execute(cmd);
 		if (!r.success()) {
-			throw new RuntimeException("fail with exit status " +  r.exit());
+			throw new RuntimeException("fail with exit status " +  r.exit() + " output: " + r.output());
+		}
+		return r.output();
+	}
+
+	public String executeSuccess() {
+		Result r = execute();
+		if (!r.success()) {
+			throw new RuntimeException("fail with exit status " +  r.exit() + " output: " + r.output());
 		}
 		return r.output();
 	}
