@@ -88,8 +88,8 @@ public class NotificationsFetchAndUpdateTask implements Task {
 		List<NotificationContent> notificationContent = mailCreator.prepareMailsToUsers(alertsCollectionType, allItems, configurationManager.getConfiguredProjects());
 		List<Mail> mails = mailPrepare.prepare(notificationContent, alertsCollectionType);
 		for (Mail mail : mails) {
-			log.info("sending mail to " + mail.recipients() + " with subject " + mail.subject());
 			if (webConfJsonStore.get().readonly_web_server()) {
+				log.info("sending mail to " + mail.recipients() + " with subject " + mail.subject());
 				log.info("read only mode");
 				continue;
 			}

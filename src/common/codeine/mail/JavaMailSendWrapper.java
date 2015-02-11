@@ -40,7 +40,7 @@ public class JavaMailSendWrapper
 			msg.setSubject(subject);
 			msg.setSentDate(new Date());
 			msg.setText(content);
-			log.info("Mail subject '" + subject + "' is sent to recipients: " + recipients);
+			log.info("Mail is sent to recipients: " + recipients + " with subject '" + subject + "'");
 			if (System.getProperty("nomail") == null)
 			{
 				Transport.send(msg);
