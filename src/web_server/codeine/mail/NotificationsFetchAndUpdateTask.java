@@ -79,7 +79,7 @@ public class NotificationsFetchAndUpdateTask implements Task {
 		}
 		for (NotificationsMysqlConnector c : notificationsConnectors) {
 			try {
-				log.info("fetching from " + c);
+				log.debug("fetching from " + c);
 				allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
 			} catch (Exception e) {
 				log.info("error fetching alerts from db " + c, e);

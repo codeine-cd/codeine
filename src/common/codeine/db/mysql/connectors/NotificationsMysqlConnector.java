@@ -66,10 +66,10 @@ public class NotificationsMysqlConnector implements IAlertsDatabaseConnector{
 		long time = System.currentTimeMillis();
 		Stopwatch s = Stopwatch.createStarted();
 		MapWithId $ = query(collType);
-		String queryMessage = "query took " + s;
+		String queryMessage = "query took " + s ;
 		s = Stopwatch.createStarted();
 		updateCollectionType(collType, time, $.maxId);
-		log.info(queryMessage + ", update took " + s + " on " + dbUtils);
+		log.info("getAlertsAndUpdate - " + dbUtils + " with num of events " + $.map.size() + ", " + queryMessage + ", update took " + s + " , handled col type " + collType);
 		return $.map;
 	}
 
@@ -122,9 +122,7 @@ public class NotificationsMysqlConnector implements IAlertsDatabaseConnector{
 		};
 		dbUtils.executeQueryCompressed("SELECT id, data, collection_type_update_time, collection_type FROM " + TABLE_NAME + 
 				" WHERE collection_type < " + collType.toLong() + " OR collection_type IS NULL" , function);
-		if (count.intValue() > 0){
-			log.info("handled col type " + collType + " with num of events " + count.intValue() + " on " + dbUtils);
-		}
+		log.debug("handled col type " + collType + " with num of events " + count.intValue() + " on " + dbUtils);
 		return new MapWithId($, maxId.get());
 	}
 
