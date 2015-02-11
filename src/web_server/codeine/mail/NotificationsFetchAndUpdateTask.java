@@ -46,7 +46,7 @@ public class NotificationsFetchAndUpdateTask implements Task {
 		this.mailsStrategy = mailsStrategy;
 		this.collectionTypeGetter = collectionTypeGetter;
 		this.alertsConnectors = alertsMysqlConnectorDatabaseConnectorListProvider.get();
-		notificationsConnectors = notificationsMysqlConnectorDatabaseConnectorListProvider.get();
+		this.notificationsConnectors = notificationsMysqlConnectorDatabaseConnectorListProvider.get();
 		this.webConfJsonStore = webConfJsonStore;
 	}
 
@@ -59,6 +59,9 @@ public class NotificationsFetchAndUpdateTask implements Task {
 		}
 		if (collType.contains(AlertsCollectionType.Daily)){
 			for (AlertsMysqlConnector c : alertsConnectors) {
+				c.removeOldAlerts();
+			}
+			for (NotificationsMysqlConnector c : notificationsConnectors) {
 				c.removeOldAlerts();
 			}
 		}
