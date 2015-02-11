@@ -76,8 +76,10 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		}
 		executor.shutdown();
 		waitForExecutors(executor);
-		putDataInCache(futures);
-		return Lists.newArrayList(cache.asMap().values());
+		Map<String, Map<String, PeerStatusJsonV2>> current = putDataInCache(futures);
+		Map<String, Map<String, PeerStatusJsonV2>> fromCacheWithCurrent = Maps.newHashMap(cache.asMap());
+		fromCacheWithCurrent.putAll(current);
+		return Lists.newArrayList(fromCacheWithCurrent.values());
 	}
 
 	private FutureTask<Map<String, PeerStatusJsonV2>> createFuture(final IStatusDatabaseConnector c) {
@@ -103,7 +105,8 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		}
 	}
 
-	private void putDataInCache(Map<String, FutureTask<Map<String, PeerStatusJsonV2>>> futures) {
+	private Map<String, Map<String, PeerStatusJsonV2>> putDataInCache(Map<String, FutureTask<Map<String, PeerStatusJsonV2>>> futures) {
+		Map<String, Map<String, PeerStatusJsonV2>> $ = Maps.newHashMap();
 		for (Entry<String, FutureTask<Map<String, PeerStatusJsonV2>>> entry : futures.entrySet()) {
 			try {
 				Map<String, PeerStatusJsonV2> map = entry.getValue().get();
@@ -112,11 +115,13 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 				}
 				else {
 					cache.put(entry.getKey(), map);
+					$.put(entry.getKey(), map);
 				}
 			} catch (Exception e) {
 				log.warn("failed to get peers from database " + entry.getKey(), e);
 			}
 		}
+		return $;
 	}
 
 	private boolean isNewer(PeerStatusJsonV2 newOne, PeerStatusJsonV2 oldOne) {
