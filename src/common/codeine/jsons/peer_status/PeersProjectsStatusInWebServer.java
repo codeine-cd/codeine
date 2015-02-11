@@ -17,6 +17,8 @@ import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
 import codeine.utils.ThreadUtils;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -26,7 +28,8 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(5);
 	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
 	private Map<String, PeerStatusJsonV2> peer_to_projects = Maps.newHashMap();
-
+	private Cache<String, Map<String, PeerStatusJsonV2>> cache = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
+	
 	@Inject
 	public PeersProjectsStatusInWebServer(StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider) {
 		super();
@@ -49,7 +52,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 				if (!res.containsKey(e.getKey())) {
 					res.put(e.getKey(), e.getValue());
 				} else { // more than one
-					log.debug("peer appears in more than one Database " + e.getKey());
+					log.debug("peer appears in more than one database " + e.getKey());
 					duplicatePeers++;
 					if (isNewer(e.getValue(), res.get(e.getKey()))) {
 						res.put(e.getKey(), e.getValue());
@@ -62,25 +65,35 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	}
 
 	private List<Map<String, PeerStatusJsonV2>> getUpdateMaps() {
-		List<Map<String, PeerStatusJsonV2>> updateMaps = Lists.newArrayList();
-		List<FutureTask<Map<String, PeerStatusJsonV2>>> futures = Lists.newArrayList();
 		List<IStatusDatabaseConnector> providers = statusDatabaseConnectorListProvider.get();
 		log.info("will get update concurrent with pool size " + providers.size());
+		Map<String, FutureTask<Map<String, PeerStatusJsonV2>>> futures = Maps.newHashMap();
 		ExecutorService executor = ThreadUtils.newFixedThreadPool(providers.size(), "PeersProjectsStatus");
 		for (final IStatusDatabaseConnector c : providers) {
-			FutureTask<Map<String, PeerStatusJsonV2>> future = new FutureTask<Map<String, PeerStatusJsonV2>>(new Callable<Map<String,PeerStatusJsonV2>>() {
-				@Override
-				public Map<String, PeerStatusJsonV2> call() throws Exception {
-					Stopwatch s = Stopwatch.createStarted();
-					Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
-					log.info("getting status from db " + c + " took " + s);
-					return peersStatus;
-				}
-			});
-			futures.add(future);
+			FutureTask<Map<String, PeerStatusJsonV2>> future = createFuture(c);
+			futures.put(c.server(), future);
 			executor.execute(future);
 		}
 		executor.shutdown();
+		waitForExecutors(executor);
+		putDataInCache(futures);
+		return Lists.newArrayList(cache.asMap().values());
+	}
+
+	private FutureTask<Map<String, PeerStatusJsonV2>> createFuture(final IStatusDatabaseConnector c) {
+		FutureTask<Map<String, PeerStatusJsonV2>> future = new FutureTask<Map<String, PeerStatusJsonV2>>(new Callable<Map<String,PeerStatusJsonV2>>() {
+			@Override
+			public Map<String, PeerStatusJsonV2> call() throws Exception {
+				Stopwatch s = Stopwatch.createStarted();
+				Map<String, PeerStatusJsonV2> peersStatus = c.getPeersStatus();
+				log.info("getting status from db " + c + " took " + s);
+				return peersStatus;
+			}
+		});
+		return future;
+	}
+
+	private void waitForExecutors(ExecutorService executor) {
 		while (!executor.isTerminated()) {
 			try {
 				Thread.sleep(1000);
@@ -88,14 +101,22 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 				ex.printStackTrace();
 			}
 		}
-		for (FutureTask<Map<String, PeerStatusJsonV2>> f : futures) {
+	}
+
+	private void putDataInCache(Map<String, FutureTask<Map<String, PeerStatusJsonV2>>> futures) {
+		for (Entry<String, FutureTask<Map<String, PeerStatusJsonV2>>> entry : futures.entrySet()) {
 			try {
-				updateMaps.add(f.get());
+				Map<String, PeerStatusJsonV2> map = entry.getValue().get();
+				if (map.isEmpty()) {
+					log.info("database is empty " + entry.getKey());
+				}
+				else {
+					cache.put(entry.getKey(), map);
+				}
 			} catch (Exception e) {
-				log.warn("failed to get peers from database " + f, e);
+				log.warn("failed to get peers from database " + entry.getKey(), e);
 			}
 		}
-		return updateMaps;
 	}
 
 	private boolean isNewer(PeerStatusJsonV2 newOne, PeerStatusJsonV2 oldOne) {
