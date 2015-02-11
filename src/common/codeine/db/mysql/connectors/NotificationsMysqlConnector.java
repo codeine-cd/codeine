@@ -103,9 +103,9 @@ public class NotificationsMysqlConnector implements IAlertsDatabaseConnector{
 		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
 			@Override
 			public Void apply(ResultSet rs){
-				if (webConfJsonStore.get().readonly_web_server()) {
-					return null;
-				}
+//				if (webConfJsonStore.get().readonly_web_server()) {
+//					return null;
+//				}
 				try {
 					String data = rs.getString("data");
 //					Long type = rs.getLong("collection_type");
