@@ -74,7 +74,7 @@
     <div class="row">
         <div class="col-md-12">
             <accordion close-others="false">
-                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="versionItem.visibleNodes.length > 0">
+                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="versionItem.visibleNodes.length > 0" class="accordion-hover-shade">
                     <accordion-group is-open="versionIsOpen[$index]">
                         <accordion-heading>
                             <div class="row">

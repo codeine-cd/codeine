@@ -381,3 +381,7 @@ div.sidebar-nav i.codeine_help {
 .scroll-top-wrapper i.fa {
     line-height: inherit;
 }
+
+.accordion-hover-shade .panel-heading:hover{
+    background-color: #e6e6e6;
+}
