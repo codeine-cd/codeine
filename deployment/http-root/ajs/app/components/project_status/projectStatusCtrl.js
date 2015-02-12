@@ -64,6 +64,16 @@
             return shouldRefresh;
         };
 
+        $scope.maxNodeAliasLengthForSmallCol = 30;
+        $scope.maxNodeAliasLength = 0;
+        for (var i9=0 ; i9 < $scope.projectStatus.nodes_for_version.length; i9++) {
+            for (var j9=0 ; j9 < $scope.projectStatus.nodes_for_version[i9].nodes.length; j9++) {
+                if ($scope.projectStatus.nodes_for_version[i9].nodes[j9].alias.length > $scope.maxNodeAliasLength) {
+                    $scope.maxNodeAliasLength = $scope.projectStatus.nodes_for_version[i9].nodes[j9].alias.length;
+                }
+            }
+        }
+
         var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
             $scope.refreshFilters();
         });
