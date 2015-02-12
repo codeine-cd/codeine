@@ -1,6 +1,7 @@
 package codeine;
 
 import java.lang.reflect.Type;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -147,5 +148,26 @@ public class CodeineApiClient {
 		}
 		project.nodes_info().add(nodeInfo);
 		saveProject(project);
+	}
+
+	public NodeInfo removeNodeFromProjectByAlias(String projectName, String alias) {
+		ProjectJson project = project(projectName);
+		NodeInfo nodeFound = null;
+		for (Iterator<NodeInfo> iterator = project.nodes_info().iterator(); iterator.hasNext();) {
+			NodeInfo node = iterator.next();
+			if (node.alias().equals(alias)) {
+				iterator.remove();
+				nodeFound = node;
+				break;
+			}
+		}
+		if (null == nodeFound) {
+			throw new IllegalArgumentException("node alias not found " + alias);
+		}
+		for (UserProjectPermissions p : project.permissions()) {
+			p.can_command().remove(alias);
+		}
+		saveProject(project);
+		return nodeFound;
 	}
 }
