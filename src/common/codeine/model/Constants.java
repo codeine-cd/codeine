@@ -172,7 +172,7 @@ public class Constants
 	public static final String COMMAND_LOG_FILE = "/log";
 
 	public static final int DEFAULT_WEB_SERVER_PORT = 12347;
-	public static final int DEFAULT_PEER_PORT = 12350;
+	public static final int DEFAULT_PEER_PORT = 49671;
 
 	public static final String DISCOVERY_PLUGIN = "discovery";
 
