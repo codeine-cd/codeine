@@ -28,7 +28,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(5);
 	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
 	private Map<String, PeerStatusJsonV2> peer_to_projects = Maps.newHashMap();
-	private Cache<String, Map<String, PeerStatusJsonV2>> cache = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
+	private Cache<String, PeerStatusJsonV2> cache = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
 	
 	@Inject
 	public PeersProjectsStatusInWebServer(StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider) {
@@ -51,17 +51,21 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 			for (Entry<String, PeerStatusJsonV2> e : peersStatus.entrySet()) {
 				if (!res.containsKey(e.getKey())) {
 					res.put(e.getKey(), e.getValue());
+					cache.put(e.getKey(), e.getValue());
 				} else { // more than one
 					log.debug("peer appears in more than one database " + e.getKey());
 					duplicatePeers++;
 					if (isNewer(e.getValue(), res.get(e.getKey()))) {
 						res.put(e.getKey(), e.getValue());
+						cache.put(e.getKey(), e.getValue());
 					}
 				}
 			}
 		}
 		log.info("total duplicate peers " + duplicatePeers);
-		return res;
+		Map<String, PeerStatusJsonV2> $ = Maps.newHashMap();
+		$.putAll(cache.asMap());
+		return $;
 	}
 
 	private List<Map<String, PeerStatusJsonV2>> getUpdateMaps() {
@@ -76,10 +80,8 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		}
 		executor.shutdown();
 		waitForExecutors(executor);
-		Map<String, Map<String, PeerStatusJsonV2>> current = putDataInCache(futures);
-		Map<String, Map<String, PeerStatusJsonV2>> fromCacheWithCurrent = Maps.newHashMap(cache.asMap());
-		fromCacheWithCurrent.putAll(current);
-		return Lists.newArrayList(fromCacheWithCurrent.values());
+		Map<String, Map<String, PeerStatusJsonV2>> current = getDataFromFutures(futures);
+		return Lists.newArrayList(current.values());
 	}
 
 	private FutureTask<Map<String, PeerStatusJsonV2>> createFuture(final IStatusDatabaseConnector c) {
@@ -105,7 +107,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 		}
 	}
 
-	private Map<String, Map<String, PeerStatusJsonV2>> putDataInCache(Map<String, FutureTask<Map<String, PeerStatusJsonV2>>> futures) {
+	private Map<String, Map<String, PeerStatusJsonV2>> getDataFromFutures(Map<String, FutureTask<Map<String, PeerStatusJsonV2>>> futures) {
 		Map<String, Map<String, PeerStatusJsonV2>> $ = Maps.newHashMap();
 		for (Entry<String, FutureTask<Map<String, PeerStatusJsonV2>>> entry : futures.entrySet()) {
 			try {
@@ -114,7 +116,6 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 					log.info("database is empty " + entry.getKey());
 				}
 				else {
-					cache.put(entry.getKey(), map);
 					$.put(entry.getKey(), map);
 				}
 			} catch (Exception e) {
