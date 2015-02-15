@@ -160,9 +160,9 @@ public class DbUtils
 	}
 
 	private Connection getConnection(boolean useCompression) {
-		String url = "jdbc:mysql://"+hostSelector.mysql().host()+":" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME;
+		String url = "jdbc:mysql://"+hostSelector.mysql().host()+":" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME + "?connectTimeout=10000";
 		if (useCompression) {
-			url += "?useCompression=true";
+			url += "&useCompression=true";
 		}
 		try {
 			return DriverManager.getConnection(url, hostSelector.mysql().user(), hostSelector.mysql().password());
