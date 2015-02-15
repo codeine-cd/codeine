@@ -60,10 +60,10 @@
                                     <ng-form name=projectDiscardOldParentForm">
                                         <div class="form-horizontal">
                                             <div class="form-group">
-                                                <div class="checkbox col-md-offset-1">
+                                                <label for="discard_old_commands" class="col-md-3 control-label">Discard old commands <help help-id="discardOldCommandsEnabledHelp"></help></label>
+                                                <div class="checkbox col-md-3">
                                                     <label>
-                                                        <input type="checkbox" ng-model="projectConfigurationForEditing.discard_old_commands.enabled"> Discard old commands
-                                                        <help help-id="discardOldCommandsEnabledHelp"></help>
+                                                        <input id="discard_old_commands" type="checkbox" ng-model="projectConfigurationForEditing.discard_old_commands.enabled">
                                                     </label>
                                                 </div>
                                             </div>
@@ -274,10 +274,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="checkbox col-md-offset-3">
+                                    <label for="collector_info{{$index}}.notification_enabled" class="col-md-3 control-label">Notification Enabled <help help-id="notificationsEnabledHelp"></help></label>
+                                    <div class="checkbox col-md-3">
                                         <label>
-                                            <input type="checkbox" ng-model="collector_info.notification_enabled"> Notification Enabled
-                                            <help help-id="notificationsEnabledHelp"></help>
+                                            <input id="collector_info{{$index}}.notification_enabled" type="checkbox" ng-model="collector_info.notification_enabled">
                                         </label>
                                     </div>
                                 </div>
@@ -406,10 +406,10 @@
                                         </accordion-heading>
                                         <ng-form name="commandsInnerFormSchedule">
                                             <div class="form-group">
-                                                <div class="checkbox col-lg-offset-3">
+                                                <label for="command_info{{$index}}.prevent_override" class="col-md-3 control-label">Prevent override <help help-id="preventOverrideHelp"></help></label>
+                                                <div class="checkbox col-md-3">
                                                     <label>
-                                                        <input type="checkbox" name="prevent_override" id="command_info{{$index}}.prevent_override" ng-model="command_info.prevent_override"> Prevent override
-                                                        <help help-id="preventOverrideHelp"></help>
+                                                        <input type="checkbox" name="prevent_override" id="command_info{{$index}}.prevent_override" ng-model="command_info.prevent_override">
                                                     </label>
                                                 </div>
                                             </div>
@@ -453,10 +453,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <div class="checkbox col-lg-offset-3">
+                                                    <label for="command_info{{$index}}.stop_on_error" class="col-md-3 control-label">Stop on error <help help-id="stopOnErrorHelp"></help></label>
+                                                    <div class="checkbox col-md-3">
                                                         <label>
-                                                            <input type="checkbox" name="stop_on_error" id="command_info{{$index}}.stop_on_error" ng-model="command_info.stop_on_error"> Stop on error
-                                                            <help help-id="stopOnErrorHelp"></help>
+                                                            <input type="checkbox" name="stop_on_error" id="command_info{{$index}}.stop_on_error" ng-model="command_info.stop_on_error">
                                                         </label>
                                                     </div>
                                                 </div>
@@ -549,16 +549,16 @@
                                                 </div>
                                             </div>
                                             <div class="form-group" ng-if="command_parameter.type == 'String' || command_parameter.type == 'Password'">
-                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.default_value">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
+                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.default_value1">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
                                                 <div class="controls col-md-3">
-                                                    <input id="command_parameter{{$index}}.default_value" name="default_value" type="text" ng-model="command_parameter.default_value" class="form-control">
+                                                    <input id="command_parameter{{$index}}.default_value1" name="default_value" type="text" ng-model="command_parameter.default_value" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group" ng-if="command_parameter.type == 'Boolean'">
-                                                <div class="checkbox col-lg-offset-3">
+                                                <label for="command_parameter{{$index}}.default_value" class="col-md-3 control-label">Default value <help help-id="command_patameter_default_val_Help"></help></label>
+                                                <div class="checkbox col-md-3">
                                                     <label>
-                                                        <input type="checkbox" ng-model="command_parameter{{$index}}.default_value"> Default value
-                                                        <help help-id="command_patameter_default_val_Help"></help>
+                                                        <input id="command_parameter{{$index}}.default_value" type="checkbox" ng-model="command_parameter{{$index}}.default_value">
                                                     </label>
                                                 </div>
                                             </div>

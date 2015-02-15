@@ -128,13 +128,12 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-md-9">
-                            <div class="checkbox">
+                            <label class="col-md-3 control-label" for="mysql_managed_by_codeine_{{$index}}" class="col-md-4 control-label">Managed by Codeine <help help-id="MysqlManagedByCodeineConfigureHelp"></help></label>
+                            <div class="checkbox col-md-4">
                                 <label>
-                                    <input type="checkbox" ng-model="mysql_instance.managed_by_codeine"> Managed by Codeine <help help-id="MysqlManagedByCodeineConfigureHelp"></help>
+                                    <input type="checkbox" ng-model="mysql_instance.managed_by_codeine" id="mysql_managed_by_codeine_{{$index}}">
                                 </label>
                             </div>
-                        </div>
                     </div>
                     <div class="form-group" ng-class="{'has-error': mysqlForm.mysql_dir.$invalid }" ng-show="mysql_instance.managed_by_codeine" >
                         <label for="mysql_dir_{{$index}}" class="col-md-3 control-label">MySQL Work Dir <help help-id="MysqlDirConfigureHelp"></help></label>

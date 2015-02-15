@@ -78,10 +78,10 @@
                                 </div>
                             </div>
                             <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive'">
-                                <div class="checkbox col-md-offset-4">
+                                <label for="stop_on_error" class="col-md-4 control-label">Stop on error <help help-id="stopOnErrorHelp"></help></label>
+                                <div class="checkbox col-md-4">
                                     <label>
-                                        <input type="checkbox"  ng-model="vm.command.stop_on_error"> Stop on error
-                                        <help help-id="stopOnErrorHelp"></help>
+                                        <input id="stop_on_error" type="checkbox"  ng-model="vm.command.stop_on_error">
                                     </label>
                                 </div>
                             </div>
@@ -107,11 +107,12 @@
                                         </div>
                                     </div>
                                     <div ng-if="parameter.type === 'Boolean'">
+
                                         <div class="form-group">
-                                            <div class="checkbox col-md-offset-4">
+                                            <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
+                                            <div class="checkbox col-md-4">
                                                 <label>
-                                                    <input type="checkbox" ng-model="parameter.value"> {{parameter.name}}
-                                                    <help help-txt="parameter.description"></help>
+                                                    <input type="checkbox" ng-model="parameter.value">
                                                 </label>
                                             </div>
                                         </div>
