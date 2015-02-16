@@ -11,6 +11,7 @@ import codeine.configuration.IConfigurationManager;
 import codeine.configuration.Links;
 import codeine.jsons.collectors.CollectorExecutionInfoWithResult;
 import codeine.jsons.collectors.CollectorInfo;
+import codeine.jsons.collectors.CollectorInfo.CollectorType;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
@@ -57,6 +58,12 @@ public class CollectorStatusApiServlet extends AbstractApiServlet {
 
 	private CollectorInfo getCollectorInfo(String projectName, String collectorName) {
 		ProjectJson projectForName = configurationManager.getProjectForName(projectName);
+		if (collectorName.equals(Constants.VERSION_COLLECTOR_NAME)) {
+			return new CollectorInfo(Constants.VERSION_COLLECTOR_NAME, projectForName.version_detection_script(), CollectorType.String);
+		}
+		if (collectorName.equals(Constants.TAGS_COLLECTOR_NAME)) {
+			return new CollectorInfo(Constants.TAGS_COLLECTOR_NAME, projectForName.tags_discovery_script(), CollectorType.String);
+		}
 		for (CollectorInfo c : projectForName.collectors()) {
 			if (c.name().equals(collectorName)) {
 				return c;
