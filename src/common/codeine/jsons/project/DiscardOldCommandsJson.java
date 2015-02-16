@@ -8,7 +8,7 @@ public class DiscardOldCommandsJson {
 	private Integer max_commands;
 	private Integer max_days;
 	
-	public DiscardOldCommandsJson(int max_commands, int max_days) {
+	public DiscardOldCommandsJson(Integer max_commands, Integer max_days) {
 		enabled = true;
 		this.max_commands = max_commands;
 		this.max_days = max_days;

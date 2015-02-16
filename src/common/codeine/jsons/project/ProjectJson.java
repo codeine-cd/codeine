@@ -29,7 +29,7 @@ public class ProjectJson
 	private String version_detection_script;
 	private List<NodeInfo> nodes_info = Lists.newArrayList();
 	private OperatingSystem operating_system = OperatingSystem.Linux;
-	private DiscardOldCommandsJson discard_old_commands = DiscardOldCommandsJson.DISABLED;
+	private DiscardOldCommandsJson discard_old_commands = new DiscardOldCommandsJson(1000, null);
 	private List<EnvironmentVariable> environment_variables = Lists.newArrayList();
 	private List<String> include_project_commands = Lists.newArrayList();
 	
