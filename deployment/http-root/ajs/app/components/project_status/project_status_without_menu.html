@@ -113,7 +113,7 @@
                             </div>
                             <div ng-class="{'col-md-9': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-7': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" style="word-break: break-all;">
                                 <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="node.collectors_info.length === 0"></i>
+                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.collectors_info)"></i>
                                 </a>
                                 <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
                                 <span ng-repeat="collector_info in node.collectors_info">

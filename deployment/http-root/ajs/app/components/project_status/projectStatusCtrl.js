@@ -206,6 +206,15 @@
             });
         };
 
+        $scope.hasFailingCollectors = function(collectors_info) {
+            for (var i=0 ; i < collectors_info.length; i++) {
+                if (collectors_info[i].exit_status !== 0) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
         $scope.isAnyNodeChecked = function() {
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
                 for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
