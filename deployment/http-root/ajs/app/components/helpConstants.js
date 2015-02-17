@@ -66,7 +66,8 @@
             "monitorScriptHelp" : "Type a shell script to monitor the desired functionality of the node.<br/><br/>By convention, monitors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
                 "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
             "collectorScriptHelp" : "Type a shell script to collector the desired functionality of the node.<br/><br/>By convention, collectors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
-                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
+                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.<br/>"+
+                "The collector output is expected in a file, that its name is in <strong>CODEINE_OUTPUT_FILE</strong> environment variable.",
             "versionScriptHelp" : "Type a shell script to specify the node's version.<br/><br/>" +
                 "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> and should contain the version number (e.g.: 1.0.3).<br/><br/>" +
                 "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
@@ -103,7 +104,10 @@
             "projectIncludeCommandsFromHelp" : "List here projects to include their configured commands in this project",
             "typeHelp" : "Select a type for the parameter for command execution",
             "collectorDescriptionHelp" : "Description will be displayed to explain what the collector is doing",
-            "collectorTypeHelp" : "Select a type of the collector",
+            "collectorTypeHelp" : "Select a type for collector. types are:<br/>"+
+                "<br/><strong>String</strong> - text value that will be displayed to user"+
+                "<br/><strong>Number</strong> - numerical value that will be displayed to user and can be a base for more calculations"+
+                "<br/><strong>Monitor</strong> - indicates failures or success by the script exit status (zero is success).",
             "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)"
         });
 

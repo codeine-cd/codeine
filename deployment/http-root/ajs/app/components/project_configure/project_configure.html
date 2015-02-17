@@ -284,7 +284,7 @@
                                 <div class="form-group">
                                     <label for="collector_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="collectorScriptHelp"></help></label>
                                     <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.script_content.$invalid}">
-                                        <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.commandAndMonitorAutoComplete' message='collector_info.script_content' rows="3" element-class="form-control" element-id="collector_info{{$index}}.script" is-required="true"></textcomplete>
+                                        <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.collectorAutoComplete' message='collector_info.script_content' rows="3" element-class="form-control" element-id="collector_info{{$index}}.script" is-required="true"></textcomplete>
                                     </div>
                                 </div>
                             </div>
