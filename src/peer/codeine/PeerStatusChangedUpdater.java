@@ -48,7 +48,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 
 	@Override
 	public void run() {
-		long initialSleep = MIN_TIME_BETWEEN_UPDATES_MILLIS + new Random().nextInt((int) MIN_TIME_BETWEEN_UPDATES_MILLIS);
+		long initialSleep = (MIN_TIME_BETWEEN_UPDATES_MILLIS / 2) + new Random().nextInt((int) MIN_TIME_BETWEEN_UPDATES_MILLIS);
 		log.info("start updating, will sleep before " + initialSleep);
 		ThreadUtils.sleep(initialSleep);
 		while (true){
