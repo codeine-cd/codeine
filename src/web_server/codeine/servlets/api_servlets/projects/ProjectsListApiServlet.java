@@ -76,7 +76,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 			}
 			newProject.name(newProjectParamsJson.project_name);
 			configurationManager.createNewProject(newProject);
-			afterProjectModifyPlugin.call(newProject, StatusChange.add);
+			afterProjectModifyPlugin.call(newProject, StatusChange.add, getUser(request).user().username());
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);  
 		}	
