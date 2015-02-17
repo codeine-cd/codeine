@@ -107,20 +107,40 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer
 		}
 		projectsUpdater.updateAllPeers();
 	}
+	public void updateDb(String serverKey) {
+		ProjectsConfigurationConnector projectsConfigurationConnector = getConnector(serverKey);
+		for (ProjectJson project : projects().values()) {
+			updateProjectInDb(project, projectsConfigurationConnector);
+		}
+	}
+
+	private ProjectsConfigurationConnector getConnector(String serverKey) {
+		for (final ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
+			if (projectsConfigurationConnector.getKey().equals(serverKey)) {
+				return projectsConfigurationConnector;
+			}
+		}
+		throw new IllegalArgumentException("server not found " + serverKey);
+	}
 
 	private void updateProjectInDb(final ProjectJson project) {
 		for (final ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider.get()) {
-			getUpdateThreadPool(projectsConfigurationConnector.getKey()).execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						projectsConfigurationConnector.updateProject(project);
-					} catch (Exception e) {
-						log.warn("cannot update project in database " + project.name() + " " + projectsConfigurationConnector, e);
-					}
-				}
-			});
+			updateProjectInDb(project, projectsConfigurationConnector);
 		}
+	}
+
+	private void updateProjectInDb(final ProjectJson project,
+			final ProjectsConfigurationConnector projectsConfigurationConnector) {
+		getUpdateThreadPool(projectsConfigurationConnector.getKey()).execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					projectsConfigurationConnector.updateProject(project);
+				} catch (Exception e) {
+					log.warn("cannot update project in database " + project.name() + " " + projectsConfigurationConnector, e);
+				}
+			}
+		});
 	}
 
 	public void createNewProject(ProjectJson project) {

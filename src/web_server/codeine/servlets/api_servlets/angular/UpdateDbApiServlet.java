@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.ConfigurationManagerServer;
+import codeine.model.Constants;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
+import codeine.utils.StringUtils;
 
 public class UpdateDbApiServlet extends AbstractApiServlet {
 
@@ -27,8 +29,14 @@ public class UpdateDbApiServlet extends AbstractApiServlet {
 	
 	@Override
 	protected void myPost(HttpServletRequest request, HttpServletResponse response) {
-		log.info("got post (push) request");
-		configurationManager.updateDb();
+		String address = getParameter(request, Constants.UrlParameters.ADDRESS);
+		log.info("got post (push) request, address: " + address);
+		if (StringUtils.isEmpty(address)) {
+			configurationManager.updateDb();
+		}
+		else {
+			configurationManager.updateDb(address);
+		}
 	}
 
 }

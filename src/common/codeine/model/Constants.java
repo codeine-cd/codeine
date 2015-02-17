@@ -212,6 +212,7 @@ public class Constants
 		public static final String VIEW_AS = "viewas";
 		public static final String FILTER = "text-filter";
 		public static final String FORCE = "force";
+		public static final String ADDRESS = "server";
 		
 		
 	}

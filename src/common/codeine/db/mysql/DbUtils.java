@@ -197,13 +197,13 @@ public class DbUtils
 
 	@Override
 	public String toString() {
-		MysqlConfigurationJson mysql = hostSelector.mysql();
-		String hostPort = mysql == null ? "null" : mysql.hostPort();
-		return "DbUtils [" + hostPort + "]";
+		return "DbUtils [" + server() + "]";
 	}
 
 	public String server() {
-		return toString();
+		MysqlConfigurationJson mysql = hostSelector.mysql();
+		String hostPort = mysql == null ? "null" : mysql.hostPort();
+		return  hostPort;
 	}
 
 }
