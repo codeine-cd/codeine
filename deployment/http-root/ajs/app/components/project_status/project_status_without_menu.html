@@ -113,10 +113,10 @@
                             </div>
                             <div ng-class="{'col-md-9': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-7': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" style="word-break: break-all;">
                                 <a ng-href="/codeine/project/{{projectName}}/node/{{node.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.collectors_info)"></i>
+                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.peer_status !== 'On' , success: node.peer_status === 'On' }" ng-show="node.collectors_info.failed_collectors.length === 0"></i>
                                 </a>
                                 <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
-                                <span ng-repeat="collector_info in node.collectors_info">
+                                <span ng-repeat="collector_info in node.collectors_info" style="display:inline-block">
                                     <a tooltip="{{::collector_info.exit_status !== 0 ? '' : collector_info.name}}"
                                        ng-href="/codeine/project/{{::projectName}}/node/{{::node.name}}/collector/{{::collector_info.name}}/status"
                                        class="label" ng-class="{'label-warning': node.peer_status === 'Disc' , 'label-danger': node.peer_status === 'On' && collector_info.exit_status !== 0, 'label-default': node.peer_status === 'On' && collector_info.exit_status === 0}">{{::collector_info.exit_status === 0 ? collector_info.value : collector_info.name}}</a>&nbsp;</span>
