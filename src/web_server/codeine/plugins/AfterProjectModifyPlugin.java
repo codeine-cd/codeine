@@ -24,14 +24,15 @@ public class AfterProjectModifyPlugin {
 
 	public enum StatusChange {add,remove,modify}
 	
-	public void call(ProjectJson projectJson, StatusChange newStatus) {
+	public void call(ProjectJson projectJson, StatusChange newStatus, String username) {
 		String after_project_modify_plugin = experimentalConfJsonStore.get().after_project_modify_plugin();
 		if (null != after_project_modify_plugin) {
-			log.info("calling after_project_modify_plugin for project " + projectJson.name());
+			log.info("calling after_project_modify_plugin for project " + projectJson.name() + " by  user " + username);
 			List<String> cmd = Lists.newArrayList(after_project_modify_plugin);
 			Map<String, String> env = Maps.newHashMap();
 			env.put(Constants.EXECUTION_ENV_PROJECT_STATUS, String.valueOf(newStatus));
 			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectJson.name());
+			env.put(Constants.EXECUTION_ENV_USER_NAME, username);
 			log.info("executing " + after_project_modify_plugin);
 			Result result = new ProcessExecuterBuilder(cmd).timeoutInMinutes(2).env(env).build().execute();
 			log.info("calling after_project_modify_plugin for project " + projectJson.name() + " finished " + result.toStringLong());

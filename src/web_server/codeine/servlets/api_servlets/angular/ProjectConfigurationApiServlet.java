@@ -52,7 +52,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
 		boolean exists = configurationManager.updateProject(projectJson);
-		afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add);
+		afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add, getUser(request).user().username());
 		writeResponseJson(resp,projectJson);
 	}
 
@@ -65,7 +65,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		ProjectJson projectToDelete = JsonUtils.cloneJson(configurationManager.getProjectForName(projectName), ProjectJson.class);
 		configurationManager.deleteProject(projectToDelete);
 		log.info("Project " + projectToDelete.name() + " was deleted by user " + user);
-		afterProjectModifyPlugin.call(projectToDelete, StatusChange.remove);
+		afterProjectModifyPlugin.call(projectToDelete, StatusChange.remove, getUser(request).user().username());
 		getWriter(response).write("{}");
 	}
 	
