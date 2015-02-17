@@ -53,6 +53,21 @@
             $location.search('tagsOff',off.join(','));
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
+
+        vm.hasSelectedTags = function() {
+            for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
+                if ($scope.projectStatus.tag_info[i].state === 1) {
+                    return true;
+                }
+            }
+           return false;
+        };
+        vm.clearSelectedTags = function() {
+            for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
+                $scope.projectStatus.tag_info[i].state = 0;
+            }
+            vm.updateTags();
+        };
     }
 
 

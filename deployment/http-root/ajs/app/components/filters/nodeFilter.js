@@ -24,21 +24,24 @@
         };
 
         var showByTags = function(tags,nodeTags) {
+            var noTagsSelected = true;
             for (var i=0; i < tags.length ; i++) {
                 if (!tags[i].state) {
                     continue;
                 }
+                noTagsSelected = false;
                 if (tags[i].state === 1) {
-                    if (nodeTags.indexOf(tags[i].name) === -1) {
-                        return false;
-                    }
-                } else {
                     if (nodeTags.indexOf(tags[i].name) !== -1) {
-                        return false;
+                        return true;
                     }
                 }
+                //else {
+                //    if (nodeTags.indexOf(tags[i].name) !== -1) {
+                //        return false;
+                //    }
+                //}
             }
-            return true;
+            return noTagsSelected;
         };
 
         return function(node, query, monitor, tags) {

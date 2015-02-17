@@ -1,6 +1,7 @@
 <div class="panel panel-default" ng-controller="tagsFilterCtrl as vm">
     <div class="panel-heading">
         <span class="panel-title"><i class="fa fa-tags"></i> Tags <help help-id="nodeTagsHelp"></help></span>
+        <span class="panel-title pull-right"><button class="btn btn-default btn-sm" ng-show="vm.hasSelectedTags()" ng-click="vm.clearSelectedTags()" tooltip="Clear selected tags"><i class="fa fa-eraser"></i></button></span>
     </div>
     <div class="list-group">
         <a class="list-group-item" ng-hide="projectStatus.tag_info.length" ng-cloak><div class="text-center">No tags</div></a>

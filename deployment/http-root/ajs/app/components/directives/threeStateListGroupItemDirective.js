@@ -33,7 +33,7 @@
                         scope.tag.state = 0;
                     }
                     scope.tag.state++;
-                    scope.tag.state %= 3;
+                    scope.tag.state %= 2;
 
                     setClass();
                     scope.onChange();
