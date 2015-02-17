@@ -35,7 +35,7 @@
             "commandsConfigureHelp" : "Configure commands to execute on node. Such command can upgrade to new version or restart the process.",
             "commandHistoryHelp" : "All the currently running and finished commands of the selected project",
             "commandExecutorHelp" : "All the currently running commands on the Codeine server from all projects",
-            "nodeTagsHelp" : "Tags on nodes.<br/>Press a tag to filter only nodes with that tag (blue). Press again to filter-out nodes with that tag (red).",
+            "nodeTagsHelp" : "Tags on nodes.<br/>Press a tag to filter only nodes with that tag (blue).",
             "emailHelp" : "Codeine will notify on failing monitors to configured users. " +
                 "<br/><br/><strong>'Immediately'</strong> - send mail immediately after a monitor has failed." +
                 "<br/><br/><strong>'Hourly'/'Daily'</strong> - send mail after a monitor has failed, Codeine will aggregate the notifications to send them at the specified frequency.",
