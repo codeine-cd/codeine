@@ -2,6 +2,7 @@ package codeine.executer;
 
 import org.apache.log4j.Logger;
 
+import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.ThreadUtils;
 
@@ -15,6 +16,8 @@ public class PeriodicExecuter implements Runnable
 	private String taskName;
 	private boolean sleepFirst;
 	private static final Logger log = Logger.getLogger(PeriodicExecuter.class);
+	private Object waitForFirstExecutionSync = new Object();
+	private boolean firstExecutionFinished = false;
 
 
 	public PeriodicExecuter(long sleepTimeMilli, Task task, String taskName) {
@@ -44,12 +47,31 @@ public class PeriodicExecuter implements Runnable
 				log.warn("error executing task " + taskName, e1);
 			}
 			s.stop();
+			if (!firstExecutionFinished) {
+				firstExecutionFinished = true;
+				synchronized (waitForFirstExecutionSync) {
+					waitForFirstExecutionSync.notifyAll();
+				}
+			}
 			log.info("task " + taskName + " took " + s + " ; going to sleep " + StringUtils.formatTimePeriod(sleepTimeMilli));
 			ThreadUtils.wait(getSleepObject(), sleepTimeMilli);
 		}
 		log.info("finished for task " + taskName);
 	}
 
+	public void waitForFirstExecution(int millisToWait) {
+		synchronized (waitForFirstExecutionSync) {
+			if (firstExecutionFinished) {
+				return;
+			}
+			try {
+				waitForFirstExecutionSync.wait(millisToWait);
+			} catch (InterruptedException e) {
+				throw ExceptionUtils.asUnchecked(e);
+			}
+		}
+	}
+	
 	protected Object getSleepObject() {
 		if (task instanceof NotifiableTask) {
 			NotifiableTask task1 = (NotifiableTask) task;
@@ -78,4 +100,5 @@ public class PeriodicExecuter implements Runnable
 	public String name() {
 		return taskName;
 	}
+
 }

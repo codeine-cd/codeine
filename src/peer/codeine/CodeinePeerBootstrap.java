@@ -49,7 +49,9 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap
 		TextFileUtils.setContents(pathHelper.getPortFile(), String.valueOf(port));
 		log.info("Hostname " + hostname);
 		injector().getInstance(SnoozeKeeper.class).snoozeAll();
-		new PeriodicExecuter(ConfigurationGetter.INTERVAL, injector().getInstance(ConfigurationGetter.class)).runInThread();
+		PeriodicExecuter configurationGetterExecuter = new PeriodicExecuter(ConfigurationGetter.INTERVAL, injector().getInstance(ConfigurationGetter.class));
+		configurationGetterExecuter.runInThread();
+		configurationGetterExecuter.waitForFirstExecution(60000);
 		log.info("starting PeerStatusChangedUpdater");
 		ThreadUtils.createThread(injector().getInstance(PeerStatusChangedUpdater.class)).start();
 	}

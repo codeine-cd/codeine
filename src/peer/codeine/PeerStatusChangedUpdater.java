@@ -20,7 +20,6 @@ public class PeerStatusChangedUpdater implements Runnable{
 
 	private long MAX_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.MINUTES.toMillis(5);
 	private long MIN_TIME_BETWEEN_UPDATES_MILLIS = TimeUnit.SECONDS.toMillis(31);
-	private long INITIAL_SLEEP = TimeUnit.SECONDS.toMillis(10);
 	private long SLEEP_TIME_AFTER_FAILURE_MILLIS = TimeUnit.MINUTES.toMillis(3);
 	
 	private static final Logger log = Logger.getLogger(PeerStatusChangedUpdater.class);
@@ -49,7 +48,7 @@ public class PeerStatusChangedUpdater implements Runnable{
 
 	@Override
 	public void run() {
-		long initialSleep = INITIAL_SLEEP + new Random().nextInt((int) MIN_TIME_BETWEEN_UPDATES_MILLIS);
+		long initialSleep = MIN_TIME_BETWEEN_UPDATES_MILLIS + new Random().nextInt((int) MIN_TIME_BETWEEN_UPDATES_MILLIS);
 		log.info("start updating, will sleep before " + initialSleep);
 		ThreadUtils.sleep(initialSleep);
 		while (true){
