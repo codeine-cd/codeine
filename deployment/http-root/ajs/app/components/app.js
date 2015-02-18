@@ -18,24 +18,27 @@
         $sceProvider.enabled(false);
         $routeProvider.
             when('/codeine', {
-                templateUrl: '/components/projects/projects.html',
+                redirectTo: '/codeine/view/main'
+            }).
+            when('/codeine/view/:tab_name', {
+                templateUrl: '/components/projects_list/projects.html',
                 controller: 'projectsListCtrl',
                 controllerAs: 'vm',
                 resolve: {
-                    projects : function($q,CodeineService) {
+                    projects : function(ProjectsRepository,$q) {
                         var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
+                        ProjectsRepository.getProjects().then(function(data) {
                             deferred.resolve(data);
-                        }).error(function() {
+                        },function() {
                             deferred.reject('Error - failed to get projects');
                         });
                         return deferred.promise;
                     },
-                    tabs: function($q,CodeineService) {
+                    tabs: function($q,TabsRepository) {
                         var deferred = $q.defer();
-                        CodeineService.getViewTabs().success(function(data) {
+                        TabsRepository.getTabs().then(function(data) {
                             deferred.resolve(data);
-                        }).error(function() {
+                        },function() {
                             deferred.reject('Error - failed to get project tabs');
                         });
                         return deferred.promise;

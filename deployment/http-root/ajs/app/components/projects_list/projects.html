@@ -2,13 +2,13 @@
     <div ng-include="'/components/menus/mainMenu.html'"></div>
 </div>
 <div class="col-md-9">
-    <tabset ng-show="vm.tabs.length > 0">
-        <tab ng-repeat="tab in vm.tabs | filter:vm.shouldShowTab()" heading="{{tab.name}}" active="tab.active" disabled="tab.disabled">
+    <tabset ng-show="vm.uiTabs.length > 0">
+        <tab ng-repeat="uiTab in vm.uiTabs | filter:vm.shouldShowTab()" heading="{{uiTab.tab.name}}" active="uiTab.active" select="vm.changeTab(uiTab.tab)">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:tab">
+                            <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:uiTab">
                                 <a href="/codeine/project/{{project.name}}/status">
                                     <i class="fa fa-folder-open"></i> {{project.name}}
                                 </a>

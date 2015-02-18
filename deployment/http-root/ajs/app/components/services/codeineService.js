@@ -15,7 +15,7 @@
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/session-info", { cache: false });
             },
             getProjects: function () {
-                return $http.get(Constants.CODEINE_WEB_SERVER + "/api/projects", { cache: false });
+                return $http.get(Constants.CODEINE_WEB_SERVER + "/api/projects");
             },
             getProjectMonitorStatistics: function(project) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/monitors-statistics", { params: { project: project }, cache: false });

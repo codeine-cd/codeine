@@ -2,11 +2,14 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectsListCtrl(projects, tabs, $filter) {
+    function projectsListCtrl(projects, tabs, $filter, $routeParams, $log, $location) {
         /*jshint validthis:true */
         var vm = this;
-        vm.tabs = tabs.slice(0);
-        vm.tabs.unshift({name:"main", exp: [".*"]});
+
+        vm.selectedTabName = $routeParams.tab_name;
+        vm.uiTabs = [];
+
+        _.each(tabs, function(tab) { vm.uiTabs.push( { tab : tab, active : tab.name === vm.selectedTabName});});
         vm.projects = projects;
 
         vm.shouldShowTab = function(){
@@ -14,6 +17,10 @@
                 return $filter('projectsFilter')(vm.projects, tab).length > 0;
             };
         };
+
+        vm.changeTab = function(tab) {
+            $location.path('/codeine/view/' + tab.name);
+        }
     }
 
     //// Angular Code ////
