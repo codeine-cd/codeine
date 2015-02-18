@@ -16,6 +16,8 @@ import codeine.plugins.AfterProjectModifyPlugin;
 import codeine.plugins.AfterProjectModifyPlugin.StatusChange;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
+import codeine.utils.MiscUtils;
+import codeine.utils.exceptions.UnAuthorizedException;
 
 public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 
@@ -51,6 +53,11 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 	protected void myPut(HttpServletRequest request, HttpServletResponse resp) {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
+		ProjectJson currentProject = configurationManager.getProjectForName(projectJson.name());
+		if (null != currentProject && !isAdministrator(request) && !MiscUtils.equals(currentProject.nodes_discovery_script(), projectJson.nodes_discovery_script())) {
+			log.warn("user tried to change discovery script in " + projectJson.name() + " user " + getUser(request).user().username());
+			throw new UnAuthorizedException("only admin can change discovery script");
+		}
 		boolean exists = configurationManager.updateProject(projectJson);
 		afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add, getUser(request).user().username());
 		writeResponseJson(resp,projectJson);
