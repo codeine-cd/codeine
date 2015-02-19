@@ -281,7 +281,7 @@
         };
 
         $scope.isNodeDisabled = function(node){
-            return !node.user_can_command;
+            return !node.immutable.user_can_command;
         };
         var unRegisterFunction = $rootScope.$on(Constants.EVENTS.BREADCRUMB_CLICKED, function () {
             $scope.clearFilters();

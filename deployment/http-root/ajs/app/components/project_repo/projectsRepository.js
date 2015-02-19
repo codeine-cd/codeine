@@ -96,6 +96,24 @@
             return deferred.promise;
         }
 
+        function loadProjectStatistics(projectName) {
+            var deferred = $q.defer();
+            ensureProjectsLoaded().then(function() {
+                var project = _search(projectName);
+                if (project.isStatisticsLoaded()) {
+                    return deferred.resolve(project);
+                }
+                CodeineService.getProjectMonitorStatistics(projectName).success(function(data) {
+                    project.setStatistics(data);
+                    deferred.resolve(project);
+                }).error(function(err) {
+                    $log.error('ProjectsRepository: failed to load project statistics from server',err);
+                    deferred.reject(err);
+                });
+            });
+            return deferred.promise;
+        }
+
         function getProject(name, properties) {
             var deferred = $q.defer();
             var promises = [];
@@ -160,6 +178,7 @@
         return {
             getProjects : getProjects,
             getProject : getProject,
+            loadProjectStatistics : loadProjectStatistics,
             loadProjectConfiguration : loadProjectConfiguration,
             loadProjectNodes : loadProjectNodes,
             loadProjectStatus : loadProjectStatus,

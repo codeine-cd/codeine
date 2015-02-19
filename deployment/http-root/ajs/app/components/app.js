@@ -69,13 +69,7 @@
                 resolve: {
                     projects : getProjects,
                     tabs: function($q,TabsRepository) {
-                        var deferred = $q.defer();
-                        TabsRepository.getTabs().then(function(data) {
-                            deferred.resolve(data);
-                        },function() {
-                            deferred.reject('Error - failed to get project tabs');
-                        });
-                        return deferred.promise;
+                        return TabsRepository.getTabs();
                     }
                 }
             }).
@@ -85,16 +79,17 @@
                 controllerAs: 'vm',
                 pageTitle: 'Command setup',
                 resolve : {
-                    command : function($q,CodeineService,$route) {
+                    command : function($q,ProjectsRepository,$route) {
                         var deferred = $q.defer();
-                        CodeineService.getProjectCommands($route.current.params.project_name).success(function(data) {
-                            for (var i=0; i < data.length; i++) {
-                                if (data[i].name === $route.current.params.command_name) {
-                                    deferred.resolve(data[i]);
+                        ProjectsRepository.getProject($route.current.params.project_name,['runnableCommands']).then(function(project) {
+                            for (var i=0; i < project.runnableCommands.length; i++) {
+                                if (project.runnableCommands[i].name === $route.current.params.command_name) {
+                                    return deferred.resolve(project.runnableCommands[i]);
                                 }
                             }
                             deferred.reject('No such command in project ' + $route.current.params.command_name);
-                        }).error(function() {
+                           project.runnableCommands
+                        }, function() {
                             deferred.reject('Error - failed to get project configuration');
                         });
                         return deferred.promise;
@@ -107,14 +102,8 @@
                 controllerAs: 'vm',
                 pageTitle: 'Manage',
                 resolve: {
-                    tabs: function($q,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getViewTabs().success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get tabs');
-                        });
-                        return deferred.promise;
+                    tabs: function(TabsRepository) {
+                        return TabsRepository.getTabs();
                     },
                     permissions : function($q,CodeineService) {
                         var deferred = $q.defer();
@@ -172,14 +161,8 @@
                 controller: 'projectGraphCtrl',
                 pageTitle: 'Project Timeline',
                 resolve: {
-                    graphData : function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectMonitorStatistics($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project graph data');
-                        });
-                        return deferred.promise;
+                    project : function($route,ProjectsRepository) {
+                        return ProjectsRepository.loadProjectStatistics($route.current.params.project_name);
                     }
                 }
             }).
@@ -202,14 +185,8 @@
                 controller: 'nodeStatusCtrl',
                 pageTitle: 'Node Status',
                 resolve: {
-                    projectConfiguration : function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project configuration');
-                        });
-                        return deferred.promise;
+                    project : function($route,ProjectsRepository) {
+                        return ProjectsRepository.getProject($route.current.params.project_name, ['config', 'runnableCommands']);
                     },
                     nodeStatus :  function($q,$route,CodeineService) {
                         var deferred = $q.defer();
@@ -217,15 +194,6 @@
                             deferred.resolve(data);
                         }).error(function() {
                             deferred.reject('Error - failed to get node status');
-                        });
-                        return deferred.promise;
-                    },
-                    commands : function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectCommands($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get projects');
                         });
                         return deferred.promise;
                     }

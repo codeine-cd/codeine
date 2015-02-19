@@ -2,14 +2,13 @@
     'use strict';
 
     //// JavaScript Code ////
-    function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, projectConfiguration, SelectedNodesService, commands) {
+    function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, project, SelectedNodesService) {
         $scope.projectName = $routeParams.project_name;
         $scope.nodeStatus = nodeStatus;
-        $scope.projectConfiguration = projectConfiguration;
+        $scope.projectConfiguration = project.configuration;
         //$log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
         //$log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
-        $scope.nodeStatus = nodeStatus;
-        $scope.commands = commands;
+        $scope.commands = project.runnableCommands;
 
         $scope.runCommand = function(command) {
             $log.debug('projectStatusCtrl: will run command ' + command);

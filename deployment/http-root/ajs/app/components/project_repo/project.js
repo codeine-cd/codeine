@@ -9,6 +9,7 @@
             this.status = {};
             this.nodes = [];
             this.runnableCommands = [];
+            this.statistics = [];
         }
 
         CodeineProject.prototype = {
@@ -20,8 +21,13 @@
                 this.statusLoaded = true;
                 angular.extend(this.status, status);
             },
+            setStatistics : function(data) {
+                this.statisticsLoaded = true;
+                this.statistics.length = 0;
+                angular.copy(data,this.statistics);
+            },
             setNodes : function(nodes) {
-              this.setNodesCount(nodes.length);
+                this.setNodesCount(nodes.length);
                 this.nodesLoaded = true;
                 this.nodes.length = 0;
                 angular.copy(nodes,this.nodes);
@@ -46,7 +52,9 @@
             isRunnableCommandsLoaded : function() {
                 return this.runnableCommandsLoaded;
             },
-
+            isStatisticsLoaded : function() {
+                return this.statisticsLoaded;
+            },
             cloneConfiguration : function() {
                 return angular.fromJson(angular.toJson(this.configuration));
             }
