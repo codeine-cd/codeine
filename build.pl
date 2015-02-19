@@ -45,6 +45,7 @@ if (defined($ENV{RELEASE_AREA}))
 	es("ln -s $tar $link");
 }
 es("cp dist/bin/codeine.jar codeine.jar");
+es("cp $propertiesFile version.properties");
 unless ($ENV{'release-to-github'} eq "true") 
 {
 	exit(0);
