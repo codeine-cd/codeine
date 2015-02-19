@@ -17,9 +17,9 @@
             return instance;
         }
 
-        function _search(projectId){
-            return _pool[projectId];
-        }
+        //function _search(projectId){
+        //    return _pool[projectId];
+        //}
 
         function getProjects(loadFromServer) {
             if(!loadFromServer && _loaded) {
@@ -47,7 +47,7 @@
 
         return {
             getProjects : getProjects
-        }
+        };
     }
 
     //// Angular Code ////

@@ -8,10 +8,10 @@
         }
 
         CodeineProject.prototype = {
-            setData : function(data) {
+            setData : function() {
 
             }
-        }
+        };
 
         return CodeineProject;
     }
