@@ -10,11 +10,16 @@
 
         //$scope.projectStatus = {};
         $scope.projectStatus.nodes_for_version = [];
+        $scope.maxNodeAliasLengthForSmallCol = 30;
+        $scope.maxNodeAliasLength = 0;
         for (var i12=0 ; i12 < $scope.projectStatusImmutable.nodes_for_version.length; i12++) {
             var nodeForVersion = {nodes:[],immutable:$scope.projectStatusImmutable.nodes_for_version[i12]};
             $scope.projectStatus.nodes_for_version.push(nodeForVersion);
             for (var j12=0 ; j12 < $scope.projectStatusImmutable.nodes_for_version[i12].nodes.length; j12++) {
                 nodeForVersion.nodes.push({immutable:$scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12]});
+                if ($scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12].alias.length > $scope.maxNodeAliasLength) {
+                    $scope.maxNodeAliasLength = $scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12].alias.length;
+                }
             }
         }
         $scope.maxNodesToShow = 2;
@@ -73,16 +78,6 @@
             return shouldRefresh;
         };
 
-        $scope.maxNodeAliasLengthForSmallCol = 30;
-        $scope.maxNodeAliasLength = 0;
-        for (var i9=0 ; i9 < $scope.projectStatus.nodes_for_version.length; i9++) {
-            for (var j9=0 ; j9 < $scope.projectStatus.nodes_for_version[i9].nodes.length; j9++) {
-                if ($scope.projectStatus.nodes_for_version[i9].nodes[j9].immutable.alias.length > $scope.maxNodeAliasLength) {
-                    $scope.maxNodeAliasLength = $scope.projectStatus.nodes_for_version[i9].nodes[j9].immutable.alias.length;
-                }
-            }
-        }
-
         var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
             $scope.refreshFilters();
         });
@@ -109,10 +104,7 @@
             for (var j=0; j < maxNodesToShowHere; j++) {
                 moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatus.nodes_for_version[i1].filteredNodes[j]);
             }
-        }
-
-        for (var i2=0 ; i2 < $scope.projectStatus.nodes_for_version.length; i2++) {
-            $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i2].filteredNodes.length;
+            $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
         }
 
         $scope.$watch("selectedMonitor",function( newName, oldName ) {
@@ -291,16 +283,6 @@
             $location.search({});
             unRegisterFunction();
             tagsChangedHandler();
-        });
-
-        $scope.projectConfiguration.commands_include_inherited = [];
-        $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat($scope.projectConfiguration.commands);
-        angular.forEach($scope.projects, function(key) {
-            if ($scope.projectConfiguration.include_project_commands.indexOf(key.name) !== -1) {
-                CodeineService.getProjectConfiguration(key.name).success(function(data) {
-                    $scope.projectConfiguration.commands_include_inherited = $scope.projectConfiguration.commands_include_inherited.concat(data.commands);
-                });
-            }
         });
     }
 

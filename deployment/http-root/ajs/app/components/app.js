@@ -21,38 +21,6 @@
         return deferred.promise;
     }
 
-    /*
-    function loadProjectWithStatus($q,$route,ProjectsRepository) {
-        var deferred = $q.defer();
-        ProjectsRepository.loadProjectStatus($route.current.params.project_name).then(function(data) {
-            deferred.resolve(data);
-        },function() {
-            deferred.reject('Error - failed to get project status');
-        });
-        return deferred.promise;
-    }
-    */
-
-    function loadProjectWithNodes($q,$route,ProjectsRepository) {
-        var deferred = $q.defer();
-        ProjectsRepository.loadProjectNodes($route.current.params.project_name).then(function(data) {
-            deferred.resolve(data);
-        },function() {
-            deferred.reject('Error - failed to get project nodes');
-        });
-        return deferred.promise;
-    }
-
-    function loadProjectWithConfiguration($q,$route,ProjectsRepository) {
-        var deferred = $q.defer();
-        ProjectsRepository.loadProjectConfiguration($route.current.params.project_name).then(function(data) {
-            deferred.resolve(data);
-        },function() {
-            deferred.reject('Error - failed to get project configuration');
-        });
-        return deferred.promise;
-    }
-
     function configFunc($compileProvider,$routeProvider,$locationProvider,$httpProvider,$sceProvider) {
         $locationProvider.html5Mode(true);
         $compileProvider.debugInfoEnabled(false);
@@ -243,15 +211,8 @@
                 controller: 'projectConfigureCtrl',
                 pageTitle: 'Project Configure',
                 resolve: {
-                    project :  loadProjectWithConfiguration,
-                    nodes :  function($q,$route,ProjectsRepository) {
-                        var deferred = $q.defer();
-                        loadProjectWithNodes($q,$route,ProjectsRepository).then(function(project) {
-                            deferred.resolve(_.map(project.nodes, function(node) { return node.alias;}));
-                        }, function() {
-                            deferred.reject('Error - failed to get command status');
-                        });
-                        return deferred.promise;
+                    project :  function($route,ProjectsRepository) {
+                        return ProjectsRepository.getProject($route.current.params.project_name, ['config', 'nodes_aliases']);
                     },
                     projects : getProjects
                 }
@@ -310,12 +271,10 @@
         });
 
         $rootScope.$on('$locationChangeStart', function () {
-            $log.debug('$locationChangeStart');
             $rootScope.app.loading = true;
         });
 
         $rootScope.$on('$locationChangeSuccess', function () {
-            $log.debug('$locationChangeSuccess');
             $rootScope.app.loading = false;
         });
     }

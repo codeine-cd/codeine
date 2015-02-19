@@ -105,9 +105,6 @@
             getUserInfo : function() {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/user-info", { cache: false });
             },
-            getProjectNodes : function(project) {
-                return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-nodes", {params: { project: project } ,cache: false });
-            },
             getProjectNodesAliases : function(project) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + "/api/project-nodes-aliases", {params: { project: project } ,cache: false });
             },

@@ -7,7 +7,7 @@
             this.name = name;
             this.configuration = {};
             this.status = {};
-            this.nodes = [];
+            this.nodes_aliases = [];
             this.runnableCommands = [];
             this.statistics = [];
         }
@@ -26,11 +26,10 @@
                 this.statistics.length = 0;
                 angular.copy(data,this.statistics);
             },
-            setNodes : function(nodes) {
-                this.setNodesCount(nodes.length);
-                this.nodesLoaded = true;
-                this.nodes.length = 0;
-                angular.copy(nodes,this.nodes);
+            setNodesAliases : function(nodesAliases) {
+                this.nodesAliasesLoaded = true;
+                this.nodes_aliases.length = 0;
+                angular.copy(nodesAliases,this.nodes_aliases);
             },
             setNodesCount : function(count) {
                 this.nodes_count = count;
@@ -46,8 +45,8 @@
             isStatusLoaded : function() {
                 return this.statusLoaded;
             },
-            isNodesLoaded : function() {
-                return this.nodesLoaded;
+            isNodesAliasesLoaded : function() {
+                return this.nodesAliasesLoaded;
             },
             isRunnableCommandsLoaded : function() {
                 return this.runnableCommandsLoaded;

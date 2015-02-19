@@ -9,17 +9,14 @@
         vm.sessionInfo = LoginService.getSessionInfo();
 
         $rootScope.$on('$locationChangeStart', function () {
-            $log.debug('$locationChangeStart');
             vm.serverDown = false;
         });
 
         $rootScope.$on("$routeChangeStart", function () {
-            $log.debug('$routeChangeStart');
             vm.contentLoading = true;
         });
 
-        $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
-            $log.debug('$routeChangeSuccess ' + event + current + previous);
+        $rootScope.$on("$routeChangeSuccess", function (event, current) {
             vm.contentLoading = false;
             var title = (LoginService.getViewAs() ? LoginService.getViewAs() + ' @' : '' );
             if (current.$$route.pageTitle) {

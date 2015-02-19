@@ -42,15 +42,15 @@
             return deferred.promise;
         }
 
-        function loadProjectNodes(projectName) {
+        function loadProjectNodesAliases(projectName) {
             var deferred = $q.defer();
             ensureProjectsLoaded().then(function() {
                 var project = _search(projectName);
-                if (project.isNodesLoaded()) {
+                if (project.isNodesAliasesLoaded()) {
                     return deferred.resolve(project);
                 }
-                CodeineService.getProjectNodes(projectName).success(function (data) {
-                    project.setNodes(data);
+                CodeineService.getProjectNodesAliases(projectName).success(function (data) {
+                    project.setNodesAliases(data);
                     deferred.resolve(project);
                 }).error(function (err) {
                     $log.error('ProjectsRepository: failed to load project nodes from server', err);
@@ -126,8 +126,8 @@
                     case 'status':
                         promises.push(loadProjectStatus(name));
                         break;
-                    case 'nodes':
-                        promises.push(loadProjectNodes(name));
+                    case 'nodes_aliases':
+                        promises.push(loadProjectNodesAliases(name));
                         break;
                     case 'runnableCommands':
                         promises.push(loadProjectRunnableCommands(name));
@@ -180,7 +180,7 @@
             getProject : getProject,
             loadProjectStatistics : loadProjectStatistics,
             loadProjectConfiguration : loadProjectConfiguration,
-            loadProjectNodes : loadProjectNodes,
+            loadProjectNodesAliases : loadProjectNodesAliases,
             loadProjectStatus : loadProjectStatus,
             loadProjectRunnableCommands : loadProjectRunnableCommands
         };

@@ -2,14 +2,18 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService,nodes, projects) {
+    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService, projects) {
         $scope.projectName = $routeParams.project_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
         $scope.tags = [];
         $scope.nodes = ['all'];
         $scope.project_is_open = true;
-        $scope.nodes = $scope.nodes.concat(nodes);
-
+        var org =  project.nodes_aliases;
+        if (project.nodes_aliases.length > 100) {
+            org = project.nodes_aliases.slice(0,100);
+            $log.info('More then 100 nodes, will not include all of them in the tabs');
+        }
+        $scope.nodes = $scope.nodes.concat(org);
         $scope.model = {
             commandAndMonitorAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_NODE_TAGS'],
             versionAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_NODE_TAGS','CODEINE_OUTPUT_FILE'],
