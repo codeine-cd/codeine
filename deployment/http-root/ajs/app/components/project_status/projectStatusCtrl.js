@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService, CodeineService) {
+    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService) {
         $scope.projectName = $scope.projectConfiguration.name;
         $scope.allNodesCount = 0;
         //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
