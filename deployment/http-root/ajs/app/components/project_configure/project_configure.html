@@ -137,7 +137,7 @@
                     <div class="form-group" ng-class="{'has-error': projectConfigurationForEditing.node_discovery_startegy.$invalid}">
                         <label for="node_discovery_startegy" class="col-md-4 control-label">Node Discovery Strategy <help help-id="nodesHelp"></help></label>
                         <div class="col-md-4">
-                            <select  class="form-control select2" name="node_discovery_startegy" id="node_discovery_startegy"  ui-select2="{ allowClear: false}" ng-model="projectConfigurationForEditing.node_discovery_startegy">
+                            <select  class="form-control select2" name="node_discovery_startegy" id="node_discovery_startegy"  ui-select2="{ allowClear: false}"  ng-model="projectConfigurationForEditing.node_discovery_startegy">
                                 <option value="Configuration">Configuration</option>
                                 <option value="Reporter">Reporter</option>
                                 <option value="Script">Script</option>
@@ -148,7 +148,8 @@
                         <div class="form-group" ng-if="projectConfigurationForEditing.node_discovery_startegy == 'Script'">
                             <label for="nodes_discovery_script" class="col-md-4 control-label">Nodes Script <help help-id="discoveryScriptHelp"></help></label>
                             <div class="col-md-7" ng-class="{'has-error': scriptDiscoveryStartegyInnerForm.script_content.$invalid}">
-                                <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
+                                <textcomplete ng-if="isAdmin()" element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' contenteditable="false" members='model.nodesDiscoveryAutoComplete' message='projectConfigurationForEditing.nodes_discovery_script' rows="3" element-class="form-control" element-id="nodes_discovery_script" is-required="true"></textcomplete>
+                                <div class="well well-lg" ng-if="!isAdmin()">{{projectConfigurationForEditing.nodes_discovery_script}}</div>
                             </div>
                         </div>
                     </ng-form>

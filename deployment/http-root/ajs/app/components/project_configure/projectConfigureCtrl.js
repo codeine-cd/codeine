@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService, projects) {
+    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService, projects, LoginService) {
         $scope.projectName = $routeParams.project_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
         $scope.tags = [];
@@ -52,6 +52,9 @@
             }
         }
 
+        $scope.isAdmin = function(){
+            return LoginService.getSessionInfo().permissions.administer;
+        }
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };
