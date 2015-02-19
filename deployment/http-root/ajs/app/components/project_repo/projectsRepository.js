@@ -15,7 +15,7 @@
             return instance;
         }
 
-        var internal_project =_retrieveInstance(Constants.CODEINE_NODES_PROJECT_NAME);
+        var internal_project = new CodeineProject(Constants.CODEINE_NODES_PROJECT_NAME);
 
         function _search(projectName){
             if (projectName === Constants.CODEINE_NODES_PROJECT_NAME) {
