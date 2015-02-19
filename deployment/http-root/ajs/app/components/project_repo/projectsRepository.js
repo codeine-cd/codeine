@@ -6,20 +6,123 @@
         var _pool = {};
         var _loaded = false;
 
-        function _retrieveInstance(projectName, projectData) {
+        function _retrieveInstance(projectName) {
             var instance = _pool[projectName];
-            if (instance) {
-                instance.setData(projectData);
-            } else {
-                instance = new CodeineProject(projectName, projectData.nodes_count);
+            if (!instance) {
+                instance = new CodeineProject(projectName);
                 _pool[projectName] = instance;
             }
             return instance;
         }
 
-        function _search(projectId){
-            return _pool[projectId];
+        function _search(projectName){
+            return _pool[projectName];
         }
+
+        function loadProjectConfiguration(projectName) {
+            var project = _search(projectName);
+            if (!project) {
+                throw 'Project not loaded from server ' + projectName;
+            }
+            if (project.isConfigLoaded()) {
+                return $q.when(project);
+            }
+            var deferred = $q.defer();
+            CodeineService.getProjectConfiguration(projectName).success(function(data) {
+                project.setConfiguration(data);
+                deferred.resolve(project);
+            }).error(function(err) {
+                $log.error('ProjectsRepository: failed to load project configuration from server',err);
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function loadProjectNodes(projectName) {
+            var project = _search(projectName);
+            if (!project) {
+                throw 'Project not loaded from server ' + projectName;
+            }
+            if (project.isNodesLoaded()) {
+                return $q.when(project);
+            }
+            var deferred = $q.defer();
+            CodeineService.getProjectNodes(projectName).success(function(data) {
+                project.setNodes(data);
+                deferred.resolve(project);
+            }).error(function(err) {
+                $log.error('ProjectsRepository: failed to load project nodes from server',err);
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function loadProjectStatus(projectName) {
+            var project = _search(projectName);
+            if (!project) {
+                throw 'Project not loaded from server ' + projectName;
+            }
+            if (project.isStatusLoaded()) {
+                return $q.when(project);
+            }
+            var deferred = $q.defer();
+            CodeineService.getProjectStatus(projectName).success(function(data) {
+                project.setStatus(data);
+                deferred.resolve(project);
+            }).error(function(err) {
+                $log.error('ProjectsRepository: failed to load project status from server',err);
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function loadProjectRunnableCommands(projectName) {
+            var project = _search(projectName);
+            if (!project) {
+                throw 'Project not loaded from server ' + projectName;
+            }
+            if (project.isRunnableCommandsLoaded()) {
+                return $q.when(project);
+            }
+            var deferred = $q.defer();
+            CodeineService.getProjectCommands(projectName).success(function(data) {
+                project.setRunnableCommands(data);
+                deferred.resolve(project);
+            }).error(function(err) {
+                $log.error('ProjectsRepository: failed to load project runnable commands from server',err);
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function getProject(name, properties) {
+            var deferred = $q.defer();
+            var promises = [];
+            for (var i = 0 ; i < properties.length ; i++) {
+                switch (properties[i])
+                {
+                    case 'config':
+                        promises.push(loadProjectConfiguration(name));
+                        break;
+                    case 'status':
+                        promises.push(loadProjectStatus(name));
+                        break;
+                    case 'nodes':
+                        promises.push(loadProjectNodes(name));
+                        break;
+                    case 'runnableCommands':
+                        promises.push(loadProjectRunnableCommands(name));
+                        break;
+                    default:
+                        throw 'No implementation for ' + properties[i];
+                }
+            }
+            $q.all(promises).then(function(allRes) {
+                deferred.resolve(allRes[0]);
+            });
+            return deferred.promise;
+        }
+
 
         function getProjects(loadFromServer) {
             if(!loadFromServer && _loaded) {
@@ -33,7 +136,8 @@
             CodeineService.getProjects().success(function(data) {
                 var projects = [];
                 data.forEach(function(projectData) {
-                    var project = _retrieveInstance(projectData.name,projectData);
+                    var project = _retrieveInstance(projectData.name);
+                    project.setNodesCount(projectData.nodes_count);
                     projects.push(project);
                 });
                 _loaded = true;
@@ -46,7 +150,12 @@
         }
 
         return {
-            getProjects : getProjects
+            getProjects : getProjects,
+            getProject : getProject,
+            loadProjectConfiguration : loadProjectConfiguration,
+            loadProjectNodes : loadProjectNodes,
+            loadProjectStatus : loadProjectStatus,
+            loadProjectRunnableCommands : loadProjectRunnableCommands
         }
     }
 
