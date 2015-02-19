@@ -8,19 +8,19 @@
         //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
         //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
-        $scope.versionIsOpen = [];
+        //$scope.projectStatus = {};
+        $scope.projectStatus.nodes_for_version = [];
+        for (var i12=0 ; i12 < $scope.projectStatusImmutable.nodes_for_version.length; i12++) {
+            var nodeForVersion = {nodes:[],immutable:$scope.projectStatusImmutable.nodes_for_version[i12]};
+            $scope.projectStatus.nodes_for_version.push(nodeForVersion);
+            for (var j12=0 ; j12 < $scope.projectStatusImmutable.nodes_for_version[i12].nodes.length; j12++) {
+                nodeForVersion.nodes.push({immutable:$scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12]});
+            }
+        }
         $scope.maxNodesToShow = 2;
+        $scope.versionIsOpen = [];
         for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
             $scope.versionIsOpen[i] = true;
-        }
-        $scope.projectStatusUI = {};
-        $scope.projectStatusUI.nodes_for_version = [];
-        for (var i12=0 ; i12 < $scope.projectStatus.nodes_for_version.length; i12++) {
-            var nodeForVersion = {nodes:[]};
-            $scope.projectStatusUI.nodes_for_version.push(nodeForVersion);
-            for (var j12=0 ; j12 < $scope.projectStatus.nodes_for_version[i12].nodes.length; j12++) {
-                nodeForVersion.nodes.push({});
-            }
         }
         $scope.collapseAll = function() {
             for (var i=0 ; i < $scope.versionIsOpen.length; i++) {
@@ -77,8 +77,8 @@
         $scope.maxNodeAliasLength = 0;
         for (var i9=0 ; i9 < $scope.projectStatus.nodes_for_version.length; i9++) {
             for (var j9=0 ; j9 < $scope.projectStatus.nodes_for_version[i9].nodes.length; j9++) {
-                if ($scope.projectStatus.nodes_for_version[i9].nodes[j9].alias.length > $scope.maxNodeAliasLength) {
-                    $scope.maxNodeAliasLength = $scope.projectStatus.nodes_for_version[i9].nodes[j9].alias.length;
+                if ($scope.projectStatus.nodes_for_version[i9].nodes[j9].immutable.alias.length > $scope.maxNodeAliasLength) {
+                    $scope.maxNodeAliasLength = $scope.projectStatus.nodes_for_version[i9].nodes[j9].immutable.alias.length;
                 }
             }
         }
@@ -89,7 +89,7 @@
 
         // Returns true if the node should be in the filtered array (Displayed)
         var isNodeFiltered = function(node) {
-            return $filter('nodeFilter')(node,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
+            return $filter('nodeFilter')(node.immutable,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
         };
 
         var moveNodeToVisible = function(versionItem,node) {
@@ -101,18 +101,18 @@
         };
 
         for (var i1=0 ; i1 < $scope.projectStatus.nodes_for_version.length; i1++) {
-            $scope.projectStatusUI.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
+            $scope.projectStatus.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
             var maxNodesToShowHere = $scope.maxNodesToShow;
-            if (maxNodesToShowHere > $scope.projectStatusUI.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatus.more_nodes_enabled) {
-                maxNodesToShowHere = $scope.projectStatusUI.nodes_for_version[i1].filteredNodes.length;
+            if (maxNodesToShowHere > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatusImmutable.more_nodes_enabled) {
+                maxNodesToShowHere = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
             }
             for (var j=0; j < maxNodesToShowHere; j++) {
-                moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatusUI.nodes_for_version[i1].filteredNodes[j]);
+                moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatus.nodes_for_version[i1].filteredNodes[j]);
             }
         }
 
         for (var i2=0 ; i2 < $scope.projectStatus.nodes_for_version.length; i2++) {
-            $scope.allNodesCount += $scope.projectStatusUI.nodes_for_version[i2].filteredNodes.length;
+            $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i2].filteredNodes.length;
         }
 
         $scope.$watch("selectedMonitor",function( newName, oldName ) {
@@ -135,7 +135,7 @@
         );
 
         $scope.showMore = function(count) {
-            if ($scope.projectStatus.more_nodes_enabled) {
+            if ($scope.projectStatusImmutable.more_nodes_enabled) {
                 return count < $scope.maxNodesToShow;
             }
             else {
@@ -146,8 +146,8 @@
             $log.debug("refreshFilters");
             var count = 0;
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
-                $scope.projectStatusUI.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatusUI.nodes_for_version[i].filteredNodes.length);
-                $scope.projectStatusUI.nodes_for_version[i].visibleNodes.splice(0,$scope.projectStatusUI.nodes_for_version[i].visibleNodes.length);
+                $scope.projectStatus.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatus.nodes_for_version[i].filteredNodes.length);
+                $scope.projectStatus.nodes_for_version[i].visibleNodes.splice(0,$scope.projectStatus.nodes_for_version[i].visibleNodes.length);
                 for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].nodes.length; j++) {
                     $scope.projectStatus.nodes_for_version[i].nodes[j].visible = false;
                     if (isNodeFiltered($scope.projectStatus.nodes_for_version[i].nodes[j])) {
@@ -275,7 +275,7 @@
             event.stopPropagation();
             angular.forEach($scope.projectStatus.nodes_for_version, function(versionItem) {
                 angular.forEach(versionItem.filteredNodes, function(node) {
-                    node.checked = event.target.checked && node.user_can_command;
+                    node.checked = event.target.checked && node.immutable.user_can_command;
                 });
             });
         };

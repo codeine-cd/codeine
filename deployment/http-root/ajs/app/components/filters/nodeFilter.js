@@ -31,7 +31,7 @@
                 }
                 noTagsSelected = false;
                 if (tags[i].state === 1) {
-                    if (nodeTags.indexOf(tags[i].name) !== -1) {
+                    if (nodeTags.indexOf(tags[i].immutable.name) !== -1) {
                         return true;
                     }
                 }

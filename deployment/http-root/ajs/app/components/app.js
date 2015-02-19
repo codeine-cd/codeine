@@ -21,6 +21,7 @@
         return deferred.promise;
     }
 
+    /*
     function loadProjectWithStatus($q,$route,ProjectsRepository) {
         var deferred = $q.defer();
         ProjectsRepository.loadProjectStatus($route.current.params.project_name).then(function(data) {
@@ -30,6 +31,7 @@
         });
         return deferred.promise;
     }
+    */
 
     function loadProjectWithNodes($q,$route,ProjectsRepository) {
         var deferred = $q.defer();
@@ -187,8 +189,8 @@
                 reloadOnSearch: false,
                 pageTitle: 'Nodes Status',
                 resolve: {
-                    project : function(ProjectsRepository) {
-                        return ProjectsRepository.getProject(Constants.CODEINE_NODES_PROJECT_NAME, ['config', 'status', 'runnableCommands']);
+                    project : function(ProjectsRepository, Constants) {
+                        return ProjectsRepository.getProject(Constants.CODEINE_NODES_PROJECT_NAME, [ 'status']);
                     }
                 }
             }).
@@ -278,8 +280,8 @@
                     nodes :  function($q,$route,ProjectsRepository) {
                         var deferred = $q.defer();
                         loadProjectWithNodes($q,$route,ProjectsRepository).then(function(project) {
-                            deferred.resolve(_.map(project.nodes, function(node) { return node.alias}));
-                        }, function(err) {
+                            deferred.resolve(_.map(project.nodes, function(node) { return node.alias;}));
+                        }, function() {
                             deferred.reject('Error - failed to get command status');
                         });
                         return deferred.promise;

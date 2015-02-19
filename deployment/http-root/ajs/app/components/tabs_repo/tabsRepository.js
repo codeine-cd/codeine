@@ -17,10 +17,6 @@
             return instance;
         }
 
-        function _search(tabName){
-            return _pool[tabName];
-        }
-
         function getTabs(loadFromServer) {
             if(!loadFromServer && _loaded) {
                 var tabs = [];
@@ -48,7 +44,7 @@
 
         return {
             getTabs : getTabs
-        }
+        };
     }
 
     //// Angular Code ////

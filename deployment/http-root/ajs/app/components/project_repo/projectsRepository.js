@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     //// JavaScript Code ////
-    function ProjectsRepositoryFactory(CodeineService, $q, $log, CodeineProject) {
+    function ProjectsRepositoryFactory(CodeineService, $q, $log, CodeineProject, Constants) {
 
         var _pool = {};
         var _loaded = false;
@@ -15,82 +15,83 @@
             return instance;
         }
 
+        var internal_project =_retrieveInstance(Constants.CODEINE_NODES_PROJECT_NAME);
+
         function _search(projectName){
+            if (projectName === Constants.CODEINE_NODES_PROJECT_NAME) {
+                return internal_project;
+            }
             return _pool[projectName];
         }
 
         function loadProjectConfiguration(projectName) {
-            var project = _search(projectName);
-            if (!project) {
-                throw 'Project not loaded from server ' + projectName;
-            }
-            if (project.isConfigLoaded()) {
-                return $q.when(project);
-            }
             var deferred = $q.defer();
-            CodeineService.getProjectConfiguration(projectName).success(function(data) {
-                project.setConfiguration(data);
-                deferred.resolve(project);
-            }).error(function(err) {
-                $log.error('ProjectsRepository: failed to load project configuration from server',err);
-                deferred.reject(err);
+            ensureProjectsLoaded().then(function() {
+                var project = _search(projectName);
+                if (project.isConfigLoaded()) {
+                    return deferred.resolve(project);
+                }
+                CodeineService.getProjectConfiguration(projectName).success(function(data) {
+                    project.setConfiguration(data);
+                    deferred.resolve(project);
+                }).error(function(err) {
+                    $log.error('ProjectsRepository: failed to load project configuration from server',err);
+                    deferred.reject(err);
+                });
             });
             return deferred.promise;
         }
 
         function loadProjectNodes(projectName) {
-            var project = _search(projectName);
-            if (!project) {
-                throw 'Project not loaded from server ' + projectName;
-            }
-            if (project.isNodesLoaded()) {
-                return $q.when(project);
-            }
             var deferred = $q.defer();
-            CodeineService.getProjectNodes(projectName).success(function(data) {
-                project.setNodes(data);
-                deferred.resolve(project);
-            }).error(function(err) {
-                $log.error('ProjectsRepository: failed to load project nodes from server',err);
-                deferred.reject(err);
+            ensureProjectsLoaded().then(function() {
+                var project = _search(projectName);
+                if (project.isNodesLoaded()) {
+                    return deferred.resolve(project);
+                }
+                CodeineService.getProjectNodes(projectName).success(function (data) {
+                    project.setNodes(data);
+                    deferred.resolve(project);
+                }).error(function (err) {
+                    $log.error('ProjectsRepository: failed to load project nodes from server', err);
+                    deferred.reject(err);
+                });
             });
             return deferred.promise;
         }
 
         function loadProjectStatus(projectName) {
-            var project = _search(projectName);
-            if (!project) {
-                throw 'Project not loaded from server ' + projectName;
-            }
-            if (project.isStatusLoaded()) {
-                return $q.when(project);
-            }
             var deferred = $q.defer();
-            CodeineService.getProjectStatus(projectName).success(function(data) {
-                project.setStatus(data);
-                deferred.resolve(project);
-            }).error(function(err) {
-                $log.error('ProjectsRepository: failed to load project status from server',err);
-                deferred.reject(err);
+            ensureProjectsLoaded().then(function() {
+                var project = _search(projectName);
+                if (project.isStatusLoaded()) {
+                    return deferred.resolve(project);
+                }
+                CodeineService.getProjectStatus(projectName).success(function(data) {
+                    project.setStatus(data);
+                    deferred.resolve(project);
+                }).error(function(err) {
+                    $log.error('ProjectsRepository: failed to load project status from server',err);
+                    deferred.reject(err);
+                });
             });
             return deferred.promise;
         }
 
         function loadProjectRunnableCommands(projectName) {
-            var project = _search(projectName);
-            if (!project) {
-                throw 'Project not loaded from server ' + projectName;
-            }
-            if (project.isRunnableCommandsLoaded()) {
-                return $q.when(project);
-            }
             var deferred = $q.defer();
-            CodeineService.getProjectCommands(projectName).success(function(data) {
-                project.setRunnableCommands(data);
-                deferred.resolve(project);
-            }).error(function(err) {
-                $log.error('ProjectsRepository: failed to load project runnable commands from server',err);
-                deferred.reject(err);
+            ensureProjectsLoaded().then(function() {
+                var project = _search(projectName);
+                if (project.isRunnableCommandsLoaded()) {
+                    return deferred.resolve(project);
+                }
+                CodeineService.getProjectCommands(projectName).success(function(data) {
+                    project.setRunnableCommands(data);
+                    deferred.resolve(project);
+                }).error(function(err) {
+                    $log.error('ProjectsRepository: failed to load project runnable commands from server',err);
+                    deferred.reject(err);
+                });
             });
             return deferred.promise;
         }
@@ -149,6 +150,13 @@
             return deferred.promise;
         }
 
+        function ensureProjectsLoaded() {
+            if (!_loaded) {
+                return getProjects();
+            }
+            return $q.when();
+        }
+
         return {
             getProjects : getProjects,
             getProject : getProject,
@@ -156,7 +164,7 @@
             loadProjectNodes : loadProjectNodes,
             loadProjectStatus : loadProjectStatus,
             loadProjectRunnableCommands : loadProjectRunnableCommands
-        }
+        };
     }
 
     //// Angular Code ////

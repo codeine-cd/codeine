@@ -20,7 +20,7 @@
 
         vm.changeTab = function(tab) {
             $location.path('/codeine/view/' + tab.name);
-        }
+        };
     }
 
     //// Angular Code ////
