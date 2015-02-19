@@ -43,6 +43,7 @@ if (defined($ENV{RELEASE_AREA}))
 	system("rm $link");
 	es("ln -s $tar $link");
 }
+es("cp dist/bin/codeine.jar codeine.jar");
 unless ($ENV{'release-to-github'} eq "true") 
 {
 	exit(0);
