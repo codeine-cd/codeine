@@ -9,6 +9,7 @@ print "prepare codeine...\n";
 my $propertiesFile = "src/common/codeine/version.properties";
 updateVersionFile();
 es("rm -rf dist");
+es("rm -f codeine_*");
 es("mkdir -p dist");
 #es("bounce_minor_version.pl");
 
