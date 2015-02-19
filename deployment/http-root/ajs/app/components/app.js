@@ -88,9 +88,8 @@
                                 }
                             }
                             deferred.reject('No such command in project ' + $route.current.params.command_name);
-                           project.runnableCommands
                         }, function() {
-                            deferred.reject('Error - failed to get project configuration');
+                            deferred.reject('Error - failed to get project runnableCommands');
                         });
                         return deferred.promise;
                     }
