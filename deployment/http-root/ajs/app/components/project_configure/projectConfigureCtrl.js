@@ -54,7 +54,7 @@
 
         $scope.isAdmin = function(){
             return LoginService.getSessionInfo().permissions.administer;
-        }
+        };
         $scope.addNode = function() {
             $scope.projectConfigurationForEditing.nodes_info.push({});
         };
