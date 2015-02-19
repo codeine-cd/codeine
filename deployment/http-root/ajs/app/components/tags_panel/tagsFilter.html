@@ -6,12 +6,12 @@
     <div class="list-group">
         <a class="list-group-item" ng-hide="projectStatus.tag_info.length" ng-cloak><div class="text-center">No tags</div></a>
         <a three-state-list-group-item tag='tag' class="cursor_pointer" on-change="vm.updateTags()" href="#" style="padding-top: 3px; padding-bottom: 3px;" ng-repeat="tag in  projectStatus.tag_info | limitTo:vm.maxTags ">
-            <div class="row" tooltip="{{::tag.name.length > 25 ? tag.name : ''}}" tooltip-popup-delay="500" tooltip-placement="right">
+            <div class="row" tooltip="{{::tag.immutable.name.length > 25 ? tag.immutable.name : ''}}" tooltip-popup-delay="500" tooltip-placement="right">
                 <div class="col-xs-9 fade_me">
-                    <span>{{tag.name}}</span>
+                    <span>{{tag.immutable.name}}</span>
                 </div>
                 <div class="col-xs-3">
-                    <span class="badge pull-right">{{tag.count}}</span>
+                    <span class="badge pull-right">{{tag.immutable.count}}</span>
                 </div>
             </div>
         </a>

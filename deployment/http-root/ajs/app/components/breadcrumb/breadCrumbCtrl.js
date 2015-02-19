@@ -12,7 +12,6 @@
         };
 
         var handler = $rootScope.$on("$routeChangeSuccess", function (event, current) {
-            $log.debug('breadCrumbCtrl: $routeChangeSuccess');
             vm.items = [];
             vm.lastItem = '';
 

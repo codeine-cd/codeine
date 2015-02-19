@@ -2,9 +2,9 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, projectConfigurationForEditing,$location,AlertService,nodes, projects) {
+    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService,nodes, projects) {
         $scope.projectName = $routeParams.project_name;
-        $scope.projectConfigurationForEditing = projectConfigurationForEditing;
+        $scope.projectConfigurationForEditing = project.cloneConfiguration();
         $scope.tags = [];
         $scope.nodes = ['all'];
         $scope.project_is_open = true;
@@ -24,27 +24,27 @@
             array[index+1] = temp;
         }
 
-        for (var i1=0; i1 < projectConfigurationForEditing.nodes_info.length ; i1++) {
-            for (var j=0; j < projectConfigurationForEditing.nodes_info[i1].tags.length ; j++) {
-                if ($scope.tags.indexOf(projectConfigurationForEditing.nodes_info[i1].tags[j]) === -1) {
-                    $scope.tags.push(projectConfigurationForEditing.nodes_info[i1].tags[j]);
+        for (var i1=0; i1 < $scope.projectConfigurationForEditing.nodes_info.length ; i1++) {
+            for (var j=0; j < $scope.projectConfigurationForEditing.nodes_info[i1].tags.length ; j++) {
+                if ($scope.tags.indexOf($scope.projectConfigurationForEditing.nodes_info[i1].tags[j]) === -1) {
+                    $scope.tags.push($scope.projectConfigurationForEditing.nodes_info[i1].tags[j]);
                 }
             }
         }
 
-        for (var i2=0; i2 < projectConfigurationForEditing.nodes_info.length ; i2++) {
-            if (projectConfigurationForEditing.nodes_info[i2].tags.length === 0) {
-                delete projectConfigurationForEditing.nodes_info[i2].tags;
+        for (var i2=0; i2 < $scope.projectConfigurationForEditing.nodes_info.length ; i2++) {
+            if ($scope.projectConfigurationForEditing.nodes_info[i2].tags.length === 0) {
+                delete $scope.projectConfigurationForEditing.nodes_info[i2].tags;
             }
         }
 
-        if (projectConfigurationForEditing.include_project_commands.length ===0) {
-            delete projectConfigurationForEditing.include_project_commands;
+        if ($scope.projectConfigurationForEditing.include_project_commands.length ===0) {
+            delete $scope.projectConfigurationForEditing.include_project_commands;
         }
 
-        for (var i3=0; i3 < projectConfigurationForEditing.permissions.length ; i3++) {
-            if (projectConfigurationForEditing.permissions[i3].can_command.length === 0) {
-                delete projectConfigurationForEditing.permissions[i3].can_command;
+        for (var i3=0; i3 < $scope.projectConfigurationForEditing.permissions.length ; i3++) {
+            if ($scope.projectConfigurationForEditing.permissions[i3].can_command.length === 0) {
+                delete $scope.projectConfigurationForEditing.permissions[i3].can_command;
             }
         }
 

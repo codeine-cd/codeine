@@ -11,6 +11,48 @@
         $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
     }
 
+    function getProjects(ProjectsRepository,$q) {
+        var deferred = $q.defer();
+        ProjectsRepository.getProjects().then(function(data) {
+            deferred.resolve(data);
+        }, function() {
+            deferred.reject('Error - failed to get projects');
+        });
+        return deferred.promise;
+    }
+
+    /*
+    function loadProjectWithStatus($q,$route,ProjectsRepository) {
+        var deferred = $q.defer();
+        ProjectsRepository.loadProjectStatus($route.current.params.project_name).then(function(data) {
+            deferred.resolve(data);
+        },function() {
+            deferred.reject('Error - failed to get project status');
+        });
+        return deferred.promise;
+    }
+    */
+
+    function loadProjectWithNodes($q,$route,ProjectsRepository) {
+        var deferred = $q.defer();
+        ProjectsRepository.loadProjectNodes($route.current.params.project_name).then(function(data) {
+            deferred.resolve(data);
+        },function() {
+            deferred.reject('Error - failed to get project nodes');
+        });
+        return deferred.promise;
+    }
+
+    function loadProjectWithConfiguration($q,$route,ProjectsRepository) {
+        var deferred = $q.defer();
+        ProjectsRepository.loadProjectConfiguration($route.current.params.project_name).then(function(data) {
+            deferred.resolve(data);
+        },function() {
+            deferred.reject('Error - failed to get project configuration');
+        });
+        return deferred.promise;
+    }
+
     function configFunc($compileProvider,$routeProvider,$locationProvider,$httpProvider,$sceProvider) {
         $locationProvider.html5Mode(true);
         $compileProvider.debugInfoEnabled(false);
@@ -25,15 +67,7 @@
                 controller: 'projectsListCtrl',
                 controllerAs: 'vm',
                 resolve: {
-                    projects : function(ProjectsRepository,$q) {
-                        var deferred = $q.defer();
-                        ProjectsRepository.getProjects().then(function(data) {
-                            deferred.resolve(data);
-                        },function() {
-                            deferred.reject('Error - failed to get projects');
-                        });
-                        return deferred.promise;
-                    },
+                    projects : getProjects,
                     tabs: function($q,TabsRepository) {
                         var deferred = $q.defer();
                         TabsRepository.getTabs().then(function(data) {
@@ -91,15 +125,7 @@
                         });
                         return deferred.promise;
                     },
-                    projects: function($q,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get projects');
-                        });
-                        return deferred.promise;
-                    }
+                    projects: getProjects
                 }
             }).
             when('/codeine/manage/statistics', {
@@ -124,15 +150,7 @@
                 controller: 'newProjectCtrl',
                 pageTitle: 'New Project',
                 resolve: {
-                    projects : function($q,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get projects');
-                        });
-                        return deferred.promise;
-                    }
+                    projects : getProjects
                 }
             }).
             when('/codeine/project/:project_name', {
@@ -144,32 +162,8 @@
                 reloadOnSearch: false,
                 pageTitle: 'Project Status',
                 resolve: {
-                    projectConfiguration : function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project configuration');
-                        });
-                        return deferred.promise;
-                    },
-                    projectStatus :  function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectStatus($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project status');
-                        });
-                        return deferred.promise;
-                    },
-                    commands : function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectCommands($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get projects');
-                        });
-                        return deferred.promise;
+                    project : function($route,ProjectsRepository) {
+                        return ProjectsRepository.getProject($route.current.params.project_name, ['config', 'status', 'runnableCommands']);
                     }
                 }
             }).
@@ -195,26 +189,8 @@
                 reloadOnSearch: false,
                 pageTitle: 'Nodes Status',
                 resolve: {
-                    projectConfiguration : function($q,$route,CodeineService,Constants) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectConfiguration(Constants.CODEINE_NODES_PROJECT_NAME).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project configuration');
-                        });
-                        return deferred.promise;
-                    },
-                    projectStatus :  function($q,$route,CodeineService,Constants) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectStatus(Constants.CODEINE_NODES_PROJECT_NAME).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project status');
-                        });
-                        return deferred.promise;
-                    },
-                    commands : function(){
-                        return [];
+                    project : function(ProjectsRepository, Constants) {
+                        return ProjectsRepository.getProject(Constants.CODEINE_NODES_PROJECT_NAME, [ 'status']);
                     }
                 }
             }).
@@ -300,33 +276,17 @@
                 controller: 'projectConfigureCtrl',
                 pageTitle: 'Project Configure',
                 resolve: {
-                    projectConfigurationForEditing : function($q,$route,CodeineService) {
+                    project :  loadProjectWithConfiguration,
+                    nodes :  function($q,$route,ProjectsRepository) {
                         var deferred = $q.defer();
-                        CodeineService.getProjectConfiguration($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project configuration');
+                        loadProjectWithNodes($q,$route,ProjectsRepository).then(function(project) {
+                            deferred.resolve(_.map(project.nodes, function(node) { return node.alias;}));
+                        }, function() {
+                            deferred.reject('Error - failed to get command status');
                         });
                         return deferred.promise;
                     },
-                    nodes :  function($q,$route,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjectNodesAliases($route.current.params.project_name).success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get project nodes');
-                        });
-                        return deferred.promise;
-                    },
-                    projects : function($q,CodeineService) {
-                        var deferred = $q.defer();
-                        CodeineService.getProjects().success(function(data) {
-                            deferred.resolve(data);
-                        }).error(function() {
-                            deferred.reject('Error - failed to get projects');
-                        });
-                        return deferred.promise;
-                    }
+                    projects : getProjects
                 }
             }).
             when('/codeine/user/:user_name', {

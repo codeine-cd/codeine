@@ -9,7 +9,7 @@
 
         function setTagState(name,stateVal) {
             for (var f=0; f < $scope.projectStatus.tag_info.length ; f++) {
-                if ($scope.projectStatus.tag_info[f].name === name) {
+                if ($scope.projectStatus.tag_info[f].immutable.name === name) {
                     $scope.projectStatus.tag_info[f].state = stateVal;
                 }
             }
@@ -44,9 +44,9 @@
             var on = [], off = [];
             for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
                 if ($scope.projectStatus.tag_info[i].state === 1) {
-                    on.push($scope.projectStatus.tag_info[i].name);
+                    on.push($scope.projectStatus.tag_info[i].immutable.name);
                 } else if ($scope.projectStatus.tag_info[i].state === 2) {
-                    off.push($scope.projectStatus.tag_info[i].name);
+                    off.push($scope.projectStatus.tag_info[i].immutable.name);
                 }
             }
             $location.search('tagsOn',on.join(','));

@@ -42,7 +42,7 @@ public class NodeWithMonitorsInfoApi extends NodeWithMonitorsInfo {
 	}
 	
 	private boolean shouldDisplayByName(String name) {
-		if (Constants.VERSION_COLLECTOR_NAME.equals(name) || Constants.TAGS_COLLECTOR_NAME.equals(name)) {
+		if (name.endsWith(Constants.VERSION_COLLECTOR_NAME) || name.endsWith(Constants.TAGS_COLLECTOR_NAME)) {
 			return false;
 		}
 		return true;
