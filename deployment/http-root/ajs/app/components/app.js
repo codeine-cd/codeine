@@ -42,6 +42,9 @@
                 }
             }).
             when('/codeine/project/:project_name/command/:command_name/setup', {
+                redirectTo: '/codeine/view/main/project/:project_name/command/:command_name/setup'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/command/:command_name/setup', {
                 templateUrl: '/components/command_setup/command_setup.html',
                 controller: 'commandSetupCtrl',
                 controllerAs: 'vm',
@@ -102,6 +105,9 @@
                 }
             }).
             when('/codeine/new_project', {
+                redirectTo: '/codeine/view/main/new_project'
+            }).
+            when('/codeine/view/:tab_name/new_project', {
                 templateUrl: '/components/new_project/new_project.html',
                 controller: 'newProjectCtrl',
                 pageTitle: 'New Project',
@@ -110,9 +116,12 @@
                 }
             }).
             when('/codeine/project/:project_name', {
-                redirectTo: '/codeine/project/:project_name/status'
+                redirectTo: '/codeine/view/main/project/:project_name/status'
             }).
             when('/codeine/project/:project_name/status', {
+                redirectTo: '/codeine/view/main/project/:project_name/status'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/status', {
                 templateUrl: '/components/project_status/project_status.html',
                 controller: 'projectStatusWithMenuCtrl',
                 reloadOnSearch: false,
@@ -124,6 +133,9 @@
                 }
             }).
             when('/codeine/project/:project_name/timeline', {
+                redirectTo: '/codeine/view/main/project/:project_name/timeline'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/timeline', {
                 templateUrl: '/components/project_graph/project_graph.html',
                 controller: 'projectGraphCtrl',
                 pageTitle: 'Project Timeline',
@@ -145,9 +157,12 @@
                 }
             }).
             when('/codeine/project/:project_name/node/:node_name', {
-                redirectTo: '/codeine/project/:project_name/node/:node_name/status'
+                redirectTo: '/codeine/view/main/project/:project_name/node/:node_name/status'
             }).
             when('/codeine/project/:project_name/node/:node_name/status', {
+                redirectTo: '/codeine/view/main/project/:project_name/node/:node_name/status'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/node/:node_name/status', {
                 templateUrl: '/components/node_status/node_status.html',
                 controller: 'nodeStatusCtrl',
                 pageTitle: 'Node Status',
@@ -167,9 +182,12 @@
                 }
             }).
             when('/codeine/project/:project_name/node/:node_name/collector/:collector_name', {
-                redirectTo: '/codeine/project/:project_name/node/:node_name/collector/:collector_name/status'
+                redirectTo: '/codeine/view/main/project/:project_name/node/:node_name/collector/:collector_name/status'
             }).
             when('/codeine/project/:project_name/node/:node_name/collector/:collector_name/status', {
+                redirectTo: '/codeine/view/main/project/:project_name/node/:node_name/collector/:collector_name/status'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/node/:node_name/collector/:collector_name/status', {
                 templateUrl: '/components/collector_status/collector_status.html',
                 controller: 'collectorStatusCtrl',
                 controllerAs: 'vm',
@@ -187,9 +205,12 @@
                 }
             }).
             when('/codeine/project/:project_name/command/:command_name/:command_id', {
-                redirectTo: '/codeine/project/:project_name/command/:command_name/:command_id/status'
+                redirectTo: '/codeine/view/main/project/:project_name/command/:command_name/:command_id/status'
             }).
             when('/codeine/project/:project_name/command/:command_name/:command_id/status', {
+                redirectTo: '/codeine/view/main/project/:project_name/command/:command_name/:command_id/status'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/command/:command_name/:command_id/status', {
                 templateUrl: '/components/command_status/command_status.html',
                 controller: 'commandStatusCtrl',
                 controllerAs: 'vm',
@@ -207,6 +228,9 @@
                 }
             }).
             when('/codeine/project/:project_name/configure', {
+                redirectTo: '/codeine/view/main/project/:project_name/configure'
+            }).
+            when('/codeine/view/:tab_name/project/:project_name/configure', {
                 templateUrl: '/components/project_configure/project_configure.html',
                 controller: 'projectConfigureCtrl',
                 pageTitle: 'Project Configure',

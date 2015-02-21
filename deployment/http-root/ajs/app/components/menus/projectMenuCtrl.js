@@ -7,6 +7,7 @@
         var vm = this;
 
         vm.projectName = $routeParams.project_name;
+        vm.tabName = $routeParams.tab_name;
         vm.permissions = LoginService.getSessionInfo().permissions;
 
         vm.deleteProject = function() {

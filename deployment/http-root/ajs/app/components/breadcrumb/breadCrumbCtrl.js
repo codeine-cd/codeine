@@ -46,17 +46,17 @@
                 vm.lastItem = current.params.user_name;
                 return;
             }
+            var view = "main";
+            if (angular.isDefined(current.params.tab_name)) {
+                view = current.params.tab_name;
+                vm.items.push( { name : current.params.tab_name, url : '/codeine/view/' + view });
+            }
             if (angular.isDefined(current.params.project_name)) {
-                vm.items.push( { name : current.params.project_name, url : '/codeine/project/' + current.params.project_name + '/status' });
+                vm.items.push( { name : current.params.project_name, url : '/codeine/view/' + view + '/project/' + current.params.project_name + '/status' });
             }
             if (angular.isDefined(current.params.node_name)) {
-                if (angular.isDefined(current.params.monitor_name)) {
-                    vm.items.push( { name : current.params.node_name, url : '/codeine/project/' + current.params.project_name + '/node/' +  current.params.node_name + '/status' });
-                    vm.lastItem = current.params.monitor_name;
-                    return;
-                }
                 if (angular.isDefined(current.params.collector_name)) {
-                    vm.items.push( { name : current.params.node_name, url : '/codeine/project/' + current.params.project_name + '/node/' +  current.params.node_name + '/status' });
+                    vm.items.push( { name : current.params.node_name, url : '/codeine/view/' + view + '/project/' + current.params.project_name + '/node/' +  current.params.node_name + '/status' });
                     vm.lastItem = current.params.collector_name;
                     return;
                 }

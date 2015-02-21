@@ -105,20 +105,20 @@
                                     <div class="checkbox">
                                         <label>
                                             <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;
-                                            <a ng-href="/codeine/project/{{::projectName}}/node/{{::node.immutable.name}}/status"
+                                            <a ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/status"
                                                > {{::node.immutable.alias}}</a>
                                         </label>
                                     </div>
                                 </form>
                             </div>
                             <div ng-class="{'col-md-9': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-7': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" style="word-break: break-all;">
-                                <a ng-href="/codeine/project/{{projectName}}/node/{{node.immutable.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.immutable.peer_status !== 'On' , success: node.immutable.peer_status === 'On' }" ng-show="node.immutable.collectors_info.failed_collectors.length === 0"></i>
+                                <a ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/status">
+                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.immutable.peer_status !== 'On' , success: node.immutable.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.immutable.collectors_info)"></i>
                                 </a>
                                 <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
                                 <span ng-repeat="collector_info in node.immutable.collectors_info" style="display:inline-block">
                                     <a tooltip="{{::collector_info.exit_status !== 0 ? '' : collector_info.name}}"
-                                       ng-href="/codeine/project/{{::projectName}}/node/{{::node.immutable.name}}/collector/{{::collector_info.name}}/status"
+                                       ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/collector/{{::collector_info.name}}/status"
                                        class="label" ng-class="{'label-warning': node.immutable.peer_status === 'Disc' , 'label-danger': node.immutable.peer_status === 'On' && collector_info.exit_status !== 0, 'label-default': node.immutable.peer_status === 'On' && collector_info.exit_status === 0}">{{::collector_info.exit_status === 0 ? collector_info.value : collector_info.name}}</a>&nbsp;</span>
                             </div>
                         </div>

@@ -32,6 +32,7 @@
         }
 
         vm.projectName = $routeParams.project_name;
+        vm.tabName = $routeParams.tab_name;
         vm.commandName = $routeParams.command_name;
         if (vm.nodes.length === 1) {
             vm.command.command_strategy = 'Single';
@@ -43,7 +44,7 @@
             $log.debug('commandSetupCtrl: will run the command - ' + angular.toJson(vm.command) + ' on ' + vm.nodes.length + ' nodes');
             vm.runPromise = CodeineService.runCommand(vm.command,vm.nodes).success(function(data) {
                 $log.debug('commandSetupCtrl: Command executed, result is ' + angular.toJson(data));
-                $location.path('/codeine/project/' + vm.projectName + '/command/' + vm.commandName + '/' + data + '/status');
+                $location.path('/codeine/view/' + vm.tabName + '/project/' + vm.projectName + '/command/' + vm.commandName + '/' + data + '/status');
             });
         };
 

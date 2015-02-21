@@ -64,14 +64,14 @@
                         <div ng-if="vm.all_nodes_is_open && vm.commandStatus.nodes_list.length < 100">
                             <div ng-repeat="node in vm.commandStatus.nodes_list" class="row">
                                 <div class="col-md-8">
-                                    <a ng-href="/codeine/project/{{::vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
+                                    <a ng-href="/codeine/view/{{::vm.tabName}}/project/{{::vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
                                 </div>
                             </div>
                         </div>
                         <div ng-if="vm.all_nodes_is_open && vm.commandStatus.nodes_list.length >= 100">
                             <div ng-repeat="node in vm.commandStatus.nodes_list | limitTo:100 " class="row">
                                 <div class="col-md-8">
-                                    <a ng-href="/codeine/project/{{::vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
+                                    <a ng-href="/codeine/view/{{::vm.tabName}}/project/{{::vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
                                 </div>
                             </div>
                             <div class="row">
@@ -91,7 +91,7 @@
                         <div ng-if="vm.fail_nodes_is_open">
                             <div ng-repeat="node in vm.commandStatus.fail_list" class="row">
                                 <div class="col-md-8">
-                                    <a ng-href="/codeine/project/{{::vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
+                                    <a ng-href="/codeine/view/{{::vm.tabName}}/project/{{::vm.projectName}}/node/{{::node.name}}/status">{{::node.alias}}</a>
                                 </div>
                             </div>
                         </div>

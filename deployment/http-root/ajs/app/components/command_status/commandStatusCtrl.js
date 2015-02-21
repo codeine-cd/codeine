@@ -7,6 +7,7 @@
         var vm = this;
 
         vm.projectName = $routeParams.project_name;
+        vm.tabName = $routeParams.tab_name;
         vm.commandStatus = commandStatus;
         var maxUpdatesNotInFocus = 100;
         vm.all_nodes_is_open = vm.commandStatus.nodes_list.length < 6;
@@ -36,7 +37,7 @@
 
         vm.rerunCommand = function() {
             $log.debug('commandStatusCtrl: will rerun the command - ' + vm.commandStatus.command);
-            var url = '/codeine/project/' + vm.projectName + '/command/' + vm.commandStatus.command + '/setup';
+            var url = '/codeine/view/' + vm.tabName + '/project/' + vm.projectName + '/command/' + vm.commandStatus.command + '/setup';
             SelectedNodesService.setSelectedNodes(vm.commandStatus.nodes_list, url, vm.commandStatus.params);
             $location.path(url);
         };

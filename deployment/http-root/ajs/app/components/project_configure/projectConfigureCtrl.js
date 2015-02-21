@@ -4,6 +4,7 @@
     //// JavaScript Code ////
     function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService, projects, LoginService) {
         $scope.projectName = $routeParams.project_name;
+        $scope.tabName = $routeParams.tab_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
         $scope.tags = [];
         $scope.nodes = ['all'];
@@ -107,7 +108,7 @@
             $scope.configPromise = CodeineService.saveProjectConfiguration($scope.projectConfigurationForEditing).success(function() {
                 AlertService.addAlert('success','Project Configuration was saved successfully',3000);
                 if (redirect) {
-                    $location.path('/codeine/project/' + $scope.projectName + '/status');
+                    $location.path('/codeine/view/' + $scope.tabName + '/project/' + $scope.projectName + '/status');
                 }
             });
         };

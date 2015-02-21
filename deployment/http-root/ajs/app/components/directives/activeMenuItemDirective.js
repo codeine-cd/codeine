@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function activeMenuItem($location) {
+    function activeMenuItem($location, $log) {
         return {
             restrict: 'A',
             link: function (scope, element) {
@@ -13,6 +13,7 @@
                     }
                     var nestedA = (element.is("a")) ? element[0] :  element.find('a')[0];
                     var path = nestedA.href;
+                    $log.debug("compare 1)" + newPath + " 2)" + path + " res:" + (newPath === path));
                     if (newPath === path) {
                         element.addClass('active');
                     } else {

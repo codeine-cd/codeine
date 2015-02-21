@@ -2,8 +2,9 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService) {
+    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams) {
         $scope.projectName = $scope.projectConfiguration.name;
+        $scope.tabName = $routeParams.tab_name;
         $scope.allNodesCount = 0;
         //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
         //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
@@ -184,7 +185,7 @@
                 AlertService.addAlert('danger','No nodes selected to run the command.<br/>Please select nodes first.',6000);
                 return;
             }
-            var url = '/codeine/project/' + $scope.projectName + '/command/' + command + '/setup';
+            var url = '/codeine/view/' + $scope.tabName + '/project/' + $scope.projectName + '/command/' + command + '/setup';
             SelectedNodesService.setSelectedNodes($scope.getAllSelectedNodes(),url);
             $location.path(url);
         };

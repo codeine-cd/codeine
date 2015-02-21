@@ -6,6 +6,7 @@
         /*jshint validthis:true */
         var vm = this;
         vm.projectName = $route.current.params.project_name;
+        vm.tabName = $route.current.params.tab_name;
         vm.limit = 10;
 
         vm.historyUrl = Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + encodeURI(vm.projectName);

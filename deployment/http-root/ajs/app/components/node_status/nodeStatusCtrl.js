@@ -4,6 +4,7 @@
     //// JavaScript Code ////
     function nodeStatusCtrl($scope, $log,$routeParams, $location, nodeStatus, project, SelectedNodesService) {
         $scope.projectName = $routeParams.project_name;
+        $scope.tabName = $routeParams.tab_name;
         $scope.nodeStatus = nodeStatus;
         $scope.projectConfiguration = project.configuration;
         //$log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
@@ -12,7 +13,7 @@
 
         $scope.runCommand = function(command) {
             $log.debug('projectStatusCtrl: will run command ' + command);
-            var url = '/codeine/project/' + $scope.projectName + '/command/' + command + '/setup';
+            var url = '/codeine/view/' + $scope.tabName + '/project/' + $scope.projectName + '/command/' + command + '/setup';
             var nodes = [];
             nodes.push($scope.nodeStatus);
             SelectedNodesService.setSelectedNodes(nodes,url);

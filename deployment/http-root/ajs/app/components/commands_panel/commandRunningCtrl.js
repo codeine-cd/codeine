@@ -6,6 +6,7 @@
         /*jshint validthis:true */
         var vm  = this;
         vm.projectName = $routeParams.project_name;
+        vm.tabName = $routeParams.tab_name;
         vm.limit = 10;
 
         CodeineService.getRunningCommands().success(function(data) {

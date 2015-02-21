@@ -9,11 +9,11 @@
                     <div class="panel panel-default">
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="project in vm.projects | projectsFilter:uiTab">
-                                <a href="/codeine/project/{{project.name}}/status">
+                                <a href="/codeine/view/{{vm.selectedTabName}}/project/{{project.name}}/status">
                                     <i class="fa fa-folder-open"></i> {{project.name}}
                                 </a>
                                 <help help-txt="project.description" ng-if="project.description"></help>
-                                <a href="/codeine/project/{{project.name}}/status" class="pull-right">
+                                <a href="/codeine/view/{{vm.selectedTabName}}/project/{{project.name}}/status" class="pull-right">
                                     <span class="badge badge-info">{{project.nodes_count}}</span>
                                 </a>
                             </li>
