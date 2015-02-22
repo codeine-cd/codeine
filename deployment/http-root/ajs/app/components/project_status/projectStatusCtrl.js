@@ -204,7 +204,7 @@
         $scope.checkboxClick = function(versionItem, event) {
             event.stopPropagation();
             angular.forEach(versionItem.filteredNodes, function(item) {
-                item.checked = event.target.checked && item.user_can_command;
+                item.checked = event.target.checked && item.immutable.user_can_command;
             });
         };
 
