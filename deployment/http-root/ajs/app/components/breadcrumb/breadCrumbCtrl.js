@@ -68,7 +68,7 @@
                 return;
             }
 
-            $scope.lastItem = capitaliseFirstLetter(path[path.length-1]);
+            vm.lastItem = capitaliseFirstLetter(path[path.length-1]);
 
         });
 
