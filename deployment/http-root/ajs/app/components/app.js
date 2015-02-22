@@ -123,7 +123,7 @@
                 redirectTo: '/codeine/view/main/project/:project_name/status'
             }).
             when('/codeine/view/:tab_name/project/:project_name/status', {
-                templateUrl: '/components/project_status/project_status.html',
+                templateUrl: '/components/project_status/project_status_with_menu.html',
                 controller: 'projectStatusWithMenuCtrl',
                 reloadOnSearch: false,
                 pageTitle: 'Project Status',
