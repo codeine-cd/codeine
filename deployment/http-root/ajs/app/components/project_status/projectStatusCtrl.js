@@ -186,7 +186,7 @@
                 return;
             }
             var url = '/codeine/view/' + $scope.tabName + '/project/' + $scope.projectName + '/command/' + command + '/setup';
-            SelectedNodesService.setSelectedNodes($scope.getAllSelectedNodes(),url);
+            SelectedNodesService.setSelectedNodes($scope.getAllSelectedNodesToRun(),url);
             $location.path(url);
         };
 
@@ -228,12 +228,12 @@
             return false;
         };
 
-        $scope.getAllSelectedNodes = function() {
+        $scope.getAllSelectedNodesToRun = function() {
             var res = [];
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
                 for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
                     if ($scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
-                        res.push($scope.projectStatus.nodes_for_version[i].filteredNodes[j]);
+                        res.push($scope.projectStatus.nodes_for_version[i].filteredNodes[j].immutable);
                     }
                 }
             }
