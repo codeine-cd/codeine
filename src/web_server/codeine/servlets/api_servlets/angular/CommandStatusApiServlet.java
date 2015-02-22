@@ -42,6 +42,7 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 			}
 		}
 		commandInfo.output(TextFileUtils.getContents(outputfile));
+		commandInfo.clearPasswordParams();
 		writeResponseGzipJson(commandInfo, request, response);
 	}
 

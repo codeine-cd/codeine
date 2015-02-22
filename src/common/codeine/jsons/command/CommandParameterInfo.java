@@ -26,4 +26,9 @@ public class CommandParameterInfo {
 	public LinkedHashSet<String> allowed_values() {
 		return allowed_values;
 	}
+	public void clearPassword() {
+		if (type == CommandParameterType.Password) {
+			value = "XXXXX";
+		}
+	}
 }

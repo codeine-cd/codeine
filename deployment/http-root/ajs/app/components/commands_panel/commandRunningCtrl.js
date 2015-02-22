@@ -22,7 +22,7 @@
             intervalTriggered++;
             $.ajax( {
                 type: 'GET',
-                url: Constants.CODEINE_WEB_SERVER + '/api/commands-status',
+                url: Constants.CODEINE_WEB_SERVER + CodeineService.getApiPrefix() + '/commands-status',
                 success: function(response) {
                     if  ((vm.history.length !== response.length) || (angular.toJson(vm.history) !== angular.toJson(response))) {
                         $scope.$apply(function() {

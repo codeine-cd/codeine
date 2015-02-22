@@ -9,7 +9,7 @@
         $scope.projectConfiguration = project.configuration;
         //$log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
         //$log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
-        $scope.commands = project.runnableCommands;
+        $scope.commands = project.runnableCommands.data;
 
         $scope.runCommand = function(command) {
             $log.debug('projectStatusCtrl: will run command ' + command);

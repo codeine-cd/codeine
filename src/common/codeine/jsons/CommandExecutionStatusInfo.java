@@ -134,4 +134,10 @@ public class CommandExecutionStatusInfo {
 		return command();
 	}
 
+	public void clearPasswordParams() {
+		for (CommandParameterInfo parameter : params) {
+			parameter.clearPassword();
+		}
+	}
+
 }

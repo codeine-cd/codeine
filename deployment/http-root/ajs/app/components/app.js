@@ -283,6 +283,8 @@
         if (Constants.CODEINE_API_PREFIX === '/api-with-token' && localStorage.getItem('api_token')) {
             $log.debug('Run: Reading user from local storage!!! ' + localStorage.getItem('api_token'));
             $http.defaults.headers.common.api_token = localStorage.getItem('api_token');
+        } else {
+            $rootScope.disableToken = true;
         }
 
         $rootScope.app = {
