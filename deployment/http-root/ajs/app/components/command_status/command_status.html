@@ -18,6 +18,10 @@
                         <div class="col-md-2"><strong>Start Time:</strong></div><div class="col-md-6"> {{vm.commandStatus.start_time | date:'short'}}</div>
                     </div>
                     <br/>
+                    <div class="row" ng-if="vm.commandStatus.finished">
+                        <div class="col-md-2"><strong>Finish Time:</strong></div><div class="col-md-6"> {{vm.commandStatus.finish_time | date:'short'}}</div>
+                    </div>
+                    <br ng-if="vm.commandStatus.finished"/>
                     <div class="row">
                         <div class="col-md-2"><strong>User:</strong></div><div class="col-md-6"> {{vm.commandStatus.user}}</div>
                     </div>
@@ -28,7 +32,10 @@
                     <div ng-repeat="param in vm.commandStatus.params">
                         <br/>
                         <div class="row">
-                            <div class="col-md-4 col-md-offset-1"><strong>{{param.name}}:</strong></div><div class="col-md-7" style="word-break: break-all;"> {{param.value}}</div>
+                            <div class="col-md-3 col-md-offset-1"><strong>{{param.name}}:</strong></div>
+                            <div class="col-md-4" style="word-break: break-all;">
+                                <input type="{{param.type === 'Password' ? 'password' : 'text'}}"  ng-model="param.value" class="form-control readonly_item" readonly>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
