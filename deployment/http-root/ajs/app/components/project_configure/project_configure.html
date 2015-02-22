@@ -550,16 +550,16 @@
                                                 </div>
                                             </div>
                                             <div class="form-group" ng-if="command_parameter.type == 'String' || command_parameter.type == 'Password'">
-                                                <label class="col-md-3 control-label" for="command_parameter{{$index}}.default_value1">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
+                                                <label class="col-md-3 control-label" for="command_parameter_{{$index}}_default_value1">Default Value <help help-id="command_patameter_default_val_Help"></help></label>
                                                 <div class="controls col-md-3">
-                                                    <input id="command_parameter{{$index}}.default_value1" name="default_value" type="text" ng-model="command_parameter.default_value" class="form-control">
+                                                    <input id="command_parameter_{{$index}}_default_value1" name="default_value" type="text" ng-model="command_parameter.default_value" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group" ng-if="command_parameter.type == 'Boolean'">
-                                                <label for="command_parameter{{$index}}.default_value" class="col-md-3 control-label">Default value <help help-id="command_patameter_default_val_Help"></help></label>
+                                                <label for="command_parameter_{{$index}}_default_value" class="col-md-3 control-label">Default value <help help-id="command_patameter_default_val_Help"></help></label>
                                                 <div class="checkbox col-md-3">
                                                     <label>
-                                                        <input id="command_parameter{{$index}}.default_value" type="checkbox" ng-model="command_parameter{{$index}}.default_value">
+                                                        <input id="command_parameter_{{$index}}_default_value" type="checkbox" ng-model="command_parameter.default_value">
                                                     </label>
                                                 </div>
                                             </div>
