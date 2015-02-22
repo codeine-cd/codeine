@@ -9,7 +9,7 @@
         vm.tabName = $route.current.params.tab_name;
         vm.limit = 10;
 
-        vm.historyUrl = Constants.CODEINE_WEB_SERVER + '/api/commands-log?project=' + encodeURI(vm.projectName);
+        vm.historyUrl = Constants.CODEINE_WEB_SERVER + CodeineService.getApiPrefix() + '/commands-log?project=' + encodeURI(vm.projectName);
         if ($route.current.params.node_name !== undefined) {
             vm.historyUrl += '&node=' + encodeURI($route.current.params.node_name);
         }

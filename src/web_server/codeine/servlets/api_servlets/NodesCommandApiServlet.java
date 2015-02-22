@@ -102,7 +102,7 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
 		String project = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		String id = getParameter(request, Constants.UrlParameters.COMMAND_ID);
-		allNodesCommandExecuterProvider.cancel(project, Long.valueOf(id), permissionsManager.user(request).user().username());
+		allNodesCommandExecuterProvider.cancel(project, Long.valueOf(id), permissionsManager.user(request));
 	}
 
 }

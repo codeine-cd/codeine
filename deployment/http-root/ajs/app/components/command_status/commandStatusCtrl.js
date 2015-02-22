@@ -2,10 +2,10 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService) {
+    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService, project) {
         /*jshint validthis:true */
         var vm = this;
-
+        vm.project = project;
         vm.projectName = $routeParams.project_name;
         vm.tabName = $routeParams.tab_name;
         vm.commandStatus = commandStatus;
@@ -35,6 +35,12 @@
             });
         },5000);
 
+        vm.canRerun = function() {
+            return vm.project.canRerun(vm.commandStatus.nodes_list);
+        };
+        vm.canCancel = function() {
+            return vm.project.canCancel(vm.commandStatus.nodes_list);
+        };
         vm.rerunCommand = function() {
             $log.debug('commandStatusCtrl: will rerun the command - ' + vm.commandStatus.command);
             var url = '/codeine/view/' + vm.tabName + '/project/' + vm.projectName + '/command/' + vm.commandStatus.command + '/setup';

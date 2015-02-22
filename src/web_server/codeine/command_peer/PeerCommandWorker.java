@@ -62,7 +62,7 @@ public class PeerCommandWorker implements Runnable {
 
 	private void execute() {
 		if (noPermissions()) {
-			announce("no permissions for user " + userObject.user() + " on node " + node.alias());
+			announce("no permissions for user " + userObject.user().username() + " on node " + node.alias() + "!");
 		}
 		else {
 			executeInternal();

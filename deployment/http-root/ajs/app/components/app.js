@@ -217,6 +217,9 @@
                 controllerAs: 'vm',
                 pageTitle: 'Command Status',
                 resolve: {
+                    project :  function($route,ProjectsRepository) {
+                        return ProjectsRepository.getProject($route.current.params.project_name, ['status']);
+                    },
                     commandStatus :  function($q,$route,CodeineService) {
                         var deferred = $q.defer();
                         CodeineService.getCommandStatus($route.current.params.project_name, $route.current.params.command_id).success(function(data) {

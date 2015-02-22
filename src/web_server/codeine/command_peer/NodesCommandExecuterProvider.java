@@ -14,11 +14,13 @@ import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.PathHelper;
 import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
+import codeine.permissions.IUserWithPermissions;
 import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;
 import codeine.utils.MiscUtils;
 import codeine.utils.TextFileUtils;
 import codeine.utils.exceptions.InShutdownException;
+import codeine.utils.exceptions.UnAuthorizedException;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -159,11 +161,21 @@ public class NodesCommandExecuterProvider {
 		return $;
 	}
 
-	public void cancel(String project, long id, String username) {
+	public void cancel(String project, long id, IUserWithPermissions userWithPermissions) {
 		for (AllNodesCommandExecuter e : cleanAndGet()) {
 			if (e.id() == id && e.project().equals(project)){
+				boolean can_cancel = false;
+				for (NodeWithPeerInfo nodeWithPeerInfo : e.nodesList()) {
+					if (userWithPermissions.canCommand(project, nodeWithPeerInfo.alias())) {
+						can_cancel = true;
+						break;
+					}
+				}
+				if (!can_cancel) {
+					throw new UnAuthorizedException("user cant cancel command");
+				}
 				log.info("cancel command " + id);
-				e.cancel(username);
+				e.cancel(userWithPermissions.user().username());
 				return;
 			}
 		}
