@@ -82,7 +82,8 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		IUserWithPermissions user = permissionsManager.user(request);
 		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		log.info("reloading project " + projectName + " user " + user.user().username());
-		configurationManager.reloadProject(projectName);
+		ProjectJson projectJson = configurationManager.reloadProject(projectName);
+		writeResponseJson(response, projectJson);
 	}
 
 }

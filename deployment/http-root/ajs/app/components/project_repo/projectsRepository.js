@@ -1,9 +1,10 @@
 (function (angular) {
     'use strict';
     //// JavaScript Code ////
-    function ProjectsRepositoryFactory(CodeineService, $q, $log, CodeineProject, Constants) {
+    function ProjectsRepositoryFactory(CodeineService, $q, $log, CodeineProject, Constants, LoginService) {
 
         var _pool = {};
+        var _projectsArray = [];
         var _loaded = false;
 
         function _retrieveInstance(projectName) {
@@ -11,6 +12,7 @@
             if (!instance) {
                 instance = new CodeineProject(projectName);
                 _pool[projectName] = instance;
+                _projectsArray.push(instance);
             }
             return instance;
         }
@@ -145,25 +147,74 @@
 
         function getProjects(loadFromServer) {
             if(!loadFromServer && _loaded) {
-                var projects = [];
-                for (var project in _pool) {
-                    projects.push(_pool[project]);
-                }
-                return $q.when(projects);
+                return $q.when(_projectsArray);
             }
             var deferred = $q.defer();
             CodeineService.getProjects().success(function(data) {
-                var projects = [];
                 data.forEach(function(projectData) {
                     var project = _retrieveInstance(projectData.name);
                     project.setNodesCount(projectData.nodes_count);
-                    projects.push(project);
                 });
                 _loaded = true;
-                deferred.resolve(projects);
+                deferred.resolve(_projectsArray);
             }).error(function(e) {
                 $log.error('ProjectsRepository: failed to load projects from server - ' + angular.toJson(e));
                 deferred.reject(e);
+            });
+            return deferred.promise;
+        }
+
+        function addProject(newProjectData) {
+            var deferred = $q.defer();
+            CodeineService.createProject(newProjectData).success(function() {
+                var project = _retrieveInstance(newProjectData.project_name);
+                _projectsArray.sort(function(a,b) {
+                    if (a.name === b.name) {
+                        return 0;
+                    }
+                    return a.name > b.name ? 1 : -1;
+                });
+                LoginService.gettingSessionInfo().then(function() {
+                    deferred.resolve(project);
+                }, function(err) {
+                    deferred.reject(err);
+                });
+            }).error(function(err) {
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function deleteProject(projectName) {
+            var deferred = $q.defer();
+            CodeineService.deleteProject(projectName).success(function() {
+                deferred.resolve();
+                _projectsArray.splice(_projectsArray.indexOf(_pool[projectName]),1);
+                delete _pool[projectName];
+            }).error(function(err) {
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function updateProjectConfiguration(config) {
+            var deferred = $q.defer();
+            CodeineService.saveProjectConfiguration(config).success(function(newConfig) {
+                _pool[newConfig.name].setConfiguration(newConfig);
+                deferred.resolve(_pool[newConfig.name]);
+            }).error(function(err) {
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        }
+
+        function reloadProjectConfiguration(projectName) {
+            var deferred = $q.defer();
+            CodeineService.reloadProjectConfiguration(projectName).success(function(newConfig) {
+                _pool[newConfig.name].setConfiguration(newConfig);
+                deferred.resolve(_pool[newConfig.name]);
+            }).error(function(err) {
+                deferred.reject(err);
             });
             return deferred.promise;
         }
@@ -176,8 +227,12 @@
         }
 
         return {
+            addProject : addProject,
+            deleteProject : deleteProject,
             getProjects : getProjects,
             getProject : getProject,
+            updateProjectConfiguration : updateProjectConfiguration,
+            reloadProjectConfiguration : reloadProjectConfiguration,
             loadProjectStatistics : loadProjectStatistics,
             loadProjectConfiguration : loadProjectConfiguration,
             loadProjectNodesAliases : loadProjectNodesAliases,

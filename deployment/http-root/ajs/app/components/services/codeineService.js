@@ -44,8 +44,8 @@
             saveProjectConfiguration : function(configuration) {
                 return $http.put(Constants.CODEINE_WEB_SERVER + "/api/project-configuration", configuration, {  params: { project: configuration.name } });
             },
-            reloadProjectConfiguration : function(configuration) {
-                return $http.post(Constants.CODEINE_WEB_SERVER + "/api/project-configuration?project=" + encodeURIComponent(configuration.name));
+            reloadProjectConfiguration : function(projectName) {
+                return $http.post(Constants.CODEINE_WEB_SERVER + "/api/project-configuration?project=" + encodeURIComponent(projectName));
             },
             pushProjectsToDb : function() {
                 return $http.post(Constants.CODEINE_WEB_SERVER + "/api/push-projects-to-db");

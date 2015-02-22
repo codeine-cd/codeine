@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function createProject($log,CodeineService,LoginService,AlertService,$location) {
+    function createProject($log,ProjectsRepository,AlertService,$location) {
         return {
             restrict: 'A',
             scope: {
@@ -10,14 +10,10 @@
             },
             link: function ($scope, element) {
                 $scope.create= function() {
-                    $log.debug('will create project with:' + angular.toJson($scope.project));
-                    CodeineService.createProject($scope.project).success(function() {
-                        $log.debug('created project');
+                    ProjectsRepository.addProject($scope.project).then(function() {
                         AlertService.addAlert('success','Successfully created new project',3000);
-                        LoginService.gettingSessionInfo().then(function() {
-                            $location.path('/codeine/project/' + $scope.project.project_name + '/configure');
-                        });
-                    });
+                        $location.path('/codeine/project/' + $scope.project.project_name + '/configure');
+                    }) ;
                 };
                 element.bind('click', $scope.create);
             }

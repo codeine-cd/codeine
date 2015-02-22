@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, CodeineService, project,$location,AlertService, projects, LoginService) {
+    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, ProjectsRepository, project,$location,AlertService, projects, LoginService) {
         $scope.projectName = $routeParams.project_name;
         $scope.tabName = $routeParams.tab_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
@@ -104,8 +104,7 @@
         };
 
         $scope.applyConfiguration = function(redirect) {
-            $log.debug('applyConfiguration: ' + angular.toJson($scope.projectConfigurationForEditing));
-            $scope.configPromise = CodeineService.saveProjectConfiguration($scope.projectConfigurationForEditing).success(function() {
+            $scope.configPromise = ProjectsRepository.updateProjectConfiguration($scope.projectConfigurationForEditing).then(function() {
                 AlertService.addAlert('success','Project Configuration was saved successfully',3000);
                 if (redirect) {
                     $location.path('/codeine/view/' + $scope.tabName + '/project/' + $scope.projectName + '/status');
@@ -114,8 +113,7 @@
         };
 
         $scope.reloadProject = function() {
-            $log.debug('reloadProject: ' + angular.toJson($scope.projectConfigurationForEditing));
-            $scope.configPromise = CodeineService.reloadProjectConfiguration($scope.projectConfigurationForEditing).success(function() {
+            $scope.configPromise = ProjectsRepository.reloadProjectConfiguration($scope.projectConfigurationForEditing.name).then(function() {
                 AlertService.addAlert('success','Project Configuration was reloaded from disk successfully',3000);
                 $route.reload();
             });

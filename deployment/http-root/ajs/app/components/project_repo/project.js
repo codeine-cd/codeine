@@ -5,6 +5,7 @@
     function CodeineProjectFactory() {
         function CodeineProject(name) {
             this.name = name;
+            this.nodes_count = 0;
             this.configuration = {};
             this.status = {};
             this.nodes_aliases = [];
