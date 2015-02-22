@@ -3,6 +3,7 @@
     //// JavaScript Code ////
     function ProjectsRepositoryFactory(CodeineService, $q, $log, CodeineProject, Constants, LoginService) {
 
+        var _projectsRetrieveTime = new Date();
         var _pool = {};
         var _projectsArray = [];
         var _loaded = false;
@@ -146,11 +147,12 @@
 
 
         function getProjects(loadFromServer) {
-            if(!loadFromServer && _loaded) {
+            if(!loadFromServer && _loaded && ((new Date() - _projectsRetrieveTime) <= 300000)) {
                 return $q.when(_projectsArray);
             }
             var deferred = $q.defer();
             CodeineService.getProjects().success(function(data) {
+                _projectsRetrieveTime = new Date();
                 data.forEach(function(projectData) {
                     var project = _retrieveInstance(projectData.name);
                     project.setNodesCount(projectData.nodes_count);
@@ -226,7 +228,14 @@
             return $q.when();
         }
 
+        function clearAll() {
+            _projectsArray.length = 0;
+            _loaded = false;
+            _pool = {};
+        }
+
         return {
+            clearAll : clearAll,
             addProject : addProject,
             deleteProject : deleteProject,
             getProjects : getProjects,

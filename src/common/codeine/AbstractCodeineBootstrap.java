@@ -70,6 +70,7 @@ public abstract class AbstractCodeineBootstrap {
 		crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
 		crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Origin,Content-Type, Accept");
 		handler.addFilter(crossHolder, "/api/*", EnumSet.allOf(DispatcherType.class));
+		handler.addFilter(crossHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
 		handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
 		createAdditionalServlets(handler);
 		ContextHandlerCollection contexts = createFileServerContexts();

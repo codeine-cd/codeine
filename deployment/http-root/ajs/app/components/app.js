@@ -53,9 +53,10 @@
                     command : function($q,ProjectsRepository,$route) {
                         var deferred = $q.defer();
                         ProjectsRepository.getProject($route.current.params.project_name,['runnableCommands']).then(function(project) {
-                            for (var i=0; i < project.runnableCommands.length; i++) {
-                                if (project.runnableCommands[i].name === $route.current.params.command_name) {
-                                    return deferred.resolve(project.runnableCommands[i]);
+                            var runnableCommands = project.runnableCommands.data;
+                            for (var i=0; i < runnableCommands.length; i++) {
+                                if (runnableCommands[i].name === $route.current.params.command_name) {
+                                    return deferred.resolve(runnableCommands[i]);
                                 }
                             }
                             deferred.reject('No such command in project ' + $route.current.params.command_name);
@@ -268,7 +269,7 @@
             });
     }
 
-    function runFunc($rootScope, $log, $q, ApplicationFocusService, LoginService, CodeineConfigurationService) {
+    function runFunc($rootScope, $http, $log, $q, Constants, ApplicationFocusService, LoginService, CodeineConfigurationService) {
 
         $(document).on( 'scroll', function(){
             if ($(window).scrollTop() > 100) {
@@ -278,6 +279,11 @@
             }
         });
         $('.scroll-top-wrapper').on('click', scrollToTop);
+
+        if (Constants.CODEINE_API_PREFIX === '/api-with-token' && localStorage.getItem('api_token')) {
+            $log.debug('Run: Reading user from local storage!!! ' + localStorage.getItem('api_token'));
+            $http.defaults.headers.common.api_token = localStorage.getItem('api_token');
+        }
 
         $rootScope.app = {
             loading: null,

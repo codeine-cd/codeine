@@ -1,19 +1,17 @@
 <div class="col-md-3">
     <div ng-include="'/components/menus/manageMenu.html'"></div>
     <div ng-include="'/components/commands_panel/commandRunning.html'"></div>
-    <div class="input-group">
-        <input type="text" ng-model="vm.newViewAs" class="form-control" placeholder="User">
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="vm.setViewAs()">View As</button>
-          </span>
-    </div><!-- /input-group -->
     <div class="form-group" admin-action>
-
+        <div class="input-group">
+            <input type="text" ng-model="vm.newViewAs" class="form-control" placeholder="User">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="vm.setViewAs()">View As</button>
+            </span>
+        </div><!-- /input-group -->
     </div>
 </div>
-<div class="col-md-9">
+<div class="col-md-9" cg-busy="vm.setViewAsPromise">
 <accordion close-others="true">
-
     <accordion-group is-open="vm.admin_is_open" ng-form="vm.codeineAdminParentForm">
         <accordion-heading>
             <div>

@@ -5,7 +5,7 @@
     function projectStatusWithMenuCtrl($scope,project) {
         $scope.projectStatusImmutable = project.status;
         $scope.projectConfiguration = project.configuration;
-        $scope.commands = project.runnableCommands;
+        $scope.commands = project.runnableCommands.data;
         $scope.projectStatus = {};
         $scope.projectStatus.tag_info = [];
         for (var i12=0 ; i12 < $scope.projectStatusImmutable.tag_info.length; i12++) {

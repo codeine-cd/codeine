@@ -49,7 +49,9 @@
             var view = "main";
             if (angular.isDefined(current.params.tab_name)) {
                 view = current.params.tab_name;
-                vm.items.push( { name : current.params.tab_name, url : '/codeine/view/' + view });
+                if (path.length > 4) {
+                    vm.items.push({name: current.params.tab_name, url: '/codeine/view/' + view});
+                }
             }
             if (angular.isDefined(current.params.project_name)) {
                 vm.items.push( { name : current.params.project_name, url : '/codeine/view/' + view + '/project/' + current.params.project_name + '/status' });

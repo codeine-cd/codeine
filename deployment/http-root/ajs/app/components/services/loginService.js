@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function LoginServiceFactory($log, $q, $http, $interval, $location, CodeineService, ApplicationFocusService) {
+    function LoginServiceFactory($log, $q, $http, $interval, CodeineService, ApplicationFocusService) {
         var viewAs,sessionInfo, deffer, initialized = false;
 
         function gettingSessionInfo(forceRefresh) {
@@ -33,17 +33,20 @@
         }
 
         function setViewAs(user) {
+            var deferred = $q.defer();
             viewAs = user;
             deffer = undefined;
             $http.defaults.headers.common.viewas = viewAs;
-            return gettingSessionInfo(true).then(function() {
+            gettingSessionInfo(true).then(function() {
+                deferred.resolve();
 
-                $location.path('/codeine');
-            },function(){
-                $log.error('LoginService: Failed to get session info after view as');
+            },function(err){
+                $log.error('LoginService: Failed to get session info after view as',err);
                 viewAs = undefined;
                 delete $http.defaults.headers.common.viewas;
+                deferred.reject(err);
             });
+            return deferred.promise;
         }
 
         function getViewAs() {

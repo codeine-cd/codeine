@@ -12,12 +12,10 @@
             }
             var promiseArrays = [];
             promiseArrays.push(CodeineService.getGlobalConfiguration().success(function(data) {
-                $log.debug('CodeineConfigurationService: got global configuration ' + angular.toJson(data));
                 globalConfiguration = data;
             }));
 
             promiseArrays.push(CodeineService.getExperimentalConfiguration().success(function(data) {
-                $log.debug('CodeineConfigurationService: got experimental configuration ' + angular.toJson(data));
                 experimentalConfiguration = data;
             }));
 

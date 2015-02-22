@@ -9,9 +9,9 @@
         $scope.tags = [];
         $scope.nodes = ['all'];
         $scope.project_is_open = true;
-        var org =  project.nodes_aliases;
-        if (project.nodes_aliases.length > 100) {
-            org = project.nodes_aliases.slice(0,100);
+        var org =  project.nodes_aliases.data;
+        if (org.length > 100) {
+            org = org.slice(0,100);
             $log.info('More then 100 nodes, will not include all of them in the tabs');
         }
         $scope.nodes = $scope.nodes.concat(org);

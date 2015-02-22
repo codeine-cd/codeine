@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function manageCodeineCtrl(tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService, $log) {
+    function manageCodeineCtrl($location, ProjectsRepository, tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService, $log) {
         /*jshint validthis:true */
         var vm = this;
         vm.admin_is_open = true;
@@ -52,7 +52,10 @@
         };
 
         vm.setViewAs = function() {
-            LoginService.setViewAs(vm.newViewAs);
+            vm.setViewAsPromise = LoginService.setViewAs(vm.newViewAs).then(function() {
+                ProjectsRepository.clearAll();
+                $location.path('/codeine');
+            });
         };
 
         vm.saveConfiguration = function() {

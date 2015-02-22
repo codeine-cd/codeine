@@ -5,7 +5,7 @@
     function projectGraphCtrl($scope,$filter,$routeParams,project) {
         $scope.projectName = $routeParams.project_name;
         $scope.commandsDateToName = {};
-        $scope.graphData = project.statistics;
+        $scope.graphData = project.statistics.data;
         $scope.options = {
             axes: {
                 x: {key: 'x', type: 'date', tooltipFormatter: function(x) {
