@@ -215,6 +215,7 @@
             var deferred = $q.defer();
             CodeineService.reloadProjectConfiguration(projectName).success(function(newConfig) {
                 _pool[newConfig.name].setConfiguration(newConfig);
+                _pool[newConfig.name].invalidateRunnableCommands();
                 deferred.resolve(_pool[newConfig.name]);
             }).error(function(err) {
                 deferred.reject(err);
