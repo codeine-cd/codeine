@@ -54,7 +54,8 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
 		ProjectJson currentProject = configurationManager.getProjectForName(projectJson.name());
-		if (null != currentProject && !isAdministrator(request) && !MiscUtils.equals(currentProject.nodes_discovery_script(), projectJson.nodes_discovery_script())) {
+		if (null != currentProject && !isAdministrator(request) && 
+				(!MiscUtils.equals(currentProject.nodes_discovery_script(), projectJson.nodes_discovery_script()) || !MiscUtils.equals(currentProject.node_discovery_startegy(), projectJson.node_discovery_startegy()))) {
 			log.warn("user tried to change discovery script in " + projectJson.name() + " user " + getUser(request).user().username());
 			throw new UnAuthorizedException("only admin can change discovery script");
 		}
