@@ -49,6 +49,9 @@
                 this.runnableCommands.data.length = 0;
                 angular.copy(runnableCommands,this.runnableCommands.data);
             },
+            invalidateRunnableCommands : function(){
+                this.runnableCommandsLoaded = false;
+            },
             isConfigLoaded : function() {
                 return this.configLoaded && !shouldRefreshObject(this.configLoaded);
             },

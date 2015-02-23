@@ -176,7 +176,7 @@
                     }
                     return a.name > b.name ? 1 : -1;
                 });
-                LoginService.gettingSessionInfo().then(function() {
+                LoginService.gettingSessionInfo(true).then(function() {
                     deferred.resolve(project);
                 }, function(err) {
                     deferred.reject(err);
@@ -203,6 +203,7 @@
             var deferred = $q.defer();
             CodeineService.saveProjectConfiguration(config).success(function(newConfig) {
                 _pool[newConfig.name].setConfiguration(newConfig);
+                _pool[newConfig.name].invalidateRunnableCommands();
                 deferred.resolve(_pool[newConfig.name]);
             }).error(function(err) {
                 deferred.reject(err);
