@@ -1,11 +1,10 @@
-package codeine.jsons;
+package codeine.api;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import codeine.api.NodeWithPeerInfo;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.utils.StringUtils;
 

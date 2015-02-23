@@ -6,9 +6,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.configuration.PathHelper;
 import codeine.executer.ThreadPoolUtils;
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.FilesUtils;
 import codeine.utils.TextFileUtils;

@@ -9,10 +9,10 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.CommandStatusJson;
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.PathHelper;
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
 import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;

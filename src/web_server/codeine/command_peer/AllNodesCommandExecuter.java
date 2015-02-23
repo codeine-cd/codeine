@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;

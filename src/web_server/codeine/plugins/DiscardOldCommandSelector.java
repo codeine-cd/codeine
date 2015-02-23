@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import codeine.jsons.CommandExecutionStatusInfo;
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.jsons.project.DiscardOldCommandsJson;
 
 import com.google.common.collect.Lists;

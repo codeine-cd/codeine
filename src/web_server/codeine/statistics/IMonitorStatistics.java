@@ -2,8 +2,8 @@ package codeine.statistics;
 
 import java.util.List;
 
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.executer.Task;
-import codeine.jsons.CommandExecutionStatusInfo;
 
 public interface IMonitorStatistics extends Task {
 

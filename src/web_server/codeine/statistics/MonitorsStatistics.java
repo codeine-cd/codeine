@@ -12,12 +12,12 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.FilesUtils;
 import codeine.utils.LimitedQueue;

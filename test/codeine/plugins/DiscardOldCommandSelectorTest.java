@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import codeine.jsons.CommandExecutionStatusInfo;
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.jsons.project.DiscardOldCommandsJson;
 
 import com.google.common.collect.Lists;

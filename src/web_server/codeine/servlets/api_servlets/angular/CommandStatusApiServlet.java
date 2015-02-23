@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.NodeWithPeerInfo;
 import codeine.command_peer.AllNodesCommandExecuter;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.PathHelper;
-import codeine.jsons.CommandExecutionStatusInfo;
 import codeine.model.Constants;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonFileUtils;
