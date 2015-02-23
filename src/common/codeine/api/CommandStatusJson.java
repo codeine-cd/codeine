@@ -2,6 +2,10 @@ package codeine.api;
 
 
 
+/**
+ * This class is used for the commands panel (history and running commands)
+ */
+@SuppressWarnings("unused")
 public class CommandStatusJson {
 
 	public String name;
@@ -14,10 +18,11 @@ public class CommandStatusJson {
 	private long id;
 	private boolean finished;
 	private boolean can_cancel;
-	@SuppressWarnings("unused")
 	private String one_node_alias;
+	private String user;
 	
-	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished, String one_node_alias) {
+	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished, String one_node_alias,
+			String user) {
 		super();
 		this.name = name;
 		this.project = project;
@@ -28,6 +33,7 @@ public class CommandStatusJson {
 		this.finished = finished;
 		this.date_long = date;
 		this.one_node_alias = one_node_alias;
+		this.user = user;
 		this.skipPercent = finished ?  100 - successPercent - failPercent : 0;
 	}
 
@@ -57,11 +63,14 @@ public class CommandStatusJson {
 
 	@Override
 	public String toString() {
-		return "CommandStatusJson [name=" + name + ", project=" + project + ", nodes=" + nodes
-				+ ", successPercent=" + successPercent + ", failPercent=" + failPercent 
-				+ ", date_long=" + date_long + ", id=" + id + ", finished=" + finished + ", can_cancel=" + can_cancel
-				+ "]";
+		return "CommandStatusJson [name=" + name + ", project=" + project + ", id=" + id + "]";
 	}
+
+	public String user() {
+		return user;
+	}
+
+	
 	
 	
 }

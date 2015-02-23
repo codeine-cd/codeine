@@ -33,7 +33,7 @@ public class CommandHistoryApiServlet extends AbstractApiServlet {
 		for (CommandStatusJson commandStatusJson : allCommands) {
 			if (user.canRead(commandStatusJson.project())){
 				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-				c.can_cancel(user.canCommand(c.project()) && !c.finished());
+				c.can_cancel(user.isAdministrator() || user.user().username().equals(c.user()));
 				allCommandsWithPermissions.add(c);
 			}
 		}

@@ -26,6 +26,8 @@ public class CommandExecutionStatusInfo {
 	private long id;
 	private boolean finished;
 	private String output;
+	private boolean can_cancel;
+	private boolean can_rerun;
 	
 	public CommandExecutionStatusInfo() {
 		super();
@@ -140,4 +142,10 @@ public class CommandExecutionStatusInfo {
 		}
 	}
 
+	public void can_cancel(boolean can_cancel) {
+		this.can_cancel = can_cancel;
+	}
+	public void can_rerun(boolean can_rerun) {
+		this.can_rerun = can_rerun;
+	}
 }

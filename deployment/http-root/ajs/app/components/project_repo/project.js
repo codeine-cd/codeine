@@ -64,30 +64,6 @@
             isStatisticsLoaded : function() {
                 return this.statisticsLoaded && !shouldRefreshObject(this.statistics);
             },
-            canRerun : function(nodes_list) {
-                var aliases = _.map(nodes_list, function(node){return node.alias;});
-                for (var i12=0 ; i12 < this.status.nodes_for_version.length; i12++) {
-                    for (var j12=0 ; j12 < this.status.nodes_for_version[i12].nodes.length; j12++) {
-                        var index = aliases.indexOf(this.status.nodes_for_version[i12].nodes[j12].alias);
-                        if (index !== -1) {
-                            aliases.splice(index, 1);
-                        }
-                    }
-                }
-                return aliases.length === 0;
-            },
-            canCancel : function(nodes_list) {
-                var aliases = _.map(nodes_list, function(node){return node.alias;});
-                for (var i12=0 ; i12 < this.status.nodes_for_version.length; i12++) {
-                    for (var j12=0 ; j12 < this.status.nodes_for_version[i12].nodes.length; j12++) {
-                        var index = aliases.indexOf(this.status.nodes_for_version[i12].nodes[j12].alias);
-                        if (index !== -1) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            },
             cloneConfiguration : function() {
                 return angular.fromJson(angular.toJson(this.configuration));
             }

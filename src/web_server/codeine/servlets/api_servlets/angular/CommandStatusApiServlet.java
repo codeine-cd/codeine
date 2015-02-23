@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import codeine.api.NodeWithPeerInfo;
 import codeine.command_peer.AllNodesCommandExecuter;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.PathHelper;
@@ -15,6 +16,9 @@ import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.TextFileUtils;
 
+/**
+ * This class is used for command status page
+ */
 public class CommandStatusApiServlet extends AbstractApiServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -43,7 +47,20 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 		}
 		commandInfo.output(TextFileUtils.getContents(outputfile));
 		commandInfo.clearPasswordParams();
+		commandInfo.can_cancel(getUser(request).isAdministrator() || getUser(request).user().username().equals(commandInfo.user()));
+		commandInfo.can_rerun(canRerun(request, projectName, commandInfo));
 		writeResponseGzipJson(commandInfo, request, response);
+	}
+
+	private boolean canRerun(HttpServletRequest request, String projectName, CommandExecutionStatusInfo commandInfo) {
+		boolean canRerun = true;
+		for (NodeWithPeerInfo node : commandInfo.nodes_list()) {
+			if (!getUser(request).canCommand(projectName, node.alias())) {
+				canRerun = false;
+				break;
+			}
+		}
+		return canRerun;
 	}
 
 	private CommandExecutionStatusInfo getCommandInfo(String file) {
