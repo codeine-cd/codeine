@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.api.CommandStatusJson;
+import codeine.command_peer.CommandExecutorHelper;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
@@ -31,13 +32,13 @@ public class CommandExecutorApiServlet extends AbstractApiServlet {
 		for (CommandStatusJson commandStatusJson : active) {
 			if (user.canRead(commandStatusJson.project())){
 				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-				c.can_cancel(user.isAdministrator() || user.user().username().equals(c.user()));
+				c.can_cancel(CommandExecutorHelper.canCancel(user, c.user()));
 				activeWithPermissions.add(c);
 			}
 		}
 		writeResponseJson(response, activeWithPermissions);
 	}
-	
+
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
 		return true;

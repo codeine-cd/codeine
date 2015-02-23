@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import codeine.api.CommandStatusJson;
+import codeine.command_peer.CommandExecutorHelper;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
@@ -33,7 +34,7 @@ public class CommandHistoryApiServlet extends AbstractApiServlet {
 		for (CommandStatusJson commandStatusJson : allCommands) {
 			if (user.canRead(commandStatusJson.project())){
 				CommandStatusJson c = JsonUtils.cloneJson(commandStatusJson, CommandStatusJson.class);
-				c.can_cancel(user.isAdministrator() || user.user().username().equals(c.user()));
+				c.can_cancel(CommandExecutorHelper.canCancel(user, c.user()));
 				allCommandsWithPermissions.add(c);
 			}
 		}

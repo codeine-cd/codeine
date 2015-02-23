@@ -12,6 +12,8 @@ import codeine.api.NodeGetter;
 import codeine.api.NodeWithMonitorsInfo;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
+import codeine.command_peer.AllNodesCommandExecuter;
+import codeine.command_peer.CommandExecutorHelper;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
@@ -21,6 +23,7 @@ import codeine.model.Constants;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.StringUtils;
+import codeine.utils.exceptions.UnAuthorizedException;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -102,7 +105,16 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 	protected void myDelete(HttpServletRequest request, HttpServletResponse response) {
 		String project = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		String id = getParameter(request, Constants.UrlParameters.COMMAND_ID);
-		allNodesCommandExecuterProvider.cancel(project, Long.valueOf(id), permissionsManager.user(request));
+		log.info("cancel command " + project + " " + id);
+		AllNodesCommandExecuter commandExecuter = allNodesCommandExecuterProvider.getCommandOrNull(project, id);
+		if (null == commandExecuter) {
+			throw new IllegalArgumentException("command not found " + project + " " + id);
+		}
+		String username = getUser(request).user().username();
+		if (!CommandExecutorHelper.canCancel(getUser(request), commandExecuter.commandData().user())) {
+			throw new UnAuthorizedException("user " + username + " not allowd to cancel command");
+		}
+		commandExecuter.cancel(username);
 	}
 
 }
