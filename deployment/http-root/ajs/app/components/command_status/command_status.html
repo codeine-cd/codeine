@@ -56,7 +56,6 @@
                                 <i class="fa fa-repeat"></i> Re-Run
                             </button>
                         </div>
-                        <br ng-show="vm.commandStatus.can_rerun"/>
                         <div class="col-md-2" ng-show="!vm.commandStatus.finished && vm.commandStatus.can_cancel">
                             <button type="button" ng-click="vm.cancelCommand($event)" class="btn btn-warning btn-sm">
                                 <i class="fa fa-times-circle"></i> Cancel
