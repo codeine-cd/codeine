@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.executer.ThreadPoolUtils;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.os_process.ProcessExecuter;
@@ -27,8 +28,8 @@ public class PluginGroupsManager extends GroupsManager{
 	private ExperimentalConfJsonStore experimentalConfJsonStore;
 
 	private LoadingCache<String, List<String>> groups = CacheBuilder.newBuilder().maximumSize(MAX_USERS)
-			.expireAfterWrite(10, TimeUnit.MINUTES)
-			.build(new CacheLoader<String, List<String>>() {
+			.refreshAfterWrite(20, TimeUnit.MINUTES)
+			.build(CacheLoader.asyncReloading(new CacheLoader<String, List<String>>() {
 				@Override
 				public List<String> load(String user) {
 					if (null == experimentalConfJsonStore.get().groups_plugin()) {
@@ -40,7 +41,7 @@ public class PluginGroupsManager extends GroupsManager{
 					log.info("resolved groups for user " + user + " : " + $);
 					return $;
 				}
-			});
+			}, ThreadPoolUtils.newFixedThreadPool(2, "PluginGroupsManager")));
 
 	@Override
 	public List<String> groups(String user) {
