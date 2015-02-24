@@ -122,6 +122,9 @@
             when('/codeine/project/:project_name/status', {
                 redirectTo: '/codeine/view/main/project/:project_name/status'
             }).
+            when('/codeine/view/main/project/:project_name', {
+                redirectTo: '/codeine/view/main/project/:project_name/status'
+            }).
             when('/codeine/view/:tab_name/project/:project_name/status', {
                 templateUrl: '/components/project_status/project_status_with_menu.html',
                 controller: 'projectStatusWithMenuCtrl',
