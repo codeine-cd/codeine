@@ -56,6 +56,13 @@
             var regexp = new RegExp(vm.command.parameters[index].validation_expression);
             return regexp.test(value);
         };
+
+        vm.nodes_per_minute = function() {
+            return (vm.nodes.length / vm.command.duration);
+        };
+        vm.nodes_per_minute_for_view = function() {
+            return vm.nodes_per_minute() >= 1 ? parseInt(vm.nodes_per_minute()) : parseInt(1 / vm.nodes_per_minute());
+        };
     }
 
     //// Angular Code ////

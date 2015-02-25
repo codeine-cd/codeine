@@ -91,6 +91,12 @@
                                     <input id="error_percent_val" name="error_percent_val" min="1" type="number" class="form-control" ng-model="vm.command.error_percent_val" required>
                                 </div>
                             </div>
+                            <div class="form-group" ng-if="vm.command.command_strategy === 'Progressive' && vm.command.ratio === 'Linear'">
+                                <label for="nodes_per_minute" class="col-md-4 control-label">{{vm.nodes_per_minute() >= 1 ? 'Estimated nodes per ' + vm.command.duration_units : 'Estimated time between nodes (in ' + vm.command.duration_units + ')'}} <help help-id="nodesPerMinuteHelp"></help></label>
+                                <div class="col-md-4">
+                                    <input id="nodes_per_minute" name="nodes_per_minute" class="form-control" value="{{vm.nodes_per_minute_for_view()}}" readonly>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

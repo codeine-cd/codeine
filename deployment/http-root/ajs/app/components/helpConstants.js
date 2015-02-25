@@ -104,6 +104,7 @@
             "projectIncludeCommandsFromHelp" : "List here projects to include their configured commands in this project",
             "typeHelp" : "Select a type for the parameter for command execution",
             "collectorDescriptionHelp" : "Description will be displayed to explain what the collector is doing",
+            "nodesPerMinuteHelp" : "An estimation of the execution frequency",
             "collectorTypeHelp" : "Select a type for collector. types are:<br/>"+
                 "<br/><strong>String</strong> - text value that will be displayed to user"+
                 "<br/><strong>Number</strong> - numerical value that will be displayed to user and can be a base for more calculations"+
