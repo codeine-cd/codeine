@@ -24,12 +24,12 @@
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href class="dropdown-toggle" dropdown-toggle>{{selectedMonitor}} <b class="caret"></b> <help help-id="monitorHelp"></help></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="collectorCount in projectStatus.collectors_count">
+                            <li ng-repeat="collectorCount in projectStatusImmutable.collectors_count">
                                 <a ng-click="selectMonitor(collectorCount.name)">{{::collectorCount.name}} <span class="badge pull-right">{{::collectorCount.count}}</span></a>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a ng-click="selectMonitor('Any Alert')">Any Alert <span class="badge pull-right">{{::projectStatus.any_alert_count}}</span></a>
+                                <a ng-click="selectMonitor('Any Alert')">Any Alert <span class="badge pull-right">{{::projectStatusImmutable.any_alert_count}}</span></a>
                             </li>
                             <li>
                                 <a ng-click="selectMonitor('All Nodes')">All Nodes <span class="badge pull-right">{{allNodesCount}}</span></a>
