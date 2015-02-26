@@ -12,7 +12,7 @@
 
         var Api = {
             setSelectedNodes : function(nodes,url, params) {
-                $log.debug('selectedNodesService: Storing nodes for url \'' + url + '\' : ' + nodes.join(','));
+                $log.debug('selectedNodesService: Storing nodes for url \'' + url + '\' : ' + nodes.length);
                 $localStorage.nodes = nodes;
                 $localStorage.url = url;
                 if (params === undefined)
