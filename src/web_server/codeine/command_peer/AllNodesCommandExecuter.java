@@ -11,6 +11,7 @@ import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.NodeGetter;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
+import codeine.command_peer.CommandFileWriter.CommandFileWriterItem;
 import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
@@ -36,10 +37,11 @@ public class AllNodesCommandExecuter {
 
 	@Inject	private Links links;
 	@Inject	private PathHelper pathHelper;
-	@Inject	private Gson gson;
 	@Inject	private NodeGetter nodeGetter;
 	@Inject private IMonitorStatistics monitorsStatistics;
 	@Inject private DiscardOldCommandsPlugin discardOldCommandsPlugin;
+	@Inject private CommandFileWriter commandFileWriter;
+	@Inject	private Gson gson;
 	
 	private int total;
 	private int count;
@@ -238,13 +240,17 @@ public class AllNodesCommandExecuter {
 
 	public void workerFinished() {
 		count++;
-		updateJson();
+		updateJsonAsync();
 	}
 
 	public boolean isActive() {
 		return active;
 	}
 
+	private void updateJsonAsync() {
+		commandFileWriter.queue(new CommandFileWriterItem(fileWriteSync, commandFile(), commandExecutionInfo));
+	}
+	
 	private void updateJson() {
 		String json;
 		json = gson.toJson(commandExecutionInfo);

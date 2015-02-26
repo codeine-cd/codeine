@@ -1,6 +1,7 @@
 package codeine;
 
 
+import codeine.command_peer.CommandFileWriter;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
 import codeine.jsons.peer_status.PeersProjectsStatus;
@@ -34,6 +35,7 @@ public class WebServerModule extends AbstractModule
 		bind(ManageStatisticsCollector.class).in(Scopes.SINGLETON);
 		bind(GroupsManager.class).to(PluginGroupsManager.class).in(Scopes.SINGLETON);
 		bind(DiscardOldCommandsPlugin.class).in(Scopes.SINGLETON);
+		bind(CommandFileWriter.class).in(Scopes.SINGLETON);
 	}
 	
 }

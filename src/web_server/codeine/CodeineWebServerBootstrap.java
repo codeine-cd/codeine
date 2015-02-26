@@ -20,6 +20,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
 
+import codeine.command_peer.CommandFileWriter;
 import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
 import codeine.jsons.auth.AuthenticationMethod;
@@ -65,6 +66,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		}
 		new PeriodicExecuter(MonitorsStatistics.SLEEP_TIME ,injector().getInstance(IMonitorStatistics.class)).runInThreadSleepFirst();
 		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(5), injector().getInstance(NotificationsFetchAndUpdateTask.class)).runInThreadSleepFirst();
+		new PeriodicExecuter(TimeUnit.SECONDS.toMillis(5), injector().getInstance(CommandFileWriter.class)).runInThreadSleepFirst();
 	}
 
 	@Override
