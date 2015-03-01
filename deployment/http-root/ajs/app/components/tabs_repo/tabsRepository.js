@@ -28,7 +28,6 @@
             var deferred = $q.defer();
             CodeineService.getViewTabs().success(function(data) {
                 var tabs = [];
-                tabs.push(_retrieveInstance('main',{name:'main', exp: ['.*']}));
                 data.forEach(function(tabData) {
                     var tab = _retrieveInstance(tabData.name,tabData);
                     tabs.push(tab);
