@@ -109,7 +109,7 @@
                 return $http.get(Constants.CODEINE_WEB_SERVER + getApiPrefix() + "/commands-status", { cache: false });
             },
             runCommand : function(command,nodes) {
-                return $http.post(Constants.CODEINE_WEB_SERVER + getApiPrefix() + '/command-nodes', { node_name_list : _.map(nodes, function(node){return node.name();}), command_info : command },{params: { project: command.project_name, redirect :false }});
+                return $http.post(Constants.CODEINE_WEB_SERVER + getApiPrefix() + '/command-nodes', { node_name_list : _.map(nodes, function(node){return node.name;}), command_info : command },{params: { project: command.project_name, redirect :false }});
             },
             getUserInfo : function() {
                 return $http.get(Constants.CODEINE_WEB_SERVER + getApiPrefix() + "/user-info", { cache: false });
