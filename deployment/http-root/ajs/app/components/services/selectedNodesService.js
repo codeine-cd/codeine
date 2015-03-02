@@ -2,41 +2,41 @@
     'use strict';
 
     //// JavaScript Code ////
-    function SelectedNodesServiceFactory ($log,$localStorage) {
+    function SelectedNodesServiceFactory ($log) {
 
-        $localStorage.$default({
+        var data = {
             nodes : [],
             url : '',
             params : []
-        });
+        };
 
         var Api = {
             setSelectedNodes : function(nodes,url, params) {
                 $log.debug('selectedNodesService: Storing nodes for url \'' + url + '\' : ' + nodes.length);
-                $localStorage.nodes = nodes;
-                $localStorage.url = url;
+                data.nodes = nodes;
+                data.url = url;
                 if (params === undefined)
                 {
                     params = [];
                 }
-                $localStorage.params = params;
+                data.params = params;
 
 
             },
 
             getSelectedNodes : function(url) {
                 $log.debug('selectedNodesService: retrieve nodes for url \'' + url + '\'');
-                if ($localStorage.url === url) {
-                    return $localStorage.nodes;
+                if (data.url === url) {
+                    return data.nodes;
                 }
-                $log.error('selectedNodesService: given url \'' + url + '\' is not like the stored one \'' + $localStorage.url + '\'');
+                $log.error('selectedNodesService: given url \'' + url + '\' is not like the stored one \'' + data.url + '\'');
             },
             getSelectedParams : function(url) {
                 $log.debug('selectedNodesService: retrieve nodes for url \'' + url + '\'');
-                if ($localStorage.url === url) {
-                    return $localStorage.params;
+                if (data.url === url) {
+                    return data.params;
                 }
-                $log.error('selectedNodesService: given url \'' + url + '\' is not like the stored one \'' + $localStorage.url + '\'');
+                $log.error('selectedNodesService: given url \'' + url + '\' is not like the stored one \'' + data.url + '\'');
             }
         };
 
