@@ -117,7 +117,7 @@
                     <div class="col-md-12">
                         <ol class="breadcrumb">
                             <li><a href='/'>Codeine</a></li>
-                            <li ng-repeat="item in vm.items"><a class="cursor_pointer" ng-click="vm.gotoUrl(item.url)">{{item.name}}</a></li>
+                            <li ng-repeat="item in vm.items"><a class="cursor_pointer" ng-click="vm.gotoUrl($event, item.url)" ng-href="{{::item.url}}">{{::item.name}}</a></li>
                             <li>{{vm.lastItem}}</li>
                         </ol>
                     </div>
@@ -126,7 +126,7 @@
                 </div><!--/row-->
             </div>
             <footer>
-                <p><a href="https://github.com/codeine-cd/codeine">&copy;  <i class="fa fa-github"></i> Codeine {{vm.sessionInfo.version}}</a></p>
+                <p><a href="https://github.com/codeine-cd/codeine">&copy;  <i class="fa fa-github"></i> Codeine {{::vm.sessionInfo.version}}</a></p>
             </footer>
         </div> <!-- /container -->
     </div>

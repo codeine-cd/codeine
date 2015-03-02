@@ -6,9 +6,11 @@
         /*jshint validthis:true */
         var vm = this;
 
-        vm.gotoUrl = function(url) {
-            $location.url(url);
-            $rootScope.$emit(Constants.EVENTS.BREADCRUMB_CLICKED,url);
+        vm.gotoUrl = function(clickEvent, url) {
+            if (clickEvent.button === 0) { //left button
+                $location.url(url);
+                $rootScope.$emit(Constants.EVENTS.BREADCRUMB_CLICKED, url);
+            }
         };
 
         var handler = $rootScope.$on("$routeChangeSuccess", function (event, current) {
