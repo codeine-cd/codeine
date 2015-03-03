@@ -2,8 +2,8 @@
     <div ng-include="'/components/menus/projectMenu.html'"></div>
     <div ng-include="'/components/commands_panel/commandHistory.html'"></div>
 </div>
-
-<div class="col-md-9" cg-busy="vm.runPromise">
+<div class="col-md-9" ng-include="'/views/404.html'" ng-if="vm.is404"></div>
+<div class="col-md-9" cg-busy="vm.runPromise" ng-if="!vm.is404">
     <div class="row">
         <div class="col-md-12">
             <div id="command_info">
@@ -113,7 +113,6 @@
                                         </div>
                                     </div>
                                     <div ng-if="parameter.type === 'Boolean'">
-
                                         <div class="form-group">
                                             <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
                                             <div class="checkbox col-md-4">
@@ -141,7 +140,7 @@
                     <accordion-group is-open="vm.nodesIsOpen">
                         <accordion-heading>
                             <div>
-                                {{vm.nodes.length}} Nodes
+                                {{vm.nodes.length + ' ' + (vm.nodes.length > 1 ? 'Nodes' : 'Node')}}
                                 <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': vm.nodesIsOpen, 'glyphicon-chevron-right': !vm.nodesIsOpen}">
                                 </i>
                             </div>
@@ -155,9 +154,24 @@
                         </div>
                     </accordion-group>
                 </accordion>
+                <div class="panel panel-default" ng-show="vm.safe_guard">
+                    <div class="panel-heading">Are you ABSOLUTELY sure running '{{vm.commandName}}'?</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <form class="form-horizontal" name="retypeForm" novalidate>
+                                    <div class="form-group">
+                                        <label for="node_name_retype" class="col-md-4 control-label">Re-type node name</label>
+                                        <div class="col-md-4" ng-class="{'has-error': retypeForm.node_name_retype.$invalid || !vm.nodeNameValidate()}">
+                                            <input id="node_name_retype" name="node_name_retype" type="text" class="form-control" ng-model="vm.node_name_retype" required>
+                                        </div>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" ng-click="vm.runCommand()" class="btn btn-info pull-right" ng-disabled="config.$invalid || params.$invalid">
+                        <button type="button" ng-click="vm.runCommand()" class="btn btn-info pull-right" ng-disabled="config.$invalid || params.$invalid || !vm.nodeNameValidate()">
                             <i class="fa fa-play-circle"></i> Run</button>
                     </div>
                 </div>
