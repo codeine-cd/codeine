@@ -494,6 +494,12 @@
                                                     <input id="command_info{{$index}}.credentials" name="credentials" ng-model="command_info.credentials" type="text" class="form-control">
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="command_info{{$index}}.block_after_execution_minutes">Wait after <help help-id="blockAfterExecutionHelp"></help></label>
+                                                <div class="controls col-md-3">
+                                                    <input id="command_info{{$index}}.block_after_execution_minutes" name="block_after_execution_minutes" ng-model="command_info.block_after_execution_minutes" type="number" min="1" class="form-control">
+                                                </div>
+                                            </div>
                                         </ng-form>
                                     </accordion-group>
                                 </accordion>

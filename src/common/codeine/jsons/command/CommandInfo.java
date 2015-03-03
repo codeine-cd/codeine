@@ -17,6 +17,7 @@ public class CommandInfo
     private String project_name;
     @SerializedName("credentials") private String cred;
     private Integer timeoutInMinutes;
+    private Integer block_after_execution_minutes;
     private Integer duration, concurrency, error_percent_val;
 	private CommandExcutionType command_strategy;
 	private Boolean stop_on_error;
@@ -147,6 +148,10 @@ public class CommandInfo
 
 	public void duration(int duration) {
 		this.duration = duration;
+	}
+
+	public Integer block_after_execution_minutes() {
+		return block_after_execution_minutes;
 	}
 
 	

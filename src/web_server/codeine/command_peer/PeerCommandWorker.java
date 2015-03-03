@@ -1,5 +1,6 @@
 package codeine.command_peer;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,6 +114,10 @@ public class PeerCommandWorker implements Runnable {
 					+ ExceptionUtils.getRootCause(ex).getMessage());
 			log.debug("error details", ex);
 			nodeFailed();
+		}
+		if (command_info.block_after_execution_minutes() != null && command_info.block_after_execution_minutes() > 0) {
+			announce("will wait after executing command on " + node.alias() + ". waiting " + command_info.block_after_execution_minutes() + " minute(s)");
+			ThreadUtils.sleep(TimeUnit.MINUTES.toMillis(command_info.block_after_execution_minutes()));
 		}
 	}
 
