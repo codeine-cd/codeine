@@ -424,6 +424,14 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="form-group" ng-show="command_info.command_strategy == 'Single'">
+                                                <label for="command_info{{$index}}.safe_guard" class="col-md-3 control-label">Safe Guard <help help-id="safeGuardHelp"></help></label>
+                                                <div class="checkbox col-md-3">
+                                                    <label>
+                                                        <input type="checkbox" name="prevent_override" id="command_info{{$index}}.safe_guard" ng-model="command_info.safe_guard">
+                                                    </label>
+                                                </div>
+                                            </div>
                                             <div class="form-group" ng-show="command_info.command_strategy == 'Immediately'">
                                                 <label class="col-md-3 control-label" for="command_info{{$index}}.concurrency">Concurrency <help help-id="concurrencyHelp"></help></label>
                                                 <div class="controls col-md-3" ng-class="{'has-error': commandsInnerFormSchedule.concurrency.$invalid}">

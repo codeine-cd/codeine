@@ -23,6 +23,8 @@ public class CommandInfo
 	private Boolean stop_on_error;
 	private DurationUnits duration_units;
 	private RatioType ratio;
+	@SuppressWarnings("unused")
+	private boolean safe_guard;
 	private Boolean prevent_override;
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
