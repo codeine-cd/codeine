@@ -64,7 +64,7 @@
         };
 
         vm.nodeNameValidate = function() {
-            return vm.node_name_retype === vm.nodes[0].alias || !vm.safe_guard;
+            return vm.node_name_retype === vm.nodes[0].alias || !vm.command.safe_guard;
         };
         vm.nodes_per_minute = function() {
             return (vm.nodes.length / vm.command.duration);

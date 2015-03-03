@@ -154,7 +154,7 @@
                         </div>
                     </accordion-group>
                 </accordion>
-                <div class="panel panel-default" ng-show="vm.safe_guard">
+                <div class="panel panel-default" ng-if="vm.command.safe_guard">
                     <div class="panel-heading">Are you ABSOLUTELY sure running '{{vm.commandName}}'?</div>
                     <div class="panel-body">
                         <div class="row">
