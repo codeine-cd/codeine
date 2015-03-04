@@ -65,7 +65,7 @@
 
         vm.nodeNameValidate = function() {
             if (vm.nodes.length > 1) {
-                return vm.node_name_retype == vm.nodes.length || !vm.command.safe_guard;
+                return vm.node_name_retype === vm.nodes.length.toString() || !vm.command.safe_guard;
             } else {
                 return vm.node_name_retype === vm.nodes[0].alias || !vm.command.safe_guard;
             }
