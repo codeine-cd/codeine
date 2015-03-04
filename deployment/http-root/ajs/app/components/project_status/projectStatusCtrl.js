@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    //// JavaScript Code ////
+    //// JavaScript Code  ////
     function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams) {
         $scope.projectName = $scope.projectConfiguration.name;
         $scope.tabName = $routeParams.tab_name;
