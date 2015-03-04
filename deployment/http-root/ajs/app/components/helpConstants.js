@@ -104,6 +104,8 @@
             "projectIncludeCommandsFromHelp" : "List here projects to include their configured commands in this project",
             "typeHelp" : "Select a type for the parameter for command execution",
             "collectorDescriptionHelp" : "Description will be displayed to explain what the collector is doing",
+            "safeGuardHelp" : "Will take extra measures to validate the correct command executed (to prevent human errors)",
+            "blockAfterExecutionHelp" : "This option is appropriate for asynchronous commands that runs in background.<br/>Entering number here will cause the command to wait the specified time in minutes after execution, and before proceeding to next node.",
             "nodesPerMinuteHelp" : "An estimation of the execution frequency",
             "collectorTypeHelp" : "Select a type for collector. types are:<br/>"+
                 "<br/><strong>String</strong> - text value that will be displayed to user"+

@@ -49,8 +49,16 @@
                     off.push($scope.projectStatus.tag_info[i].immutable.name);
                 }
             }
-            $location.search('tagsOn',on.join(','));
-            $location.search('tagsOff',off.join(','));
+            if (on.length > 0) {
+                $location.search('tagsOn', on.join(','));
+            } else {
+                $location.search('tagsOn', null);
+            }
+            if (off.length > 0) {
+                $location.search('tagsOff', off.join(','));
+            } else {
+                $location.search('tagsOff', null);
+            }
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
 

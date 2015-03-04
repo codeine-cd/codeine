@@ -10,12 +10,21 @@
         }
     }
 
-    function commandSetupCtrl($log, SelectedNodesService, $location, $routeParams,command,CodeineService) {
+    function commandSetupCtrl($log, SelectedNodesService, $location, $routeParams,command,CodeineService,AlertService) {
         /*jshint validthis:true */
         var vm = this;
 
         vm.command = command;
+        vm.projectName = $routeParams.project_name;
+        vm.tabName = $routeParams.tab_name;
+        vm.commandName = $routeParams.command_name;
         vm.nodes = SelectedNodesService.getSelectedNodes($location.path());
+        if (vm.nodes === undefined) {
+            $log.error('did not find selected nodes');
+            AlertService.addAlert('danger', "Could not setup the command at this time");
+            vm.is404 = true;
+            return;
+        }
 
         for (var i=0; i <vm.command.parameters.length; i++) {
             vm.command.parameters[i].value = getParsedParamValue(vm.command.parameters[i].type, vm.command.parameters[i].default_value);
@@ -31,9 +40,6 @@
             }
         }
 
-        vm.projectName = $routeParams.project_name;
-        vm.tabName = $routeParams.tab_name;
-        vm.commandName = $routeParams.command_name;
         if (vm.nodes.length === 1) {
             vm.command.command_strategy = 'Single';
             vm.command.prevent_override = true;
@@ -57,6 +63,20 @@
             return regexp.test(value);
         };
 
+        vm.nodeNameValidate = function() {
+            if (vm.nodes.length > 1) {
+                return vm.node_name_retype === vm.nodes.length.toString() || !vm.command.safe_guard;
+            } else {
+                return vm.node_name_retype === vm.nodes[0].alias || !vm.command.safe_guard;
+            }
+        };
+        vm.getRetypeTitle = function() {
+            if (vm.nodes.length > 1) {
+                return 'Re-type number of nodes';
+            } else {
+                return 'Re-type node name';
+            }
+        };
         vm.nodes_per_minute = function() {
             return (vm.nodes.length / vm.command.duration);
         };

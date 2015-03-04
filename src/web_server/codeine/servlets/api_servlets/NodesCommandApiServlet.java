@@ -92,6 +92,7 @@ public class NodesCommandApiServlet extends AbstractApiServlet {
 			for (NodeWithPeerInfo nodeWithPeerInfo : currentNodes) {
 				nodes.add(nodeWithPeerInfo.name());
 			}
+			nodes.addAll(commandData.node_name_list());
 			commandData.nodes().clear();
 			for (NodeWithMonitorsInfo node : nodeGetter.getNodes(projectName)) {
 				if (nodes.contains(node.name())) {

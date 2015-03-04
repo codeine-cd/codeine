@@ -11,6 +11,7 @@ public class ScehudleCommandExecutionInfo {
 	
 	private CommandInfo command_info;
 	private List<NodeWithPeerInfo> nodes = Lists.newArrayList();
+	private List<String> node_name_list = Lists.newArrayList();
 	private boolean should_execute_on_all_nodes;
 	private String address_to_notify;
 	
@@ -30,6 +31,9 @@ public class ScehudleCommandExecutionInfo {
 	
 	public List<NodeWithPeerInfo> nodes() {
 		return nodes;
+	}
+	public List<String> node_name_list() {
+		return node_name_list;
 	}
 	public boolean should_execute_on_all_nodes() {
 		return should_execute_on_all_nodes;

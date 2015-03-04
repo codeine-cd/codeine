@@ -17,11 +17,14 @@ public class CommandInfo
     private String project_name;
     @SerializedName("credentials") private String cred;
     private Integer timeoutInMinutes;
+    private Integer block_after_execution_minutes;
     private Integer duration, concurrency, error_percent_val;
 	private CommandExcutionType command_strategy;
 	private Boolean stop_on_error;
 	private DurationUnits duration_units;
 	private RatioType ratio;
+	@SuppressWarnings("unused")
+	private boolean safe_guard;
 	private Boolean prevent_override;
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
@@ -147,6 +150,10 @@ public class CommandInfo
 
 	public void duration(int duration) {
 		this.duration = duration;
+	}
+
+	public Integer block_after_execution_minutes() {
+		return block_after_execution_minutes;
 	}
 
 	

@@ -12,6 +12,7 @@ import codeine.command_peer.AllNodesCommandExecuter;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.PathHelper;
 import codeine.model.Constants;
+import codeine.permissions.IUserWithPermissions;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.TextFileUtils;
@@ -54,8 +55,9 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 
 	private boolean canRerun(HttpServletRequest request, String projectName, CommandExecutionStatusInfo commandInfo) {
 		boolean canRerun = true;
+		IUserWithPermissions user = getUser(request);
 		for (NodeWithPeerInfo node : commandInfo.nodes_list()) {
-			if (!getUser(request).canCommand(projectName, node.alias())) {
+			if (!user.canCommand(projectName, node.alias())) {
 				canRerun = false;
 				break;
 			}
