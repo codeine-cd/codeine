@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 
-import codeine.api.NodeInfo;
 import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.jsons.project.ProjectJson;
@@ -17,7 +16,7 @@ import codeine.utils.os_process.ProcessExecuter;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class TestsSuite {
+public abstract class TestsSuite {
 
 
 	private final Logger log = Logger.getLogger(TestsSuite.class);
@@ -67,10 +66,11 @@ public class TestsSuite {
 		getJsonFileUtils().setContent(testsConf().conf_file(), codeineConf);
 	}
 	private void configureProjects() {
-		ProjectJson project = new ProjectJson("integration_test_project");
-		project.nodes_info().add(new NodeInfo(InetUtils.getLocalHost().getHostName()));
-		getJsonFileUtils().setContent(testsConf().projects_dir() + "/integration_test_project/project.conf.json", project);
+		ProjectJson project = getProjectConfiguration();
+		getJsonFileUtils().setContent(testsConf().projects_dir() + "/" + project.name() + "/project.conf.json", project);
 	}
+
+	protected abstract ProjectJson getProjectConfiguration();
 
 	private JsonFileUtils getJsonFileUtils() {
 		JsonFileUtils jsonFileUtils = injector().getInstance(JsonFileUtils.class);
