@@ -13,7 +13,7 @@
             this.statistics = { data : [] };
         }
 
-        function shouldRefreshObject(obj, name) {
+        function shouldRefreshObject(obj) {
             //$log.debug('shouldRefreshObject ' + (new Date().getTime() - obj.retrieveTime) + ' ' + name + ' ' + obj.retrieveTime);
             return (new Date().getTime() - obj.retrieveTime > 300000);
         }
@@ -54,19 +54,19 @@
                 this.runnableCommandsLoaded = false;
             },
             isConfigLoaded : function() {
-                return this.configLoaded && !shouldRefreshObject(this.configuration, 'configuration');
+                return this.configLoaded && !shouldRefreshObject(this.configuration);
             },
             isStatusLoaded : function() {
-                return this.statusLoaded && !shouldRefreshObject(this.status, 'status');
+                return this.statusLoaded && !shouldRefreshObject(this.status);
             },
             isNodesAliasesLoaded : function() {
-                return this.nodesAliasesLoaded && !shouldRefreshObject(this.nodes_aliases, 'nodes_aliases');
+                return this.nodesAliasesLoaded && !shouldRefreshObject(this.nodes_aliases);
             },
             isRunnableCommandsLoaded : function() {
-                return this.runnableCommandsLoaded && !shouldRefreshObject(this.runnableCommands, 'runnableCommands');
+                return this.runnableCommandsLoaded && !shouldRefreshObject(this.runnableCommands);
             },
             isStatisticsLoaded : function() {
-                return this.statisticsLoaded && !shouldRefreshObject(this.statistics, 'statistics');
+                return this.statisticsLoaded && !shouldRefreshObject(this.statistics);
             },
             cloneConfiguration : function() {
                 return angular.fromJson(angular.toJson(this.configuration));
