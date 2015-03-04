@@ -13,29 +13,30 @@
             this.statistics = { data : [] };
         }
 
-        function shouldRefreshObject(obj) {
-            return (new Date() - obj.retrieveTime > 300000);
+        function shouldRefreshObject(obj, name) {
+            //$log.debug('shouldRefreshObject ' + (new Date().getTime() - obj.retrieveTime) + ' ' + name + ' ' + obj.retrieveTime);
+            return (new Date().getTime() - obj.retrieveTime > 300000);
         }
 
         CodeineProject.prototype = {
             setConfiguration : function(data) {
-                data.retrieveTime = new Date();
+                data.retrieveTime = new Date().getTime();
                 this.configLoaded = true;
                 angular.extend(this.configuration, data);
             },
             setStatus : function(status) {
-                status.retrieveTime = new Date();
+                status.retrieveTime = new Date().getTime();
                 this.statusLoaded = true;
                 angular.extend(this.status, status);
             },
             setStatistics : function(data) {
-                this.statistics.data.retrieveTime = new Date();
+                this.statistics.retrieveTime = new Date().getTime();
                 this.statisticsLoaded = true;
                 this.statistics.data.length = 0;
                 angular.copy(data,this.statistics.data);
             },
             setNodesAliases : function(nodesAliases) {
-                this.nodes_aliases.retrieveTime = new Date();
+                this.nodes_aliases.retrieveTime = new Date().getTime();
                 this.nodesAliasesLoaded = true;
                 this.nodes_aliases.data.length = 0;
                 angular.copy(nodesAliases,this.nodes_aliases.data);
@@ -44,7 +45,7 @@
                 this.nodes_count = count;
             },
             setRunnableCommands : function(runnableCommands) {
-                this.runnableCommands.retrieveTime = new Date();
+                this.runnableCommands.retrieveTime = new Date().getTime();
                 this.runnableCommandsLoaded = true;
                 this.runnableCommands.data.length = 0;
                 angular.copy(runnableCommands,this.runnableCommands.data);
@@ -53,19 +54,19 @@
                 this.runnableCommandsLoaded = false;
             },
             isConfigLoaded : function() {
-                return this.configLoaded && !shouldRefreshObject(this.configLoaded);
+                return this.configLoaded && !shouldRefreshObject(this.configuration, 'configuration');
             },
             isStatusLoaded : function() {
-                return this.statusLoaded && !shouldRefreshObject(this.status);
+                return this.statusLoaded && !shouldRefreshObject(this.status, 'status');
             },
             isNodesAliasesLoaded : function() {
-                return this.nodesAliasesLoaded && !shouldRefreshObject(this.nodes_aliases);
+                return this.nodesAliasesLoaded && !shouldRefreshObject(this.nodes_aliases, 'nodes_aliases');
             },
             isRunnableCommandsLoaded : function() {
-                return this.runnableCommandsLoaded && !shouldRefreshObject(this.runnableCommands);
+                return this.runnableCommandsLoaded && !shouldRefreshObject(this.runnableCommands, 'runnableCommands');
             },
             isStatisticsLoaded : function() {
-                return this.statisticsLoaded && !shouldRefreshObject(this.statistics);
+                return this.statisticsLoaded && !shouldRefreshObject(this.statistics, 'statistics');
             },
             cloneConfiguration : function() {
                 return angular.fromJson(angular.toJson(this.configuration));
