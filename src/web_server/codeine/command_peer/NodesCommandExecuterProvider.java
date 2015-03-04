@@ -16,8 +16,8 @@ import codeine.configuration.PathHelper;
 import codeine.model.Constants;
 import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;
+import codeine.utils.JsonUtils;
 import codeine.utils.MiscUtils;
-import codeine.utils.TextFileUtils;
 import codeine.utils.exceptions.InShutdownException;
 
 import com.google.common.base.Predicate;
@@ -57,7 +57,7 @@ public class NodesCommandExecuterProvider {
 			}
 			String file = parentDir + "/" + dir + Constants.JSON_COMMAND_FILE_NAME;
 			try {
-				CommandExecutionStatusInfo j = gson.fromJson(TextFileUtils.getContents(file), CommandExecutionStatusInfo.class); 
+				CommandExecutionStatusInfo j = JsonUtils.fromJsonFromFile(file, CommandExecutionStatusInfo.class); 
 				if (!shouldShowByNode(j, nodeName)){
 					continue;
 				}
