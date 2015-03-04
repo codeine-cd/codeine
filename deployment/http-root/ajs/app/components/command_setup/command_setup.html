@@ -155,12 +155,12 @@
                     </accordion-group>
                 </accordion>
                 <div class="panel panel-default" ng-if="vm.command.safe_guard">
-                    <div class="panel-heading">Are you ABSOLUTELY sure running '{{vm.commandName}}'?</div>
+                    <div class="panel-heading">Are you ABSOLUTELY sure running '{{vm.commandName}}' ?</div>
                     <div class="panel-body">
                         <div class="row">
                             <form class="form-horizontal" name="retypeForm" novalidate>
                                     <div class="form-group">
-                                        <label for="node_name_retype" class="col-md-4 control-label">Re-type node name</label>
+                                        <label for="node_name_retype" class="col-md-4 control-label">{{vm.getRetypeTitle()}}</label>
                                         <div class="col-md-4" ng-class="{'has-error': retypeForm.node_name_retype.$invalid || !vm.nodeNameValidate()}">
                                             <input id="node_name_retype" name="node_name_retype" type="text" class="form-control" ng-model="vm.node_name_retype" required>
                                         </div>

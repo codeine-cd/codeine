@@ -64,7 +64,18 @@
         };
 
         vm.nodeNameValidate = function() {
-            return vm.node_name_retype === vm.nodes[0].alias || !vm.command.safe_guard;
+            if (vm.nodes.length > 1) {
+                return vm.node_name_retype == vm.nodes.length || !vm.command.safe_guard;
+            } else {
+                return vm.node_name_retype === vm.nodes[0].alias || !vm.command.safe_guard;
+            }
+        };
+        vm.getRetypeTitle = function() {
+            if (vm.nodes.length > 1) {
+                return 'Re-type number of nodes';
+            } else {
+                return 'Re-type node name';
+            }
         };
         vm.nodes_per_minute = function() {
             return (vm.nodes.length / vm.command.duration);
