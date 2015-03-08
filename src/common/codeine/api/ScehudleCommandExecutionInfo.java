@@ -7,6 +7,9 @@ import codeine.jsons.command.CommandInfo;
 import com.google.common.collect.Lists;
 
 
+/**
+ * This is the data that should be sent from the client to execute a command
+ */
 public class ScehudleCommandExecutionInfo {
 	
 	private CommandInfo command_info;

@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.CommandStatusJson;
+import codeine.api.NodeInfoNameAndAlias;
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.PathHelper;
 import codeine.model.Constants;
@@ -82,15 +83,15 @@ public class NodesCommandExecuterProvider {
 	}
 	
 	private boolean shouldShowByNode(CommandExecutionStatusInfo j, String nodeName) {
-		List<NodeWithPeerInfo> nodes_list = j.nodes_list();
+		List<NodeInfoNameAndAlias> nodes_list = j.nodes_list();
 		return shouldShowByNode(nodeName, nodes_list);
 	}
 
-	private boolean shouldShowByNode(String nodeName, List<NodeWithPeerInfo> nodes_list) {
+	private boolean shouldShowByNode(String nodeName, List<? extends NodeInfoNameAndAlias> nodes_list) {
 		if (nodeName == null) {
 			return true;
 		}
-		for (NodeWithPeerInfo node : nodes_list) {
+		for (NodeInfoNameAndAlias node : nodes_list) {
 			if (node.name().equals(nodeName)) {
 				return true;
 			}
