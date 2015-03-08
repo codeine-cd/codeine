@@ -163,7 +163,7 @@ public abstract class AbstractServlet extends HttpServlet{
 	}
 	
 	protected final void writeResponseJson(HttpServletResponse response, Object json) {
-		getWriter(response).write(gson().toJson(json));
+		gson().toJson(json, getWriter(response));
 	}
 
 	protected final void writeResponseGzipJson(Object json, HttpServletRequest request, HttpServletResponse response) {
@@ -175,7 +175,7 @@ public abstract class AbstractServlet extends HttpServlet{
 		try {
 			try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(getGzipStream(response),
 					response.getCharacterEncoding()))) {
-				writer.write(gson().toJson(json));
+				gson().toJson(json, writer);
 			}
 		} catch (IOException e) {
 			throw ExceptionUtils.asUnchecked(e);
