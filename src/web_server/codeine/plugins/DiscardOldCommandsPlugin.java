@@ -14,7 +14,6 @@ import codeine.utils.FilesUtils;
 import codeine.utils.JsonUtils;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 public class DiscardOldCommandsPlugin {
@@ -23,7 +22,6 @@ public class DiscardOldCommandsPlugin {
 
 	
 	@Inject	private PathHelper pathHelper;
-	@Inject	private Gson gson;
 	private ThreadPoolExecutor executor = ThreadPoolUtils.newThreadPool(2, "DiscardOldCommandsPlugin");
 
 	public void queueForDelete(final ProjectJson project) {

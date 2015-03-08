@@ -23,7 +23,6 @@ import codeine.utils.exceptions.InShutdownException;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.google.inject.Provider;
 
 public class NodesCommandExecuterProvider {
@@ -31,7 +30,6 @@ public class NodesCommandExecuterProvider {
 	private static final Logger log = Logger.getLogger(NodesCommandExecuterProvider.class);
 	@Inject private Provider<AllNodesCommandExecuter> allNodesCommandExecuterProvider;
 	@Inject private PrepareForShutdown prepareForShutdown;
-	@Inject private Gson gson;
 	@Inject private PathHelper pathHelper;
 	private List<AllNodesCommandExecuter> executers = Lists.newArrayList();
 	
