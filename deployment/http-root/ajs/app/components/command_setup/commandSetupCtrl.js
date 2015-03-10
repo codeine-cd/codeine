@@ -14,7 +14,7 @@
         /*jshint validthis:true */
         var vm = this;
 
-        vm.command = command;
+        vm.command = angular.fromJson(angular.toJson(command));
         vm.projectName = $routeParams.project_name;
         vm.tabName = $routeParams.tab_name;
         vm.commandName = $routeParams.command_name;
