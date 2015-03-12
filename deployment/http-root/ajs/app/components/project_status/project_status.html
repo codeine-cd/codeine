@@ -15,6 +15,7 @@
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <button ng-click="refreshProjectStatus()" tooltip="Refresh Project Status" class="btn btn-default navbar-btn navbar-left"><i class="fa fa-refresh"></i></button>
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
                         <input type="text" ng-model="nodesFilter" class="form-control search-query" placeholder="Filter Nodes">
@@ -50,82 +51,84 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="well well-sm">
-                <form class="form-inline" role="form">
-                    <div class="checkbox">
-                        <label tooltip="Select All">
-                            <input type="checkbox" ng-checked="isAllNodesChecked()" ng-click="doSelectAllNodes($event)">
-                        </label>
-                    </div>&nbsp;
-                    <button type="button" ng-click="expandAll()" class="btn btn-xs" tooltip="Expand All"><i class="fa fa-plus"></i></button>
-                    <button type="button" ng-click="collapseAll()" class="btn btn-xs" tooltip="Collapse All"><i class="fa fa-minus"></i></button>
+    <div cg-busy="refreshStatusPromise">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well well-sm">
+                    <form class="form-inline" role="form">
+                        <div class="checkbox">
+                            <label tooltip="Select All">
+                                <input type="checkbox" ng-checked="isAllNodesChecked()" ng-click="doSelectAllNodes($event)">
+                            </label>
+                        </div>&nbsp;
+                        <button type="button" ng-click="expandAll()" class="btn btn-xs" tooltip="Expand All"><i class="fa fa-plus"></i></button>
+                        <button type="button" ng-click="collapseAll()" class="btn btn-xs" tooltip="Collapse All"><i class="fa fa-minus"></i></button>
                     <span>
                         <b>Project {{projectConfiguration.name}}</b> <help help-txt="projectConfiguration.description" ng-if="projectConfiguration.description"></help>
                     </span>
-                    <small class="pull-right">
-                        <span>Total Nodes: {{allNodesCount}} Selected: {{selectedCount()}}</span>
-                    </small>
-                </form>
+                        <small class="pull-right">
+                            <span>Total Nodes: {{allNodesCount}} Selected: {{selectedCount()}}</span>
+                        </small>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <accordion close-others="false">
-                <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="versionItem.visibleNodes.length > 0" class="accordion-hover-shade">
-                    <accordion-group is-open="versionIsOpen[$index]">
-                        <accordion-heading>
-                            <div class="row">
-                                <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <accordion close-others="false">
+                    <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="versionItem.visibleNodes.length > 0" class="accordion-hover-shade">
+                        <accordion-group is-open="versionIsOpen[$index]">
+                            <accordion-heading>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form class="form-inline" role="form">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" ng-checked="isVersionChecked(versionItem)" ng-click="checkboxClick(versionItem,$event)" >&nbsp;{{versionItem.immutable.version}}
+                                                </label>
+                                            </div>
+                                            <div class="progress pull-right col-md-1 project-status-progress">
+                                                <div class="progress-bar progress-bar-success" ng-style="{width: versionItem.immutable.not_failing_nodes_precent + '%'}">
+                                                </div>
+                                                <div class="progress-bar progress-bar-danger" ng-style="{width: versionItem.immutable.failing_nodes_precent + '%'}">
+                                                </div>
+                                            </div>
+                                            <i class="pull-right fa fa-exclamation" ng-show="versionItem.immutable.failing_nodes_count > 0" style="color: red;"></i>
+                                            <small class="pull-right">
+                                                <span>{{versionItem.filteredNodes.length}}</span> nodes
+                                            </small>
+                                        </form>
+                                    </div>
+                                </div>
+                            </accordion-heading>
+                            <div class="row" ng-repeat="node in versionItem.visibleNodes | orderBy:'alias'">
+                                <div ng-class="{'col-md-3': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-5': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" class="fade_me" tooltip="{{::((node.immutable.alias.length > (maxNodeAliasLengthForSmallCol-5) && node.immutable.alias.length <= maxNodeAliasLengthForSmallCol) || node.immutable.alias.length > 40 ) ? node.immutable.alias : ''}}" tooltip-placement="right" tooltip-popup-delay="500">
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" ng-checked="isVersionChecked(versionItem)" ng-click="checkboxClick(versionItem,$event)" >&nbsp;{{versionItem.immutable.version}}
+                                                <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;
+                                                <a ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/status"
+                                                        > {{::node.immutable.alias}}</a>
                                             </label>
                                         </div>
-                                        <div class="progress pull-right col-md-1 project-status-progress">
-                                            <div class="progress-bar progress-bar-success" ng-style="{width: versionItem.immutable.not_failing_nodes_precent + '%'}">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" ng-style="{width: versionItem.immutable.failing_nodes_precent + '%'}">
-                                            </div>
-                                        </div>
-                                        <i class="pull-right fa fa-exclamation" ng-show="versionItem.immutable.failing_nodes_count > 0" style="color: red;"></i>
-                                        <small class="pull-right">
-                                            <span>{{versionItem.filteredNodes.length}}</span> nodes
-                                        </small>
                                     </form>
                                 </div>
-                            </div>
-                        </accordion-heading>
-                        <div class="row" ng-repeat="node in versionItem.visibleNodes | orderBy:'alias'">
-                            <div ng-class="{'col-md-3': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-5': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" class="fade_me" tooltip="{{::((node.immutable.alias.length > (maxNodeAliasLengthForSmallCol-5) && node.immutable.alias.length <= maxNodeAliasLengthForSmallCol) || node.immutable.alias.length > 40 ) ? node.immutable.alias : ''}}" tooltip-placement="right" tooltip-popup-delay="500">
-                                <form class="form-inline" role="form">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input ng-model="node.checked" type="checkbox" ng-disabled="isNodeDisabled(node)">&nbsp;
-                                            <a ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/status"
-                                               > {{::node.immutable.alias}}</a>
-                                        </label>
-                                    </div>
-                                </form>
-                            </div>
-                            <div ng-class="{'col-md-9': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-7': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" style="word-break: break-all;">
-                                <a ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/status">
-                                    <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.immutable.peer_status !== 'On' , success: node.immutable.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.immutable.collectors_info)"></i>
-                                </a>
-                                <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
+                                <div ng-class="{'col-md-9': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-7': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" style="word-break: break-all;">
+                                    <a ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/status">
+                                        <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.immutable.peer_status !== 'On' , success: node.immutable.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.immutable.collectors_info)"></i>
+                                    </a>
+                                    <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
                                 <span ng-repeat="collector_info in node.immutable.collectors_info" style="display:inline-block">
                                     <a tooltip="{{::collector_info.exit_status !== 0 ? '' : collector_info.name}}"
                                        ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/collector/{{::collector_info.name}}/status"
                                        class="label" ng-class="{'label-warning': node.immutable.peer_status === 'Disc' , 'label-danger': node.immutable.peer_status === 'On' && collector_info.exit_status !== 0, 'label-default': node.immutable.peer_status === 'On' && collector_info.exit_status === 0}">{{::collector_info.exit_status === 0 ? collector_info.value : collector_info.name}}</a>&nbsp;</span>
+                                </div>
                             </div>
-                        </div>
-                        <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>
-                    </accordion-group>
-                </div>
-            </accordion>
+                            <button ng-click="loadMoreNodes($index)" class="btn btn-default btn-sm" ng-show="versionItem.visibleNodes.length !== versionItem.filteredNodes.length">More...</button>
+                        </accordion-group>
+                    </div>
+                </accordion>
+            </div>
         </div>
     </div>
 </div>

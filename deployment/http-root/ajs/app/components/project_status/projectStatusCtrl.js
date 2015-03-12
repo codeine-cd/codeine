@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code  ////
-    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams) {
+    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams,ProjectsRepository) {
         $scope.projectName = $scope.projectConfiguration.name;
         $scope.tabName = $routeParams.tab_name;
         $scope.allNodesCount = 0;
@@ -285,6 +285,10 @@
             unRegisterFunction();
             tagsChangedHandler();
         });
+
+        $scope.refreshProjectStatus = function() {
+            $scope.refreshStatusPromise = ProjectsRepository.getProject($scope.projectConfiguration.name, [ 'status' ], true);
+        };
     }
 
 
