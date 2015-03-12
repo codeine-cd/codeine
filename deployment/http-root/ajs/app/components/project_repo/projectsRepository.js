@@ -63,11 +63,11 @@
             return deferred.promise;
         }
 
-        function loadProjectStatus(projectName) {
+        function loadProjectStatus(projectName, force) {
             var deferred = $q.defer();
             ensureProjectsLoaded().then(function() {
                 var project = _search(projectName);
-                if (project.isStatusLoaded()) {
+                if (project.isStatusLoaded() && !force) {
                     return deferred.resolve(project);
                 }
                 CodeineService.getProjectStatus(projectName).success(function(data) {
@@ -117,7 +117,7 @@
             return deferred.promise;
         }
 
-        function getProject(name, properties) {
+        function getProject(name, properties, force) {
             var deferred = $q.defer();
             var promises = [];
             for (var i = 0 ; i < properties.length ; i++) {
@@ -127,7 +127,7 @@
                         promises.push(loadProjectConfiguration(name));
                         break;
                     case 'status':
-                        promises.push(loadProjectStatus(name));
+                        promises.push(loadProjectStatus(name, force));
                         break;
                     case 'nodes_aliases':
                         promises.push(loadProjectNodesAliases(name));
