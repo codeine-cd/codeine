@@ -29,7 +29,47 @@ public class CommandInfo
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
 
-    public String description(){
+	
+	public CommandInfo() {
+		super();
+	}
+    
+    
+
+	public CommandInfo(String name, String description, String project_name, String cred, Integer timeoutInMinutes,
+			Integer block_after_execution_minutes, Integer duration, Integer concurrency, Integer error_percent_val,
+			CommandExcutionType command_strategy, Boolean stop_on_error, DurationUnits duration_units, RatioType ratio,
+			boolean safe_guard, Boolean prevent_override, List<CommandParameterInfo> parameters, String script_content) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.project_name = project_name;
+		this.cred = cred;
+		this.timeoutInMinutes = timeoutInMinutes;
+		this.block_after_execution_minutes = block_after_execution_minutes;
+		this.duration = duration;
+		this.concurrency = concurrency;
+		this.error_percent_val = error_percent_val;
+		this.command_strategy = command_strategy;
+		this.stop_on_error = stop_on_error;
+		this.duration_units = duration_units;
+		this.ratio = ratio;
+		this.safe_guard = safe_guard;
+		this.prevent_override = prevent_override;
+		this.parameters = parameters;
+		this.script_content = script_content;
+	}
+
+
+
+	public CommandInfo(String name, String project_name) {
+		this.name = name;
+		this.project_name = project_name;
+	}
+
+
+
+	public String description(){
     	return description;
     }
 

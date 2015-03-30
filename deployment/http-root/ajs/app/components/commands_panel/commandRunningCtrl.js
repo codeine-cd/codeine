@@ -7,7 +7,7 @@
         var vm  = this;
         vm.projectName = $routeParams.project_name;
         vm.tabName = $routeParams.tab_name;
-        if (typeof vm.tabName !== 'undefined') {
+        if (typeof vm.tabName === 'undefined') {
             vm.tabName = 'main';
         }
         vm.limit = 10;

@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 
+import codeine.utils.JsonUtils;
 import codeine.utils.TextFileUtils;
 
 import com.google.gson.Gson;
@@ -36,8 +37,7 @@ public class PersistentFileJsonProvider {
 			}
 			return defaultValue;
 		}
-		String contents = TextFileUtils.getContents(file2);
-		return gson.fromJson(contents, classOfT);
+		return JsonUtils.fromJsonFromFile(file2, classOfT);
 	}
 
 }

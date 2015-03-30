@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.NodeGetter;
+import codeine.api.NodeInfoNameAndAlias;
 import codeine.api.NodeWithPeerInfo;
 import codeine.api.ScehudleCommandExecutionInfo;
 import codeine.command_peer.CommandFileWriter.CommandFileWriterItem;
@@ -175,9 +176,9 @@ public class AllNodesCommandExecuter {
 
 	private void writeFooter() {
 		writeLine("finished!");
-		Function<NodeWithPeerInfo, String> f = new Function<NodeWithPeerInfo, String>() {
+		Function<NodeInfoNameAndAlias, String> f = new Function<NodeInfoNameAndAlias, String>() {
 			@Override
-			public String apply(NodeWithPeerInfo n){
+			public String apply(NodeInfoNameAndAlias n){
 				return n.alias();
 			}
 		};

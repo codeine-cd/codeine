@@ -11,10 +11,9 @@ import codeine.configuration.PathHelper;
 import codeine.executer.ThreadPoolUtils;
 import codeine.jsons.project.ProjectJson;
 import codeine.utils.FilesUtils;
-import codeine.utils.TextFileUtils;
+import codeine.utils.JsonUtils;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 public class DiscardOldCommandsPlugin {
@@ -23,7 +22,6 @@ public class DiscardOldCommandsPlugin {
 
 	
 	@Inject	private PathHelper pathHelper;
-	@Inject	private Gson gson;
 	private ThreadPoolExecutor executor = ThreadPoolUtils.newThreadPool(2, "DiscardOldCommandsPlugin");
 
 	public void queueForDelete(final ProjectJson project) {
@@ -61,8 +59,7 @@ public class DiscardOldCommandsPlugin {
 		for (File command : commands) {
 			String commandOutputInfoFile = pathHelper.getCommandOutputInfoFile(projectName, command.getName());
 			try {
-				String json = TextFileUtils.getContents(commandOutputInfoFile);
-				$.add(gson.fromJson(json, CommandExecutionStatusInfo.class));
+				$.add(JsonUtils.fromJsonFromFile(commandOutputInfoFile, CommandExecutionStatusInfo.class));
 			} catch (Exception e) {
 				log.warn("failed to read " + commandOutputInfoFile);
 			}

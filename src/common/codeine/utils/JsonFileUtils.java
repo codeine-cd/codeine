@@ -27,7 +27,7 @@ public class JsonFileUtils {
 		if (!FilesUtils.exists(file)) {
 			return ReflectionUtils.newInstance(clazz);
 		}
-		return gson.fromJson(TextFileUtils.getContents(file), clazz);
+		return JsonUtils.fromJsonFromFile(file, clazz);
 	}
 	public <T> T getConfFromFile(String file, Type clazz, T defaultValue) {
 		log.info("parsing file " + file);
@@ -36,7 +36,7 @@ public class JsonFileUtils {
 		}
 		T $ = null;
 		try {
-			$ = gson.fromJson(TextFileUtils.getContents(file), clazz);
+			$ = JsonUtils.fromJsonFromFile(file, clazz);
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
 		}

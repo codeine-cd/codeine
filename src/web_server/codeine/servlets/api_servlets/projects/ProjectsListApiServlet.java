@@ -11,10 +11,8 @@ import org.apache.log4j.Logger;
 
 import codeine.ConfigurationManagerServer;
 import codeine.api.NodeAggregator;
-import codeine.api.VersionItemInfo;
 import codeine.jsons.project.CodeineProject;
 import codeine.jsons.project.ProjectJson;
-import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.plugins.AfterProjectModifyPlugin;
@@ -54,8 +52,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 		for (ProjectJson projectJson : configuredProjects) {
 			if (user.canRead(projectJson.name())){
 				try {
-					VersionItemInfo versionItem = aggregator.aggregate(projectJson.name()).get(Constants.ALL_VERSION);
-					projects.add(new CodeineProject(projectJson.name(), versionItem.count(), projectJson.description()));
+					projects.add(new CodeineProject(projectJson.name(), aggregator.count(projectJson.name()), projectJson.description()));
 				} catch (Exception e) {
 					log.error("failed to add project " + projectJson.name(), e);
 				}

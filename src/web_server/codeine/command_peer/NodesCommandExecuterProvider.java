@@ -11,19 +11,19 @@ import org.apache.log4j.Logger;
 
 import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.CommandStatusJson;
+import codeine.api.NodeInfoNameAndAlias;
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.PathHelper;
 import codeine.model.Constants;
 import codeine.servlet.PrepareForShutdown;
 import codeine.utils.FilesUtils;
+import codeine.utils.JsonUtils;
 import codeine.utils.MiscUtils;
-import codeine.utils.TextFileUtils;
 import codeine.utils.exceptions.InShutdownException;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.google.inject.Provider;
 
 public class NodesCommandExecuterProvider {
@@ -31,7 +31,6 @@ public class NodesCommandExecuterProvider {
 	private static final Logger log = Logger.getLogger(NodesCommandExecuterProvider.class);
 	@Inject private Provider<AllNodesCommandExecuter> allNodesCommandExecuterProvider;
 	@Inject private PrepareForShutdown prepareForShutdown;
-	@Inject private Gson gson;
 	@Inject private PathHelper pathHelper;
 	private List<AllNodesCommandExecuter> executers = Lists.newArrayList();
 	
@@ -57,7 +56,7 @@ public class NodesCommandExecuterProvider {
 			}
 			String file = parentDir + "/" + dir + Constants.JSON_COMMAND_FILE_NAME;
 			try {
-				CommandExecutionStatusInfo j = gson.fromJson(TextFileUtils.getContents(file), CommandExecutionStatusInfo.class); 
+				CommandExecutionStatusInfo j = JsonUtils.fromJsonFromFile(file, CommandExecutionStatusInfo.class); 
 				if (!shouldShowByNode(j, nodeName)){
 					continue;
 				}
@@ -84,15 +83,15 @@ public class NodesCommandExecuterProvider {
 	}
 	
 	private boolean shouldShowByNode(CommandExecutionStatusInfo j, String nodeName) {
-		List<NodeWithPeerInfo> nodes_list = j.nodes_list();
+		List<NodeInfoNameAndAlias> nodes_list = j.nodes_list();
 		return shouldShowByNode(nodeName, nodes_list);
 	}
 
-	private boolean shouldShowByNode(String nodeName, List<NodeWithPeerInfo> nodes_list) {
+	private boolean shouldShowByNode(String nodeName, List<? extends NodeInfoNameAndAlias> nodes_list) {
 		if (nodeName == null) {
 			return true;
 		}
-		for (NodeWithPeerInfo node : nodes_list) {
+		for (NodeInfoNameAndAlias node : nodes_list) {
 			if (node.name().equals(nodeName)) {
 				return true;
 			}

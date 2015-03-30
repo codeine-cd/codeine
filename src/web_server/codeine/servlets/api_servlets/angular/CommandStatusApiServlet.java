@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import codeine.api.CommandExecutionStatusInfo;
-import codeine.api.NodeWithPeerInfo;
+import codeine.api.NodeInfoNameAndAlias;
 import codeine.command_peer.AllNodesCommandExecuter;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.PathHelper;
@@ -56,7 +56,7 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 	private boolean canRerun(HttpServletRequest request, String projectName, CommandExecutionStatusInfo commandInfo) {
 		boolean canRerun = true;
 		IUserWithPermissions user = getUser(request);
-		for (NodeWithPeerInfo node : commandInfo.nodes_list()) {
+		for (NodeInfoNameAndAlias node : commandInfo.nodes_list()) {
 			if (!user.canCommand(projectName, node.alias())) {
 				canRerun = false;
 				break;

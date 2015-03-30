@@ -10,15 +10,18 @@ import codeine.utils.StringUtils;
 
 import com.google.common.collect.Lists;
 
+/**
+ * This class represents the data saved for each command on disk, and send to ui
+ */
 @SuppressWarnings("unused")
 public class CommandExecutionStatusInfo {
 
 	private String command;
 	private List<CommandParameterInfo> params;
 	private String project_name;
-	private List<NodeWithPeerInfo> nodes_list;
-	private Queue<NodeWithPeerInfo> fail_list = new ConcurrentLinkedDeque<NodeWithPeerInfo>();
-	private Queue<NodeWithPeerInfo> success_list = new ConcurrentLinkedDeque<NodeWithPeerInfo>();
+	private List<NodeInfoNameAndAlias> nodes_list;
+	private Queue<NodeInfoNameAndAlias> fail_list = new ConcurrentLinkedDeque<NodeInfoNameAndAlias>();
+	private Queue<NodeInfoNameAndAlias> success_list = new ConcurrentLinkedDeque<NodeInfoNameAndAlias>();
 	private long start_time;
 	private Long finish_time;
 	private String user = "Guest";
@@ -32,7 +35,7 @@ public class CommandExecutionStatusInfo {
 		super();
 	}
 
-	public CommandExecutionStatusInfo(String user, String command, List<CommandParameterInfo> params, String projectName, List<NodeWithPeerInfo> nodes_list, long id) {
+	public CommandExecutionStatusInfo(String user, String command, List<CommandParameterInfo> params, String projectName, List<? extends NodeInfoNameAndAlias> nodes_list, long id) {
 		this.command = command;
 		this.params = params;
 		this.project_name = projectName;
@@ -42,40 +45,40 @@ public class CommandExecutionStatusInfo {
 		this.user = StringUtils.isEmpty(user) ? "Guest" : user; 
 	}
 
-	private List<NodeWithPeerInfo> copyNodesInfo(List<NodeWithPeerInfo> nodes_list) {
-		List<NodeWithPeerInfo> $ = Lists.newArrayList();
-		for (NodeWithPeerInfo nodeWithPeerInfo : nodes_list) {
+	private List<NodeInfoNameAndAlias> copyNodesInfo(List<? extends NodeInfoNameAndAlias> nodes_list) {
+		List<NodeInfoNameAndAlias> $ = Lists.newArrayList();
+		for (NodeInfoNameAndAlias nodeWithPeerInfo : nodes_list) {
 			$.add(copyOnlyNodeInfo(nodeWithPeerInfo));
 		}
 		return $;
 	}
 
-	private NodeWithPeerInfo copyOnlyNodeInfo(NodeWithPeerInfo nodeWithPeerInfo) {
-		NodeWithPeerInfo n = null;
-		if (nodeWithPeerInfo.getClass().equals(NodeWithPeerInfo.class)) {
+	private NodeInfoNameAndAlias copyOnlyNodeInfo(NodeInfoNameAndAlias nodeWithPeerInfo) {
+		NodeInfoNameAndAlias n = null;
+		if (nodeWithPeerInfo.getClass().equals(NodeInfoNameAndAlias.class)) {
 			n = nodeWithPeerInfo;
 		}
 		else {
-			n = new NodeWithPeerInfo(nodeWithPeerInfo);
+			n = new NodeInfoNameAndAlias(nodeWithPeerInfo);
 		}
 		return n;
 	}
 
-	public void addFailedNode(NodeWithPeerInfo node) {
+	public void addFailedNode(NodeInfoNameAndAlias node) {
 		fail_list.add(copyOnlyNodeInfo(node));
 	}
 
-	public void addSuccessNode(NodeWithPeerInfo node) {
+	public void addSuccessNode(NodeInfoNameAndAlias node) {
 		success_list.add(copyOnlyNodeInfo(node));
 	}
 
-	public Collection<NodeWithPeerInfo> fail_list() {
+	public Collection<NodeInfoNameAndAlias> fail_list() {
 		return fail_list;
 	}
-	public Collection<NodeWithPeerInfo> success_list() {
+	public Collection<NodeInfoNameAndAlias> success_list() {
 		return success_list;
 	}
-	public List<NodeWithPeerInfo> nodes_list() {
+	public List<NodeInfoNameAndAlias> nodes_list() {
 		return nodes_list;
 	}
 

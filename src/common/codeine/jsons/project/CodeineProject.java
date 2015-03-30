@@ -17,6 +17,11 @@ public class CodeineProject {
 	public String name() {
 		return name;
 	}
+
+	@Override
+	public String toString() {
+		return "CodeineProject [name=" + name + ", nodes_count=" + nodes_count + "]";
+	}
 	
 	
 }
