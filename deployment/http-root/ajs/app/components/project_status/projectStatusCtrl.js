@@ -4,7 +4,13 @@
     //// JavaScript Code  ////
     function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams,ProjectsRepository) {
         $scope.projectName = $scope.projectConfiguration.name;
+        if ($location.path() === '/codeine/nodes/status') {
+            $scope.projectName = Constants.CODEINE_NODES_PROJECT_NAME;
+        }
         $scope.tabName = $routeParams.tab_name;
+        if (typeof $scope.tabName === 'undefined') {
+            $scope.tabName = 'main';
+        }
         $scope.allNodesCount = 0;
         //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
         //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
