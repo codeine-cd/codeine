@@ -96,6 +96,9 @@ public class NodeGetter {
 	private Map<String, CollectorExecutionInfo> allCollectorsForInternalProject(PeerStatusJsonV2 peerStatusJsonV2) {
 		Map<String, CollectorExecutionInfo> $ = Maps.newHashMap();
 		for (Entry<String, ProjectStatus> projName2Status : peerStatusJsonV2.project_name_to_status().entrySet()) {
+			if (projName2Status.getKey().equals(Constants.CODEINE_NODES_PROJECT_NAME)) {
+				continue;
+			}
 			for (NodeWithMonitorsInfo nodeInfo : projName2Status.getValue().nodes_info()) {
 				for (Entry<String, CollectorExecutionInfo> colName2Info : nodeInfo.collectors().entrySet()) {
 					CollectorExecutionInfo c = colName2Info.getValue();
