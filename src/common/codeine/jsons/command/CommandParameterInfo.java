@@ -31,4 +31,7 @@ public class CommandParameterInfo {
 			value = "XXXXX";
 		}
 	}
+	public void value(String value) {
+		this.value = value;
+	}
 }
