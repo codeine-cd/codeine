@@ -55,6 +55,9 @@ public class NodesCommandExecuterProvider {
 				continue;
 			}
 			String file = parentDir + "/" + dir + Constants.JSON_COMMAND_FILE_NAME;
+			if (!FilesUtils.exists(file)) {
+				continue;
+			}
 			try {
 				CommandExecutionStatusInfo j = JsonUtils.fromJsonFromFile(file, CommandExecutionStatusInfo.class); 
 				if (!shouldShowByNode(j, nodeName)){
