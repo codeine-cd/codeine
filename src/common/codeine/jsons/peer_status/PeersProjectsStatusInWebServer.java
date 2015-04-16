@@ -43,7 +43,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 			if (!connectorsMap.containsKey(connector.server())) {
 				log.info("start fetching data from " + connector.server());
 				PeersProjectsStatusInWebServerConnectorWorker w = new PeersProjectsStatusInWebServerConnectorWorker(connector);
-				PeriodicExecuter e = new PeriodicExecuter(WORKER_SLEEP_TIME, w);
+				PeriodicExecuter e = new PeriodicExecuter(WORKER_SLEEP_TIME, w, "PeersStatusWorker-" + connector.server());
 				e.runInThread();
 				connectorsMap.put(connector.server(), e);
 			}
@@ -68,7 +68,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 			for (Entry<String, PeerStatusJsonV2> e : peersStatus.entrySet()) {
 				if (!cache.asMap().containsKey(e.getKey())) {
 					cache.put(e.getKey(), e.getValue());
-				} else { // more than one
+				} else { // more than one/already in cache
 					log.debug("peer appears in more than one database " + e.getKey());
 					if (isNewer(e.getValue(), cache.asMap().get(e.getKey()))) {
 						cache.put(e.getKey(), e.getValue());
@@ -81,10 +81,10 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 
 	private boolean isNewer(PeerStatusJsonV2 newOne, PeerStatusJsonV2 oldOne) {
 		if (newOne.update_time_from_peer() == 0) {
-			log.warn("peer new do not have update time " + newOne);
+			log.debug("peer new do not have update time " + newOne);
 		}
 		if (oldOne.update_time_from_peer() == 0) {
-			log.warn("peer old do not have update time " + oldOne);
+			log.debug("peer old do not have update time " + oldOne);
 		}
 		if (newOne.update_time_from_peer() > 0 || oldOne.update_time_from_peer() > 0) {
 			return newOne.update_time_from_peer() > oldOne.update_time_from_peer();
