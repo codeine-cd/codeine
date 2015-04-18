@@ -45,7 +45,7 @@ public class DiscardOldCommandsPlugin {
 	private void deleteCommands(List<CommandExecutionStatusInfo> commandsToDelete) {
 		for (CommandExecutionStatusInfo commandExecutionStatusInfo : commandsToDelete) {
 			String commandOutputDir = pathHelper.getCommandOutputDir(commandExecutionStatusInfo.project_name(), String.valueOf(commandExecutionStatusInfo.id()));
-			log.info("deleteCommands - deleting " + commandExecutionStatusInfo);
+			log.info("deleteCommands - deleting " + commandExecutionStatusInfo + " dir is " + commandOutputDir);
 			try {
 				FilesUtils.delete(commandOutputDir);
 			} catch (Exception e) {
@@ -59,7 +59,12 @@ public class DiscardOldCommandsPlugin {
 		for (File command : commands) {
 			String commandOutputInfoFile = pathHelper.getCommandOutputInfoFile(projectName, command.getName());
 			try {
-				$.add(JsonUtils.fromJsonFromFile(commandOutputInfoFile, CommandExecutionStatusInfo.class));
+				if (FilesUtils.exists(commandOutputInfoFile)) {
+					$.add(JsonUtils.fromJsonFromFile(commandOutputInfoFile, CommandExecutionStatusInfo.class));
+				}
+				else {
+					log.debug("json file not exist " + commandOutputInfoFile);
+				}
 			} catch (Exception e) {
 				log.warn("failed to read " + commandOutputInfoFile);
 			}
