@@ -274,7 +274,7 @@
             $scope.refreshStatusPromise = ProjectsRepository.getProject($scope.projectConfiguration.name, [ 'status' ], true)
                 .then(function() {
                     syncWithImmutableProject();
-                })
+                });
         };
 
         var syncWithImmutableProject = function () {
