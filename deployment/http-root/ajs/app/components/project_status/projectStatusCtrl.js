@@ -3,47 +3,61 @@
 
     //// JavaScript Code  ////
     function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams,ProjectsRepository) {
+
+        $scope.allNodesCount = 0;
+        $scope.maxNodeAliasLengthForSmallCol = 30;
+        $scope.maxNodeAliasLength = 0;
+        $scope.maxNodesToShow = 2;
+        $scope.projectStatus.nodes_for_version = [];
+        $scope.versionIsOpen = [];
+
         $scope.projectName = $scope.projectConfiguration.name;
+        $scope.tabName = $routeParams.tab_name;
+
         if ($location.path() === '/codeine/nodes/status') {
             $scope.projectName = Constants.CODEINE_NODES_PROJECT_NAME;
         }
-        $scope.tabName = $routeParams.tab_name;
+
         if (typeof $scope.tabName === 'undefined') {
             $scope.tabName = 'main';
         }
-        $scope.allNodesCount = 0;
+
         //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
         //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
-        //$scope.projectStatus = {};
-        $scope.projectStatus.nodes_for_version = [];
-        $scope.maxNodeAliasLengthForSmallCol = 30;
-        $scope.maxNodeAliasLength = 0;
-        for (var i12=0 ; i12 < $scope.projectStatusImmutable.nodes_for_version.length; i12++) {
-            var nodeForVersion = {nodes:[],immutable:$scope.projectStatusImmutable.nodes_for_version[i12]};
-            $scope.projectStatus.nodes_for_version.push(nodeForVersion);
-            for (var j12=0 ; j12 < $scope.projectStatusImmutable.nodes_for_version[i12].nodes.length; j12++) {
-                nodeForVersion.nodes.push({immutable:$scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12]});
-                if ($scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12].alias.length > $scope.maxNodeAliasLength) {
-                    $scope.maxNodeAliasLength = $scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12].alias.length;
-                }
+        // Returns true if the node should be in the filtered array (Displayed)
+        var isNodeFiltered = function(node) {
+            return $filter('nodeFilter')(node.immutable,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
+        };
+
+        var moveNodeToVisible = function(versionItem,node) {
+            node.visible = true;
+            if (!versionItem.visibleNodes) {
+                versionItem.visibleNodes = [];
             }
-        }
-        $scope.maxNodesToShow = 2;
-        $scope.versionIsOpen = [];
-        for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
-            $scope.versionIsOpen[i] = true;
-        }
+            versionItem.visibleNodes.push(node);
+        };
+
+        var unRegisterFunction = $rootScope.$on(Constants.EVENTS.BREADCRUMB_CLICKED, function () {
+            $scope.clearFilters();
+        });
+
+        var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
+            $scope.refreshFilters();
+        });
+
         $scope.collapseAll = function() {
             for (var i=0 ; i < $scope.versionIsOpen.length; i++) {
                 $scope.versionIsOpen[i] = false;
             }
         };
+
         $scope.expandAll = function() {
             for (var i=0 ; i < $scope.versionIsOpen.length; i++) {
                 $scope.versionIsOpen[i] = true;
             }
         };
+
         $scope.shouldShowClearFilters = function() {
             var search = $location.search();
             var noTagsOn = ((!angular.isDefined(search.tagsOn) || search.tagsOn.length === 0));
@@ -66,8 +80,6 @@
             $scope.refreshFilters();
         };
 
-        $scope.initValues();
-
         $scope.initFromQueryString = function() {
             var queryStringObject = $location.search();
             var shouldRefresh = false;
@@ -84,35 +96,6 @@
             }
             return shouldRefresh;
         };
-
-        var tagsChangedHandler = $rootScope.$on(Constants.EVENTS.TAGS_CHANGED, function() {
-            $scope.refreshFilters();
-        });
-
-        // Returns true if the node should be in the filtered array (Displayed)
-        var isNodeFiltered = function(node) {
-            return $filter('nodeFilter')(node.immutable,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
-        };
-
-        var moveNodeToVisible = function(versionItem,node) {
-            node.visible = true;
-            if (!versionItem.visibleNodes) {
-                versionItem.visibleNodes = [];
-            }
-            versionItem.visibleNodes.push(node);
-        };
-
-        for (var i1=0 ; i1 < $scope.projectStatus.nodes_for_version.length; i1++) {
-            $scope.projectStatus.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
-            var maxNodesToShowHere = $scope.maxNodesToShow;
-            if (maxNodesToShowHere > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatusImmutable.more_nodes_enabled) {
-                maxNodesToShowHere = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
-            }
-            for (var j=0; j < maxNodesToShowHere; j++) {
-                moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatus.nodes_for_version[i1].filteredNodes[j]);
-            }
-            $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
-        }
 
         $scope.$watch("selectedMonitor",function( newName, oldName ) {
                 if ( newName === oldName ) {
@@ -141,6 +124,7 @@
                 return true;
             }
         };
+
         $scope.refreshFilters = function() {
             $log.debug("refreshFilters");
             var count = 0;
@@ -162,10 +146,6 @@
             }
             $scope.allNodesCount = count;
         };
-
-        if ($scope.initFromQueryString()) {
-            $scope.refreshFilters();
-        }
 
         $scope.loadMoreNodes = function(index) {
             var j = 0;
@@ -207,6 +187,7 @@
             }
             return count;
         };
+
         $scope.checkboxClick = function(versionItem, event) {
             event.stopPropagation();
             angular.forEach(versionItem.filteredNodes, function(item) {
@@ -282,9 +263,6 @@
         $scope.isNodeDisabled = function(node){
             return !node.immutable.user_can_command;
         };
-        var unRegisterFunction = $rootScope.$on(Constants.EVENTS.BREADCRUMB_CLICKED, function () {
-            $scope.clearFilters();
-        });
 
         $scope.$on('$destroy',function() {
             $location.search({});
@@ -293,10 +271,55 @@
         });
 
         $scope.refreshProjectStatus = function() {
-            $scope.refreshStatusPromise = ProjectsRepository.getProject($scope.projectConfiguration.name, [ 'status' ], true);
+            $scope.refreshStatusPromise = ProjectsRepository.getProject($scope.projectConfiguration.name, [ 'status' ], true)
+                .then(function() {
+                    syncWithImmutableProject();
+                })
         };
-    }
 
+        var syncWithImmutableProject = function () {
+
+            var tempVersionIsOpen = $scope.versionIsOpen;
+
+            $scope.projectStatus.nodes_for_version = [];
+            $scope.versionIsOpen = [];
+
+            for (var i12=0 ; i12 < $scope.projectStatusImmutable.nodes_for_version.length; i12++) {
+                var nodeForVersion = {nodes:[],immutable:$scope.projectStatusImmutable.nodes_for_version[i12]};
+                $scope.projectStatus.nodes_for_version.push(nodeForVersion);
+                for (var j12=0 ; j12 < $scope.projectStatusImmutable.nodes_for_version[i12].nodes.length; j12++) {
+                    nodeForVersion.nodes.push({immutable:$scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12]});
+                    if ($scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12].alias.length > $scope.maxNodeAliasLength) {
+                        $scope.maxNodeAliasLength = $scope.projectStatusImmutable.nodes_for_version[i12].nodes[j12].alias.length;
+                    }
+                }
+            }
+
+            for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
+                $scope.versionIsOpen[i] = tempVersionIsOpen.length > i ? tempVersionIsOpen[i] : true;
+            }
+
+            for (var i1=0 ; i1 < $scope.projectStatus.nodes_for_version.length; i1++) {
+                $scope.projectStatus.nodes_for_version[i1].filteredNodes = $scope.projectStatus.nodes_for_version[i1].nodes.slice();
+                var maxNodesToShowHere = $scope.maxNodesToShow;
+                if (maxNodesToShowHere > $scope.projectStatus.nodes_for_version[i1].filteredNodes.length || !$scope.projectStatusImmutable.more_nodes_enabled) {
+                    maxNodesToShowHere = $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
+                }
+                for (var j=0; j < maxNodesToShowHere; j++) {
+                    moveNodeToVisible($scope.projectStatus.nodes_for_version[i1],$scope.projectStatus.nodes_for_version[i1].filteredNodes[j]);
+                }
+                $scope.allNodesCount += $scope.projectStatus.nodes_for_version[i1].filteredNodes.length;
+            }
+        };
+
+        $scope.initValues();
+
+        syncWithImmutableProject();
+
+        if ($scope.initFromQueryString()) {
+            $scope.refreshFilters();
+        }
+    }
 
     //// Angular Code ////
     angular.module('codeine').controller('projectStatusCtrl', projectStatusCtrl);
