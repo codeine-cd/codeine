@@ -46,7 +46,8 @@ public class NodesManagerPeer implements NodesManager {
 			List<NodeInfo> nodes = projectJson.nodes_info();
 			NodeListJson nodes2 = new NodeListJson();
 			for (NodeInfo nodeJson : nodes) {
-				if (InetUtils.nameWithoutPort(nodeJson.name()).equalsIgnoreCase(InetUtils.getLocalHost().getHostName())){
+				String configuredHostName = InetUtils.nameWithoutPort(nodeJson.name());
+				if (isLocalHostNameMatch(configuredHostName)){
 					nodes2.add(nodeJson);
 				}
 			}
@@ -67,6 +68,10 @@ public class NodesManagerPeer implements NodesManager {
 		default:
 			throw new UnsupportedOperationException("for value " + projectJson.node_discovery_startegy());
 		}
+	}
+	private boolean isLocalHostNameMatch(String configuredHostName) {
+		return configuredHostName.equalsIgnoreCase(InetUtils.getLocalHost().getHostName())
+				|| configuredHostName.equalsIgnoreCase(InetUtils.getLocalHost().getCanonicalHostName());
 	}
 
 }
