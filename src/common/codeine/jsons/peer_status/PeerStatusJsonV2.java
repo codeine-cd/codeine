@@ -34,7 +34,6 @@ public class PeerStatusJsonV2 {
 	private PeerType peer_type;
 	private transient PeerStatusString status;
 	
-	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip, String user_dns_domain) {
 		super();
 		this.host = host;
 		this.port = port;
@@ -87,11 +86,21 @@ public class PeerStatusJsonV2 {
 	public String host_port() {
 		return host + ":" + port;
 	}
+	public String canonical_host_port() {
+		return canonical_host + ":" + port;
+	}
 	public String ip_port() {
 		return peer_ip + ":" + port;
 	}
+
 	public String address_port() {
-		return StringUtils.isEmpty(user_dns_domain) ? host_port() : host + "." + user_dns_domain + ":" + port;
+		if (!StringUtils.isEmpty(user_dns_domain)) {
+			return host + "." + user_dns_domain + ":" + port;
+		} else if (!StringUtils.isEmpty(canonical_host)) {
+			return canonical_host_port();
+		} else {
+			return host_port();
+		}
 	}
 
 	public long update_time() {
