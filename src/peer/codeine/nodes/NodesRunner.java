@@ -1,5 +1,6 @@
 package codeine.nodes;
 
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,6 +27,7 @@ import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
 import codeine.mail.NotificationDeliverToDatabase;
 import codeine.model.Constants;
+import codeine.utils.network.InetUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -51,6 +53,8 @@ public class NodesRunner implements Task{
 	
 	@Override
 	public synchronized void run() {
+		InetAddress localHost = InetUtils.getLocalHost();
+		log.info("NodeRunner is starting on host " + localHost.getHostName() + " " + localHost.getCanonicalHostName());
 		log.info("NodeRunner is starting " + this + " with executers " + executers);
 		Set<String> removedProjects = Sets.newHashSet(executers.keySet());
 		for (ProjectJson project : getProjects()) {

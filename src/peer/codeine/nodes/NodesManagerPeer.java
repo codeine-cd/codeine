@@ -1,5 +1,6 @@
 package codeine.nodes;
 
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 
@@ -70,8 +71,9 @@ public class NodesManagerPeer implements NodesManager {
 		}
 	}
 	private boolean isLocalHostNameMatch(String configuredHostName) {
-		return configuredHostName.equalsIgnoreCase(InetUtils.getLocalHost().getHostName())
-				|| configuredHostName.equalsIgnoreCase(InetUtils.getLocalHost().getCanonicalHostName());
+		InetAddress localHost = InetUtils.getLocalHost();
+		return configuredHostName.equalsIgnoreCase(localHost.getHostName())
+				|| configuredHostName.equalsIgnoreCase(localHost.getCanonicalHostName());
 	}
 
 }
