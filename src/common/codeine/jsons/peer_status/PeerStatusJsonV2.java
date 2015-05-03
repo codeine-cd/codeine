@@ -24,6 +24,7 @@ public class PeerStatusJsonV2 {
 	private String user_dns_domain;
 	private Map<String, ProjectStatus> project_name_to_status = Maps.newHashMap();//Lists.newArrayList();
 	private String host;
+	private String canonical_host; //TODO introduced in codeine 1202, can be used after cfengine is in that build
 	private int port;
 	private String version;
 	private String tar;
@@ -34,8 +35,10 @@ public class PeerStatusJsonV2 {
 	private PeerType peer_type;
 	private transient PeerStatusString status;
 	
+	public PeerStatusJsonV2(String host, int port, String version, long start_time, String install_dir, String tar, Map<String, ProjectStatus> project_name_to_status, String peer_ip, String user_dns_domain, String canonical_host) {
 		super();
 		this.host = host;
+		this.canonical_host = canonical_host;
 		this.port = port;
 		this.peer_ip = peer_ip;
 		this.version = version;
