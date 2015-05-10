@@ -50,7 +50,7 @@ function Expand-ZipFile()
 	
 	Write-Log "Extracting..."
 	
-	$cmd = ($ZipExec + " x " + $File + " -o" + $Destination + " -y")
+	$cmd = ('$ZipExec' + " x " + $File + " -o" + $Destination + " -y")
 	
 	Write-Host ("Exec " + $cmd)
 	
