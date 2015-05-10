@@ -13,6 +13,7 @@ import codeine.servlets.api_servlets.CommandExecutorApiServlet;
 import codeine.servlets.api_servlets.CommandHistoryApiServlet;
 import codeine.servlets.api_servlets.MonitorsStatisticsApiServlet;
 import codeine.servlets.api_servlets.NodesCommandApiServlet;
+import codeine.servlets.api_servlets.NodesCsvApiServlet;
 import codeine.servlets.api_servlets.PrepareForShutdownApiServlet;
 import codeine.servlets.api_servlets.ProjectStatusApiServlet;
 import codeine.servlets.api_servlets.ProjectTagsApiServlet;
@@ -59,6 +60,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveApi(ProjectTagsApiServlet.class, (Constants.PROJECT_TAGS_CONTEXT));
 		serveApi(ProjectsListApiServlet.class, (Constants.PROJECTS_LIST_CONTEXT));
 		serveApi(NodesCommandApiServlet.class, (Constants.COMMAND_NODES_CONTEXT));
+		serveApi(NodesCsvApiServlet.class, (Constants.PROJECT_NODES_CSV_CONTEXT));
 		serveApi(CodeineConfigurationApiServlet.class, (Constants.GLOBAL_CONFIGURATION_CONTEXT));
 		serveApi(UpdateDbApiServlet.class, (Constants.PUSH_PROJECTS_TO_DB_CONTEXT));
 		serveApi(CodeineExperimentalConfigurationApiServlet.class, (Constants.EXPERIMENTAL_CONFIGURATION_CONTEXT));
