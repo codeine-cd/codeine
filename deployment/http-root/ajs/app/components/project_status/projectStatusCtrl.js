@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code  ////
-    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams,ProjectsRepository) {
+    function projectStatusCtrl($scope,$rootScope,$log,$filter,$location,SelectedNodesService,Constants,AlertService,$routeParams,ProjectsRepository,CodeineService) {
 
         $scope.allNodesCount = 0;
         $scope.maxNodeAliasLengthForSmallCol = 30;
@@ -252,6 +252,19 @@
             $scope.refreshStatusPromise = ProjectsRepository.getProject($scope.projectConfiguration.name, [ 'status' ], true)
                 .then(function() {
                     syncWithImmutableProject();
+                });
+        };
+
+        $scope.downloadNodes = function() {
+            CodeineService.getNodesCsv($scope.projectName).
+                success(function(data) {
+                    var element = angular.element('<a/>');
+                    element.attr({
+                        href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+                        target: '_blank',
+                        download: 'nodes.'+$scope.projectName+'.csv'
+                    })[0].click();
+
                 });
         };
 
