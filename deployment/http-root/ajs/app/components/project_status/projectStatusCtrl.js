@@ -22,6 +22,8 @@
             $scope.tabName = 'main';
         }
 
+        $scope.csvUrl = CodeineService.getCsvUrl($scope.projectName);
+
         //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
         //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
@@ -252,19 +254,6 @@
             $scope.refreshStatusPromise = ProjectsRepository.getProject($scope.projectConfiguration.name, [ 'status' ], true)
                 .then(function() {
                     syncWithImmutableProject();
-                });
-        };
-
-        $scope.downloadNodes = function() {
-            CodeineService.getNodesCsv($scope.projectName).
-                success(function(data) {
-                    var element = angular.element('<a/>');
-                    element.attr({
-                        href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
-                        target: '_blank',
-                        download: 'nodes.'+$scope.projectName+'.csv'
-                    })[0].click();
-
                 });
         };
 

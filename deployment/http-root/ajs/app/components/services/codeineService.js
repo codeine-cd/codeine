@@ -114,8 +114,8 @@
             getUserInfo : function() {
                 return $http.get(Constants.CODEINE_WEB_SERVER + getApiPrefix() + "/user-info", { cache: false });
             },
-            getNodesCsv : function(project) {
-                return $http.get(Constants.CODEINE_WEB_SERVER + getApiPrefix() + "/csv-nodes", {params: { project: project } ,cache: false });
+            getCsvUrl : function(project) {
+                return Constants.CODEINE_WEB_SERVER + getApiPrefix() + "/csv-nodes?project=" + encodeURI(project);
             },
             getProjectNodesAliases : function(project) {
                 return $http.get(Constants.CODEINE_WEB_SERVER + getApiPrefix() + "/project-nodes-aliases", {params: { project: project } ,cache: false });

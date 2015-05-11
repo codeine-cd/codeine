@@ -32,6 +32,7 @@ public class NodesCsvApiServlet extends AbstractApiServlet {
 		String project = getProjectName(request);
 		List<NodeWithMonitorsInfo> nodes = nodeGetter.getNodes(project);
 		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename=nodes." + project + ".csv");
 		PrintWriter writer = getWriter(response);
 		writer.println("name,alias");
 		for (NodeWithMonitorsInfo n : nodes) {

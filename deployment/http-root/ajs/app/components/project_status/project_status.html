@@ -16,7 +16,7 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <button ng-click="refreshProjectStatus()" tooltip="refresh" class="btn btn-default navbar-btn navbar-left"><i class="fa fa-refresh"></i></button>
-                <button ng-click="downloadNodes()" tooltip="download nodes list in csv format" class="btn btn-default navbar-btn navbar-left"><i class="fa fa-cloud-download"></i></button>
+                <a target="_blank" ng-href="{{::csvUrl}}" tooltip="download nodes list in csv format" class="btn btn-default navbar-btn navbar-left"><i class="fa fa-cloud-download"></i></a>
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
                         <input type="text" ng-model="nodesFilter" class="form-control search-query" placeholder="Filter Nodes">
