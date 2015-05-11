@@ -29,8 +29,8 @@ public class NotificationsFetchAndUpdateTask implements Task {
 	private AggregateMailPrepare mailPrepare;
 	private MailStrategy mailsStrategy;
 	private CollectionTypeGetter collectionTypeGetter;
-	private List<AlertsMysqlConnector> alertsConnectors;
-	private List<NotificationsMysqlConnector> notificationsConnectors;
+	private AlertsMysqlConnectorDatabaseConnectorListProvider alertsConnectors;
+	private NotificationsMysqlConnectorDatabaseConnectorListProvider notificationsConnectors;
 	private ExperimentalConfJsonStore webConfJsonStore;
 
 	
@@ -45,8 +45,8 @@ public class NotificationsFetchAndUpdateTask implements Task {
 		this.mailPrepare = mailPrepare;
 		this.mailsStrategy = mailsStrategy;
 		this.collectionTypeGetter = collectionTypeGetter;
-		this.alertsConnectors = alertsMysqlConnectorDatabaseConnectorListProvider.get();
-		this.notificationsConnectors = notificationsMysqlConnectorDatabaseConnectorListProvider.get();
+		this.alertsConnectors = alertsMysqlConnectorDatabaseConnectorListProvider;
+		this.notificationsConnectors = notificationsMysqlConnectorDatabaseConnectorListProvider;
 		this.webConfJsonStore = webConfJsonStore;
 	}
 
@@ -58,10 +58,10 @@ public class NotificationsFetchAndUpdateTask implements Task {
 			workOnCollectionType(alertsCollectionType);
 		}
 		if (collType.contains(AlertsCollectionType.Daily)){
-			for (AlertsMysqlConnector c : alertsConnectors) {
+			for (AlertsMysqlConnector c : alertsConnectors.get()) {
 				c.removeOldAlerts();
 			}
-			for (NotificationsMysqlConnector c : notificationsConnectors) {
+			for (NotificationsMysqlConnector c : notificationsConnectors.get()) {
 				c.removeOldAlerts();
 			}
 		}
@@ -69,7 +69,7 @@ public class NotificationsFetchAndUpdateTask implements Task {
 
 	private void workOnCollectionType(AlertsCollectionType alertsCollectionType) {
 		Multimap<String, CollectorNotificationJson> allItems = HashMultimap.create();
-		for (AlertsMysqlConnector c : alertsConnectors) {
+		for (AlertsMysqlConnector c : alertsConnectors.get()) {
 			try {
 				log.info("fetching from " + c);
 				allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
@@ -77,7 +77,7 @@ public class NotificationsFetchAndUpdateTask implements Task {
 				log.info("error fetching alerts from db " + c, e);
 			}
 		}
-		for (NotificationsMysqlConnector c : notificationsConnectors) {
+		for (NotificationsMysqlConnector c : notificationsConnectors.get()) {
 			try {
 				log.debug("fetching from " + c);
 				allItems.putAll(c.getAlertsAndUpdate(alertsCollectionType));
