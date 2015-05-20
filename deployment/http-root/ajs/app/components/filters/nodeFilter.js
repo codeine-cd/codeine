@@ -23,7 +23,8 @@
             return collectors.indexOf(selectedMonitor) !== -1;
         };
 
-        var showByTags = function(tags,nodeTags) {
+        var showByTags = function(tags, nodeTags, tagsMode) {
+            var mode = tagsMode || '||';
             var noTagsSelected = true;
             for (var i=0; i < tags.length ; i++) {
                 if (!tags[i].state) {
@@ -32,22 +33,23 @@
                 noTagsSelected = false;
                 if (tags[i].state === 1) {
                     if (nodeTags.indexOf(tags[i].immutable.name) !== -1) {
-                        return true;
+                        if (mode === '||') {
+                            return true;
+                        }
+                        noTagsSelected = true;
+                    }
+                    else if (mode === '&&') {
+                        return false;
                     }
                 }
-                //else {
-                //    if (nodeTags.indexOf(tags[i].name) !== -1) {
-                //        return false;
-                //    }
-                //}
             }
             return noTagsSelected;
         };
 
-        return function(node, query, monitor, tags) {
+        return function(node, query, monitor, tags, filterMode) {
             return (showByName(query, node.alias) &&
             (showByCollectors(monitor, node.failed_collectors)) &&
-            showByTags(tags,node.tags));
+            showByTags(tags,node.tags, filterMode));
         };
     }
 

@@ -28,8 +28,9 @@
         //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
 
         // Returns true if the node should be in the filtered array (Displayed)
-        var isNodeFiltered = function(node) {
-            return $filter('nodeFilter')(node.immutable,$scope.nodesFilter,$scope.selectedMonitor,$scope.projectStatus.tag_info);
+        var isNodeFiltered = function(node, filterMode) {
+            return $filter('nodeFilter')(node.immutable, $scope.nodesFilter,
+                $scope.selectedMonitor, $scope.projectStatus.tag_info, filterMode);
         };
 
         var moveNodeToVisible = function(versionItem,node) {
@@ -63,9 +64,7 @@
         $scope.shouldShowClearFilters = function() {
             var search = $location.search();
             var noTagsOn = ((!angular.isDefined(search.tagsOn) || search.tagsOn.length === 0));
-            var noTagsOff = ((!angular.isDefined(search.tagsOff) || search.tagsOff.length === 0));
-            var noTags = noTagsOn && noTagsOff;
-            return !(($scope.selectedMonitor === 'All Nodes') && ($scope.nodesFilter === '') && (noTags));
+            return !(($scope.selectedMonitor === 'All Nodes') && ($scope.nodesFilter === '') && (noTagsOn));
         };
 
         $scope.initValues = function() {
@@ -91,9 +90,6 @@
                 $scope.selectedMonitor = queryStringObject.monitorFilter;
             }
             if (angular.isDefined(queryStringObject.tagsOn)) {
-                shouldRefresh = true;
-            }
-            if (angular.isDefined(queryStringObject.tagsOff)) {
                 shouldRefresh = true;
             }
             return shouldRefresh;
@@ -296,12 +292,13 @@
         $scope.refreshFilters = function() {
             $log.debug("refreshFilters");
             var count = 0;
+            var filterMode = $location.search().filterMode;
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
                 $scope.projectStatus.nodes_for_version[i].filteredNodes.splice(0,$scope.projectStatus.nodes_for_version[i].filteredNodes.length);
                 $scope.projectStatus.nodes_for_version[i].visibleNodes.splice(0,$scope.projectStatus.nodes_for_version[i].visibleNodes.length);
                 for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].nodes.length; j++) {
                     $scope.projectStatus.nodes_for_version[i].nodes[j].visible = false;
-                    if (isNodeFiltered($scope.projectStatus.nodes_for_version[i].nodes[j])) {
+                    if (isNodeFiltered($scope.projectStatus.nodes_for_version[i].nodes[j], filterMode)) {
                         $scope.projectStatus.nodes_for_version[i].filteredNodes.push($scope.projectStatus.nodes_for_version[i].nodes[j]);
                         count++;
                     }

@@ -2,10 +2,19 @@
     'use strict';
 
     //// JavaScript Code ////
-    function tagsFilterCtrl($scope,$rootScope,Constants,$location) {
+    function tagsFilterCtrl($scope, $rootScope, Constants, $location, $log) {
         /*jshint validthis:true */
         var vm = this;
         vm.maxTags = 10;
+        vm.filterMode = $location.search().filterMode || '||';
+
+        var unbind = $scope.$watch('vm.filterMode', function(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                $log.debug('vm.filterMode: ' + vm.filterMode);
+                $location.search('filterMode', newVal);
+                $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
+            }
+        });
 
         function setTagState(name,stateVal) {
             for (var f=0; f < $scope.projectStatus.tag_info.length ; f++) {
@@ -28,36 +37,22 @@
                     setTagState(array[i],1);
                 }
             }
-            if (angular.isDefined(queryStringObject.tagsOff)) {
-                shouldRefresh = true;
-                var array2 = queryStringObject.tagsOff.split(',');
-                for (var i1=0; i1 < array2.length; i1++) {
-                    setTagState(array2[i1],2);
-                }
-            }
             return shouldRefresh;
         };
 
         vm.initTagsFromQueryString();
 
         vm.updateTags = function() {
-            var on = [], off = [];
+            var on = [];
             for (var i=0; i < $scope.projectStatus.tag_info.length ; i++) {
                 if ($scope.projectStatus.tag_info[i].state === 1) {
                     on.push($scope.projectStatus.tag_info[i].immutable.name);
-                } else if ($scope.projectStatus.tag_info[i].state === 2) {
-                    off.push($scope.projectStatus.tag_info[i].immutable.name);
                 }
             }
             if (on.length > 0) {
                 $location.search('tagsOn', on.join(','));
             } else {
-                $location.search('tagsOn', null);
-            }
-            if (off.length > 0) {
-                $location.search('tagsOff', off.join(','));
-            } else {
-                $location.search('tagsOff', null);
+                $location.search('tagsOn', undefined);
             }
             $rootScope.$emit(Constants.EVENTS.TAGS_CHANGED);
         };
@@ -76,6 +71,8 @@
             }
             vm.updateTags();
         };
+
+        $scope.$on('$destroy', unbind);
     }
 
 
