@@ -4,7 +4,7 @@
     </div>
     <div class="list-group">
         <a class="list-group-item" ng-hide="vm.history.length" ng-cloak><div class="text-center">No commands</div></a>
-        <a ng-href="/codeine/view/{{::vm.tabName}}/project/{{::item.project}}/command/{{::item.name}}/{{::item.id}}/status" command-item command-data="item" ng-repeat="item in vm.history | limitTo:vm.limit " class="list-group-item"
+        <a ng-href="/codeine/view/{{::vm.tabName}}/project/{{::item.project}}/command/{{::item.name}}/{{::item.id}}/status" command-item command-data="item" ng-repeat="item in vm.history track by item.id | limitTo:vm.limit " class="list-group-item"
            style="padding-top: 2px;padding-bottom: 4px"></a>
         <list-group-more-item items="vm.history" max-items="vm.limit"></list-group-more-item>
     </div>

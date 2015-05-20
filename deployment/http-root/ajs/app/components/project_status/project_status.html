@@ -26,7 +26,7 @@
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href class="dropdown-toggle" dropdown-toggle>{{selectedMonitor}} <b class="caret"></b> <help help-id="monitorHelp"></help></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="collectorCount in projectStatusImmutable.collectors_count">
+                            <li ng-repeat="collectorCount in projectStatusImmutable.collectors_count track by collectorCount.name">
                                 <a ng-click="selectMonitor(collectorCount.name)">{{::collectorCount.name}} <span class="badge pull-right">{{::collectorCount.count}}</span></a>
                             </li>
                             <li class="divider"></li>
@@ -43,7 +43,7 @@
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href class="dropdown-toggle" dropdown-toggle><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="command in commands"  ng-class=" {disabled : !isAnyNodeChecked() }">
+                            <li ng-repeat="command in commands track by command.name"  ng-class=" {disabled : !isAnyNodeChecked() }">
                                 <a ng-click="runCommand(command.name)">{{::command.name}}</a>
                             </li>
                         </ul>
@@ -77,7 +77,7 @@
         <div class="row">
             <div class="col-md-12">
                 <accordion close-others="false">
-                    <div ng-repeat="versionItem in projectStatus.nodes_for_version" ng-show="versionItem.visibleNodes.length > 0" class="accordion-hover-shade">
+                    <div ng-repeat="versionItem in projectStatus.nodes_for_version track by versionItem.immutable.version" ng-show="versionItem.visibleNodes.length > 0" class="accordion-hover-shade">
                         <accordion-group is-open="versionIsOpen[$index]">
                             <accordion-heading>
                                 <div class="row">
@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </accordion-heading>
-                            <div class="row" ng-repeat="node in versionItem.visibleNodes | orderBy:'alias'">
+                            <div class="row" ng-repeat="node in versionItem.visibleNodes track by node.immutable.alias | orderBy:'alias'">
                                 <div ng-class="{'col-md-3': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-5': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" class="fade_me" tooltip="{{::((node.immutable.alias.length > (maxNodeAliasLengthForSmallCol-5) && node.immutable.alias.length <= maxNodeAliasLengthForSmallCol) || node.immutable.alias.length > 40 ) ? node.immutable.alias : ''}}" tooltip-placement="right" tooltip-popup-delay="500">
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">
@@ -119,7 +119,7 @@
                                         <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.immutable.peer_status !== 'On' , success: node.immutable.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.immutable.collectors_info)"></i>
                                     </a>
                                     <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
-                                <span ng-repeat="collector_info in node.immutable.collectors_info" style="display:inline-block">
+                                <span ng-repeat="collector_info in node.immutable.collectors_info track by collector_info.name" style="display:inline-block">
                                     <a tooltip="{{::collector_info.exit_status !== 0 ? '' : collector_info.name}}"
                                        ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/collector/{{::collector_info.name}}/status"
                                        class="label" ng-class="{'label-warning': node.immutable.peer_status === 'Disc' , 'label-danger': node.immutable.peer_status === 'On' && collector_info.exit_status !== 0, 'label-default': node.immutable.peer_status === 'On' && collector_info.exit_status === 0}">{{::collector_info.exit_status === 0 ? collector_info.value : collector_info.name}}</a>&nbsp;</span>
