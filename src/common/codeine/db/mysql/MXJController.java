@@ -1,13 +1,13 @@
 package codeine.db.mysql;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 
 public class MXJController
@@ -112,7 +112,8 @@ public class MXJController
 		options.put("innodb_buffer_pool_size", String.valueOf(512L * 1024 * 1024));
 		options.put("tmp_table_size", TMP_TABLE_SIZE);
 		options.put("max_heap_table_size", MAX_HEAP_TABLE_SIZE);
-		
+        options.put("skip-name-resolve", "true");
+
 		if (LOW_PRIORITY_UPDATES)
 		{
 			options.put("low_priority_updates", "true");
