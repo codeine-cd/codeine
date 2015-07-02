@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 
     var appConfig = {
         // configurable paths
-        app: require('./bower.json').appPath || 'app',
+        app : 'app',
         dist: 'dist'
     };
 
@@ -233,7 +233,7 @@ module.exports = function (grunt) {
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
             html: ['<%= yeoman.dist %>/**/*.html'],
-            css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
+            css: ['<%= yeoman.dist %>/styles/*.css'],
             js: ['<%= yeoman.dist %>/scripts/scripts.*.js',
                 '<%= yeoman.dist %>/components/**/*.html',
                 '<%= yeoman.dist %>/index.html'],
@@ -243,20 +243,10 @@ module.exports = function (grunt) {
                     js: [
                         [/["']([^:"']+\.(?:html))["']/img, 'Update the JS to reference our revved htmls'],
                         [/[\\']([^:"']+\.(?:html))[\\']/img, 'Update the JS to reference our revved htmls'],
-                        [/(\/images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images'],
-                        [/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']
+                        [/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images'],
+                        [/(\/images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']
                     ]
                 }
-            }
-        },
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/images',
-                    src: '**/{,*/}*.{png,jpg,jpeg,gif}',
-                    dest: '<%= yeoman.dist %>/images'
-                }]
             }
         },
         svgmin: {
@@ -290,7 +280,7 @@ module.exports = function (grunt) {
         ngtemplates: {
             dist: {
                 options: {
-                    module: 'app',
+                    module: 'codeine',
                     prefix: '/',
                     htmlmin: '<%= htmlmin.dist.options %>',
                     usemin: '/scripts/scripts.js'
@@ -325,6 +315,9 @@ module.exports = function (grunt) {
                         if (url.indexOf('data:') === 0) {
                             return url;
                         }
+                        if (url.indexOf('/images') === 0) {
+                            return url;
+                        }
                         return '/images/' +  url;
                     },
                     css : true
@@ -333,7 +326,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%= yeoman.dist %>/styles',
                     src: 'vendor.*.css',
-                    dest: '<%= yeoman.dist %>styles'
+                    dest: '<%= yeoman.dist %>/styles'
                 }]
             }
         },
