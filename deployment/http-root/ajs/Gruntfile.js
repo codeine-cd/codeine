@@ -243,7 +243,8 @@ module.exports = function (grunt) {
                     js: [
                         [/["']([^:"']+\.(?:html))["']/img, 'Update the JS to reference our revved htmls'],
                         [/[\\']([^:"']+\.(?:html))[\\']/img, 'Update the JS to reference our revved htmls'],
-                        [/(\/images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']
+                        [/(\/images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images'],
+                        [/(images\/[^''""]*\.(png|jpg|jpeg|gif|webp|svg))/g, 'Replacing references to images']
                     ]
                 }
             }
