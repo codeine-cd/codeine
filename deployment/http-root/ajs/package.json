@@ -45,12 +45,9 @@
     "grunt-angular-templates": "^0.5.7"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   },
   "scripts": {
     "test": "grunt test"
-  },
-  "dependencies": {
-    "karma": "^0.10.10"
   }
 }
