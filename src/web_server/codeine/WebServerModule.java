@@ -5,6 +5,7 @@ import codeine.api.NodeAggregator;
 import codeine.command_peer.CommandFileWriter;
 import codeine.command_peer.NodesCommandExecuterProvider;
 import codeine.configuration.IConfigurationManager;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.peer_status.PeersProjectsStatus;
 import codeine.jsons.peer_status.PeersProjectsStatusInWebServer;
 import codeine.permissions.GroupsManager;
@@ -15,7 +16,6 @@ import codeine.servlet.UsersManager;
 import codeine.servlet.manage_statistics.ManageStatisticsCollector;
 import codeine.statistics.IMonitorStatistics;
 import codeine.statistics.MonitorsStatisticsProvider;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
@@ -38,6 +38,7 @@ public class WebServerModule extends AbstractModule
 		bind(DiscardOldCommandsPlugin.class).in(Scopes.SINGLETON);
 		bind(CommandFileWriter.class).in(Scopes.SINGLETON);
 		bind(NodeAggregator.class).in(Scopes.SINGLETON);
+        bind(GlobalConfigurationJsonStore.class).in(Scopes.SINGLETON);
 	}
 	
 }
