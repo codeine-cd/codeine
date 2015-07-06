@@ -7,3 +7,4 @@ codeine.iml
 *.iml
 /target/
 deployment/http-root/ajs/app/set_api_token_2.html
+*.log

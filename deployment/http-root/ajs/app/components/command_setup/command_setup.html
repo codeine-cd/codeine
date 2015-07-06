@@ -103,37 +103,41 @@
                 <div class="panel panel-default" ng-show="vm.command.parameters.length > 0">
                     <div class="panel-heading">Command Parameters</div>
                     <div class="panel-body">
-                        <form class="form-horizontal" name="params" novalidate>
-                            <ng-form name="paramsInnerForm">
-                                <div class="form-group" ng-repeat="parameter in vm.command.parameters">
-                                    <div ng-if="parameter.type === 'String' || parameter.type === 'Password'">
+                        <div class="form-horizontal">
+                            <div class="form-group" ng-repeat="parameter in vm.command.parameters" ng-form="paramsInnerForm">
+                                <div ng-if="parameter.type === 'String' || parameter.type === 'Password'">
+                                    <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
+                                    <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid || paramsInnerForm.param_value.$error.parameterValidator}">
+                                        <input id="param_{{$index}}" name="param_value" type="{{parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="parameter.value" ui-validate="{parameterValidator : 'vm.validateParameter($value,$index)'}">
+                                    </div>
+                                    <div class="help-block" style="display: inline-block;" ng-messages="paramsInnerForm.param_value.$error">
+                                        <div ng-message="parameterValidator">Invalid value, check tooltip</div>
+                                    </div>
+                                </div>
+                                <div ng-if="parameter.type === 'Boolean'">
+                                    <div class="form-group">
                                         <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
-                                        <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid || paramsInnerForm.param_value.$error.parameterValidator}" id="{{parameter.name}}">
-                                            <input id="param_{{$index}}" name="param_value" type="{{parameter.type === 'String' ? 'text' : 'password'}}" class="form-control" ng-model="parameter.value" ui-validate="{parameterValidator : 'vm.validateParameter($value,$index)'}">
-                                        </div>
-                                    </div>
-                                    <div ng-if="parameter.type === 'Boolean'">
-                                        <div class="form-group">
-                                            <label for="param_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
-                                            <div class="checkbox col-md-4">
-                                                <label>
-                                                    <input type="checkbox" ng-model="parameter.value">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-if="parameter.type === 'Selection'">
-                                        <label for="param_selection_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
-                                        <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid}">
-                                            <select class="form-control select2" name="param_value" id="param_selection_{{$index}}" ui-select2="{allowClear: false}" ng-model="parameter.value" required>
-                                                <option value=""></option>
-                                                <option ng-repeat="opt in parameter.allowed_values" value="{{opt}}">{{opt}}</option>
-                                            </select>
+                                        <div class="checkbox col-md-4">
+                                            <label>
+                                                <input type="checkbox" ng-model="parameter.value">
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                            </ng-form>
-                        </form>
+                                <div ng-if="parameter.type === 'Selection'">
+                                    <label for="param_selection_{{$index}}" class="col-md-4 control-label">{{parameter.name}} <help help-txt="parameter.description"></help></label>
+                                    <div class="col-md-4" ng-class="{'has-error': paramsInnerForm.param_value.$invalid}">
+                                        <select class="form-control select2" name="param_value" id="param_selection_{{$index}}" ui-select2="{allowClear: false}" ng-model="parameter.value" required>
+                                            <option value=""></option>
+                                            <option ng-repeat="opt in parameter.allowed_values" value="{{opt}}">{{opt}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block" style="display: inline-block;" ng-messages="paramsInnerForm.param_value.$error">
+                                        <div ng-message="required">This parameter is required</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <accordion>

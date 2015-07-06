@@ -318,7 +318,9 @@
     }
 
     //// Angular Code ////
-    angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate','ngTextcomplete','ngDistinctValues','n3-charts.linechart','angulartics', 'angulartics.google.analytics','filter.duration','cgBusy', 'frapontillo.bootstrap-switch'])
+    angular.module('codeine', ['ngRoute', 'ngAnimate', 'ui.bootstrap','ui.select2','ngStorage','ui.validate',
+        'ngTextcomplete','ngDistinctValues','n3-charts.linechart','angulartics',
+        'angulartics.google.analytics','filter.duration','cgBusy', 'frapontillo.bootstrap-switch', 'ngMessages'])
     .config(configFunc)
     .run(runFunc);
 
