@@ -37,34 +37,39 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 	}
 
 	private void addExceptionInfo(Throwable e) {
-		log.fatal("exception info " + e.getMessage() + " " + e);
+		log.fatal("exception info " + e.getMessage());
 	}
 
-	public static void main(String[] args) {
-		
-	}
-	public static void main1(String[] args) {
-		BasicConfigurator.configure();
-		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
-		throw new RuntimeException() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void printStackTrace(java.io.PrintWriter s) {
-				overflow();
-
-			}
-
-			@Override
-			public void printStackTrace() {
-				overflow();
-			}
-
-			private void overflow() {
-				overflow();
-			}
-
-		};
-	}
+//	public static void main(String[] args) {
+//
+//	}
+//	public static void main(String[] args) {
+//		BasicConfigurator.configure();
+//		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
+//		throw new RuntimeException() {
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public String getMessage() {
+//				overflow();
+//				return "";
+//			}
+//
+//			@Override
+//			public void printStackTrace(java.io.PrintWriter s) {
+//				overflow();
+//			}
+//
+//			@Override
+//			public void printStackTrace() {
+//				overflow();
+//			}
+//
+//			private void overflow() {
+//				overflow();
+//			}
+//
+//		};
+//	}
 
 }
