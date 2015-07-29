@@ -71,6 +71,10 @@ public class ProjectJson
 		return node_discovery_startegy;
 	}
 
+	public void node_discovery_startegy(NodeDiscoveryStrategy newStrategy)
+	{
+		node_discovery_startegy = newStrategy;
+	}
 
 	public String name() {
 		return name;
