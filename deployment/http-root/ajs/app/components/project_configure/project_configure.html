@@ -172,7 +172,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="node_info in projectConfigurationForEditing.nodes_info" ng-form="nodesInfoRow">
+                            <tr ng-repeat="node_info in projectConfigurationForEditing.nodes_info | limitTo: -nodeQuantity" ng-form="nodesInfoRow">
                                 <td class="controls col-md-3" ng-class="{'has-error': nodesInfoRow.node_name.$invalid}">
                                     <input type="text" name="node_name" class="form-control" ng-distinct-values="projectConfigurationForEditing.nodes_info" ng-model="node_info.name" required>
                                 </td>
@@ -186,12 +186,19 @@
                                     <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index,$event)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                                 </td>
                             </tr>
-
                             </tbody>
                         </table>
+                        <div class="row" ng-show="projectConfigurationForEditing.nodes_info.length > nodeQuantity">
+                            <div class="col-md-12">
+                                <button ng-click="nodeQuantity = nodeQuantity + 10;" style="margin-left: 10px;"
+                                        class="btn btn-default btn-sm">More...</button>
+                            </div>
+                        </div>
+                        <br/>
                         <div class="row">
                             <div class="col-md-12">
-                                <button ng-click="addNode()" type="button" style="margin-left: 10px;" class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
+                                <button ng-click="addNode()" type="button" style="margin-left: 10px;"
+                                        class="btn btn-info"><i class="fa fa-plus"></i> Add Node</button>
                             </div>
                             <br/><br/>
                         </div>

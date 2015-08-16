@@ -7,7 +7,6 @@
         var vm = this;
 
         vm.selectedTabName = $routeParams.tab_name;
-        $log.debug("building tabs");
         vm.uiTabs = [];
         vm.uiTabs.push({tab:{name:'main', exp: ['.*']}, active : vm.selectedTabName === 'main'});
         _.each(tabs, function(tab) {

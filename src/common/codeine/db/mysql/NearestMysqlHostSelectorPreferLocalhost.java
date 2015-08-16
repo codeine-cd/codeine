@@ -1,16 +1,14 @@
 package codeine.db.mysql;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.executer.Task;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.network.InetUtils;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostSelector{
 
@@ -62,15 +60,7 @@ public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostS
 		}
 		return null;
 	}
-	public MysqlConfigurationJson getLocalConf() {
-		MysqlConfigurationJson localConf = getLocalConfOrNull();
-		if (null == localConf) {
-			throw new RuntimeException("could not find mysql configuration to start with. host is " + InetUtils.getLocalHost() + " and configuration is " + conf.get().mysql());
-		}
-		return localConf;
-	}
 
-	
 	@Override
 	public String toString() {
 		return "NearestMysqlHostSelector [mysqlConf=" + mysqlConf + "]";
