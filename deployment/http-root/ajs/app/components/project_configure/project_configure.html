@@ -172,7 +172,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="node_info in projectConfigurationForEditing.nodes_info | limitTo: -nodeQuantity" ng-form="nodesInfoRow">
+                            <tr ng-repeat="node_info in projectConfigurationForEditing.nodes_info | limitTo: -nodeQuantity" ng-form="nodesInfoRow"
+                                class="repeated-item">
                                 <td class="controls col-md-3" ng-class="{'has-error': nodesInfoRow.node_name.$invalid}">
                                     <input type="text" name="node_name" class="form-control" ng-distinct-values="projectConfigurationForEditing.nodes_info" ng-model="node_info.name" required>
                                 </td>
@@ -183,7 +184,7 @@
                                     <input type="text" ui-select2="select2Options" ng-model="node_info.tags" class="form-control select2">
                                 </td>
                                 <td class="col-md-1">
-                                    <button ng-click="removeItem(projectConfigurationForEditing.nodes_info,$index,$event)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
+                                    <button ng-click="removeNodeItem(projectConfigurationForEditing.nodes_info,node_info,$event)" tooltip="Remove Node" class="btn btn-default btn-mini"><i class="fa fa-times"></i></button>
                                 </td>
                             </tr>
                             </tbody>

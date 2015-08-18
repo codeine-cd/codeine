@@ -81,6 +81,13 @@
             array.splice(index,1);
         };
 
+        $scope.removeNodeItem = function(array, item, $event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            array.splice(array.indexOf(item),1);
+            AlertService.addAlert('success','Removed node ' + item.name,3000);
+        };
+
         $scope.moveUp = function(array,index,$event) {
             $event.preventDefault();
             $event.stopPropagation();
