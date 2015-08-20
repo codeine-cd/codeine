@@ -1,28 +1,26 @@
 package codeine.jsons.peer_status;
 
+import codeine.db.IStatusDatabaseConnector;
+import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
+import codeine.executer.PeriodicExecuter;
+import codeine.executer.Task;
+import codeine.utils.StringUtils;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Maps;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
-import codeine.db.IStatusDatabaseConnector;
-import codeine.db.mysql.connectors.StatusDatabaseConnectorListProvider;
-import codeine.executer.PeriodicExecuter;
-import codeine.executer.Task;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Maps;
-
 public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 
 	private static final Logger log = Logger.getLogger(PeersProjectsStatusInWebServer.class);
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(55);
-	public static final long WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(5);
+	public static long WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(30);
 	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
 	private Map<String, PeerStatusJsonV2> peer_to_projects = Maps.newHashMap();
 	private Cache<String, PeerStatusJsonV2> cache = CacheBuilder.newBuilder().expireAfterWrite(20, TimeUnit.MINUTES).build();
@@ -32,6 +30,16 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	public PeersProjectsStatusInWebServer(StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider) {
 		super();
 		this.statusDatabaseConnectorListProvider = statusDatabaseConnectorListProvider;
+        if (!StringUtils.isEmpty(System.getProperty("REFRESH_SECONDS"))) {
+            try {
+                WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(Long.parseLong(System.getProperty("REFRESH_SECONDS"), 10));
+
+            }
+            catch(Exception e) {
+                log.error("Failed to parse REFRESH_SECONDS property", e);
+            }
+        }
+        log.info("refresh rate is " + WORKER_SLEEP_TIME + " milliseconds");
 	}
 	
 	@Override
