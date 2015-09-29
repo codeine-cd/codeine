@@ -15,8 +15,8 @@ import com.google.common.collect.Maps;
 public class NodeWithMonitorsInfo extends NodeWithPeerInfo {
 
 	private String projectName;
-	private Map<String, MonitorStatusInfo> monitors = Maps.newHashMap();
-	private Map<String, CollectorExecutionInfo> collectors = Maps.newHashMap();
+	private Map<String, MonitorStatusInfo> monitors = Maps.newConcurrentMap();
+	private Map<String, CollectorExecutionInfo> collectors = Maps.newConcurrentMap();
 	private String version = Constants.NO_VERSION;
 	
 	public NodeWithMonitorsInfo(PeerStatusJsonV2 peer, String name, String alias, String projectName, Map<String,MonitorStatusInfo> monitors) {
