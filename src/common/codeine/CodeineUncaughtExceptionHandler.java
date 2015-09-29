@@ -1,9 +1,9 @@
 package codeine;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+
+import java.lang.Thread.UncaughtExceptionHandler;
 
 public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
@@ -17,7 +17,7 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 		try {
-			System.out.println("Uncaught exception!");
+			System.err.println("Uncaught exception!");
 			if (!errorPrintedToOut) {
 				errorPrintedToOut = true;
 				e.printStackTrace();
@@ -43,33 +43,33 @@ public class CodeineUncaughtExceptionHandler implements UncaughtExceptionHandler
 //	public static void main(String[] args) {
 //
 //	}
-//	public static void main(String[] args) {
-//		BasicConfigurator.configure();
-//		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
-//		throw new RuntimeException() {
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public String getMessage() {
-//				overflow();
-//				return "";
-//			}
-//
-//			@Override
-//			public void printStackTrace(java.io.PrintWriter s) {
-//				overflow();
-//			}
-//
-//			@Override
-//			public void printStackTrace() {
-//				overflow();
-//			}
-//
-//			private void overflow() {
-//				overflow();
-//			}
-//
-//		};
-//	}
+	public static void main(String[] args) {
+		BasicConfigurator.configure();
+		Thread.setDefaultUncaughtExceptionHandler(new CodeineUncaughtExceptionHandler());
+		throw new RuntimeException() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getMessage() {
+				overflow();
+				return "";
+			}
+
+			@Override
+			public void printStackTrace(java.io.PrintWriter s) {
+				overflow();
+			}
+
+			@Override
+			public void printStackTrace() {
+				overflow();
+			}
+
+			private void overflow() {
+				overflow();
+			}
+
+		};
+	}
 
 }

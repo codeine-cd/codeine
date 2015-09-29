@@ -15,7 +15,7 @@
             else {
                 deffer = $q.defer();
                 CodeineService.getSessionInfo().success(function (data) {
-                    $log.debug('LoginService: got session info ' + angular.toJson(data));
+                    $log.debug('LoginService: got session info');
                     sessionInfo = data;
                     deffer.resolve(data);
                     deffer = undefined;

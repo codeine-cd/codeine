@@ -2,7 +2,8 @@
     'use strict';
 
     //// JavaScript Code ////
-    function projectConfigureCtrl($timeout, $route, $scope, $log,$routeParams, ProjectsRepository, project,$location,AlertService, projects, LoginService) {
+    function projectConfigureCtrl($route, $scope, $log,$routeParams, ProjectsRepository, project, $location,
+                                  AlertService, projects, LoginService) {
         $scope.projectName = $routeParams.project_name;
         $scope.tabName = $routeParams.tab_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
@@ -22,6 +23,7 @@
             nodesDiscoveryAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_OUTPUT_FILE'],
             tagsAutoComplete : ['CODEINE_PROJECT_NAME','CODEINE_NODE_NAME','CODEINE_NODE_ALIAS','CODEINE_OUTPUT_FILE']
         };
+        $scope.nodeQuantity = 30;
 
         function swapItems(index,array) {
             var temp = array[index];
@@ -77,6 +79,13 @@
             $event.preventDefault();
             $event.stopPropagation();
             array.splice(index,1);
+        };
+
+        $scope.removeNodeItem = function(array, item, $event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            array.splice(array.indexOf(item),1);
+            AlertService.addAlert('success','Removed node ' + item.name,3000);
         };
 
         $scope.moveUp = function(array,index,$event) {
