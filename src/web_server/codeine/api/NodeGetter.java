@@ -53,7 +53,8 @@ public class NodeGetter {
 				return e.getValue();
 			}
 		}
-		throw new IllegalArgumentException("peer not found " + peer_key);
+		return null;
+		//throw new IllegalArgumentException("peer not found " + peer_key);
 	}
 	public List<PeerStatusJsonV2> peers() {
 		return Lists.newArrayList(peersProjectsStatus.peer_to_projects().values());
