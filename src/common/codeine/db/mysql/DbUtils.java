@@ -20,12 +20,13 @@ import com.google.common.base.Function;
 public class DbUtils
 {
 	private static Logger log = Logger.getLogger(DbUtils.class);
-	private static int TIMEOUT_SEC = 5; 
-	
+	private DBConnection dbConnection = new DBConnection();
+
+
 	@Inject
 	private MysqlHostSelector hostSelector;
-	
-	
+
+
 	
 	public DbUtils() {
 		super();
@@ -96,7 +97,7 @@ public class DbUtils
 			throw prepareException(sql, connection, e, null);
 		} finally {
 			closeResultSet(rs);
-			closeConnection(connection);
+			dbConnection.closeConnection(connection);
 		}
 	}
 
@@ -121,7 +122,7 @@ public class DbUtils
 			throw prepareException(sql, connection, e, null);
 		} finally {
 			closeResultSet(rs);
-			closeConnection(connection);
+			dbConnection.closeConnection(connection);
 		}
 	}
 
@@ -141,22 +142,12 @@ public class DbUtils
 			throw prepareException(sql, connection, e, args);
 		} finally {
 			closeStatement(preparedStatement);
-			closeConnection(connection);
+			dbConnection.closeConnection(connection);
 		}
 	}
 	
 	public int executeUpdateAsRoot(String sql) {
 		return executeUpdate(sql, true);
-	}
-
-	private static void closeConnection(Connection connection) {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			log.debug("fail to close connection");
-		}
 	}
 
 	private Connection getConnection(boolean useCompression) {
@@ -177,22 +168,6 @@ public class DbUtils
 		} catch (SQLException e) {
 			throw new ConnectToDatabaseException(url, e);
 		}
-	}
-	
-	public static boolean checkConnection(String host, Integer port, String user, String password) {
-		String url = "jdbc:mysql://"+host+":" + port + "/" + MysqlConstants.DB_NAME + "?socketTimeout=10000&connectTimeout=10000";
-		Connection connection = null;
-		try {
-			connection = DriverManager.getConnection(url, user, password);			
-			return connection.isValid(TIMEOUT_SEC);
-		} catch (SQLException e) {
-			log.warn("error while testing connection to " + url + " " + e.getMessage());
-			return false;
-		}
-		finally {
-			closeConnection(connection);
-		}
-		
 	}
 
 	@Override

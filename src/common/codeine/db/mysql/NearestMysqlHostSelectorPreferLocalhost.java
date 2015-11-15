@@ -15,6 +15,7 @@ public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostS
 	private static final Logger log = Logger.getLogger(NearestMysqlHostSelectorPreferLocalhost.class);
 	@Inject
 	private GlobalConfigurationJsonStore conf;
+	@Inject private IDBConnection dbConnection;
 	
 	private MysqlConfigurationJson mysqlConf; 
 	
@@ -37,7 +38,7 @@ public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostS
 
 	private MysqlConfigurationJson selectNearestConf() {
 		log.info("selectNearestConf - starting");
-		MysqlConfigurationJson selectedMysql = new NearestHostSelector(conf.get().mysql()).select();
+		MysqlConfigurationJson selectedMysql = new NearestHostSelector(conf.get().mysql(), dbConnection).select();
 		log.info("selectNearestConf - selected mysql " + selectedMysql);
 		return selectedMysql;
 	}
