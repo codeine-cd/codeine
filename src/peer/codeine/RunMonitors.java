@@ -1,18 +1,5 @@
 package codeine;
 
-import static com.google.common.collect.Maps.*;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeInfo;
 import codeine.configuration.IConfigurationManager;
@@ -37,12 +24,23 @@ import codeine.utils.network.HttpUtils;
 import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
 import codeine.utils.os_process.ShellScript;
-
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import static com.google.common.collect.Maps.newHashMap;
 
 public class RunMonitors implements Task {
 	private IConfigurationManager configurationManager;
@@ -85,26 +83,31 @@ public class RunMonitors implements Task {
 
 	@Override
 	public void run() {
-		List<NodeMonitor> monitors = Lists.newArrayList(project().monitors());
-		removeNonExistMonitors();
-		validateDiskSpaceForMonitorRun();
-		for (NodeMonitor monitor : monitors) {
-			try {
-				shellScript = null;
-				runMonitorOnce(monitor);
-			} finally {
-				if (null != shellScript){
-					shellScript.delete();
-				}
-			}
-		}
-		updateVersion();
-		if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Script) {
-			updateTagsByScript();
-		}
-		else if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Configuration){
-			updateTagsByConfiguration();
-		}
+        try {
+            List<NodeMonitor> monitors = Lists.newArrayList(project().monitors());
+            removeNonExistMonitors();
+            validateDiskSpaceForMonitorRun();
+            for (NodeMonitor monitor : monitors) {
+                try {
+                    shellScript = null;
+                    runMonitorOnce(monitor);
+                } finally {
+                    if (null != shellScript) {
+                        shellScript.delete();
+                    }
+                }
+            }
+            updateVersion();
+            if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Script) {
+                updateTagsByScript();
+            } else if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Configuration) {
+                updateTagsByConfiguration();
+            }
+        }
+        catch (Throwable e)
+        {
+            log.error("Error in RunMonitors", e);
+        }
 	}
 
 	private void validateDiskSpaceForMonitorRun() {

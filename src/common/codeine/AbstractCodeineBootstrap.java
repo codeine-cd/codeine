@@ -1,12 +1,12 @@
 package codeine;
 
-import java.io.File;
-import java.lang.management.ManagementFactory;
-import java.util.EnumSet;
-import java.util.List;
-
-import javax.servlet.DispatcherType;
-
+import codeine.jsons.info.CodeineRuntimeInfo;
+import codeine.model.Constants;
+import codeine.servlet.GeneralServletModule;
+import codeine.stdout.StdoutRedirectToLog;
+import com.google.common.collect.Lists;
+import com.google.inject.*;
+import com.google.inject.servlet.GuiceFilter;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -16,19 +16,11 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
-import codeine.jsons.info.CodeineRuntimeInfo;
-import codeine.model.Constants;
-import codeine.servlet.GeneralServletModule;
-import codeine.stdout.StdoutRedirectToLog;
-
-import com.google.common.collect.Lists;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Scopes;
-import com.google.inject.servlet.GuiceFilter;
+import javax.servlet.DispatcherType;
+import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.util.EnumSet;
+import java.util.List;
 
 public abstract class AbstractCodeineBootstrap {
 
