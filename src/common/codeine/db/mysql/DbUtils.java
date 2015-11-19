@@ -86,7 +86,7 @@ public class DbUtils
 	private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root, boolean useCompression)
 	{
 		ResultSet rs = null;
-		Connection connection = root ? getConnectionForRoot() : getConnection(useCompression);
+		Connection connection = root ? getConnectionForRoot(useCompression) : getConnection(useCompression);
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			rs = preparedStatement.executeQuery();
@@ -131,7 +131,7 @@ public class DbUtils
 	}
 	private int executeUpdate(String sql, boolean root, String... args) {
 		PreparedStatement preparedStatement = null;
-		Connection connection = root ? getConnectionForRoot() : getConnection(false);
+		Connection connection = root ? getConnectionForRoot(true) : getConnection(true);
 		try {
 			preparedStatement = connection.prepareStatement(sql);
 			for (int i = 1; i <= args.length; i++) {
@@ -161,8 +161,11 @@ public class DbUtils
 			throw new ConnectToDatabaseException(url, e);
 		}
 	}
-	private Connection getConnectionForRoot() {
+	private Connection getConnectionForRoot(boolean useCompression) {
 		String url = "jdbc:mysql://localhost:" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME + "?user=root&" + "createDatabaseIfNotExist=true";
+		if (useCompression) {
+			url += "&useCompression=true";
+		}
 		try {
 			return DriverManager.getConnection(url);
 		} catch (SQLException e) {
