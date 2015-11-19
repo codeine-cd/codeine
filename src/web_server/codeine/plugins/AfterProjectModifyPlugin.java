@@ -27,7 +27,8 @@ public class AfterProjectModifyPlugin {
 	public void call(ProjectJson projectJson, StatusChange newStatus, String username) {
 		String after_project_modify_plugin = experimentalConfJsonStore.get().after_project_modify_plugin();
 		if (null != after_project_modify_plugin) {
-			log.info("calling after_project_modify_plugin for project " + projectJson.name() + " by  user " + username);
+			log.info("calling after_project_modify_plugin for project " + projectJson.name() + " by  user " + username
+					+ " with status " + newStatus.toString());
 			List<String> cmd = Lists.newArrayList(after_project_modify_plugin);
 			Map<String, String> env = Maps.newHashMap();
 			env.put(Constants.EXECUTION_ENV_PROJECT_STATUS, String.valueOf(newStatus));
