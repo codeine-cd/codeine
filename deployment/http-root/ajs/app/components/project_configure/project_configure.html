@@ -668,8 +668,8 @@
         </accordion>
         <div class="row">
             <div class="col-md-12">
-                <button ng-disabled="configForm.$invalid" ng-click="applyConfiguration(true)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
-                <button ng-disabled="configForm.$invalid" ng-click="applyConfiguration(false)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
+                <button ng-disabled="configForm.$invalid || configForm.$pristine" ng-click="applyConfiguration(true)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-floppy-o"></i> Save & Close</button>
+                <button ng-disabled="configForm.$invalid || configForm.$pristine" ng-click="applyConfiguration(false)" style="margin-right: 10px;" class="btn btn-success pull-right"><i class="fa fa-check-square-o"></i> Apply</button>
             </div>
             <br/><br/>
         </div>
