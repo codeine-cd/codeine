@@ -119,7 +119,7 @@
                                         <i class="fa fa-check-circle fa-lg" ng-class="{ disc: node.immutable.peer_status !== 'On' , success: node.immutable.peer_status === 'On' }" ng-show="!hasFailingCollectors(node.immutable.collectors_info)"></i>
                                     </a>
                                     <!-- collector_info.exit_status !== 0 => monitor failed ; collector_info.exit_status === 0 => collector data-->
-                                <span ng-repeat="collector_info in node.immutable.collectors_info track by collector_info.name" style="display:inline-block">
+                                <span ng-repeat="collector_info in node.immutable.collectors_info | orderBy: 'name' track by collector_info.name" style="display:inline-block">
                                     <a tooltip="{{::collector_info.exit_status !== 0 ? '' : collector_info.name}}"
                                        ng-href="/codeine/view/{{::tabName}}/project/{{::projectName}}/node/{{::node.immutable.name}}/collector/{{::collector_info.name}}/status"
                                        class="label" ng-class="{'label-warning': node.immutable.peer_status === 'Disc' , 'label-danger': node.immutable.peer_status === 'On' && collector_info.exit_status !== 0, 'label-default': node.immutable.peer_status === 'On' && collector_info.exit_status === 0}">{{::collector_info.exit_status === 0 ? collector_info.value : collector_info.name}}</a>&nbsp;</span>
