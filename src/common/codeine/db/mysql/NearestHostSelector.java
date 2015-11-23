@@ -1,65 +1,49 @@
 package codeine.db.mysql;
 
-import java.util.List;
-
+import codeine.jsons.global.MysqlConfigurationJson;
 import org.apache.log4j.Logger;
 
-import codeine.jsons.global.MysqlConfigurationJson;
-import codeine.utils.StringUtils;
+import java.util.List;
 
 
 public class NearestHostSelector {
 
 	private static final Logger log = Logger.getLogger(NearestHostSelector.class);
-	public static long DIFF_THRESHOLD = 50;
-	private List<MysqlConfigurationJson> list;
-	private MysqlConfigurationJson lastSql;
-	private IDBConnection dbConnection;
+	public static long DIFF_THRESHOLD = 100;
+	private MysqlConnectionWithPing lastSql;
+    private IMysqlConnectionsProvider mysqlHostsProvider;
 
-	public NearestHostSelector(List<MysqlConfigurationJson> list, IDBConnection dbConnection) {
-		this.list = list;
-		this.dbConnection = dbConnection;
+	public NearestHostSelector(IMysqlConnectionsProvider mysqlHostsProvider) {
+        this.mysqlHostsProvider = mysqlHostsProvider;
 	}
 
 	public MysqlConfigurationJson select() {
-		long minTime = Long.MAX_VALUE;
-		long lastSqlMinTime = Long.MAX_VALUE;
-		MysqlConfigurationJson $ = null;
-		if (lastSql != null) {
-			lastSqlMinTime = check(lastSql);
-			if (lastSqlMinTime != Long.MAX_VALUE) {
-				$ = lastSql;
-			}
-		}
-		for (MysqlConfigurationJson mysql : list) {
-			if (mysql == lastSql) {
-				continue;
-			}
-			long total = check(mysql);
-			log.info("ping host " + mysql + " time is " + StringUtils.formatTimePeriod(total));
-			if (total < minTime){
-				if (lastSqlMinTime - total < DIFF_THRESHOLD) {
-					$ = lastSql;
-				}
-				else {
-					minTime = total;
-					$ = mysql;
-				}
-			}
-		}
-		if ($ == null){
-			throw new RuntimeException("no host is reachable: " + list);
-		}
-		log.info("selected host " + $ + " with time " + StringUtils.formatTimePeriod(minTime));
-		lastSql = $;
-		return $;
+        List<MysqlConnectionWithPing> connectionsList = mysqlHostsProvider.getMysqlConnections();
+        if (connectionsList.size() == 0) {
+            throw new RuntimeException("no host is reachable");
+        }
+        MysqlConnectionWithPing fastestConnection = connectionsList.get(0);
+        if (lastSql == null) {
+            lastSql = fastestConnection;
+            log.info("Setting first sql database " + lastSql.getConfiguration());
+        }
+        else {
+            lastSql = getConnection(connectionsList, lastSql.getConfiguration());
+            if (lastSql == null || fastestConnection.getPingTime() + DIFF_THRESHOLD < lastSql.getPingTime()) {
+                log.info("Switching databases, new connection is " + fastestConnection + " last sql was " + lastSql);
+                lastSql = fastestConnection;
+            }
+        }
+        log.info("Selected databases " + lastSql);
+        return lastSql.getConfiguration();
 	}
 
-	private long check(MysqlConfigurationJson mysql) {
-		long start = System.currentTimeMillis();
-		if (!dbConnection.checkConnection(mysql.host(), mysql.port(), mysql.user(), mysql.password())){
-			return Long.MAX_VALUE;
-		}
-		return  System.currentTimeMillis() - start;
-	}
+    private MysqlConnectionWithPing getConnection(List<MysqlConnectionWithPing> list, MysqlConfigurationJson configuration) {
+        for (MysqlConnectionWithPing connection : list) {
+            if (connection.getConfiguration().equals(configuration)) {
+                return connection;
+            }
+        }
+        return null;
+    }
 }
