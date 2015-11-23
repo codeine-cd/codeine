@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class MysqlConnectionsProvider implements IMysqlConnectionsProvider {
                 $.add(new MysqlConnectionWithPing(sqlHost, check(sqlHost)));
             }
         }
-        $.sort(new Comparator<MysqlConnectionWithPing>() {
+        Collections.sort($, new Comparator<MysqlConnectionWithPing>() {
             @Override
             public int compare(MysqlConnectionWithPing o1, MysqlConnectionWithPing o2) {
                 return Long.compare(o1.getPingTime(),o2.getPingTime());
