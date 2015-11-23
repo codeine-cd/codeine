@@ -67,5 +67,18 @@ public class MysqlConfigurationJson {
 		return "MysqlConfigurationJson [host=" + host + ", port=" + port + "]";
 	}
 
-	
+    @Override
+    public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof MysqlConfigurationJson) {
+            MysqlConfigurationJson that = (MysqlConfigurationJson) other;
+            result = (this.port().equals(that.port()) && this.host().equals(that.host()));
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.port().hashCode() + this.host().hashCode();
+    }
 }

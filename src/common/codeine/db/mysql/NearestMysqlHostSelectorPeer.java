@@ -1,14 +1,12 @@
 package codeine.db.mysql;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.executer.Task;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
+import java.util.concurrent.TimeUnit;
 
 public class NearestMysqlHostSelectorPeer implements Task, MysqlHostSelector{
 
@@ -35,7 +33,7 @@ public class NearestMysqlHostSelectorPeer implements Task, MysqlHostSelector{
 
 	private MysqlConfigurationJson selectNearestConf() {
 		log.info("selectNearestConf - starting");
-		MysqlConfigurationJson selectedMysql = new NearestHostSelector(conf.get().mysql(), dbConnection).select();
+		MysqlConfigurationJson selectedMysql = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql())).select();
 		log.info("selectNearestConf - selected mysql " + selectedMysql);
 		return selectedMysql;
 	}
