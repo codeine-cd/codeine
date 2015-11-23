@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostSelector{
 
 	private static final Logger log = Logger.getLogger(NearestMysqlHostSelectorPreferLocalhost.class);
+	@Inject private IDBConnection dbConnection;
 	@Inject
 	private GlobalConfigurationJsonStore conf;
 
@@ -37,7 +38,7 @@ public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostS
 
 	private MysqlConfigurationJson selectNearestConf() {
 		log.info("selectNearestConf - starting");
-		MysqlConfigurationJson selectedMysql = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql())).select();
+		MysqlConfigurationJson selectedMysql = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql(), dbConnection)).select();
 		log.info("selectNearestConf - selected mysql " + selectedMysql);
 		return selectedMysql;
 	}
