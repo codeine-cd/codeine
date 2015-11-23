@@ -21,24 +21,16 @@ public class VersionsMappingServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject	private VersionsMapping versionsMapping;
-	@Inject	private VersionsMappingStore versionsMappingStore;
-
 	@Override
 	protected void myPost(HttpServletRequest req, HttpServletResponse resp){
-		VersionInfo versionInfo = readBodyJson(req, VersionInfo.class);
-		log.info("recieved version mapping " + versionInfo);
-		versionsMapping.update(versionInfo);
-		VersionInfo info2 = gson().fromJson(gson().toJson(versionInfo), VersionInfo.class);
-		info2.alias = info2.name;
-		versionsMapping.update(info2);
-		versionsMappingStore.store();
+		log.error("Called post of VersionsMappingServlet");
 	}
 	
 	@Override
 	protected void myGet(HttpServletRequest req, HttpServletResponse resp){
+		log.error("Called get of VersionsMappingServlet");
 		PrintWriter writer = getWriter(resp);
-		writer.println(gson().toJson(versionsMapping));
+		writer.println();
 	}
 
 	@Override

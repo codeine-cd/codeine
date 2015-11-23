@@ -33,7 +33,7 @@ public class CodeineDirectoryModule extends AbstractModule
 		bind(ProjectsConfigurationConnector.class).to(ProjectsConfigurationMysqlConnector.class);
 		bind(IStatusDatabaseConnector.class).to(StatusMysqlConnector.class);
 		bind(MysqlHostSelector.class).toProvider(MysqlHostSelectorProvider.class).in(Scopes.SINGLETON);
-		bind(PeersProjectsStatus.class).to(PeersProjectsStatusInDirectory.class).in(Scopes.SINGLETON);
+		//bind(PeersProjectsStatus.class).to(PeersProjectsStatusInDirectory.class).in(Scopes.SINGLETON);
 		bind(VersionsMappingStore.class).in(Scopes.SINGLETON);
 		bind(VersionsMapping.class).toProvider(VersionsMappingProvider.class).in(Scopes.SINGLETON);
 		bind(IConfigurationManager.class).to(ConfigurationReadManagerServer.class).in(Scopes.SINGLETON);

@@ -50,7 +50,7 @@ public class CodeineDirectoryBootstrap extends AbstractCodeineBootstrap
 		}
 		injector().getInstance(MysqlDatabaseSchemaManagement.class).initDatabase();
 		new PeriodicExecuter(OldPeersRemove.INTERVAL ,injector().getInstance(OldPeersRemove.class)).runInThread();
-		new PeriodicExecuter(PeersProjectsStatusInDirectory.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
+		//new PeriodicExecuter(PeersProjectsStatusInDirectory.SLEEP_TIME ,injector().getInstance(PeersProjectsStatus.class)).runInThread();
 	}
 
 	@Override
