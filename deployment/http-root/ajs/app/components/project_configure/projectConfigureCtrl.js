@@ -3,7 +3,7 @@
 
     //// JavaScript Code ////
     function projectConfigureCtrl($route, $scope, $log,$routeParams, ProjectsRepository, project, $location,
-                                  AlertService, projects, LoginService, $timeout) {
+                                  AlertService, projects, LoginService) {
         $scope.projectName = $routeParams.project_name;
         $scope.tabName = $routeParams.tab_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
