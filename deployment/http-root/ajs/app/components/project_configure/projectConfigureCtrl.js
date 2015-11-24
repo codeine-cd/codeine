@@ -3,7 +3,7 @@
 
     //// JavaScript Code ////
     function projectConfigureCtrl($route, $scope, $log,$routeParams, ProjectsRepository, project, $location,
-                                  AlertService, projects, LoginService) {
+                                  AlertService, projects, LoginService, $timeout) {
         $scope.projectName = $routeParams.project_name;
         $scope.tabName = $routeParams.tab_name;
         $scope.projectConfigurationForEditing = project.cloneConfiguration();
@@ -148,6 +148,7 @@
             'tags': $scope.nodes,
             'tokenSeparators': [",", " "]
         };
+
         $scope.projects  = [];
 
         angular.forEach(projects, function(key) {
@@ -161,6 +162,13 @@
             'tokenSeparators': [",", " "]
         };
 
+        /*
+        $timeout(function() {
+            $scope.configForm.$setDirty(false);
+            $scope.configForm.$setPristine(true);
+            $scope.configForm.$setUntouched(true);
+        }, 2000);
+        */
     }
 
 
