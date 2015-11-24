@@ -13,11 +13,11 @@ public class MysqlConnectionsProvider implements IMysqlConnectionsProvider {
 
     private static final Logger log = Logger.getLogger(MysqlConnectionsProvider.class);
     private List<MysqlConfigurationJson> sqlHosts;
-    @Inject
     private IDBConnection dbConnection;
 
-    public MysqlConnectionsProvider(List<MysqlConfigurationJson> sqls) {
+    public MysqlConnectionsProvider(List<MysqlConfigurationJson> sqls, IDBConnection dbConnection) {
         sqlHosts = sqls;
+        this.dbConnection = dbConnection;
     }
 
     @Override

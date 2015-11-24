@@ -33,7 +33,7 @@ public class NearestMysqlHostSelectorPeer implements Task, MysqlHostSelector{
 
 	private MysqlConfigurationJson selectNearestConf() {
 		log.info("selectNearestConf - starting");
-		MysqlConfigurationJson selectedMysql = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql())).select();
+		MysqlConfigurationJson selectedMysql = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql(), dbConnection)).select();
 		log.info("selectNearestConf - selected mysql " + selectedMysql);
 		return selectedMysql;
 	}
