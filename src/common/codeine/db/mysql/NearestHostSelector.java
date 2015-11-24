@@ -34,7 +34,7 @@ public class NearestHostSelector {
                 lastSql = fastestConnection;
             }
         }
-        log.info("Selected databases " + lastSql);
+        log.info("Selected database: " + lastSql);
         return lastSql.getConfiguration();
 	}
 
