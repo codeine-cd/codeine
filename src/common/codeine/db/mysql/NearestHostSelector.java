@@ -14,6 +14,7 @@ public class NearestHostSelector {
     private IMysqlConnectionsProvider mysqlHostsProvider;
 
 	public NearestHostSelector(IMysqlConnectionsProvider mysqlHostsProvider) {
+        log.info("Creating NearestHostSelector");
         this.mysqlHostsProvider = mysqlHostsProvider;
 	}
 

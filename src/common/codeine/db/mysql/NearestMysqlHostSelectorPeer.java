@@ -15,10 +15,15 @@ public class NearestMysqlHostSelectorPeer implements Task, MysqlHostSelector{
 	@Inject
 	private GlobalConfigurationJsonStore conf;
 	@Inject private IDBConnection dbConnection;
-	
-	private MysqlConfigurationJson mysqlConf; 
-	
-	@Override
+	private MysqlConfigurationJson mysqlConf;
+    private NearestHostSelector nearestHostSelector;
+
+    public NearestMysqlHostSelectorPeer()
+    {
+        nearestHostSelector = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql(), dbConnection));
+    }
+
+    @Override
 	public MysqlConfigurationJson mysql() {
 		return mysql(false);
 	}
@@ -33,7 +38,7 @@ public class NearestMysqlHostSelectorPeer implements Task, MysqlHostSelector{
 
 	private MysqlConfigurationJson selectNearestConf() {
 		log.info("selectNearestConf - starting");
-		MysqlConfigurationJson selectedMysql = new NearestHostSelector(new MysqlConnectionsProvider(conf.get().mysql(), dbConnection)).select();
+        MysqlConfigurationJson selectedMysql = nearestHostSelector.select();
 		log.info("selectNearestConf - selected mysql " + selectedMysql);
 		return selectedMysql;
 	}
