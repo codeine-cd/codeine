@@ -9,7 +9,7 @@ import java.util.List;
 public class NearestHostSelector {
 
 	private static final Logger log = Logger.getLogger(NearestHostSelector.class);
-	public static long DIFF_THRESHOLD = 100;
+	public static long DIFF_THRESHOLD = 200;
 	private MysqlConnectionWithPing lastSql;
     private IMysqlConnectionsProvider mysqlHostsProvider;
 
