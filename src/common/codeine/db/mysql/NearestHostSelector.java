@@ -14,7 +14,7 @@ public class NearestHostSelector {
     private IMysqlConnectionsProvider mysqlHostsProvider;
 
 	public NearestHostSelector(IMysqlConnectionsProvider mysqlHostsProvider) {
-        log.info("Creating NearestHostSelector");
+        log.info("Creating NearestHostSelector, DIFF_THRESHOLD=" + DIFF_THRESHOLD);
         this.mysqlHostsProvider = mysqlHostsProvider;
 	}
 
@@ -32,6 +32,7 @@ public class NearestHostSelector {
             lastSql = getConnection(connectionsList, lastSql.getConfiguration());
             if (lastSql == null || fastestConnection.getPingTime() + DIFF_THRESHOLD < lastSql.getPingTime()) {
                 log.info("Switching databases, new connection is " + fastestConnection + " last sql was " + lastSql);
+                log.info("total diff: " + (lastSql.getPingTime() - fastestConnection.getPingTime()));
                 lastSql = fastestConnection;
             }
         }
