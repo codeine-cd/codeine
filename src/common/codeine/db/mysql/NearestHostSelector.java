@@ -32,7 +32,9 @@ public class NearestHostSelector {
             lastSql = getConnection(connectionsList, lastSql.getConfiguration());
             if (lastSql == null || fastestConnection.getPingTime() + DIFF_THRESHOLD < lastSql.getPingTime()) {
                 log.info("Switching databases, new connection is " + fastestConnection + " last sql was " + lastSql);
-                log.info("total diff: " + (lastSql.getPingTime() - fastestConnection.getPingTime()));
+                if (lastSql != null) {
+                    log.info("total diff: " + (lastSql.getPingTime() - fastestConnection.getPingTime()));
+                }
                 lastSql = fastestConnection;
             }
         }
