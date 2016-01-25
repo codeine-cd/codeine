@@ -67,7 +67,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		if (null != currentProject && !isAdministrator(request) && !checkForRootPermissions(projectJson, currentProject)) {
 			log.warn("user tried to change command or collector in " + projectJson.name() + " user " +
 					getUser(request).user().username() + " to run as root");
-			throw new UnAuthorizedException("only admin can change discovery script");
+			throw new UnAuthorizedException("only admin can set commands and collectors to run as root");
 		}
 		boolean exists = configurationManager.updateProject(projectJson);
 		afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add, getUser(request).user().username());
