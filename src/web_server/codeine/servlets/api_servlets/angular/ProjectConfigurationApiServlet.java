@@ -1,13 +1,9 @@
 package codeine.servlets.api_servlets.angular;
 
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-
 import codeine.ConfigurationManagerServer;
+import codeine.jsons.collectors.CollectorInfo;
+import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.permissions.IUserWithPermissions;
@@ -18,6 +14,15 @@ import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
 import codeine.utils.MiscUtils;
 import codeine.utils.exceptions.UnAuthorizedException;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 
@@ -59,6 +64,12 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 			log.warn("user tried to change discovery script in " + projectJson.name() + " user " + getUser(request).user().username());
 			throw new UnAuthorizedException("only admin can change discovery script");
 		}
+		checkForRootPermissions(projectJson, currentProject);
+		if (null != currentProject && !isAdministrator(request) && !checkForRootPermissions(projectJson, currentProject)) {
+			log.warn("user tried to change command or collector in " + projectJson.name() + " user " +
+					getUser(request).user().username() + " to run as root");
+			throw new UnAuthorizedException("only admin can change discovery script");
+		}
 		boolean exists = configurationManager.updateProject(projectJson);
 		afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add, getUser(request).user().username());
 		writeResponseJson(resp,projectJson);
@@ -85,6 +96,44 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		log.info("reloading project " + projectName + " user " + user.user().username());
 		ProjectJson projectJson = configurationManager.reloadProject(projectName);
 		writeResponseJson(response, projectJson);
+	}
+
+	private boolean checkForRootPermissions(ProjectJson newProjectConf, ProjectJson currentProjectConf) {
+		List<CollectorInfo> rootCollectors = Lists.newArrayList(Iterables.filter(newProjectConf.collectors(), rootCollectorPredicate()));
+		List<CommandInfo> rootCommands = Lists.newArrayList(Iterables.filter(newProjectConf.commands(), rootCommandPredicate()));
+		log.info("updated configuration has " + rootCollectors.size() + " collectors and " + rootCommands.size() +
+				" commands running has root");
+		List<CollectorInfo> currentRootCollectors = Lists.newArrayList(Iterables.filter(currentProjectConf.collectors(), rootCollectorPredicate()));
+		List<CommandInfo> currentRootCommands = Lists.newArrayList(Iterables.filter(currentProjectConf.commands(), rootCommandPredicate()));
+		rootCollectors.removeAll(currentRootCollectors);
+		if (rootCollectors.size() > 0) {
+			log.info("Found " + rootCollectors.size() + " collectors that changed to root permissions " + rootCollectors);
+			return false;
+		}
+		rootCommands.removeAll(currentRootCommands);
+		if (rootCommands.size() > 0) {
+			log.info("Found " + rootCommands.size() + " collectors that changed to root permissions " + rootCommands);
+			return false;
+		}
+		return true;
+	}
+
+	private Predicate<CommandInfo> rootCommandPredicate() {
+		return new Predicate<CommandInfo>() {
+			@Override
+			public boolean apply(CommandInfo commandInfo) {
+				return commandInfo.cred().equals("root");
+			}
+		};
+	}
+
+	private Predicate<CollectorInfo> rootCollectorPredicate() {
+		return new Predicate<CollectorInfo>() {
+			@Override
+			public boolean apply(CollectorInfo collectorInfo) {
+				return collectorInfo.cred().equals("root");
+			}
+		};
 	}
 
 }

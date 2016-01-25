@@ -1,13 +1,12 @@
 package codeine.jsons.command;
 
-import java.util.List;
-
 import codeine.api.CommandExcutionType;
 import codeine.api.DurationUnits;
 import codeine.api.RatioType;
-
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 
 public class CommandInfo 
@@ -196,5 +195,19 @@ public class CommandInfo
 		return block_after_execution_minutes;
 	}
 
-	
+
+	public int hashCode(){
+		return name().hashCode();
+	}
+
+	public boolean equals(Object o){
+		if (o == null)
+			return false;
+		if (!(o instanceof CommandInfo))
+			return false;
+
+		CommandInfo other = (CommandInfo) o;
+		return this.name().equals(other.name());
+	}
+
 }

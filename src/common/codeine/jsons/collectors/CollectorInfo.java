@@ -71,6 +71,19 @@ public class CollectorInfo {
 	public boolean notification_enabled() {
 		return notification_enabled;
 	}
-	
-	
+
+	public int hashCode(){
+		return name().hashCode();
+	}
+
+	public boolean equals(Object o){
+		if (o == null)
+			return false;
+		if (!(o instanceof CollectorInfo))
+			return false;
+
+		CollectorInfo other = (CollectorInfo) o;
+		return this.name().equals(other.name());
+	}
+
 }
