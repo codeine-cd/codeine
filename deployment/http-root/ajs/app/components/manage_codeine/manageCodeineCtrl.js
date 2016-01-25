@@ -5,7 +5,7 @@
     function manageCodeineCtrl($location, ProjectsRepository, tabs, permissions, projects, CodeineService, AlertService, LoginService, CodeineConfigurationService, $log) {
         /*jshint validthis:true */
         var vm = this;
-        vm.admin_is_open = true;
+        vm.admin_is_open = false;
 
         function addSuccessMessage(msg) {
             AlertService.addAlert('success',msg);
@@ -47,7 +47,9 @@
             vm.globalConfigurationForEditing.mysql.push({});
         };
 
-        vm.removeMysql = function(index) {
+        vm.removeMysql = function(index, $event) {
+            $event.preventDefault();
+            $event.stopPropagation();
             vm.globalConfigurationForEditing.mysql.splice(index,1);
         };
 

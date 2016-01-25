@@ -94,7 +94,7 @@ public abstract class AbstractCodeineBootstrap {
 	private ContextHandlerCollection createFileServerContexts(){
 		ContextHandlerCollection contexts = new ContextHandlerCollection();
 		addHandler(Constants.RESOURCESS_CONTEXT, Constants.getResourcesDir(), contexts);
-		contexts.addHandler(createStaticContextHandler("/favicon.ico", Constants.getResourcesDir() + "/img/favicon.ico"));
+        contexts.addHandler(createStaticContextHandler("/favicon.ico", Constants.getAngularDir() + "/favicon.ico"));
 		specificCreateFileServer(contexts);
 		return contexts;
 	}

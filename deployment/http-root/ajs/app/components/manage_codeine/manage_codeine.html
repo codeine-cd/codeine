@@ -90,14 +90,16 @@
             </div>
         </div>
         <accordion close-others="false">
-            <accordion-group ng-repeat="mysql_instance in vm.globalConfigurationForEditing.mysql" is-open="mysql_is_open" ng-form="mysqlConfigParentForm">
+            <accordion-group ng-repeat="mysql_instance in vm.globalConfigurationForEditing.mysql track by mysql_instance.host" is-open="mysql_is_open" ng-form="mysqlConfigParentForm">
                 <accordion-heading>
-                    <i class="fa fa-warning" style="color:red;" ng-show="mysqlConfigParentForm.$invalid"></i>
-                    Mysql:  {{mysql_instance.host}} : {{ mysql_instance.port}}
-                    <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': mysql_is_open, 'glyphicon-chevron-right': !mysql_is_open}">
-                    </i>
-                    <div class="btn-group btn-group-xs pull-right">
-                        <button title="Remove MySQL" ng-click="vm.removeMysql($index)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                    <div>
+                        <i class="fa fa-warning" style="color:red;" ng-show="mysqlConfigParentForm.$invalid"></i>
+                        Mysql:  {{mysql_instance.host}} : {{ mysql_instance.port}}
+                        <i class="glyphicon pull-right" ng-class="{'glyphicon-chevron-down': mysql_is_open, 'glyphicon-chevron-right': !mysql_is_open}">
+                        </i>
+                        <div class="btn-group btn-group-xs pull-right">
+                            <button title="Remove MySQL" ng-click="vm.removeMysql($index,$event)" class="btn btn-default"><i class="fa fa-times"></i></button>
+                        </div>
                     </div>
                 </accordion-heading>
                 <ng-form name="mysqlForm">

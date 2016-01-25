@@ -9,11 +9,12 @@ import java.util.List;
 public class NearestHostSelector {
 
 	private static final Logger log = Logger.getLogger(NearestHostSelector.class);
-	public static long DIFF_THRESHOLD = 100;
+	public static long DIFF_THRESHOLD = 250;
 	private MysqlConnectionWithPing lastSql;
     private IMysqlConnectionsProvider mysqlHostsProvider;
 
 	public NearestHostSelector(IMysqlConnectionsProvider mysqlHostsProvider) {
+        log.info("Creating NearestHostSelector, DIFF_THRESHOLD=" + DIFF_THRESHOLD);
         this.mysqlHostsProvider = mysqlHostsProvider;
 	}
 
@@ -31,10 +32,13 @@ public class NearestHostSelector {
             lastSql = getConnection(connectionsList, lastSql.getConfiguration());
             if (lastSql == null || fastestConnection.getPingTime() + DIFF_THRESHOLD < lastSql.getPingTime()) {
                 log.info("Switching databases, new connection is " + fastestConnection + " last sql was " + lastSql);
+                if (lastSql != null) {
+                    log.info("total diff: " + (lastSql.getPingTime() - fastestConnection.getPingTime()));
+                }
                 lastSql = fastestConnection;
             }
         }
-        log.info("Selected databases " + lastSql);
+        log.info("Selected database: " + lastSql);
         return lastSql.getConfiguration();
 	}
 

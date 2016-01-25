@@ -148,6 +148,7 @@
             'tags': $scope.nodes,
             'tokenSeparators': [",", " "]
         };
+
         $scope.projects  = [];
 
         angular.forEach(projects, function(key) {
@@ -161,6 +162,13 @@
             'tokenSeparators': [",", " "]
         };
 
+        /*
+        $timeout(function() {
+            $scope.configForm.$setDirty(false);
+            $scope.configForm.$setPristine(true);
+            $scope.configForm.$setUntouched(true);
+        }, 2000);
+        */
     }
 
 

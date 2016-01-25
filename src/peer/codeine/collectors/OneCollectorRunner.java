@@ -1,14 +1,5 @@
 package codeine.collectors;
 
-import java.io.File;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.PeerStatusChangedUpdater;
 import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
@@ -30,7 +21,6 @@ import codeine.utils.TextFileUtils;
 import codeine.utils.logging.LogUtils;
 import codeine.utils.network.HttpUtils;
 import codeine.utils.os_process.ShellScript;
-
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -38,12 +28,18 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.inject.assistedinject.Assisted;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class OneCollectorRunner implements IOneCollectorRunner {
 
 	private static final int MIN_INTERVAL_MILLI = 20000;
 	private static final Logger log = Logger.getLogger(OneCollectorRunner.class);
-	@Inject private PathHelper pathHelper;
+    @Inject private PathHelper pathHelper;
 	@Inject private FeatureFlags featureFlags;
 	@Inject private PeerStatus peerStatus;
 	@Inject private Gson gson;
@@ -159,27 +155,18 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 		return env;
 	}
 
-	private void sendNotificationIfNeeded() {
-		if (snoozeKeeper.isSnooze(project.name(), node.name())) {
-			log.info("in snooze period");
-			return;
-		}
-		if (collectorInfo.notification_enabled() && shouldNotify()) {
-			try {
-				notificationsCount.get(System.currentTimeMillis());
-			} catch (ExecutionException e) {
-				log.warn("could not get from cache", e);
-			}
-			notificationDeliverToDatabase.sendCollectorResult(
-					collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString(), true, (int)notificationsCount.size());
-		}
-		previousResult = result;
-	}
 
-	private boolean shouldNotify() {
-		return null != previousResult && null != result 
-				&& result.exit() != 0 && result.exit() != previousResult.exit();
-	}
+
+    private void sendNotificationIfNeeded() {
+        if (new NotificationChecker().shouldSendNotification(snoozeKeeper, collectorInfo, project.name(), node.name(), notificationsCount, result, previousResult)) {
+            notificationDeliverToDatabase.sendCollectorResult(
+                    collectorInfo.name(), node, project, result.output(), result.exit(), stopwatch.toString(),
+                    true, (int)notificationsCount.size());
+        }
+        previousResult = result;
+    }
+
+
 
 	private boolean shouldUpdate() {
 		if (result == null) {
