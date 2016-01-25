@@ -64,7 +64,6 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 			log.warn("user tried to change discovery script in " + projectJson.name() + " user " + getUser(request).user().username());
 			throw new UnAuthorizedException("only admin can change discovery script");
 		}
-		checkForRootPermissions(projectJson, currentProject);
 		if (null != currentProject && !isAdministrator(request) && !checkForRootPermissions(projectJson, currentProject)) {
 			log.warn("user tried to change command or collector in " + projectJson.name() + " user " +
 					getUser(request).user().username() + " to run as root");
