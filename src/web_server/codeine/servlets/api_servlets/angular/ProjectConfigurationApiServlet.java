@@ -13,6 +13,7 @@ import codeine.plugins.AfterProjectModifyPlugin.StatusChange;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
 import codeine.utils.MiscUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.exceptions.UnAuthorizedException;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -121,7 +122,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		return new Predicate<CommandInfo>() {
 			@Override
 			public boolean apply(CommandInfo commandInfo) {
-				return commandInfo.cred().equals("root");
+				return !StringUtils.isEmpty(commandInfo.cred()) && commandInfo.cred().equals("root");
 			}
 		};
 	}
@@ -130,7 +131,7 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 		return new Predicate<CollectorInfo>() {
 			@Override
 			public boolean apply(CollectorInfo collectorInfo) {
-				return collectorInfo.cred().equals("root");
+				return !StringUtils.isEmpty(collectorInfo.cred()) && collectorInfo.cred().equals("root");
 			}
 		};
 	}
