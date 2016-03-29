@@ -29,6 +29,7 @@ public class CommandOutputApiServlet extends AbstractApiServlet {
         String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
         String commandID = getParameter(request, Constants.UrlParameters.COMMAND_ID);
         log.info("Will return command " + commandID + " of project " + projectName + " output");
+        request.startAsync();
         String outfile = pathHelper.getCommandOutputFile(projectName, commandID);
         try {
             ByteStreams.copy(new FileInputStream(outfile), request.getAsyncContext().getResponse().getOutputStream());
