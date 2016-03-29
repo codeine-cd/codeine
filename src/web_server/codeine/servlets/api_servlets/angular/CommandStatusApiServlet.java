@@ -1,11 +1,5 @@
 package codeine.servlets.api_servlets.angular;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.NodeInfoNameAndAlias;
 import codeine.command_peer.AllNodesCommandExecuter;
@@ -16,6 +10,11 @@ import codeine.permissions.IUserWithPermissions;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonFileUtils;
 import codeine.utils.TextFileUtils;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This class is used for command status page
@@ -34,6 +33,8 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 	protected void myGet(HttpServletRequest request, HttpServletResponse response) {
 		String projectName = getParameter(request, Constants.UrlParameters.PROJECT_NAME);
 		String commandName = getParameter(request, Constants.UrlParameters.COMMAND_NAME);
+		String includeOutputParameter = getParameter(request, Constants.UrlParameters.INCLUDE_OUTPUT);
+		boolean includeOutput = OptionalParameter.getValue(includeOutputParameter);
 		String file = pathHelper.getCommandOutputInfoFile(projectName, commandName);
 		String outputfile = pathHelper.getCommandOutputFile(projectName, commandName);
 		AllNodesCommandExecuter e = allNodesCommandExecuterProvider.getCommandOrNull(projectName, commandName);
@@ -46,7 +47,9 @@ public class CommandStatusApiServlet extends AbstractApiServlet {
 				commandInfo = getCommandInfo(file);
 			}
 		}
-		commandInfo.output(TextFileUtils.getContents(outputfile));
+		if (includeOutput) {
+			commandInfo.output(TextFileUtils.getContents(outputfile));
+		}
 		commandInfo.clearPasswordParams();
 		commandInfo.can_cancel(getUser(request).isAdministrator() || getUser(request).user().username().equals(commandInfo.user()));
 		commandInfo.can_rerun(canRerun(request, projectName, commandInfo));

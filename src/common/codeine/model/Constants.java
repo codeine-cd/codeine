@@ -1,9 +1,9 @@
 package codeine.model;
 
-import java.io.File;
-
 import codeine.utils.StringUtils;
 import codeine.utils.network.InetUtils;
+
+import java.io.File;
 
 public class Constants
 {
@@ -214,8 +214,7 @@ public class Constants
 		public static final String FILTER = "text-filter";
 		public static final String FORCE = "force";
 		public static final String ADDRESS = "server";
-		
-		
+		public static final String INCLUDE_OUTPUT = "output";
 	}
 
 	public static String getPersistentDir() {
