@@ -36,6 +36,7 @@ public class CommandOutputApiServlet extends AbstractApiServlet {
         final String commandID = getParameter(request, Constants.UrlParameters.COMMAND_ID);
         log.info("Will return command " + commandID + " of project " + projectName + " output");
         request.startAsync();
+        request.getAsyncContext().getResponse().setContentType("text/html; charset=utf-8");
         final String outfile = pathHelper.getCommandOutputFile(projectName, commandID);
         FutureTask futureProcess = new FutureTask<>(new Callable<Boolean>() {
             @Override
