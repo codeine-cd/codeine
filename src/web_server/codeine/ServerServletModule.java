@@ -1,45 +1,19 @@
 package codeine;
 
-import static codeine.model.Constants.*;
-
-import javax.servlet.http.HttpServlet;
-
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
 import codeine.servlets.AngularServlet;
 import codeine.servlets.RootServlet;
-import codeine.servlets.api_servlets.CancelShutdownApiServlet;
-import codeine.servlets.api_servlets.CommandExecutorApiServlet;
-import codeine.servlets.api_servlets.CommandHistoryApiServlet;
-import codeine.servlets.api_servlets.MonitorsStatisticsApiServlet;
-import codeine.servlets.api_servlets.NodesCommandApiServlet;
-import codeine.servlets.api_servlets.NodesCsvApiServlet;
-import codeine.servlets.api_servlets.PrepareForShutdownApiServlet;
-import codeine.servlets.api_servlets.ProjectStatusApiServlet;
-import codeine.servlets.api_servlets.ProjectTagsApiServlet;
-import codeine.servlets.api_servlets.ReporterServlet;
-import codeine.servlets.api_servlets.UpgradeApiServlet;
-import codeine.servlets.api_servlets.angular.CodeineConfigurationApiServlet;
-import codeine.servlets.api_servlets.angular.CodeineExperimentalConfigurationApiServlet;
-import codeine.servlets.api_servlets.angular.CodeinePermissionsApiServlet;
-import codeine.servlets.api_servlets.angular.CollectorStatusApiServlet;
-import codeine.servlets.api_servlets.angular.CommandStatusApiServlet;
-import codeine.servlets.api_servlets.angular.ManageStatisticsInfoApiServlet;
-import codeine.servlets.api_servlets.angular.MonitorStatusApiServlet;
-import codeine.servlets.api_servlets.angular.NodeStatusApiServlet;
-import codeine.servlets.api_servlets.angular.ProjectCommandsApiServlet;
-import codeine.servlets.api_servlets.angular.ProjectConfigurationApiServlet;
-import codeine.servlets.api_servlets.angular.ProjectNodesAliasesApiServlet;
-import codeine.servlets.api_servlets.angular.ProjectNodesApiServlet;
-import codeine.servlets.api_servlets.angular.ProjectStatus2ApiServlet;
-import codeine.servlets.api_servlets.angular.ProjectsTabsApiServlet;
-import codeine.servlets.api_servlets.angular.RuntimeInfoApiServlet;
-import codeine.servlets.api_servlets.angular.UpdateDbApiServlet;
-import codeine.servlets.api_servlets.angular.UserInfoApiServlet;
+import codeine.servlets.api_servlets.*;
+import codeine.servlets.api_servlets.angular.*;
 import codeine.servlets.api_servlets.projects.ProjectsListApiServlet;
 import codeine.users.RegisterServlet;
-
 import com.google.inject.Scopes;
+
+import javax.servlet.http.HttpServlet;
+
+import static codeine.model.Constants.apiContext;
+import static codeine.model.Constants.apiTokenContext;
 
 public class ServerServletModule extends CodeineServletModule
 {
@@ -75,6 +49,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveApi(MonitorStatusApiServlet.class, (Constants.MONITOR_STATUS_CONTEXT));
 		serveApi(CollectorStatusApiServlet.class, (Constants.COLLECTOR_STATUS_CONTEXT));
 		serveApi(CommandStatusApiServlet.class, (Constants.COMMAND_STATUS_CONTEXT));
+		serveApi(CommandOutputApiServlet.class, (Constants.COMMAND_OUTPUT_CONTEXT));
 		serveApi(RuntimeInfoApiServlet.class, (Constants.SESSION_INFO_CONTEXT));
 		serveApi(ProjectsTabsApiServlet.class, (Constants.PROJECTS_TABS_CONTEXT));
 		serveApi(CodeinePermissionsApiServlet.class, (Constants.PERMISSIONS_CONFIGURATION_CONTEXT));
