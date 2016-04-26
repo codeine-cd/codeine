@@ -49,9 +49,12 @@ public class NearestMysqlHostSelectorPreferLocalhost implements Task, MysqlHostS
 
 	public static MysqlConfigurationJson getLocalConfOrNull(GlobalConfigurationJsonStore conf2) {
 		log.info("getLocalConfOrNull - checking host");
+		InetAddress localHost = InetUtils.getLocalHost();
 		for (MysqlConfigurationJson mysqlConfigurationJson : conf2.get().mysql()) {
 			try {
-				if (InetAddress.getByName(mysqlConfigurationJson.host()).equals(InetUtils.getLocalHost())){
+				InetAddress mysqlAddress = InetAddress.getByName(mysqlConfigurationJson.host());
+				log.info("Checking " + mysqlAddress.getHostAddress() + " against " + localHost.getHostAddress());
+				if (mysqlAddress.getHostAddress().equals(localHost.getHostAddress())){
 					log.info("returning localhost " + mysqlConfigurationJson.host());
 					return mysqlConfigurationJson;
 				}
