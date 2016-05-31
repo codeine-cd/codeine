@@ -1,8 +1,8 @@
 package codeine.jsons.command;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
+
+import java.util.Map;
 
 public class CommandInfoForSpecificNode {
 
@@ -35,5 +35,15 @@ public class CommandInfoForSpecificNode {
 	public Map<String, String> environment_variables() {
 		return environment_variables;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "CommandInfoForSpecificNode{" +
+				"node_name='" + node_name + '\'' +
+				", node_alias='" + node_alias + '\'' +
+				", tmp_dir='" + tmp_dir + '\'' +
+				", key='" + key + '\'' +
+				", environment_variables=" + environment_variables +
+				'}';
+	}
 }
