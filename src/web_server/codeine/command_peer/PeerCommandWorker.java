@@ -1,11 +1,5 @@
 package codeine.command_peer;
 
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.NodeWithPeerInfo;
 import codeine.configuration.Links;
 import codeine.jsons.command.CommandInfo;
@@ -19,9 +13,13 @@ import codeine.utils.ExceptionUtils;
 import codeine.utils.ThreadUtils;
 import codeine.utils.logging.LogUtils;
 import codeine.utils.network.HttpUtils;
-
 import com.google.common.base.Function;
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
+
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PeerCommandWorker implements Runnable {
 	
@@ -88,6 +86,7 @@ public class PeerCommandWorker implements Runnable {
 				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias(), null, key, project.environmentVariables());
 				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info))
 						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info2));
+				log.info("Post data of command is " + postData);
 				HttpUtils.doPOST(url, postData, function,null);
 			}
 			else {
