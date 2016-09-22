@@ -1,14 +1,5 @@
 package codeine.command_peer;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.CommandExecutionStatusInfo;
 import codeine.api.CommandStatusJson;
 import codeine.api.NodeInfoNameAndAlias;
@@ -20,11 +11,17 @@ import codeine.utils.FilesUtils;
 import codeine.utils.JsonUtils;
 import codeine.utils.MiscUtils;
 import codeine.utils.exceptions.InShutdownException;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Provider;
+import org.apache.log4j.Logger;
+
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 public class NodesCommandExecuterProvider {
 
@@ -140,7 +137,16 @@ public class NodesCommandExecuterProvider {
 			} else {
 				alias = null;
 			}
-			$.add(new CommandStatusJson(e.name(), e.project(), e.nodes(), e.success(), e.error(), e.commandData().start_time(), e.commandData().id(),  !e.isActive(), alias, e.commandExecutionInfo().user()));
+			$.add(new CommandStatusJson(e.name(),
+					e.project(),
+					e.nodes(),
+					e.success(),
+					e.error(),
+					e.commandData() != null ? e.commandData().start_time() : 0L,
+					e.commandData() != null ? e.commandData().id() : 0L,
+					!e.isActive(),
+					alias,
+					e.commandExecutionInfo() != null ? e.commandExecutionInfo().user() : "Unknown"));
 		}
 		return $;
 	}
