@@ -40,7 +40,7 @@
     "karma-jasmine": "0.1.5",
     "karma-phantomjs-launcher": "0.1.4",
     "load-grunt-tasks": "0.2.0",
-    "time-grunt": "0.2.1",
+    "time-grunt": "~0.2.1",
     "grunt-jscs": "1.6.0",
     "grunt-angular-templates": "0.5.7"
   },
