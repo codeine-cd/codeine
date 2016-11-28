@@ -16,10 +16,6 @@ es("cp target/codeine-1.0.0-jar-with-dependencies.jar dist/bin/codeine.jar");
 es("cd deployment/http-root/ajs ; npm install");
 es("rm -rf deployment/http-root/ajs/app/bower_components");
 es("cd deployment/http-root/ajs ; bower install");
-if (defined($ENV{INTEL_INSIDE}))
-{
-    es("cd deployment/http-root/ajs; /bin/cp /nfs/iil/gen/itec/sws3/dist/workspace/misc/web/css-url-rewriter.js node_modules/grunt-cdnify/node_modules/css-url-rewriter/lib/css-url-rewriter.js");
-}
 es("cd deployment/http-root/ajs ; grunt");
 es("mkdir -p dist/http-root/ajs");
 es("rsync -ur deployment/http-root/ajs/dist dist/http-root/ajs/");
