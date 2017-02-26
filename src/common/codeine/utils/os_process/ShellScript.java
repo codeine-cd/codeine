@@ -1,13 +1,5 @@
 package codeine.utils.os_process;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.attribute.PosixFilePermission;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredHelper;
 import codeine.model.Constants;
@@ -18,8 +10,15 @@ import codeine.utils.StringUtils;
 import codeine.utils.TextFileUtils;
 import codeine.utils.os.OperatingSystem;
 import codeine.utils.os_process.ProcessExecuter.ProcessExecuterBuilder;
-
 import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ShellScript {
 
@@ -119,7 +118,7 @@ public class ShellScript {
 		default:
 			throw new RuntimeException("missing implementation for " + operatingSystem);
 		}
-		return new ProcessExecuterBuilder(cmd, runFromDir).env(env).user(cred).build().execute();
+		return new ProcessExecuterBuilder(cmd, runFromDir).timeoutInMinutes(TimeUnit.MINUTES.toMillis(4)).env(env).user(cred).build().execute();
 	}
 
 	private String getOutputFile() {
