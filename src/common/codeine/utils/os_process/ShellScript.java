@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class ShellScript {
 
@@ -118,7 +117,7 @@ public class ShellScript {
 		default:
 			throw new RuntimeException("missing implementation for " + operatingSystem);
 		}
-		return new ProcessExecuterBuilder(cmd, runFromDir).timeoutInMinutes(TimeUnit.MINUTES.toMillis(4)).env(env).user(cred).build().execute();
+		return new ProcessExecuterBuilder(cmd, runFromDir).timeoutInMinutes(4).env(env).user(cred).build().execute();
 	}
 
 	private String getOutputFile() {
