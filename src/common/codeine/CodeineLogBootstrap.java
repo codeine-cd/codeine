@@ -1,16 +1,11 @@
 package codeine;
 
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
-
 import codeine.model.Constants;
 import codeine.utils.FilesUtils;
+import org.apache.log4j.*;
+
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 
 public class CodeineLogBootstrap {
 
@@ -41,7 +36,7 @@ public class CodeineLogBootstrap {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		appender.setMaxBackupIndex(5);
+		appender.setMaxBackupIndex(10);
 		appender.setMaximumFileSize(10 * 1000000);
 		Logger.getRootLogger().addAppender(appender);
 		Logger.getRootLogger().setLevel(Level.INFO);
