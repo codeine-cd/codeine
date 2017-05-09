@@ -1,1 +1,1 @@
-wrapper.exe --name="Codeine" javaw -Xmx100M -cp bin\codeine.jar codeine.CodeinePeerBootstrap
+wrapper.exe --name="Codeine" javaw -Xmx200M -cp bin\codeine.jar codeine.CodeinePeerBootstrap
