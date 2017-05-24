@@ -1,16 +1,5 @@
 package codeine.servlets.api_servlets.angular;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeGetter;
 import codeine.api.NodeInfo;
@@ -25,10 +14,18 @@ import codeine.permissions.IUserWithPermissions;
 import codeine.permissions.UserPermissionsGetter;
 import codeine.servlet.AbstractApiServlet;
 import codeine.utils.network.InetUtils;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 
@@ -57,6 +54,12 @@ public class ProjectStatus2ApiServlet extends AbstractApiServlet {
 	}
 	private void optimizeForUi(ProjectStatusInfo projectStatusInfo) {
 		for (NodesForVersion nodesForVersion : projectStatusInfo.nodes_for_version) {
+			Collections.sort(nodesForVersion.nodes, new Comparator<NodeWithMonitorsInfo>() {
+				@Override
+				public int compare(NodeWithMonitorsInfo o1, NodeWithMonitorsInfo o2) {
+					return o1.node_alias().compareTo(o2.node_alias());
+				}
+			});
 			for (NodeWithMonitorsInfo node : nodesForVersion.nodes) {
 				node.collectors(null);
 			}
