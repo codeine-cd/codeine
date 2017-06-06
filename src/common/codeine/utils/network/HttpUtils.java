@@ -1,32 +1,22 @@
 package codeine.utils.network;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import codeine.utils.ExceptionUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.net.*;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
-
-import codeine.utils.ExceptionUtils;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 
 public class HttpUtils
 {
 	private static final Logger log = Logger.getLogger(HttpUtils.class);
 	private final static String USER_AGENT = "Mozilla/5.0";
 	public static final int READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
-	public static final int SHORT_READ_TIMEOUT_MILLI = (int) TimeUnit.SECONDS.toMillis(23);
+	public static final int SHORT_READ_TIMEOUT_MILLI = (int) TimeUnit.SECONDS.toMillis(8);
 	public static final int MEDIUM_READ_TIMEOUT_MILLI = (int) TimeUnit.MINUTES.toMillis(23);
 	
 	public static String doGET(String url,Map<String,String> headers, int timeoutMilli)

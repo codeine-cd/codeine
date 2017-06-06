@@ -1,13 +1,6 @@
 package codeine;
 
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.NodeGetter;
 import codeine.api.NodeInfo;
 import codeine.api.NodeWithMonitorsInfo;
@@ -22,11 +15,16 @@ import codeine.model.Constants;
 import codeine.utils.ExceptionUtils;
 import codeine.utils.StringUtils;
 import codeine.utils.network.HttpUtils;
-
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import org.apache.log4j.Logger;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ThreadPoolExecutor;
 
 
 public class ProjectConfigurationInPeerUpdater{
@@ -35,7 +33,7 @@ public class ProjectConfigurationInPeerUpdater{
 	@Inject	private PeersProjectsStatus peersProjectsStatus;
 	@Inject	private NodeGetter nodeGetter;
 	@Inject	private Links links;
-	private ThreadPoolExecutor threadPool = ThreadPoolUtils.newThreadPool(10, "ProjectConfigurationInPeerUpdater");
+	private ThreadPoolExecutor threadPool = ThreadPoolUtils.newThreadPool(25, "ProjectConfigurationInPeerUpdater");
 	
 	
 	private void sendUpdateToPeers(Collection<PeerStatusJsonV2> allPeers) {
