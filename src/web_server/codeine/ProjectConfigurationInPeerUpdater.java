@@ -81,6 +81,10 @@ public class ProjectConfigurationInPeerUpdater{
 		}
 		peers.addAll(getPeersFromProject(updatedProject));
 		peers.addAll(getPeersFromProject(previousProject));
+		if (peers.size() > 1000) {
+			log.info("Skipping updating project " + updatedProject.name() + " as it has " + peers.size() + " peers");
+			return;
+		}
 		executeOnThreadPool(peers);
 	}
 
