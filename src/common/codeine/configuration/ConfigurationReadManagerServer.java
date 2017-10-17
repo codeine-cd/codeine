@@ -131,6 +131,7 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	}
 	
 	public List<CommandInfo> getProjectCommands(String projectName) {
+		getProjectForName(projectName);
 		LinkedList<String> projectQueue = Lists.newLinkedList();
 		Set<String> projectsToAdd = new HashSet<>();
 		projectsToAdd.add(projectName);
@@ -153,7 +154,13 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 
 		List<CommandInfo> $ = Lists.newArrayList();
 		for (String item : projectsToAdd) {
-			$.addAll(getProjectForName(item).commands());
+			ProjectJson projectForName = getProjectForNameOrNull(item);
+			if (projectForName != null) {
+				$.addAll(projectForName.commands());
+			}
+			else {
+				log.warn("project not found " + item + " to include from project " + projectName);
+			}
 		}
 		List<CommandInfo> clonedList = JsonUtils.cloneJson($, new TypeToken<List<CommandInfo>>(){}.getType());
 		for (CommandInfo commandInfo : clonedList) {
