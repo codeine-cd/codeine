@@ -1,13 +1,5 @@
 package codeine.configuration;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
@@ -16,11 +8,18 @@ import codeine.utils.JsonFileUtils;
 import codeine.utils.JsonUtils;
 import codeine.utils.exceptions.ProjectNotFoundException;
 import codeine.utils.logging.LogUtils;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.inject.Inject;
+import org.apache.log4j.Logger;
 
 public class ConfigurationReadManagerServer implements IConfigurationManager
 {
@@ -132,18 +131,29 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 	}
 	
 	public List<CommandInfo> getProjectCommands(String projectName) {
-		List<CommandInfo> $ = Lists.newArrayList();
-		ProjectJson project = getProjectForName(projectName);
-		$.addAll(project.commands());
-		if (!project.include_project_commands().isEmpty()) {
-			for (String p : project.include_project_commands()) {
-				ProjectJson projectForNameOrNull = getProjectForNameOrNull(p);
-				if (null == projectForNameOrNull) {
-					log.warn("project not found " + p + " to include from project " + projectName);
-					continue;
+		LinkedList<String> projectQueue = Lists.newLinkedList();
+		Set<String> projectsToAdd = new HashSet<>();
+		projectsToAdd.add(projectName);
+		projectQueue.push(projectName);
+		while (!projectQueue.isEmpty()) {
+			String item = projectQueue.pop();
+			ProjectJson projectObj = getProjectForNameOrNull(item);
+			if (projectObj != null) {
+				for (int i =0; i < projectObj.include_project_commands().size() ; i++) {
+					String newProject = projectObj.include_project_commands().get(i);
+					if (projectsToAdd.add(newProject)) {
+						projectQueue.push(newProject);
+					}
 				}
-				$.addAll(projectForNameOrNull.commands());
 			}
+			else {
+				log.warn("project not found " + item + " to include from project " + projectName);
+			}
+		}
+
+		List<CommandInfo> $ = Lists.newArrayList();
+		for (String item : projectsToAdd) {
+			$.addAll(getProjectForName(item).commands());
 		}
 		List<CommandInfo> clonedList = JsonUtils.cloneJson($, new TypeToken<List<CommandInfo>>(){}.getType());
 		for (CommandInfo commandInfo : clonedList) {
