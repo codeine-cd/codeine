@@ -33,7 +33,7 @@ public class ProjectConfigurationInPeerUpdater{
 	@Inject	private PeersProjectsStatus peersProjectsStatus;
 	@Inject	private NodeGetter nodeGetter;
 	@Inject	private Links links;
-	private ThreadPoolExecutor threadPool = ThreadPoolUtils.newThreadPool(25, "ProjectConfigurationInPeerUpdater");
+	private ThreadPoolExecutor threadPool = ThreadPoolUtils.newThreadPool(12, "ProjectConfigurationInPeerUpdater");
 	
 	
 	private void sendUpdateToPeers(Collection<PeerStatusJsonV2> allPeers) {
