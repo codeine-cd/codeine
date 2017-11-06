@@ -22,6 +22,7 @@ public class GlobalConfigurationJson
 	private List<MysqlConfigurationJson> mysql = Lists.newArrayList();
 	private String[] roles = {};
 	private boolean large_deployment;
+	private boolean disable_auto_select_mysql;
 
 	public GlobalConfigurationJson() {
 	}
@@ -81,5 +82,9 @@ public class GlobalConfigurationJson
 	public void web_server_port(int web_server_port) {
 		this.web_server_port = web_server_port;
 		
+	}
+
+	public boolean disable_auto_select_mysql() {
+		return disable_auto_select_mysql;
 	}
 }

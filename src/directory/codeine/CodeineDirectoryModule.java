@@ -1,8 +1,5 @@
 package codeine;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import codeine.configuration.ConfigurationReadManagerServer;
 import codeine.configuration.IConfigurationManager;
 import codeine.db.IStatusDatabaseConnector;
@@ -14,14 +11,13 @@ import codeine.db.mysql.connectors.ProjectsConfigurationMysqlConnector;
 import codeine.db.mysql.connectors.StatusMysqlConnector;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
-import codeine.jsons.peer_status.PeersProjectsStatus;
-import codeine.jsons.peer_status.PeersProjectsStatusInDirectory;
 import codeine.version.VersionsMapping;
 import codeine.version.VersionsMappingProvider;
 import codeine.version.VersionsMappingStore;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class CodeineDirectoryModule extends AbstractModule
 {
@@ -45,11 +41,17 @@ public class CodeineDirectoryModule extends AbstractModule
 
 		@Override
 		public MysqlHostSelector get() {
-			MysqlConfigurationJson localConfOrNull = NearestMysqlHostSelectorPreferLocalhost.getLocalConfOrNull(conf);
-			if (null == localConfOrNull) {
+			MysqlConfigurationJson confOrNull;
+			if (conf.get().disable_auto_select_mysql()) {
+		 		confOrNull = conf.get().mysql().get(0);
+			}
+			else {
+				confOrNull = NearestMysqlHostSelectorPreferLocalhost.getLocalConfOrNull(conf);
+			}
+			if (null == confOrNull) {
 				throw new RuntimeException("could not find db conf to start with");
 			}
-			return new StaticMysqlHostSelector(localConfOrNull);
+			return new StaticMysqlHostSelector(confOrNull);
 		}
 		
 	}
