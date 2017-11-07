@@ -1,18 +1,18 @@
 package codeine.servlet;
 
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.security.LoginService;
-import org.eclipse.jetty.util.security.Credential;
-
 import codeine.jsons.auth.AuthenticationMethod;
 import codeine.jsons.auth.CodeineUser;
 import codeine.jsons.auth.IdentityConfJson;
 import codeine.jsons.auth.IdentityConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.plugins.CodeineConfModifyPlugin;
+import codeine.plugins.CodeineConfModifyPlugin.Step;
 import codeine.utils.ExceptionUtils;
+import javax.inject.Inject;
+import org.apache.log4j.Logger;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.LoginService;
+import org.eclipse.jetty.util.security.Credential;
 
 public class UsersManager {
 
@@ -20,6 +20,7 @@ public class UsersManager {
 	private @Inject IdentityConfJsonStore identityConfJsonStore;
 	private @Inject HashLoginService hashLoginService;
 	private @Inject GlobalConfigurationJsonStore globalConfigurationJsonStore;
+	private @Inject CodeineConfModifyPlugin codeineConfModifyPlugin;
 	
 	private void store(IdentityConfJson json) {
 		identityConfJsonStore.store(json);
@@ -42,7 +43,9 @@ public class UsersManager {
 
 	public CodeineUser addUser(String name, String sisma) {
 		CodeineUser user = identityConfJsonStore.get().add(name, sisma);
+		codeineConfModifyPlugin.call(Step.pre, name);
 		store(identityConfJsonStore.get());
+		codeineConfModifyPlugin.call(Step.post, name);
 		putUser(name, sisma);
 		return user;
 	}

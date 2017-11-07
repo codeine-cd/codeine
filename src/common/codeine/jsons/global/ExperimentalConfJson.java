@@ -8,6 +8,7 @@ public class ExperimentalConfJson {
 	private boolean allow_concurrent_commands_in_peer;
 	private String groups_plugin;
 	private String after_project_modify_plugin;
+	private String codeine_conf_modify_plugin;
 
 	public String new_issue_link() {
 		return new_issue_link;
@@ -23,6 +24,9 @@ public class ExperimentalConfJson {
 	}
 	public String after_project_modify_plugin() {
 		return after_project_modify_plugin;
+	}
+	public String codeine_conf_modify_plugin() {
+		return codeine_conf_modify_plugin;
 	}
 
 }
