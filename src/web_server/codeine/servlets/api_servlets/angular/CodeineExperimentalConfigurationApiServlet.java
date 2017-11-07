@@ -1,15 +1,15 @@
 package codeine.servlets.api_servlets.angular;
 
 
+import codeine.jsons.global.ExperimentalConfJson;
+import codeine.jsons.global.ExperimentalConfJsonStore;
+import codeine.plugins.CodeineConfModifyPlugin;
+import codeine.plugins.CodeineConfModifyPlugin.Step;
+import codeine.servlet.AbstractApiServlet;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
-import codeine.jsons.global.ExperimentalConfJson;
-import codeine.jsons.global.ExperimentalConfJsonStore;
-import codeine.servlet.AbstractApiServlet;
 
 public class CodeineExperimentalConfigurationApiServlet extends AbstractApiServlet {
 
@@ -19,6 +19,7 @@ public class CodeineExperimentalConfigurationApiServlet extends AbstractApiServl
 	private static final long serialVersionUID = 1L;
 
 	@Inject private ExperimentalConfJsonStore configurationJsonStore;
+	@Inject private CodeineConfModifyPlugin codeineConfModifyPlugin;
 	
 	@Override
 	protected boolean checkPermissions(HttpServletRequest request) {
@@ -40,8 +41,10 @@ public class CodeineExperimentalConfigurationApiServlet extends AbstractApiServl
 	@Override
 	protected void myPut(HttpServletRequest req, HttpServletResponse resp) {
 		ExperimentalConfJson config = readBodyJson(req, ExperimentalConfJson.class);
-		log.info("Will update codeine Experimenta configuration. New Config is: " + config);
+		log.info("Will update codeine Experimental configuration. New Config is: " + config);
+		codeineConfModifyPlugin.call(Step.pre, getUser(req).user().username());
 		configurationJsonStore.store(config);
+		codeineConfModifyPlugin.call(Step.post, getUser(req).user().username());
 		writeResponseJson(resp, configurationJsonStore.get());
 	}
 

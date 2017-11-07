@@ -101,7 +101,8 @@ public class Constants
 	public static final String COMMAND_RESULT = "codeine-command-result=";
 
 	public static final String JSON_COMMAND_FILE_NAME = "/command.json";
-	
+
+	public static final String EXECUTION_ENV_CONFIGURATION_STEP = "CODEINE_CONFIGURATION_STEP";
 	public static final String EXECUTION_ENV_OUTPUT_FILE = "CODEINE_OUTPUT_FILE";
 	public static final String EXECUTION_ENV_PROJECT_NAME = "CODEINE_PROJECT_NAME";
 	public static final String EXECUTION_ENV_USER_NAME = "CODEINE_USER_NAME";
