@@ -9,6 +9,7 @@ public class ExperimentalConfJson {
 	private String groups_plugin;
 	private String after_project_modify_plugin;
 	private String codeine_conf_modify_plugin;
+	private boolean after_project_modify_plugin_async;
 
 	public String new_issue_link() {
 		return new_issue_link;
@@ -28,5 +29,10 @@ public class ExperimentalConfJson {
 	public String codeine_conf_modify_plugin() {
 		return codeine_conf_modify_plugin;
 	}
+	public boolean after_project_modify_plugin_async() {
+		return after_project_modify_plugin_async;
+	}
+
+
 
 }
