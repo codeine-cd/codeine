@@ -217,6 +217,7 @@ public class Constants
 		public static final String FORCE = "force";
 		public static final String ADDRESS = "server";
 		public static final String INCLUDE_OUTPUT = "output";
+		public static final String SYNC_REQUEST = "sync";
 	}
 
 	public static String getPersistentDir() {
