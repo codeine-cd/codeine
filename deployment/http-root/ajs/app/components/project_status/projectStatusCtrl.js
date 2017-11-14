@@ -24,9 +24,6 @@
 
         $scope.csvUrl = CodeineService.getCsvUrl($scope.projectName);
 
-        //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
-        //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
-
         // Returns true if the node should be in the filtered array (Displayed)
         var isNodeFiltered = function(node, filterMode) {
             return $filter('nodeFilter')(node.immutable, $scope.nodesFilter,
@@ -181,16 +178,14 @@
         };
 
         $scope.isAnyNodeChecked = function() {
-            var res = false;
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
                 for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
                     if ($scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
-                        res = true;
-                        break;
+                        return true;
                     }
                 }
             }
-            return res;
+            return false;
         };
 
         $scope.getAllSelectedNodesToRun = function() {
