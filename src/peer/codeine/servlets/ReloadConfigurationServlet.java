@@ -31,10 +31,19 @@ public class ReloadConfigurationServlet extends AbstractServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		log.info("ReloadConfigurationServlet called");
 		String parameter = UrlParameters.SYNC_REQUEST;
-		boolean isSync = Boolean.parseBoolean(getParameter(req, parameter));
+		final boolean isSync = Boolean.parseBoolean(getParameter(req, parameter));
 		Runnable thread = new Runnable() {
 			@Override
 			public void run() {
+				if (!isSync) {
+					doSleep();
+				}
+				configurationManager.refresh();
+				nodesRunner.run();
+				log.info("ReloadConfigurationServlet finished");
+			}
+
+			private void doSleep() {
 				try {
 					long duration = globalConfigurationJsonStore.get().large_deployment() ? 60 : 25;
 					int millis = new Random().nextInt((int) TimeUnit.SECONDS.toMillis(duration));
@@ -43,9 +52,6 @@ public class ReloadConfigurationServlet extends AbstractServlet {
 				} catch (InterruptedException e) {
 					log.error(e);
 				}
-				configurationManager.refresh();
-				nodesRunner.run();
-				log.info("ReloadConfigurationServlet async finished");
 			}
 		};
 		if (isSync) {
