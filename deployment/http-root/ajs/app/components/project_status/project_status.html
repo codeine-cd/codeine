@@ -43,7 +43,7 @@
                     <li class="dropdown" dropdown on-toggle="toggled(open)">
                         <a href class="dropdown-toggle" dropdown-toggle><i class="fa fa-play"></i> Run Command... <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="command in commands track by command.name"  ng-class=" {disabled : !isAnyNodeChecked() }">
+                            <li ng-repeat="command in getCommands() track by command.name"  ng-class=" {disabled : !isAnyNodeChecked() }">
                                 <a ng-click="runCommand(command.name)">{{::command.name}}</a>
                             </li>
                         </ul>

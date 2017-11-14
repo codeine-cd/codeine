@@ -111,7 +111,8 @@
                 "<br/><strong>String</strong> - text value that will be displayed to user"+
                 "<br/><strong>Number</strong> - numerical value that will be displayed to user and can be a base for more calculations"+
                 "<br/><strong>Monitor</strong> - indicates failures or success by the script exit status (zero is success).",
-            "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)"
+            "operatingSystemHelp" : "Type of operating system for this project, will define the way scripts run in this project (shell/cmd)",
+            "commandTags" : "Will filter commands menu based on the tags of the selected nodes.<br/>Only commands with nodes that apply to selected nodes tags will be displayed"
         });
 
 })(angular);

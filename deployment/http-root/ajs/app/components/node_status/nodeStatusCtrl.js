@@ -7,9 +7,7 @@
         $scope.tabName = $routeParams.tab_name;
         $scope.nodeStatus = nodeStatus;
         $scope.projectConfiguration = project.configuration;
-        //$log.debug('nodeStatusCtrl: node status ' + angular.toJson($scope.nodeStatus));
-        //$log.debug('nodeStatusCtrl: project configuration ' + angular.toJson($scope.projectConfiguration));
-        $scope.commands = project.runnableCommands.data;
+        $scope.commands = filterCommands(project.runnableCommands.data);
 
         $scope.runCommand = function(command) {
             $log.debug('projectStatusCtrl: will run command ' + command);
@@ -37,6 +35,13 @@
             }
             return true;
         };
+
+        function filterCommands(commands) {
+            return _.filter(commands, function(command) {
+                var commandTags = command.command_tags || [];
+                return _.intersection(commandTags,$scope.nodeStatus.tags).length === commandTags.length;
+            });
+        }
     }
 
     //// Angular Code ////

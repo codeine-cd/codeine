@@ -24,9 +24,6 @@
 
         $scope.csvUrl = CodeineService.getCsvUrl($scope.projectName);
 
-        //$log.debug('projectStatusCtrl: projectConfiguration = ' + angular.toJson($scope.projectConfiguration));
-        //$log.debug('projectStatusCtrl: projectStatus = ' + angular.toJson($scope.projectStatus));
-
         // Returns true if the node should be in the filtered array (Displayed)
         var isNodeFiltered = function(node, filterMode) {
             return $filter('nodeFilter')(node.immutable, $scope.nodesFilter,
@@ -311,6 +308,21 @@
                 }
             }
             $scope.allNodesCount = count;
+        };
+
+        $scope.getCommands = function() {
+            if (!$scope.isAnyNodeChecked()) {
+                return $scope.commands;
+            }
+            var nodesTagsIntersection = _.intersection.apply(this, _.map($scope.getAllSelectedNodesToRun(), function(node) {
+                return node.tags;
+            }));
+
+            $log.info(nodesTagsIntersection);
+            return _.filter($scope.commands, function(command) {
+                var commandTags = command.command_tags || [];
+                return _.intersection(commandTags,nodesTagsIntersection).length === commandTags.length;
+            });
         };
 
         $scope.initValues();

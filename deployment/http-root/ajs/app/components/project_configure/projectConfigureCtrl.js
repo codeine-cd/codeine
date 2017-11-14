@@ -55,6 +55,13 @@
             }
         }
 
+        for (var i4=0; i4 < $scope.projectConfigurationForEditing.commands.length ; i4++) {
+            if ($scope.projectConfigurationForEditing.commands[i4].command_tags &&
+                $scope.projectConfigurationForEditing.commands[i4].command_tags.length === 0) {
+                delete $scope.projectConfigurationForEditing.commands[i4].command_tags;
+            }
+        }
+
         $scope.isAdmin = function(){
             return LoginService.getSessionInfo().permissions.administer;
         };

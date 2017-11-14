@@ -63,7 +63,7 @@ public class BasicTest extends TestsSuite {
 		List<CommandParameterInfo> parameters = Lists.newArrayList();
 		Boolean prevent_override = false;
 		RatioType ratio = null;
-		CommandInfo command = new CommandInfo(TEST_COMMAND_NAME, "description", project.name(), null, 1, null, duration, concurrency, error_percent_val, command_strategy, false, duration_units, ratio , false, prevent_override, parameters, script_content);
+		CommandInfo command = new CommandInfo(TEST_COMMAND_NAME, "description", project.name(), null, 1, null, duration, concurrency, error_percent_val, command_strategy, false, duration_units, ratio , false, prevent_override, parameters, script_content, Lists.<String>newArrayList());
 		project.commands().add(command);
 	}
 
