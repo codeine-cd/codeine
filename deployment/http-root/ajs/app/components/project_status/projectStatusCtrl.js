@@ -181,14 +181,16 @@
         };
 
         $scope.isAnyNodeChecked = function() {
+            var res = false;
             for (var i=0 ; i < $scope.projectStatus.nodes_for_version.length; i++) {
                 for (var j=0 ; j < $scope.projectStatus.nodes_for_version[i].filteredNodes.length; j++) {
                     if ($scope.projectStatus.nodes_for_version[i].filteredNodes[j].checked) {
-                        return true;
+                        res = true;
+                        break;
                     }
                 }
             }
-            return false;
+            return res;
         };
 
         $scope.getAllSelectedNodesToRun = function() {
@@ -311,6 +313,21 @@
                 }
             }
             $scope.allNodesCount = count;
+        };
+
+        $scope.getCommands = function() {
+            if (!$scope.isAnyNodeChecked()) {
+                return $scope.commands;
+            }
+            var nodesTagsIntersection = _.intersection.apply(this, _.map($scope.getAllSelectedNodesToRun(), function(node) {
+                return node.tags;
+            }));
+
+            $log.info(nodesTagsIntersection);
+            return _.filter($scope.commands, function(command) {
+                var commandTags = command.command_tags || [];
+                return _.intersection(commandTags,nodesTagsIntersection).length === commandTags.length;
+            });
         };
 
         $scope.initValues();
