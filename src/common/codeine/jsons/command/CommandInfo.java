@@ -9,15 +9,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 
-public class CommandInfo 
+public class CommandInfo
 {
-    private static final int MAX_CONCURRENCY = 500;    
-    private String name, description;
-    private String project_name;
-    @SerializedName("credentials") private String cred;
-    private Integer timeoutInMinutes;
-    private Integer block_after_execution_minutes;
-    private Integer duration, concurrency, error_percent_val;
+	private static final int MAX_CONCURRENCY = 500;
+	private String name, description;
+	private String project_name;
+	@SerializedName("credentials") private String cred;
+	private Integer timeoutInMinutes;
+	private Integer block_after_execution_minutes;
+	private Integer duration, concurrency, error_percent_val;
 	private CommandExcutionType command_strategy;
 	private Boolean stop_on_error;
 	private DurationUnits duration_units;
@@ -27,18 +27,18 @@ public class CommandInfo
 	private Boolean prevent_override;
 	private List<CommandParameterInfo> parameters = Lists.newArrayList();
 	private String script_content;
+	private List<String> command_tags = Lists.newArrayList();
 
-	
+
 	public CommandInfo() {
 		super();
 	}
-    
-    
 
 	public CommandInfo(String name, String description, String project_name, String cred, Integer timeoutInMinutes,
-			Integer block_after_execution_minutes, Integer duration, Integer concurrency, Integer error_percent_val,
-			CommandExcutionType command_strategy, Boolean stop_on_error, DurationUnits duration_units, RatioType ratio,
-			boolean safe_guard, Boolean prevent_override, List<CommandParameterInfo> parameters, String script_content) {
+		Integer block_after_execution_minutes, Integer duration, Integer concurrency, Integer error_percent_val,
+		CommandExcutionType command_strategy, Boolean stop_on_error, DurationUnits duration_units, RatioType ratio,
+		boolean safe_guard, Boolean prevent_override, List<CommandParameterInfo> parameters,
+		String script_content, List<String> command_tags) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -57,6 +57,7 @@ public class CommandInfo
 		this.prevent_override = prevent_override;
 		this.parameters = parameters;
 		this.script_content = script_content;
+		this.command_tags = command_tags;
 	}
 
 
@@ -69,8 +70,8 @@ public class CommandInfo
 
 
 	public String description(){
-    	return description;
-    }
+		return description;
+	}
 
 	public String name() {
 		return name;
@@ -114,21 +115,28 @@ public class CommandInfo
 	public CommandExcutionType command_strategy() {
 		return command_strategy;
 	}
-	
+
 	public boolean prevent_override() {
 		return prevent_override != null && prevent_override;
 	}
-	
+
 	public List<CommandParameterInfo> parameters() {
 		return parameters;
 	}
-	
+
 	public void script_content(String content) {
 		this.script_content = content;
 	}
-	
+
 	public String script_content() {
-		return script_content; 
+		return script_content;
+	}
+
+	public List<String> command_tags() {
+		if (command_tags == null) {
+			return Lists.newArrayList();
+		}
+		return command_tags;
 	}
 
 	@Override
@@ -155,36 +163,36 @@ public class CommandInfo
 	public void overrideByConfiguration(CommandInfo configuredCommand) {
 		cred(configuredCommand.cred());
 		script_content(configuredCommand.script_content());
-	    if (null == timeoutInMinutes) {
-	    	timeoutInMinutes = configuredCommand.timeoutInMinutes;
-	    	if (null == timeoutInMinutes) {
-	    		timeoutInMinutes = 10;
-	    	}
-	    }
-	    if (null == duration) {
-	    	duration = configuredCommand.duration;
-	    }
-	    if (null == concurrency) {
-	    	concurrency = configuredCommand.concurrency;
-	    }
-	    if (null == error_percent_val) {
-	    	error_percent_val = configuredCommand.error_percent_val;
-	    }
-	    if (null == command_strategy) {
-	    	command_strategy = configuredCommand.command_strategy;
-	    }
-	    if (null == stop_on_error) {
-	    	stop_on_error = configuredCommand.stop_on_error;
-	    }
-	    if (null == duration_units) {
-	    	duration_units = configuredCommand.duration_units;
-	    }
-	    if (null == ratio) {
-	    	ratio = configuredCommand.ratio;
-	    }
-	    if (null == prevent_override) {
-	    	prevent_override = configuredCommand.prevent_override;
-	    }
+		if (null == timeoutInMinutes) {
+			timeoutInMinutes = configuredCommand.timeoutInMinutes;
+			if (null == timeoutInMinutes) {
+				timeoutInMinutes = 10;
+			}
+		}
+		if (null == duration) {
+			duration = configuredCommand.duration;
+		}
+		if (null == concurrency) {
+			concurrency = configuredCommand.concurrency;
+		}
+		if (null == error_percent_val) {
+			error_percent_val = configuredCommand.error_percent_val;
+		}
+		if (null == command_strategy) {
+			command_strategy = configuredCommand.command_strategy;
+		}
+		if (null == stop_on_error) {
+			stop_on_error = configuredCommand.stop_on_error;
+		}
+		if (null == duration_units) {
+			duration_units = configuredCommand.duration_units;
+		}
+		if (null == ratio) {
+			ratio = configuredCommand.ratio;
+		}
+		if (null == prevent_override) {
+			prevent_override = configuredCommand.prevent_override;
+		}
 	}
 
 	public void duration(int duration) {
