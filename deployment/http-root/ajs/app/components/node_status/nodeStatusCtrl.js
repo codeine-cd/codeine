@@ -6,11 +6,7 @@
         $scope.projectName = $routeParams.project_name;
         $scope.tabName = $routeParams.tab_name;
         $scope.nodeStatus = nodeStatus;
-        $log.info('fff');
-        $log.debug($scope.nodeStatus);
         $scope.projectConfiguration = project.configuration;
-        $log.info('fff');
-        $log.debug($scope.projectConfiguration);
         $scope.commands = filterCommands(project.runnableCommands.data);
 
         $scope.runCommand = function(command) {
