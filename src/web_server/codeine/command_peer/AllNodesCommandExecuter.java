@@ -47,6 +47,7 @@ public class AllNodesCommandExecuter {
 	private int total;
 	private int count;
 	private int fail;
+	private int skipped;
 	private BufferedWriter writer;
 	private boolean active = true;
 	private long commandId;
@@ -239,6 +240,12 @@ public class AllNodesCommandExecuter {
 		commandExecutionInfo.addSuccessNode(node);
 	}
 
+	public void nodeSkipped(NodeWithPeerInfo node) {
+		log.debug("node skipped " + node.name());
+		skipped++;
+		commandExecutionInfo.addSkippedNode(node);
+	}
+
 	public void workerFinished() {
 		count++;
 		updateJsonAsync();
@@ -265,11 +272,15 @@ public class AllNodesCommandExecuter {
 	}
 
 	public int success() {
-		return (int) (count - fail) * 100 / total;
+		return (int) (count - fail - skipped) * 100 / total;
 	}
 
 	public int error() {
 		return fail * 100 / total;
+	}
+
+	public int skipped() {
+		return skipped * 100 / total;
 	}
 
 	public String project() {

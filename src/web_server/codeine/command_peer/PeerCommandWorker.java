@@ -10,6 +10,7 @@ import codeine.model.Constants.UrlParameters;
 import codeine.model.ExitStatus;
 import codeine.permissions.IUserWithPermissions;
 import codeine.utils.ExceptionUtils;
+import codeine.utils.StringUtils;
 import codeine.utils.ThreadUtils;
 import codeine.utils.logging.LogUtils;
 import codeine.utils.network.HttpUtils;
@@ -22,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PeerCommandWorker implements Runnable {
-	
+
 	private static final Logger log = Logger.getLogger(PeerCommandWorker.class);
 	private NodeWithPeerInfo node;
 	private AllNodesCommandExecuter allNodesCommandExecuter;
@@ -35,7 +36,7 @@ public class PeerCommandWorker implements Runnable {
 	private static Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
 	private IUserWithPermissions userObject;
 	private boolean failedReported = false;
-	
+
 	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
@@ -52,6 +53,7 @@ public class PeerCommandWorker implements Runnable {
 		try {
 			execute();
 		} finally {
+			allNodesCommandExecuter.workerFinished();
 		}
 	}
 
@@ -62,18 +64,19 @@ public class PeerCommandWorker implements Runnable {
 	private void execute() {
 		if (noPermissions()) {
 			announce("no permissions for user " + userObject.user().username() + " on node " + node.alias() + "!");
+			nodeFailed();
 		}
 		else {
 			executeInternal();
 		}
-		allNodesCommandExecuter.workerFinished();
 	}
 
 
 	private void executeInternal() {
-		String url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;
-		log.info("commandNode " + allNodesCommandExecuter.commandString() + " for " + node.alias() + " url is " + url);
+		String url = StringUtils.EMPTY;
 		try {
+			url = links.getPeerLink(node.peer_address()) + Constants.COMMAND_NODE_CONTEXT;
+			log.info("commandNode " + allNodesCommandExecuter.commandString() + " for " + node.alias() + " url is " + url);
 			ThreadUtils.sleep(getSleepTime());
 			log.debug("running worker " + node);
 			final StringBuilder result = new StringBuilder();
@@ -86,7 +89,7 @@ public class PeerCommandWorker implements Runnable {
 				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias(), null, key, project.environmentVariables());
 				log.info("Post data of command is " + command_info2.toString());
 				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info))
-						+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info2));
+					+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info2));
 
 				HttpUtils.doPOST(url, postData, function,null);
 			}
@@ -111,7 +114,7 @@ public class PeerCommandWorker implements Runnable {
 		} catch (Exception ex) {
 			announce("error in node " + node.alias() + " message: " + ExceptionUtils.getRootCause(ex).getMessage());
 			log.warn("error in node with link " + url + " ; message "
-					+ ExceptionUtils.getRootCause(ex).getMessage());
+				+ ExceptionUtils.getRootCause(ex).getMessage());
 			log.debug("error details", ex);
 			nodeFailed();
 		}
@@ -154,6 +157,10 @@ public class PeerCommandWorker implements Runnable {
 		return "===> " + line + " <===";
 	}
 
+	public NodeWithPeerInfo getNode() {
+		return node;
+	}
+
 	private final class ReadCommandOutputFunction implements Function<String, Void> {
 		private final StringBuilder result;
 
@@ -170,7 +177,7 @@ public class PeerCommandWorker implements Runnable {
 					line = "\nCommand failed with exit status " + exitStatus;
 					if (exitStatus <= 0) {
 						line += " (" + ExitStatus.fromInt(exitStatus) + ")";
-						
+
 					}
 					line += "\n";
 				} else {
