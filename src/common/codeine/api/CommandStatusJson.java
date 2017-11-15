@@ -21,7 +21,7 @@ public class CommandStatusJson {
 	private String one_node_alias;
 	private String user;
 	
-	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, long date, long id, boolean finished, String one_node_alias,
+	public CommandStatusJson(String name, String project, int nodes, int successPercent, int failPercent, int skippedPercent, long date, long id, boolean finished, String one_node_alias,
 			String user) {
 		super();
 		this.name = name;
@@ -34,7 +34,7 @@ public class CommandStatusJson {
 		this.date_long = date;
 		this.one_node_alias = one_node_alias;
 		this.user = user;
-		this.skipPercent = finished ?  100 - successPercent - failPercent : 0;
+		this.skipPercent = skippedPercent;
 	}
 
 	public long id() {
@@ -70,7 +70,4 @@ public class CommandStatusJson {
 		return user;
 	}
 
-	
-	
-	
 }

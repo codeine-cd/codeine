@@ -22,6 +22,7 @@ public class CommandExecutionStatusInfo {
 	private List<NodeInfoNameAndAlias> nodes_list;
 	private Queue<NodeInfoNameAndAlias> fail_list = new ConcurrentLinkedDeque<NodeInfoNameAndAlias>();
 	private Queue<NodeInfoNameAndAlias> success_list = new ConcurrentLinkedDeque<NodeInfoNameAndAlias>();
+	private Queue<NodeInfoNameAndAlias> skip_list = new ConcurrentLinkedDeque<NodeInfoNameAndAlias>();
 	private long start_time;
 	private Long finish_time;
 	private String user = "Guest";
@@ -72,12 +73,21 @@ public class CommandExecutionStatusInfo {
 		success_list.add(copyOnlyNodeInfo(node));
 	}
 
+	public void addSkippedNode(NodeInfoNameAndAlias node) {
+		skip_list.add(copyOnlyNodeInfo(node));
+	}
+
 	public Collection<NodeInfoNameAndAlias> fail_list() {
 		return fail_list;
 	}
 	public Collection<NodeInfoNameAndAlias> success_list() {
 		return success_list;
 	}
+
+	public Collection<NodeInfoNameAndAlias> skip_list() {
+		return skip_list;
+	}
+
 	public List<NodeInfoNameAndAlias> nodes_list() {
 		return nodes_list;
 	}

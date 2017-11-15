@@ -68,10 +68,21 @@ public abstract class CommandExecutionStrategy {
 				Thread.sleep(1000);
 				if (isCancel()) {
 					List<Runnable> shutdownNow = executor.shutdownNow();
+					addSkippedNodes(shutdownNow);
 					log.info("shutdownNow " + shutdownNow.size());
 				}
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
+			}
+		}
+	}
+
+	private void addSkippedNodes(List<Runnable> shutdownNow) {
+		for (int i=0; i <shutdownNow.size(); i++) {
+			if (shutdownNow.get(i) instanceof PeerCommandWorker) {
+				NodeWithPeerInfo node = ((PeerCommandWorker) shutdownNow.get(i)).getNode();
+				log.info("Adding skipped node " + node);
+				allNodesCommandExecuter.nodeSkipped(node);
 			}
 		}
 	}
