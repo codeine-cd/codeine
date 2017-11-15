@@ -78,11 +78,13 @@ public abstract class CommandExecutionStrategy {
 	}
 
 	private void addSkippedNodes(List<Runnable> shutdownNow) {
-		for (int i=0; i <shutdownNow.size(); i++) {
-			if (shutdownNow.get(i) instanceof PeerCommandWorker) {
-				NodeWithPeerInfo node = ((PeerCommandWorker) shutdownNow.get(i)).getNode();
+		for (Runnable aShutdownNow : shutdownNow) {
+			if (aShutdownNow instanceof PeerCommandWorker) {
+				NodeWithPeerInfo node = ((PeerCommandWorker) aShutdownNow).getNode();
 				log.info("Adding skipped node " + node);
 				allNodesCommandExecuter.nodeSkipped(node);
+			} else {
+				log.error("Runnable is not PeerCommandWorker");
 			}
 		}
 	}
