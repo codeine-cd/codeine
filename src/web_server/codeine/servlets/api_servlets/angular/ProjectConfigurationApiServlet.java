@@ -14,16 +14,14 @@ import codeine.servlet.AbstractApiServlet;
 import codeine.utils.JsonUtils;
 import codeine.utils.MiscUtils;
 import codeine.utils.StringUtils;
-import codeine.utils.exceptions.UnAuthorizedException;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
-
+import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import org.apache.log4j.Logger;
 
 public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 
@@ -58,6 +56,10 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
 	@Override
 	protected void myPut(HttpServletRequest request, HttpServletResponse resp) {
 		ProjectJson projectJson = readBodyJson(request, ProjectJson.class);
+		if (projectJson.conf_uuid() == null) {
+			log.warn("Save configuration request without uuid, will reject");
+			throw new RuntimeException("Project configuration object must have conf_uuid value");
+		}
 		log.info("Updating configuration of " + projectJson.name() + ", new configuration is " + projectJson);
 		ProjectJson currentProject = configurationManager.getProjectForName(projectJson.name());
 		if (null != currentProject && !isAdministrator(request) && 

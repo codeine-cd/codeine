@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -102,6 +103,10 @@ public class ConfigurationReadManagerServer implements IConfigurationManager
 		ProjectJson $ = getProjectForNameOrNull(projectName);
 		if (null == $) {
 			throw new ProjectNotFoundException(projectName);
+		}
+		if ($.conf_uuid() == null) {
+			log.info("Generating new UUID for project " + projectName);
+			$.conf_uuid(UUID.randomUUID());
 		}
 		return $;
 	}
