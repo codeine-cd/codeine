@@ -125,6 +125,11 @@
                 if (redirect) {
                     $location.path('/codeine/view/' + $scope.tabName + '/project/' + $scope.projectName + '/status');
                 }
+                else {
+                  return ProjectsRepository.loadProjectConfiguration($scope.projectName).then(function() {
+                    $scope.projectConfigurationForEditing = project.cloneConfiguration();
+                  });
+                }
             });
         };
 

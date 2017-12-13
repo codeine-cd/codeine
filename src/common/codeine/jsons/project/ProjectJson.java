@@ -13,6 +13,7 @@ import codeine.utils.os.OperatingSystem;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.UUID;
 
 public class ProjectJson
 {
@@ -32,6 +33,7 @@ public class ProjectJson
 	private DiscardOldCommandsJson discard_old_commands = new DiscardOldCommandsJson(1000, null);
 	private List<EnvironmentVariable> environment_variables = Lists.newArrayList();
 	private List<String> include_project_commands = Lists.newArrayList();
+	private UUID conf_uuid;
 	
 	public ProjectJson(String name) {
 		this.name = name;
@@ -157,6 +159,14 @@ public class ProjectJson
 
 	public String description() {
 		return description;
+	}
+
+	public UUID conf_uuid() {
+		return conf_uuid;
+	}
+
+	public void conf_uuid(UUID newUUID) {
+		conf_uuid = newUUID;
 	}
 
 }
