@@ -54,17 +54,14 @@ public class ConfigurationManagerServer extends ConfigurationReadManagerServer {
             for (final ProjectsConfigurationConnector projectsConfigurationConnector : statusDatabaseConnectorListProvider
                 .get()) {
                 getUpdateThreadPool(projectsConfigurationConnector.getKey())
-                    .execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                projectsConfigurationConnector.deleteProject(projectToDelete);
-                            } catch (Exception e) {
-                                log.warn(
-                                    "cannot update project in database " + projectToDelete.name()
-                                        + " "
-                                        + projectsConfigurationConnector, e);
-                            }
+                    .execute(() -> {
+                        try {
+                            projectsConfigurationConnector.deleteProject(projectToDelete);
+                        } catch (Exception e) {
+                            log.warn(
+                                "cannot update project in database " + projectToDelete.name()
+                                    + " "
+                                    + projectsConfigurationConnector, e);
                         }
                     });
             }
