@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandHistoryCtrl($scope,$log,$interval,$route,Constants,CodeineService,ApplicationFocusService) {
+    function commandHistoryCtrl($scope,$log,$timeout,$route,Constants,CodeineService,ApplicationFocusService) {
         /*jshint validthis:true */
         var vm = this;
         vm.projectName = $route.current.params.project_name;
@@ -20,31 +20,36 @@
         var maxUpdatesNotInFocus = 100;
         var intervalTriggered = 0;
 
-        var intervalHandler = $interval(function() {
-            if (!ApplicationFocusService.isInFocus() && intervalTriggered > maxUpdatesNotInFocus) {
-                return;
-            }
-            intervalTriggered++;
-            $.ajax( {
-                type: 'GET',
-                url: vm.historyUrl ,
-                success: function(response) {
-                    if  ((vm.history.length !== response.length) || (angular.toJson(vm.history) !== angular.toJson(response))) {
-                        $scope.$apply(function() {
-                            vm.history = response;
-                        });
-                    }
-                },
-                error:  function(err) {
-                    $log.error('commandHistoryCtrl: ' + err);
-                },
-                dataType: 'json'
-            });
-        },5000,0,false);
+        var intervalHandler = $timeout(refreshFunc,5000,false);
 
         $scope.$on('$destroy', function() {
-            $interval.cancel(intervalHandler);
+            $timeout.cancel(intervalHandler);
         });
+
+      function refreshFunc() {
+        if (!ApplicationFocusService.isInFocus() && intervalTriggered > maxUpdatesNotInFocus) {
+          interval = $timeout(refreshFunc, 5000,false);
+          return;
+        }
+        intervalTriggered++;
+        $.ajax( {
+          type: 'GET',
+          url: vm.historyUrl ,
+          success: function(response) {
+            if  ((vm.history.length !== response.length) || (angular.toJson(vm.history) !== angular.toJson(response))) {
+              $scope.$apply(function() {
+                vm.history = response;
+              });
+            }
+            interval = $timeout(refreshFunc, 5000,false);
+          },
+          error:  function(err) {
+            $log.error('commandHistoryCtrl: ' + err);
+            interval = $timeout(refreshFunc, 5000,false);
+          },
+          dataType: 'json'
+        });
+      }
     }
 
     //// Angular Code ////
