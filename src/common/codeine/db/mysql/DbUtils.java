@@ -151,7 +151,7 @@ public class DbUtils
 	}
 
 	private Connection getConnection(boolean useCompression) {
-		String url = "jdbc:mysql://"+hostSelector.mysql().host()+":" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME + "?connectTimeout=10000&socketTimeout=90000";
+		String url = "jdbc:mysql://"+hostSelector.mysql().host()+":" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME + "?connectTimeout=60000&socketTimeout=90000";
 		if (useCompression) {
 			url += "&useCompression=true";
 		}

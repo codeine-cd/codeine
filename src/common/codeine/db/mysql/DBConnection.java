@@ -24,7 +24,7 @@ public class DBConnection implements IDBConnection {
     @Override
     public boolean checkConnection(String host, Integer port, String user, String password) {
         String url = "jdbc:mysql://" + host + ":" + port + "/" + MysqlConstants.DB_NAME +
-                "?socketTimeout=10000&connectTimeout=10000&useCompression=true";
+                "?socketTimeout=60000&connectTimeout=60000&useCompression=true";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url, user, password);
