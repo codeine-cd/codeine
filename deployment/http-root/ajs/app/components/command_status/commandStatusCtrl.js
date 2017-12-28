@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService, project) {
+    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService, project) {
         /*jshint validthis:true */
         var vm = this;
         vm.project = project;
@@ -13,27 +13,7 @@
         vm.all_nodes_is_open = vm.commandStatus.nodes_list.length < 6;
         vm.fail_nodes_is_open = vm.commandStatus.fail_list.length < 6;
         var intervalTriggered = 0;
-        var interval = $interval(function() {
-            if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
-                return;
-            }
-            intervalTriggered++;
-            CodeineService.getCommandStatus(vm.projectName, $routeParams.command_id).success(function(data) {
-                var scrolledToBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
-                vm.commandStatus = data;
-                if (vm.commandStatus.finished) {
-                    $log.debug('commandStatusCtrl: command is finished');
-                    $timeout(function() {
-                        $interval.cancel(interval);
-                    });
-                }
-                if (scrolledToBottom) {
-                    $timeout(function() {
-                        $(document).scrollTop($(document).height());
-                    });
-                }
-            });
-        },5000);
+        var interval = $timeout(refreshCommands, 5000);
 
         vm.rerunCommand = function() {
             $log.debug('commandStatusCtrl: will rerun the command - ' + vm.commandStatus.command);
@@ -51,9 +31,33 @@
             }
         };
 
+      function refreshCommands() {
+        if (!ApplicationFocusService.isInFocus && intervalTriggered > maxUpdatesNotInFocus) {
+          interval = $timeout(refreshCommands, 5000);
+          return;
+        }
+        intervalTriggered++;
+        CodeineService.getCommandStatus(vm.projectName, $routeParams.command_id).success(function(data) {
+          var scrolledToBottom = $(window).scrollTop() + $(window).height() > $(document).height() - 100;
+          vm.commandStatus = data;
+          if (vm.commandStatus.finished) {
+            $log.debug('commandStatusCtrl: command is finished');
+            $timeout(function() {
+              $timeout.cancel(interval);
+            });
+          }
+          if (scrolledToBottom) {
+            $timeout(function() {
+              $(document).scrollTop($(document).height());
+            });
+          }
+          interval = $timeout(refreshCommands, 5000);
+        });
+      }
+
         $scope.$on('$destroy', function() {
             if (interval) {
-                $interval.cancel(interval);
+              $timeout.cancel(interval);
             }
         });
     }
