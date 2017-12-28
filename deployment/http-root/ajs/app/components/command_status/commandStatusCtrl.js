@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $interval, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService, project) {
+    function commandStatusCtrl($scope, $log,$routeParams, CodeineService, commandStatus, $timeout, ApplicationFocusService, $location, SelectedNodesService, $window, AlertService, project) {
         /*jshint validthis:true */
         var vm = this;
         vm.project = project;
@@ -43,7 +43,7 @@
           if (vm.commandStatus.finished) {
             $log.debug('commandStatusCtrl: command is finished');
             $timeout(function() {
-              $interval.cancel(interval);
+              $timeout.cancel(interval);
             });
           }
           if (scrolledToBottom) {
