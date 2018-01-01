@@ -1,7 +1,9 @@
 package codeine.db.mysql.connectors;
 
+import com.google.common.collect.Maps;
 import java.util.List;
 
+import java.util.Map;
 import javax.inject.Inject;
 
 import codeine.configuration.FeatureFlags;
@@ -17,23 +19,31 @@ import com.google.gson.Gson;
 public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
 
     @Inject
-    private GlobalConfigurationJsonStore globalConfigurationJsonStore;
-    @Inject
     private Gson gson;
     @Inject
     private ExperimentalConfJsonStore webConfJsonStore;
     @Inject
     private FeatureFlags featureFlags;
+    @Inject
+    private GlobalConfigurationJsonStore globalConfigurationJsonStore;
+
+    private Map<MysqlConfigurationJson, DbUtils> dbUtilsMap = Maps.newHashMap();
 
     public List<NotificationsMysqlConnector> get() {
         List<NotificationsMysqlConnector> $ = Lists.newArrayList();
         for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
-            DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m), globalConfigurationJsonStore);
+            DbUtils dbUtils = getDbUtils(m);
             NotificationsMysqlConnector c = new NotificationsMysqlConnector(dbUtils, gson,
                 webConfJsonStore, featureFlags);
             $.add(c);
         }
         return $;
+    }
+
+    private DbUtils getDbUtils(MysqlConfigurationJson m) {
+        return dbUtilsMap.computeIfAbsent(m,
+            mysqlConfigurationJson -> new DbUtils(new StaticMysqlHostSelector(m),
+                globalConfigurationJsonStore));
     }
 
 

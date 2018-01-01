@@ -1,7 +1,9 @@
 package codeine.db.mysql.connectors;
 
+import com.google.common.collect.Maps;
 import java.util.List;
 
+import java.util.Map;
 import javax.inject.Inject;
 
 import codeine.db.ProjectsConfigurationConnector;
@@ -20,18 +22,23 @@ public class ProjectConfigurationDatabaseConnectorListProvider {
 	@Inject private Gson gson;
 	@Inject private ExperimentalConfJsonStore webConfJsonStore;
 
+	private Map<MysqlConfigurationJson, DbUtils> dbUtilsMap = Maps.newHashMap();
+
 	public List<ProjectsConfigurationConnector> get() {
 		List<ProjectsConfigurationConnector> $ = Lists.newArrayList();
 		for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
-			DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m), globalConfigurationJsonStore);
+			DbUtils dbUtils = getDbUtils(m);
 			ProjectsConfigurationConnector c = new ProjectsConfigurationMysqlConnector(dbUtils, gson, webConfJsonStore);
 			$.add(c);
 		}
 		return $;
 	}
 
-	
-	
-	
+	private DbUtils getDbUtils(MysqlConfigurationJson m) {
+		return dbUtilsMap.computeIfAbsent(m,
+                    mysqlConfigurationJson -> new DbUtils(new StaticMysqlHostSelector(m),
+                        globalConfigurationJsonStore));
+	}
+
 
 }
