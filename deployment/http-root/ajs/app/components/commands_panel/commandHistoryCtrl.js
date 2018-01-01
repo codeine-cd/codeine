@@ -28,7 +28,7 @@
 
       function refreshFunc() {
         if (!ApplicationFocusService.isInFocus() && intervalTriggered > maxUpdatesNotInFocus) {
-          interval = $timeout(refreshFunc, 5000,false);
+          intervalHandler = $timeout(refreshFunc, 5000,false);
           return;
         }
         intervalTriggered++;
@@ -41,11 +41,11 @@
                 vm.history = response;
               });
             }
-            interval = $timeout(refreshFunc, 5000,false);
+            intervalHandler = $timeout(refreshFunc, 5000,false);
           },
           error:  function(err) {
             $log.error('commandHistoryCtrl: ' + err);
-            interval = $timeout(refreshFunc, 5000,false);
+            intervalHandler = $timeout(refreshFunc, 5000,false);
           },
           dataType: 'json'
         });
