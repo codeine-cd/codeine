@@ -34,19 +34,12 @@ public class DbUtils {
     private DBConnection dbConnection = new DBConnection();
     private Map<String, String> connectionsPool = Maps.newConcurrentMap();
 
-    @Inject
     private MysqlHostSelector hostSelector;
-
-    @Inject
     private GlobalConfigurationJsonStore globalConfigurationJsonStore;
 
-    public DbUtils() {
-        super();
-        init();
-    }
-
-
+    @Inject
     public DbUtils(MysqlHostSelector hostSelector, GlobalConfigurationJsonStore globalConfigurationJsonStore) {
+        super();
         this.hostSelector = hostSelector;
         this.globalConfigurationJsonStore = globalConfigurationJsonStore;
         init();
