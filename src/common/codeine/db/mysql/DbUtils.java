@@ -37,11 +37,12 @@ public class DbUtils {
     private MysqlHostSelector hostSelector;
 
 
-    public DbUtils() {
+    public DbUtils(int maxTotal, int minTotal) {
         super();
-        genericObjectPoolConfig.setMaxTotal(2);
-        genericObjectPoolConfig.setMinIdle(1);
-        genericObjectPoolConfig.setMaxIdle(2);try {
+        genericObjectPoolConfig.setMaxTotal(maxTotal);
+        genericObjectPoolConfig.setMinIdle(minTotal);
+        genericObjectPoolConfig.setMaxIdle(maxTotal);
+        try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             log.error("Failed to load MySQL JDBC driver", e);
@@ -49,8 +50,8 @@ public class DbUtils {
     }
 
 
-    public DbUtils(MysqlHostSelector hostSelector) {
-        this();
+    public DbUtils(MysqlHostSelector hostSelector, int maxTotal, int minTotal) {
+        this(maxTotal, minTotal);
         this.hostSelector = hostSelector;
     }
 

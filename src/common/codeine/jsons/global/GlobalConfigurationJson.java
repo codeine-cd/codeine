@@ -23,6 +23,8 @@ public class GlobalConfigurationJson
 	private String[] roles = {};
 	private boolean large_deployment;
 	private boolean disable_auto_select_mysql;
+	private Integer max_db_pool_size = 2;
+	private Integer min_db_pool_size = 2;
 
 	public GlobalConfigurationJson() {
 	}
@@ -86,5 +88,13 @@ public class GlobalConfigurationJson
 
 	public boolean disable_auto_select_mysql() {
 		return disable_auto_select_mysql;
+	}
+
+	public Integer max_db_pool_size() {
+		return max_db_pool_size;
+	}
+
+	public Integer min_db_pool_size() {
+		return min_db_pool_size;
 	}
 }

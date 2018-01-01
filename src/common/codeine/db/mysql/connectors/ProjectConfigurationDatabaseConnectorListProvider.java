@@ -23,7 +23,9 @@ public class ProjectConfigurationDatabaseConnectorListProvider {
 	public List<ProjectsConfigurationConnector> get() {
 		List<ProjectsConfigurationConnector> $ = Lists.newArrayList();
 		for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
-			DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m));
+			DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m),
+				globalConfigurationJsonStore.get().max_db_pool_size(),
+				globalConfigurationJsonStore.get().min_db_pool_size());
 			ProjectsConfigurationConnector c = new ProjectsConfigurationMysqlConnector(dbUtils, gson, webConfJsonStore);
 			$.add(c);
 		}
