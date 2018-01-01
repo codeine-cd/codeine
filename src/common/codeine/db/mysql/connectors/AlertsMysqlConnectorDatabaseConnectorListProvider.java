@@ -22,7 +22,9 @@ public class AlertsMysqlConnectorDatabaseConnectorListProvider {
 	public List<AlertsMysqlConnector> get() {
 		List<AlertsMysqlConnector> $ = Lists.newArrayList();
 		for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
-			DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m));
+			DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m),
+				globalConfigurationJsonStore.get().max_db_pool_size(),
+				globalConfigurationJsonStore.get().min_db_pool_size());
 			AlertsMysqlConnector c = new AlertsMysqlConnector(dbUtils, gson, webConfJsonStore);
 			$.add(c);
 		}

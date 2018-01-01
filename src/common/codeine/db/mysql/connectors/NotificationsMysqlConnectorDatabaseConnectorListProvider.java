@@ -15,24 +15,28 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 
 public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
-	
-	@Inject private GlobalConfigurationJsonStore globalConfigurationJsonStore;
-	@Inject private Gson gson;
-	@Inject private ExperimentalConfJsonStore webConfJsonStore;
-	@Inject private FeatureFlags featureFlags;
 
-	public List<NotificationsMysqlConnector> get() {
-		List<NotificationsMysqlConnector> $ = Lists.newArrayList();
-		for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
-			DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m));
-			NotificationsMysqlConnector c = new NotificationsMysqlConnector(dbUtils, gson, webConfJsonStore, featureFlags);
-			$.add(c);
-		}
-		return $;
-	}
+    @Inject
+    private GlobalConfigurationJsonStore globalConfigurationJsonStore;
+    @Inject
+    private Gson gson;
+    @Inject
+    private ExperimentalConfJsonStore webConfJsonStore;
+    @Inject
+    private FeatureFlags featureFlags;
 
-	
-	
-	
+    public List<NotificationsMysqlConnector> get() {
+        List<NotificationsMysqlConnector> $ = Lists.newArrayList();
+        for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
+            DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m),
+                globalConfigurationJsonStore.get().max_db_pool_size(),
+                globalConfigurationJsonStore.get().min_db_pool_size());
+            NotificationsMysqlConnector c = new NotificationsMysqlConnector(dbUtils, gson,
+                webConfJsonStore, featureFlags);
+            $.add(c);
+        }
+        return $;
+    }
+
 
 }

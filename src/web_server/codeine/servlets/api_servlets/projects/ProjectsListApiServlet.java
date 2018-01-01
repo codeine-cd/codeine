@@ -39,12 +39,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 		String query = getParameter(request, "projectSearch");
 		List<ProjectJson> configuredProjects = filter(configurationManager.getConfiguredProjects(), query);
 		
-		Comparator<ProjectJson> c = new Comparator<ProjectJson>() {
-			@Override
-			public int compare(ProjectJson o1, ProjectJson o2) {
-				return o1.name().compareTo(o2.name());
-			}
-		};
+		Comparator<ProjectJson> c = Comparator.comparing(ProjectJson::name);
 		Collections.sort(configuredProjects, c);
 		
 		List<CodeineProject> projects = Lists.newArrayList();
@@ -83,12 +78,7 @@ public class ProjectsListApiServlet extends AbstractApiServlet
 		if (null == query){
 			return configuredProjects;
 		}
-		Predicate<ProjectJson> type = new Predicate<ProjectJson>(){
-			@Override
-			public boolean apply(ProjectJson project){
-				return (project.name().toLowerCase().contains(query.toLowerCase()));
-			}
-		};
+		Predicate<ProjectJson> type = project -> (project.name().toLowerCase().contains(query.toLowerCase()));
 		return Lists.newArrayList(Iterables.filter(configuredProjects, type));
 	}
 	
