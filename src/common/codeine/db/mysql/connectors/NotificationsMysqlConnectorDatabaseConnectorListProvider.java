@@ -28,9 +28,7 @@ public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
     public List<NotificationsMysqlConnector> get() {
         List<NotificationsMysqlConnector> $ = Lists.newArrayList();
         for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
-            DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m),
-                globalConfigurationJsonStore.get().max_db_pool_size(),
-                globalConfigurationJsonStore.get().min_db_pool_size());
+            DbUtils dbUtils = new DbUtils(new StaticMysqlHostSelector(m), globalConfigurationJsonStore);
             NotificationsMysqlConnector c = new NotificationsMysqlConnector(dbUtils, gson,
                 webConfJsonStore, featureFlags);
             $.add(c);

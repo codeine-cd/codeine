@@ -1,5 +1,6 @@
 package codeine.db.mysql;
 
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.exceptions.ConnectToDatabaseException;
 import codeine.utils.exceptions.DatabaseException;
@@ -36,12 +37,25 @@ public class DbUtils {
     @Inject
     private MysqlHostSelector hostSelector;
 
+    @Inject
+    private GlobalConfigurationJsonStore globalConfigurationJsonStore;
 
-    public DbUtils(int maxTotal, int minTotal) {
+    public DbUtils() {
         super();
-        genericObjectPoolConfig.setMaxTotal(maxTotal);
-        genericObjectPoolConfig.setMinIdle(minTotal);
-        genericObjectPoolConfig.setMaxIdle(maxTotal);
+        init();
+    }
+
+
+    public DbUtils(MysqlHostSelector hostSelector, GlobalConfigurationJsonStore globalConfigurationJsonStore) {
+        this.hostSelector = hostSelector;
+        this.globalConfigurationJsonStore = globalConfigurationJsonStore;
+        init();
+    }
+
+    private void init() {
+        genericObjectPoolConfig.setMaxTotal(globalConfigurationJsonStore.get().max_db_pool_size());
+        genericObjectPoolConfig.setMinIdle(globalConfigurationJsonStore.get().min_db_pool_size());
+        genericObjectPoolConfig.setMaxIdle(globalConfigurationJsonStore.get().max_db_pool_size());
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -50,10 +64,6 @@ public class DbUtils {
     }
 
 
-    public DbUtils(MysqlHostSelector hostSelector, int maxTotal, int minTotal) {
-        this(maxTotal, minTotal);
-        this.hostSelector = hostSelector;
-    }
 
 
     private static void closeStatement(Statement stmt) {
