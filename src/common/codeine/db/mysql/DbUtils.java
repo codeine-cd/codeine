@@ -242,7 +242,7 @@ public class DbUtils {
     }
 
     private String getConnectionPoolName(String sqlAddress) {
-        return sqlAddress.split(":")[0];
+        return sqlAddress;
     }
 
     @Override
