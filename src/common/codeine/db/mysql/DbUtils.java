@@ -89,9 +89,7 @@ public class DbUtils {
         } finally {
             closeStatement(preparedStatement);
             closeResultSet(rs);
-            if (root) {
-                dbConnection.closeConnection(connection);
-            }
+            dbConnection.closeConnection(connection);
         }
     }
 
@@ -120,6 +118,7 @@ public class DbUtils {
         } finally {
             closeStatement(preparedStatement);
             closeResultSet(rs);
+            dbConnection.closeConnection(connection);
         }
     }
 
@@ -140,9 +139,7 @@ public class DbUtils {
             throw prepareException(sql, connection, e, args);
         } finally {
             closeStatement(preparedStatement);
-            if (root) {
-                dbConnection.closeConnection(connection);
-            }
+            dbConnection.closeConnection(connection);
         }
     }
 
