@@ -6,8 +6,8 @@ import codeine.utils.exceptions.ConnectToDatabaseException;
 import codeine.utils.exceptions.DatabaseException;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
-import java.io.IOException;
-import java.io.StringReader;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,48 +15,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
-import java.util.Properties;
 import javax.inject.Inject;
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp2.PoolableConnection;
-import org.apache.commons.dbcp2.PoolableConnectionFactory;
-import org.apache.commons.dbcp2.PoolingDriver;
-import org.apache.commons.pool2.ObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.log4j.Logger;
 
 public class DbUtils {
 
-    private final GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
+    private Map<String, HikariDataSource> hikariDataSourceMap = Maps.newHashMap();
     private static Logger log = Logger.getLogger(DbUtils.class);
     private DBConnection dbConnection = new DBConnection();
-    private Map<String, String> connectionsPool = Maps.newConcurrentMap();
 
     private MysqlHostSelector hostSelector;
     private GlobalConfigurationJsonStore globalConfigurationJsonStore;
 
     @Inject
-    public DbUtils(MysqlHostSelector hostSelector, GlobalConfigurationJsonStore globalConfigurationJsonStore) {
+    public DbUtils(MysqlHostSelector hostSelector,
+        GlobalConfigurationJsonStore globalConfigurationJsonStore) {
         super();
         this.hostSelector = hostSelector;
         this.globalConfigurationJsonStore = globalConfigurationJsonStore;
-        init();
     }
-
-    private void init() {
-        genericObjectPoolConfig.setMaxTotal(globalConfigurationJsonStore.get().max_db_pool_size());
-        genericObjectPoolConfig.setMinIdle(globalConfigurationJsonStore.get().min_db_pool_size());
-        genericObjectPoolConfig.setMaxIdle(globalConfigurationJsonStore.get().max_db_pool_size());
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            log.error("Failed to load MySQL JDBC driver", e);
-        }
-    }
-
-
 
 
     private static void closeStatement(Statement stmt) {
@@ -107,11 +84,14 @@ public class DbUtils {
                 function.apply(rs);
             }
         } catch (SQLException e) {
+            log.error("Error during executeQuery", e);
             throw prepareException(sql, connection, e, null);
         } finally {
             closeStatement(preparedStatement);
             closeResultSet(rs);
-            dbConnection.closeConnection(connection);
+            if (root) {
+                dbConnection.closeConnection(connection);
+            }
         }
     }
 
@@ -140,7 +120,6 @@ public class DbUtils {
         } finally {
             closeStatement(preparedStatement);
             closeResultSet(rs);
-            dbConnection.closeConnection(connection);
         }
     }
 
@@ -161,7 +140,9 @@ public class DbUtils {
             throw prepareException(sql, connection, e, args);
         } finally {
             closeStatement(preparedStatement);
-            dbConnection.closeConnection(connection);
+            if (root) {
+                dbConnection.closeConnection(connection);
+            }
         }
     }
 
@@ -173,16 +154,11 @@ public class DbUtils {
         String mysqlAddress = hostSelector.mysql().host() + ":" + hostSelector.mysql().port();
         String jdbcUrl =
             "jdbc:mysql://" + mysqlAddress + "/"
-                + MysqlConstants.DB_NAME + "?connectTimeout=60000&socketTimeout=90000";
-        if (useCompression) {
-            jdbcUrl += "&useCompression=true";
-        }
-        String url = getConnectionString(jdbcUrl, hostSelector.mysql());
+                + MysqlConstants.DB_NAME + "?useCompression=true";
         try {
-            return DriverManager
-                .getConnection(url);
+            return getDBConnection(jdbcUrl, hostSelector.mysql());
         } catch (SQLException e) {
-            throw new ConnectToDatabaseException(url, e);
+            throw new ConnectToDatabaseException(jdbcUrl, e);
         }
     }
 
@@ -200,49 +176,31 @@ public class DbUtils {
         }
     }
 
-    private String getConnectionString(String sqlAddress,
-        MysqlConfigurationJson mysql) {
-        return connectionsPool.computeIfAbsent(sqlAddress,
-            s -> {
-                ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(sqlAddress,
-                    mysql.user(), mysql.password());
-                PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
-                    connectionFactory, null);
-                ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(
-                    poolableConnectionFactory, genericObjectPoolConfig);
-                poolableConnectionFactory.setPool(connectionPool);
-                try {
-                    Class.forName("org.apache.commons.dbcp2.PoolingDriver");
-                    PoolingDriver driver = (PoolingDriver) DriverManager
-                        .getDriver("jdbc:apache:commons:dbcp:");
-                    String connectionPoolName = getConnectionPoolName(sqlAddress);
-                    driver.registerPool(connectionPoolName, connectionPool);
-                    log.info("Created connection pool to " + sqlAddress + " with name "
-                        + connectionPoolName);
-                    return "jdbc:apache:commons:dbcp:" + connectionPoolName;
-                } catch (ClassNotFoundException | SQLException e) {
-                    log.error("Failed to create connection pool, will use normal connections");
-                    return "jdbc:mysql://" + sqlAddress + "/" + MysqlConstants.DB_NAME;
-                }
+    private Connection getDBConnection(String sqlAddress,
+        MysqlConfigurationJson mysql) throws SQLException {
+        HikariDataSource dataSource = hikariDataSourceMap.computeIfAbsent(sqlAddress,
+            address -> {
+                HikariConfig config = new HikariConfig();
+                config.setUsername(mysql.user());
+                config.setPassword(mysql.password());
+                config.setJdbcUrl(address);
+                config.setMaximumPoolSize(globalConfigurationJsonStore.get().max_db_pool_size());
+                config.setMinimumIdle(globalConfigurationJsonStore.get().min_db_pool_size());
+                config.setConnectionTimeout(60000);
+                config.addDataSourceProperty("cachePrepStmts", true);
+                config.addDataSourceProperty("prepStmtCacheSize", 250);
+                config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+                config.addDataSourceProperty("useServerPrepStmts", true);
+                config.addDataSourceProperty("useLocalSessionState", true);
+                config.addDataSourceProperty("useLocalTransactionState", true);
+                config.addDataSourceProperty("rewriteBatchedStatements", true);
+                config.addDataSourceProperty("cacheResultSetMetadata", true);
+                config.addDataSourceProperty("cacheServerConfiguration", true);
+                config.addDataSourceProperty("elideSetAutoCommits", true);
+                config.addDataSourceProperty("maintainTimeStats", false);
+                return new HikariDataSource(config);
             });
-    }
-
-    private Properties getConnectionProperties(boolean useCompression) {
-        Properties props = new Properties();
-        String propertiesTr = "connectTimeout=60000;socketTimeout=90000";
-        if (useCompression) {
-            propertiesTr += ";useCompression=true";
-        }
-        try {
-            props.load(new StringReader(propertiesTr));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return props;
-    }
-
-    private String getConnectionPoolName(String sqlAddress) {
-        return sqlAddress;
+        return dataSource.getConnection();
     }
 
     @Override

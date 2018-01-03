@@ -50,22 +50,19 @@ public class ProjectsConfigurationMysqlConnector implements ProjectsConfiguratio
 	@Override
 	public Map<String, ProjectJson> getAllProjects() {
 		final Map<String, ProjectJson> $ = Maps.newHashMap();
-		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
-			@Override
-			public Void apply(ResultSet input) {
-				String json = null;
-				String project = null;
-				try {
-					project = input.getString("project_name");
-					json = input.getString("data");
-					$.put(project, gson.fromJson(json, ProjectJson.class));
-				} catch (Exception e) {
-					log.error("json is " + json);
-					log.error("failed to read project from database " + project, e);
-				}
-				return null;
-			}
-		};
+		Function<ResultSet, Void> function = input -> {
+            String json = null;
+            String project = null;
+            try {
+                project = input.getString("project_name");
+                json = input.getString("data");
+                $.put(project, gson.fromJson(json, ProjectJson.class));
+            } catch (Exception e) {
+                log.error("json is " + json);
+                log.error("failed to read project from database " + project, e);
+            }
+            return null;
+        };
 		dbUtils.executeQuery("select * from " + TABLE_NAME, function);
 		return $;
 	}
