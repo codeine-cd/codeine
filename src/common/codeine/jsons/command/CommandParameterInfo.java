@@ -17,6 +17,11 @@ public class CommandParameterInfo {
 	
 	enum CommandParameterType {String, Boolean, Selection, Password}
 
+	public CommandParameterInfo(String name, String value) {
+		this.name = name;
+		this.value = value;
+	}
+
 	public String name() {
 		return name;
 	}
@@ -33,5 +38,9 @@ public class CommandParameterInfo {
 	}
 	public void value(String value) {
 		this.value = value;
+	}
+
+	public String default_value() {
+		return default_value;
 	}
 }
