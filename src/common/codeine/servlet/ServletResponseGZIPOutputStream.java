@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 
 public class ServletResponseGZIPOutputStream extends ServletOutputStream {
 
@@ -51,4 +52,13 @@ public class ServletResponseGZIPOutputStream extends ServletOutputStream {
         gzipStream.write(b);
     }
 
+    @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+
+    }
 }
