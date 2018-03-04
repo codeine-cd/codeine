@@ -162,19 +162,27 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap
 		
 		Constraint constraint2 = new Constraint();
 		constraint2.setAuthenticate(false);
-		constraint.setName("reporter");
-		constraint.setRoles(config.get().roles());
+		constraint2.setName("reporter");
+		constraint2.setRoles(config.get().roles());
 		ConstraintMapping constraintMapping2 = new ConstraintMapping();
 		constraintMapping2.setConstraint(constraint2);
 		constraintMapping2.setPathSpec(Constants.apiContext(Constants.REPORTER_CONTEXT));
-		
+
 		Constraint constraint3 = new Constraint();
 		constraint3.setAuthenticate(false);
-		constraint.setName("api_with_token");
-		constraint.setRoles(config.get().roles());
+		constraint3.setName("api_with_token");
+		constraint3.setRoles(config.get().roles());
 		ConstraintMapping constraintMapping3 = new ConstraintMapping();
 		constraintMapping3.setConstraint(constraint3);
 		constraintMapping3.setPathSpec(Constants.apiTokenContext("/*"));
+
+		Constraint constraint4 = new Constraint();
+		constraint4.setAuthenticate(false);
+		constraint4.setName("prometheus");
+		constraint4.setRoles(config.get().roles());
+		ConstraintMapping constraintMapping4 = new ConstraintMapping();
+		constraintMapping4.setConstraint(constraint4);
+		constraintMapping4.setPathSpec(Constants.apiContext(Constants.METRICS_CONTEXT));
 
 		securityHandler.addConstraintMapping(constraintMapping3);
 		securityHandler.addConstraintMapping(constraintMapping2);
