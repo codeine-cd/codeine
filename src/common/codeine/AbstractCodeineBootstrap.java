@@ -100,7 +100,7 @@ public abstract class AbstractCodeineBootstrap {
         stats.setHandler(server.getHandler());
         server.setHandler(stats);
         new JettyStatisticsCollector(stats).register();
-        handler.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
+        handler.addServlet(new ServletHolder(new MetricsServlet()), Constants.METRICS_CONTEXT);
     }
 
     protected int startServer(ContextHandlerCollection contexts) throws Exception {
