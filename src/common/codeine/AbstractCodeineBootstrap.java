@@ -72,16 +72,15 @@ public abstract class AbstractCodeineBootstrap {
         injector = Guice.createInjector(getModules(component));
         FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
         ServletContextHandler handler = createServletContextHandler();
-
-        if (injector.getInstance(GlobalConfigurationJsonStore.class).get().prometheus_enabled()) {
-            handler.addServlet(new ServletHolder(new MetricsServlet()), Constants.METRICS_CONTEXT);
-        }
-
         handler.setContextPath("/");
-        FilterHolder promHolder = new FilterHolder(
-            new MetricsFilter("webapp_metrics_filter", "prometheus jetty metrics", 4, null));
-        handler.addFilter(promHolder, "/api/*", EnumSet.allOf(DispatcherType.class));
-        handler.addFilter(promHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
+        if (injector.getInstance(GlobalConfigurationJsonStore.class).get().prometheus_enabled()) {
+            log.info("Adding prometheus filter");
+            handler.addServlet(new ServletHolder(new MetricsServlet()), Constants.METRICS_CONTEXT);
+            FilterHolder promHolder = new FilterHolder(
+                new MetricsFilter("webapp_metrics_filter", "prometheus jetty metrics", 4, null));
+            handler.addFilter(promHolder, "/api/*", EnumSet.allOf(DispatcherType.class));
+            handler.addFilter(promHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
+        }
 
         FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
         crossHolder
@@ -102,7 +101,7 @@ public abstract class AbstractCodeineBootstrap {
     }
 
     private void registerPrometheus() {
-        log.info("Add prometheus servlet and metrics");
+        log.info("Adding prometheus servlet and metrics");
         Server server = injector.getInstance(Server.class);
         DefaultExports.initialize();
         StatisticsHandler stats = new StatisticsHandler();

@@ -1,5 +1,6 @@
 package codeine;
 
+import io.prometheus.client.CollectorRegistry;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -90,6 +91,7 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap {
             log.warn("could not bind to default port " + Constants.DEFAULT_PEER_PORT
                 + " will fallback to random port", e);
             server.stop();
+            CollectorRegistry.defaultRegistry.clear();
         }
         server = new Server(0);
         return startServer(contexts, server);
