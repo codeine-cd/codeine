@@ -14,6 +14,7 @@ import com.google.inject.Provider;
 import com.google.inject.Scopes;
 import com.google.inject.servlet.GuiceFilter;
 import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.filter.MetricsFilter;
 import io.prometheus.client.hotspot.DefaultExports;
 import io.prometheus.client.jetty.JettyStatisticsCollector;
 import java.io.File;
@@ -71,15 +72,23 @@ public abstract class AbstractCodeineBootstrap {
         injector = Guice.createInjector(getModules(component));
         FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
         ServletContextHandler handler = createServletContextHandler();
-        handler.setContextPath("/");
+
         if (injector.getInstance(GlobalConfigurationJsonStore.class).get().prometheus_enabled()) {
-            registerPrometheus(handler);
+            handler.addServlet(new ServletHolder(new MetricsServlet()), Constants.METRICS_CONTEXT);
         }
+
+        handler.setContextPath("/");
+        FilterHolder promHolder = new FilterHolder(
+            new MetricsFilter("webapp_metrics_filter", "prometheus jetty metrics", 4, null));
+        handler.addFilter(promHolder, "/api/*", EnumSet.allOf(DispatcherType.class));
+        handler.addFilter(promHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
+
         FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
         crossHolder
             .setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
         crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
             "X-Requested-With,Origin,Content-Type,Accept,api_token");
+
         handler.addFilter(crossHolder, "/api/*", EnumSet.allOf(DispatcherType.class));
         handler.addFilter(crossHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
         handler.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
@@ -92,7 +101,7 @@ public abstract class AbstractCodeineBootstrap {
         execute();
     }
 
-    private void registerPrometheus(ServletContextHandler handler) {
+    private void registerPrometheus() {
         log.info("Add prometheus servlet and metrics");
         Server server = injector.getInstance(Server.class);
         DefaultExports.initialize();
@@ -100,7 +109,6 @@ public abstract class AbstractCodeineBootstrap {
         stats.setHandler(server.getHandler());
         server.setHandler(stats);
         new JettyStatisticsCollector(stats).register();
-        handler.addServlet(new ServletHolder(new MetricsServlet()), Constants.METRICS_CONTEXT);
     }
 
     protected int startServer(ContextHandlerCollection contexts) throws Exception {
@@ -109,10 +117,14 @@ public abstract class AbstractCodeineBootstrap {
 
     protected int startServer(ContextHandlerCollection contexts, Server jettyServer)
         throws Exception {
-        ((HttpConnectionFactory)jettyServer.getConnectors()[0].getConnectionFactories().iterator().next()).getHttpConfiguration().setRequestHeaderSize(30000);
+        ((HttpConnectionFactory) jettyServer.getConnectors()[0].getConnectionFactories().iterator()
+            .next()).getHttpConfiguration().setRequestHeaderSize(30000);
         jettyServer.setHandler(contexts);
+        if (injector.getInstance(GlobalConfigurationJsonStore.class).get().prometheus_enabled()) {
+            registerPrometheus();
+        }
         jettyServer.start();
-        return ((ServerConnector)jettyServer.getConnectors()[0]).getLocalPort();
+        return ((ServerConnector) jettyServer.getConnectors()[0]).getLocalPort();
     }
 
     protected void createAdditionalServlets(ServletContextHandler handler) {
