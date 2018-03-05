@@ -145,15 +145,6 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS
             | ServletContextHandler.SECURITY);
 
-        Constraint constraint = new Constraint();
-        constraint.setName(Constraint.__SPNEGO_AUTH);
-        constraint.setRoles(config.get().roles());
-        constraint.setAuthenticate(true);
-
-        ConstraintMapping constraintMapping = new ConstraintMapping();
-        constraintMapping.setConstraint(constraint);
-        constraintMapping.setPathSpec("/*");
-
         ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler() {
             @Override
             public void handle(String pathInContext, Request baseRequest,
@@ -169,6 +160,15 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap {
                 super.handle(pathInContext, baseRequest, request, response);
             }
         };
+
+        Constraint constraint = new Constraint();
+        constraint.setName(Constraint.__SPNEGO_AUTH);
+        constraint.setRoles(config.get().roles());
+        constraint.setAuthenticate(true);
+
+        ConstraintMapping constraintMapping = new ConstraintMapping();
+        constraintMapping.setConstraint(constraint);
+        constraintMapping.setPathSpec("/*");
 
         Constraint constraint2 = new Constraint();
         constraint2.setAuthenticate(false);
@@ -189,15 +189,13 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap {
         Constraint constraint4 = new Constraint();
         constraint4.setAuthenticate(false);
         constraint4.setName("prometheus");
-        constraint4.setRoles(config.get().roles());
         ConstraintMapping constraintMapping4 = new ConstraintMapping();
         constraintMapping4.setConstraint(constraint4);
-        constraintMapping4.setPathSpec(Constants.apiContext(Constants.METRICS_CONTEXT));
+        constraintMapping4.setPathSpec(Constants.METRICS_CONTEXT);
 
-        securityHandler.addConstraintMapping(constraintMapping4);
-        securityHandler.addConstraintMapping(constraintMapping3);
-        securityHandler.addConstraintMapping(constraintMapping2);
-        securityHandler.addConstraintMapping(constraintMapping);
+        securityHandler.setConstraintMappings(Lists
+            .newArrayList(constraintMapping4, constraintMapping3, constraintMapping2,
+                constraintMapping));
         SpnegoLoginService loginService = new SpnegoLoginService(null,
             Constants.getSpnegoPropertiesPath());
         securityHandler.setLoginService(loginService);
