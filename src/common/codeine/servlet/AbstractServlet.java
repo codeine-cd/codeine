@@ -1,5 +1,6 @@
 package codeine.servlet;
 
+import codeine.utils.exceptions.ProjectNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -123,6 +124,9 @@ public abstract class AbstractServlet extends HttpServlet{
 		} else if (e instanceof InShutdownException){
 			error = new ApiError("Cannot execute","Preparing for shutdown",e.getMessage());
 			response.setStatus(HttpStatus.FORBIDDEN_403);
+		} else if (e instanceof ProjectNotFoundException){
+			error = new ApiError("Not found",e.getMessage(),e.getMessage());
+			response.setStatus(HttpStatus.NOT_FOUND_404);
 		} else {
 			error = new ApiError("Internal Server Error",e.getMessage() ,e.getMessage());
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR_500);
