@@ -15,10 +15,16 @@ my $log = "";
 #my $log = "-Dlog.to.stdout=true";
 my $kill = undef;
 my $daemon = undef;
+my $xmx = "2g";
+my $jvm_args = "";
+my $workarea = undef;
 
 GetOptions(
 	"kill"   => \$kill,
 	"daemon"   => \$daemon,
+	"xmx"   => \$xmx,
+	"jvm-args" => \$jvm_args,
+	"workarea" => \$workarea
 );
 
 if ($kill)
@@ -31,12 +37,16 @@ if ($kill)
 	sleep 5;
 }
 
+if ($workarea) {
+	$ENV{CODEINE_WORKAREA} = $workarea;
+}
+my $cmdLine = "$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx$xmx $jvm_args -cp $dir/codeine.jar codeine.CodeineServerBootstrap";
 print "starting servers\n";
 if ($daemon)
 {
-	system("/usr/bin/nohup $ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx2g -cp $dir/codeine.jar codeine.CodeineServerBootstrap > $httpRoot/codeine.server.out.log 2>&1 < /dev/null &");
+	system("/usr/bin/nohup $cmdLine > $httpRoot/codeine.server.out.log 2>&1 < /dev/null &");
 }
 else
 {
-	system("$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx2g -cp $dir/codeine.jar codeine.CodeineServerBootstrap");
+	system("$cmdLine");
 }

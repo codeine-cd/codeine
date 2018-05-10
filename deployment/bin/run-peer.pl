@@ -15,10 +15,16 @@ my $log = "";
 #my $log = "-Dlog.to.stdout=true";
 my $kill = undef;
 my $daemon = undef;
+my $xmx = "100m";
+my $jvm_args = "";
+my $workarea = undef;
 
 GetOptions(
-	"kill"   => \$kill,
-	"daemon"   => \$daemon,
+    "kill"   => \$kill,
+    "daemon"   => \$daemon,
+    "xmx"   => \$xmx,
+    "jvm-args" => \$jvm_args,
+    "workarea" => \$workarea
 );
 
 if ($kill)
@@ -31,12 +37,17 @@ if ($kill)
 	sleep 5;
 }
 
+if ($workarea) {
+    $ENV{CODEINE_WORKAREA} = $workarea;
+}
+
+my $cmdLine = "$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx$xmx $jvm_args -cp $dir/codeine.jar codeine.CodeinePeerBootstrap";
 print "starting peer\n";
 if ($daemon)
 {
-	system("/usr/bin/nohup $ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx100m -cp $dir/codeine.jar codeine.CodeinePeerBootstrap > $httpRoot/codeine.peer.out.log 2>&1 < /dev/null &");
+	system("/usr/bin/nohup $cmdLine > $httpRoot/codeine.peer.out.log 2>&1 < /dev/null &");
 }
 else
 {
-	system("$ENV{'JAVA_HOME'}/bin/java $debug $log -Xmx100m -cp $dir/codeine.jar codeine.CodeinePeerBootstrap");
+	system("$cmdLine");
 }
