@@ -22,9 +22,9 @@ my $workarea = undef;
 GetOptions(
     "kill"   => \$kill,
     "daemon"   => \$daemon,
-    "xmx"   => \$xmx,
-    "jvm-args" => \$jvm_args,
-    "workarea" => \$workarea
+    "xmx=s" => \$xmx,
+    "jvm-args=s" => \$jvm_args,
+    "workarea=s" => \$workarea
 );
 
 if ($kill)
