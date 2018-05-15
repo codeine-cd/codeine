@@ -129,8 +129,6 @@ public class MXJController
 		{
 			options.put("server-id", String.valueOf(getServerID()));
 		}
-//	        options.put("skip-innodb", null);
-		options.put("user", MysqlConstants.DB_USER);
 		if (DUMP_QUERIES_LOG)
 		{
 			options.put("log", System.getProperty("mysql.datadir") + File.separator + "queries.log");
