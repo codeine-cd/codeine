@@ -140,7 +140,7 @@ public class MysqlProcessControlService {
 			return true;
 		} else {
 			log.info("createDbUser() - creating user in database");
-			sql = "CREATE USER '" + mysqlConf.user() + "'@'%' identified by '" + MysqlConstants.DB_PASSWORD + "'";
+			sql = "CREATE USER '" + mysqlConf.user() + "'@'%' identified by '" + mysqlConf.password() + "'";
 			int rs = dbUtils.executeUpdateAsRoot(sql);
 			if (rs != -1) {
 				log.info("user created successfully");
