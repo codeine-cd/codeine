@@ -8,21 +8,19 @@ import codeine.utils.StringUtils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
-import org.apache.log4j.Logger;
-
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import org.apache.log4j.Logger;
 
 public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 
 	private static final Logger log = Logger.getLogger(PeersProjectsStatusInWebServer.class);
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(55);
-	public static long WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(30);
+	private long WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(30);
 	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
-	private Map<String, PeerStatusJsonV2> peer_to_projects = Maps.newHashMap();
 	private Cache<String, PeerStatusJsonV2> cache = CacheBuilder.newBuilder().expireAfterWrite(20, TimeUnit.MINUTES).build();
 	private Map<String, PeriodicExecuter> connectorsMap = Maps.newHashMap();
 	
@@ -33,7 +31,6 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
         if (!StringUtils.isEmpty(System.getProperty("REFRESH_SECONDS"))) {
             try {
                 WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(Long.parseLong(System.getProperty("REFRESH_SECONDS"), 10));
-
             }
             catch(Exception e) {
                 log.error("Failed to parse REFRESH_SECONDS property", e);
@@ -60,7 +57,6 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 			log.info("stopping " + e.getKey());
 			e.getValue().stopWhenPossible();
 		}
-		peer_to_projects = getCacheAsMap();
 	}
 	
 	private Map<String, PeerStatusJsonV2> getCacheAsMap() {
@@ -102,7 +98,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 
 	@Override
 	public Map<String, PeerStatusJsonV2> peer_to_projects() {
-		return peer_to_projects;
+		return getCacheAsMap();
 	}
 
 	public class PeersProjectsStatusInWebServerConnectorWorker implements Task {

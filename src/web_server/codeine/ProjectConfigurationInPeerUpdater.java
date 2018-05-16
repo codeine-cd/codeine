@@ -64,12 +64,7 @@ public class ProjectConfigurationInPeerUpdater{
 
 	private void executeOnThreadPool(final Collection<PeerStatusJsonV2> allPeers) {
 		log.info("adding task to thread pool " + threadPool);
-		threadPool.execute(new Runnable() {
-			@Override
-			public void run() {
-				sendUpdateToPeers(allPeers);
-			}
-		});
+		threadPool.execute(() -> sendUpdateToPeers(allPeers));
 	}
 
 

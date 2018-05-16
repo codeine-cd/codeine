@@ -68,22 +68,18 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	public Map<String, PeerStatusJsonV2> getPeersStatus() {
 		log.info("getPeersStatus " + dbUtils.server());
 		final Map<String, PeerStatusJsonV2> $ = Maps.newHashMap();
-		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
-			@Override
-			public Void apply(ResultSet rs){
-				try {
-					String key = rs.getString(1);
-					String value = rs.getString(2);
-					PeerStatusJsonV2 peerStatus = gson.fromJson(value, PeerStatusJsonV2.class);
-					peerStatus.status(PeerStatusString.valueOf(rs.getString("status")));
-					updateNodesWithPeer(peerStatus);
-					$.put(key, peerStatus);
-					return null;
-				} catch (SQLException e) {
-					throw ExceptionUtils.asUnchecked(e); 
-				}
+		Function<ResultSet, Void> function = rs -> {
+			try {
+				String key = rs.getString(1);
+				String value = rs.getString(2);
+				PeerStatusJsonV2 peerStatus = gson.fromJson(value, PeerStatusJsonV2.class);
+				peerStatus.status(PeerStatusString.valueOf(rs.getString("status")));
+				updateNodesWithPeer(peerStatus);
+				$.put(key, peerStatus);
+				return null;
+			} catch (SQLException e) {
+				throw ExceptionUtils.asUnchecked(e);
 			}
-
 		};
 		dbUtils.executeQueryCompressed("select * from " + TABLE_NAME, function);
 		return $;
