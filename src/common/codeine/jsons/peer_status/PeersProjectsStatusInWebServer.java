@@ -21,7 +21,7 @@ public class PeersProjectsStatusInWebServer implements PeersProjectsStatus {
 	public static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(55);
 	private long WORKER_SLEEP_TIME = TimeUnit.SECONDS.toMillis(30);
 	private StatusDatabaseConnectorListProvider statusDatabaseConnectorListProvider;
-	private Cache<String, PeerStatusJsonV2> cache = CacheBuilder.newBuilder().expireAfterWrite(20, TimeUnit.MINUTES).build();
+	private final Cache<String, PeerStatusJsonV2> cache = CacheBuilder.newBuilder().expireAfterWrite(20, TimeUnit.MINUTES).build();
 	private Map<String, PeriodicExecuter> connectorsMap = Maps.newHashMap();
 	
 	@Inject
