@@ -196,7 +196,7 @@ public class CommandInfo {
         if (null == prevent_override) {
             prevent_override = configuredCommand.prevent_override;
         }
-        if (null == parameters) {
+        if (null == parameters || parameters.isEmpty()) {
             parameters = Lists.newArrayList();
             configuredCommand.parameters.forEach(parameter -> parameters
                 .add(new CommandParameterInfo(parameter.name(), parameter.default_value())));
