@@ -134,13 +134,10 @@ public class CommandNodeServletBackup extends AbstractServlet
 			}
 			cmdForOutput.add(file);
 			writer.println("$ " + StringUtils.collectionToString(cmdForOutput));
-			Function<String, Void> function = new Function<String, Void>(){
-				@Override
-				public Void apply(String input){
-					writer.println(input);
-					writer.flush();
-					return null;
-				}
+			Function<String, Void> function = input -> {
+				writer.println(input);
+				writer.flush();
+				return null;
 			};
 			Map<String, String> env = getEnvParams(commandInfo);
 			env.put(Constants.EXECUTION_ENV_PROJECT_NAME, commandInfo.project_name());

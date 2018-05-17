@@ -48,10 +48,10 @@
                 "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME</strong>",
             "tagsdiscoveryScriptHelp" : "Type a shell script to discover tags for the project's nodes. The script runs on each individual Codeine peer.<br/><br/>" +
                 "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> in the following json format: <pre>[\"&lt;tag-string&gt;\", ...]</pre> <br/>" +
-                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS</strong>",
+                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_HOST, CODEINE_PORT</strong>",
             "commandScriptHelp" : "Type a shell script to execute on nodes.<br/><br/>" +
                 "Parameters will be provided to the script as <strong>Environment Variables</strong>.<br/>" +
-                "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>",
+                "In addition, the script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS, CODEINE_HOST, CODEINE_PORT</strong>",
             "monitorsConfigureHelp" : "Monitors used to detect malfunctions and errors on the running nodes.<br/><br/>" +
                 "Codeine runs the monitors periodically on all nodes, and notifies when a node fails.",
             "collectorsConfigureHelp" : "Collectors used to detect malfunctions and errors on the running nodes, and also to provide information about nodes status.<br/><br/>" +
@@ -64,13 +64,13 @@
             "credentialsHelp" : "The user that will be used to execute the configured script.<br/><br/> This feature does not work for most cases right now.",
             "notificationsEnabledHelp" : "If checked, emails will be sent to the configured users, when this collector starts to fail.",
             "monitorScriptHelp" : "Type a shell script to monitor the desired functionality of the node.<br/><br/>By convention, monitors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
-                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
+                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS, CODEINE_HOST, CODEINE_PORT</strong>.",
             "collectorScriptHelp" : "Type a shell script to collector the desired functionality of the node.<br/><br/>By convention, collectors are marked as failed if their <strong>exit status is non-zero</strong>.<br/><br/>" +
-                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.<br/>"+
+                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS, CODEINE_HOST, CODEINE_PORT</strong>.<br/>"+
                 "The collector output is expected in a file, that its name is in <strong>CODEINE_OUTPUT_FILE</strong> environment variable.",
             "versionScriptHelp" : "Type a shell script to specify the node's version.<br/><br/>" +
                 "The script output should be written to a file in a path specified in the environment variable <strong>CODEINE_OUTPUT_FILE</strong> and should contain the version number (e.g.: 1.0.3).<br/><br/>" +
-                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS</strong>.",
+                "The script can use the following environment variables in execution: <strong>CODEINE_PROJECT_NAME, CODEINE_NODE_NAME, CODEINE_NODE_ALIAS, CODEINE_NODE_TAGS, CODEINE_HOST, CODEINE_PORT</strong>.",
             "tabsConfigureHelp" : "Enables a separate view for a group of projects in the main page of Codeine.",
             "serverNameHelp" : "A name to be displayed when accessing UI or in mail messages",
             "webServerHostHelp" : "Full host name of the web server",

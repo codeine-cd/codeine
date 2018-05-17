@@ -1,5 +1,7 @@
 package codeine;
 
+import static com.google.common.collect.Maps.newHashMap;
+
 import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeInfo;
 import codeine.configuration.IConfigurationManager;
@@ -7,6 +9,7 @@ import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredHelper;
 import codeine.executer.Task;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
@@ -29,8 +32,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import org.apache.log4j.Logger;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -39,50 +40,55 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import static com.google.common.collect.Maps.newHashMap;
+import org.apache.log4j.Logger;
 
 public class RunMonitors implements Task {
-	private IConfigurationManager configurationManager;
-	private String projectName;
-	private static final Logger log = Logger.getLogger(RunMonitors.class);
-	private static final int MAX_OUTPUT_SIZE = 1000000;
-	private Map<String, Long> lastRun = newHashMap();
-	private PeerStatus projectStatusUpdater;
-	private final MailSender mailSender;
-	private final PathHelper pathHelper;
-	private NodeInfo node;
-	private NotificationDeliverToDatabase notificationDeliverToMongo;
-	private PeerStatusChangedUpdater mongoPeerStatusUpdater;
-	private SnoozeKeeper snoozeKeeper;
-	private ShellScript shellScript;
 
-	public RunMonitors(IConfigurationManager configurationManager, String project, PeerStatus projectStatusUpdater, MailSender mailSender,
-			PathHelper pathHelper, NodeInfo node, NotificationDeliverToDatabase notificationDeliverToMongo,
-			PeerStatusChangedUpdater mongoPeerStatusUpdater, SnoozeKeeper snoozeKeeper) {
-		this.configurationManager = configurationManager;
-		this.projectName = project;
-		this.projectStatusUpdater = projectStatusUpdater;
-		this.mailSender = mailSender;
-		this.pathHelper = pathHelper;
-		this.node = node;
-		this.notificationDeliverToMongo = notificationDeliverToMongo;
-		this.mongoPeerStatusUpdater = mongoPeerStatusUpdater;
-		this.snoozeKeeper = snoozeKeeper;
-		init();
-	}
+    private GlobalConfigurationJsonStore globalConfigurationJsonStore;
+    private IConfigurationManager configurationManager;
+    private String projectName;
+    private static final Logger log = Logger.getLogger(RunMonitors.class);
+    private static final int MAX_OUTPUT_SIZE = 1000000;
+    private Map<String, Long> lastRun = newHashMap();
+    private PeerStatus projectStatusUpdater;
+    private final MailSender mailSender;
+    private final PathHelper pathHelper;
+    private NodeInfo node;
+    private NotificationDeliverToDatabase notificationDeliverToMongo;
+    private PeerStatusChangedUpdater mongoPeerStatusUpdater;
+    private SnoozeKeeper snoozeKeeper;
+    private ShellScript shellScript;
 
-	private void init() {
-		String monitorOutputDirWithNode = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name());
-		FilesUtils.mkdirs(monitorOutputDirWithNode);
-	}
+    public RunMonitors(IConfigurationManager configurationManager, String project,
+        PeerStatus projectStatusUpdater, MailSender mailSender,
+        PathHelper pathHelper, NodeInfo node,
+        NotificationDeliverToDatabase notificationDeliverToMongo,
+        PeerStatusChangedUpdater mongoPeerStatusUpdater, SnoozeKeeper snoozeKeeper, GlobalConfigurationJsonStore globalConfigurationJsonStore) {
+        this.configurationManager = configurationManager;
+        this.projectName = project;
+        this.projectStatusUpdater = projectStatusUpdater;
+        this.mailSender = mailSender;
+        this.pathHelper = pathHelper;
+        this.node = node;
+        this.notificationDeliverToMongo = notificationDeliverToMongo;
+        this.mongoPeerStatusUpdater = mongoPeerStatusUpdater;
+        this.snoozeKeeper = snoozeKeeper;
+        this.globalConfigurationJsonStore = globalConfigurationJsonStore;
+        init();
+    }
 
-	private ProjectJson project() {
-		return configurationManager.getProjectForName(projectName);
-	}
+    private void init() {
+        String monitorOutputDirWithNode = pathHelper
+            .getMonitorOutputDirWithNode(project().name(), node.name());
+        FilesUtils.mkdirs(monitorOutputDirWithNode);
+    }
 
-	@Override
-	public void run() {
+    private ProjectJson project() {
+        return configurationManager.getProjectForName(projectName);
+    }
+
+    @Override
+    public void run() {
         try {
             List<NodeMonitor> monitors = Lists.newArrayList(project().monitors());
             removeNonExistMonitors();
@@ -103,233 +109,269 @@ public class RunMonitors implements Task {
             } else if (project().node_discovery_startegy() == NodeDiscoveryStrategy.Configuration) {
                 updateTagsByConfiguration();
             }
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
             log.error("Error in RunMonitors", e);
         }
-	}
+    }
 
-	private void validateDiskSpaceForMonitorRun() {
-		File tempDir = new File(System.getProperty("java.io.tmpdir"));
-		if (tempDir.getUsableSpace() < 100){
-			log.warn("not enough space to run monitors " + tempDir + " usableSpace: " + tempDir.getUsableSpace() + " , but it might work on the backup dir");
+    private void validateDiskSpaceForMonitorRun() {
+        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        if (tempDir.getUsableSpace() < 100) {
+            log.warn("not enough space to run monitors " + tempDir + " usableSpace: " + tempDir
+                .getUsableSpace() + " , but it might work on the backup dir");
 //			snoozeKeeper.snoozeAll();
-		}
-	}
+        }
+    }
 
-	private void updateTagsByConfiguration() {
-		projectStatusUpdater.updateTags(project(), node.name(), node.alias(), node.tags());
-	}
+    private void updateTagsByConfiguration() {
+        projectStatusUpdater.updateTags(project(), node.name(), node.alias(), node.tags());
+    }
 
-	private void removeNonExistMonitors() {
-		boolean removed = projectStatusUpdater.removeNonExistMonitors(project(), node.name(), node.alias());
-		if (removed) {
-			updateStatusInMongo();
-		}
-	}
+    private void removeNonExistMonitors() {
+        boolean removed = projectStatusUpdater
+            .removeNonExistMonitors(project(), node.name(), node.alias());
+        if (removed) {
+            updateStatusInMongo();
+        }
+    }
 
-	@SuppressWarnings("serial")
-	private void updateTagsByScript() {
-		ProjectJson project = project();
-		if (project.node_discovery_startegy() != NodeDiscoveryStrategy.Script || StringUtils.isEmpty(project.tags_discovery_script())) {
-			log.info("tags discovery is not configured for project " + projectName);
-			return;
-		}
-		Map<String, String> env = Maps.newHashMap();
-		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
-		env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
-		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project.name(), node.name()), ";"));
-		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
-		env.putAll(project.environmentVariables());
-		ShellScript script = new ShellScript(
-				"tags_" + projectName + "_" + node.name(), project.tags_discovery_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env, null);
-		String tags = script.execute().outputFromFile();
-		if (tags.isEmpty()){
-			tags = "[]";
-		}
-		List<String> tagsList = new Gson().fromJson(tags, new TypeToken<List<String>>(){}.getType());
-		List<String> prevTags = projectStatusUpdater.updateTags(project, node.name(), node.alias(), tagsList);
-		if (!tagsList.equals(prevTags)) {
-			updateStatusInMongo();
-		}
-	}
-	
-	private void updateVersion() {
-		ProjectJson project = project();
-		if (StringUtils.isEmpty(project.version_detection_script())) {
-			log.info("version is not configured for project " + projectName);
-			return;
-		}
-		Map<String, String> env = Maps.newHashMap();
-		env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
-		env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
-		env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project.name(), node.name()), ";"));
-		env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
-		env.putAll(project.environmentVariables());
-		ShellScript script = new ShellScript(
-				"version_" + projectName + "_" + node.name(), project.version_detection_script(), project.operating_system(), null, pathHelper.getProjectDir(projectName), env, null);
-		String version = script.execute().outputFromFile();
-		if (version.isEmpty()){
-			version = Constants.NO_VERSION;
-		}
-		String prevVersion = projectStatusUpdater.updateVersion(project, node.name(), node.alias(), version);
-		if (!version.equals(prevVersion)) {
-			updateStatusInMongo();
-		}
-	}
+    @SuppressWarnings("serial")
+    private void updateTagsByScript() {
+        ProjectJson project = project();
+        if (project.node_discovery_startegy() != NodeDiscoveryStrategy.Script || StringUtils
+            .isEmpty(project.tags_discovery_script())) {
+            log.info("tags discovery is not configured for project " + projectName);
+            return;
+        }
+        Map<String, String> env = Maps.newHashMap();
+        env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+        env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
+        env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils
+            .collectionToString(projectStatusUpdater.getTags(project.name(), node.name()), ";"));
+        env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
+        env.put(Constants.EXECUTION_ENV_CODEINE_SERVER,
+            globalConfigurationJsonStore.get().web_server_host());
+        env.put(Constants.EXECUTION_ENV_CODEINE_SERVER_PORT,
+            globalConfigurationJsonStore.get().web_server_port().toString());
+        env.putAll(project.environmentVariables());
+        ShellScript script = new ShellScript(
+            "tags_" + projectName + "_" + node.name(), project.tags_discovery_script(),
+            project.operating_system(), null, pathHelper.getProjectDir(projectName), env, null);
+        String tags = script.execute().outputFromFile();
+        if (tags.isEmpty()) {
+            tags = "[]";
+        }
+        List<String> tagsList = new Gson().fromJson(tags, new TypeToken<List<String>>() {
+        }.getType());
+        List<String> prevTags = projectStatusUpdater
+            .updateTags(project, node.name(), node.alias(), tagsList);
+        if (!tagsList.equals(prevTags)) {
+            updateStatusInMongo();
+        }
+    }
 
-	private void runMonitorOnce(NodeMonitor monitor) {
-		Long lastRuntime = lastRun.get(monitor.name());
-		if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(monitor)) {
-			try {
-				runMonitor(monitor);
-			} catch (Exception e) {
-				log.warn("got exception when executing monitor ", e);
-			}
-			lastRun.put(monitor.name(), System.currentTimeMillis());
-		} else {
-			log.info("skipping monitor " + monitor);
-		}
-	}
+    private void updateVersion() {
+        ProjectJson project = project();
+        if (StringUtils.isEmpty(project.version_detection_script())) {
+            log.info("version is not configured for project " + projectName);
+            return;
+        }
+        Map<String, String> env = Maps.newHashMap();
+        env.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+        env.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
+        env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils
+            .collectionToString(projectStatusUpdater.getTags(project.name(), node.name()), ";"));
+        env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
+        env.put(Constants.EXECUTION_ENV_CODEINE_SERVER,
+            globalConfigurationJsonStore.get().web_server_host());
+        env.put(Constants.EXECUTION_ENV_CODEINE_SERVER_PORT,
+            globalConfigurationJsonStore.get().web_server_port().toString());
+        env.putAll(project.environmentVariables());
+        ShellScript script = new ShellScript(
+            "version_" + projectName + "_" + node.name(), project.version_detection_script(),
+            project.operating_system(), null, pathHelper.getProjectDir(projectName), env, null);
+        String version = script.execute().outputFromFile();
+        if (version.isEmpty()) {
+            version = Constants.NO_VERSION;
+        }
+        String prevVersion = projectStatusUpdater
+            .updateVersion(project, node.name(), node.alias(), version);
+        if (!version.equals(prevVersion)) {
+            updateStatusInMongo();
+        }
+    }
 
-	private int minInterval(NodeMonitor c) {
-		if (null == c.minInterval()) {
-			return 20000;
-		}
-		return c.minInterval() * 60000;
-	}
+    private void runMonitorOnce(NodeMonitor monitor) {
+        Long lastRuntime = lastRun.get(monitor.name());
+        if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval(
+            monitor)) {
+            try {
+                runMonitor(monitor);
+            } catch (Exception e) {
+                log.warn("got exception when executing monitor ", e);
+            }
+            lastRun.put(monitor.name(), System.currentTimeMillis());
+        } else {
+            log.info("skipping monitor " + monitor);
+        }
+    }
 
-	private void runMonitor(NodeMonitor monitor) {
-		Result res = null;
-		Stopwatch stopwatch = Stopwatch.createStarted();
-		try {
-			boolean hasCredentials = hasCredentials(monitor);
-			List<String> cmd = buildCmd(monitor, hasCredentials);
-			log.debug("will execute " + cmd);
-			log.debug("will execute encoded " + cmd);
-			Map<String, String> map = Maps.newHashMap();
-			map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
-			map.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
-			map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
-			map.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(projectStatusUpdater.getTags(project().name(), node.name()), ";"));
-			map.putAll(project().environmentVariables());
-			res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name())).user(monitor.credentials()).env(map).build().execute();
-		} catch (Exception e) {
-			res = new Result(ExitStatus.EXCEPTION, e.getMessage());
-			log.debug("error in monitor", e);
-		}
-		stopwatch.stop();
-		// long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-		if (null == res.output()) {
-			res.output("No Output\n");
-		}
-		writeResult(res, monitor, stopwatch);
-		String result = String.valueOf(res.success());
-		MonitorStatusInfo monitorInfo = new MonitorStatusInfo(monitor.name(), result);
-		String previousResult = updateStatusInDatastore(monitorInfo);
-		log.info("monitor '" + monitor.name() + "' ended with result: " + res.success() + " , previous result " + previousResult + ", took: " + stopwatch);
-		if (shouldSendStatusToMongo(result, previousResult)) {
-			updateStatusInMongo();
-		}
-		if (monitor.notification_enabled()) {
-			if (Constants.IS_MAIL_STARTEGY_MONGO) {
-				if (shouldSendNotificationToMongo(res, previousResult)) {
-					notificationDeliverToMongo.sendCollectorResult(monitor.name(), node, project(), res.output(), res.exit(), stopwatch.toString(), false, 1);
-				}
-			} else {
-				if (null == previousResult) {
-					previousResult = result;
-				}
-				mailSender.sendMailIfNeeded(Boolean.valueOf(result), Boolean.valueOf(previousResult), monitor, node,
-						res.output(), project());
-			}
-		} else {
-			log.debug("notification not enabled for " + monitor);
-		}
+    private int minInterval(NodeMonitor c) {
+        if (null == c.minInterval()) {
+            return 20000;
+        }
+        return c.minInterval() * 60000;
+    }
 
-	}
+    private void runMonitor(NodeMonitor monitor) {
+        Result res = null;
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        try {
+            boolean hasCredentials = hasCredentials(monitor);
+            List<String> cmd = buildCmd(monitor, hasCredentials);
+            log.debug("will execute " + cmd);
+            log.debug("will execute encoded " + cmd);
+            Map<String, String> map = Maps.newHashMap();
+            map.put(Constants.EXECUTION_ENV_NODE_NAME, node.name());
+            map.put(Constants.EXECUTION_ENV_NODE_ALIAS, node.alias());
+            map.put(Constants.EXECUTION_ENV_PROJECT_NAME, projectName);
+            map.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils
+                .collectionToString(projectStatusUpdater.getTags(project().name(), node.name()),
+                    ";"));
+            map.put(Constants.EXECUTION_ENV_CODEINE_SERVER,
+                globalConfigurationJsonStore.get().web_server_host());
+            map.put(Constants.EXECUTION_ENV_CODEINE_SERVER_PORT,
+                globalConfigurationJsonStore.get().web_server_port().toString());
+            map.putAll(project().environmentVariables());
+            res = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(project().name()))
+                .user(monitor.credentials()).env(map).build().execute();
+        } catch (Exception e) {
+            res = new Result(ExitStatus.EXCEPTION, e.getMessage());
+            log.debug("error in monitor", e);
+        }
+        stopwatch.stop();
+        // long millis = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        if (null == res.output()) {
+            res.output("No Output\n");
+        }
+        writeResult(res, monitor, stopwatch);
+        String result = String.valueOf(res.success());
+        MonitorStatusInfo monitorInfo = new MonitorStatusInfo(monitor.name(), result);
+        String previousResult = updateStatusInDatastore(monitorInfo);
+        log.info("monitor '" + monitor.name() + "' ended with result: " + res.success()
+            + " , previous result " + previousResult + ", took: " + stopwatch);
+        if (shouldSendStatusToMongo(result, previousResult)) {
+            updateStatusInMongo();
+        }
+        if (monitor.notification_enabled()) {
+            if (Constants.IS_MAIL_STARTEGY_MONGO) {
+                if (shouldSendNotificationToMongo(res, previousResult)) {
+                    notificationDeliverToMongo
+                        .sendCollectorResult(monitor.name(), node, project(), res.output(),
+                            res.exit(), stopwatch.toString(), false, 1);
+                }
+            } else {
+                if (null == previousResult) {
+                    previousResult = result;
+                }
+                mailSender
+                    .sendMailIfNeeded(Boolean.valueOf(result), Boolean.valueOf(previousResult),
+                        monitor, node,
+                        res.output(), project());
+            }
+        } else {
+            log.debug("notification not enabled for " + monitor);
+        }
 
-	private void updateStatusInMongo() {
-		mongoPeerStatusUpdater.pushUpdate("Plain Old Monitor");
-	}
+    }
 
-	private boolean shouldSendNotificationToMongo(Result res, String previousResult) {
-		if (Constants.RUNNING_COLLECTORS_IN_PEER) {
-			return false;
-		}
-		if (snoozeKeeper.isSnooze(project().name(), node.name())) {
-			log.info("in snooze period");
-			return false;
-		}
-		return null != previousResult && Boolean.valueOf(previousResult) && !res.success();
-	}
+    private void updateStatusInMongo() {
+        mongoPeerStatusUpdater.pushUpdate("Plain Old Monitor");
+    }
 
-	private boolean shouldSendStatusToMongo(String result, String previousResult) {
-		return !result.equals(previousResult);
-	}
+    private boolean shouldSendNotificationToMongo(Result res, String previousResult) {
+        if (Constants.RUNNING_COLLECTORS_IN_PEER) {
+            return false;
+        }
+        if (snoozeKeeper.isSnooze(project().name(), node.name())) {
+            log.info("in snooze period");
+            return false;
+        }
+        return null != previousResult && Boolean.valueOf(previousResult) && !res.success();
+    }
 
-	protected boolean hasCredentials(NodeMonitor collector) {
-		return collector.credentials() != null;
-	}
+    private boolean shouldSendStatusToMongo(String result, String previousResult) {
+        return !result.equals(previousResult);
+    }
 
-	private String updateStatusInDatastore(MonitorStatusInfo monitor) {
-		return projectStatusUpdater.updateStatus(project(), monitor, node.name(), node.alias());
-	}
+    protected boolean hasCredentials(NodeMonitor collector) {
+        return collector.credentials() != null;
+    }
 
-	private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
-		String fileName = pathHelper.getMonitorsDir(project().name()) + File.separator + node.name() + "_" + c.name();
-		if (c.script_content() != null) {
-			if (null != shellScript){
-				log.warn("'shellScript' should be null but not", new RuntimeException());
-				LogUtils.assertFailed(log, "'shellScript' should be null but not");
-			}
-			fileName += node.name();
-			shellScript = new ShellScript(fileName, c.script_content(), project().operating_system(), null, null, null, null);
-			fileName = shellScript.create();
-			log.debug("file is " + fileName);
-		}
-		else if (FilesUtils.exists(fileName)){ //TODO remove after build 1100
-			log.warn("monitor is in old format " + fileName);
-		}
-		else {
-			throw new RuntimeException("monitor is missing " + fileName);
-		}
-		List<String> cmd = new ArrayList<String>();
-		if (project().operating_system() == OperatingSystem.Windows){
-			cmd.add("cmd");
-			cmd.add("/c");
-			cmd.add("call");
-			cmd.add(fileName);
-		}
-		else if (hasCredentials) {
-			cmd.add(PathHelper.getReadLogs());
-			cmd.add(encode(c.credentials()));
-			cmd.add(encode("/bin/sh"));
-			cmd.add(encode("-xe"));
-			cmd.add(encode(fileName));
-		} else {
-			cmd.add("/bin/sh");
-			cmd.add("-xe");
-			cmd.add(fileName);
-		}
-		return cmd;
-	}
+    private String updateStatusInDatastore(MonitorStatusInfo monitor) {
+        return projectStatusUpdater.updateStatus(project(), monitor, node.name(), node.alias());
+    }
 
-	private String encode(final String value1) {
-		return CredHelper.encode(value1);
-	}
+    private List<String> buildCmd(NodeMonitor c, boolean hasCredentials) {
+        String fileName =
+            pathHelper.getMonitorsDir(project().name()) + File.separator + node.name() + "_" + c
+                .name();
+        if (c.script_content() != null) {
+            if (null != shellScript) {
+                log.warn("'shellScript' should be null but not", new RuntimeException());
+                LogUtils.assertFailed(log, "'shellScript' should be null but not");
+            }
+            fileName += node.name();
+            shellScript = new ShellScript(fileName, c.script_content(),
+                project().operating_system(), null, null, null, null);
+            fileName = shellScript.create();
+            log.debug("file is " + fileName);
+        } else if (FilesUtils.exists(fileName)) { //TODO remove after build 1100
+            log.warn("monitor is in old format " + fileName);
+        } else {
+            throw new RuntimeException("monitor is missing " + fileName);
+        }
+        List<String> cmd = new ArrayList<String>();
+        if (project().operating_system() == OperatingSystem.Windows) {
+            cmd.add("cmd");
+            cmd.add("/c");
+            cmd.add("call");
+            cmd.add(fileName);
+        } else if (hasCredentials) {
+            cmd.add(PathHelper.getReadLogs());
+            cmd.add(encode(c.credentials()));
+            cmd.add(encode("/bin/sh"));
+            cmd.add(encode("-xe"));
+            cmd.add(encode(fileName));
+        } else {
+            cmd.add("/bin/sh");
+            cmd.add("-xe");
+            cmd.add(fileName);
+        }
+        return cmd;
+    }
 
-	private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch) {
-		String file = pathHelper.getMonitorOutputDirWithNode(project().name(), node.name()) + "/" + HttpUtils.specialEncode(collector.name())
-				+ ".txt";
-		log.debug("Output for " + collector.name() + " will be written to: " + file);
+    private String encode(final String value1) {
+        return CredHelper.encode(value1);
+    }
+
+    private void writeResult(Result res, NodeMonitor collector, Stopwatch stopwatch) {
+        String file =
+            pathHelper.getMonitorOutputDirWithNode(project().name(), node.name()) + "/" + HttpUtils
+                .specialEncode(collector.name())
+                + ".txt";
+        log.debug("Output for " + collector.name() + " will be written to: " + file);
 //		NodeWithMonitorsInfo nodeInfo = projectStatusUpdater.nodeInfo(project(), node.name(), node.alias());
-		try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
-			log.debug("writing the new format");
-			String output = res.output() == null || res.output().length() <= MAX_OUTPUT_SIZE ? res.output() : "\nOutput too long...\n" + res.output().substring(res.output().length() - MAX_OUTPUT_SIZE);
-			MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(collector.name(), res.exit(), output, stopwatch.elapsed(TimeUnit.MILLISECONDS), System.currentTimeMillis());
-			out.write(new Gson().toJson(monitorExecutionResult));
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(file));) {
+            log.debug("writing the new format");
+            String output =
+                res.output() == null || res.output().length() <= MAX_OUTPUT_SIZE ? res.output()
+                    : "\nOutput too long...\n" + res.output()
+                        .substring(res.output().length() - MAX_OUTPUT_SIZE);
+            MonitorExecutionResult monitorExecutionResult = new MonitorExecutionResult(
+                collector.name(), res.exit(), output, stopwatch.elapsed(TimeUnit.MILLISECONDS),
+                System.currentTimeMillis());
+            out.write(new Gson().toJson(monitorExecutionResult));
 //			out.write("+------------------------------------------------------------------+\n");
 //			out.write("| monitor:       " + collector.name() + "\n");
 //			if (hasCredentials(collector)) {
@@ -344,14 +386,14 @@ public class RunMonitors implements Task {
 //			out.write("| version:       " + nodeInfo.version() + "\n");
 //			out.write("+------------------------------------------------------------------+\n");
 //			out.write(res.output);
-		} catch (IOException e) {
-			throw ExceptionUtils.asUnchecked(e);
-		}
-	}
+        } catch (IOException e) {
+            throw ExceptionUtils.asUnchecked(e);
+        }
+    }
 
-	@Override
-	public String toString() {
-		return "RunMonitors [project=" + project() + "]";
-	}
+    @Override
+    public String toString() {
+        return "RunMonitors [project=" + project() + "]";
+    }
 
 }

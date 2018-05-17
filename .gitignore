@@ -9,5 +9,4 @@ deployment/http-root/ajs/app/set_api_token_2.html
 *.log
 classes
 dist
-deployment
 mysql_work_dir
