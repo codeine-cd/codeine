@@ -15,7 +15,7 @@ public class NodeWithPeerInfo extends NodeInfo{
 		super(name, alias);
 		this.peer = peer;
 		if (null != peer) {
-			peer_host_port = peer.host_port();
+			peer_host_port = peer.canonical_host_port();
 			peer_address = peer.address_port();
 			peer_key = peer.key();
 			peer_status = peer.status();
@@ -32,7 +32,7 @@ public class NodeWithPeerInfo extends NodeInfo{
 	
 	public void peer(PeerStatusJsonV2 peer) {
 		this.peer = peer;
-		peer_host_port = peer.host_port();
+		peer_host_port = peer.canonical_host_port();
 		peer_address = peer.address_port();
 		peer_key = peer.key();
 		peer_status = peer.status();

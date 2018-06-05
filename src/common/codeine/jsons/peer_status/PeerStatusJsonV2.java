@@ -88,10 +88,6 @@ public class PeerStatusJsonV2 {
         return peer_key;
     }
 
-    public String host_port() {
-        return canonical_host + ":" + port;
-    }
-
     public String canonical_host_port() {
         return canonical_host + ":" + port;
     }
@@ -151,7 +147,7 @@ public class PeerStatusJsonV2 {
 
     @Override
     public String toString() {
-        return "PeerStatusJsonV2 [host_port()=" + host_port() + ", update_time()=" + new Date(
+        return "PeerStatusJsonV2 [host_port()=" + canonical_host() + ", update_time()=" + new Date(
             update_time())
             + ", update_time_from_peer()=" + new Date(update_time_from_peer()) + ", peer_type()="
             + peer_type() + "]";
