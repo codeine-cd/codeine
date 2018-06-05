@@ -26,6 +26,8 @@ public class PeerStatus {
 	private static final Logger log = Logger.getLogger(PeerStatus.class);
 
 	private Map<String, ProjectStatus> project_name_to_status = Maps.newConcurrentMap();
+	private String canonical_host_name = InetUtils.getLocalHost().getCanonicalHostName();
+	private String host_address = InetUtils.getLocalHost().getHostAddress();
 
 	@Inject
 	private CodeineRuntimeInfo codeineRuntimeInfo;
@@ -96,9 +98,9 @@ public class PeerStatus {
 	}
 
 	public PeerStatusJsonV2 createJson() {
-		return new PeerStatusJsonV2(InetUtils.getLocalHost().getHostName(), codeineRuntimeInfo.port(),
+		return new PeerStatusJsonV2(codeineRuntimeInfo.port(),
 				codeineRuntimeInfo.version(), codeineRuntimeInfo.startTime(), Constants.getInstallDir(),
-				PathHelper.getTarFile(), project_name_to_status(), InetUtils.getLocalHost().getHostAddress(), System.getProperty("DNS_DOMAIN_NAME"), InetUtils.getLocalHost().getCanonicalHostName());
+				PathHelper.getTarFile(), project_name_to_status(), host_address, System.getProperty("DNS_DOMAIN_NAME"), canonical_host_name);
 	}
 
 	public String updateVersion(ProjectJson project, String node, String alias, String version) {
