@@ -113,9 +113,9 @@ public class ProjectConfigurationInPeerUpdater {
             log.debug("Nodes from project: " + nodes);
         }
         for (PeerStatusJsonV2 peer : peersProjectsStatus.peer_to_projects().values()) {
-            log.debug("checking peer on host " + peer.host());
-            if (null != peer.host()) {
-                if (nodes.contains(StringUtils.toLowerCase(peer.host()))) {
+            log.debug("checking peer on host " + peer.canonical_host());
+            if (null != peer.canonical_host()) {
+                if (nodes.contains(StringUtils.toLowerCase(peer.canonical_host()))) {
                     peers.add(peer);
                 }
             }

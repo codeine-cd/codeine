@@ -60,7 +60,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	public void putReplaceStatus(PeerStatusJsonV2 p) {
 		String json = gson.toJson(p);
 		log.info("will update status to " + dbUtils.server() + "\n" + json);
-		dbUtils.executeUpdate("DELETE FROM "+TABLE_NAME+" WHERE peer_key = '" + p.peer_old_key() + "'");
+		dbUtils.executeUpdate("DELETE FROM "+TABLE_NAME+" WHERE peer_key = '" + p.peer_key() + "'");
 		dbUtils.executeUpdate("REPLACE INTO "+TABLE_NAME+" (peer_key, data, update_time ) VALUES (?, ?, CURRENT_TIMESTAMP())", p.peer_key(), json);
 	}
 	
@@ -93,39 +93,35 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector{
 	public void updatePeersStatus(final long timeToRemove, final long timeToDisc) {
 		final List<String> idToRemove = Lists.newArrayList();
 		final List<String> idToDisc = Lists.newArrayList();
-		Function<ResultSet, Void> function = new Function<ResultSet, Void>() {
-			@Override
-			public Void apply(ResultSet rs){
-				try {
-					String key = rs.getString("peer_key");
+		Function<ResultSet, Void> function = rs -> {
+			try {
+				String key = rs.getString("peer_key");
 //					PeerStatusString status = PeerStatusString.valueOf(rs.getString("status"));
-					String value = rs.getString("data");
-					String status = rs.getString("status");
-					PeerStatusJsonV2 peerStatus = gson.fromJson(value, PeerStatusJsonV2.class);
-					PeerType peerType = peerStatus.peer_type();
-					long timeToRemovePeer = peerType == PeerType.Reporter ? timeToRemove + TimeUnit.DAYS.toMinutes(7) : timeToRemove;
-					long timeToDiscPeer = peerType == PeerType.Reporter ? timeToDisc + TimeUnit.DAYS.toMinutes(7) : timeToDisc;
-					long timeDiff = rs.getLong("TIME_DIFF");
-					log.debug("time diff is " + timeDiff);
-					if (timeDiff > timeToRemovePeer){
-						log.info("time diff is " + timeDiff);
-						log.info("deleting " + peerStatus);
+				String value = rs.getString("data");
+				String status = rs.getString("status");
+				PeerStatusJsonV2 peerStatus = gson.fromJson(value, PeerStatusJsonV2.class);
+				PeerType peerType = peerStatus.peer_type();
+				long timeToRemovePeer = peerType == PeerType.Reporter ? timeToRemove + TimeUnit.DAYS.toMinutes(7) : timeToRemove;
+				long timeToDiscPeer = peerType == PeerType.Reporter ? timeToDisc + TimeUnit.DAYS.toMinutes(7) : timeToDisc;
+				long timeDiff = rs.getLong("TIME_DIFF");
+				log.debug("time diff is " + timeDiff);
+				if (timeDiff > timeToRemovePeer){
+					log.info("time diff is " + timeDiff);
+					log.info("deleting " + peerStatus);
 //						rs.deleteRow();
-						idToRemove.add(key);
-					}
-					else if (timeDiff > timeToDiscPeer && !status.equals(PeerStatusString.Disc.toString())){
-						log.info("time diff is " + timeDiff);
-						log.info("update to disc " + peerStatus);
-						idToDisc.add(key);
+					idToRemove.add(key);
+				}
+				else if (timeDiff > timeToDiscPeer && !status.equals(PeerStatusString.Disc.toString())){
+					log.info("time diff is " + timeDiff);
+					log.info("update to disc " + peerStatus);
+					idToDisc.add(key);
 //						rs.updateString("status", "Disc");
 //						rs.updateRow();
-					}
-					return null;
-				} catch (SQLException e) {
-					throw ExceptionUtils.asUnchecked(e); 
 				}
+				return null;
+			} catch (SQLException e) {
+				throw ExceptionUtils.asUnchecked(e);
 			}
-
 		};
 		dbUtils.executeUpdateableQuery("select *,TIMESTAMPDIFF(MINUTE,update_time,CURRENT_TIMESTAMP()) as TIME_DIFF from " + TABLE_NAME, function);
 		if (webConfJsonStore.get().readonly_web_server()) {

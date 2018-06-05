@@ -1,19 +1,15 @@
 package codeine.version;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.inject.Inject;
-
 import codeine.api.NodeGetter;
 import codeine.jsons.info.VersionInfo;
 import codeine.jsons.peer_status.PeerStatusJsonV2;
 import codeine.utils.StringUtils;
 import codeine.utils.network.InetUtils;
-
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Random;
+import javax.inject.Inject;
 
 
 public class RsyncSourceGetter {
@@ -36,19 +32,12 @@ public class RsyncSourceGetter {
 //		if ("a".equals("a")){
 //			return versionsMapping.info(versionName).default_rsync_source;
 //		}
-		List<PeerStatusJsonV2> filteredByVersion = Lists.newArrayList(Iterables.filter(nodesGetter.peers(), new Predicate<PeerStatusJsonV2>() {
-			@Override
-			public boolean apply(PeerStatusJsonV2 peerStatus){
-				return versionName.equals(peerStatus.version()) && !hostname.equals(peerStatus.host())
-						&& !StringUtils.isEmpty(peerStatus.tar());
-			}
-		}));
-		List<PeerStatusJsonV2> filteredByDomain = Lists.newArrayList(Iterables.filter(filteredByVersion, new Predicate<PeerStatusJsonV2>() {
-			@Override
-			public boolean apply(PeerStatusJsonV2 peerStatus){
-				return hostDomain.equals(InetUtils.domain(peerStatus.host())) && !hostname.equals(peerStatus.host());
-			}
-		}));
+		List<PeerStatusJsonV2> filteredByVersion = Lists.newArrayList(Iterables.filter(nodesGetter.peers(),
+			peerStatus -> versionName.equals(peerStatus.version()) && !hostname.equals(peerStatus.canonical_host())
+					&& !StringUtils.isEmpty(peerStatus.tar())));
+		List<PeerStatusJsonV2> filteredByDomain = Lists.newArrayList(Iterables.filter(filteredByVersion,
+			peerStatus ->
+				hostDomain.equals(InetUtils.domain(peerStatus.canonical_host())) && !hostname.equals(peerStatus.canonical_host())));
 		if (!filteredByDomain.isEmpty()){
 			String hostUrl = hostUrl(filteredByDomain);
 			if (null != hostUrl){
@@ -71,7 +60,7 @@ public class RsyncSourceGetter {
 			return null;// with decreasing probability - don't use that list to prevent bad version somewhere affecting
 		}
 		PeerStatusJsonV2 peerStatusJson = list.get(nextInt);
-		return peerStatusJson.host() + ":" + peerStatusJson.tar();
+		return peerStatusJson.canonical_host() + ":" + peerStatusJson.tar();
 	}
 
 }
