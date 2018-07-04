@@ -86,16 +86,40 @@ public class ProjectConfigurationApiServlet extends AbstractApiServlet {
             throw new IllegalArgumentException(
                 "only admin can set commands and collectors to run as root");
         }
+        validateNoNullObjects(projectJson);
+        boolean exists = configurationManager.updateProject(projectJson);
+        afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add,
+            getUser(request).user().username());
+        writeResponseJson(resp, projectJson);
+    }
+
+    private void validateNoNullObjects(ProjectJson projectJson) {
         if (projectJson.node_discovery_startegy() == NodeDiscoveryStrategy.Configuration
             && projectJson.nodes_info().stream().anyMatch(Objects::isNull)) {
             String message = "Found null object in the nodes list";
             log.warn(message);
             throw new IllegalArgumentException(message);
         }
-        boolean exists = configurationManager.updateProject(projectJson);
-        afterProjectModifyPlugin.call(projectJson, exists ? StatusChange.modify : StatusChange.add,
-            getUser(request).user().username());
-        writeResponseJson(resp, projectJson);
+        if (projectJson.collectors().stream().anyMatch(Objects::isNull)) {
+            String message = "Found null object in the collectors list";
+            log.warn(message);
+            throw new IllegalArgumentException(message);
+        }
+        if (projectJson.mail().stream().anyMatch(Objects::isNull)) {
+            String message = "Found null object in the mails list";
+            log.warn(message);
+            throw new IllegalArgumentException(message);
+        }
+        if (projectJson.permissions().stream().anyMatch(Objects::isNull)) {
+            String message = "Found null object in the permissions list";
+            log.warn(message);
+            throw new IllegalArgumentException(message);
+        }
+        if (projectJson.commands().stream().anyMatch(Objects::isNull)) {
+            String message = "Found null object in the commands list";
+            log.warn(message);
+            throw new IllegalArgumentException(message);
+        }
     }
 
     @Override
