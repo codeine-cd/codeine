@@ -158,12 +158,10 @@ public class NodesRunner implements Task {
     private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
         log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
         Task task;
-        if (Constants.RUNNING_COLLECTORS_IN_PEER) {
-            CollectorsRunner collectorsTask = collectorsRunnerFactory
-                .create(project.name(), nodeJson);
-            collectorsTask.init();
-            task = collectorsTask;
-        }
+        CollectorsRunner collectorsTask = collectorsRunnerFactory
+            .create(project.name(), nodeJson);
+        collectorsTask.init();
+        task = collectorsTask;
         PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL,
             task, "RunMonitors_" + project.name() + "_" + nodeJson.name());
         log.info("starting 1executor " + periodicExecuter.name());
