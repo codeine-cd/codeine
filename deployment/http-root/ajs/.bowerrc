@@ -4,7 +4,7 @@
     "https-proxy":"http://proxy.iil.intel.com:911",
     "registry": {
         "search": [
-            "https://bower.herokuapp.com"
+            "https://registry.bower.io"
         ]
     }
 }
