@@ -9,7 +9,6 @@ public class Constants {
 
 
     public static final boolean SECURITY_ENABLED = true;
-    public static final boolean RUNNING_COLLECTORS_IN_PEER = true;
 
     public static final String HTTP_ROOT_CONTEXT = "/http-root";
     public static final String GUEST_USER = "Guest";

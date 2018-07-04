@@ -1,16 +1,7 @@
 package codeine.jsons.peer_status;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.api.MonitorStatusInfo;
 import codeine.api.NodeWithMonitorsInfo;
-import codeine.configuration.NodeMonitor;
 import codeine.configuration.PathHelper;
 import codeine.jsons.collectors.CollectorExecutionInfo;
 import codeine.jsons.collectors.CollectorInfo;
@@ -18,9 +9,13 @@ import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
 import codeine.utils.network.InetUtils;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import javax.inject.Inject;
+import org.apache.log4j.Logger;
 
 public class PeerStatus {
 	private static final Logger log = Logger.getLogger(PeerStatus.class);
@@ -113,33 +108,10 @@ public class PeerStatus {
 		return nodeInfo.tags(tagsList);
 	}
 
-	public boolean removeNonExistMonitors(ProjectJson project, String node, String alias) {
-		List<String> monitorsNotToRemove = Lists.newArrayList();
-		for (NodeMonitor nodeMonitor : project.monitors()) {
-			monitorsNotToRemove.add(nodeMonitor.name());
-		}
-		List<String> monitorsToRemove = Lists.newArrayList();
-		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
-		for (String monitorName : nodeInfo.monitors().keySet()) {
-			if (!monitorsNotToRemove.contains(monitorName)) {
-				monitorsToRemove.add(monitorName);
-			}
-		}
-		for (String m : monitorsToRemove) {
-			log.info("removing not exist monitor " + m);
-			nodeInfo.monitors().remove(m);
-		}
-		return !monitorsToRemove.isEmpty();
-	}
-	
 	public boolean removeNonExistCollectors(ProjectJson project, String node, String alias) {
 		List<String> collectorsNotToRemove = Lists.newArrayList(Constants.VERSION_COLLECTOR_NAME, Constants.TAGS_COLLECTOR_NAME);
 		for (CollectorInfo collectorInfo : project.collectors()) {
 			collectorsNotToRemove.add(collectorInfo.name());
-		}
-		//TODO monitors backward
-		for (NodeMonitor monitorInfo : project.monitors()) {
-			collectorsNotToRemove.add(monitorInfo.name());
 		}
 		NodeWithMonitorsInfo nodeInfo = initStatus(project, node, alias);
 		List<String> collectorsToRemove = Lists.newArrayList(nodeInfo.collectors().keySet());
@@ -152,14 +124,8 @@ public class PeerStatus {
 		return !collectorsToRemove.isEmpty();
 	}
 
-	public NodeWithMonitorsInfo nodeInfo(ProjectJson project, String node, String alias) {
-		return initStatus(project, node, alias);
-	}
-
 	public List<String> getTags(String project_name, String node_name) {
 		NodeWithMonitorsInfo nodeInfoOrNull = project_name_to_status().get(project_name).nodeInfoOrNull(node_name);
 		return nodeInfoOrNull.tags();
 	}
-
-
 }

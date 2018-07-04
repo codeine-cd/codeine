@@ -1,25 +1,21 @@
 package codeine.jsons.project;
 
-import java.util.List;
-import java.util.Map;
-
 import codeine.api.NodeInfo;
-import codeine.configuration.NodeMonitor;
 import codeine.jsons.collectors.CollectorInfo;
 import codeine.jsons.command.CommandInfo;
 import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.permissions.UserProjectPermissions;
 import codeine.utils.os.OperatingSystem;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ProjectJson
 {
 	private String name;
 	private String description;
-	private List<NodeMonitor> monitors = Lists.newArrayList();
 	private List<CollectorInfo> collectors = Lists.newArrayList();
 	private List<MailPolicyJson> mail = Lists.newArrayList();
 	private NodeDiscoveryStrategy node_discovery_startegy = NodeDiscoveryStrategy.Configuration;
@@ -43,28 +39,12 @@ public class ProjectJson
 	}
 
 
-	public NodeMonitor getMonitor(String name)
-	{
-		for (NodeMonitor c : monitors)
-		{
-			if (c.name().equals(name))
-			{
-				return c;
-			}
-		}
-		return null;
-	}
-	
 	@Override
 	public String toString() {
 		return "ProjectJson [" + (name != null ? "name=" + name + ", " : "")
 				+ (description != null ? "description=" + description : "") + "]";
 	}
 
-	public List<NodeMonitor> monitors() {
-		return monitors;
-	}
-	
 	public List<MailPolicyJson> mail() {
 		return mail;
 	}
