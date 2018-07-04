@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
 import codeine.PeerStatusChangedUpdater;
-import codeine.RunMonitors;
 import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
 import codeine.collectors.CollectorsRunner;
@@ -159,17 +158,11 @@ public class NodesRunner implements Task {
     private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
         log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
         Task task;
-        RunMonitors monitorsTask = new RunMonitors(configurationManager, project.name(), peerStatus,
-            mailSender, pathHelper,
-            nodeJson, notificationDeliverToMongo, mongoPeerStatusUpdater, snoozeKeeper,
-            globalConfigurationJsonStore);
         if (Constants.RUNNING_COLLECTORS_IN_PEER) {
             CollectorsRunner collectorsTask = collectorsRunnerFactory
                 .create(project.name(), nodeJson);
             collectorsTask.init();
             task = collectorsTask;
-        } else {
-            task = monitorsTask;
         }
         PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL,
             task, "RunMonitors_" + project.name() + "_" + nodeJson.name());
