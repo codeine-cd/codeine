@@ -22,7 +22,7 @@ public class ConsulRegistrator {
             .id(name)
             .name(name)
             .port(port)
-            .check(Registration.RegCheck.ttl(10L))
+            .check(Registration.RegCheck.tcp("localhost:" + port, 10, 5))
             .build();
         agentClient.register(service);
     }
