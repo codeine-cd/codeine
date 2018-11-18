@@ -35,6 +35,8 @@ public class CodeinePeerBootstrap extends AbstractCodeineBootstrap {
 
     @Override
     protected void execute() {
+        log.info("executing peer bootstrap");
+        registerInConsul("CodeinePeer", getHttpPort());
         CodeineRuntimeInfo peerRuntimeInfo = injector().getInstance(CodeineRuntimeInfo.class);
         PathHelper pathHelper = injector().getInstance(PathHelper.class);
         startMysqlSelectorThread();
