@@ -15,6 +15,16 @@ public class ConsulRegistrator {
         client = Consul.builder().build();
     }
 
+    public boolean consulExists() {
+        try {
+            client.statusClient().getLeader();
+            return true;
+        } catch (RuntimeException ex) {
+            log.error("Failed to get status from consul", ex);
+            return false;
+        }
+    }
+
     public void register(String name, int port) {
         log.info("Will register " + name + " with port " + port);
         AgentClient agentClient = client.agentClient();
