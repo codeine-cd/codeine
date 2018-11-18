@@ -2,6 +2,7 @@ package codeine;
 
 import com.orbitz.consul.AgentClient;
 import com.orbitz.consul.Consul;
+import com.orbitz.consul.ConsulException;
 import com.orbitz.consul.model.agent.ImmutableRegistration;
 import com.orbitz.consul.model.agent.Registration;
 import org.apache.log4j.Logger;
@@ -9,21 +10,26 @@ import org.apache.log4j.Logger;
 public class ConsulRegistrator {
 
     private static final Logger log = Logger.getLogger(ConsulRegistrator.class);
-    private final Consul client;
+    private Consul client;
+    private boolean connected;
 
     public ConsulRegistrator() {
-        client = Consul.builder().build();
+
     }
 
-    public boolean consulExists() {
+    public void init() {
         try {
-            String res = client.statusClient().getLeader();
-            log.info("Consul leader found: " + res);
-            return true;
-        } catch (RuntimeException ex) {
-            log.error("Failed to get status from consul", ex);
-            return false;
+            client = Consul.builder().build();
+            connected = true;
+            log.info("Consul was found");
+        } catch (ConsulException ex) {
+            log.error("Failed to connect to consul", ex);
         }
+    }
+
+
+    public boolean consulExists() {
+        return connected;
     }
 
     public void register(String name, int port) {
