@@ -56,6 +56,7 @@ public class CodeineWebServerBootstrap extends AbstractCodeineBootstrap {
     @Override
     protected void execute() {
         log.info("executing web server bootstrap");
+        registerInConsul("CodeineServer", getHttpPort());
         new PeriodicExecuter(PeersProjectsStatusInWebServer.SLEEP_TIME,
             injector().getInstance(PeersProjectsStatus.class)).runInThread();
         try {

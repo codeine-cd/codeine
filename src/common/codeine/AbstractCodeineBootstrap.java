@@ -29,6 +29,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -66,6 +67,21 @@ public abstract class AbstractCodeineBootstrap {
 
     private Injector injector;
 
+    protected void registerInConsul(String name, int port) {
+        if (injector.getInstance(GlobalConfigurationJsonStore.class).get().consul_registration()) {
+            ConsulRegistrator consulRegistrator = injector.getInstance(ConsulRegistrator.class);
+            consulRegistrator.register(name, port);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> deregisterFromConsul(name)));
+        }
+    }
+
+    private void deregisterFromConsul(String name) {
+        if (injector.getInstance(GlobalConfigurationJsonStore.class).get().consul_registration()) {
+            ConsulRegistrator consulRegistrator = injector.getInstance(ConsulRegistrator.class);
+            consulRegistrator.deregister(name);
+        }
+    }
+
     protected void execute1(String component) throws Exception {
         System.out.println("Starting codeine " + component + " at version " + CodeineVersion.get());
 
@@ -83,8 +99,7 @@ public abstract class AbstractCodeineBootstrap {
         }
 
         FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
-        crossHolder
-            .setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
+        crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
         crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
             "X-Requested-With,Origin,Content-Type,Accept,api_token");
 
@@ -114,10 +129,9 @@ public abstract class AbstractCodeineBootstrap {
         return startServer(contexts, injector.getInstance(Server.class));
     }
 
-    protected int startServer(ContextHandlerCollection contexts, Server jettyServer)
-        throws Exception {
-        ((HttpConnectionFactory) jettyServer.getConnectors()[0].getConnectionFactories().iterator()
-            .next()).getHttpConfiguration().setRequestHeaderSize(30000);
+    protected int startServer(ContextHandlerCollection contexts, Server jettyServer) throws Exception {
+        ((HttpConnectionFactory) jettyServer.getConnectors()[0].getConnectionFactories().iterator().next())
+            .getHttpConfiguration().setRequestHeaderSize(30000);
         jettyServer.setHandler(contexts);
         if (injector.getInstance(GlobalConfigurationJsonStore.class).get().prometheus_enabled()) {
             registerPrometheus();
@@ -138,8 +152,7 @@ public abstract class AbstractCodeineBootstrap {
     private ContextHandlerCollection createFileServerContexts() {
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         addHandler(Constants.RESOURCESS_CONTEXT, Constants.getResourcesDir(), contexts);
-        contexts.addHandler(
-            createStaticContextHandler("/favicon.ico", Constants.getAngularDir() + "/favicon.ico"));
+        contexts.addHandler(createStaticContextHandler("/favicon.ico", Constants.getAngularDir() + "/favicon.ico"));
         specificCreateFileServer(contexts);
         return contexts;
     }
@@ -147,8 +160,7 @@ public abstract class AbstractCodeineBootstrap {
     protected void specificCreateFileServer(ContextHandlerCollection contexts) {
     }
 
-    protected void addHandler(String contextPath, String filesPath,
-        ContextHandlerCollection contexts) {
+    protected void addHandler(String contextPath, String filesPath, ContextHandlerCollection contexts) {
         createFileSystem(filesPath);
         contexts.addHandler(createStaticContextHandler(contextPath, filesPath));
         log.info("context " + contextPath + " is serving " + filesPath);
@@ -178,9 +190,7 @@ public abstract class AbstractCodeineBootstrap {
     private ContextHandler createStaticContextHandler(String contextPath, String fsPath) {
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
-        resourceHandler.setWelcomeFiles(new String[]{
-            "index.htm", "index.html"
-        });
+        resourceHandler.setWelcomeFiles(new String[]{"index.htm", "index.html"});
         resourceHandler.setResourceBase(fsPath);
         ContextHandler ch = new ContextHandler();
         ch.setContextPath(contextPath);
@@ -189,8 +199,8 @@ public abstract class AbstractCodeineBootstrap {
     }
 
     private Module[] getModules(final String component) {
-        List<Module> $ = Lists.<Module>newArrayList(new GeneralServletModule(),
-            new CodeineGeneralModule(), new BaseModule(component));
+        List<Module> $ = Lists.<Module>newArrayList(new GeneralServletModule(), new CodeineGeneralModule(),
+            new BaseModule(component));
         $.addAll(getGuiceModules());
         return $.toArray(new Module[]{});
     }
