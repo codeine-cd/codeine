@@ -17,7 +17,8 @@ public class ConsulRegistrator {
 
     public boolean consulExists() {
         try {
-            client.statusClient().getLeader();
+            String res = client.statusClient().getLeader();
+            log.info("Consul leader found: " + res);
             return true;
         } catch (RuntimeException ex) {
             log.error("Failed to get status from consul", ex);
