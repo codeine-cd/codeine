@@ -70,6 +70,7 @@ public abstract class AbstractCodeineBootstrap {
     protected void registerInConsul(String name, int port) {
         if (injector.getInstance(GlobalConfigurationJsonStore.class).get().consul_registration()) {
             ConsulRegistrator consulRegistrator = injector.getInstance(ConsulRegistrator.class);
+            consulRegistrator.init();
             if (consulRegistrator.consulExists()) {
                 consulRegistrator.register(name, port);
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> deregisterFromConsul(name)));
