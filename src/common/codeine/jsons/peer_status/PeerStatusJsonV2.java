@@ -97,7 +97,7 @@ public class PeerStatusJsonV2 {
     }
 
     public String address_port() {
-        if (!StringUtils.isEmpty(user_dns_domain)) {
+        if (!StringUtils.isEmpty(user_dns_domain) && !canonical_host.contains(user_dns_domain)) {
             return canonical_host + "." + user_dns_domain + ":" + port;
         }
         return canonical_host_port();
