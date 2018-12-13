@@ -291,6 +291,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-3 control-label"
+                                           for="collector_info{{$index}}.collector_tags">Tags <help
+                                        help-id="collectorTags"></help></label>
+                                    <div class="controls col-md-7">
+                                        <input id="collector_info{{$index}}.collector_tags" type="text"
+                                               ui-select2="select2Options" ng-model="collector_info.collector_tags" class="form-control select2">
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="collector_info{{$index}}.script" class="col-md-3 control-label">Script <help help-id="collectorScriptHelp"></help></label>
                                     <div class="col-md-7" ng-class="{'has-error': collectorsInnerForm.script_content.$invalid}">
                                         <textcomplete element-placeholder='Type a shell/bat script here. If the script is long, call an external script as a command' members='model.collectorAutoComplete' message='collector_info.script_content' rows="3" element-class="form-control" element-id="collector_info{{$index}}.script" is-required="true"></textcomplete>
@@ -519,7 +528,8 @@
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label" for="command_info{{$index}}.command_tags">Tags <help help-id="commandTags"></help></label>
                                                 <div class="controls col-md-7">
-                                                    <input type="text" ui-select2="select2Options" ng-model="command_info.command_tags" class="form-control select2">
+                                                    <input id="command_info{{$index}}.command_tags" type="text" ui-select2="select2Options"
+                                                            ng-model="command_info.command_tags" class="form-control select2">
                                                 </div>
                                             </div>
                                         </ng-form>

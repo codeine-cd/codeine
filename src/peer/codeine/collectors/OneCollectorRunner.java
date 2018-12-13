@@ -30,8 +30,10 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.inject.assistedinject.Assisted;
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 
@@ -64,16 +66,13 @@ public class OneCollectorRunner implements IOneCollectorRunner {
     private Result result;
     private Result previousResult;
     private Stopwatch stopwatch;
-    private LoadingCache<Long, Object> notificationsCount = CacheBuilder.newBuilder()
-        .maximumSize(100)
-        .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<Long, Object>() {
-                @Override
-                public Object load(Long key) {
-                    return new Object();
-                }
-            });
+    private LoadingCache<Long, Object> notificationsCount = CacheBuilder.newBuilder().maximumSize(100)
+        .expireAfterWrite(24, TimeUnit.HOURS).build(new CacheLoader<Long, Object>() {
+            @Override
+            public Object load(Long key) {
+                return new Object();
+            }
+        });
 
     @Inject
     public OneCollectorRunner(@Assisted CollectorInfo collector, @Assisted ProjectJson project,
@@ -91,6 +90,13 @@ public class OneCollectorRunner implements IOneCollectorRunner {
     private void runOnceCheckMinInterval() {
         if (featureFlags.isCollectorsDisabled()) {
             log.info("collectors are disabled");
+            return;
+        }
+        List<String> intersect = collectorInfo.collector_tags().stream().filter(node.tags()::contains)
+            .collect(Collectors.toList());
+        if (intersect.size() != collectorInfo.collector_tags().size()) {
+            log.info("Skipping collector, as node is missing some tags: " + collectorInfo.collector_tags().stream()
+                .filter(s -> !intersect.contains(s)).collect(Collectors.toList()));
             return;
         }
         if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval()) {
@@ -114,11 +120,9 @@ public class OneCollectorRunner implements IOneCollectorRunner {
         if (null == result.output()) {
             result.output("No Output\n");
         }
-        CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(),
-            collectorInfo.type(), result.exit(), outputFromFile(),
-            stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
-        CollectorExecutionInfoWithResult resultWrapped = new CollectorExecutionInfoWithResult(info,
-            result);
+        CollectorExecutionInfo info = new CollectorExecutionInfo(collectorInfo.name(), collectorInfo.type(),
+            result.exit(), outputFromFile(), stopwatch.elapsed(TimeUnit.MILLISECONDS), startTime);
+        CollectorExecutionInfoWithResult resultWrapped = new CollectorExecutionInfoWithResult(info, result);
         processResult(resultWrapped, stopwatch);
     }
 
@@ -129,29 +133,26 @@ public class OneCollectorRunner implements IOneCollectorRunner {
         return result.outputFromFile();
     }
 
-    private void processResult(CollectorExecutionInfoWithResult resultWrapped,
-        Stopwatch stopwatch) {
+    private void processResult(CollectorExecutionInfoWithResult resultWrapped, Stopwatch stopwatch) {
         resultWrapped.result().limitOutputLength();
         writeResult(resultWrapped);
         CollectorExecutionInfo lastValue = updateStatusInDataset(resultWrapped.info());
-        log.info("collector '" + collectorInfo.name() + "' took:" + stopwatch + " result:"
-            + resultWrapped.info().valueAndExitStatus() + (null != lastValue ? " previous:"
-            + lastValue.valueAndExitStatus() : ""));
+        log.info("collector '" + collectorInfo.name() + "' took:" + stopwatch + " result:" + resultWrapped.info()
+            .valueAndExitStatus() + (null != lastValue ? " previous:" + lastValue.valueAndExitStatus() : ""));
         updateDatastoreIfNeeded();
         sendNotificationIfNeeded();
     }
 
     private ShellScript createShellScript() {
-        ShellScript shellScript = new ShellScript(getKey(), collectorInfo.script_content(),
-            project.operating_system(), null, pathHelper.getProjectDir(project.name()),
-            prepareEnv(), collectorInfo.cred());
+        ShellScript shellScript = new ShellScript(getKey(), collectorInfo.script_content(), project.operating_system(),
+            null, pathHelper.getProjectDir(project.name()), prepareEnv(), collectorInfo.cred());
         shellScript.create();
         return shellScript;
     }
 
     private String getKey() {
-        return codeineRuntimeInfo.port() + "_" + pathHelper.getMonitorsDir(project.name())
-            + File.separator + node.name() + "_" + collectorInfo.name();
+        return codeineRuntimeInfo.port() + "_" + pathHelper.getMonitorsDir(project.name()) + File.separator + node
+            .name() + "_" + collectorInfo.name();
     }
 
     private void executeScriptAndDeleteIt(ShellScript shellScript) {
@@ -172,8 +173,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
         env.put(Constants.EXECUTION_ENV_PROJECT_NAME, project.name());
         env.put(Constants.EXECUTION_ENV_NODE_TAGS,
             StringUtils.collectionToString(peerStatus.getTags(project.name(), node.name()), ";"));
-        env.put(Constants.EXECUTION_ENV_CODEINE_SERVER,
-            globalConfigurationJsonStore.get().web_server_host());
+        env.put(Constants.EXECUTION_ENV_CODEINE_SERVER, globalConfigurationJsonStore.get().web_server_host());
         env.put(Constants.EXECUTION_ENV_CODEINE_SERVER_PORT,
             globalConfigurationJsonStore.get().web_server_port().toString());
         env.putAll(project.environmentVariables());
@@ -183,12 +183,11 @@ public class OneCollectorRunner implements IOneCollectorRunner {
 
     private void sendNotificationIfNeeded() {
         if (new NotificationChecker()
-            .shouldSendNotification(snoozeKeeper, collectorInfo, project.name(), node.name(),
-                notificationsCount, result, previousResult)) {
-            notificationDeliverToDatabase.sendCollectorResult(
-                collectorInfo.name(), node, project, result.output(), result.exit(),
-                stopwatch.toString(),
-                true, (int) notificationsCount.size());
+            .shouldSendNotification(snoozeKeeper, collectorInfo, project.name(), node.name(), notificationsCount,
+                result, previousResult)) {
+            notificationDeliverToDatabase
+                .sendCollectorResult(collectorInfo.name(), node, project, result.output(), result.exit(),
+                    stopwatch.toString(), true, (int) notificationsCount.size());
         }
         previousResult = result;
     }
@@ -202,11 +201,11 @@ public class OneCollectorRunner implements IOneCollectorRunner {
             return true;
         }
         boolean shouldUpdate;
-        shouldUpdate = !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile())
-            || !MiscUtils.equals(result.exit(), previousResult.exit());
+        shouldUpdate = !MiscUtils.equals(result.outputFromFile(), previousResult.outputFromFile()) || !MiscUtils
+            .equals(result.exit(), previousResult.exit());
         if (shouldUpdate) {
-            LogUtils.info(log, "collector should update", result.outputFromFile(),
-                previousResult.outputFromFile(), result.exit(), previousResult.exit());
+            LogUtils.info(log, "collector should update", result.outputFromFile(), previousResult.outputFromFile(),
+                result.exit(), previousResult.exit());
         }
         return shouldUpdate;
     }
@@ -223,10 +222,8 @@ public class OneCollectorRunner implements IOneCollectorRunner {
     }
 
     private void writeResult(CollectorExecutionInfoWithResult result) {
-        String file =
-            pathHelper.getCollectorOutputDirWithNode(project.name(), node.name()) + "/" + HttpUtils
-                .specialEncode(collectorInfo.name())
-                + ".txt";
+        String file = pathHelper.getCollectorOutputDirWithNode(project.name(), node.name()) + "/" + HttpUtils
+            .specialEncode(collectorInfo.name()) + ".txt";
         log.debug("Output for " + collectorInfo.name() + " will be written to: " + file);
         TextFileUtils.setContents(file, gson.toJson(result));
     }
