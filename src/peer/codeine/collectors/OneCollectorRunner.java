@@ -92,11 +92,8 @@ public class OneCollectorRunner implements IOneCollectorRunner {
             log.info("collectors are disabled");
             return;
         }
-        List<String> intersect = collectorInfo.collector_tags().stream().filter(node.tags()::contains)
-            .collect(Collectors.toList());
         if (node.tags().containsAll(collectorInfo.collector_tags())) {
-            log.info("Skipping collector, as node is missing some tags: " + collectorInfo.collector_tags().stream()
-                .filter(s -> !intersect.contains(s)).collect(Collectors.toList()));
+            log.info("Skipping collector, as node is missing some tags: " + collectorInfo.collector_tags());
             return;
         }
         if (lastRuntime == null || System.currentTimeMillis() - lastRuntime > minInterval()) {
