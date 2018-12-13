@@ -94,7 +94,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
         }
         List<String> intersect = collectorInfo.collector_tags().stream().filter(node.tags()::contains)
             .collect(Collectors.toList());
-        if (intersect.size() != collectorInfo.collector_tags().size()) {
+        if (node.tags().containsAll(collectorInfo.collector_tags())) {
             log.info("Skipping collector, as node is missing some tags: " + collectorInfo.collector_tags().stream()
                 .filter(s -> !intersect.contains(s)).collect(Collectors.toList()));
             return;
