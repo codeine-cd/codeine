@@ -6,6 +6,7 @@ import codeine.model.Constants;
 import codeine.servlet.GeneralServletModule;
 import codeine.servlet.HealthServlet;
 import codeine.stdout.StdoutRedirectToLog;
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -15,6 +16,8 @@ import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.Scopes;
 import com.google.inject.servlet.GuiceFilter;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.filter.MetricsFilter;
 import io.prometheus.client.hotspot.DefaultExports;
@@ -98,6 +101,8 @@ public abstract class AbstractCodeineBootstrap {
         handler.setContextPath("/");
         if (injector.getInstance(GlobalConfigurationJsonStore.class).get().prometheus_enabled()) {
             log.info("Adding prometheus filter");
+            CollectorRegistry.defaultRegistry
+                .register(new DropwizardExports(injector.getInstance(MetricRegistry.class)));
             handler.addServlet(new ServletHolder(new MetricsServlet()), Constants.METRICS_CONTEXT);
             FilterHolder promHolder = new FilterHolder(
                 new MetricsFilter("webapp_metrics_filter", "prometheus jetty metrics", 4, null));

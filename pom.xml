@@ -7,6 +7,8 @@
 	<name>codeine</name>
 	<properties>
 		<prometheus_client_version>0.3.0</prometheus_client_version>
+		<drop_wizard_version>3.2.6</drop_wizard_version>
+		<jetty_version>9.4.8.v20171121</jetty_version>
 	</properties>
 	<build>
 		<sourceDirectory>src/external/mysql_lib</sourceDirectory>
@@ -183,22 +185,22 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-			<version>9.4.8.v20171121</version>
+			<version>${jetty_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-security</artifactId>
-			<version>9.4.8.v20171121</version>
+			<version>${jetty_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlet</artifactId>
-			<version>9.4.8.v20171121</version>
+			<version>${jetty_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlets</artifactId>
-			<version>9.4.8.v20171121</version>
+			<version>${jetty_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -231,6 +233,11 @@
 			<version>${prometheus_client_version}</version>
 		</dependency>
 		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_dropwizard</artifactId>
+			<version>${prometheus_client_version}</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.5</version>
@@ -259,12 +266,12 @@
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-core</artifactId>
-			<version>3.2.6</version>
+			<version>${drop_wizard_version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-healthchecks</artifactId>
-			<version>3.2.6</version>
+			<version>${drop_wizard_version}</version>
 		</dependency>
 	</dependencies>
 </project>

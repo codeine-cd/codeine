@@ -4,6 +4,7 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.exceptions.ConnectToDatabaseException;
 import codeine.utils.exceptions.DatabaseException;
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
@@ -28,14 +29,16 @@ public class DbUtils {
     private MysqlHostSelector hostSelector;
     private GlobalConfigurationJsonStore globalConfigurationJsonStore;
     private final HealthCheckRegistry healthCheckRegistry;
+    private final MetricRegistry metricRegistry;
 
     @Inject
     public DbUtils(MysqlHostSelector hostSelector, GlobalConfigurationJsonStore globalConfigurationJsonStore,
-        HealthCheckRegistry healthCheckRegistry) {
+        HealthCheckRegistry healthCheckRegistry, MetricRegistry metricRegistry) {
         super();
         this.hostSelector = hostSelector;
         this.globalConfigurationJsonStore = globalConfigurationJsonStore;
         this.healthCheckRegistry = healthCheckRegistry;
+        this.metricRegistry = metricRegistry;
     }
 
 
@@ -192,6 +195,7 @@ public class DbUtils {
             config.addDataSourceProperty("cacheServerConfiguration", true);
             config.addDataSourceProperty("elideSetAutoCommits", true);
             config.addDataSourceProperty("maintainTimeStats", false);
+            config.setMetricRegistry(metricRegistry);
             config.setHealthCheckRegistry(healthCheckRegistry);
             config.addHealthCheckProperty("connectivityCheckTimeoutMs",
                 globalConfigurationJsonStore.get().connectivity_check_timeout_ms().toString());

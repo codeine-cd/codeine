@@ -1,5 +1,6 @@
 package codeine.db.mysql.connectors;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.collect.Maps;
 import java.util.List;
@@ -29,6 +30,8 @@ public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
     private GlobalConfigurationJsonStore globalConfigurationJsonStore;
     @Inject
     private HealthCheckRegistry healthCheckRegistry;
+    @Inject
+    private MetricRegistry metricRegistry;
 
     private Map<MysqlConfigurationJson, DbUtils> dbUtilsMap = Maps.newHashMap();
 
@@ -46,7 +49,7 @@ public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
     private DbUtils getDbUtils(MysqlConfigurationJson m) {
         return dbUtilsMap.computeIfAbsent(m,
             mysqlConfigurationJson -> new DbUtils(new StaticMysqlHostSelector(m), globalConfigurationJsonStore,
-                healthCheckRegistry));
+                healthCheckRegistry, metricRegistry));
     }
 
 

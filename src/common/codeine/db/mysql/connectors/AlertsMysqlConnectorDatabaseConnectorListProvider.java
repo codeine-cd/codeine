@@ -5,6 +5,7 @@ import codeine.db.mysql.StaticMysqlHostSelector;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,6 +24,8 @@ public class AlertsMysqlConnectorDatabaseConnectorListProvider {
     private ExperimentalConfJsonStore webConfJsonStore;
     @Inject
     private HealthCheckRegistry healthCheckRegistry;
+    @Inject
+    private MetricRegistry metricRegistry;
 
     private Map<MysqlConfigurationJson, DbUtils> dbUtilsMap = Maps.newHashMap();
 
@@ -39,7 +42,7 @@ public class AlertsMysqlConnectorDatabaseConnectorListProvider {
     private DbUtils getDbUtils(MysqlConfigurationJson m) {
         return dbUtilsMap.computeIfAbsent(m,
                     mysqlConfigurationJson -> new DbUtils(new StaticMysqlHostSelector(m),
-                        globalConfigurationJsonStore, healthCheckRegistry));
+                        globalConfigurationJsonStore, healthCheckRegistry, metricRegistry));
     }
 
 

@@ -8,6 +8,7 @@ import codeine.jsons.labels.LabelJsonFromFileProvider;
 import codeine.jsons.labels.LabelJsonProvider;
 import codeine.servlet.RequestBodyReader;
 
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +30,7 @@ public class CodeineGeneralModule extends AbstractModule {
         bind(RequestBodyReader.class).in(RequestScoped.class);
         bind(ConsulRegistrator.class).in(Scopes.SINGLETON);
         bind(HealthCheckRegistry.class).toInstance(new HealthCheckRegistry());
+        bind(MetricRegistry.class).toInstance(new MetricRegistry());
     }
 
 }
