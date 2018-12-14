@@ -1,6 +1,8 @@
 package codeine.jsons.collectors;
 
+import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 
 
 public class CollectorInfo {
@@ -13,8 +15,10 @@ public class CollectorInfo {
 	@SerializedName("credentials") private String cred;
 	private CollectorType type;
 	private boolean notification_enabled;
-	
-	public static enum CollectorType {
+	private List<String> collector_tags = Lists.newArrayList();
+
+
+	public enum CollectorType {
 		String,Number,Monitor
 	}
 
@@ -24,7 +28,7 @@ public class CollectorInfo {
 	
 	
 	public CollectorInfo(String name, String script_content, Integer min_interval, String cred, CollectorType type,
-			boolean notification_enabled) {
+			boolean notification_enabled,List<String> collector_tags) {
 		super();
 		this.name = name;
 		this.script_content = script_content;
@@ -32,6 +36,7 @@ public class CollectorInfo {
 		this.cred = cred;
 		this.type = type;
 		this.notification_enabled = notification_enabled;
+		this.collector_tags = collector_tags;
 	}
 
 
@@ -84,6 +89,13 @@ public class CollectorInfo {
 
 		CollectorInfo other = (CollectorInfo) o;
 		return this.name().equals(other.name());
+	}
+
+	public List<String> collector_tags() {
+		if (collector_tags == null) {
+			return Lists.newArrayList();
+		}
+		return collector_tags;
 	}
 
 }

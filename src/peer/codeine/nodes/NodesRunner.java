@@ -1,17 +1,5 @@
 package codeine.nodes;
 
-import codeine.jsons.global.GlobalConfigurationJsonStore;
-import java.net.InetAddress;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
-import org.apache.log4j.Logger;
-
 import codeine.PeerStatusChangedUpdater;
 import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
@@ -21,17 +9,24 @@ import codeine.configuration.IConfigurationManager;
 import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
 import codeine.executer.Task;
+import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.mail.MailSender;
 import codeine.mail.NotificationDeliverToDatabase;
-import codeine.model.Constants;
 import codeine.utils.network.InetUtils;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.net.InetAddress;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import org.apache.log4j.Logger;
 
 public class NodesRunner implements Task {
 
@@ -42,25 +37,17 @@ public class NodesRunner implements Task {
 
     @Inject
     private IConfigurationManager configurationManager;
-    @Inject
-    private PathHelper pathHelper;
+
     @Inject
     private PeerStatus peerStatus;
-    @Inject
-    private MailSender mailSender;
-    @Inject
-    private NotificationDeliverToDatabase notificationDeliverToMongo;
+
     @Inject
     private NodesManager nodesManager;
-    @Inject
-    private SnoozeKeeper snoozeKeeper;
-    private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();
-    @Inject
-    private PeerStatusChangedUpdater mongoPeerStatusUpdater;
+
     @Inject
     private CollectorsRunnerFactory collectorsRunnerFactory;
-    @Inject
-    private GlobalConfigurationJsonStore globalConfigurationJsonStore;
+
+    private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();
 
     @Override
     public synchronized void run() {
