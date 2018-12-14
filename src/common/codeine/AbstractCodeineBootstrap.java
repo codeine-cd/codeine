@@ -110,8 +110,6 @@ public abstract class AbstractCodeineBootstrap {
             handler.addFilter(promHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
         }
 
-        addHealthEndpoint(handler, injector.getInstance(HealthCheckRegistry.class));
-
         FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
         crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
         crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
@@ -139,10 +137,6 @@ public abstract class AbstractCodeineBootstrap {
         new JettyStatisticsCollector(stats).register();
     }
 
-    private void addHealthEndpoint(ServletContextHandler handler, HealthCheckRegistry healthCheckRegistry) {
-        log.info("Adding health end point");
-//        handler.addServlet(new ServletHolder(new HealthServlet(healthCheckRegistry)), Constants.HEALTH_CONTEXT);
-    }
 
     protected int startServer(ContextHandlerCollection contexts) throws Exception {
         return startServer(contexts, injector.getInstance(Server.class));
