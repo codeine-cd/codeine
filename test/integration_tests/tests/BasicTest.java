@@ -52,7 +52,8 @@ public class BasicTest extends TestsSuite {
 	private void initProject() {
 		project = new ProjectJson(TEST_PROJECT_NAME);
 		project.nodes_info().add(new NodeInfo(InetUtils.getLocalHost().getHostName()));
-		CollectorInfo collector = new CollectorInfo(TEST_COLLECTOR_NAME, "echo 'hi'", null, null, CollectorType.Monitor, false);
+		CollectorInfo collector = new CollectorInfo(TEST_COLLECTOR_NAME, "echo 'hi'", null, null,
+			CollectorType.Monitor, false, Lists.newArrayList());
 		project.collectors().add(collector);
 		CommandExcutionType command_strategy = CommandExcutionType.Single;
 		Integer duration = null;
