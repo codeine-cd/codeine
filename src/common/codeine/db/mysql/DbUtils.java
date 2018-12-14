@@ -4,6 +4,7 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.global.MysqlConfigurationJson;
 import codeine.utils.exceptions.ConnectToDatabaseException;
 import codeine.utils.exceptions.DatabaseException;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.zaxxer.hikari.HikariConfig;
@@ -26,13 +27,15 @@ public class DbUtils {
 
     private MysqlHostSelector hostSelector;
     private GlobalConfigurationJsonStore globalConfigurationJsonStore;
+    private final HealthCheckRegistry healthCheckRegistry;
 
     @Inject
-    public DbUtils(MysqlHostSelector hostSelector,
-        GlobalConfigurationJsonStore globalConfigurationJsonStore) {
+    public DbUtils(MysqlHostSelector hostSelector, GlobalConfigurationJsonStore globalConfigurationJsonStore,
+        HealthCheckRegistry healthCheckRegistry) {
         super();
         this.hostSelector = hostSelector;
         this.globalConfigurationJsonStore = globalConfigurationJsonStore;
+        this.healthCheckRegistry = healthCheckRegistry;
     }
 
 
@@ -71,12 +74,10 @@ public class DbUtils {
         executeQuery(sql, function, false, true);
     }
 
-    private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root,
-        boolean useCompression) {
+    private void executeQuery(String sql, Function<ResultSet, Void> function, boolean root, boolean useCompression) {
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
-        Connection connection =
-            root ? getConnectionForRoot(useCompression) : getConnection(useCompression);
+        Connection connection = root ? getConnectionForRoot(useCompression) : getConnection(useCompression);
         try {
             preparedStatement = connection.prepareStatement(sql);
             rs = preparedStatement.executeQuery();
@@ -93,8 +94,7 @@ public class DbUtils {
         }
     }
 
-    private DatabaseException prepareException(String sql, Connection connection, SQLException e,
-        String[] args) {
+    private DatabaseException prepareException(String sql, Connection connection, SQLException e, String[] args) {
         try {
             return new DatabaseException(sql, connection.getMetaData().getURL(), e, args);
         } catch (SQLException e1) {
@@ -149,9 +149,7 @@ public class DbUtils {
 
     private Connection getConnection(boolean useCompression) {
         String mysqlAddress = hostSelector.mysql().host() + ":" + hostSelector.mysql().port();
-        String jdbcUrl =
-            "jdbc:mysql://" + mysqlAddress + "/"
-                + MysqlConstants.DB_NAME + "?useCompression=true";
+        String jdbcUrl = "jdbc:mysql://" + mysqlAddress + "/" + MysqlConstants.DB_NAME + "?useCompression=true";
         try {
             return getDBConnection(jdbcUrl, hostSelector.mysql());
         } catch (SQLException e) {
@@ -161,8 +159,8 @@ public class DbUtils {
 
     private Connection getConnectionForRoot(boolean useCompression) {
         String url =
-            "jdbc:mysql://localhost:" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME
-                + "?user=root&" + "createDatabaseIfNotExist=true";
+            "jdbc:mysql://localhost:" + hostSelector.mysql().port() + "/" + MysqlConstants.DB_NAME + "?user=root&"
+                + "createDatabaseIfNotExist=true";
         if (useCompression) {
             url += "&useCompression=true";
         }
@@ -173,30 +171,32 @@ public class DbUtils {
         }
     }
 
-    private Connection getDBConnection(String sqlAddress,
-        MysqlConfigurationJson mysql) throws SQLException {
-        HikariDataSource dataSource = hikariDataSourceMap.computeIfAbsent(sqlAddress,
-            address -> {
-                HikariConfig config = new HikariConfig();
-                config.setUsername(mysql.user());
-                config.setPassword(mysql.password());
-                config.setJdbcUrl(address);
-                config.setMaximumPoolSize(globalConfigurationJsonStore.get().max_db_pool_size());
-                config.setMinimumIdle(globalConfigurationJsonStore.get().min_db_pool_size());
-                config.setConnectionTimeout(60000);
-                config.addDataSourceProperty("cachePrepStmts", true);
-                config.addDataSourceProperty("prepStmtCacheSize", 250);
-                config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-                config.addDataSourceProperty("useServerPrepStmts", true);
-                config.addDataSourceProperty("useLocalSessionState", true);
-                config.addDataSourceProperty("useLocalTransactionState", true);
-                config.addDataSourceProperty("rewriteBatchedStatements", true);
-                config.addDataSourceProperty("cacheResultSetMetadata", true);
-                config.addDataSourceProperty("cacheServerConfiguration", true);
-                config.addDataSourceProperty("elideSetAutoCommits", true);
-                config.addDataSourceProperty("maintainTimeStats", false);
-                return new HikariDataSource(config);
-            });
+    private Connection getDBConnection(String sqlAddress, MysqlConfigurationJson mysql) throws SQLException {
+        HikariDataSource dataSource = hikariDataSourceMap.computeIfAbsent(sqlAddress, address -> {
+            HikariConfig config = new HikariConfig();
+            config.setUsername(mysql.user());
+            config.setPassword(mysql.password());
+            config.setJdbcUrl(address);
+            config.setPoolName(mysql.host());
+            config.setMaximumPoolSize(globalConfigurationJsonStore.get().max_db_pool_size());
+            config.setMinimumIdle(globalConfigurationJsonStore.get().min_db_pool_size());
+            config.setConnectionTimeout(60000);
+            config.addDataSourceProperty("cachePrepStmts", true);
+            config.addDataSourceProperty("prepStmtCacheSize", 250);
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+            config.addDataSourceProperty("useServerPrepStmts", true);
+            config.addDataSourceProperty("useLocalSessionState", true);
+            config.addDataSourceProperty("useLocalTransactionState", true);
+            config.addDataSourceProperty("rewriteBatchedStatements", true);
+            config.addDataSourceProperty("cacheResultSetMetadata", true);
+            config.addDataSourceProperty("cacheServerConfiguration", true);
+            config.addDataSourceProperty("elideSetAutoCommits", true);
+            config.addDataSourceProperty("maintainTimeStats", false);
+            config.setHealthCheckRegistry(healthCheckRegistry);
+            config.addHealthCheckProperty("connectivityCheckTimeoutMs",
+                globalConfigurationJsonStore.get().connectivity_check_timeout_ms().toString());
+            return new HikariDataSource(config);
+        });
         return dataSource.getConnection();
     }
 

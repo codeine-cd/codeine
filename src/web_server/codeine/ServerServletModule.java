@@ -2,6 +2,7 @@ package codeine;
 
 import codeine.model.Constants;
 import codeine.servlet.CodeineServletModule;
+import codeine.servlet.HealthServlet;
 import codeine.servlets.AngularServlet;
 import codeine.servlets.RootServlet;
 import codeine.servlets.api_servlets.*;
@@ -53,6 +54,7 @@ public class ServerServletModule extends CodeineServletModule
 		serveApi(RuntimeInfoApiServlet.class, (Constants.SESSION_INFO_CONTEXT));
 		serveApi(ProjectsTabsApiServlet.class, (Constants.PROJECTS_TABS_CONTEXT));
 		serveApi(CodeinePermissionsApiServlet.class, (Constants.PERMISSIONS_CONFIGURATION_CONTEXT));
+		serveMe(HealthServlet.class, Constants.HEALTH_CONTEXT);
 	}
 
 	private void serveApi(Class<? extends HttpServlet> class1, String contextPath) {

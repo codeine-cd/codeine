@@ -1,5 +1,6 @@
 package codeine;
 
+import codeine.model.Constants;
 import com.orbitz.consul.AgentClient;
 import com.orbitz.consul.Consul;
 import com.orbitz.consul.ConsulException;
@@ -35,12 +36,8 @@ public class ConsulRegistrator {
     public void register(String name, int port) {
         log.info("Will register " + name + " with port " + port);
         AgentClient agentClient = client.agentClient();
-        Registration service = ImmutableRegistration.builder()
-            .id(name)
-            .name(name)
-            .port(port)
-            .check(Registration.RegCheck.tcp("localhost:" + port, 10, 5))
-            .build();
+        Registration service = ImmutableRegistration.builder().id(name).name(name).port(port)
+            .check(Registration.RegCheck.http("localhost:" + port + "/" + Constants.HEALTH_CONTEXT, 60, 5)).build();
         agentClient.register(service);
     }
 

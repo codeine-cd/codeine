@@ -26,6 +26,7 @@ public class GlobalConfigurationJson {
     private Integer max_db_pool_size = 2;
     private Integer min_db_pool_size = 2;
     private boolean prometheus_enabled = true;
+    private Integer connectivity_check_timeout_ms = 3000;
     private boolean consul_registration;
 
     public GlobalConfigurationJson() {
@@ -108,6 +109,10 @@ public class GlobalConfigurationJson {
 
     public boolean consul_registration() {
         return consul_registration;
+    }
+
+    public Integer connectivity_check_timeout_ms() {
+        return connectivity_check_timeout_ms;
     }
 
 }

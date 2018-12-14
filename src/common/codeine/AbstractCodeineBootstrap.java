@@ -4,7 +4,9 @@ import codeine.jsons.global.GlobalConfigurationJsonStore;
 import codeine.jsons.info.CodeineRuntimeInfo;
 import codeine.model.Constants;
 import codeine.servlet.GeneralServletModule;
+import codeine.servlet.HealthServlet;
 import codeine.stdout.StdoutRedirectToLog;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -29,7 +31,6 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -104,6 +105,8 @@ public abstract class AbstractCodeineBootstrap {
             handler.addFilter(promHolder, "/api-with-token/*", EnumSet.allOf(DispatcherType.class));
         }
 
+        addHealthEndpoint(handler, injector.getInstance(HealthCheckRegistry.class));
+
         FilterHolder crossHolder = new FilterHolder(new CrossOriginFilter());
         crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST, PUT, DELETE");
         crossHolder.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
@@ -129,6 +132,11 @@ public abstract class AbstractCodeineBootstrap {
         stats.setHandler(server.getHandler());
         server.setHandler(stats);
         new JettyStatisticsCollector(stats).register();
+    }
+
+    private void addHealthEndpoint(ServletContextHandler handler, HealthCheckRegistry healthCheckRegistry) {
+        log.info("Adding health end point");
+//        handler.addServlet(new ServletHolder(new HealthServlet(healthCheckRegistry)), Constants.HEALTH_CONTEXT);
     }
 
     protected int startServer(ContextHandlerCollection contexts) throws Exception {
@@ -205,8 +213,8 @@ public abstract class AbstractCodeineBootstrap {
     }
 
     private Module[] getModules(final String component) {
-        List<Module> $ = Lists.<Module>newArrayList(new GeneralServletModule(), new CodeineGeneralModule(),
-            new BaseModule(component));
+        List<Module> $ = Lists
+            .newArrayList(new GeneralServletModule(), new CodeineGeneralModule(), new BaseModule(component));
         $.addAll(getGuiceModules());
         return $.toArray(new Module[]{});
     }
