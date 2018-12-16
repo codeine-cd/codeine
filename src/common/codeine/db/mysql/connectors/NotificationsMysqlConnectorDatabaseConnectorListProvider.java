@@ -1,5 +1,7 @@
 package codeine.db.mysql.connectors;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.collect.Maps;
 import java.util.List;
 
@@ -26,6 +28,10 @@ public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
     private FeatureFlags featureFlags;
     @Inject
     private GlobalConfigurationJsonStore globalConfigurationJsonStore;
+    @Inject
+    private HealthCheckRegistry healthCheckRegistry;
+    @Inject
+    private MetricRegistry metricRegistry;
 
     private Map<MysqlConfigurationJson, DbUtils> dbUtilsMap = Maps.newHashMap();
 
@@ -33,8 +39,8 @@ public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
         List<NotificationsMysqlConnector> $ = Lists.newArrayList();
         for (MysqlConfigurationJson m : globalConfigurationJsonStore.get().mysql()) {
             DbUtils dbUtils = getDbUtils(m);
-            NotificationsMysqlConnector c = new NotificationsMysqlConnector(dbUtils, gson,
-                webConfJsonStore, featureFlags);
+            NotificationsMysqlConnector c = new NotificationsMysqlConnector(dbUtils, gson, webConfJsonStore,
+                featureFlags);
             $.add(c);
         }
         return $;
@@ -42,8 +48,8 @@ public class NotificationsMysqlConnectorDatabaseConnectorListProvider {
 
     private DbUtils getDbUtils(MysqlConfigurationJson m) {
         return dbUtilsMap.computeIfAbsent(m,
-            mysqlConfigurationJson -> new DbUtils(new StaticMysqlHostSelector(m),
-                globalConfigurationJsonStore));
+            mysqlConfigurationJson -> new DbUtils(new StaticMysqlHostSelector(m), globalConfigurationJsonStore,
+                healthCheckRegistry, metricRegistry));
     }
 
 

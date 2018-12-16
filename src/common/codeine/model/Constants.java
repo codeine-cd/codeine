@@ -45,6 +45,7 @@ public class Constants {
     public static final String COMMAND_OUTPUT_CONTEXT = "/command-output";
     public static final String REPORTER_CONTEXT = "/reporter";
     public static final String METRICS_CONTEXT = "/metrics";
+    public static final String HEALTH_CONTEXT = "/health";
     public static final String UPGRADE_SERVER_CONTEXT = "/upgrade-server";
     public static final String COMMANDS_LOG_CONTEXT = "/commands-log";
     public static final String COMMANDS_EXECUTER_STATUS = "/commands-status";
