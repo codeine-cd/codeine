@@ -195,7 +195,7 @@ public class DbUtils {
             config.addDataSourceProperty("cacheServerConfiguration", true);
             config.addDataSourceProperty("elideSetAutoCommits", true);
             config.addDataSourceProperty("maintainTimeStats", false);
-            config.setMetricRegistry(metricRegistry);
+//            config.setMetricRegistry(metricRegistry);
             config.setHealthCheckRegistry(healthCheckRegistry);
             config.addHealthCheckProperty("connectivityCheckTimeoutMs",
                 globalConfigurationJsonStore.get().connectivity_check_timeout_ms().toString());
