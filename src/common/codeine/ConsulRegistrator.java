@@ -37,7 +37,7 @@ public class ConsulRegistrator {
         log.info("Will register " + name + " with port " + port);
         AgentClient agentClient = client.agentClient();
         Registration service = ImmutableRegistration.builder().id(name).name(name).port(port)
-            .check(Registration.RegCheck.http("localhost:" + port + "/" + Constants.HEALTH_CONTEXT, 60, 5)).build();
+            .check(Registration.RegCheck.http("http://localhost:" + port + Constants.HEALTH_CONTEXT, 60, 5)).build();
         agentClient.register(service);
     }
 
