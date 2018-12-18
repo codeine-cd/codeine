@@ -92,7 +92,7 @@ public class OneCollectorRunner implements IOneCollectorRunner {
             log.info("collectors are disabled");
             return;
         }
-        if (node.tags().containsAll(collectorInfo.collector_tags())) {
+        if (!node.tags().containsAll(collectorInfo.collector_tags())) {
             log.info("Skipping collector, as node is missing some tags: " + collectorInfo.collector_tags());
             return;
         }
