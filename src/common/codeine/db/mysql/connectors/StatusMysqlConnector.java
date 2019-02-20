@@ -75,18 +75,20 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector {
         Function<ResultSet, Void> function = rs -> {
             try {
                 String key = rs.getString(1);
-                log.debug("Checking key " + key);
                 String value = rs.getString(2);
-                PeerStatusJsonV2 peerStatus = gson.fromJson(value, PeerStatusJsonV2.class);
-                peerStatus.status(PeerStatusString.valueOf(rs.getString("status")));
-                updateNodesWithPeer(peerStatus);
-                $.put(key, peerStatus);
+                try {
+                    PeerStatusJsonV2 peerStatus = gson.fromJson(value, PeerStatusJsonV2.class);
+                    peerStatus.status(PeerStatusString.valueOf(rs.getString("status")));
+                    updateNodesWithPeer(peerStatus);
+                    $.put(key, peerStatus);
+                } catch (JsonSyntaxException e) {
+                    log.error("Got json exception while trying to parse line of key " + key + ", will skip this node",
+                        e);
+                    return null;
+                }
                 return null;
             } catch (SQLException e) {
                 throw ExceptionUtils.asUnchecked(e);
-            } catch (JsonSyntaxException e) {
-                log.error("Got json exception while trying to parse line, will skip this node", e);
-                return null;
             }
         };
         dbUtils.executeQueryCompressed("select * from " + TABLE_NAME, function);
