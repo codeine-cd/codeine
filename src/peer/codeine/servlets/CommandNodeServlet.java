@@ -224,7 +224,6 @@ public class CommandNodeServlet extends AbstractServlet {
         else {
             tags.addAll(projectStatusUpdater.getTags(projectName, nodeName));
         }
-
         return tags;
     }
 
