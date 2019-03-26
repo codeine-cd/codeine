@@ -17,8 +17,9 @@ public class SingleNodeCommandStrategy extends CommandExecutionStrategy {
 	
 
 	public SingleNodeCommandStrategy(AllNodesCommandExecuter allNodesCommandExecuter,
-			ScehudleCommandExecutionInfo commandData, Links links, ProjectJson project, IUserWithPermissions userObject) {
-		super(commandData, allNodesCommandExecuter, links, project, userObject);
+			ScehudleCommandExecutionInfo commandData, Links links, ProjectJson project,
+		IUserWithPermissions userObject, long commandId) {
+		super(commandData, allNodesCommandExecuter, links, project, userObject, commandId);
 	}
 
 	@Override

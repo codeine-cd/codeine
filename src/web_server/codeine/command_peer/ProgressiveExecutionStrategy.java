@@ -23,8 +23,10 @@ public class ProgressiveExecutionStrategy extends CommandExecutionStrategy {
 	private NodeGetter nodesGetter;
 	private Object cancelObject = new Object();
 
-	public ProgressiveExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,ScehudleCommandExecutionInfo commandData, Links links, NodeGetter nodesGetter, ProjectJson project, IUserWithPermissions userObject) {
-		super(commandData, allNodesCommandExecuter, links, project, userObject);
+	public ProgressiveExecutionStrategy(AllNodesCommandExecuter allNodesCommandExecuter,
+		ScehudleCommandExecutionInfo commandData, Links links, NodeGetter nodesGetter, ProjectJson project,
+		IUserWithPermissions userObject, long commandId) {
+		super(commandData, allNodesCommandExecuter, links, project, userObject, commandId);
 		this.nodesGetter = nodesGetter;
 	}
 

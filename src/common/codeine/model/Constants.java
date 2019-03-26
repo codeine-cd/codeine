@@ -104,11 +104,13 @@ public class Constants {
     public static final String EXECUTION_ENV_CONFIGURATION_STEP = "CODEINE_CONFIGURATION_STEP";
     public static final String EXECUTION_ENV_OUTPUT_FILE = "CODEINE_OUTPUT_FILE";
     public static final String EXECUTION_ENV_PROJECT_NAME = "CODEINE_PROJECT_NAME";
+    public static final String EXECUTION_ENV_COMMAND_NAME = "CODEINE_COMMAND_NAME";
     public static final String EXECUTION_ENV_USER_NAME = "CODEINE_USER_NAME";
     public static final String EXECUTION_ENV_PROJECT_STATUS = "CODEINE_PROJECT_STATUS";
     public static final String EXECUTION_ENV_NODE_NAME = "CODEINE_NODE_NAME";
     public static final String EXECUTION_ENV_NODE_ALIAS = "CODEINE_NODE_ALIAS";
     public static final String EXECUTION_ENV_NODE_TAGS = "CODEINE_NODE_TAGS";
+    public static final String EXECUTION_ENV_COMMAND_STATUS_LINK = "CODEINE_COMMAND_STATUS_LINK";
     public static final String EXECUTION_ENV_CODEINE_SERVER = "CODEINE_HOST";
     public static final String EXECUTION_ENV_CODEINE_SERVER_PORT = "CODEINE_PORT";
     public static final String ENV_CODEINE_WORKAREA = "CODEINE_WORKAREA";

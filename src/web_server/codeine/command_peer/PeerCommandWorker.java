@@ -35,9 +35,12 @@ public class PeerCommandWorker implements Runnable {
 	private ProjectJson project;
 	private static Pattern pattern = Pattern.compile(".*" + Constants.COMMAND_RESULT + "(-?\\d+).*");
 	private IUserWithPermissions userObject;
+	private final long commandId;
 	private boolean failedReported = false;
 
-	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter, CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project, IUserWithPermissions userObject) {
+	public PeerCommandWorker(NodeWithPeerInfo node, AllNodesCommandExecuter allNodesCommandExecuter,
+		CommandInfo command_info, boolean shouldOutputImmediatly, Links links, ProjectJson project,
+		IUserWithPermissions userObject, long commandId) {
 		this.node = node;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.command_info = command_info;
@@ -45,6 +48,7 @@ public class PeerCommandWorker implements Runnable {
 		this.links = links;
 		this.project = project;
 		this.userObject = userObject;
+		this.commandId = commandId;
 	}
 
 
@@ -86,7 +90,8 @@ public class PeerCommandWorker implements Runnable {
 			}
 			if (POST && !command_info.name().equals("upgrade_old_peers")) {
 				String key = userObject.user().encodedApiTokenWithTime();
-				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias(), null, key, project.environmentVariables());
+				CommandInfoForSpecificNode command_info2 = new CommandInfoForSpecificNode(node.name(), node.alias(),
+					null, key, project.environmentVariables(), commandId);
 				log.info("Post data of command is " + command_info2.toString());
 				String postData = UrlParameters.DATA_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info))
 					+"&" + UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME + "=" + HttpUtils.encodeURL(new Gson().toJson(command_info2));
