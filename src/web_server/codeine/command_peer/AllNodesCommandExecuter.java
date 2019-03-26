@@ -34,288 +34,297 @@ import com.google.inject.Inject;
 
 public class AllNodesCommandExecuter {
 
-	private static final Logger log = Logger.getLogger(AllNodesCommandExecuter.class);
+    private static final Logger log = Logger.getLogger(AllNodesCommandExecuter.class);
 
-	@Inject	private Links links;
-	@Inject	private PathHelper pathHelper;
-	@Inject	private NodeGetter nodeGetter;
-	@Inject private IMonitorStatistics monitorsStatistics;
-	@Inject private DiscardOldCommandsPlugin discardOldCommandsPlugin;
-	@Inject private CommandFileWriter commandFileWriter;
-	@Inject	private Gson gson;
-	
-	private int total;
-	private int count;
-	private int fail;
-	private int skipped;
-	private BufferedWriter writer;
-	private boolean active = true;
-	private long commandId;
-	private String dirNameFull;
-	private ScehudleCommandExecutionInfo commandData;
-	private CommandExecutionStatusInfo commandExecutionInfo;
-	private ProjectJson project;
-	private IUserWithPermissions userObject;
-	private Object fileWriteSync = new Object();
-	private CommandExecutionStrategy strategy;
+    @Inject
+    private Links links;
+    @Inject
+    private PathHelper pathHelper;
+    @Inject
+    private NodeGetter nodeGetter;
+    @Inject
+    private IMonitorStatistics monitorsStatistics;
+    @Inject
+    private DiscardOldCommandsPlugin discardOldCommandsPlugin;
+    @Inject
+    private CommandFileWriter commandFileWriter;
+    @Inject
+    private Gson gson;
 
-	private String cancelingUser;
+    private int total;
+    private int count;
+    private int fail;
+    private int skipped;
+    private BufferedWriter writer;
+    private boolean active = true;
+    private long commandId;
+    private String dirNameFull;
+    private ScehudleCommandExecutionInfo commandData;
+    private CommandExecutionStatusInfo commandExecutionInfo;
+    private ProjectJson project;
+    private IUserWithPermissions userObject;
+    private Object fileWriteSync = new Object();
+    private CommandExecutionStrategy strategy;
 
-	public long executeOnAllNodes(IUserWithPermissions userObject, ScehudleCommandExecutionInfo commandData, ProjectJson project) {
-		this.project = project;
-		this.userObject = userObject;
-		discardOldCommandsPlugin.queueForDelete(project);
-		try {
-			this.commandData = commandData;
-			this.total = commandData.nodes().size();
-			commandId = getNewDirName();
-			dirNameFull = pathHelper.getCommandOutputDir(commandData.command_info().project_name(), String.valueOf(commandId));
-			FilesUtils.mkdirs(dirNameFull);
-			String pathname = dirNameFull + "/log";
-			File file = new File(pathname);
-			FilesUtils.createNewFile(file);
-			createCommandDataFile(userObject.user().username());
-			writer = TextFileUtils.getWriter(file, false);
-			log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData.command_info().concurrency() + "by " + userObject.user());
-			String nodesWord = commandData.nodes().size() == 1 ? "node" : "nodes";
-			writeLine("running command '"+commandData.command_info().command_name()+"' on " + commandData.nodes().size() + " " + nodesWord + " by " + userObject.user().username());
-			writeNodesList(commandData);
-			updatePeersAddresses();
-			Thread commandThread = ThreadUtils.createThread(new Runnable() {
-				@Override
-				public void run() {
-					execute();
-				};
-			}, "AllNodesCommandExecuter_"+commandData.command_info().command_name());
-			commandThread.start();
-			monitorsStatistics.updateCommand(commandExecutionInfo);
-			return commandId;
-		} catch (Exception ex) {
-			finish();
-			throw ExceptionUtils.asUnchecked(ex);
-		}
-	}
+    private String cancelingUser;
 
-	private void updatePeersAddresses() {
-		for (NodeWithPeerInfo n : commandData.nodes()) {
-			PeerStatusJsonV2 p = nodeGetter.peer(n.peer_key());
-			if (null == p) {
-				writeLine("Warning: ignoring node '" + n.alias() + "' since peer not found");
-				continue;
-			}
-			n.peer_address(p.address_port());
-		}
-	}
+    public long executeOnAllNodes(IUserWithPermissions userObject, ScehudleCommandExecutionInfo commandData,
+        ProjectJson project) {
+        this.project = project;
+        this.userObject = userObject;
+        discardOldCommandsPlugin.queueForDelete(project);
+        try {
+            this.commandData = commandData;
+            this.total = commandData.nodes().size();
+            commandId = getNewDirName();
+            dirNameFull = pathHelper
+                .getCommandOutputDir(commandData.command_info().project_name(), String.valueOf(commandId));
+            FilesUtils.mkdirs(dirNameFull);
+            String pathname = dirNameFull + "/log";
+            File file = new File(pathname);
+            FilesUtils.createNewFile(file);
+            createCommandDataFile(userObject.user().username());
+            writer = TextFileUtils.getWriter(file, false);
+            log.info("running command " + commandData.command_info().command_name() + " with concurrency " + commandData
+                .command_info().concurrency() + "by " + userObject.user());
+            String nodesWord = commandData.nodes().size() == 1 ? "node" : "nodes";
+            writeLine(
+                "running command '" + commandData.command_info().command_name() + "' on " + commandData.nodes().size()
+                    + " " + nodesWord + " by " + userObject.user().username());
+            writeNodesList(commandData);
+            updatePeersAddresses();
+            Thread commandThread = ThreadUtils.createThread(this::execute,
+                "AllNodesCommandExecuter_" + commandData.command_info().command_name());
+            commandThread.start();
+            monitorsStatistics.updateCommand(commandExecutionInfo);
+            return commandId;
+        } catch (Exception ex) {
+            finish();
+            throw ExceptionUtils.asUnchecked(ex);
+        }
+    }
 
-	public void writeNodesList(ScehudleCommandExecutionInfo commandData) {
-		if (commandData.nodes().size() < 11) {
-			Function<NodeWithPeerInfo, String> predicate = new Function<NodeWithPeerInfo, String>(){
-				@Override
-				public String apply(NodeWithPeerInfo input) {
-					return input.alias();
-				}
-			};
-			writeLine("nodes list: " + StringUtils.collectionToString(commandData.nodes(), predicate));
-		}
-	}
+    private void updatePeersAddresses() {
+        for (NodeWithPeerInfo n : commandData.nodes()) {
+            PeerStatusJsonV2 p = nodeGetter.peer(n.peer_key());
+            if (null == p) {
+                writeLine("Warning: ignoring node '" + n.alias() + "' since peer not found");
+                continue;
+            }
+            n.peer_address(p.address_port());
+        }
+    }
 
-	private void finish() {
-		log.info("Finishing command " + commandExecutionInfo.id());
-		if (null != commandExecutionInfo) {
-			commandExecutionInfo.finish();
-		}
-		try {
-			updateJson();
-			FilesUtils.createNewFile(dirNameFull + Constants.COMMAND_FINISH_FILE);
-		} catch (Exception e) {
-			log.warn("Failed to mark command as finished " + commandExecutionInfo, e);
-		}
-		active = false;
-	}
+    public void writeNodesList(ScehudleCommandExecutionInfo commandData) {
+        if (commandData.nodes().size() < 11) {
+            Function<NodeWithPeerInfo, String> predicate = input -> input.alias();
+            writeLine("nodes list: " + StringUtils.collectionToString(commandData.nodes(), predicate));
+        }
+    }
 
-	private void execute() {
-		try {
-			initStrategy();
-			strategy.execute();
-			if (strategy.isCancel()) {
-				writeLine("Execution was canceled by user " + cancelingUser);
-			}
-			if (strategy.isError()) {
-				writeLine(strategy.error());
-			}
-			writeFooter();
-			if (null != commandData.address_to_notify()) {
-				int status = fail > 0 ? 1 : 0;
-				String message = "command-finished,project=" + commandData.command_info().project_name() + ",id=" + commandId + ",status=" + status;
-				log.info("sending finished event: " + message);
-				SocketUtils.sendToPort(commandData.address_to_notify(), message);
-			}
-		} finally {
-			finish();
-		}
-	}
+    private void finish() {
+        log.info("Finishing command " + commandExecutionInfo.id());
+        if (null != commandExecutionInfo) {
+            commandExecutionInfo.finish();
+        }
+        try {
+            updateJson();
+            FilesUtils.createNewFile(dirNameFull + Constants.COMMAND_FINISH_FILE);
+        } catch (Exception e) {
+            log.warn("Failed to mark command as finished " + commandExecutionInfo, e);
+        }
+        active = false;
+    }
 
-	private void initStrategy() {
-		switch (commandData.command_info().command_strategy())
-		{
-		case Single: {
-			strategy = new SingleNodeCommandStrategy(this, commandData, links,project, userObject);
-			break;
-		}
-		case Immediately: {
-			strategy = new ImmediatlyCommandStrategy(this, commandData, links,project, userObject);
-			break;
-		}
-		case Progressive: {
-			strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter,project, userObject);
-			break;
-		}
-		default:
-			throw new IllegalStateException("couldnt handle strategy " + commandData.command_info().command_strategy());
-		}
-	}
+    private void execute() {
+        try {
+            initStrategy();
+            strategy.execute();
+            if (strategy.isCancel()) {
+                writeLine("Execution was canceled by user " + cancelingUser);
+            }
+            if (strategy.isError()) {
+                writeLine(strategy.error());
+            }
+            writeFooter();
+            if (null != commandData.address_to_notify()) {
+                int status = fail > 0 ? 1 : 0;
+                String message =
+                    "command-finished,project=" + commandData.command_info().project_name() + ",id=" + commandId
+                        + ",status=" + status;
+                log.info("sending finished event: " + message);
+                SocketUtils.sendToPort(commandData.address_to_notify(), message);
+            }
+        } finally {
+            finish();
+        }
+    }
 
-	private void writeFooter() {
-		writeLine("finished!");
-		Function<NodeInfoNameAndAlias, String> f = new Function<NodeInfoNameAndAlias, String>() {
-			@Override
-			public String apply(NodeInfoNameAndAlias n){
-				return n.alias();
-			}
-		};
-		if (!commandExecutionInfo.fail_list().isEmpty()) {
-			writeLine("failed nodes: " + StringUtils.collectionToString(commandExecutionInfo.fail_list(), f));
-		}
-		writeLine("=========> aggregate-command-statistics (success/total): " + (total - fail) + "/" + total + "\n");
-	}
+    private void initStrategy() {
+        switch (commandData.command_info().command_strategy()) {
+            case Single: {
+                strategy = new SingleNodeCommandStrategy(this, commandData, links, project, userObject, commandId);
+                break;
+            }
+            case Immediately: {
+                strategy = new ImmediatlyCommandStrategy(this, commandData, links, project, userObject, commandId);
+                break;
+            }
+            case Progressive: {
+                strategy = new ProgressiveExecutionStrategy(this, commandData, links, nodeGetter, project, userObject,
+                    commandId);
+                break;
+            }
+            default:
+                throw new IllegalStateException(
+                    "couldnt handle strategy " + commandData.command_info().command_strategy());
+        }
+    }
 
-	private void createCommandDataFile(String user) {
-		commandExecutionInfo = new CommandExecutionStatusInfo(user, commandData.command_info().command_name(), commandData.command_info().parameters(), commandData.command_info().project_name(),
-				commandData.nodes(), commandId);
-		FilesUtils.createNewFile(commandFile());
-		updateJson();
-	}
+    private void writeFooter() {
+        writeLine("finished!");
+        Function<NodeInfoNameAndAlias, String> f = new Function<NodeInfoNameAndAlias, String>() {
+            @Override
+            public String apply(NodeInfoNameAndAlias n) {
+                return n.alias();
+            }
+        };
+        if (!commandExecutionInfo.fail_list().isEmpty()) {
+            writeLine("failed nodes: " + StringUtils.collectionToString(commandExecutionInfo.fail_list(), f));
+        }
+        writeLine("=========> aggregate-command-statistics (success/total): " + (total - fail) + "/" + total + "\n");
+    }
 
-	private String commandFile() {
-		return dirNameFull + Constants.JSON_COMMAND_FILE_NAME;
-	}
+    private void createCommandDataFile(String user) {
+        commandExecutionInfo = new CommandExecutionStatusInfo(user, commandData.command_info().command_name(),
+            commandData.command_info().parameters(), commandData.command_info().project_name(), commandData.nodes(),
+            commandId);
+        FilesUtils.createNewFile(commandFile());
+        updateJson();
+    }
 
-	private long getNewDirName() {
-		long i = 0;
-		String dir = pathHelper.getAllCommandsInProjectOutputDir(commandData.command_info().project_name());
-		List<String> filesInDir = FilesUtils.getFilesInDir(dir);
-		for (String dir1 : filesInDir) {
-			try {
-				long j = Long.parseLong(dir1);
-				i = Math.max(i, j);
-			} catch (NumberFormatException e) {
-				log.debug("error parsing " + dir1);
-			}
-		}
-		return i + 1;
-	}
+    private String commandFile() {
+        return dirNameFull + Constants.JSON_COMMAND_FILE_NAME;
+    }
 
-	void writeLine(String line) {
-		writeLineToFile(line);
-	}
+    private long getNewDirName() {
+        long i = 0;
+        String dir = pathHelper.getAllCommandsInProjectOutputDir(commandData.command_info().project_name());
+        List<String> filesInDir = FilesUtils.getFilesInDir(dir);
+        for (String dir1 : filesInDir) {
+            try {
+                long j = Long.parseLong(dir1);
+                i = Math.max(i, j);
+            } catch (NumberFormatException e) {
+                log.debug("error parsing " + dir1);
+            }
+        }
+        return i + 1;
+    }
 
-	private synchronized void writeLineToFile(String line) {
-		try {
-			writer.append(line);
-			writer.newLine();
-			writer.flush();
-		} catch (IOException e) {
-			throw ExceptionUtils.asUnchecked(e);
-		}
-	}
+    void writeLine(String line) {
+        writeLineToFile(line);
+    }
 
-	public void fail(NodeWithPeerInfo node) {
-		log.debug("node fail " + node.name());
-		fail++;
-		commandExecutionInfo.addFailedNode(node);
-	}
+    private synchronized void writeLineToFile(String line) {
+        try {
+            writer.append(line);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            throw ExceptionUtils.asUnchecked(e);
+        }
+    }
 
-	public void nodeSuccess(NodeWithPeerInfo node) {
-		log.debug("node success " + node.name());
-		commandExecutionInfo.addSuccessNode(node);
-	}
+    public void fail(NodeWithPeerInfo node) {
+        log.debug("node fail " + node.name());
+        fail++;
+        commandExecutionInfo.addFailedNode(node);
+    }
 
-	public void nodeSkipped(NodeWithPeerInfo node) {
-		log.debug("node skipped " + node.name());
-		skipped++;
-		commandExecutionInfo.addSkippedNode(node);
-	}
+    public void nodeSuccess(NodeWithPeerInfo node) {
+        log.debug("node success " + node.name());
+        commandExecutionInfo.addSuccessNode(node);
+    }
 
-	public void workerFinished() {
-		count++;
-		updateJsonAsync();
-	}
+    public void nodeSkipped(NodeWithPeerInfo node) {
+        log.debug("node skipped " + node.name());
+        skipped++;
+        commandExecutionInfo.addSkippedNode(node);
+    }
 
-	public boolean isActive() {
-		return active;
-	}
+    public void workerFinished() {
+        count++;
+        updateJsonAsync();
+    }
 
-	private void updateJsonAsync() {
-		commandFileWriter.queue(new CommandFileWriterItem(fileWriteSync, commandFile(), commandExecutionInfo));
-	}
-	
-	private void updateJson() {
-		String json;
-		json = gson.toJson(commandExecutionInfo);
-		synchronized (fileWriteSync) {
-			TextFileUtils.setContents(commandFile(), json);
-		}
-	}
+    public boolean isActive() {
+        return active;
+    }
 
-	public String name() {
-		return commandData.command_info().command_name();
-	}
+    private void updateJsonAsync() {
+        commandFileWriter.queue(new CommandFileWriterItem(fileWriteSync, commandFile(), commandExecutionInfo));
+    }
 
-	public int success() {
-		return (int) (count - fail - skipped) * 100 / total;
-	}
+    private void updateJson() {
+        String json;
+        json = gson.toJson(commandExecutionInfo);
+        synchronized (fileWriteSync) {
+            TextFileUtils.setContents(commandFile(), json);
+        }
+    }
 
-	public int error() {
-		return fail * 100 / total;
-	}
+    public String name() {
+        return commandData.command_info().command_name();
+    }
 
-	public int skipped() {
-		return skipped * 100 / total;
-	}
+    public int success() {
+        return (int) (count - fail - skipped) * 100 / total;
+    }
 
-	public String project() {
-		return commandData.command_info().project_name();
-	}
+    public int error() {
+        return fail * 100 / total;
+    }
 
-	public int nodes() {
-		return commandData.nodes().size();
-	}
+    public int skipped() {
+        return skipped * 100 / total;
+    }
 
-	public CommandExecutionStatusInfo commandData() {
-		return commandExecutionInfo;
-	}
+    public String project() {
+        return commandData.command_info().project_name();
+    }
 
-	public long id() {
-		return commandId;
-	}
+    public int nodes() {
+        return commandData.nodes().size();
+    }
 
-	public void cancel(String username) {
-		strategy.setCancel();
-		this.cancelingUser = username;
-	}
+    public CommandExecutionStatusInfo commandData() {
+        return commandExecutionInfo;
+    }
 
-	public List<NodeWithPeerInfo> nodesList() {
-		return commandData.nodes();
-	}
-	public Object fileWriteSync() {
-		return fileWriteSync;
-	}
+    public long id() {
+        return commandId;
+    }
 
-	public CommandExecutionStatusInfo commandExecutionInfo() {
-		return commandExecutionInfo;
-	}
+    public void cancel(String username) {
+        strategy.setCancel();
+        this.cancelingUser = username;
+    }
 
-	public String commandString() {
-		return commandExecutionInfo().project_name() + "/" + commandExecutionInfo().command_name() + "/" + commandExecutionInfo().id();
-	}
+    public List<NodeWithPeerInfo> nodesList() {
+        return commandData.nodes();
+    }
+
+    public Object fileWriteSync() {
+        return fileWriteSync;
+    }
+
+    public CommandExecutionStatusInfo commandExecutionInfo() {
+        return commandExecutionInfo;
+    }
+
+    public String commandString() {
+        return commandExecutionInfo().project_name() + "/" + commandExecutionInfo().command_name() + "/"
+            + commandExecutionInfo().id();
+    }
 }

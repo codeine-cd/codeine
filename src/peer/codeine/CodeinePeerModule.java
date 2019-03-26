@@ -20,7 +20,6 @@ import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.nodes.NodesManagerPeer;
 import codeine.nodes.NodesRunner;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import com.google.inject.assistedinject.FactoryModuleBuilder;

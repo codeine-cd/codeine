@@ -22,18 +22,21 @@ public abstract class CommandExecutionStrategy {
 	private boolean cancel;
 	private ProjectJson project;
 	private IUserWithPermissions userObject;
+	private final long commandId;
 	private String error;
 
 	public static final int MAX_NODES_TO_EXECUTE = 100;
 	
 	public CommandExecutionStrategy(ScehudleCommandExecutionInfo commandData,
-			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project, IUserWithPermissions userObject) {
+			AllNodesCommandExecuter allNodesCommandExecuter, Links links, ProjectJson project,
+		IUserWithPermissions userObject, long commandId) {
 		super();
 		this.commandData = commandData;
 		this.allNodesCommandExecuter = allNodesCommandExecuter;
 		this.links = links;
 		this.project = project;
 		this.userObject = userObject;
+		this.commandId = commandId;
 	}
 
 	public abstract void execute();
@@ -43,7 +46,8 @@ public abstract class CommandExecutionStrategy {
 	}
 	
 	private void commandNode(ExecutorService executor, NodeWithPeerInfo node, boolean shouldOutputImmediatly) {
-		PeerCommandWorker worker = new PeerCommandWorker(node, allNodesCommandExecuter, commandData.command_info(), shouldOutputImmediatly, links, project, userObject);
+		PeerCommandWorker worker = new PeerCommandWorker(node, allNodesCommandExecuter, commandData.command_info(),
+			shouldOutputImmediatly, links, project, userObject, commandId);
 		executor.execute(worker);
 	}
 	

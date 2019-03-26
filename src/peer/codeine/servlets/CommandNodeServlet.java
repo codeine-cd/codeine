@@ -2,6 +2,7 @@ package codeine.servlets;
 
 import codeine.SnoozeKeeper;
 import codeine.configuration.IConfigurationManager;
+import codeine.configuration.Links;
 import codeine.configuration.PathHelper;
 import codeine.credentials.CredHelper;
 import codeine.jsons.auth.EncryptionUtils;
@@ -52,13 +53,15 @@ public class CommandNodeServlet extends AbstractServlet {
     private SnoozeKeeper snoozeKeeper;
     @Inject
     private PeerStatus projectStatusUpdater;
+    @Inject
+    private Links links;
 
 
     @Override
     public void myPost(HttpServletRequest request, HttpServletResponse res) {
         log.info("start handle command");
-        if (Boolean.parseBoolean(getParameter(request, Constants.UrlParameters.FORCE))
-            || experimentalConfJsonStore.get().allow_concurrent_commands_in_peer()) {
+        if (Boolean.parseBoolean(getParameter(request, Constants.UrlParameters.FORCE)) || experimentalConfJsonStore
+            .get().allow_concurrent_commands_in_peer()) {
             executeCommandNotSync(request, res);
         } else {
             executeCommandSync(request, res);
@@ -67,15 +70,13 @@ public class CommandNodeServlet extends AbstractServlet {
     }
 
     /**
-     * this prevents multiple commands on the same peer, so preventing upgrade the peer during
-     * command for example
+     * this prevents multiple commands on the same peer, so preventing upgrade the peer during command for example
      */
     private void executeCommandNotSync(HttpServletRequest request, HttpServletResponse res) {
         executeInternal(request, res);
     }
 
-    private synchronized void executeCommandSync(HttpServletRequest request,
-        HttpServletResponse res) {
+    private synchronized void executeCommandSync(HttpServletRequest request, HttpServletResponse res) {
         executeInternal(request, res);
     }
 
@@ -87,13 +88,10 @@ public class CommandNodeServlet extends AbstractServlet {
             String parameter = Constants.UrlParameters.DATA_NAME;
             String data = getParameter(request, parameter);
             CommandInfo commandInfo = gson().fromJson(data, CommandInfo.class);
-            String data2 = getParameter(request,
-                Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
-            CommandInfoForSpecificNode commandInfo2 = gson()
-                .fromJson(data2, CommandInfoForSpecificNode.class);
+            String data2 = getParameter(request, Constants.UrlParameters.DATA_ADDITIONAL_COMMAND_INFO_NAME);
+            CommandInfoForSpecificNode commandInfo2 = gson().fromJson(data2, CommandInfoForSpecificNode.class);
             if (null != commandInfo2.key()) {
-                String decrypt = EncryptionUtils
-                    .decrypt(Constants.CODEINE_API_TOKEN_DERIVER, commandInfo2.key());
+                String decrypt = EncryptionUtils.decrypt(Constants.CODEINE_API_TOKEN_DERIVER, commandInfo2.key());
                 validateKey(decrypt);
             } else {
                 log.warn("key is null", new RuntimeException());
@@ -104,8 +102,8 @@ public class CommandNodeServlet extends AbstractServlet {
             ProjectJson project = getProject(commandInfo.project_name());
             boolean windows_peer = project.operating_system() == OperatingSystem.Windows;
             if (null != script_content) {
-                cmdScript = new ShellScript(file, script_content, project.operating_system(),
-                    commandInfo2.tmp_dir(), null, null, null);
+                cmdScript = new ShellScript(file, script_content, project.operating_system(), commandInfo2.tmp_dir(),
+                    null, null, null);
                 file = cmdScript.create();
             } else {
                 log.info("command not found " + file);
@@ -149,20 +147,24 @@ public class CommandNodeServlet extends AbstractServlet {
             };
             Map<String, String> env = Maps.newHashMap();
             env.put(Constants.EXECUTION_ENV_PROJECT_NAME, commandInfo.project_name());
+            if (commandInfo2.command_id() != null) {
+                env.put(Constants.EXECUTION_ENV_COMMAND_STATUS_LINK, links
+                    .getWebServerCommandStatus(commandInfo.project_name(), commandInfo.name(),
+                        commandInfo2.command_id()));
+            }
+            env.put(Constants.EXECUTION_ENV_COMMAND_NAME, commandInfo.name());
             env.put(Constants.EXECUTION_ENV_NODE_NAME, commandInfo2.node_name());
             env.put(Constants.EXECUTION_ENV_NODE_ALIAS, commandInfo2.node_alias());
-            env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils.collectionToString(
-                projectStatusUpdater.getTags(commandInfo.project_name(), commandInfo2.node_name()),
-                ";"));
-            env.put(Constants.EXECUTION_ENV_CODEINE_SERVER,
-                globalConfigurationJsonStore.get().web_server_host());
+            env.put(Constants.EXECUTION_ENV_NODE_TAGS, StringUtils
+                .collectionToString(projectStatusUpdater.getTags(commandInfo.project_name(), commandInfo2.node_name()),
+                    ";"));
+            env.put(Constants.EXECUTION_ENV_CODEINE_SERVER, globalConfigurationJsonStore.get().web_server_host());
             env.put(Constants.EXECUTION_ENV_CODEINE_SERVER_PORT,
                 globalConfigurationJsonStore.get().web_server_port().toString());
             env.putAll(commandInfo2.environment_variables());
             env.putAll(getEnvParams(commandInfo));
-            Result result = new ProcessExecuterBuilder(cmd,
-                pathHelper.getProjectDir(commandInfo.project_name())).cmdForOutput(cmdForOutput)
-                .timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env)
+            Result result = new ProcessExecuterBuilder(cmd, pathHelper.getProjectDir(commandInfo.project_name()))
+                .cmdForOutput(cmdForOutput).timeoutInMinutes(commandInfo.timeoutInMinutes()).function(function).env(env)
                 .user(cred).build().execute();
             writer.println(Constants.COMMAND_RESULT + result.exit());
             writer.flush();
