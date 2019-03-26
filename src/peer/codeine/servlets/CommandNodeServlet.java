@@ -11,6 +11,7 @@ import codeine.jsons.command.CommandInfoForSpecificNode;
 import codeine.jsons.command.CommandParameterInfo;
 import codeine.jsons.global.ExperimentalConfJsonStore;
 import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.jsons.nodes.NodeDiscoveryStrategy;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
 import codeine.model.Constants;
@@ -27,6 +28,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -211,6 +213,21 @@ public class CommandNodeServlet extends AbstractServlet {
             $.put(p.name(), p.value());
         }
         return $;
+    }
+
+    private List<String> getTags(String projectName, String nodeName) {
+        List<String> tags = new ArrayList<>();
+        ProjectJson projectJson = configurationManager.getProjectForName(projectName);
+        if (projectJson.node_discovery_startegy().equals(NodeDiscoveryStrategy.Configuration)) {
+            projectJson.nodes_info().stream()
+                .filter(n -> n.name().equals(nodeName))
+                .findFirst()
+                .ifPresent(n -> tags.addAll(n.tags()));
+        }
+        else {
+            tags.addAll(projectStatusUpdater.getTags(projectName, nodeName));
+        }
+        return tags;
     }
 
     private String encodeIfNeeded(String text, String cred) {
