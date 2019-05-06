@@ -154,7 +154,12 @@ public class DbUtils {
         String mysqlAddress = hostSelector.mysql().host() + ":" + hostSelector.mysql().port();
         String jdbcUrl = "jdbc:mysql://" + mysqlAddress + "/" + MysqlConstants.DB_NAME + "?useCompression=true";
         try {
-            return getDBConnection(jdbcUrl, hostSelector.mysql());
+            if (globalConfigurationJsonStore.get().large_deployment()) {
+                return DriverManager
+                    .getConnection(jdbcUrl, hostSelector.mysql().user(), hostSelector.mysql().password());
+            } else {
+                return getDBConnection(jdbcUrl, hostSelector.mysql());
+            }
         } catch (SQLException e) {
             throw new ConnectToDatabaseException(jdbcUrl, e);
         }
