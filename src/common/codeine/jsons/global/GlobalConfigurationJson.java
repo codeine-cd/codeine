@@ -28,6 +28,7 @@ public class GlobalConfigurationJson {
     private boolean prometheus_enabled = true;
     private Integer connectivity_check_timeout_ms = 3000;
     private boolean consul_registration;
+    private Integer node_interval_seconds = 60;
 
     public GlobalConfigurationJson() {
     }
@@ -113,6 +114,10 @@ public class GlobalConfigurationJson {
 
     public Integer connectivity_check_timeout_ms() {
         return connectivity_check_timeout_ms;
+    }
+
+    public Integer node_interval_seconds() {
+        return node_interval_seconds;
     }
 
 }

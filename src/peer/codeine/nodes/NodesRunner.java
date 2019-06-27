@@ -1,20 +1,15 @@
 package codeine.nodes;
 
-import codeine.PeerStatusChangedUpdater;
-import codeine.SnoozeKeeper;
 import codeine.api.NodeInfo;
 import codeine.collectors.CollectorsRunner;
 import codeine.collectors.CollectorsRunnerFactory;
 import codeine.configuration.IConfigurationManager;
-import codeine.configuration.PathHelper;
 import codeine.executer.PeriodicExecuter;
 import codeine.executer.Task;
-import codeine.jsons.global.GlobalConfigurationJsonStore;
+import codeine.jsons.global.GlobalConfigurationJson;
 import codeine.jsons.nodes.NodesManager;
 import codeine.jsons.peer_status.PeerStatus;
 import codeine.jsons.project.ProjectJson;
-import codeine.mail.MailSender;
-import codeine.mail.NotificationDeliverToDatabase;
 import codeine.utils.network.InetUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,8 +27,10 @@ public class NodesRunner implements Task {
 
     private static final Logger log = Logger.getLogger(NodesRunner.class);
 
-    private static final long NODE_MONITOR_INTERVAL = TimeUnit.SECONDS.toMillis(29);
-    public static final long NODE_RUNNER_INTERVAL = TimeUnit.HOURS.toMillis(1);
+    private static long NODE_MONITOR_INTERVAL = TimeUnit.SECONDS.toMillis(60);
+
+    @Inject
+    private GlobalConfigurationJson globalConfigurationJson;
 
     @Inject
     private IConfigurationManager configurationManager;
@@ -49,12 +46,16 @@ public class NodesRunner implements Task {
 
     private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();
 
+    public NodesRunner() {
+        NODE_MONITOR_INTERVAL = TimeUnit.SECONDS.toMillis(globalConfigurationJson.node_interval_seconds());
+    }
+
     @Override
     public synchronized void run() {
         InetAddress localHost = InetUtils.getLocalHost();
-        log.info("NodeRunner is starting on host " + localHost.getHostName() + " " + localHost
-            .getCanonicalHostName());
-        log.info("NodeRunner is starting " + this + " with executers " + executers);
+        log.info("NodeRunner is starting on host " + localHost.getHostName() + " " + localHost.getCanonicalHostName());
+        log.info("NodeRunner is starting " + this + " with executers " + executers + " interval is "
+            + NODE_MONITOR_INTERVAL);
         Set<String> removedProjects = Sets.newHashSet(executers.keySet());
         for (ProjectJson project : getProjects()) {
             removedProjects.remove(project.name());
@@ -94,34 +95,29 @@ public class NodesRunner implements Task {
 
     private boolean startStopExecutorsForProject(ProjectJson project) {
         Map<NodeInfo, PeriodicExecuter> currentNodes = getCurrentNodes(project);
-        log.info(
-            "project: " + project.name() + " currentProjectExecutors: " + currentNodes.keySet());
+        log.info("project: " + project.name() + " currentProjectExecutors: " + currentNodes.keySet());
         SelectedNodes selectedNodes;
         try {
             selectedNodes = new NodesSelector(currentNodes, getNodes(project)).selectStartStop();
         } catch (Exception e) {
-            log.error(
-                "failed to select nodes for project " + project.name() + " will leave old nodes "
-                    + currentNodes, e);
+            log.error("failed to select nodes for project " + project.name() + " will leave old nodes " + currentNodes,
+                e);
             return !currentNodes.isEmpty();
         }
         log.info("selectedNodes: " + selectedNodes);
         stopNodes(project.name(), selectedNodes.nodesToStop());
-        Map<NodeInfo, PeriodicExecuter> newProjectExecutors = selectedNodes
-            .existingProjectExecutors();
+        Map<NodeInfo, PeriodicExecuter> newProjectExecutors = selectedNodes.existingProjectExecutors();
         for (NodeInfo nodeJson : selectedNodes.nodesToStart()) {
             log.info("start exec1 monitoring node " + nodeJson + " in project " + project.name());
             try {
                 PeriodicExecuter e = startExecuter(project, nodeJson);
                 newProjectExecutors.put(nodeJson, e);
             } catch (Exception e1) {
-                log.error("failed to start executor for node " + nodeJson + " in project " + project
-                    .name(), e1);
+                log.error("failed to start executor for node " + nodeJson + " in project " + project.name(), e1);
             }
         }
         executers.put(project.name(), newProjectExecutors);
-        log.info(
-            "project: " + project.name() + " newProjectExecutors: " + newProjectExecutors.keySet());
+        log.info("project: " + project.name() + " newProjectExecutors: " + newProjectExecutors.keySet());
         return !executers.get(project.name()).isEmpty();
     }
 
@@ -134,23 +130,17 @@ public class NodesRunner implements Task {
     }
 
     private Map<NodeInfo, PeriodicExecuter> getCurrentNodes(ProjectJson project) {
-        Map<NodeInfo, PeriodicExecuter> currentNodes = executers.get(project.name());
-        if (null == currentNodes) {
-            currentNodes = Maps.newHashMap();
-            executers.put(project.name(), currentNodes);
-        }
-        return currentNodes;
+        return executers.computeIfAbsent(project.name(), k -> Maps.newHashMap());
     }
 
     private PeriodicExecuter startExecuter(ProjectJson project, NodeInfo nodeJson) {
         log.info("Starting monitor thread for project " + project.name() + " node " + nodeJson);
         Task task;
-        CollectorsRunner collectorsTask = collectorsRunnerFactory
-            .create(project.name(), nodeJson);
+        CollectorsRunner collectorsTask = collectorsRunnerFactory.create(project.name(), nodeJson);
         collectorsTask.init();
         task = collectorsTask;
-        PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL,
-            task, "RunMonitors_" + project.name() + "_" + nodeJson.name());
+        PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, task,
+            "RunMonitors_" + project.name() + "_" + nodeJson.name());
         log.info("starting 1executor " + periodicExecuter.name());
         periodicExecuter.runInThread();
         return periodicExecuter;

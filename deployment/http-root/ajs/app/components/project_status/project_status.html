@@ -102,7 +102,8 @@
                                     </div>
                                 </div>
                             </accordion-heading>
-                            <div class="row" ng-repeat="node in versionItem.visibleNodes track by node.immutable.alias | orderBy:'alias'">
+                            <div class="row"
+                                 ng-repeat="node in versionItem.visibleNodes track by node.immutable.name | orderBy:'alias'">
                                 <div ng-class="{'col-md-3': maxNodeAliasLength <= maxNodeAliasLengthForSmallCol, 'col-md-5': maxNodeAliasLength > maxNodeAliasLengthForSmallCol}" class="fade_me" tooltip="{{::((node.immutable.alias.length > (maxNodeAliasLengthForSmallCol-5) && node.immutable.alias.length <= maxNodeAliasLengthForSmallCol) || node.immutable.alias.length > 40 ) ? node.immutable.alias : ''}}" tooltip-placement="right" tooltip-popup-delay="500">
                                     <form class="form-inline" role="form">
                                         <div class="checkbox">
