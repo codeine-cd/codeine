@@ -27,7 +27,7 @@ public class NodesRunner implements Task {
 
     private static final Logger log = Logger.getLogger(NodesRunner.class);
 
-    private static long NODE_MONITOR_INTERVAL = TimeUnit.SECONDS.toMillis(60);
+    private long nodeMonitorInterval = TimeUnit.SECONDS.toMillis(60);
 
     @Inject
     private GlobalConfigurationJson globalConfigurationJson;
@@ -46,16 +46,13 @@ public class NodesRunner implements Task {
 
     private Map<String, Map<NodeInfo, PeriodicExecuter>> executers = Maps.newHashMap();
 
-    public NodesRunner() {
-        NODE_MONITOR_INTERVAL = TimeUnit.SECONDS.toMillis(globalConfigurationJson.node_interval_seconds());
-    }
-
     @Override
     public synchronized void run() {
+        nodeMonitorInterval = TimeUnit.SECONDS.toMillis(globalConfigurationJson.node_interval_seconds());
         InetAddress localHost = InetUtils.getLocalHost();
         log.info("NodeRunner is starting on host " + localHost.getHostName() + " " + localHost.getCanonicalHostName());
         log.info("NodeRunner is starting " + this + " with executers " + executers + " interval is "
-            + NODE_MONITOR_INTERVAL);
+            + nodeMonitorInterval);
         Set<String> removedProjects = Sets.newHashSet(executers.keySet());
         for (ProjectJson project : getProjects()) {
             removedProjects.remove(project.name());
@@ -139,7 +136,7 @@ public class NodesRunner implements Task {
         CollectorsRunner collectorsTask = collectorsRunnerFactory.create(project.name(), nodeJson);
         collectorsTask.init();
         task = collectorsTask;
-        PeriodicExecuter periodicExecuter = new PeriodicExecuter(NODE_MONITOR_INTERVAL, task,
+        PeriodicExecuter periodicExecuter = new PeriodicExecuter(nodeMonitorInterval, task,
             "RunMonitors_" + project.name() + "_" + nodeJson.name());
         log.info("starting 1executor " + periodicExecuter.name());
         periodicExecuter.runInThread();
