@@ -6,7 +6,7 @@
 	<version>1.0.0</version>
 	<name>codeine</name>
 	<properties>
-		<prometheus_client_version>0.3.0</prometheus_client_version>
+		<prometheus_client_version>0.7.0</prometheus_client_version>
 		<drop_wizard_version>3.2.6</drop_wizard_version>
 		<jetty_version>9.4.17.v20190418</jetty_version>
 	</properties>
@@ -214,7 +214,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient</artifactId>
+			<artifactId>simpleclient_jetty_jdk8</artifactId>
 			<version>${prometheus_client_version}</version>
 		</dependency>
 		<dependency>
