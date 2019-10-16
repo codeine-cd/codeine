@@ -54,7 +54,7 @@ public class StatusMysqlConnector implements IStatusDatabaseConnector {
             log.info("read only mode");
             return;
         }
-        String colsDefinition = "peer_key VARCHAR(150) NOT NULL PRIMARY KEY, data text, update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, status VARCHAR(50) DEFAULT 'On' NOT NULL";
+        String colsDefinition = "peer_key VARCHAR(150) NOT NULL PRIMARY KEY, data MEDIUMTEXT, update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, status VARCHAR(50) DEFAULT 'On' NOT NULL";
         dbUtils.executeUpdate("create table if not exists " + TABLE_NAME + " (" + colsDefinition + ")");
     }
 
